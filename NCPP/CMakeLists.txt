@@ -15,11 +15,18 @@ file(GLOB DODSourceFiles
 )
 source_group("Source\\NCPP\\DOD" FILES ${DODSourceFiles})
 
+file(GLOB ECSSourceFiles
+    "Source/NCPP/ECS/*.cpp"
+    "Source/NCPP/ECS/*.hpp"
+)
+source_group("Source\\NCPP\\ECS" FILES ${ECSSourceFiles})
+
 
 
 add_library(NCPP STATIC
     ${SourceFiles}
     ${DODSourceFiles}
+    ${ECSSourceFiles}
 )
 
 

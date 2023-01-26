@@ -17,6 +17,7 @@
 #include <functional>
 #include <random>
 #include <cmath>
+#include <bitset>
 
 
 

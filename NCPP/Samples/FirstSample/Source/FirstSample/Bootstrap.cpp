@@ -8,33 +8,52 @@ NCPP_STRUCT S_Transform {
 
 };
 
+NCPP_STRUCT S_Cube{
+
+	DirectX::XMFLOAT3 size;
+
+};
+
+
+
+NCPP_CLASS C_TransformSystem final :
+	public NCPP::ECS::T_IC_BasicComponentSystem<C_TransformSystem, S_Transform>
+{
+
+public:
+	C_TransformSystem(NCPP::ECS::C_BasicEntitySystem* p_EntitySystem) :
+		T_IC_ComponentSystem(p_EntitySystem)
+	{
+
+
+
+	}
+	~C_TransformSystem() {
+
+
+
+	}
+
+};
+
 
 
 int main() {
 
-	NCPP::DOD::T_C_DefaultData<S_Transform> transformData;
+	NCPP::ECS::C_BasicEntitySystem entitySystem;
+	C_TransformSystem transformSystem(&entitySystem);
 
-	transformData.EmplaceBack({
 
-		{1.0f, 2.0f, 3.0f}
 
-	});
-	transformData.EmplaceBack({
+	NCPP::ECS::EntityId entityId = entitySystem.CreateEntity();
+	entitySystem.DestroyEntity(entityId);
+	transformSystem.AddComponent(entityId, 
+		{
 
-		{2.0f, 3.0f, 4.0f}
+			{1.0f, 2.0f, 3.0f}
 
-	});
-	transformData.EmplaceBack({
-
-		{3.0f, 4.0f, 5.0f}
-
-	});
-
-	for (auto& a : transformData.T_Column<S_Transform>()) {
-
-		std::cout << a.position.x << " " << a.position.y << " " << a.position.z << std::endl;
-
-	}
+		}
+	);
 
 	return 0;
 }
