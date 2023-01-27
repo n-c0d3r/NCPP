@@ -11,16 +11,17 @@ namespace NCPP {
 				
 		template<
 			template<typename TA_ColumnType> class TA_T_C_Allocator,
-			template<typename TA_ColumnType> typename TA_T_IteratorHash,
-			template<typename TA_ColumnType> typename TA_T_IteratorEqualTo,
+			template<typename TA_ColumnType> typename TA_T_IdHash,
+			template<typename TA_ColumnType> typename TA_T_IdEqualTo,
 			typename... TA_ColumnTypes
 		>
 		NCPP_CLASS T_C_Data final {
 
+#pragma region Typedefs
 		public:
 			using ColumnVectorsTupleType = typename std::tuple<std::vector<TA_ColumnTypes, TA_T_C_Allocator<TA_ColumnTypes>>...>;
 			using RowTupleType = typename std::tuple<TA_ColumnTypes...>;
-			using IteratorMapType = typename std::unordered_map<size_t, size_t, TA_T_IteratorHash<size_t>, TA_T_IteratorEqualTo<size_t>, TA_T_C_Allocator<std::pair<const size_t, size_t>>>;
+			using IteratorMapType = typename std::unordered_map<size_t, size_t, TA_T_IdHash<size_t>, TA_T_IdEqualTo<size_t>, TA_T_C_Allocator<std::pair<const size_t, size_t>>>;
 
 			static const size_t ColumnCount = std::tuple_size_v<ColumnVectorsTupleType>;
 
@@ -35,114 +36,11 @@ namespace NCPP {
 
 			template<typename TA_ColumnType>
 			using T_ColumnVectorTypeFromColumnType = typename std::vector<TA_ColumnType, TA_T_C_Allocator<TA_ColumnType>>;
+#pragma endregion
 
 
 
-		private:
-			template<size_t TA_Index>
-			NCPP_SFUNCTION(
-				void, ClearColumnVectors, (ColumnVectorsTupleType& tuple),
-				{
-
-					typename T_ColumnVectorType<TA_Index>& vector = std::get<typename T_ColumnVectorType<TA_Index>>(tuple);
-
-					vector.clear();
-
-				}
-			)
-
-			template<size_t TA_Index>
-			NCPP_SFUNCTION(
-				void, ResizeColumnVectors, (ColumnVectorsTupleType& tuple, size_t newRowCount),
-				{
-
-					typename T_ColumnVectorType<TA_Index>& vector = std::get<typename T_ColumnVectorType<TA_Index>>(tuple);
-
-					vector.resize(newRowCount);
-
-				}
-			);
-
-			template<size_t TA_Index>
-			NCPP_SFUNCTION(
-				void, CopyColumnVectors, (ColumnVectorsTupleType& tupleDst, ColumnVectorsTupleType& tupleSrc),
-				{
-
-					typename T_ColumnVectorType<TA_Index>& vector1 = std::get<typename T_ColumnVectorType<TA_Index>>(tupleDst);
-					typename T_ColumnVectorType<TA_Index>& vector2 = std::get<typename T_ColumnVectorType<TA_Index>>(tupleSrc);
-
-					vector1 = vector2;
-
-				}
-			);
-
-			template<size_t TA_Index>
-			NCPP_SFUNCTION(
-				void, MoveColumnVectors, (ColumnVectorsTupleType& tupleDst, ColumnVectorsTupleType& tupleSrc),
-				{
-
-					typename T_ColumnVectorType<TA_Index>& vector1 = std::get<typename T_ColumnVectorType<TA_Index>>(tupleDst);
-					typename T_ColumnVectorType<TA_Index>& vector2 = std::get<typename T_ColumnVectorType<TA_Index>>(tupleSrc);
-
-					vector1 = std::move(vector2);
-					vector2.clear();
-
-				}
-			);
-
-			template<size_t TA_Index>
-			NCPP_SFUNCTION(
-				void, SetRowTuple, (ColumnVectorsTupleType& tuple, size_t rowIndex, const RowTupleType& rowTuple),
-				{
-
-					std::get<typename T_ColumnVectorType<TA_Index>>(tuple)[rowIndex] = std::get<TA_Index>(rowTuple);
-
-				}
-			);
-
-			template<size_t TA_Index>
-			NCPP_SFUNCTION(
-				void, GetRowTuple, (const ColumnVectorsTupleType& tuple, size_t rowIndex, RowTupleType& rowTuple),
-				{
-
-					std::get<TA_Index>(rowTuple) = std::get<typename T_ColumnVectorType<TA_Index>>(tuple)[rowIndex];
-
-				}
-			);
-
-			static NCPP_CONSTEXPR Id CreateId(
-				IteratorMapType& map,
-				Id data
-			)
-			{
-
-				size_t id;
-
-				if (sizeof(size_t) == sizeof(std::uint64_t))
-					id = static_cast<std::uint64_t>(rand()) * static_cast<std::uint64_t>(rand());
-				if (sizeof(size_t) == sizeof(std::uint32_t))
-					id = rand();
-
-				if (map.find(id) == map.end())
-				{
-					map[id] = data;
-					return id;
-				}
-
-				return CreateId(map, data);
-			}
-
-			static NCPP_CONSTEXPR void DeleteId(
-				IteratorMapType& map,
-				Id id
-			)
-			{
-
-				map.erase(id);
-			}
-
-
-
+#pragma region Properties
 		private:
 			ColumnVectorsTupleType m_ColumnVectorsTuple;
 
@@ -150,9 +48,11 @@ namespace NCPP {
 
 			IteratorMapType m_Id2IndexMap;
 			IteratorMapType m_Index2IdMap;
+#pragma endregion
 
 
 
+#pragma region Getters and Setters
 		public:
 			NCPP_GETTER(size_t RowCount()) const { return m_RowCount; }
 
@@ -194,9 +94,11 @@ namespace NCPP {
 				T_TemplatedFor<SetRowTuple, 0, ColumnCount>(m_ColumnVectorsTuple, index, rowTuple);
 
 			}
+#pragma endregion
 
 
 
+#pragma region Constructors and Destructor
 		public:
 			NCPP_CONSTEXPR T_C_Data() :
 				m_RowCount(0)
@@ -241,9 +143,11 @@ namespace NCPP {
 
 				return *this;
 			}
+#pragma endregion
 
 
 
+#pragma region Methods
 		public:
 			NCPP_CONSTEXPR void Resize(size_t rowCount) {
 
@@ -325,6 +229,112 @@ namespace NCPP {
 				other.m_RowCount = 0;
 
 			}
+
+
+
+		private:
+			template<size_t TA_Index>
+			NCPP_SFUNCTION(
+				NCPP_CONSTEXPR void, ClearColumnVectors, (ColumnVectorsTupleType& tuple),
+				{
+
+					typename T_ColumnVectorType<TA_Index>&vector = std::get<typename T_ColumnVectorType<TA_Index>>(tuple);
+
+					vector.clear();
+
+				}
+			)
+
+			template<size_t TA_Index>
+			NCPP_SFUNCTION(
+				NCPP_CONSTEXPR void, ResizeColumnVectors, (ColumnVectorsTupleType& tuple, size_t newRowCount),
+				{
+
+					typename T_ColumnVectorType<TA_Index>&vector = std::get<typename T_ColumnVectorType<TA_Index>>(tuple);
+
+					vector.resize(newRowCount);
+
+				}
+			);
+
+			template<size_t TA_Index>
+			NCPP_SFUNCTION(
+				NCPP_CONSTEXPR void, CopyColumnVectors, (ColumnVectorsTupleType& tupleDst, ColumnVectorsTupleType& tupleSrc),
+				{
+
+					typename T_ColumnVectorType<TA_Index>&vector1 = std::get<typename T_ColumnVectorType<TA_Index>>(tupleDst);
+					typename T_ColumnVectorType<TA_Index>& vector2 = std::get<typename T_ColumnVectorType<TA_Index>>(tupleSrc);
+
+					vector1 = vector2;
+
+				}
+			);
+
+			template<size_t TA_Index>
+			NCPP_SFUNCTION(
+				NCPP_CONSTEXPR void, MoveColumnVectors, (ColumnVectorsTupleType& tupleDst, ColumnVectorsTupleType& tupleSrc),
+				{
+
+					typename T_ColumnVectorType<TA_Index>&vector1 = std::get<typename T_ColumnVectorType<TA_Index>>(tupleDst);
+					typename T_ColumnVectorType<TA_Index>& vector2 = std::get<typename T_ColumnVectorType<TA_Index>>(tupleSrc);
+
+					vector1 = std::move(vector2);
+					vector2.clear();
+
+				}
+			);
+
+			template<size_t TA_Index>
+			NCPP_SFUNCTION(
+				NCPP_CONSTEXPR void, SetRowTuple, (ColumnVectorsTupleType& tuple, size_t rowIndex, const RowTupleType& rowTuple),
+				{
+
+					std::get<typename T_ColumnVectorType<TA_Index>>(tuple)[rowIndex] = std::get<TA_Index>(rowTuple);
+
+				}
+			);
+
+			template<size_t TA_Index>
+			NCPP_SFUNCTION(
+				NCPP_CONSTEXPR void, GetRowTuple, (const ColumnVectorsTupleType& tuple, size_t rowIndex, RowTupleType& rowTuple),
+				{
+
+					std::get<TA_Index>(rowTuple) = std::get<typename T_ColumnVectorType<TA_Index>>(tuple)[rowIndex];
+
+				}
+			);
+
+			static NCPP_CONSTEXPR Id CreateId(
+				IteratorMapType& map,
+				Id data
+			)
+			{
+
+				size_t id;
+
+				if (sizeof(size_t) == sizeof(std::uint64_t))
+					id = static_cast<std::uint64_t>(rand()) * static_cast<std::uint64_t>(rand());
+				if (sizeof(size_t) == sizeof(std::uint32_t))
+					id = rand();
+
+				if (map.find(id) == map.end())
+				{
+					map[id] = data;
+					return id;
+				}
+
+				return CreateId(map, data);
+			}
+
+			static NCPP_CONSTEXPR void DeleteId(
+				IteratorMapType& map,
+				Id id
+			)
+			{
+
+				map.erase(id);
+			}
+#pragma endregion
 
 		};
 

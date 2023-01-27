@@ -9,9 +9,10 @@ namespace NCPP {
 	namespace DOD {
 
 		template<class TA_C_System>
-		NCPP_CLASS T_IC_System
+		NCPP_CLASS T_IC_System : public T_C_Singleton<TA_C_System>
 		{
 
+#pragma region Constructors and Destructor
 		protected:
 			NCPP_CONSTEXPR T_IC_System() {
 
@@ -23,6 +24,7 @@ namespace NCPP {
 
 
 			}
+#pragma endregion
 
 		};
 

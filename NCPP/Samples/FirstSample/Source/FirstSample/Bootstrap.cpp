@@ -41,19 +41,30 @@ public:
 int main() {
 
 	NCPP::ECS::C_BasicEntitySystem entitySystem;
+
 	C_TransformSystem transformSystem(&entitySystem);
 
 
 
 	NCPP::ECS::EntityId entityId = entitySystem.CreateEntity();
-	entitySystem.DestroyEntity(entityId);
-	transformSystem.AddComponent(entityId, 
+
+	NCPP::ECS::ComponentId transformId = transformSystem.AddComponent(entityId, 
 		{
 
 			{1.0f, 2.0f, 3.0f}
 
 		}
 	);
+
+
+
+	for (auto& transform : transformSystem) {
+
+		std::cout << transform.position.x << " " << transform.position.y << " " << transform.position.z << " " << std::endl;
+
+	}
+
+
 
 	return 0;
 }

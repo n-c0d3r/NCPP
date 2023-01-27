@@ -21,11 +21,14 @@ namespace NCPP {
 
 		struct S_EntitySignature final {
 
+#pragma region Properties
 		private:
 			std::bitset<ECS_SIGNATURE_BIT_COUNT> m_Value;
+#pragma endregion
 
 
 
+#pragma region Constructors and Destructor
 		public:
 			S_EntitySignature() :
 				m_Value(0)
@@ -46,6 +49,7 @@ namespace NCPP {
 
 
 			}
+#pragma endregion
 
 		};
 
@@ -53,23 +57,28 @@ namespace NCPP {
 
 		template<
 			template<typename TA_ColumnType> class TA_T_C_Allocator,
-			template<typename TA_ColumnType> typename TA_T_IteratorHash,
-			template<typename TA_ColumnType> typename TA_T_IteratorEqualTo
+			template<typename TA_ColumnType> typename TA_T_IdHash,
+			template<typename TA_ColumnType> typename TA_T_IdEqualTo
 		>
 		NCPP_CLASS T_C_EntitySystem final :
-			public DOD::T_IC_System<T_C_EntitySystem<TA_T_C_Allocator, TA_T_IteratorHash, TA_T_IteratorEqualTo>>
+			public DOD::T_IC_System<T_C_EntitySystem<TA_T_C_Allocator, TA_T_IdHash, TA_T_IdEqualTo>>
 		{
 
+#pragma region Typedefs
 		public:
-			using DataType = typename DOD::T_C_Data<TA_T_C_Allocator, TA_T_IteratorHash, TA_T_IteratorEqualTo, S_EntitySignature>;
+			using DataType = typename DOD::T_C_Data<TA_T_C_Allocator, TA_T_IdHash, TA_T_IdEqualTo, S_EntitySignature>;
+#pragma endregion
 
 
 
+#pragma region Properties
 		protected:
 			DataType m_Data;
+#pragma endregion
 
 
 
+#pragma region Constructors and Destructor
 		public:
 			NCPP_CONSTEXPR T_C_EntitySystem() :
 				m_Data()
@@ -83,9 +92,11 @@ namespace NCPP {
 
 
 			}
+#pragma endregion
 
 
 
+#pragma region Methods
 		public:
 			EntityId CreateEntity() {
 
@@ -96,6 +107,7 @@ namespace NCPP {
 				m_Data.Erase(id);
 
 			}
+#pragma endregion
 
 		};
 

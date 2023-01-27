@@ -60,6 +60,10 @@ namespace NCPP {
 
 	private:
 		static TA_Class * s_p_Instance;
+
+
+
+	public:
 		static NCPP_GETTER(TA_Class* P_Instance()) { return s_p_Instance; }
 
 

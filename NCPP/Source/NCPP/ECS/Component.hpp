@@ -16,8 +16,8 @@ namespace NCPP {
 
 		template<
 			template<typename TA_ColumnType> class TA_T_C_Allocator,
-			template<typename TA_ColumnType> typename TA_T_IteratorHash,
-			template<typename TA_ColumnType> typename TA_T_IteratorEqualTo
+			template<typename TA_ColumnType> typename TA_T_IdHash,
+			template<typename TA_ColumnType> typename TA_T_IdEqualTo
 		>
 		NCPP_CLASS T_C_EntitySystem;
 
@@ -26,45 +26,128 @@ namespace NCPP {
 		template<
 			class TA_C_ComponentSystem,
 			template<typename TA_ColumnType> class TA_T_C_Allocator,
-			template<typename TA_ColumnType> typename TA_T_IteratorHash,
-			template<typename TA_ColumnType> typename TA_T_IteratorEqualTo,
+			template<typename TA_ColumnType> typename TA_T_IdHash,
+			template<typename TA_ColumnType> typename TA_T_IdEqualTo,
 			typename TA_ComponentType
 		>
 		NCPP_CLASS T_IC_ComponentSystem :
 			public DOD::T_IC_System<TA_C_ComponentSystem>
 		{
 
+#pragma region Typedefs
 		public:
-			using DataType = typename DOD::T_C_Data<TA_T_C_Allocator, TA_T_IteratorHash, TA_T_IteratorEqualTo, TA_ComponentType>;
-			using EntitySystemType = typename T_C_EntitySystem<TA_T_C_Allocator, TA_T_IteratorHash, TA_T_IteratorEqualTo>;
+			using DataType = typename DOD::T_C_Data<TA_T_C_Allocator, TA_T_IdHash, TA_T_IdEqualTo, TA_ComponentType>;
+			using EntitySystemType = typename T_C_EntitySystem<TA_T_C_Allocator, TA_T_IdHash, TA_T_IdEqualTo>;
 			using EntityId2ComponentIdMapType = typename std::unordered_map<
 				EntityId, ComponentId, 
-				TA_T_IteratorHash<EntityId>, 
-				TA_T_IteratorEqualTo<EntityId>, 
+				TA_T_IdHash<EntityId>, 
+				TA_T_IdEqualTo<EntityId>, 
 				TA_T_C_Allocator<std::pair<const EntityId, ComponentId>>
 			>;
 			using ComponentId2EntityIdMapType = typename std::unordered_map<
 				ComponentId, EntityId,
-				TA_T_IteratorHash<ComponentId>,
-				TA_T_IteratorEqualTo<ComponentId>,
+				TA_T_IdHash<ComponentId>,
+				TA_T_IdEqualTo<ComponentId>,
 				TA_T_C_Allocator<std::pair<const ComponentId, EntityId>>
 			>;
+#pragma endregion
 
 
 
+#pragma region Nested Types
+		public:
+			struct S_Iterator;
+			friend struct S_Iterator;
+
+			struct S_Iterator {
+
+			public:
+				size_t index = 0;
+
+
+
+			public:
+				NCPP_CONSTEXPR TA_ComponentType& operator * () {
+
+					return TA_C_ComponentSystem::P_Instance()->m_Data.T_Column<TA_ComponentType>()[index];
+				}
+				NCPP_CONSTEXPR TA_ComponentType* operator -> () {
+
+					return *(TA_C_ComponentSystem::P_Instance()->m_Data.T_Column<TA_ComponentType>()[index]);
+				}
+				NCPP_CONSTEXPR const TA_ComponentType& operator * () const {
+
+					return TA_C_ComponentSystem::P_Instance()->m_Data.T_Column<TA_ComponentType>()[index];
+				}
+				NCPP_CONSTEXPR const TA_ComponentType* operator -> () const {
+
+					return *(TA_C_ComponentSystem::P_Instance()->m_Data.T_Column<TA_ComponentType>()[index]);
+				}
+				NCPP_CONSTEXPR S_Iterator operator + (size_t offset) const {
+
+					return { index + offset; };
+				}
+				NCPP_CONSTEXPR S_Iterator operator - (size_t offset) const {
+
+					return { index - offset; };
+				}
+				NCPP_CONSTEXPR S_Iterator& operator ++ () {
+
+					++index;
+
+					return *this;
+				}
+				NCPP_CONSTEXPR S_Iterator& operator -- () {
+
+					--index;
+
+					return *this;
+				}
+				NCPP_CONSTEXPR S_Iterator& operator += (size_t offset) {
+
+					index += offset;
+
+					return *this;
+				}
+				NCPP_CONSTEXPR S_Iterator& operator -= (size_t offset) {
+
+					index -= offset;
+
+					return *this;
+				}
+				NCPP_CONSTEXPR bool operator != (const S_Iterator& other) {
+
+					return index != other.index;
+				}
+
+			};
+#pragma endregion
+
+
+
+#pragma region Properties
 		protected:
 			DataType m_Data;
 			EntitySystemType* m_p_EntitySystem;
 			EntityId2ComponentIdMapType m_EntityId2ComponentIdMap;
 			ComponentId2EntityIdMapType m_ComponentId2EntityIdMap;
+#pragma endregion
 
 
 
+#pragma region Getters and Setters
 		public:
 			NCPP_GETTER(EntitySystemType* P_EntitySystem()) const { return m_p_EntitySystem; }
 
+			NCPP_GETTER(S_Iterator begin()) { return { 0 }; }
+			NCPP_GETTER(S_Iterator end()) { return { m_Data.RowCount() }; }
+			NCPP_GETTER(const S_Iterator begin()) const { return { 0 }; }
+			NCPP_GETTER(const S_Iterator end()) const { return { m_Data.RowCount() }; }
+#pragma endregion
 
 
+
+#pragma region Constructors and Destructor
 		protected:
 			NCPP_CONSTEXPR T_IC_ComponentSystem(EntitySystemType* p_EntitySystem) :
 				m_Data(),
@@ -80,9 +163,11 @@ namespace NCPP {
 				m_ComponentId2EntityIdMap.clear();
 
 			}
+#pragma endregion
 
 
 
+#pragma region Methods
 		public:
 			ComponentId AddComponent(EntityId entityId, const TA_ComponentType& component) {
 
@@ -103,6 +188,7 @@ namespace NCPP {
 				m_Data.Erase(id);
 
 			}
+#pragma endregion
 
 		};
 			
