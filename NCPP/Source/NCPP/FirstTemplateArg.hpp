@@ -24,7 +24,7 @@ namespace NCPP {
 
 		};
 		template<typename TA_Type, typename... TA_Rest>
-		struct T_S_ArgsCase<true, TA_Type, TA_Rest...> {
+		struct T_S_ArgsCase<false, TA_Type, TA_Rest...> {
 
 			using Type = TA_Type;
 
