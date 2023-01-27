@@ -13,6 +13,7 @@ namespace NCPP {
 #include <NCPP/FirstTemplateArg.hpp>
 #include <NCPP/LastTemplateArg.hpp>
 #include <NCPP/NthTemplateArg.hpp>
+#include <NCPP/TemplateArgCount.hpp>
 #include <NCPP/DOD/DOD.hpp>
 #include <NCPP/ECS/ECS.hpp>
 

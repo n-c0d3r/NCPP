@@ -5,9 +5,7 @@
 template<typename... TA_Args>
 void T_Foo() {
 
-	using Type = typename NCPP::T_S_LastTemplateArg<TA_Args...>::Type;
-
-	std::cout << typeid(Type).name() << std::endl;
+	std::cout << NCPP::T_TemplateArgCount<TA_Args...>() << std::endl;
 
 }
 
