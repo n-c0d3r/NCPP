@@ -21,12 +21,19 @@ file(GLOB ECSSourceFiles
 )
 source_group("Source\\NCPP\\ECS" FILES ${ECSSourceFiles})
 
+file(GLOB RTTRSourceFiles
+    "Source/NCPP/RTTR/*.cpp"
+    "Source/NCPP/RTTR/*.hpp"
+)
+source_group("Source\\NCPP\\RTTR" FILES ${RTTRSourceFiles})
+
 
 
 add_library(NCPP STATIC
     ${SourceFiles}
     ${DODSourceFiles}
     ${ECSSourceFiles}
+    ${RTTRSourceFiles}
 )
 
 

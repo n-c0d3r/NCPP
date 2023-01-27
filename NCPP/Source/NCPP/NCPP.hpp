@@ -16,6 +16,7 @@ namespace NCPP {
 #include <NCPP/TemplateArgCount.hpp>
 #include <NCPP/DOD/DOD.hpp>
 #include <NCPP/ECS/ECS.hpp>
+#include <NCPP/RTTR/RTTR.hpp>
 
 
 

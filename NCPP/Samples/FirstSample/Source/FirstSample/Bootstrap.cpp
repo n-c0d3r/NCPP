@@ -2,18 +2,42 @@
 
 
 
-template<typename... TA_Args>
-void T_Foo() {
+class A {
 
-	std::cout << NCPP::T_TemplateArgCount<TA_Args...>() << std::endl;
+public:
+	A() {
 
+
+
+	}
+
+	int F(bool c, float b) {
+
+		std::cout << c << " " << b << std::endl;
+
+		return 5;
+	}
+
+};
+
+
+
+int F(bool c, float b) {
+
+	std::cout << c << " " << b << std::endl;
+
+	return 5;
 }
 
 
 
 int main() {
 
-	T_Foo<int, bool, float, double>();
+	A a;
+
+	NCPP::RTTR::T_C_Function<int(bool, float)> f(F);
+
+	f(1, 2.5f);
 
 	return 0;
 }
