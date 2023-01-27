@@ -78,7 +78,7 @@ namespace NCPP {
 
 
 
-#pragma region Constructors and Destructor
+#pragma region Constructors, Destructor, and Operators
 		public:
 			NCPP_CONSTEXPR T_C_EntitySystem() :
 				m_Data()
@@ -113,7 +113,7 @@ namespace NCPP {
 
 
 
-		using C_BasicEntitySystem = T_C_EntitySystem<std::allocator, std::hash, std::equal_to>;
+		using C_StandardEntitySystem = T_C_EntitySystem<std::allocator, std::hash, std::equal_to>;
 
 	}
 

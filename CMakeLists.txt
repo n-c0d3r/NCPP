@@ -10,6 +10,4 @@ set(CMAKE_C_STANDARD 17)
 
 
 
-add_subdirectory(Dependencies)
-
 add_subdirectory(NCPP)

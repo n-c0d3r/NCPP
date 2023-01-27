@@ -65,6 +65,7 @@ namespace NCPP {
 
 	public:
 		static NCPP_GETTER(TA_Class* P_Instance()) { return s_p_Instance; }
+		static NCPP_GETTER(TA_Class& Instance()) { return *s_p_Instance; }
 
 
 

@@ -69,19 +69,19 @@ namespace NCPP {
 			public:
 				NCPP_CONSTEXPR TA_ComponentType& operator * () {
 
-					return TA_C_ComponentSystem::P_Instance()->m_Data.T_Column<TA_ComponentType>()[index];
+					return TA_C_ComponentSystem::P_Instance()->m_EnabledData.T_Column<TA_ComponentType>()[index];
 				}
 				NCPP_CONSTEXPR TA_ComponentType* operator -> () {
 
-					return *(TA_C_ComponentSystem::P_Instance()->m_Data.T_Column<TA_ComponentType>()[index]);
+					return *(TA_C_ComponentSystem::P_Instance()->m_EnabledData.T_Column<TA_ComponentType>()[index]);
 				}
 				NCPP_CONSTEXPR const TA_ComponentType& operator * () const {
 
-					return TA_C_ComponentSystem::P_Instance()->m_Data.T_Column<TA_ComponentType>()[index];
+					return TA_C_ComponentSystem::P_Instance()->m_EnabledData.T_Column<TA_ComponentType>()[index];
 				}
 				NCPP_CONSTEXPR const TA_ComponentType* operator -> () const {
 
-					return *(TA_C_ComponentSystem::P_Instance()->m_Data.T_Column<TA_ComponentType>()[index]);
+					return *(TA_C_ComponentSystem::P_Instance()->m_EnabledData.T_Column<TA_ComponentType>()[index]);
 				}
 				NCPP_CONSTEXPR S_Iterator operator + (size_t offset) const {
 
@@ -127,8 +127,9 @@ namespace NCPP {
 
 #pragma region Properties
 		protected:
-			DataType m_Data;
-			EntitySystemType* m_p_EntitySystem;
+			DataType m_EnabledData;
+			DataType m_DisabledData;
+			EntitySystemType& m_p_EntitySystem;
 			EntityId2ComponentIdMapType m_EntityId2ComponentIdMap;
 			ComponentId2EntityIdMapType m_ComponentId2EntityIdMap;
 #pragma endregion
@@ -139,19 +140,26 @@ namespace NCPP {
 		public:
 			NCPP_GETTER(EntitySystemType* P_EntitySystem()) const { return m_p_EntitySystem; }
 
+			NCPP_GETTER(DataType& EnabledData()) { return m_EnabledData; }
+			NCPP_GETTER(const DataType& EnabledData()) const { return m_EnabledData; }
+
+			NCPP_GETTER(DataType& DisabledData()) { return m_DisabledData; }
+			NCPP_GETTER(const DataType& DisabledData()) const { return m_DisabledData; }
+
 			NCPP_GETTER(S_Iterator begin()) { return { 0 }; }
-			NCPP_GETTER(S_Iterator end()) { return { m_Data.RowCount() }; }
+			NCPP_GETTER(S_Iterator end()) { return { m_EnabledData.RowCount() }; }
 			NCPP_GETTER(const S_Iterator begin()) const { return { 0 }; }
-			NCPP_GETTER(const S_Iterator end()) const { return { m_Data.RowCount() }; }
+			NCPP_GETTER(const S_Iterator end()) const { return { m_EnabledData.RowCount() }; }
 #pragma endregion
 
 
 
-#pragma region Constructors and Destructor
+#pragma region Constructors, Destructor, and Operators
 		protected:
-			NCPP_CONSTEXPR T_IC_ComponentSystem(EntitySystemType* p_EntitySystem) :
-				m_Data(),
-				m_p_EntitySystem(p_EntitySystem)
+			NCPP_CONSTEXPR T_IC_ComponentSystem() :
+				m_EnabledData(),
+				m_DisabledData(),
+				m_p_EntitySystem(EntitySystemType::Instance())
 			{
 
 				
@@ -159,6 +167,8 @@ namespace NCPP {
 			}
 			virtual ~T_IC_ComponentSystem() {
 
+				m_EnabledData.Clear();
+				m_DisabledData.Clear();
 				m_EntityId2ComponentIdMap.clear();
 				m_ComponentId2EntityIdMap.clear();
 
@@ -171,7 +181,7 @@ namespace NCPP {
 		public:
 			ComponentId AddComponent(EntityId entityId, const TA_ComponentType& component) {
 
-				ComponentId id = m_Data.EmplaceBack(component);
+				ComponentId id = m_EnabledData.EmplaceBack(component);
 
 				m_EntityId2ComponentIdMap[entityId] = id;
 				m_ComponentId2EntityIdMap[id] = entityId;
@@ -185,7 +195,31 @@ namespace NCPP {
 				m_EntityId2ComponentIdMap.erase(entityId);
 				m_ComponentId2EntityIdMap.erase(id);
 
-				m_Data.Erase(id);
+				m_EnabledData.Erase(id);
+
+			}
+			void Enable(ComponentId id) {
+
+				if (m_DisabledData.IsHasRow(id)) {
+
+					//TA_ComponentType component = std::move(std::get<TA_ComponentType>(m_DisabledData.GetRow(id)));
+
+				}
+
+			}
+			void Disable(ComponentId id) {
+
+				if (m_EnabledData.IsHasRow(id)) {
+
+					size_t index = m_EnabledData.Id2Index(id);
+
+					TA_ComponentType component = std::move(m_EnabledData.T_Column<TA_ComponentType>()[index]);
+
+					m_EnabledData.Erase(id);
+
+					m_DisabledData.EmplaceBackWithId(id, component);
+
+				}
 
 			}
 #pragma endregion
@@ -194,8 +228,8 @@ namespace NCPP {
 			
 
 
-		template<class TA_C_ComponentSystem, typename... TA_ComponentTypes>
-		using T_IC_BasicComponentSystem = T_IC_ComponentSystem<TA_C_ComponentSystem, std::allocator, std::hash, std::equal_to, TA_ComponentTypes...>;
+		template<class TA_C_ComponentSystem, typename TA_ComponentType>
+		using T_IC_StandardComponentSystem = T_IC_ComponentSystem<TA_C_ComponentSystem, std::allocator, std::hash, std::equal_to, TA_ComponentType>;
 
 
 	}

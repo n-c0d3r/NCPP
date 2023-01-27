@@ -12,7 +12,7 @@ namespace NCPP {
 		NCPP_CLASS T_IC_System : public T_C_Singleton<TA_C_System>
 		{
 
-#pragma region Constructors and Destructor
+#pragma region Constructors, Destructor, and Operators
 		protected:
 			NCPP_CONSTEXPR T_IC_System() {
 

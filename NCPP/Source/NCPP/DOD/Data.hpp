@@ -2,6 +2,7 @@
 
 #include <NCPP/Utilities.hpp>
 #include <NCPP/TemplatedFor.hpp>
+#include <NCPP/FirstTemplateArg.hpp>
 
 
 
@@ -22,6 +23,8 @@ namespace NCPP {
 			using ColumnVectorsTupleType = typename std::tuple<std::vector<TA_ColumnTypes, TA_T_C_Allocator<TA_ColumnTypes>>...>;
 			using RowTupleType = typename std::tuple<TA_ColumnTypes...>;
 			using IteratorMapType = typename std::unordered_map<size_t, size_t, TA_T_IdHash<size_t>, TA_T_IdEqualTo<size_t>, TA_T_C_Allocator<std::pair<const size_t, size_t>>>;
+
+			using FirstColumnType = typename T_S_FirstTemplateArg<TA_ColumnTypes...>::Type;
 
 			static const size_t ColumnCount = std::tuple_size_v<ColumnVectorsTupleType>;
 
@@ -55,6 +58,17 @@ namespace NCPP {
 #pragma region Getters and Setters
 		public:
 			NCPP_GETTER(size_t RowCount()) const { return m_RowCount; }
+
+			// Note: only travel first column!
+			NCPP_GETTER(typename T_ColumnVectorType<0>::iterator begin()) { return T_Column<FirstColumnType>().begin(); }
+			NCPP_GETTER(typename T_ColumnVectorType<0>::iterator end()) { return T_Column<FirstColumnType>().end(); }
+			NCPP_GETTER(typename T_ColumnVectorType<0>::const_iterator begin()) const { return T_Column<FirstColumnType>().begin(); }
+			NCPP_GETTER(typename T_ColumnVectorType<0>::const_iterator end()) const { return T_Column<FirstColumnType>().end(); }
+
+			NCPP_GETTER(size_t Id2Index(size_t id)) const { return m_Id2IndexMap.find(id)->second; }
+			NCPP_GETTER(size_t Index2Id(size_t index)) const { return m_Index2IdMap.find(index)->second; }
+
+			NCPP_GETTER(bool IsHasRow(size_t id)) const { return m_Id2IndexMap.find(id) != m_Id2IndexMap.end(); }
 
 			template<typename TA_ColumnType>
 			NCPP_GETTER(T_ColumnVectorTypeFromColumnType<TA_ColumnType>& T_Column()) {
@@ -98,7 +112,7 @@ namespace NCPP {
 
 
 
-#pragma region Constructors and Destructor
+#pragma region Constructors, Destructor, and Operators
 		public:
 			NCPP_CONSTEXPR T_C_Data() :
 				m_RowCount(0)
@@ -179,6 +193,22 @@ namespace NCPP {
 				T_TemplatedFor<SetRowTuple, 0, ColumnCount>(m_ColumnVectorsTuple, index, rowTuple);
 
 				size_t id = CreateId(m_Id2IndexMap, index);
+
+				m_Index2IdMap[id] = index;
+
+				return id;
+			}
+			NCPP_CONSTEXPR size_t EmplaceBackWithId(size_t id, const TA_ColumnTypes&... datas) {
+
+				return EmplaceBackWithId(id, std::make_tuple(datas...));
+			}
+			NCPP_CONSTEXPR size_t EmplaceBackWithId(size_t id, const RowTupleType& rowTuple) {
+
+				Resize(m_RowCount + 1);
+
+				size_t index = m_RowCount - 1;
+
+				T_TemplatedFor<SetRowTuple, 0, ColumnCount>(m_ColumnVectorsTuple, index, rowTuple);
 
 				m_Index2IdMap[id] = index;
 
@@ -341,7 +371,13 @@ namespace NCPP {
 
 
 		template<typename... TA_ColumnTypes>
-		using T_C_BasicData = T_C_Data<std::allocator, std::hash, std::equal_to, TA_ColumnTypes...>;
+		using T_C_StandardData = T_C_Data<std::allocator, std::hash, std::equal_to, TA_ColumnTypes...>;
+
+
+
+#define NCPP_DOD_DATA_TRAVEL(Iterator, Data, ColumnIndex) \
+		for(auto Iterator = Data.T_Column<typename std::remove_reference_t<decltype(Data)>::T_ColumnType<0>>().begin(); Iterator != Data.T_Column<typename std::remove_reference_t<decltype(Data)>::T_ColumnType<0>>().end(); ++Iterator)\
+		
 
 	}
 
