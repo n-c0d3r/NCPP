@@ -2,42 +2,41 @@
 
 
 
-class A {
+class A : public NCPP::RTTR::IC_Object {
+
+private:
+	int i[32];
+
+	
 
 public:
-	A() {
+	A() :
+		i{1,2,3,4,5,6,7}
+	{
 
 
 
 	}
+	~A() {
 
-	int F(bool c, float b) {
+		std::cout << "Destruct A" << std::endl;
 
-		std::cout << c << " " << b << std::endl;
-
-		return 5;
 	}
 
 };
 
 
 
-int F(bool c, float b) {
-
-	std::cout << c << " " << b << std::endl;
-
-	return 5;
-}
-
-
-
 int main() {
 
-	A a;
+	NCPP::RTTR::T_C_StandardClass<A> aClass;
 
-	NCPP::RTTR::T_C_Function<int(bool, float)> f(F);
+	{
 
-	f(1, 2.5f);
+		NCPP::RTTR::T_C_UniqueObjectPtr<A> p_Object1 = NCPP::RTTR::T_MakeUnique<A>((A*)aClass.CreateInstance());
+		NCPP::RTTR::T_C_UniqueObjectPtr<A> p_Object2 = std::move(p_Object1);
+
+	}
 
 	return 0;
 }

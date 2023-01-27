@@ -160,7 +160,6 @@ namespace NCPP {
 		template<class TA_C_ComponentSystem, typename TA_ComponentType>
 		using T_IC_StandardComponentSystem = T_IC_ComponentSystem<TA_C_ComponentSystem, std::allocator, std::hash, std::equal_to, TA_ComponentType>;
 
-
 	}
 
 }
