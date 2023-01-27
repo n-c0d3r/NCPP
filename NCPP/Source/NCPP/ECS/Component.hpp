@@ -54,77 +54,6 @@ namespace NCPP {
 
 
 
-#pragma region Nested Types
-		public:
-			struct S_Iterator;
-			friend struct S_Iterator;
-
-			struct S_Iterator {
-
-			public:
-				size_t index = 0;
-
-
-
-			public:
-				NCPP_CONSTEXPR TA_ComponentType& operator * () {
-
-					return TA_C_ComponentSystem::P_Instance()->m_EnabledData.T_Column<TA_ComponentType>()[index];
-				}
-				NCPP_CONSTEXPR TA_ComponentType* operator -> () {
-
-					return *(TA_C_ComponentSystem::P_Instance()->m_EnabledData.T_Column<TA_ComponentType>()[index]);
-				}
-				NCPP_CONSTEXPR const TA_ComponentType& operator * () const {
-
-					return TA_C_ComponentSystem::P_Instance()->m_EnabledData.T_Column<TA_ComponentType>()[index];
-				}
-				NCPP_CONSTEXPR const TA_ComponentType* operator -> () const {
-
-					return *(TA_C_ComponentSystem::P_Instance()->m_EnabledData.T_Column<TA_ComponentType>()[index]);
-				}
-				NCPP_CONSTEXPR S_Iterator operator + (size_t offset) const {
-
-					return { index + offset; };
-				}
-				NCPP_CONSTEXPR S_Iterator operator - (size_t offset) const {
-
-					return { index - offset; };
-				}
-				NCPP_CONSTEXPR S_Iterator& operator ++ () {
-
-					++index;
-
-					return *this;
-				}
-				NCPP_CONSTEXPR S_Iterator& operator -- () {
-
-					--index;
-
-					return *this;
-				}
-				NCPP_CONSTEXPR S_Iterator& operator += (size_t offset) {
-
-					index += offset;
-
-					return *this;
-				}
-				NCPP_CONSTEXPR S_Iterator& operator -= (size_t offset) {
-
-					index -= offset;
-
-					return *this;
-				}
-				NCPP_CONSTEXPR bool operator != (const S_Iterator& other) {
-
-					return index != other.index;
-				}
-
-			};
-#pragma endregion
-
-
-
 #pragma region Properties
 		protected:
 			DataType m_EnabledData;
@@ -146,10 +75,10 @@ namespace NCPP {
 			NCPP_GETTER(DataType& DisabledData()) { return m_DisabledData; }
 			NCPP_GETTER(const DataType& DisabledData()) const { return m_DisabledData; }
 
-			NCPP_GETTER(S_Iterator begin()) { return { 0 }; }
-			NCPP_GETTER(S_Iterator end()) { return { m_EnabledData.RowCount() }; }
-			NCPP_GETTER(const S_Iterator begin()) const { return { 0 }; }
-			NCPP_GETTER(const S_Iterator end()) const { return { m_EnabledData.RowCount() }; }
+			NCPP_GETTER(auto begin()) { return m_EnabledData.begin(); }
+			NCPP_GETTER(auto end()) { return m_EnabledData.end(); }
+			NCPP_GETTER(const auto begin()) const { return m_EnabledData.begin(); }
+			NCPP_GETTER(const auto end()) const { return m_EnabledData.end(); }
 #pragma endregion
 
 
