@@ -11,6 +11,7 @@ namespace NCPP {
 #include <NCPP/Utilities.hpp>
 #include <NCPP/TemplatedFor.hpp>
 #include <NCPP/FirstTemplateArg.hpp>
+#include <NCPP/LastTemplateArg.hpp>
 #include <NCPP/NthTemplateArg.hpp>
 #include <NCPP/DOD/DOD.hpp>
 #include <NCPP/ECS/ECS.hpp>
