@@ -66,6 +66,7 @@
     + **Union** (lower case)
     + **Function** (lower case)
     + **Template** (lower case)
+    + **Namespace** (lower case)
 - Snake Case:
     + **Macro** (upper case)
     + **Constant** (upper case)

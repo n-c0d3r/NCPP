@@ -1,8 +1,8 @@
 #pragma once
 
-namespace NCPP {
+namespace ncpp {
 
-    namespace DOD {
+    namespace dod {
 
 
 
@@ -12,13 +12,13 @@ namespace NCPP {
 
 
 
-#include <NCPP/Utilities.hpp>
+#include <ncpp/utilities.hpp>
 
 
 
-namespace NCPP {
+namespace ncpp {
 
-    namespace DOD {
+    namespace dod {
 
 
 

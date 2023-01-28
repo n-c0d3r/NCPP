@@ -1,2 +1,2 @@
 
-add_subdirectory(FirstSample)
+add_subdirectory(first_sample)

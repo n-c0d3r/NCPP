@@ -1,8 +1,8 @@
-#include <NCPP/NCPP.hpp>
+#include <ncpp/ncpp.hpp>
 
 
 
-namespace NCPP {
+namespace ncpp {
 
 
 

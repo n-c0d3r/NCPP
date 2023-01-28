@@ -1,8 +1,8 @@
 #pragma once
 
-namespace NCPP {
+namespace ncpp {
 
-    namespace RTTR {
+    namespace rttr {
 
 
 
@@ -12,12 +12,12 @@ namespace NCPP {
 
 
 
-#include <NCPP/Utilities.hpp>
+#include <ncpp/utilities.hpp>
 
 
-namespace NCPP {
+namespace ncpp {
 
-    namespace RTTR {
+    namespace rttr {
 
 
 

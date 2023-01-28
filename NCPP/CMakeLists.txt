@@ -1,63 +1,63 @@
 
-# NCPP options
+# ncpp options
 set(NCPP_DEFAULT_ALIGNMENT 16 CACHE STRING "Default Data Alignment")
 
 
 
-# NCPP target configure file
-configure_file(Source/NCPP/.Config ${CMAKE_CURRENT_BINARY_DIR}/BuiltSource/NCPP/Config.hpp)
+# ncpp target configure file
+configure_file(source/ncpp/.config ${CMAKE_CURRENT_BINARY_DIR}/built_source/ncpp/config.hpp)
 
 
 
-# NCPP target source files
-file(GLOB SourceFiles
-    "Source/NCPP/*.cpp"
-    "Source/NCPP/*.hpp"
+# ncpp target source files
+file(GLOB source_files
+    "Source/ncpp/*.cpp"
+    "Source/ncpp/*.hpp"
 )
-source_group("Source\\NCPP" FILES ${SourceFiles})
+source_group("Source\\ncpp" FILES ${source_files})
 
-file(GLOB DODSourceFiles
-    "Source/NCPP/DOD/*.cpp"
-    "Source/NCPP/DOD/*.hpp"
+file(GLOB dod_sourceFiles
+    "Source/ncpp/dod/*.cpp"
+    "Source/ncpp/dod/*.hpp"
 )
-source_group("Source\\NCPP\\DOD" FILES ${DODSourceFiles})
+source_group("Source\\ncpp\\dod" FILES ${dod_sourceFiles})
 
-file(GLOB ECSSourceFiles
-    "Source/NCPP/ECS/*.cpp"
-    "Source/NCPP/ECS/*.hpp"
+file(GLOB ecs_sourceFiles
+    "Source/ncpp/ecs/*.cpp"
+    "Source/ncpp/ecs/*.hpp"
 )
-source_group("Source\\NCPP\\ECS" FILES ${ECSSourceFiles})
+source_group("Source\\ncpp\\ecs" FILES ${ecs_sourceFiles})
 
-file(GLOB RTTRSourceFiles
-    "Source/NCPP/RTTR/*.cpp"
-    "Source/NCPP/RTTR/*.hpp"
+file(GLOB rttr_sourceFiles
+    "Source/ncpp/rttr/*.cpp"
+    "Source/ncpp/rttr/*.hpp"
 )
-source_group("Source\\NCPP\\RTTR" FILES ${RTTRSourceFiles})
+source_group("Source\\ncpp\\rttr" FILES ${rttr_sourceFiles})
 
 
 
-# Create NCPP target
-add_library(NCPP STATIC
-    ${SourceFiles}
-    ${DODSourceFiles}
-    ${ECSSourceFiles}
-    ${RTTRSourceFiles}
+# Create ncpp target
+add_library(ncpp STATIC
+    ${source_files}
+    ${dod_sourceFiles}
+    ${ecs_sourceFiles}
+    ${rttr_sourceFiles}
 )
 
 
 
-# NCPP target settings
-set_target_properties(NCPP
+# ncpp target settings
+set_target_properties(ncpp
     PROPERTIES 
-        FOLDER "NCPP"
+        FOLDER "ncpp"
 )
-target_include_directories(NCPP
+target_include_directories(ncpp
     PUBLIC 
-        ${CMAKE_CURRENT_SOURCE_DIR}/Source
-        ${CMAKE_CURRENT_BINARY_DIR}/BuiltSource
+        ${CMAKE_CURRENT_SOURCE_DIR}/source
+        ${CMAKE_CURRENT_BINARY_DIR}/built_source
 )
 
 
 
 # sub directories
-add_subdirectory(Samples)
+add_subdirectory(samples)

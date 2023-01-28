@@ -55,16 +55,6 @@
 #define NCPP_ALIGN(N) __attribute__((__align(N)))
 #endif
 
-
-
-//Use to create the function which is nested inside a struct
-#define NCPP_SFUNCTION(ReturnType, Name, Params, Content) \
-struct Name final {\
-\
-	static ReturnType Invoke Params { Content; }\
-\
-};
-
 #pragma endregion
 
 

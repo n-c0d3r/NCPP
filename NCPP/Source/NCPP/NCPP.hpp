@@ -1,6 +1,6 @@
 #pragma once
 
-namespace NCPP {
+namespace ncpp {
 
 
 
@@ -8,15 +8,15 @@ namespace NCPP {
 
 
 
-#include <NCPP/Utilities.hpp>
-#include <NCPP/DOD/DOD.hpp>
-#include <NCPP/ECS/ECS.hpp>
-#include <NCPP/RTTR/RTTR.hpp>
+#include <ncpp/Utilities.hpp>
+#include <ncpp/dod/dod.hpp>
+#include <ncpp/ecs/ecs.hpp>
+#include <ncpp/rttr/rttr.hpp>
 
 
 
-namespace NCPP {
+namespace ncpp {
 
-
+	
 
 }
