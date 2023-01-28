@@ -269,7 +269,7 @@ namespace NCPP {
 				NCPP_CONSTEXPR void, ClearColumnVectors, (ColumnVectorsTupleType& tuple),
 				{
 
-					typename T_ColumnVectorType<TA_Index>&vector = std::get<typename T_ColumnVectorType<TA_Index>>(tuple);
+					typename T_C_Data::T_ColumnVectorType<TA_Index>&vector = std::get<TA_Index>(tuple);
 
 					vector.clear();
 
@@ -281,7 +281,7 @@ namespace NCPP {
 				NCPP_CONSTEXPR void, ResizeColumnVectors, (ColumnVectorsTupleType& tuple, size_t newRowCount),
 				{
 
-					typename T_ColumnVectorType<TA_Index>&vector = std::get<typename T_ColumnVectorType<TA_Index>>(tuple);
+					typename T_C_Data::T_ColumnVectorType<TA_Index>&vector = std::get<TA_Index>(tuple);
 
 					vector.resize(newRowCount);
 
@@ -293,8 +293,8 @@ namespace NCPP {
 				NCPP_CONSTEXPR void, CopyColumnVectors, (ColumnVectorsTupleType& tupleDst, ColumnVectorsTupleType& tupleSrc),
 				{
 
-					typename T_ColumnVectorType<TA_Index>&vector1 = std::get<typename T_ColumnVectorType<TA_Index>>(tupleDst);
-					typename T_ColumnVectorType<TA_Index>& vector2 = std::get<typename T_ColumnVectorType<TA_Index>>(tupleSrc);
+					typename T_C_Data::T_ColumnVectorType<TA_Index>&vector1 = std::get<TA_Index>(tupleDst);
+					typename T_C_Data::T_ColumnVectorType<TA_Index>& vector2 = std::get<TA_Index>(tupleSrc);
 
 					vector1 = vector2;
 
@@ -306,8 +306,8 @@ namespace NCPP {
 				NCPP_CONSTEXPR void, MoveColumnVectors, (ColumnVectorsTupleType& tupleDst, ColumnVectorsTupleType& tupleSrc),
 				{
 
-					typename T_ColumnVectorType<TA_Index>&vector1 = std::get<typename T_ColumnVectorType<TA_Index>>(tupleDst);
-					typename T_ColumnVectorType<TA_Index>& vector2 = std::get<typename T_ColumnVectorType<TA_Index>>(tupleSrc);
+					typename T_C_Data::T_ColumnVectorType<TA_Index>&vector1 = std::get<TA_Index>(tupleDst);
+					typename T_C_Data::T_ColumnVectorType<TA_Index>& vector2 = std::get<TA_Index>(tupleSrc);
 
 					vector1 = std::move(vector2);
 					vector2.clear();
@@ -320,7 +320,7 @@ namespace NCPP {
 				NCPP_CONSTEXPR void, SetRowTuple, (ColumnVectorsTupleType& tuple, size_t rowIndex, const RowTupleType& rowTuple),
 				{
 
-					std::get<typename T_ColumnVectorType<TA_Index>>(tuple)[rowIndex] = std::get<TA_Index>(rowTuple);
+					std::get<typename T_C_Data::T_ColumnVectorType<TA_Index>>(tuple)[rowIndex] = std::get<TA_Index>(rowTuple);
 
 				}
 			);
@@ -330,7 +330,7 @@ namespace NCPP {
 				NCPP_CONSTEXPR void, GetRowTuple, (const ColumnVectorsTupleType& tuple, size_t rowIndex, RowTupleType& rowTuple),
 				{
 
-					std::get<TA_Index>(rowTuple) = std::get<typename T_ColumnVectorType<TA_Index>>(tuple)[rowIndex];
+					std::get<TA_Index>(rowTuple) = std::get<TA_Index>(tuple)[rowIndex];
 
 				}
 			);

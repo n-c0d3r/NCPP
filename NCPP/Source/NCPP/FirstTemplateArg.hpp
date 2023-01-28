@@ -7,7 +7,7 @@
 namespace NCPP {
 
 	template<
-        typename... TA_Types
+        typename... TA_FullTypes
 	>
 	struct T_S_FirstTemplateArg {
 
@@ -32,7 +32,7 @@ namespace NCPP {
 
 
 
-		using Type = typename T_S_ArgsCase<sizeof...(TA_Types) == 1, TA_Types...>::Type;
+		using Type = typename T_S_ArgsCase<sizeof...(TA_FullTypes) == 1, TA_FullTypes...>::Type;
 
 	};
 
