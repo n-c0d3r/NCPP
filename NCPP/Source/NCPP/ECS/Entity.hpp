@@ -19,7 +19,7 @@ namespace NCPP {
 
 
 
-		struct S_EntitySignature final {
+		NCPP_STRUCT S_EntitySignature final {
 
 #pragma region Properties
 		private:
@@ -51,7 +51,8 @@ namespace NCPP {
 			}
 #pragma endregion
 
-		};
+		}
+		;
 
 
 

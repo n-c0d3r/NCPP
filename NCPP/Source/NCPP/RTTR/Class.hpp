@@ -13,12 +13,12 @@ namespace NCPP {
 			class TA_C_Object,
 			template<typename TA_Type> class TA_T_C_Allocator
 		>
-		class T_C_Class;
+		NCPP_CLASS T_C_Class;
 
 
+		NCPP_CLASS IC_Class {
 
-		class IC_Class {
-
+#pragma region Constructors, Destructor, and Operators
 		public:
 			NCPP_CONSTEXPR IC_Class()
 			{
@@ -31,11 +31,13 @@ namespace NCPP {
 
 
 			}
+#pragma endregion
 
 
 
+#pragma region Methods
 		public:
-			virtual void* CreateInstance() {
+			virtual IC_Object* CreateInstance() {
 
 				return 0;
 			}
@@ -48,6 +50,7 @@ namespace NCPP {
 				TA_C_Object* p_Object,
 				T_C_Class<TA_C_Object, TA_T_C_Allocator>* p_Class
 			);
+#pragma endregion
 
 		};
 
@@ -57,27 +60,34 @@ namespace NCPP {
 			class TA_C_Object,
 			template<typename TA_Type> class TA_T_C_Allocator
 		>
-		class T_C_Class :
+		NCPP_CLASS T_C_Class :
 			public IC_Class
 		{
 
+#pragma region Typedefs
 		public:
 			using C_Object = TA_C_Object;
 			using C_Allocator = TA_T_C_Allocator<C_Object>;
+#pragma endregion
 
 
 
+#pragma region Properties
 		private:
 			C_Allocator m_Allocator;
+#pragma endregion
 
 
 
+#pragma region Getters and Setters
 		public:
 			NCPP_GETTER(C_Allocator& Allocator()) { return m_Allocator; }
 			NCPP_GETTER(const C_Allocator& Allocator()) const { return m_Allocator; }
+#pragma endregion
 
 
 
+#pragma region Constructors, Destructor, and Operators
 		public:
 			NCPP_CONSTEXPR T_C_Class() :
 				IC_Class()
@@ -117,20 +127,23 @@ namespace NCPP {
 
 				return *this;
 			}
+#pragma endregion
 
 
 
+#pragma region Methods
 		public:
-			void* CreateInstance() {
+			IC_Object* CreateInstance() {
 
 				C_Object* ptr = m_Allocator.allocate(1);
-		
+			
 				new(ptr) C_Object();
 
 				T_SetupObject<TA_C_Object, TA_T_C_Allocator>(ptr, this);
 
 				return ptr;
 			}
+#pragma endregion
 
 		};
 

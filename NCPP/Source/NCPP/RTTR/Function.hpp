@@ -9,25 +9,30 @@ namespace NCPP {
 	namespace RTTR {
 
 		template<typename TA_FunctionType>
-		class T_C_Function;
+		NCPP_CLASS T_C_Function;
 
 
 
 		template<typename TA_ReturnType, typename... TA_ArgTypes>
-		class T_C_Function<TA_ReturnType(TA_ArgTypes...)> {
+		NCPP_CLASS T_C_Function<TA_ReturnType(TA_ArgTypes...)> {
 
+#pragma region Typedefs
 		public:
 			using FunctionType = typename TA_ReturnType(TA_ArgTypes...);
 			using FunctorType = std::function<FunctionType>;
 			using ReturnType = typename TA_ReturnType;
+#pragma endregion
 
 
 
+#pragma region Properties
 		private:
 			FunctorType m_Functor;
+#pragma endregion
 
 
 
+#pragma region Constructors, Destructor, and Operators
 		public:
 			NCPP_CONSTEXPR T_C_Function(FunctorType&& functor) :
 				m_Functor(std::move(functor))
@@ -85,6 +90,7 @@ namespace NCPP {
 
 				return m_Functor(std::forward<TA_ArgTypes>(args)...);
 			}
+#pragma endregion
 
 		};
 

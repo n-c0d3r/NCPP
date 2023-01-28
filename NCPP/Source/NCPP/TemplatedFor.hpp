@@ -6,6 +6,7 @@
 
 namespace NCPP {
 
+#pragma region T_TemplatedFor_Step
 	template<
 		template<size_t TA_Index> typename TA_FunctionType,
 		size_t TA_Begin, size_t TA_End, size_t TA_Index,
@@ -80,6 +81,9 @@ namespace NCPP {
 		>::Invoke(std::forward<TA_Args>(args)...);
 
 	};
+#pragma endregion
+
+
 
 	template<
 		template<size_t TA_Index> typename TA_FunctionType,

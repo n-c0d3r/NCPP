@@ -16,7 +16,8 @@ namespace NCPP {
 			template<typename TA_ColumnType> typename TA_T_IdEqualTo,
 			typename... TA_ColumnTypes
 		>
-		NCPP_CLASS T_C_Data final {
+		NCPP_CLASS
+		T_C_Data final {
 
 #pragma region Typedefs
 		public:
@@ -72,7 +73,7 @@ namespace NCPP {
 
 			template<typename TA_ColumnType>
 			NCPP_GETTER(T_ColumnVectorTypeFromColumnType<TA_ColumnType>& T_Column()) {
-				
+					
 				return std::get<T_ColumnVectorTypeFromColumnType<TA_ColumnType>>(m_ColumnVectorsTuple);
 			}
 
@@ -241,7 +242,7 @@ namespace NCPP {
 			}
 
 
-			
+				
 		private:
 			NCPP_CONSTEXPR void CopyFrom(const T_C_Data& other) {
 
@@ -376,7 +377,7 @@ namespace NCPP {
 
 
 #define NCPP_DOD_DATA_TRAVEL(Iterator, Data, ColumnIndex) \
-		for(auto Iterator = Data.T_Column<typename std::remove_reference_t<decltype(Data)>::T_ColumnType<0>>().begin(); Iterator != Data.T_Column<typename std::remove_reference_t<decltype(Data)>::T_ColumnType<0>>().end(); ++Iterator)\
+		for(auto Iterator = Data.T_Column<typename std::remove_reference_t<decltype(Data)>::T_ColumnType<0>>().begin(); Iterator != Data.T_Column<typename std::remove_reference_t<decltype(Data)>::T_ColumnType<0>>().end(); ++Iterator)
 		
 
 	}

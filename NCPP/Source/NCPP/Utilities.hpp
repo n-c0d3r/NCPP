@@ -1,5 +1,7 @@
 #pragma once
 
+#pragma region Includes
+
 #include <NCPP/Config.hpp>
 
 #include <iostream>
@@ -21,27 +23,42 @@
 
 
 
-#ifdef _MSC_VER
+#if defined(_WIN64) || defined(_WIN32)
 #include <Windows.h>
 #include <DirectXMath.h>
 #endif
 
+#pragma endregion
 
+
+
+#pragma region Common Macros
 
 #define NCPP_CONSTEXPR inline constexpr
 #define NCPP_GETTER(Getter) NCPP_CONSTEXPR Getter
 #define NCPP_SETTER(Setter) NCPP_CONSTEXPR Setter 
 
-#ifdef _MSC_VER
-#define NCPP_ALIGN(N) __declspec(align(N))
-#endif
+
 
 #ifndef NCPP_DEFAULT_ALIGNMENT
 #define NCPP_DEFAULT_ALIGNMENT 16
 #endif
 
-#define NCPP_CLASS class NCPP_ALIGN(NCPP_DEFAULT_ALIGNMENT)
-#define NCPP_STRUCT struct NCPP_ALIGN(NCPP_DEFAULT_ALIGNMENT)
+
+
+#if defined(_MSC_VER)
+#define NCPP_ALIGN(N) __declspec(align(N))
+
+#elif defined( __GNUC__ ) || defined(__MINGW64__)
+#define NCPP_ALIGN(N) __attribute__((__align(N)))
+#endif
+
+
+
+#define NCPP_CLASS class NCPP_ALIGN(NCPP_DEFAULT_ALIGNMENT) 
+#define NCPP_STRUCT struct NCPP_ALIGN(NCPP_DEFAULT_ALIGNMENT) 
+
+
 
 //Use to create the function which is nested inside a struct
 #define NCPP_SFUNCTION(ReturnType, Name, Params, Content) \
@@ -51,12 +68,17 @@ struct Name final {\
 \
 };
 
+#pragma endregion
 
+
+
+#pragma region Utility Classes, Structs and Types
 
 namespace NCPP {
 
 	template<class TA_Class>
-	NCPP_CLASS T_C_Singleton {
+	NCPP_CLASS
+	T_C_Singleton {
 
 	private:
 		static TA_Class * s_p_Instance;
@@ -88,3 +110,5 @@ namespace NCPP {
 	using Id = size_t;
 
 }
+
+#pragma endregion

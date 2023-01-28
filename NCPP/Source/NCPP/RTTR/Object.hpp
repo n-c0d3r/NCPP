@@ -12,23 +12,28 @@ namespace NCPP {
 
 
 
-		class IC_Object {
+		NCPP_CLASS IC_Object {
 
 		public:
 			friend class IC_Class;
 
 
 
+#pragma region Properties
 		private:
 			std::function<void()> m_DeletionFunction;
+#pragma endregion
 
 
 
+#pragma region Getters and Setters
 		public:
 			NCPP_GETTER(std::function<void()>& DeletionFunction()) { return m_DeletionFunction; }
+#pragma endregion
 
 
 
+#pragma region Constructors, Destructor, and Operators
 		public:
 			IC_Object() :
 				m_DeletionFunction([this]() {
@@ -51,6 +56,7 @@ namespace NCPP {
 
 				m_DeletionFunction();
 			}
+#pragma endregion
 
 		};
 
@@ -60,6 +66,7 @@ namespace NCPP {
 		template<class TA_C_Object>
 		struct T_S_ObjectDelete {
 
+#pragma region Constructors, Destructor, and Operators
 			constexpr T_S_ObjectDelete() noexcept = default;
 
 			T_S_ObjectDelete(const T_S_ObjectDelete<TA_C_Object>& d) noexcept {
@@ -73,6 +80,7 @@ namespace NCPP {
 				p_Object->Release();
 
 			}
+#pragma endregion
 
 		};
 

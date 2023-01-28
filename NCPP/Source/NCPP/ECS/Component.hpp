@@ -91,8 +91,8 @@ namespace NCPP {
 				m_p_EntitySystem(EntitySystemType::Instance())
 			{
 
+					
 				
-			
 			}
 			virtual ~T_IC_ComponentSystem() {
 
