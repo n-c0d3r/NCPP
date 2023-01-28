@@ -1,0 +1,3 @@
+[submodule "Documentations/Conventions/NCPPConvention"]
+	path = Documentations/Conventions/NCPPConvention
+	url = https://github.com/n-c0d3r/NCPPConvention
