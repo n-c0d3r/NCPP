@@ -13,8 +13,6 @@ namespace NCPP {
 
 
 #include <NCPP/Utilities.hpp>
-#include <NCPP/DOD/Data.hpp>
-#include <NCPP/DOD/System.hpp>
 
 
 

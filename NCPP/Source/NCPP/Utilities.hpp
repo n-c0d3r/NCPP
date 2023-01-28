@@ -4,6 +4,8 @@
 
 #include <NCPP/Config.hpp>
 
+
+
 #include <iostream>
 #include <vector>
 #include <set>
@@ -28,7 +30,13 @@
 #include <DirectXMath.h>
 #endif
 
+
+
 #pragma endregion
+
+
+
+
 
 
 
@@ -40,23 +48,12 @@
 
 
 
-#ifndef NCPP_DEFAULT_ALIGNMENT
-#define NCPP_DEFAULT_ALIGNMENT 16
-#endif
-
-
-
 #if defined(_MSC_VER)
 #define NCPP_ALIGN(N) __declspec(align(N))
 
 #elif defined( __GNUC__ ) || defined(__MINGW64__)
 #define NCPP_ALIGN(N) __attribute__((__align(N)))
 #endif
-
-
-
-#define NCPP_CLASS class NCPP_ALIGN(NCPP_DEFAULT_ALIGNMENT) 
-#define NCPP_STRUCT struct NCPP_ALIGN(NCPP_DEFAULT_ALIGNMENT) 
 
 
 
@@ -72,42 +69,15 @@ struct Name final {\
 
 
 
+
+
+
+
 #pragma region Utility Classes, Structs and Types
 
 namespace NCPP {
 
-	template<class TA_Class>
-	NCPP_CLASS
-	T_C_Singleton {
 
-	private:
-		static TA_Class * s_p_Instance;
-
-
-
-	public:
-		static NCPP_GETTER(TA_Class* P_Instance()) { return s_p_Instance; }
-		static NCPP_GETTER(TA_Class& Instance()) { return *s_p_Instance; }
-
-
-
-	public:
-		NCPP_CONSTEXPR T_C_Singleton() { s_p_Instance = (TA_Class*)this; }
-
-		template<typename... TA_Args>
-		static NCPP_CONSTEXPR TA_Class* CreateInstance(const TA_Args&... args) {
-
-			return new TA_Class(args...);
-		}
-
-	};
-
-	template<class TA_Class>
-	TA_Class* T_C_Singleton<TA_Class>::s_p_Instance = 0;
-
-
-
-	using Id = size_t;
 
 }
 
