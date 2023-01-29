@@ -14,8 +14,6 @@ namespace ncpp {
 
 #include <ncpp/utilities.hpp>
 
-#include <ncpp/dod/data.hpp>
-
 
 
 namespace ncpp {

@@ -45,6 +45,13 @@ namespace ncpp {
             struct meta_type {
 
                 uint32_t outer_index;
+                uint32_t inner_index;
+
+                struct NCPP_DEFAULT_ALIGN {
+
+                    item_type item;
+
+                };
 
             };
 #pragma endregion
@@ -250,8 +257,8 @@ namespace ncpp {
 
 
 
+                meta_set_.push_back({ handle.index, (uint32_t)item_set_.size() });
                 item_set_.push_back(std::forward<item_param_type>(item));
-                meta_set_.push_back({ handle.index });
 
 
 
@@ -307,6 +314,7 @@ namespace ncpp {
                     std::swap(meta_set_.at(inner_index), meta_set_.back());
 
                     sparse_id_set_[meta_set_.at(inner_index).outer_index].index = inner_index;
+                    meta_set_.at(inner_index).inner_index = inner_index;
 
                 }
 
@@ -366,7 +374,7 @@ namespace ncpp {
 
             NCPP_CONSTEXPR item_type& at(meta_type meta) {
 
-                return at(meta.outer_index);
+                return at(meta.inner_index);
             }
 
             NCPP_CONSTEXPR bool is_valid(id_type handle) {
