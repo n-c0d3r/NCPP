@@ -6,14 +6,19 @@ int main() {
 
 	ncpp::containers::handle_map_t<int> int_map(0, 1555);
 
-	int_map.insert(5);
-	
-	int a = 4;
-	auto handle = int_map.insert(a);
+	int_map.insert(0);
+	int_map.insert(1);
+	int_map.insert(2);
+	int_map.insert(3);
+	int_map.insert(4);
 
-	int_map.erase(handle);
+	for (auto meta : int_map.meta_set()) {
 
-	std::cout << int_map.at(handle) << std::endl;
+		int a = int_map[meta];
+
+		std::cout << a << std::endl;
+
+	}
 
 	return 0;
 }
