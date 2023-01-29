@@ -15,7 +15,7 @@ namespace ncpp {
 #include <ncpp/utilities.hpp>
 
 #include <ncpp/containers/handle_map.hpp>
-//#include <ncpp/containers/bridge_map.hpp>
+#include <ncpp/containers/bridge_map.hpp>
 
 
 

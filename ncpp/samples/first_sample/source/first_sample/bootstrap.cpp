@@ -10,103 +10,97 @@
 
 int main() {
 
-	// size_t loop_count = 500000;
+	size_t loop_count = 500000;
 
 
 
-	// {
+	{
 
-	// 	using map_type = ncpp::containers::handle_map_t<int>;
+		using map_type = ncpp::containers::handle_map_t<int>;
 
-	// 	map_type map(0, loop_count * sizeof(int));
+		map_type map(0, loop_count * sizeof(int) * 2);
 
-	// 	clock_t start = clock();
-	// 	for (int i = 0; i < loop_count; ++i) {
+		clock_t start = clock();
+		for (int i = 0; i < loop_count; ++i) {
 
-	// 		map.insert(5);
+			map.insert(5);
 
-	// 	}
-	// 	clock_t end = clock();
-	// 	std::cout << end - start << std::endl;
+		}
+		clock_t end = clock();
+		std::cout << end - start << std::endl;
 
-	// }
-
-
-
-	// {
-
-	// 	using map_type = std::unordered_map<int, bool>;
-
-	// 	map_type map;
-
-	// 	clock_t start = clock();
-	// 	for (int i = 0; i < loop_count; ++i) {
-
-	// 		map.insert({ i, 5 });
-
-	// 	}
-	// 	clock_t end = clock();
-	// 	std::cout << end - start << std::endl;
-
-	// }
+	}
 
 
 
-	// {
+	{
 
-	// 	using map_type = ncpp::containers::handle_map_t<int>;
+		using map_type = std::unordered_map<int, bool>;
 
-	// 	map_type map(0, loop_count * sizeof(int));
+		map_type map;
 
-	// 	for (int i = 0; i < loop_count; ++i) {
+		clock_t start = clock();
+		for (int i = 0; i < loop_count; ++i) {
 
-	// 		map.insert(5);
+			map.insert({ i, 5 });
 
-	// 	}
+		}
+		clock_t end = clock();
+		std::cout << end - start << std::endl;
 
-	// 	clock_t start = clock();
-
-	// 	clock_t end = clock();
-	// 	std::cout << end - start << std::endl;
-
-	// }
+	}
 
 
 
-	// {
+	{
 
-	// 	using map_type = std::unordered_map<int, bool>;
+		using map_type = ncpp::containers::handle_map_t<int>;
 
-	// 	map_type map;
+		map_type map(0, loop_count * sizeof(int) * 2);
 
-	// 	for (int i = 0; i < loop_count; ++i) {
+		for (int i = 0; i < loop_count; ++i) {
 
-	// 		map.insert({ i, 5 });
+			map.insert(i);
 
-	// 	}
+		}
 
-	// 	clock_t start = clock();
-	// 	for (auto& it : map) {
+		clock_t start = clock();
+		size_t sum = 0;
+		for (auto& meta : map) {
 
-	// 		it.second = it.second * 2;
-	// 		it.second = it.second * 2;
-	// 		it.second = it.second * 2;
-	// 		it.second = it.second * 2;
-	// 		it.second = it.second * 2;
-	// 		it.second = it.second * 2;
+			sum += meta.item;
 
-	// 	}
-	// 	clock_t end = clock();
-	// 	std::cout << end - start << std::endl;
+		}
+		clock_t end = clock();
+		std::cout << end - start << std::endl;
 
-	// }
+	}
 
 
-	using map_type = ncpp::containers::handle_map_t<int>;
 
-	map_type map;
+	{
 
-	map.insert(5);
+		using map_type = std::unordered_map<int, bool>;
+
+		map_type map;
+
+		for (int i = 0; i < loop_count; ++i) {
+
+			map.insert({ i, i });
+
+		}
+
+		clock_t start = clock();
+		size_t sum = 0;
+		for (auto& it : map) {
+
+			sum += it.second;
+
+		}
+		clock_t end = clock();
+		std::cout << end - start << std::endl;
+
+	}
 
 	return 0;
 }

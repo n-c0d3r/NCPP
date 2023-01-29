@@ -62,7 +62,6 @@ namespace ncpp {
         public:
             using id_set_type = std::vector<id_type, allocator_t<id_type>>;
             using meta_set_type = std::vector<meta_type, allocator_t<meta_type>>;
-            using item_set_type = std::vector<item_type, allocator_t<item_type>>;
 #pragma endregion
 
 
@@ -76,7 +75,6 @@ namespace ncpp {
 
             bool is_fragmented_ = 0;
 
-            item_set_type item_set_;
             id_set_type sparse_id_set_;
             meta_set_type meta_set_;
 #pragma endregion
@@ -85,11 +83,9 @@ namespace ncpp {
 
 #pragma region Getters and Setters
         public:
-            NCPP_GETTER(size_t size()) const noexcept { return item_set_.size(); }
-            NCPP_GETTER(size_t capacity()) const noexcept { return item_set_.capacity(); }
+            NCPP_GETTER(size_t size()) const noexcept { return meta_set_.size(); }
+            NCPP_GETTER(size_t capacity()) const noexcept { return meta_set_.capacity(); }
 
-            NCPP_GETTER(item_set_type& item_set()) { return item_set_; }
-            NCPP_GETTER(const item_set_type& item_set())const  { return item_set_; }
             NCPP_GETTER(id_set_type& sparse_id_set()) { return sparse_id_set_; }
             NCPP_GETTER(const id_set_type& sparse_id_set())const { return sparse_id_set_; }
             NCPP_GETTER(meta_set_type& meta_set()) { return meta_set_; }
@@ -107,13 +103,13 @@ namespace ncpp {
 
             NCPP_GETTER(bool is_free_list_empty()) const noexcept { return free_list_front_ == 0xFFFFFFFF; }
 
-            NCPP_GETTER(typename item_set_type::iterator       begin()) { return item_set_.begin(); }
-            NCPP_GETTER(typename item_set_type::const_iterator cbegin()) const { return item_set_.cbegin(); }
-            NCPP_GETTER(typename item_set_type::iterator       end()) { return item_set_.end(); }
-            NCPP_GETTER(typename item_set_type::const_iterator cend()) const { return item_set_.cend(); }
+            NCPP_GETTER(typename meta_set_type::iterator       begin()) { return meta_set_.begin(); }
+            NCPP_GETTER(typename meta_set_type::const_iterator cbegin()) const { return meta_set_.cbegin(); }
+            NCPP_GETTER(typename meta_set_type::iterator       end()) { return meta_set_.end(); }
+            NCPP_GETTER(typename meta_set_type::const_iterator cend()) const { return meta_set_.cend(); }
 
-            NCPP_GETTER(item_type front()) const { return item_set_.front(); }
-            NCPP_GETTER(item_type back()) const { return item_set_.back(); }
+            NCPP_GETTER(meta_set_type front()) const { return meta_set_.front().item; }
+            NCPP_GETTER(meta_set_type back()) const { return meta_set_.back().item; }
 #pragma endregion
 
 
@@ -123,7 +119,6 @@ namespace ncpp {
             explicit handle_map_t(uint16_t item_type_id, size_t reserve_count) : 
                 item_type_id_(item_type_id)
             {
-                item_set_.reserve(reserve_count);
                 sparse_id_set_.reserve(reserve_count);
                 meta_set_.reserve(reserve_count);
             }
@@ -140,7 +135,6 @@ namespace ncpp {
 
             handle_map_t(const handle_map_t& other) : 
                 item_type_id_(other.item_type_id_),
-                item_set_(other.item_set_),
                 sparse_id_set_(other.sparse_id_set_),
                 meta_set_(other.meta_set_),
                 is_fragmented_(other.is_fragmented_),
@@ -154,7 +148,6 @@ namespace ncpp {
             NCPP_CONSTEXPR handle_map_t& operator = (const handle_map_t& other) {
 
                 item_type_id_ = other.item_type_id_;
-                item_set_ = other.item_set_;
                 sparse_id_set_ = other.sparse_id_set_;
                 meta_set_ = other.meta_set_;
                 is_fragmented_ = other.is_fragmented_;
@@ -166,7 +159,6 @@ namespace ncpp {
 
             handle_map_t(handle_map_t&& other) :
                 item_type_id_(std::move(other.item_type_id_)),
-                item_set_(std::move(other.item_set_)),
                 sparse_id_set_(std::move(other.sparse_id_set_)),
                 meta_set_(std::move(other.meta_set_)),
                 is_fragmented_(std::move(other.is_fragmented_)),
@@ -180,7 +172,6 @@ namespace ncpp {
             NCPP_CONSTEXPR handle_map_t& operator = (handle_map_t&& other) {
 
                 item_type_id_ = std::move(other.item_type_id_);
-                item_set_ = std::move(other.item_set_);
                 sparse_id_set_ = std::move(other.sparse_id_set_);
                 meta_set_ = std::move(other.meta_set_);
                 is_fragmented_ = std::move(other.is_fragmented_);
@@ -192,19 +183,14 @@ namespace ncpp {
 
 
 
-            NCPP_CONSTEXPR item_type& operator[](id_type handle) {
+            NCPP_CONSTEXPR meta_type& operator[](id_type handle) {
 
                 return at(handle);
             }
 
-            NCPP_CONSTEXPR item_type& operator[](uint32_t inner_index) {
+            NCPP_CONSTEXPR meta_type& operator[](uint32_t inner_index) {
 
                 return at(inner_index);
-            }
-
-            NCPP_CONSTEXPR item_type& operator[](meta_type meta) {
-
-                return at(meta);
             }
 #pragma endregion
 
@@ -225,7 +211,7 @@ namespace ncpp {
 
                     id_type inner_id = {
                     
-                        (uint32_t)item_set_.size(),
+                        (uint32_t)meta_set_.size(),
                         1,
                         item_type_id_,
                         0
@@ -249,7 +235,7 @@ namespace ncpp {
                     }
 
                     inner_id.is_free = 0;
-                    inner_id.index = (uint32_t)item_set_.size();
+                    inner_id.index = (uint32_t)meta_set_.size();
 
                     handle = inner_id;
                     handle.index = outer_index;
@@ -257,8 +243,7 @@ namespace ncpp {
 
 
 
-                meta_set_.push_back({ handle.index, (uint32_t)item_set_.size() });
-                item_set_.push_back(std::forward<item_param_type>(item));
+                meta_set_.push_back({ handle.index, (uint32_t)meta_set_.size(), std::forward<item_param_type>(item)});
 
 
 
@@ -308,9 +293,8 @@ namespace ncpp {
 
                 }
 
-                if (inner_index != item_set_.size() - 1) {
+                if (inner_index != meta_set_.size() - 1) {
 
-                    std::swap(item_set_.at(inner_index), item_set_.back());
                     std::swap(meta_set_.at(inner_index), meta_set_.back());
 
                     sparse_id_set_[meta_set_.at(inner_index).outer_index].index = inner_index;
@@ -320,7 +304,6 @@ namespace ncpp {
 
 
 
-                item_set_.pop_back();
                 meta_set_.pop_back();
 
 
@@ -346,13 +329,12 @@ namespace ncpp {
 
             inline void reset() {
 
-                item_set_.clear();
                 sparse_id_set_.clear();
                 meta_set_.clear();
 
             }
 
-            NCPP_CONSTEXPR item_type& at(id_type handle) {
+            NCPP_CONSTEXPR meta_type& at(id_type handle) {
 
                 assert(handle.index < sparse_id_set_.size() && "outer index out of range");
                 
@@ -360,21 +342,16 @@ namespace ncpp {
 
                 assert(handle.type_id == item_type_id_ && "type id mismatch");
                 assert(handle.generation == inner_id.generation && "at called with old generation");
-                assert(inner_id.index < item_set_.size() && "inner index out of range");
+                assert(inner_id.index < meta_set_.size() && "inner index out of range");
 
-                return item_set_[inner_id.index];
+                return meta_set_[inner_id.index];
             }
 
-            NCPP_CONSTEXPR item_type& at(uint32_t inner_index) {
+            NCPP_CONSTEXPR meta_type& at(uint32_t inner_index) {
 
-                assert(inner_index < item_set_.size() && "inner index out of range");
+                assert(inner_index < meta_set_.size() && "inner index out of range");
 
-                return item_set_[inner_index];
-            }
-
-            NCPP_CONSTEXPR item_type& at(meta_type meta) {
-
-                return at(meta.inner_index);
+                return meta_set_[inner_index];
             }
 
             NCPP_CONSTEXPR bool is_valid(id_type handle) {
@@ -386,7 +363,7 @@ namespace ncpp {
                 return (
                     (handle.type_id == item_type_id_)
                     && (handle.generation == inner_id.generation)
-                    && (inner_id.index < item_set_.size())
+                    && (inner_id.index < meta_set_.size())
                 );
             }
 #pragma endregion
