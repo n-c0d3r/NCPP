@@ -112,7 +112,7 @@ struct PP_CAT(static_warning,__LINE__) { \
 
 #pragma region Utility Items
 
-namespace NCPP {
+namespace ncpp {
 
 	
 
