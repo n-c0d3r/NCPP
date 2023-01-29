@@ -18,7 +18,7 @@ int main() {
 
 		using map_type = ncpp::containers::handle_map_t<int>;
 
-		map_type map(0, loop_count * sizeof(int) * 2);
+		map_type map(loop_count * sizeof(int) * 2);
 
 		clock_t start = clock();
 		for (int i = 0; i < loop_count; ++i) {
@@ -56,7 +56,7 @@ int main() {
 
 		using map_type = ncpp::containers::handle_map_t<int>;
 
-		map_type map(0, loop_count * sizeof(int) * 2);
+		map_type map(loop_count * sizeof(int) * 2);
 
 		for (int i = 0; i < loop_count; ++i) {
 

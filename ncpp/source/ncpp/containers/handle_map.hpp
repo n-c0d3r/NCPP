@@ -24,7 +24,6 @@ namespace ncpp {
 
                         uint32_t index;
                         uint16_t generation;
-                        uint16_t type_id : 15;
                         uint16_t is_free : 1;
 
                     };
@@ -71,8 +70,6 @@ namespace ncpp {
             uint32_t free_list_front_ = 0xFFFFFFFF;
             uint32_t free_list_back_  = 0xFFFFFFFF;
 
-            uint16_t item_type_id_;
-
             bool is_fragmented_ = 0;
 
             id_set_type sparse_id_set_;
@@ -116,14 +113,13 @@ namespace ncpp {
 
 #pragma region Constructors, Destructor and Operators
         public:
-            explicit handle_map_t(uint16_t item_type_id, size_t reserve_count) : 
-                item_type_id_(item_type_id)
+            explicit handle_map_t(size_t reserve_count)
             {
                 sparse_id_set_.reserve(reserve_count);
                 meta_set_.reserve(reserve_count);
             }
             explicit handle_map_t() :
-                handle_map_t(0, NCPP_CONTAINERS_DEFAULT_HANDLE_MAP_RESERVE_COUNT)
+                handle_map_t(NCPP_CONTAINERS_DEFAULT_HANDLE_MAP_RESERVE_COUNT)
             {
 
             }
@@ -213,7 +209,6 @@ namespace ncpp {
                     
                         (uint32_t)meta_set_.size(),
                         1,
-                        item_type_id_,
                         0
                     
                     };
@@ -340,7 +335,6 @@ namespace ncpp {
                 
                 id_type inner_id = sparse_id_set_[handle.index];
 
-                assert(handle.type_id == item_type_id_ && "type id mismatch");
                 assert(handle.generation == inner_id.generation && "at called with old generation");
                 assert(inner_id.index < meta_set_.size() && "inner index out of range");
 
@@ -361,8 +355,7 @@ namespace ncpp {
                 id_type inner_id = sparse_id_set_[handle.index];
 
                 return (
-                    (handle.type_id == item_type_id_)
-                    && (handle.generation == inner_id.generation)
+                    (handle.generation == inner_id.generation)
                     && (inner_id.index < meta_set_.size())
                 );
             }
