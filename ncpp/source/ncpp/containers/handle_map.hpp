@@ -2,6 +2,8 @@
 
 #include <ncpp/utilities.hpp>
 
+#include <ncpp/tmp_helper/tmp_helper.hpp>
+
 
 
 namespace ncpp {
@@ -86,6 +88,11 @@ namespace ncpp {
             NCPP_GETTER(meta_set_type& meta_set()) { return meta_set_; }
             NCPP_GETTER(const meta_set_type& meta_set())const { return meta_set_; }
 
+            NCPP_GETTER(id_type& sparse_id(uint32_t index)) { return sparse_id_set_[index]; }
+            NCPP_GETTER(const id_type& sparse_id(uint32_t index))const { return sparse_id_set_[index]; }
+            NCPP_GETTER(meta_type& meta(uint32_t index)) { return meta_set_[index]; }
+            NCPP_GETTER(const meta_type& meta(uint32_t index))const { return meta_set_[index]; }
+
             NCPP_GETTER(uint32_t free_list_front()) const noexcept { return free_list_front_; }
             NCPP_GETTER(uint32_t free_list_back()) const noexcept { return free_list_back_; }
 
@@ -113,9 +120,14 @@ namespace ncpp {
                 sparse_id_set_.reserve(reserve_count);
                 meta_set_.reserve(reserve_count);
             }
+            explicit handle_map_t() :
+                handle_map_t(0, NCPP_CONTAINERS_DEFAULT_HANDLE_MAP_RESERVE_COUNT)
+            {
+
+            }
             ~handle_map_t() {
 
-
+                reset();
 
             }
 
@@ -175,33 +187,17 @@ namespace ncpp {
 
             NCPP_CONSTEXPR item_type& operator[](id_type handle) {
 
-                assert(handle.index < sparse_id_set_.size() && "outer index out of range");
-
-                id_type inner_id = sparse_id_set_[handle.index];
-
-                assert(handle.type_id == item_type_id_ && "type id mismatch");
-                assert(handle.generation == inner_id.generation && "at called with old generation");
-                assert(inner_id.index < item_set_.size() && "inner index out of range");
-
-                return item_set_[inner_id.index];
+                return at(handle);
             }
 
             NCPP_CONSTEXPR item_type& operator[](uint32_t inner_index) {
 
-                assert(inner_index < item_set_.size() && "inner index out of range");
-
-                return item_set_[inner_index];
+                return at(inner_index);
             }
 
             NCPP_CONSTEXPR item_type& operator[](meta_type meta) {
 
-                assert(meta.outer_index < sparse_id_set_.size() && "outer index out of range");
-
-                id_type inner_id = sparse_id_set_[meta.outer_index];
-
-                assert(inner_id.index < item_set_.size() && "inner index out of range");
-
-                return item_set_[inner_id.index];
+                return at(meta);
             }
 #pragma endregion
 

@@ -1,6 +1,9 @@
 
-# ncpp options
+# ncpp utility options
 set(NCPP_DEFAULT_ALIGNMENT 16 CACHE STRING "Default Data Alignment")
+
+# ncpp containers options
+set(NCPP_CONTAINERS_DEFAULT_HANDLE_MAP_RESERVE_COUNT 1024 CACHE STRING "Default Handle Map Reserve Count")
 
 
 

@@ -22,7 +22,7 @@ namespace ncpp {
             template<template<size_t index> typename f_type_t, bool is_end, size_t end, size_t index, typename... arg_types>
             inline void step_invoke_t(arg_types&&... args) {
 
-                step_t<f_type_t, is_end, end, index, arg_types...>::invoke(std::forward<args>...);
+                step_t<f_type_t, is_end, end, index, arg_types...>::invoke(std::forward<arg_types>(args)...);
             }
 
             template<template<size_t index> typename f_type_t, size_t end, size_t index, typename... arg_types>
@@ -41,9 +41,9 @@ namespace ncpp {
 
                 static inline void invoke(arg_types&&... args) {
 
-                    f_type_t<index>::invoke(std::forward<args>...);
+                    f_type_t<index>::invoke(std::forward<arg_types>(args)...);
 
-                    step_invoke_t<f_type_t, index + 1 == end, end, index + 1, arg_types...>(std::forward<args>...);
+                    step_invoke_t<f_type_t, index + 1 == end, end, index + 1, arg_types...>(std::forward<arg_types>(args)...);
 
                 }
 
@@ -58,7 +58,7 @@ namespace ncpp {
 
             static_warning(end > begin, "end > begin, templated_for_t will not be executed.");
 
-            templated_for_helper::step_invoke_t<f_type_t, (end <= begin), end, begin, arg_types...>(std::forward<args>...);
+            templated_for_helper::step_invoke_t<f_type_t, (end <= begin), end, begin, arg_types...>(std::forward<arg_types>(args)...);
 
         }
 

@@ -2,6 +2,8 @@
 
 #include <ncpp/utilities.hpp>
 
+#include <ncpp/tmp_helper/tmp_helper.hpp>
+
 #include <ncpp/containers/handle_map.hpp>
 
 

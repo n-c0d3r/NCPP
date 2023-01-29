@@ -57,15 +57,14 @@
 
 
 
-#define NCPP_LOOP_FUNCTION_T(Name, Params) \
+// Not allow use of directive inside function body
+#define NCPP_LOOP_FUNCTION_T(Name, Params, Body) \
 template<size_t index>\
 struct Name {\
 \
-	static inline void invoke Params; \
+	static inline void invoke Params { Body; }; \
 \
-};\
-template<size_t index>\
-inline void Name<index>::invoke Params
+};
 
 
 
