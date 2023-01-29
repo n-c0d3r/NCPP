@@ -45,6 +45,8 @@ namespace ncpp {
             template<size_t column_index>
             using id_set_type_t = typename column_type_t<column_index>::id_set_type;
 
+            using row_type = typename std::tuple<column_types...>;
+            using row_id_type = typename std::tuple<typename containers::handle_map_t<column_types, allocator_t>::id_type...>;
             using map_tuple_type = typename std::tuple<typename containers::handle_map_t<column_types, allocator_t>...>;
 #pragma endregion
 
@@ -155,6 +157,43 @@ namespace ncpp {
                 }
             );
 
+            NCPP_LOOP_FUNCTION_T(
+                emplace_row_copy_t, (map_tuple_type& map_tuple, const row_type& row, row_id_type& row_handle),
+                {
+
+                    using map_type = typename data_t::item_map_type_t<index>;
+                    using item_type = typename data_t::item_type_t<index>;
+                    using id_type = typename data_t::id_type_t<index>;
+
+                    std::get<id_type>(row_handle) = std::get<map_type>(map_tuple).insert(std::get<item_type>(row));
+
+                }
+            );
+            NCPP_LOOP_FUNCTION_T(
+                emplace_row_move_t, (map_tuple_type& map_tuple, const row_type& row, row_id_type& row_handle),
+                {
+
+                    using map_type = typename data_t::item_map_type_t<index>;
+                    using item_type = typename data_t::item_type_t<index>;
+                    using id_type = typename data_t::id_type_t<index>;
+
+                    std::get<id_type>(row_handle) = std::get<map_type>(map_tuple).insert(std::move(std::get<item_type>(row)));
+
+                }
+            );
+
+            NCPP_LOOP_FUNCTION_T(
+                erase_row_t, (map_tuple_type& map_tuple, row_id_type& row_handle),
+                {
+
+                    using map_type = typename data_t::item_map_type_t<index>;
+                    using id_type = typename data_t::id_type_t<index>;
+
+                    std::get<map_type>(map_tuple).erase(std::get<id_type>(row_handle));
+
+                }
+            );
+
 
 
         public:
@@ -191,6 +230,42 @@ namespace ncpp {
 
                 tmp_helper::templated_for_t<reset_map_tuple_t, 0, column_count>(map_tuple_);
 
+            }
+
+            row_id_type emplace(const row_type& row) {
+
+                row_id_type row_handle;
+
+                tmp_helper::templated_for_t<emplace_row_copy_t, 0, column_count>(map_tuple_, row, row_handle);
+
+                return row_handle;
+            }
+            row_id_type emplace(const column_types&... items) {
+
+                row_type row = std::make_tuple(items...);
+
+                return emplace(row);
+            }
+            row_id_type emplace(row_type&& row) {
+
+                row_id_type row_handle;
+
+                tmp_helper::templated_for_t<emplace_row_move_t, 0, column_count>(map_tuple_, std::forward<row_type>(row), row_handle);
+
+                return row_handle;
+            }
+            row_id_type emplace(column_types&&... items) {
+
+                return emplace(std::move(std::make_tuple(items...)));
+            }
+
+            void erase(row_id_type row_handle) {
+
+                tmp_helper::templated_for_t<erase_row_t, 0, column_count>(map_tuple_, row_handle);
+            }
+            void erase(typename containers::handle_map_t<column_types, allocator_t>::id_type... handles) {
+
+                return erase(std::move(std::make_tuple(handles...)));
             }
 #pragma endregion
 
