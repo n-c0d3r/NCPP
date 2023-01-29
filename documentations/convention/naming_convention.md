@@ -20,42 +20,14 @@
         + **_t** : `Template`
     + Multiple Prefixes:
         + Non-template:
-            + Member:
-                + **\__p\__** : `Member Pointer`
-                + **\__l\__** : `Member LValue Reference`
-                + **\__r\__** : `Member RValue Reference`
-                + **\__u\__** : `Member Universal Reference`
-            + Static:
-                + **_ps** : `Static Pointer`
-                + **_ls** : `Static LValue Reference`
-                + **_rs** : `Static RValue Reference`
-                + **_us** : `Static Universal Reference`
-            + Global:
-                + **_pg** : `Global Pointer`
-                + **_lg** : `Global LValue Reference`
-                + **_rg** : `Global RValue Reference`
-                + **_ug** : `Global Universal Reference`
+            + **\__p\__** : `Member Pointer`
+            + **_ps** : `Static Pointer`
+            + **_pg** : `Global Pointer`
         + Template:
-            + Ordinary:
-                + **_pt** : `Pointer Template`
-                + **_lt** : `LValue Reference Template`
-                + **_rt** : `RValue Reference Template`
-                + **_ut** : `Universal Reference Template`
-            + Member:
-                + **\__pt\__** : `Member Pointer Template`
-                + **\__lt\__** : `Member LValue Reference Template`
-                + **\__rt\__** : `Member RValue Reference Template`
-                + **\__ut\__** : `Member Universal Reference Template`
-            + Static:
-                + **_pst** : `Static Pointer Template`
-                + **_lst** : `Static LValue Reference Template`
-                + **_rst** : `Static RValue Reference Template`
-                + **_ust** : `Static Universal Reference Template`
-            + Global:
-                + **_pgt** : `Global Pointer Template`
-                + **_lgt** : `Global LValue Reference Template`
-                + **_rgt** : `Global RValue Reference Template`
-                + **_ugt** : `Global Universal Reference Template`
+            + **_pt** : `Pointer Template`
+            + **\__pt\__** : `Member Pointer Template`
+            + **_pst** : `Static Pointer Template`
+            + **_pgt** : `Global Pointer Template`
 
 ## Casings: ##
 - Camel Case:
