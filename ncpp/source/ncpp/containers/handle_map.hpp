@@ -106,8 +106,8 @@ namespace ncpp {
 
 #pragma region Constructors, Destructor and Operators
         public:
-            explicit handle_map_t(uint16_t item_type_id, size_t reserve_count)
-                : item_type_id_(item_type_id)
+            explicit handle_map_t(uint16_t item_type_id, size_t reserve_count) : 
+                item_type_id_(item_type_id)
             {
                 item_set_.reserve(reserve_count);
                 sparse_id_set_.reserve(reserve_count);
@@ -117,6 +117,58 @@ namespace ncpp {
 
 
 
+            }
+
+            handle_map_t(const handle_map_t& other) : 
+                item_type_id_(other.item_type_id_),
+                item_set_(other.item_set_),
+                sparse_id_set_(other.sparse_id_set_),
+                meta_set_(other.meta_set_),
+                is_fragmented_(other.is_fragmented_),
+                free_list_front_(other.free_list_front_),
+                free_list_back_(other.free_list_back_)
+            {
+
+
+
+            }
+            NCPP_CONSTEXPR handle_map_t& operator = (const handle_map_t& other) {
+
+                item_type_id_ = other.item_type_id_;
+                item_set_ = other.item_set_;
+                sparse_id_set_ = other.sparse_id_set_;
+                meta_set_ = other.meta_set_;
+                is_fragmented_ = other.is_fragmented_;
+                free_list_front_ = other.free_list_front_;
+                free_list_back_ = other.free_list_back_;
+
+                return *this;
+            }
+
+            handle_map_t(handle_map_t&& other) :
+                item_type_id_(std::move(other.item_type_id_)),
+                item_set_(std::move(other.item_set_)),
+                sparse_id_set_(std::move(other.sparse_id_set_)),
+                meta_set_(std::move(other.meta_set_)),
+                is_fragmented_(std::move(other.is_fragmented_)),
+                free_list_front_(std::move(other.free_list_front_)),
+                free_list_back_(std::move(other.free_list_back_))
+            {
+
+
+
+            }
+            NCPP_CONSTEXPR handle_map_t& operator = (handle_map_t&& other) {
+
+                item_type_id_ = std::move(other.item_type_id_);
+                item_set_ = std::move(other.item_set_);
+                sparse_id_set_ = std::move(other.sparse_id_set_);
+                meta_set_ = std::move(other.meta_set_);
+                is_fragmented_ = std::move(other.is_fragmented_);
+                free_list_front_ = std::move(other.free_list_front_);
+                free_list_back_ = std::move(other.free_list_back_);
+
+                return *this;
             }
 
 

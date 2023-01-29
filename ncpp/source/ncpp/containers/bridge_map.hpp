@@ -53,9 +53,54 @@ namespace ncpp {
             }
             ~bridge_map_t() {
 
-                map1_to_map2_index_set_.clear();
-                map2_to_map1_index_set_.clear();
+                clear();
 
+            }
+
+
+
+            bridge_map_t(const bridge_map_t& other) :
+                map1_(other.map1_),
+                map2_(other.map2_),
+
+                map1_to_map2_index_set_(other.map1_to_map2_index_set_),
+                map2_to_map1_index_set_(other.map2_to_map1_index_set_)
+            {
+
+
+
+            }
+            NCPP_CONSTEXPR bridge_map_t& operator = (const bridge_map_t& other) {
+
+                map1_ = other.map1_;
+                map2_ = other.map2_;
+
+                map1_to_map2_index_set_ = other.map1_to_map2_index_set_;
+                map2_to_map1_index_set_ = other.map2_to_map1_index_set_;
+
+                return *this;
+            }
+
+            bridge_map_t(bridge_map_t&& other) :
+                map1_(other.map1_),
+                map2_(other.map2_),
+
+                map1_to_map2_index_set_(std::move(other.map1_to_map2_index_set_)),
+                map2_to_map1_index_set_(std::move(other.map2_to_map1_index_set_))
+            {
+
+
+
+            }
+            NCPP_CONSTEXPR bridge_map_t& operator = (bridge_map_t&& other) {
+
+                map1_ = other.map1_;
+                map2_ = other.map2_;
+
+                map1_to_map2_index_set_ = std::move(other.map1_to_map2_index_set_);
+                map2_to_map1_index_set_ = std::move(other.map2_to_map1_index_set_);
+
+                return *this;
             }
 #pragma endregion
 
@@ -103,6 +148,13 @@ namespace ncpp {
 
                 map1_to_map2_index_set_[handle1.index] = handle2.index;
                 map2_to_map1_index_set_[handle2.index] = handle1.index;
+
+            }
+
+            inline void clear() {
+
+                map1_to_map2_index_set_.clear();
+                map2_to_map1_index_set_.clear();
 
             }
 #pragma endregion
