@@ -2,7 +2,7 @@
 
 namespace ncpp {
 
-    namespace rttr {
+    namespace containers {
 
 
 
@@ -14,11 +14,13 @@ namespace ncpp {
 
 #include <ncpp/utilities.hpp>
 
+#include <ncpp/containers/handle_map.hpp>
+
 
 
 namespace ncpp {
 
-    namespace rttr {
+    namespace containers {
 
 
 

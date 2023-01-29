@@ -52,10 +52,10 @@
                 + **_rst** : `Static RValue Reference Template`
                 + **_ust** : `Static Universal Reference Template`
             + Global:
-                + **_pgt** : `Pointer Template`
-                + **_lgt** : `LValue Reference Template`
-                + **_rgt** : `RValue Reference Template`
-                + **_ugt** : `Universal Reference Template`
+                + **_pgt** : `Global Pointer Template`
+                + **_lgt** : `Global LValue Reference Template`
+                + **_rgt** : `Global RValue Reference Template`
+                + **_ugt** : `Global Universal Reference Template`
 
 ## Casings: ##
 - Camel Case:

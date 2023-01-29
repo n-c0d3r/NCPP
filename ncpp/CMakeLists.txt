@@ -11,37 +11,58 @@ configure_file(source/ncpp/.config ${CMAKE_CURRENT_BINARY_DIR}/built_source/ncpp
 
 # ncpp target source files
 file(GLOB source_files
-    "Source/ncpp/*.cpp"
-    "Source/ncpp/*.hpp"
+    "source/ncpp/*.cpp"
+    "source/ncpp/*.hpp"
 )
-source_group("Source\\ncpp" FILES ${source_files})
+source_group("source\\ncpp" FILES ${source_files})
 
-file(GLOB dod_sourceFiles
-    "Source/ncpp/dod/*.cpp"
-    "Source/ncpp/dod/*.hpp"
+file(GLOB tmp_helper_source_files
+    "source/ncpp/tmp_helper/*.cpp"
+    "source/ncpp/tmp_helper/*.hpp"
 )
-source_group("Source\\ncpp\\dod" FILES ${dod_sourceFiles})
+source_group("source\\ncpp\\tmp_helper" FILES ${tmp_helper_source_files})
 
-file(GLOB ecs_sourceFiles
-    "Source/ncpp/ecs/*.cpp"
-    "Source/ncpp/ecs/*.hpp"
+file(GLOB containers_source_files
+    "source/ncpp/containers/*.cpp"
+    "source/ncpp/containers/*.hpp"
 )
-source_group("Source\\ncpp\\ecs" FILES ${ecs_sourceFiles})
+source_group("source\\ncpp\\containers" FILES ${containers_source_files})
 
-file(GLOB rttr_sourceFiles
-    "Source/ncpp/rttr/*.cpp"
-    "Source/ncpp/rttr/*.hpp"
+file(GLOB dod_source_files
+    "source/ncpp/dod/*.cpp"
+    "source/ncpp/dod/*.hpp"
 )
-source_group("Source\\ncpp\\rttr" FILES ${rttr_sourceFiles})
+source_group("source\\ncpp\\dod" FILES ${dod_source_files})
+
+file(GLOB job_system_source_files
+    "source/ncpp/job_system/*.cpp"
+    "source/ncpp/job_system/*.hpp"
+)
+source_group("source\\ncpp\\job_system" FILES ${job_system_source_files})
+
+file(GLOB ecs_source_files
+    "source/ncpp/ecs/*.cpp"
+    "source/ncpp/ecs/*.hpp"
+)
+source_group("source\\ncpp\\ecs" FILES ${ecs_source_files})
+
+file(GLOB rttr_source_files
+    "source/ncpp/rttr/*.cpp"
+    "source/ncpp/rttr/*.hpp"
+)
+source_group("source\\ncpp\\rttr" FILES ${rttr_source_files})
 
 
 
 # Create ncpp target
 add_library(ncpp STATIC
     ${source_files}
-    ${dod_sourceFiles}
-    ${ecs_sourceFiles}
-    ${rttr_sourceFiles}
+    ${tmp_helper_source_files}
+    ${containers_source_files}
+    ${dod_source_files}
+    ${job_system_source_files}
+    ${ecs_source_files}
+    ${rttr_source_files}
 )
 
 
