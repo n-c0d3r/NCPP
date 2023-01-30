@@ -1,17 +1,5 @@
 #pragma once
 
-namespace ncpp {
-
-    namespace ecs {
-
-
-
-    }
-
-}
-
-
-
 #include <ncpp/utilities.hpp>
 
 #include <ncpp/tmp_helper/tmp_helper.hpp>
@@ -19,17 +7,20 @@ namespace ncpp {
 #include <ncpp/dod/dod.hpp>
 #include <ncpp/job_system/job_system.hpp>
 
-#include <ncpp/ecs/world.hpp>
-#include <ncpp/ecs/entity.hpp>
-#include <ncpp/ecs/component.hpp>
-
 
 
 namespace ncpp {
 
     namespace ecs {
 
+        template<template<typename data_type> class allocator_t = std::allocator>
+        class NCPP_DEFAULT_ALIGN world_it {
 
+        private:
+            world_it();
+            ~world_it();
+
+        };
 
     }
 

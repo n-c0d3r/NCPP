@@ -10,8 +10,20 @@ namespace ncpp {
 
     namespace containers {
 
-        template<typename item_type, template<typename data_type> class allocator_t = std::allocator>
+        template<typename item_type, size_t count, template<typename data_type> class allocator_t = std::allocator>
+        class NCPP_DEFAULT_ALIGN handle_map_array_t;
+
+
+
+        template<typename item_type, template<typename data_type> class allocator_t = std::allocator, size_t map_count = 1>
         class NCPP_DEFAULT_ALIGN handle_map_t {
+
+#pragma region Nested Types
+        public:
+            friend class handle_map_array_t<item_type, map_count, allocator_t>;
+#pragma endregion
+
+
 
 #pragma region Nested Types
         public:
@@ -24,6 +36,7 @@ namespace ncpp {
 
                         uint32_t index;
                         uint16_t generation;
+                        uint16_t map_index : 15;
                         uint16_t is_free : 1;
 
                     };
@@ -67,13 +80,23 @@ namespace ncpp {
 
 #pragma region Properties
         private:
-            uint32_t free_list_front_ = 0xFFFFFFFF;
-            uint32_t free_list_back_  = 0xFFFFFFFF;
+            uint32_t unique_free_list_front_;
+            uint32_t& free_list_front_;
 
-            bool is_fragmented_ = 0;
+            uint32_t unique_free_list_back_;
+            uint32_t& free_list_back_;
 
-            id_set_type sparse_id_set_;
+            bool unique_is_fragmented_;
+            bool& is_fragmented_;
+
+            id_set_type unique_sparse_id_set_;
+            id_set_type& sparse_id_set_;
+
             meta_set_type meta_set_;
+
+            bool is_shared_ = 0;
+
+            uint16_t map_index_;
 #pragma endregion
 
 
@@ -101,19 +124,44 @@ namespace ncpp {
             NCPP_GETTER(bool is_free_list_empty()) const noexcept { return free_list_front_ == 0xFFFFFFFF; }
 
             NCPP_GETTER(typename meta_set_type::iterator       begin()) { return meta_set_.begin(); }
-            NCPP_GETTER(typename meta_set_type::const_iterator cbegin()) const { return meta_set_.cbegin(); }
+            NCPP_GETTER(typename meta_set_type::const_iterator begin()) const { return meta_set_.cbegin(); }
             NCPP_GETTER(typename meta_set_type::iterator       end()) { return meta_set_.end(); }
-            NCPP_GETTER(typename meta_set_type::const_iterator cend()) const { return meta_set_.cend(); }
+            NCPP_GETTER(typename meta_set_type::const_iterator end()) const { return meta_set_.cend(); }
 
             NCPP_GETTER(meta_set_type front()) const { return meta_set_.front().item; }
             NCPP_GETTER(meta_set_type back()) const { return meta_set_.back().item; }
+
+            NCPP_GETTER(bool is_shared()) const { return is_shared_; }
+
+            NCPP_GETTER(uint16_t map_index()) const { return map_index_; }
+
+            NCPP_GETTER(id_type get_handle(const meta_type& meta)) const { 
+                id_type handle = sparse_id_set_[meta.outer_index];
+                handle.index = meta.outer_index;
+                return handle;
+            }
 #pragma endregion
 
 
 
 #pragma region Constructors, Destructor and Operators
         public:
-            explicit handle_map_t(size_t reserve_count)
+            explicit handle_map_t(size_t reserve_count) :
+                is_shared_(0),
+
+                unique_free_list_front_(0xFFFFFFFF),
+                free_list_front_(unique_free_list_front_),
+
+                unique_free_list_back_(0xFFFFFFFF),
+                free_list_back_(unique_free_list_back_),
+
+                unique_sparse_id_set_(),
+                sparse_id_set_(unique_sparse_id_set_),
+
+                unique_is_fragmented_(0),
+                is_fragmented_(unique_is_fragmented_),
+
+                map_index_(0)
             {
                 sparse_id_set_.reserve(reserve_count);
                 meta_set_.reserve(reserve_count);
@@ -123,56 +171,100 @@ namespace ncpp {
             {
 
             }
+            explicit handle_map_t(uint16_t map_index, size_t reserve_count, id_set_type& shared_sparse_id_set, uint32_t& shared_free_list_front, uint32_t shared_free_list_back, bool& shared_is_fragmented) :
+                is_shared_(1),
+
+                unique_free_list_front_(0xFFFFFFFF),
+                free_list_front_(shared_free_list_front),
+
+                unique_free_list_back_(0xFFFFFFFF),
+                free_list_back_(shared_free_list_back),
+
+                unique_sparse_id_set_(),
+                sparse_id_set_(shared_sparse_id_set),
+
+                unique_is_fragmented_(0),
+                is_fragmented_(shared_is_fragmented),
+
+                map_index_(map_index)
+            {
+
+                meta_set_.reserve(reserve_count);
+
+            }
             ~handle_map_t() {
 
-                reset();
+                if (is_shared_)
+                    clear();
+                else
+                    reset();
 
             }
 
             handle_map_t(const handle_map_t& other) : 
-                item_type_id_(other.item_type_id_),
-                sparse_id_set_(other.sparse_id_set_),
-                meta_set_(other.meta_set_),
-                is_fragmented_(other.is_fragmented_),
-                free_list_front_(other.free_list_front_),
-                free_list_back_(other.free_list_back_)
+                handle_map_t()
             {
 
+                if (is_shared_)
+                    clear();
+                else
+                    reset();
 
+                for (const auto& meta : other) {
+
+                    insert(meta.item);
+
+                }
 
             }
             NCPP_CONSTEXPR handle_map_t& operator = (const handle_map_t& other) {
 
-                item_type_id_ = other.item_type_id_;
-                sparse_id_set_ = other.sparse_id_set_;
-                meta_set_ = other.meta_set_;
-                is_fragmented_ = other.is_fragmented_;
-                free_list_front_ = other.free_list_front_;
-                free_list_back_ = other.free_list_back_;
+                if (is_shared_)
+                    clear();
+                else
+                    reset();
+
+                for (const auto& meta : other) {
+
+                    insert(meta.item);
+
+                }
 
                 return *this;
             }
 
             handle_map_t(handle_map_t&& other) :
-                item_type_id_(std::move(other.item_type_id_)),
-                sparse_id_set_(std::move(other.sparse_id_set_)),
-                meta_set_(std::move(other.meta_set_)),
-                is_fragmented_(std::move(other.is_fragmented_)),
-                free_list_front_(std::move(other.free_list_front_)),
-                free_list_back_(std::move(other.free_list_back_))
+                handle_map_t()
             {
 
+                if (is_shared_)
+                    clear();
+                else
+                    reset();
 
+                uint32_t i = 0;
+                while (i != other.size()) {
+
+                    insert(other[i].item);
+                    other.erase(other[i]);
+
+                }
 
             }
             NCPP_CONSTEXPR handle_map_t& operator = (handle_map_t&& other) {
 
-                item_type_id_ = std::move(other.item_type_id_);
-                sparse_id_set_ = std::move(other.sparse_id_set_);
-                meta_set_ = std::move(other.meta_set_);
-                is_fragmented_ = std::move(other.is_fragmented_);
-                free_list_front_ = std::move(other.free_list_front_);
-                free_list_back_ = std::move(other.free_list_back_);
+                if (is_shared_)
+                    clear();
+                else
+                    reset();
+
+                uint32_t i = 0;
+                while (i != other.size()) {
+
+                    insert(other[i].item);
+                    other.erase(other[i]);
+
+                }
 
                 return *this;
             }
@@ -209,6 +301,7 @@ namespace ncpp {
                     
                         (uint32_t)meta_set_.size(),
                         1,
+                        map_index_,
                         0
                     
                     };
@@ -257,34 +350,41 @@ namespace ncpp {
                 return insert_main_t(std::forward<const item_type&>(item));
             }
 
+            NCPP_CONSTEXPR bool erase(const meta_type& meta) {
+                return erase(meta.outer_index);
+            }
             NCPP_CONSTEXPR bool erase(id_type handle) {
 
                 if (!is_valid(handle)) return false;
+
+                return erase(handle.index);
+            }
+            NCPP_CONSTEXPR bool erase(uint32_t outer_index) {
 
                 is_fragmented_ = true;
 
 
 
-                id_type inner_id = sparse_id_set_[handle.index];
+                id_type inner_id = sparse_id_set_[outer_index];
                 uint32_t inner_index = inner_id.index;
 
                 inner_id.is_free = 1;
                 ++inner_id.generation;
                 inner_id.index = 0xFFFFFFFF;
-                sparse_id_set_[handle.index] = inner_id;
+                sparse_id_set_[outer_index] = inner_id;
 
 
 
                 if (is_free_list_empty()) {
 
-                    free_list_front_ = handle.index;
+                    free_list_front_ = outer_index;
                     free_list_back_ = free_list_front_;
 
                 }
                 else {
 
-                    sparse_id_set_[free_list_back_].index = handle.index;
-                    free_list_back_ = handle.index;
+                    sparse_id_set_[free_list_back_].index = outer_index;
+                    free_list_back_ = outer_index;
 
                 }
 
@@ -324,7 +424,9 @@ namespace ncpp {
 
             inline void reset() {
 
-                sparse_id_set_.clear();
+                if(!is_shared_)
+                    sparse_id_set_.clear();
+
                 meta_set_.clear();
 
             }
@@ -340,12 +442,29 @@ namespace ncpp {
 
                 return meta_set_[inner_id.index];
             }
+            NCPP_CONSTEXPR const meta_type& at(id_type handle) const {
+
+                assert(handle.index < sparse_id_set_.size() && "outer index out of range");
+
+                id_type inner_id = sparse_id_set_.at(handle.index);
+
+                assert(handle.generation == inner_id.generation && "at called with old generation");
+                assert(inner_id.index < meta_set_.size() && "inner index out of range");
+
+                return meta_set_.at(inner_id.index);
+            }
 
             NCPP_CONSTEXPR meta_type& at(uint32_t inner_index) {
 
                 assert(inner_index < meta_set_.size() && "inner index out of range");
 
                 return meta_set_[inner_index];
+            }
+            NCPP_CONSTEXPR const meta_type& at(uint32_t inner_index) const {
+
+                assert(inner_index < meta_set_.size() && "inner index out of range");
+
+                return meta_set_.at(inner_index);
             }
 
             NCPP_CONSTEXPR bool is_valid(id_type handle) {
@@ -358,6 +477,45 @@ namespace ncpp {
                     (handle.generation == inner_id.generation)
                     && (inner_id.index < meta_set_.size())
                 );
+            }
+            NCPP_CONSTEXPR bool is_valid(id_type handle) const {
+
+                if (handle.index >= sparse_id_set_.size()) return false;
+
+                id_type inner_id = sparse_id_set_.at(handle.index);
+
+                return (
+                    (handle.generation == inner_id.generation)
+                    && (inner_id.index < meta_set_.size())
+                );
+            }
+
+            inline void shared_transfer(handle_map_t& src, id_type handle) {
+
+                assert(is_shared_ && "shared transfer not working in non-shared map");
+                assert(handle.map_index == src.map_index_ && "invalid handle");
+                
+                meta_set_.push_back(std::move(src.at(handle)));
+                meta_type& meta = meta_set_.back();
+                
+                uint32_t outer_index = handle.index;
+                
+                id_type inner_id = sparse_id_set_[outer_index];
+
+                if (inner_id.index != src.meta_set_.size() - 1) {
+
+                    std::swap(src.meta_set_[inner_id.index], src.meta_set_.back());
+                    sparse_id_set_[src.meta_set_.back().outer_index].index = inner_id.index;
+                    src.meta_set_.at(inner_id.index).inner_index = inner_id.index;
+
+                }
+
+                inner_id.map_index = map_index_;
+                inner_id.index = meta_set_.size() - 1;
+
+                sparse_id_set_[outer_index] = inner_id;
+
+
             }
 #pragma endregion
 

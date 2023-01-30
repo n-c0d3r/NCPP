@@ -28,6 +28,7 @@
             + **\__pt\__** : `Member Pointer Template`
             + **_pst** : `Static Pointer Template`
             + **_pgt** : `Global Pointer Template`
+            + **_it** : `Interface Template`
 
 ## Casings: ##
 - Camel Case:

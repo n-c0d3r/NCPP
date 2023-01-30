@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include <array>
 #include <vector>
 #include <set>
 #include <map>
@@ -114,7 +115,40 @@ struct PP_CAT(static_warning,__LINE__) { \
 
 namespace ncpp {
 
-	
+	template<class _class>
+    class NCPP_DEFAULT_ALIGN singleton_t {
+
+    private:
+        static _class* instance_ps;
+
+
+
+    public:
+        static NCPP_GETTER(_class* instance()) { return instance_ps; }
+
+
+
+    protected:
+        singleton_t()
+        {
+
+            instance_ps = (_class*)this;
+
+        }
+
+
+
+    public:
+        template<typename... arg_types>
+        static NCPP_CONSTEXPR _class* create_instance(arg_types... args) {
+
+            return new _class(std::forward<arg_types>(args)...);
+        }
+
+    };
+
+    template<class _class>
+    _class* singleton_t<_class>::instance_ps = 0;
 
 }
 
