@@ -13,9 +13,6 @@
         + **_p** : `Pointer`
         + **_pp** : `2nd Level Pointer`
         + **_ppp...** (there are n "p") : `Nth Level Pointer`
-        + **_l** : `LValue Reference`
-        + **_r** : `RValue Reference`
-        + **_u** : `Universal Reference`
     + Template:
         + **_t** : `Template`
     + Multiple Prefixes:

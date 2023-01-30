@@ -2,8 +2,14 @@
 # ncpp utility options
 set(NCPP_DEFAULT_ALIGNMENT 16 CACHE STRING "Default Data Alignment")
 
+# ncpp mem options
+option(NCPP_MEM_ANALYZE "Enable memory analyzing")
+
 # ncpp containers options
 set(NCPP_CONTAINERS_DEFAULT_HANDLE_MAP_RESERVE_COUNT 1024 CACHE STRING "Default Handle Map Reserve Count")
+
+# ncpp job system options
+set(NCPP_JOB_SYSTEM_COROUTINE_COUNT_PER_WORKER_THREAD 128 CACHE STRING "Coroutine Count Per Worker Thread")
 
 
 
@@ -37,6 +43,12 @@ file(GLOB dod_source_files
 )
 source_group("source\\ncpp\\dod" FILES ${dod_source_files})
 
+file(GLOB parallelism_and_concurrency_source_files
+    "source/ncpp/parallelism_and_concurrency/*.cpp"
+    "source/ncpp/parallelism_and_concurrency/*.hpp"
+)
+source_group("source\\ncpp\\parallelism_and_concurrency" FILES ${parallelism_and_concurrency_source_files})
+
 file(GLOB job_system_source_files
     "source/ncpp/job_system/*.cpp"
     "source/ncpp/job_system/*.hpp"
@@ -63,6 +75,7 @@ add_library(ncpp STATIC
     ${tmp_helper_source_files}
     ${containers_source_files}
     ${dod_source_files}
+    ${parallelism_and_concurrency_source_files}
     ${job_system_source_files}
     ${ecs_source_files}
     ${rttr_source_files}

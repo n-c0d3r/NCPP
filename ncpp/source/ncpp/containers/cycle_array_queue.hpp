@@ -29,23 +29,23 @@ namespace ncpp {
             item_array_type item_array_;
             size_t begin_index_;
             size_t end_index_;
-            size_t size_;
 #pragma endregion
 
 
 
 #pragma region Getters and Setters
-            NCPP_GETTER(iterator begin()) { return item_array_.data() + begin_; }
-            NCPP_GETTER(const_iterator cbegin()) const { return item_array_.data() + begin_; }
-            NCPP_GETTER(iterator end()) { return item_array_.data() + end_; }
-            NCPP_GETTER(const_iterator cend()) const { return item_array_.data() + end_; }
+        public:
+            NCPP_GETTER(iterator begin()) { return item_array_.data() + begin_index_ % capacity; }
+            NCPP_GETTER(const_iterator begin()) const { return item_array_.data() + begin_index_ % capacity; }
+            NCPP_GETTER(iterator end()) { return item_array_.data() + end_index_ % capacity; }
+            NCPP_GETTER(const_iterator end()) const { return item_array_.data() + end_index_ % capacity; }
 
             NCPP_GETTER(item_type& front()) { return *begin(); }
-            NCPP_GETTER(const item_type& front()) const { return *cbegin(); }
-            NCPP_GETTER(item_type& back()) { return *end(); }
-            NCPP_GETTER(const item_type& back()) const { return *cend(); }
+            NCPP_GETTER(const item_type& front()) const { return *begin(); }
+            NCPP_GETTER(item_type& back()) { return *(item_array_.data() + (end_index_ - 1) % capacity); }
+            NCPP_GETTER(const item_type& back()) const { return *(item_array_.data() + (end_index_ - 1) % capacity); }
 
-            NCPP_GETTER(size_t size()) const { return size_; }
+            NCPP_GETTER(size_t size()) const { return end_index_ - begin_index_; }
 #pragma endregion
 
 
@@ -54,9 +54,7 @@ namespace ncpp {
         public:
             explicit cycle_array_queue_t() :
                 begin_index_(0),
-                end_index_(0),
-
-                size_(0)
+                end_index_(0)
             {
 
 
@@ -76,26 +74,11 @@ namespace ncpp {
             template<typename item_param_type>
             inline bool enqueue_main_t(item_param_type&& item) {
 
-                if (size_ == capacity) return false;
+                if (size() == capacity) return false;
 
-
-
-                if (end_index_ > capacity) {
-
-                    end_index_ = 0;
-
-                }
-
-
-
-                item_array_[end_index_] = std::forward<item_param_type>(item);
-
-
+                item_array_[end_index_ % capacity] = std::forward<item_param_type>(item);
 
                 ++end_index_;
-                ++size_;
-
-
 
                 return true;
             }
@@ -117,6 +100,13 @@ namespace ncpp {
             inline bool enqueue(const item_type& item) {
 
                 return enqueue_main_t(item);
+            }
+            inline void dequeue() {
+
+                if (size() == 0) return;
+
+                ++begin_index_;
+                                                
             }
 #pragma endregion
 

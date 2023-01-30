@@ -24,6 +24,8 @@
 #include <random>
 #include <cmath>
 #include <bitset>
+#include <cstdio>
+#include <cstdlib>
 
 
 
@@ -43,8 +45,8 @@
 #pragma region Macros
 
 #define NCPP_CONSTEXPR inline constexpr
-#define NCPP_GETTER(Getter) NCPP_CONSTEXPR Getter
-#define NCPP_SETTER(Setter) NCPP_CONSTEXPR Setter 
+#define NCPP_GETTER(Getter) inline Getter
+#define NCPP_SETTER(Setter) inline Setter 
 
 
 
@@ -113,43 +115,15 @@ struct PP_CAT(static_warning,__LINE__) { \
 
 #pragma region Utility Items
 
+#include <ncpp/singleton.hpp>
+#include <ncpp/lock_guard.hpp>
+
 namespace ncpp {
 
-	template<class _class>
-    class NCPP_DEFAULT_ALIGN singleton_t {
-
-    private:
-        static _class* instance_ps;
-
-
-
-    public:
-        static NCPP_GETTER(_class* instance()) { return instance_ps; }
-
-
-
-    protected:
-        singleton_t()
-        {
-
-            instance_ps = (_class*)this;
-
-        }
-
-
-
-    public:
-        template<typename... arg_types>
-        static NCPP_CONSTEXPR _class* create_instance(arg_types... args) {
-
-            return new _class(std::forward<arg_types>(args)...);
-        }
-
-    };
-
-    template<class _class>
-    _class* singleton_t<_class>::instance_ps = 0;
+    
 
 }
 
 #pragma endregion
+
+

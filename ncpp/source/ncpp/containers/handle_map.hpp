@@ -494,6 +494,7 @@ namespace ncpp {
 
                 assert(is_shared_ && "shared transfer not working in non-shared map");
                 assert(handle.map_index == src.map_index_ && "invalid handle");
+                assert(this != &src && "cant shared transfer in the same map");
                 
                 meta_set_.push_back(std::move(src.at(handle)));
                 meta_type& meta = meta_set_.back();
