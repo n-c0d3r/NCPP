@@ -4,8 +4,6 @@
 
 namespace ncpp {
 
-
-
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
 
 	std::atomic_uint64_t memory_usage_g = 0;

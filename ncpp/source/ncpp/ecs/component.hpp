@@ -1,19 +1,17 @@
 #pragma once
 
-#include <ncpp/utilities.hpp>
+#include <ncpp/prerequisites.hpp>
 
-#include <ncpp/tmp_helper/tmp_helper.hpp>
-#include <ncpp/containers/containers.hpp>
-#include <ncpp/dod/dod.hpp>
+#include <ncpp/utilities/.hpp>
 
 
 
 namespace ncpp {
 
-    namespace ecs {
+	namespace ecs {
 
 
 
-    }
+	}
 
 }

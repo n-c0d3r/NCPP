@@ -1,5 +1,7 @@
 #pragma once
 
+namespace ncpp { }
+
 #include <ncpp/prerequisites.hpp>
 
 #include <ncpp/mem.hpp>

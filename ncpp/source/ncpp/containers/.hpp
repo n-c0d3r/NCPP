@@ -1,5 +1,7 @@
 #pragma once
 
+namespace ncpp { namespace containers {} }
+
 #include <ncpp/prerequisites.hpp>
 
 #include <ncpp/utilities/.hpp>

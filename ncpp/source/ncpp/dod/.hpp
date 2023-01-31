@@ -1,30 +1,7 @@
 #pragma once
 
-namespace ncpp {
+namespace ncpp { namespace dod { } }
 
-    namespace dod {
+#include <ncpp/prerequisites.hpp>
 
-
-
-    }
-
-}
-
-
-
-#include <ncpp/utilities.hpp>
-
-#include <ncpp/tmp_helper/tmp_helper.hpp>
-#include <ncpp/containers/containers.hpp>
-
-
-
-namespace ncpp {
-
-    namespace dod {
-
-
-
-    }
-
-}
+#include <ncpp/utilities/.hpp>
