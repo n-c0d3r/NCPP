@@ -37,6 +37,12 @@ file(GLOB containers_source_files
 )
 source_group("source\\ncpp\\containers" FILES ${containers_source_files})
 
+file(GLOB cbjs_source_files
+    "source/ncpp/cbjs/*.cpp"
+    "source/ncpp/cbjs/*.hpp"
+)
+source_group("source\\ncpp\\cbjs" FILES ${cbjs_source_files})
+
 file(GLOB dod_source_files
     "source/ncpp/dod/*.cpp"
     "source/ncpp/dod/*.hpp"
@@ -56,6 +62,7 @@ add_library(ncpp STATIC
     ${source_files}
     ${utilities_source_files}
     ${containers_source_files}
+    ${cbjs_source_files}
     ${dod_source_files}
     ${ecs_source_files}
 )
