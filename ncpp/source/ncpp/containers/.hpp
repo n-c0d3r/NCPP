@@ -7,4 +7,4 @@
 #include <ncpp/containers/handle_map.hpp>
 #include <ncpp/containers/handle_map_array.hpp>
 #include <ncpp/containers/bridge_map.hpp>
-#include <ncpp/containers/cycle_array_queue.hpp>
+#include <ncpp/containers/array_queue.hpp>

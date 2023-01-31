@@ -3,7 +3,7 @@
 set(NCPP_DEFAULT_ALIGNMENT 16 CACHE STRING "Default Data Alignment")
 
 # ncpp mem options
-option(NCPP_ENABLE_MEMORY_ANALYZING "Enable memory analyzing")
+option(NCPP_ENABLE_MEMORY_COUNTING "Enable memory counting" ON)
 
 # ncpp containers options
 set(NCPP_DEFAULT_HANDLE_MAP_RESERVE_COUNT 1024 CACHE STRING "Default Handle Map Reserve Count")

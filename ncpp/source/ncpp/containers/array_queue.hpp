@@ -11,7 +11,7 @@ namespace ncpp {
     namespace containers {
 
         template<typename item_type, size_t capacity>
-        class NCPP_DEFAULT_ALIGN cycle_array_queue_t {
+        class NCPP_DEFAULT_ALIGN array_queue_t {
 
 #pragma region Typedefs
         public:
@@ -50,7 +50,7 @@ namespace ncpp {
 
 #pragma region Constructors, Destructor and Operators
         public:
-            explicit cycle_array_queue_t() :
+            explicit array_queue_t() :
                 begin_index_(0),
                 end_index_(0)
             {
@@ -58,7 +58,7 @@ namespace ncpp {
 
 
             }
-            ~cycle_array_queue_t() {
+            ~array_queue_t() {
 
 
 
