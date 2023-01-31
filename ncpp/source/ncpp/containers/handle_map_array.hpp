@@ -1,8 +1,9 @@
 #pragma once
 
-#include <ncpp/utilities.hpp>
+#include <ncpp/prerequisites.hpp>
 
-#include <ncpp/tmp_helper/tmp_helper.hpp>
+#include <ncpp/utilities/.hpp>
+
 #include <ncpp/containers/handle_map.hpp>
 
 
@@ -42,15 +43,17 @@ namespace ncpp {
 
 #pragma region Getters and Setters
         public:
-            NCPP_GETTER(uint32_t free_list_front()) const noexcept { return free_list_front_; }
-            NCPP_GETTER(uint32_t free_list_back()) const noexcept { return free_list_back_; }
+            NCPP_CONSTEXPR uint32_t free_list_front() const noexcept { return free_list_front_; }
+            NCPP_CONSTEXPR uint32_t free_list_back() const noexcept { return free_list_back_; }
 
-            NCPP_GETTER(bool is_fragmented()) const noexcept { return is_fragmented_; }
+            NCPP_CONSTEXPR bool is_fragmented() const noexcept { return is_fragmented_; }
 
-            NCPP_GETTER(id_set_type& sparse_id_set()) { return sparse_id_set_; }
-            NCPP_GETTER(const id_set_type& sparse_id_set())const { return sparse_id_set_; }
-            NCPP_GETTER(meta_set_type& meta_set()) { return meta_set_; }
-            NCPP_GETTER(const meta_set_type& meta_set())const { return meta_set_; }
+            NCPP_CONSTEXPR id_set_type& sparse_id_set() { return sparse_id_set_; }
+            NCPP_CONSTEXPR const id_set_type& sparse_id_set()const { return sparse_id_set_; }
+            NCPP_CONSTEXPR meta_set_type& meta_set() { return meta_set_; }
+            NCPP_CONSTEXPR const meta_set_type& meta_set() const { return meta_set_; }
+
+            NCPP_CONSTEXPR size_t get_count() const { return count; }
 #pragma endregion
 
 
@@ -78,7 +81,7 @@ namespace ncpp {
 
             }
             explicit handle_map_array_t() :
-                handle_map_array_t(NCPP_CONTAINERS_DEFAULT_HANDLE_MAP_RESERVE_COUNT)
+                handle_map_array_t(NCPP_DEFAULT_HANDLE_MAP_RESERVE_COUNT)
             {
 
             }
@@ -86,6 +89,34 @@ namespace ncpp {
 
                 reset();
 
+            }
+
+            handle_map_array_t(const handle_map_array_t& other) :
+                handle_map_array_t()
+            {
+
+                copy_from(other);
+
+            }
+            NCPP_CONSTEXPR handle_map_array_t& operator = (const handle_map_array_t& other) {
+
+                copy_from(other);
+
+                return *this;
+            }
+
+            handle_map_array_t(handle_map_array_t&& other) :
+                handle_map_array_t()
+            {
+
+                move_from(std::forward<handle_map_array_t>(other));
+
+            }
+            NCPP_CONSTEXPR handle_map_array_t& operator = (handle_map_array_t&& other) {
+
+                move_from(std::forward<handle_map_array_t>(other));
+
+                return *this;
             }
 
 
@@ -106,14 +137,26 @@ namespace ncpp {
         public:
             inline void clear() {
 
+                free_list_front_ = 0xFFFFFFFF;
+                free_list_back_ = 0xFFFFFFFF;
+                is_fragmented_ = 0;
+
                 for (size_t i = 0; i < count; ++i) {
 
                     array_[i].clear();
 
                 }
 
+                sparse_id_set_.clear();
+
             }
             inline void reset() {
+
+                free_list_front_ = 0xFFFFFFFF;
+                free_list_back_ = 0xFFFFFFFF;
+                is_fragmented_ = 0;
+
+                sparse_id_set_.clear();
 
                 for (size_t i = 0; i < count; ++i) {
 
@@ -143,6 +186,40 @@ namespace ncpp {
             inline void transfer(handle_map_type& dst_map, handle_map_type& src_map, id_type handle) {
 
                 dst_map.shared_transfer(src_map, handle);
+
+            }
+
+            inline void copy_from(const handle_map_array_t& other) {
+
+                reset();
+
+                sparse_id_set_.reserve(other.sparse_id_set_.capacity());
+
+                for (auto inner_id : other.sparse_id_set()) {
+
+                    auto other_map = other[inner_id.map_index];
+                    meta_type& meta = other_map[inner_id.index];
+
+                    array_[inner_id.map_index].insert(meta.item);
+
+                }
+
+            }
+
+            inline void move_from(handle_map_array_t&& other) {
+
+                sparse_id_set_.reserve(other.sparse_id_set_.capacity());
+
+                sparse_id_set_ = std::move(other.sparse_id_set_);
+
+                for (size_t i = 0; i < count; ++i) {
+
+                    array_[i].meta_set() = std::move(other.array_[i].meta_set());
+                    array_[i].sparse_id_set() = std::move(other.array_[i].sparse_id_set());
+
+                }
+
+                other.reset();
 
             }
 #pragma endregion

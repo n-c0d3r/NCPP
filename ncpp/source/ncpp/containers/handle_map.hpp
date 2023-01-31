@@ -1,8 +1,8 @@
 #pragma once
 
-#include <ncpp/utilities.hpp>
+#include <ncpp/prerequisites.hpp>
 
-#include <ncpp/tmp_helper/tmp_helper.hpp>
+#include <ncpp/utilities/.hpp>
 
 
 
@@ -103,42 +103,47 @@ namespace ncpp {
 
 #pragma region Getters and Setters
         public:
-            NCPP_GETTER(size_t size()) const noexcept { return meta_set_.size(); }
-            NCPP_GETTER(size_t capacity()) const noexcept { return meta_set_.capacity(); }
+            NCPP_CONSTEXPR size_t size() const noexcept { return meta_set_.size(); }
+            NCPP_CONSTEXPR size_t capacity() const noexcept { return meta_set_.capacity(); }
 
-            NCPP_GETTER(id_set_type& sparse_id_set()) { return sparse_id_set_; }
-            NCPP_GETTER(const id_set_type& sparse_id_set())const { return sparse_id_set_; }
-            NCPP_GETTER(meta_set_type& meta_set()) { return meta_set_; }
-            NCPP_GETTER(const meta_set_type& meta_set())const { return meta_set_; }
+            NCPP_CONSTEXPR id_set_type& sparse_id_set() { return sparse_id_set_; }
+            NCPP_CONSTEXPR const id_set_type& sparse_id_set()const { return sparse_id_set_; }
+            NCPP_CONSTEXPR meta_set_type& meta_set() { return meta_set_; }
+            NCPP_CONSTEXPR const meta_set_type& meta_set()const { return meta_set_; }
 
-            NCPP_GETTER(id_type& sparse_id(uint32_t index)) { return sparse_id_set_[index]; }
-            NCPP_GETTER(const id_type& sparse_id(uint32_t index))const { return sparse_id_set_[index]; }
-            NCPP_GETTER(meta_type& meta(uint32_t index)) { return meta_set_[index]; }
-            NCPP_GETTER(const meta_type& meta(uint32_t index))const { return meta_set_[index]; }
+            NCPP_CONSTEXPR id_type& sparse_id(uint32_t index) { return sparse_id_set_[index]; }
+            NCPP_CONSTEXPR const id_type& sparse_id(uint32_t index)const { return sparse_id_set_[index]; }
+            NCPP_CONSTEXPR meta_type& meta(uint32_t index) { return meta_set_[index]; }
+            NCPP_CONSTEXPR const meta_type& meta(uint32_t index) const { return meta_set_[index]; }
 
-            NCPP_GETTER(uint32_t free_list_front()) const noexcept { return free_list_front_; }
-            NCPP_GETTER(uint32_t free_list_back()) const noexcept { return free_list_back_; }
+            NCPP_CONSTEXPR uint32_t free_list_front() const noexcept { return free_list_front_; }
+            NCPP_CONSTEXPR uint32_t free_list_back() const noexcept { return free_list_back_; }
 
-            NCPP_GETTER(bool is_fragmented()) const noexcept { return is_fragmented_; }
+            NCPP_CONSTEXPR bool is_fragmented() const noexcept { return is_fragmented_; }
 
-            NCPP_GETTER(bool is_free_list_empty()) const noexcept { return free_list_front_ == 0xFFFFFFFF; }
+            NCPP_CONSTEXPR bool is_free_list_empty() const noexcept { return free_list_front_ == 0xFFFFFFFF; }
 
-            NCPP_GETTER(typename meta_set_type::iterator       begin()) { return meta_set_.begin(); }
-            NCPP_GETTER(typename meta_set_type::const_iterator begin()) const { return meta_set_.cbegin(); }
-            NCPP_GETTER(typename meta_set_type::iterator       end()) { return meta_set_.end(); }
-            NCPP_GETTER(typename meta_set_type::const_iterator end()) const { return meta_set_.cend(); }
+            NCPP_CONSTEXPR typename meta_set_type::iterator       begin() { return meta_set_.begin(); }
+            NCPP_CONSTEXPR typename meta_set_type::const_iterator begin() const { return meta_set_.cbegin(); }
+            NCPP_CONSTEXPR typename meta_set_type::iterator       end() { return meta_set_.end(); }
+            NCPP_CONSTEXPR typename meta_set_type::const_iterator end() const { return meta_set_.cend(); }
 
-            NCPP_GETTER(meta_set_type front()) const { return meta_set_.front().item; }
-            NCPP_GETTER(meta_set_type back()) const { return meta_set_.back().item; }
+            NCPP_CONSTEXPR meta_set_type front() const { return meta_set_.front().item; }
+            NCPP_CONSTEXPR meta_set_type back() const { return meta_set_.back().item; }
 
-            NCPP_GETTER(bool is_shared()) const { return is_shared_; }
+            NCPP_CONSTEXPR bool is_shared() const { return is_shared_; }
 
-            NCPP_GETTER(uint16_t map_index()) const { return map_index_; }
+            NCPP_CONSTEXPR uint16_t map_index() const { return map_index_; }
 
-            NCPP_GETTER(id_type get_handle(const meta_type& meta)) const { 
-                id_type handle = sparse_id_set_[meta.outer_index];
+            NCPP_CONSTEXPR id_type get_handle(const meta_type& meta) const { 
+                id_type handle = sparse_id_set_.at(meta.outer_index);
                 handle.index = meta.outer_index;
                 return handle;
+            }
+            NCPP_CONSTEXPR id_type get_handle(uint32_t inner_index) const {
+                meta_type meta = meta_set_.at(inner_index);
+
+                return get_handle(meta);
             }
 #pragma endregion
 
@@ -167,7 +172,7 @@ namespace ncpp {
                 meta_set_.reserve(reserve_count);
             }
             explicit handle_map_t() :
-                handle_map_t(NCPP_CONTAINERS_DEFAULT_HANDLE_MAP_RESERVE_COUNT)
+                handle_map_t(NCPP_DEFAULT_HANDLE_MAP_RESERVE_COUNT)
             {
 
             }

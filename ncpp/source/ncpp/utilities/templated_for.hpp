@@ -1,14 +1,14 @@
 #pragma once
 
-#include <ncpp/utilities.hpp>
+#include <ncpp/prerequisites.hpp>
 
-#include <ncpp/tmp_helper/nth_template_arg.hpp>
+#include <ncpp/utilities/nth_template_arg.hpp>
 
 
 
 namespace ncpp {
 
-    namespace tmp_helper {
+    namespace utilities {
 
         namespace templated_for_helper {
 

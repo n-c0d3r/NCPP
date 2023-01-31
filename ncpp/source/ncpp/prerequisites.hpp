@@ -1,5 +1,10 @@
 #pragma once
 
+
+
+
+
+
 #pragma region Includes
 
 #include <ncpp/config.hpp>
@@ -41,15 +46,13 @@
 
 
 
-
 #pragma region Macros
 
 #define NCPP_CONSTEXPR inline constexpr
-#define NCPP_GETTER(Getter) inline Getter
-#define NCPP_SETTER(Setter) inline Setter 
 
 
 
+// alignment macros
 #if defined(_MSC_VER)
 #define NCPP_ALIGN(N) __declspec(align(N))
 #elif defined( __GNUC__ ) || defined(__MINGW64__)
@@ -71,6 +74,7 @@ struct Name {\
 
 
 
+// Implement static warning
 #if defined(__GNUC__)
 #define DEPRECATE(foo, msg) foo __attribute__((deprecated(msg)))
 #elif defined(_MSC_VER)
@@ -79,22 +83,26 @@ struct Name {\
 #error This compiler is not supported
 #endif
 
-#define PP_CAT(x,y) PP_CAT1(x,y)
-#define PP_CAT1(x,y) x##y
+#define NCPP_PP_CAT(x,y) NCPP_PP_CAT1(x,y)
+#define NCPP_PP_CAT1(x,y) x##y
 
-namespace detail
-{
-    struct true_type {};
-    struct false_type {};
-    template <int test> struct converter : public true_type {};
-    template <> struct converter<0> : public false_type {};
+namespace ncpp {
+
+    namespace static_warning_helper
+    {
+        struct true_type {};
+        struct false_type {};
+        template <int test> struct converter : public true_type {};
+        template <> struct converter<0> : public false_type {};
+    }
+
 }
 
 #define static_warning(cond, msg) \
-struct PP_CAT(static_warning,__LINE__) { \
-  DEPRECATE(void _(::detail::false_type const& ),msg) {}; \
-  void _(::detail::true_type const& ) {}; \
-  PP_CAT(static_warning,__LINE__)() {_(::detail::converter<(cond)>());} \
+struct NCPP_PP_CAT(static_warning,__LINE__) { \
+  DEPRECATE(void _(::ncpp::static_warning_helper::false_type const& ),msg) {}; \
+  void _(::ncpp::static_warning_helper::true_type const& ) {}; \
+  NCPP_PP_CAT(static_warning,__LINE__)() {_(ncpp::static_warning_helper::converter<(cond)>());} \
 }
 
 // Note: using static_warning_template changes the meaning of a program in a small way.
@@ -103,27 +111,6 @@ struct PP_CAT(static_warning,__LINE__) { \
 // non-template situation.
 //  'token' must be a program-wide unique identifier.
 #define static_warning_template(token, cond, msg) \
-    static_warning(cond, msg) PP_CAT(PP_CAT(_localvar_, token),__LINE__)
+    static_warning(cond, msg) NCPP_PP_CAT(NCPP_PP_CAT(_localvar_, token),__LINE__)
 
 #pragma endregion
-
-
-
-
-
-
-
-#pragma region Utility Items
-
-#include <ncpp/singleton.hpp>
-#include <ncpp/lock_guard.hpp>
-
-namespace ncpp {
-
-    
-
-}
-
-#pragma endregion
-
-

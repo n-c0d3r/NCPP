@@ -1,10 +1,8 @@
 #pragma once
 
-#include <ncpp/utilities.hpp>
+#include <ncpp/prerequisites.hpp>
 
-#include <ncpp/tmp_helper/tmp_helper.hpp>
-
-#include <ncpp/containers/handle_map.hpp>
+#include <ncpp/utilities/.hpp>
 
 
 
@@ -35,17 +33,17 @@ namespace ncpp {
 
 #pragma region Getters and Setters
         public:
-            NCPP_GETTER(iterator begin()) { return item_array_.data() + begin_index_ % capacity; }
-            NCPP_GETTER(const_iterator begin()) const { return item_array_.data() + begin_index_ % capacity; }
-            NCPP_GETTER(iterator end()) { return item_array_.data() + end_index_ % capacity; }
-            NCPP_GETTER(const_iterator end()) const { return item_array_.data() + end_index_ % capacity; }
+            NCPP_CONSTEXPR iterator begin() { return item_array_.data() + begin_index_ % capacity; }
+            NCPP_CONSTEXPR const_iterator begin() const { return item_array_.data() + begin_index_ % capacity; }
+            NCPP_CONSTEXPR iterator end() { return item_array_.data() + end_index_ % capacity; }
+            NCPP_CONSTEXPR const_iterator end() const { return item_array_.data() + end_index_ % capacity; }
 
-            NCPP_GETTER(item_type& front()) { return *begin(); }
-            NCPP_GETTER(const item_type& front()) const { return *begin(); }
-            NCPP_GETTER(item_type& back()) { return *(item_array_.data() + (end_index_ - 1) % capacity); }
-            NCPP_GETTER(const item_type& back()) const { return *(item_array_.data() + (end_index_ - 1) % capacity); }
+            NCPP_CONSTEXPR item_type& front() { return *begin(); }
+            NCPP_CONSTEXPR const item_type& front() const { return *begin(); }
+            NCPP_CONSTEXPR item_type& back() { return *(item_array_.data() + (end_index_ - 1) % capacity); }
+            NCPP_CONSTEXPR const item_type& back() const { return *(item_array_.data() + (end_index_ - 1) % capacity); }
 
-            NCPP_GETTER(size_t size()) const { return end_index_ - begin_index_; }
+            NCPP_CONSTEXPR size_t size() const { return end_index_ - begin_index_; }
 #pragma endregion
 
 
