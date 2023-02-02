@@ -1,8 +1,8 @@
 #pragma once
 
 /**
- *  @file ncpp/utilities/lock_guard.hpp
- *  @brief Implementing lock_guard_t.
+ *  @file ncpp/utilities/unique_lock.hpp
+ *  @brief Implementing unique_lock_t.
  */
 
 
@@ -19,7 +19,7 @@ namespace ncpp {
          *  An object that manages a mutex object by keeping it always locked.
          */
         template<class locker_class>
-        class NCPP_DEFAULT_ALIGN lock_guard_t {
+        class NCPP_DEFAULT_ALIGN unique_lock_t {
 
         private:
             locker_class& locker_;
@@ -33,14 +33,14 @@ namespace ncpp {
 
 
         public:
-            lock_guard_t(locker_class& locker) :
+            unique_lock_t(locker_class& locker) :
                 locker_(locker)
             {
 
                 locker_.lock();
 
             }
-            ~lock_guard_t() {
+            ~unique_lock_t() {
 
                 locker_.unlock();
 

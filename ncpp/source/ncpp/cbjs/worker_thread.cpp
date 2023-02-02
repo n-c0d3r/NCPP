@@ -80,7 +80,7 @@ namespace ncpp {
 
 						{
 
-							utilities::lock_guard_t<pac::spinlock> lock_guard(job_p_queue_lock_array_[job_queue_index]);
+							utilities::unique_lock_t<pac::spinlock> lock_guard(job_p_queue_lock_array_[job_queue_index]);
 
 							job_p = job_p_queue.front();
 

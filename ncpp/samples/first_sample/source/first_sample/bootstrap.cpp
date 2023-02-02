@@ -18,9 +18,9 @@ int main() {
 
 					job_vector.push_back(std::move(cbjs::job{
 
-						[](cbjs::job& job, cbjs::coroutine& coroutine) {
+						[i](cbjs::job& job, cbjs::coroutine& coroutine) {
 							
-							std::cout << "memory usage: " << memory_usage() << "(bytes)" << std::endl;
+							std::cout << i << std::endl;
 
 						}
 

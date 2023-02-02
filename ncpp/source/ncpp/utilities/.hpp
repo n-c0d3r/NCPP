@@ -18,4 +18,4 @@ namespace ncpp {
 #include <ncpp/utilities/templated_for.hpp>
 
 #include <ncpp/utilities/singleton.hpp>
-#include <ncpp/utilities/lock_guard.hpp>
+#include <ncpp/utilities/unique_lock.hpp>
