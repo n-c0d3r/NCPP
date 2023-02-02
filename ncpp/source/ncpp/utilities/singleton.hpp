@@ -1,5 +1,12 @@
 #pragma once
 
+/**
+ *  @file ncpp/utilities/singleton.hpp
+ *  @brief Implementing Singleton Pattern.
+ */
+
+
+
 #include <ncpp/prerequisites.hpp>
 
 
@@ -8,16 +15,19 @@ namespace ncpp {
 
     namespace utilities {
 
+        /**
+         *  Singleton template. Only allow 1 instance at a time.
+         */
         template<class _class>
         class NCPP_DEFAULT_ALIGN singleton_t {
 
         private:
-            static _class* instance_ps;
+            static _class* instance_ps;/**< instance pointer. */
 
 
 
         public:
-            static _class& instance() { return *instance_ps; }
+            static inline _class& instance() { return *instance_ps; }/**< use to get the instance reference. */
 
 
 

@@ -1,5 +1,13 @@
 #pragma once
 
+/** @file ncpp/prerequisites.hpp
+*   @brief The file that is always included on the top.
+*
+*   Including stl headers, platform api headers, and defining some macros,...
+*/
+
+
+
 namespace ncpp {}
 
 
@@ -33,10 +41,12 @@ namespace ncpp {}
 #include <bitset>
 #include <cstdio>
 #include <cstdlib>
+#include <semaphore>
 
 
 
 #if defined(_WIN64) || defined(_WIN32)
+#define NCPP_WINDOWS_PLATFORM
 #include <Windows.h>
 #include <DirectXMath.h>
 #endif
@@ -50,6 +60,12 @@ namespace ncpp {}
 
 #pragma region Macros
 
+#if defined(_WIN64) || defined(_WIN32)
+#define NCPP_WINDOWS_PLATFORM
+#endif
+
+
+
 #define NCPP_CONSTEXPR inline constexpr
 
 
@@ -62,17 +78,6 @@ namespace ncpp {}
 #endif
 
 #define NCPP_DEFAULT_ALIGN NCPP_ALIGN(NCPP_DEFAULT_ALIGNMENT)
-
-
-
-// Not allow use of directive inside function body
-#define NCPP_LOOP_FUNCTION_T(Name, Params, Body) \
-template<size_t index>\
-struct Name {\
-\
-	static inline void invoke Params { Body; }; \
-\
-};
 
 
 

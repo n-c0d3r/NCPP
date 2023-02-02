@@ -1,5 +1,11 @@
 #pragma once
 
+/** @file ncpp/utilities/templated_for.hpp
+*   @brief Containing macros and functions to create the loop template.
+*/
+
+
+
 #include <ncpp/prerequisites.hpp>
 
 #include <ncpp/utilities/nth_template_arg.hpp>
@@ -53,6 +59,27 @@ namespace ncpp {
 
 
 
+        /**
+         *  The macro using to create the body function of loop template.
+         */
+        #define NCPP_LOOP_FUNCTION_T(Name, Params, Body) \
+        template<size_t index>\
+        struct Name {\
+        \
+	        static inline void invoke Params { Body; }; \
+        \
+        };
+
+
+ 
+        /**
+        *   The function template helping run a loop which the index be a template argument.
+        *   @param <f_type_t> the struct template that has the only one template argument <index> and the invoke(args...) function. 
+        *   @param <begin> the integer representing the begin of the loop
+        *   @param <end> the integer representing the end of the loop
+        *   @param <arg_types...> types of each argument in the invoke function
+        *   @param args... the arguments forwarding to invoke function
+        */
         template<template<size_t index> typename f_type_t, size_t begin, size_t end, typename... arg_types>
         inline void templated_for_t(arg_types&&... args) {
 

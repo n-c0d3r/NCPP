@@ -1,5 +1,11 @@
 #pragma once
 
+/** @file ncpp/mem.hpp
+*	@brief Containing the memory management utilities.
+*/
+
+
+
 #include <ncpp/prerequisites.hpp>
 
 
@@ -14,16 +20,22 @@ namespace ncpp {
 
 
 
+	/**
+	 *	Flagging the memory is allocated by a ncpp allocator.
+	 */
 #define NCPP_MEMORY_ALLOCATION_FLAG 0xF0362F98
 
 
 
+	/**
+	 *	Describing informations about allocated memory 
+	 */
 	struct NCPP_DEFAULT_ALIGN allocation_desc {
 
 		size_t actual_size;
 		size_t flag : 32;
 		size_t align : 1;
-		size_t aligned_shift : 1;
+		size_t alignment_shift : 1;
 
 	};
 
@@ -34,9 +46,9 @@ namespace ncpp {
 
 
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
-	size_t memory_usage();
-	void increase_memory_usage(size_t bytes);
-	void decrease_memory_usage(size_t bytes);
+	extern inline size_t memory_usage();
+	extern inline void increase_memory_usage(size_t bytes);
+	extern inline void decrease_memory_usage(size_t bytes);
 #endif
 
 
@@ -68,7 +80,7 @@ namespace ncpp {
 		alloc_desc_p->actual_size = actual_size;
 		alloc_desc_p->flag = NCPP_MEMORY_ALLOCATION_FLAG;
 		alloc_desc_p->align = align;
-		alloc_desc_p->aligned_shift = aligned_ptr - raw_ptr;
+		alloc_desc_p->alignment_shift = aligned_ptr - raw_ptr;
 
 		increase_memory_usage(actual_size);
 
@@ -79,7 +91,7 @@ namespace ncpp {
 
 		allocation_desc* alloc_desc_p = (allocation_desc*)ptr - 1;
 
-		u8* raw_ptr = reinterpret_cast<u8*>(alloc_desc_p) - alloc_desc_p->aligned_shift;
+		u8* raw_ptr = reinterpret_cast<u8*>(alloc_desc_p) - alloc_desc_p->alignment_shift;
 
 		decrease_memory_usage(alloc_desc_p->actual_size);
 

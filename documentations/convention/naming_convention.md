@@ -5,7 +5,6 @@
 + List of Sufixes:
     + Interface, Enum:
         + **_i** : `Interface` (allow multiple inheritable but not allow public constructor)
-        + **_e** : `Enum`
     + Variable, Constant:
         + **_** : `Member Variable` (use for private or protected member only)
         + **_s** : `Static Variable`

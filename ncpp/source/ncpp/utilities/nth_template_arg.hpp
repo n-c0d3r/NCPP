@@ -1,5 +1,12 @@
 #pragma once
 
+/**
+ *  @file ncpp/utilities/nth_template_arg.hpp
+ *  @brief Implementing nth_template_arg_t.
+ */
+
+
+
 #include <ncpp/prerequisites.hpp>
 
 
@@ -49,6 +56,9 @@ namespace ncpp {
 
 
 
+        /**
+         *  Finding out the nth template argument.
+         */
         template<size_t nth, typename... arg_types>
         struct nth_template_arg_t {
 

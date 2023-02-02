@@ -6,10 +6,12 @@ set(NCPP_DEFAULT_ALIGNMENT 16 CACHE STRING "Default Data Alignment")
 option(NCPP_ENABLE_MEMORY_COUNTING "Enable memory counting" ON)
 
 # ncpp containers options
-set(NCPP_DEFAULT_HANDLE_MAP_RESERVE_COUNT 1024 CACHE STRING "Default Handle Map Reserve Count")
+set(NCPP_DEFAULT_HANDLE_MAP_RESERVE_COUNT 4096 CACHE STRING "Default Handle Map Reserve Count")
 
 # ncpp job system options
-set(NCPP_COROUTINE_COUNT_PER_WORKER_THREAD 128 CACHE STRING "Coroutine Count Per Worker Thread")
+set(NCPP_DEFAULT_JOB_PRIORITY_COUNT 3 CACHE STRING "Job Priority Count")
+set(NCPP_DEFAULT_JOB_QUEUE_CAPACITY 1024 CACHE STRING "Default Job Queue Capacity")
+set(NCPP_DEFAULT_COROUTINE_COUNT_PER_WORKER_THREAD 1024 CACHE STRING "Default Coroutine Count Per Worker Thread")
 
 
 
@@ -37,17 +39,17 @@ file(GLOB containers_source_files
 )
 source_group("source\\ncpp\\containers" FILES ${containers_source_files})
 
+file(GLOB pac_source_files
+    "source/ncpp/pac/*.cpp"
+    "source/ncpp/pac/*.hpp"
+)
+source_group("source\\ncpp\\pac" FILES ${pac_source_files})
+
 file(GLOB cbjs_source_files
     "source/ncpp/cbjs/*.cpp"
     "source/ncpp/cbjs/*.hpp"
 )
 source_group("source\\ncpp\\cbjs" FILES ${cbjs_source_files})
-
-file(GLOB dod_source_files
-    "source/ncpp/dod/*.cpp"
-    "source/ncpp/dod/*.hpp"
-)
-source_group("source\\ncpp\\dod" FILES ${dod_source_files})
 
 file(GLOB ecs_source_files
     "source/ncpp/ecs/*.cpp"
@@ -62,8 +64,8 @@ add_library(ncpp STATIC
     ${source_files}
     ${utilities_source_files}
     ${containers_source_files}
+    ${pac_source_files}
     ${cbjs_source_files}
-    ${dod_source_files}
     ${ecs_source_files}
 )
 

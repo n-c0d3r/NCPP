@@ -1,6 +1,12 @@
 #pragma once
 
-namespace ncpp { namespace utilities {} }
+namespace ncpp { 
+	
+	/**
+	*	Containing the utilities in ncpp project.
+	*/
+	namespace utilities {} 
+}
 
 #include <ncpp/prerequisites.hpp>
 
@@ -12,3 +18,4 @@ namespace ncpp { namespace utilities {} }
 #include <ncpp/utilities/templated_for.hpp>
 
 #include <ncpp/utilities/singleton.hpp>
+#include <ncpp/utilities/lock_guard.hpp>
