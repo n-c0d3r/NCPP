@@ -185,6 +185,9 @@ namespace ncpp {
                                                 
             }
 
+            /**
+             *  Resizing the stack.
+             */
             inline void resize(size_t size) {
 
                 end_index_ = size;

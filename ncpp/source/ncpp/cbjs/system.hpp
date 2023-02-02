@@ -17,8 +17,15 @@ namespace ncpp {
 
 
 
+        /**
+         *  Storing the settings to create job system.  
+         */
         struct NCPP_DEFAULT_ALIGN system_settings {
 
+            /**
+             *  The job to be kicked first.
+             *  The job system will stop when the entry job done.
+             */
             job& entry_job;
             uint32_t worker_thread_count = std::thread::hardware_concurrency();
             uint32_t job_queue_capacity = NCPP_DEFAULT_JOB_QUEUE_CAPACITY;
@@ -28,6 +35,10 @@ namespace ncpp {
 
 
 
+        /**
+         *  Managing worker threads and overall states.
+         *  To initialize cbjs, we need to create the job system and run it. 
+         */
         class NCPP_DEFAULT_ALIGN system final :
             public utilities::singleton_t<system>
         {
@@ -68,10 +79,19 @@ namespace ncpp {
 
 
         public:
+            /**
+             *  Starting the job system
+             */
             void start();
 
         private:
+            /**
+             *  Requesting job system to stop, can be used by the main worker thread.
+             */
             void request_stop();
+            /**
+             *  Waiting worker threads done.
+             */
             void join();
 
         };

@@ -3,6 +3,7 @@
 /**
  *  @file ncpp/pac/win_fiber.hpp
  *  @brief Implementing fiber for windows platform.
+ * 	@details Must be included with #ifdef NCPP_WINDOWS_PLATFORM.
  */
 
 
@@ -18,8 +19,11 @@
 namespace ncpp {
 	
 	namespace pac {
-	
-#ifdef NCPP_WINDOWS_PLATFORM
+
+		/**
+		 *  Windows platform fiber.
+		 * 	Using WinAPI to implement fiber.
+		 */
 		class NCPP_DEFAULT_ALIGN win_fiber {
 
 		public:
@@ -29,7 +33,13 @@ namespace ncpp {
 
 		private:
 			const fiber_creation_mode creation_mode_;
+            /**
+             *  The WinAPI fiber.
+             */
 			LPVOID platform_fiber_;
+            /**
+             *  The main function to be run inside the fiber.
+             */
 			functor_type functor_;
 
 
@@ -48,15 +58,20 @@ namespace ncpp {
 
 
 		public:
+            /**
+             *  The main procedure of the fiber.
+             */
 			static VOID WINAPI proc(LPVOID data)
 			{
 				reinterpret_cast<win_fiber*>(data)->functor_(*reinterpret_cast<win_fiber*>(data));
 			}
 
+            /**
+             *  Switching to this fiber
+             */
 			void switch_to_this();
 
 		};
-#endif
 	
 	} 
 

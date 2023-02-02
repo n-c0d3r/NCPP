@@ -1,7 +1,7 @@
 #pragma once
 
 /**
-*	The root namespace of ncpp project.
+*	The root namespace of ncpp library.
 */
 namespace ncpp { }
 

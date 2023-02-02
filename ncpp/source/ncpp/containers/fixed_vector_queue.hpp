@@ -189,6 +189,9 @@ namespace ncpp {
                                                 
             }
 
+            /**
+             *  Resizing the queue.
+             */
             inline void resize(size_t size) {
 
                 end_index_ = begin_index_ + size;

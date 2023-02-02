@@ -3,7 +3,7 @@
 namespace ncpp { 
 	
 	/**
-	*	Containing the utilities in ncpp project.
+	*	Containing the utilities in ncpp library.
 	*/
 	namespace utilities {} 
 }

@@ -18,6 +18,10 @@ namespace ncpp {
 
 
 
+        /**
+         *  Manages things working on a thread.
+         *  Its contain a fiber, a coroutine pool, coroutine pointer queues and job pointer queues.
+         */
         class NCPP_DEFAULT_ALIGN worker_thread final
         {
 
@@ -31,17 +35,42 @@ namespace ncpp {
 
 
         private:
+            /**
+             *  The worker thread index.
+             *  0 is the main worker thread.
+             */
             uint32_t index_;
 
+            /**
+             *  The thread from the C++ STL.
+             */
             std::thread std_thread_;
 
+            /**
+             *  Each job_p_queue has a priority.
+             *  The capacity of job_p_queue_array_ is the priority count.
+             */
             job_p_queue_array_type job_p_queue_array_;
+            /**
+             *  Each job_p_queue_lock has a priority.
+             *  The capacity of job_p_queue_lock_array_ is the priority count.
+             */
             job_p_queue_lock_array_type job_p_queue_lock_array_;
 
+            /**
+             *  Each coroutine_p_queue has a priority.
+             *  The capacity of coroutine_p_queue_array_ is the priority count.
+             */
             coroutine_p_queue_array_type coroutine_p_queue_array_;
 
+            /**
+             *  This thread's fiber.
+             */
             std::unique_ptr<pac::fiber> fiber_p_;
 
+            /**
+             *  This thread's coroutine pool pointer.
+             */
             std::unique_ptr<coroutine_pool> coroutine_pool_p_;
 
 
@@ -67,10 +96,23 @@ namespace ncpp {
 
 
         public:
+            /**
+             *  Starting the worker thread.
+             *  Automatically creating a new thread if not main worker thread.
+             */
             void start();
+            /**
+             *  Joining the C++ STL thread.
+             */
             void join();
+            /**
+             *  The main worker loop.
+             */
             void loop();
 
+            /**
+             *  Scheduling a job to be run on this thread.
+             */
             void schedule(job& j);
 
         };

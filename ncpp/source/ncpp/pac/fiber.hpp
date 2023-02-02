@@ -2,7 +2,7 @@
 
 /**
  *  @file ncpp/pac/fiber.hpp
- *  @brief Defining targeted platform fiber.
+ *  @brief Defining targeted platform fiber. 
  */
 
 
@@ -21,6 +21,9 @@ namespace ncpp {
 
 
 
+		/**
+		 *  Indicating how to create a fiber.
+		 */
 		enum class fiber_creation_mode {
 
 			CONVERT_FROM_THREAD,

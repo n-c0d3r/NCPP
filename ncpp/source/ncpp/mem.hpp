@@ -8,10 +8,17 @@
 
 #include <ncpp/prerequisites.hpp>
 
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+#include <ncpp/memory_counting.hpp>
+#endif
+
 
 
 namespace ncpp {
 
+	/**
+	 *	Can be used to indicate that something need to use ncpp overloaded version,...
+	 */
 	struct placeholder {
 
 
@@ -43,13 +50,6 @@ namespace ncpp {
 		return (reinterpret_cast<allocation_desc*>(ptr) - 1)->flag == NCPP_MEMORY_ALLOCATION_FLAG;
 	}
 
-
-
-#ifdef NCPP_ENABLE_MEMORY_COUNTING
-	extern inline size_t memory_usage();
-	extern inline void increase_memory_usage(size_t bytes);
-	extern inline void decrease_memory_usage(size_t bytes);
-#endif
 
 
 #pragma region Implement aligned allocation,...
@@ -128,3 +128,4 @@ inline void operator delete(void* ptr) {
 	}
 }
 #pragma endregion
+
