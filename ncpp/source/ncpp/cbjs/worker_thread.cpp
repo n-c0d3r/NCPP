@@ -6,7 +6,7 @@ namespace ncpp {
 
 	namespace cbjs {
 
-		worker_thread::worker_thread(uint32_t index) :
+		worker_thread::worker_thread(u32 index) :
 			index_(index),
 			fiber_p_(),
 			coroutine_pool_p_()
@@ -70,11 +70,11 @@ namespace ncpp {
 			while(system::instance().is_running()) {
 								
 				//process job queues
-				for (uint8_t job_queue_index = 0; job_queue_index < NCPP_DEFAULT_JOB_PRIORITY_COUNT; ++job_queue_index) {
+				for (u8 job_queue_index = 0; job_queue_index < NCPP_DEFAULT_JOB_PRIORITY_COUNT; ++job_queue_index) {
 
 					job_p_queue_type& job_p_queue = job_p_queue_array_[job_queue_index];
 
-					for (uint8_t i = 0; i < min(NCPP_DEFAULT_JOB_PRIORITY_COUNT - job_queue_index, job_p_queue.size()); ++i) {
+					for (u8 i = 0; i < min(NCPP_DEFAULT_JOB_PRIORITY_COUNT - job_queue_index, job_p_queue.size()); ++i) {
 
 						job* job_p = 0;
 
@@ -105,13 +105,13 @@ namespace ncpp {
 
 
 				//process wait queues
-				for (uint8_t job_queue_index = 0; job_queue_index < NCPP_DEFAULT_JOB_PRIORITY_COUNT; ++job_queue_index) {
+				for (u8 job_queue_index = 0; job_queue_index < NCPP_DEFAULT_JOB_PRIORITY_COUNT; ++job_queue_index) {
 
 					coroutine_p_queue_type& coroutine_p_queue = coroutine_p_queue_array_[job_queue_index];
 
-					const uint8_t coroutine_count = min(NCPP_DEFAULT_JOB_PRIORITY_COUNT - job_queue_index, coroutine_p_queue.size());
+					const u8 coroutine_count = min(NCPP_DEFAULT_JOB_PRIORITY_COUNT - job_queue_index, coroutine_p_queue.size());
 
-					for (uint8_t i = 0; i < coroutine_count; ++i) {
+					for (u8 i = 0; i < coroutine_count; ++i) {
 
 						coroutine* coroutine_p = coroutine_p_queue.front();
 

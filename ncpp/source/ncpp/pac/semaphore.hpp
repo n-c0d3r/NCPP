@@ -2,7 +2,7 @@
 
 /**
  *  @file ncpp/pac/semaphore.hpp
- *  @brief Implementing semaphore.
+ *  @brief Implements semaphore.
  */
 
 
@@ -18,14 +18,14 @@ namespace ncpp {
 	namespace pac {
 	
 		/**
-		 *	Implementing semaphore
+		 *	Implements semaphore
 		 */
         template <typename Mutex, typename CondVar>
         class semaphore_t {
         public:
             using native_handle_type = typename CondVar::native_handle_type;
 
-            explicit semaphore_t(size_t count = 0);
+            explicit semaphore_t(sz count = 0);
             semaphore_t(const semaphore_t&) = delete;
             semaphore_t(semaphore_t&&) = delete;
             semaphore_t& operator=(const semaphore_t&) = delete;
@@ -33,24 +33,24 @@ namespace ncpp {
 
             void notify();
             void wait();
-            bool try_wait();
+            b8 try_wait();
             template<class Rep, class Period>
-            bool wait_for(const std::chrono::duration<Rep, Period>& d);
+            b8 wait_for(const std::chrono::duration<Rep, Period>& d);
             template<class Clock, class Duration>
-            bool wait_until(const std::chrono::time_point<Clock, Duration>& t);
+            b8 wait_until(const std::chrono::time_point<Clock, Duration>& t);
 
             native_handle_type native_handle();
 
         private:
             Mutex   mMutex;
             CondVar mCv;
-            size_t  mCount;
+            sz  mCount;
         };
 
         using semaphore = semaphore_t<std::mutex, std::condition_variable>;
 
         template <typename Mutex, typename CondVar>
-        semaphore_t<Mutex, CondVar>::semaphore_t(size_t count)
+        semaphore_t<Mutex, CondVar>::semaphore_t(sz count)
             : mCount{count}
         {}
 
@@ -69,7 +69,7 @@ namespace ncpp {
         }
 
         template <typename Mutex, typename CondVar>
-        bool semaphore_t<Mutex, CondVar>::try_wait() {
+        b8 semaphore_t<Mutex, CondVar>::try_wait() {
             std::lock_guard<Mutex> lock{mMutex};
 
             if (mCount > 0) {
@@ -82,7 +82,7 @@ namespace ncpp {
 
         template <typename Mutex, typename CondVar>
         template<class Rep, class Period>
-        bool semaphore_t<Mutex, CondVar>::wait_for(const std::chrono::duration<Rep, Period>& d) {
+        b8 semaphore_t<Mutex, CondVar>::wait_for(const std::chrono::duration<Rep, Period>& d) {
             std::unique_lock<Mutex> lock{mMutex};
             auto finished = mCv.wait_for(lock, d, [&]{ return mCount > 0; });
 
@@ -94,7 +94,7 @@ namespace ncpp {
 
         template <typename Mutex, typename CondVar>
         template<class Clock, class Duration>
-        bool semaphore_t<Mutex, CondVar>::wait_until(const std::chrono::time_point<Clock, Duration>& t) {
+        b8 semaphore_t<Mutex, CondVar>::wait_until(const std::chrono::time_point<Clock, Duration>& t) {
             std::unique_lock<Mutex> lock{mMutex};
             auto finished = mCv.wait_until(lock, t, [&]{ return mCount > 0; });
 

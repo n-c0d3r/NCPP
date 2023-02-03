@@ -3,7 +3,7 @@
 namespace ncpp { 
 	
 	/**
-	 *	Containing the containers in ncpp library
+	 *	Contains the containers in ncpp library
 	 */
 	namespace containers {} 
 }

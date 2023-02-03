@@ -1,7 +1,7 @@
 #pragma once
 
 /** @file ncpp/memory_counting.hpp
-*	@brief Implementing memory counting functionalities.
+*	@brief Implements memory counting functionalities.
 */
 
 
@@ -13,16 +13,16 @@
 namespace ncpp {
 
 	/**
-	 *	Use to get current memory usage. 
+	 *	Uses to get current memory usage. 
 	 */
-	extern inline size_t memory_usage();
+	extern inline sz memory_usage();
 	/**
-	 *	Increasing memory usage by given bytes.
+	 *	Increases memory usage by given bytes.
 	 */
-	extern inline void increase_memory_usage(size_t bytes);
+	extern inline void increase_memory_usage(sz bytes);
 	/**
-	 *	Decreasing memory usage by given bytes.
+	 *	Decreases memory usage by given bytes.
 	 */
-	extern inline void decrease_memory_usage(size_t bytes);
+	extern inline void decrease_memory_usage(sz bytes);
 
 }

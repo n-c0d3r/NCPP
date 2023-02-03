@@ -2,7 +2,7 @@
 
 /**
  *  @file ncpp/containers/fixed_vector_stack.hpp
- *  @brief Implementing fixed vector stack.
+ *  @brief Implements fixed vector stack.
  */
 
 
@@ -35,8 +35,8 @@ namespace ncpp {
 #pragma region Properties
         private:
             item_vector_type item_vector_;
-            size_t end_index_;
-            size_t capacity_;
+            sz end_index_;
+            sz capacity_;
 #pragma endregion
 
 
@@ -53,7 +53,7 @@ namespace ncpp {
             inline item_type& back() { return *(item_vector_.data() + (end_index_ - 1)); }
             inline const item_type& back() const { return *(item_vector_.data() + (end_index_ - 1)); }
 
-            inline size_t size() const { return end_index_; }
+            inline sz size() const { return end_index_; }
 #pragma endregion
 
 
@@ -63,7 +63,7 @@ namespace ncpp {
             /**
              *  Initialization constructor
              */
-            inline explicit fixed_vector_stack_t(size_t capacity) :
+            inline explicit fixed_vector_stack_t(sz capacity) :
                 end_index_(0),
                 capacity_(capacity)
             {
@@ -152,7 +152,7 @@ namespace ncpp {
         
         public:
             /**
-             *  Clear the stack by resetting the end index
+             *  Clears the stack by resetting the end index
              */
             inline void clear() {
 
@@ -161,21 +161,21 @@ namespace ncpp {
             }
 
             /**
-             *  Push an item into the stack by move operation
+             *  Pushes an item into the stack by move operation
              */
             inline void push(item_type&& item) {
 
                 push_main_t(std::forward<item_type>(item));
             }
             /**
-             *  Push an item into the stack by copy operation
+             *  Pushes an item into the stack by copy operation
              */
             inline void push(const item_type& item) {
 
                 push_main_t(item);
             }
             /**
-             *  Pop the front element
+             *  Pops the front element
              */
             inline void pop() {
 
@@ -186,9 +186,9 @@ namespace ncpp {
             }
 
             /**
-             *  Resizing the stack.
+             *  Resizes the stack.
              */
-            inline void resize(size_t size) {
+            inline void resize(sz size) {
 
                 end_index_ = size;
 

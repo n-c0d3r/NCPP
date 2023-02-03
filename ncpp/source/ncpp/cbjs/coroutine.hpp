@@ -18,7 +18,7 @@ namespace ncpp {
 
 
         /**
-         *  Indicating whether the coroutine is able to run   .
+         *  Indicates whether the coroutine is able to run   .
          */
         enum struct coroutine_state {
 
@@ -76,7 +76,7 @@ namespace ncpp {
 
         /**
          *  A coroutine is a function that can suspend execution to be resumed later.
-         *  It contain a fiber to run the main worker loop, be able switch back to the owner thread fiber and resumed later by switching to that fiber. 
+         *  It contain a fiber to run the main worker loop, be able to switch back to the owner thread fiber and resumed later by switching to that fiber. 
          */
         class NCPP_DEFAULT_ALIGN coroutine final
         {
@@ -94,9 +94,9 @@ namespace ncpp {
             inline coroutine_state state() const { return state_; }
             
             /**
-             *  Indicating whether job_p_ is NULL.
+             *  Indicates whether job_p_ is NULL.
              */
-            inline bool is_has_job() const { return job_p_ != 0; }
+            inline b8 is_has_job() const { return job_p_ != 0; }
 
 
 
@@ -112,7 +112,7 @@ namespace ncpp {
 
         public:
             /**
-             *  Binding the thread fiber to use when job done,... 
+             *  Binds the thread fiber to use when job done,... 
              */
             inline void bind_thread_fiber(pac::fiber& thread_fiber) {
 
@@ -120,7 +120,7 @@ namespace ncpp {
 
             }
             /**
-             *  Binding the job to run.
+             *  Binds the job to run.
              */
             inline void bind_job(job& j) {
 
@@ -129,7 +129,7 @@ namespace ncpp {
             }
             
             /**
-             *  Changing the state updater by auto creating it from the passed arguments and switch to the owner thread fiber.
+             *  Changes the state updater by auto creating it from the passed arguments and switch to the owner thread fiber.
              */
             template<typename state_updater_type, typename... arg_types>
             inline void yield_t(arg_types&&... args) {
@@ -142,7 +142,7 @@ namespace ncpp {
 
             }
             /**
-             *  Changing the state updater and switch to the owner thread fiber.
+             *  Changes the state updater and switch to the owner thread fiber.
              */
             inline void yield(coroutine_state_updater& state_updater) {
 
@@ -155,7 +155,7 @@ namespace ncpp {
 
         private:
             /**
-             *  Changing the state updater to default and switch to the owner thread fiber.
+             *  Changes the state updater to default and switch to the owner thread fiber.
              *  Also resetting job_p_ to NULL and state_ to coroutine_state::RUNNABLE.
              *  Be private because this function only need to call by the coroutine its self to switch back to the owner thread fiber when the coroutine is ready to take a new job.
              */
@@ -171,7 +171,7 @@ namespace ncpp {
 
         public:
             /**
-             *  Switching from owner thread fiber to the coroutine's fiber.
+             *  Switches from owner thread fiber to the coroutine's fiber.
              */
             inline void switch_to_this() {
                                 
@@ -179,7 +179,7 @@ namespace ncpp {
             }
 
             /**
-             *  Updating the state by calling state_updater_p_->update().
+             *  Updates the state by calling state_updater_p_->update().
              */
             inline coroutine_state update_state() {
 
@@ -193,14 +193,14 @@ namespace ncpp {
 
 
         /**
-         *  Storing coroutines.
-         *  Can pop a coroutine to use and push it back again.
+         *  Stores and manages coroutines.
+         *  Capable of popping a coroutine to use and pushing it back again.
          */
         class NCPP_DEFAULT_ALIGN coroutine_pool final
         {
 
         private:
-            size_t capacity_;
+            sz capacity_;
             containers::fixed_vector_stack_t<coroutine*> coroutine_p_stack_;
             std::vector<coroutine> coroutine_vector_;
             worker_thread& worker_thread_;
@@ -208,21 +208,21 @@ namespace ncpp {
 
 
         public:
-            inline size_t capacity() const { return capacity_; }
+            inline sz capacity() const { return capacity_; }
             inline worker_thread& get_worker_thread() { return worker_thread_; }
             inline const worker_thread& get_worker_thread() const { return worker_thread_; }
 
 
 
         public:
-            coroutine_pool(size_t capacity, worker_thread& wt_);
+            coroutine_pool(sz capacity, worker_thread& wt_);
             ~coroutine_pool();
 
 
 
         public:
             /**
-             *  Push a coroutine pointer back to the coroutine pointer stack.
+             *  Pushes a coroutine pointer back to the coroutine pointer stack.
              */
             inline void push(coroutine* c) {
 
@@ -230,7 +230,7 @@ namespace ncpp {
 
             }
             /**
-             *  Pop a coroutine pointer from the coroutine pointer stack.
+             *  Pops a coroutine pointer from the coroutine pointer stack.
              */
             inline coroutine* pop() {
 

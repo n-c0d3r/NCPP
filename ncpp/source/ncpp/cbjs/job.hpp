@@ -19,7 +19,7 @@ namespace ncpp {
 
         /**
          *  Be a function, and also storing job's informations (priority, is_done,...).
-         *  Can be allocated in the stack and owned by a coroutine after scheduled.
+         *  Usually allocated in the stack and owned by a coroutine after scheduling.
          */
         struct NCPP_DEFAULT_ALIGN job {
 
@@ -47,18 +47,18 @@ namespace ncpp {
              */
             functor_type functor;
             /**
-             *  Storing the priority of the job when scheduling.
+             *  Stores the priority of the job when scheduling.
              *  The strongest value is 0 (the highest priority). 
              */
-            uint16_t priority = 0;
+            u8 priority = 0;
 
-            bool is_done = 0;
+            b8 is_done = 0;
 
 
 
         public:
             /**
-             *  Resetting the states to be kicked again.
+             *  Resets the states to be kicked again.
              */
             inline void reset() {
 

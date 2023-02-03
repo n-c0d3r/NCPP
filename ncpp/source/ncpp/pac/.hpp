@@ -3,7 +3,7 @@
 namespace ncpp { 
     
     /**
-     *  Implementing parallelism and concurrency functionalities.  
+     *  Implements parallelism and concurrency functionalities.  
      */
     namespace pac {} 
 }

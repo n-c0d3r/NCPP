@@ -2,7 +2,7 @@
 
 /**
  *  @file ncpp/pac/fiber.hpp
- *  @brief Defining targeted platform fiber. 
+ *  @brief Defines targeted platform fiber. 
  */
 
 
@@ -22,7 +22,7 @@ namespace ncpp {
 
 
 		/**
-		 *  Indicating how to create a fiber.
+		 *  Indicates how to create a fiber.
 		 */
 		enum class fiber_creation_mode {
 
@@ -33,6 +33,9 @@ namespace ncpp {
 
 
 	
+		/**
+		 *  If current platform is Windows, uses win_fiber
+		 */
 #ifdef NCPP_WINDOWS_PLATFORM
 		using fiber = win_fiber;
 #endif

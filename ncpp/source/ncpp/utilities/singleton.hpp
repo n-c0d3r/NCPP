@@ -2,7 +2,7 @@
 
 /**
  *  @file ncpp/utilities/singleton.hpp
- *  @brief Implementing Singleton Pattern.
+ *  @brief Implements Singleton Pattern.
  */
 
 

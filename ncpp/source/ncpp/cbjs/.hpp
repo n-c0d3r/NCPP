@@ -3,7 +3,7 @@
 namespace ncpp { 
 	
 	/**
-	 *	Implementing coroutine based job system
+	 *	Implements coroutine based job system
 	 */
 	namespace cbjs {} 
 }

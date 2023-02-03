@@ -1,7 +1,7 @@
 #pragma once
 
 /** @file ncpp/utilities/templated_for.hpp
-*   @brief Containing macros and functions to create the loop template.
+*   @brief Contains macros and functions to create the loop template.
 */
 
 
@@ -18,20 +18,20 @@ namespace ncpp {
 
         namespace templated_for_helper {
 
-            template<template<size_t index> typename f_type_t, bool is_end, size_t end, size_t index, typename... arg_types>
+            template<template<sz index> typename f_type_t, b8 is_end, sz end, sz index, typename... arg_types>
             struct step_t {
 
 
 
             };
 
-            template<template<size_t index> typename f_type_t, bool is_end, size_t end, size_t index, typename... arg_types>
+            template<template<sz index> typename f_type_t, b8 is_end, sz end, sz index, typename... arg_types>
             inline void step_invoke_t(arg_types&&... args) {
 
                 step_t<f_type_t, is_end, end, index, arg_types...>::invoke(std::forward<arg_types>(args)...);
             }
 
-            template<template<size_t index> typename f_type_t, size_t end, size_t index, typename... arg_types>
+            template<template<sz index> typename f_type_t, sz end, sz index, typename... arg_types>
             struct step_t<f_type_t, true, end, index, arg_types...> {
 
                 static inline void invoke(arg_types&&... args) {
@@ -42,7 +42,7 @@ namespace ncpp {
 
             };
 
-            template<template<size_t index> typename f_type_t, size_t end, size_t index, typename... arg_types>
+            template<template<sz index> typename f_type_t, sz end, sz index, typename... arg_types>
             struct step_t<f_type_t, false, end, index, arg_types...> {
 
                 static inline void invoke(arg_types&&... args) {
@@ -63,7 +63,7 @@ namespace ncpp {
          *  The macro using to create the body function of loop template.
          */
         #define NCPP_LOOP_FUNCTION_T(Name, Params, Body) \
-        template<size_t index>\
+        template<sz index>\
         struct Name {\
         \
 	        static inline void invoke Params { Body; }; \
@@ -80,7 +80,7 @@ namespace ncpp {
         *   @param <arg_types...> types of each argument in the invoke function
         *   @param args... the arguments forwarding to invoke function
         */
-        template<template<size_t index> typename f_type_t, size_t begin, size_t end, typename... arg_types>
+        template<template<sz index> typename f_type_t, sz begin, sz end, typename... arg_types>
         inline void templated_for_t(arg_types&&... args) {
 
             static_warning(end > begin, "end > begin, templated_for_t will not be executed.");

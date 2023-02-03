@@ -16,7 +16,7 @@ namespace ncpp {
 
 
 			worker_thread_vector_.resize(settings_.worker_thread_count);
-			for (uint16_t i = 0; i < settings_.worker_thread_count; ++i) {
+			for (u16 i = 0; i < settings_.worker_thread_count; ++i) {
 
 				worker_thread_vector_[i] = std::make_unique<cbjs::worker_thread>(i);
 
@@ -37,7 +37,7 @@ namespace ncpp {
 
 			worker_thread_vector_[1]->schedule(settings_.entry_job);
 
-			for (uint16_t i = 1; i < settings_.worker_thread_count; ++i) {
+			for (u16 i = 1; i < settings_.worker_thread_count; ++i) {
 
 				worker_thread_vector_[i]->start();
 
@@ -56,7 +56,7 @@ namespace ncpp {
 		}
 		void system::join() {
 
-			for (uint16_t i = 1; i < settings_.worker_thread_count; ++i) {
+			for (u16 i = 1; i < settings_.worker_thread_count; ++i) {
 
 				worker_thread_vector_[i]->join();
 

@@ -2,7 +2,7 @@
 
 /**
  *  @file ncpp/utilities/unique_lock.hpp
- *  @brief Implementing unique_lock_t.
+ *  @brief Implements unique_lock_t.
  */
 
 

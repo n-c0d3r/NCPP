@@ -3,7 +3,7 @@
 /** @file ncpp/prerequisites.hpp
 *   @brief The file that is always included on the top.
 *
-*   Including stl headers, platform api headers, and defining some macros,...
+*   Includes stl headers, platform api headers, and defines some macros,...
 */
 
 
@@ -81,7 +81,7 @@ namespace ncpp {}
 
 
 
-// Implement static warning
+// Implements static warning
 #if defined(__GNUC__)
 #define DEPRECATE(foo, msg) foo __attribute__((deprecated(msg)))
 #elif defined(_MSC_VER)
@@ -127,21 +127,34 @@ struct NCPP_PP_CAT(static_warning,__LINE__) { \
 #pragma region Typedefs
 
 namespace ncpp {
+    
+    /** 8bit unsigned integer. */
+    using u8 = uint8_t; 
+    /** 16bit unsigned integer. */
+    using u16 = uint16_t; 
+    /** 32bit unsigned integer. */
+    using u32 = uint32_t; 
+    /** 64bit unsigned integer. */
+    using u64 = uint64_t; 
 
-    using u8 = uint8_t;
-    using u16 = uint16_t;
-    using u32 = uint32_t;
-    using u64 = uint64_t;
+    /** 8bit signed integer. */
+    using i8 = int8_t; 
+    /** 16bit signed integer. */
+    using i16 = int16_t; 
+    /** 32bit signed integer. */
+    using i32 = int32_t; 
+    /** 64bit signed integer. */
+    using i64 = int64_t; 
 
-    using i8 = int8_t;
-    using i16 = int16_t;
-    using i32 = int32_t;
-    using i64 = int64_t;
-
-    using f32 = float;
-    using f64 = double;
-
-    using b8 = bool;
+    /** 32bit floating-point type. */
+    using f32 = float; 
+    /** 64bit floating-point type. */
+    using f64 = double; 
+    
+    /** 8bit boolean. */
+    using b8 = bool; 
+    /** the same as size_t. */
+    using sz = size_t; 
 
 }
 

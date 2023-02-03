@@ -2,7 +2,7 @@
 
 /**
  *  @file ncpp/pac/win_fiber.hpp
- *  @brief Implementing fiber for windows platform.
+ *  @brief Implements fiber for windows platform.
  * 	@details Must be included with #ifdef NCPP_WINDOWS_PLATFORM.
  */
 
@@ -22,7 +22,7 @@ namespace ncpp {
 
 		/**
 		 *  Windows platform fiber.
-		 * 	Using WinAPI to implement fiber.
+		 * 	Uses WinAPI to implement fiber.
 		 */
 		class NCPP_DEFAULT_ALIGN win_fiber {
 
@@ -67,7 +67,7 @@ namespace ncpp {
 			}
 
             /**
-             *  Switching to this fiber
+             *  Switches to this fiber
              */
 			void switch_to_this();
 

@@ -53,7 +53,7 @@ namespace ncpp {
 
 
 
-		coroutine_pool::coroutine_pool(size_t capacity, worker_thread& wt) :
+		coroutine_pool::coroutine_pool(sz capacity, worker_thread& wt) :
 			capacity_(capacity),
 			coroutine_p_stack_(capacity),
 			coroutine_vector_(capacity),
@@ -62,7 +62,7 @@ namespace ncpp {
 
 			coroutine_vector_.reserve(capacity_);
 			coroutine_vector_.resize(capacity_);
-			for (size_t i = 0; i < capacity_; ++i) {
+			for (sz i = 0; i < capacity_; ++i) {
 
 				coroutine_p_stack_.push(&coroutine_vector_[i]);
 

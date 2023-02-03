@@ -2,7 +2,7 @@
 
 /**
  *  @file ncpp/utilities/nth_template_arg.hpp
- *  @brief Implementing nth_template_arg_t.
+ *  @brief Implements nth_template_arg_t.
  */
 
 
@@ -17,35 +17,35 @@ namespace ncpp {
 
         namespace nth_template_arg_helper {
 
-            template<bool is_single, bool is_nth, size_t nth_remain, typename... arg_types>
+            template<b8 is_single, b8 is_nth, sz nth_remain, typename... arg_types>
             struct nth_template_arg_t {
 
                 using type = void;
 
             };
 
-            template<size_t nth_remain, typename arg_type>
+            template<sz nth_remain, typename arg_type>
             struct nth_template_arg_t<true, true, nth_remain, arg_type> {
 
                 using type = arg_type;
 
             };
 
-            template<size_t nth_remain, typename arg_type>
+            template<sz nth_remain, typename arg_type>
             struct nth_template_arg_t<true, false, nth_remain, arg_type> {
 
                 using type = void;
 
             };
 
-            template<size_t nth_remain, typename nth_arg_type, typename... rest>
+            template<sz nth_remain, typename nth_arg_type, typename... rest>
             struct nth_template_arg_t<false, true, nth_remain, nth_arg_type, rest...> {
 
                 using type = nth_arg_type;
 
             };
 
-            template<size_t nth_remain, typename nth_arg_type, typename... rest>
+            template<sz nth_remain, typename nth_arg_type, typename... rest>
             struct nth_template_arg_t<false, false, nth_remain, nth_arg_type, rest...> {
 
                 using type = typename nth_template_arg_t<sizeof...(rest) == 1, nth_remain == 1, nth_remain - 1, rest...>::type;
@@ -57,9 +57,9 @@ namespace ncpp {
 
 
         /**
-         *  Finding out the nth template argument.
+         *  Finds out the nth template argument.
          */
-        template<size_t nth, typename... arg_types>
+        template<sz nth, typename... arg_types>
         struct nth_template_arg_t {
 
             static_assert(nth < sizeof...(arg_types), "invalid 'nth' value!");

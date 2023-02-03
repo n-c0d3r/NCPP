@@ -18,7 +18,7 @@ namespace ncpp {
 	namespace pac {
 	
 		/**
-		 *	Implementing spinlock
+		 *	Implements spinlock
 		 */
 		class NCPP_DEFAULT_ALIGN spinlock {
 

@@ -20,7 +20,7 @@ namespace ncpp {
 
         /**
          *  Manages things working on a thread.
-         *  Its contain a fiber, a coroutine pool, coroutine pointer queues and job pointer queues.
+         *  It contain a fiber, a coroutine pool, coroutine pointer queues and job pointer queues.
          */
         class NCPP_DEFAULT_ALIGN worker_thread final
         {
@@ -39,44 +39,46 @@ namespace ncpp {
              *  The worker thread index.
              *  0 is the main worker thread.
              */
-            uint32_t index_;
+            u32 index_;
 
             /**
-             *  The thread from the C++ STL.
+             *  The thread from C++ STL.
              */
             std::thread std_thread_;
 
             /**
-             *  Each job_p_queue has a priority.
+             *  Each job_p_queue has a priority, each job_p_queue is stored in this array.
              *  The capacity of job_p_queue_array_ is the priority count.
              */
             job_p_queue_array_type job_p_queue_array_;
             /**
-             *  Each job_p_queue_lock has a priority.
+             *  Each job_p_queue_lock has a priority, each job_p_queue_lock is stored in this array.
              *  The capacity of job_p_queue_lock_array_ is the priority count.
              */
             job_p_queue_lock_array_type job_p_queue_lock_array_;
 
             /**
-             *  Each coroutine_p_queue has a priority.
+             *  Each coroutine_p_queue has a priority, each coroutine_p_queue is stored in this array.
              *  The capacity of coroutine_p_queue_array_ is the priority count.
              */
             coroutine_p_queue_array_type coroutine_p_queue_array_;
 
             /**
-             *  This thread's fiber.
+             *  This thread's fiber pointer.
+             *  Uses pointer because we need to initialize it later inside C++ STL thread.
              */
             std::unique_ptr<pac::fiber> fiber_p_;
 
             /**
              *  This thread's coroutine pool pointer.
+             *  Uses pointer because we need to initialize it later inside C++ STL thread.
              */
             std::unique_ptr<coroutine_pool> coroutine_pool_p_;
 
 
 
         public:
-            inline uint32_t index() const { return index_; }
+            inline u32 index() const { return index_; }
 
             inline std::thread& std_thread() { return std_thread_; }
             inline const std::thread& std_thread() const { return std_thread_; }
@@ -90,19 +92,19 @@ namespace ncpp {
 
 
         public:
-            worker_thread(uint32_t index);
+            worker_thread(u32 index);
             ~worker_thread();
 
 
 
         public:
             /**
-             *  Starting the worker thread.
-             *  Automatically creating a new thread if not main worker thread.
+             *  Starts the worker thread.
+             *  Automatically creating a new C++ STL thread if not main worker thread.
              */
             void start();
             /**
-             *  Joining the C++ STL thread.
+             *  Joinsthe C++ STL thread.
              */
             void join();
             /**
@@ -111,7 +113,7 @@ namespace ncpp {
             void loop();
 
             /**
-             *  Scheduling a job to be run on this thread.
+             *  Schedules a job to be run on this thread.
              */
             void schedule(job& j);
 
