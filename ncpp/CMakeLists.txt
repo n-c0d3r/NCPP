@@ -1,12 +1,13 @@
 
 # ncpp utility options
-set(NCPP_DEFAULT_ALIGNMENT 16 CACHE STRING "Default Data Alignment")
+set(NCPP_DEFAULT_ALIGN 16 CACHE STRING "Default Data Align")
 
 # ncpp mem options
 option(NCPP_ENABLE_MEMORY_COUNTING "Enable memory counting" ON)
 
 # ncpp containers options
 set(NCPP_DEFAULT_HANDLE_MAP_RESERVE_COUNT 4096 CACHE STRING "Default Handle Map Reserve Count")
+set(NCPP_DEFAULT_HANDLE_MAP_VECTOR_RESERVE_COUNT 4 CACHE STRING "Default Handle Map Vector Reserve Count")
 
 # ncpp job system options
 set(NCPP_DEFAULT_JOB_PRIORITY_COUNT 3 CACHE STRING "Job Priority Count")

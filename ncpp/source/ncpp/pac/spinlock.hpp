@@ -20,7 +20,7 @@ namespace ncpp {
 		/**
 		 *	Implements spinlock
 		 */
-		class NCPP_DEFAULT_ALIGN spinlock {
+		class NCPP_DEFAULT_SET_ALIGN spinlock {
 
 		private:
 			std::atomic_flag flag_;

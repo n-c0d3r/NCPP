@@ -32,7 +32,7 @@ namespace ncpp {
         /**
          *  Responsible for updating the coroutine state.
          */
-        class NCPP_DEFAULT_ALIGN coroutine_state_updater {
+        class NCPP_DEFAULT_SET_ALIGN coroutine_state_updater {
 
         public:
             coroutine_state_updater(){}
@@ -53,9 +53,9 @@ namespace ncpp {
 
 
         /**
-         *  A coroutine state updater that only update coroutine state to coroutine_state::RUNNABLE after the indicated job done.
+         *  A coroutine state updater that only update coroutine state to coroutine_state::RUNNABLE when the indicated job done.
          */
-        class NCPP_DEFAULT_ALIGN wait_job_done : public coroutine_state_updater {
+        class NCPP_DEFAULT_SET_ALIGN wait_job_done : public coroutine_state_updater {
 
         private:
             job& job_;
@@ -75,10 +75,54 @@ namespace ncpp {
 
 
         /**
+         *  A coroutine state updater that only update coroutine state to coroutine_state::RUNNABLE when the indicated variable equal to another indicated variable.
+         */
+        template<typename object_type>
+        class NCPP_DEFAULT_SET_ALIGN wait_value_t : public coroutine_state_updater {
+
+        private:
+            object_type* object_p_;
+            object_type* another_object_p_;
+
+
+
+        public:
+            wait_value_t(
+                object_type& object_reference,
+                object_type& another_object_reference
+            ) :
+                object_p_(&object_reference),
+                another_object_p_(&another_object_reference)
+            {}
+            wait_value_t(
+                object_type& object_reference,
+                object_type&& another_object_reference
+            ) :
+                object_p_(&object_reference),
+                another_object_p_(&another_object_reference)
+            {}
+            wait_value_t(
+                object_type&& object_reference,
+                object_type& another_object_reference
+            ) :
+                object_p_(&object_reference),
+                another_object_p_(&another_object_reference)
+            {}
+
+            coroutine_state update() {
+
+                return (coroutine_state)(*object_p_ == *another_object_p_);
+            }
+
+        };
+
+
+
+        /**
          *  A coroutine is a function that can suspend execution to be resumed later.
          *  It contain a fiber to run the main worker loop, be able to switch back to the owner thread fiber and resumed later by switching to that fiber. 
          */
-        class NCPP_DEFAULT_ALIGN coroutine final
+        class NCPP_DEFAULT_SET_ALIGN coroutine final
         {
 
         private:
@@ -137,6 +181,18 @@ namespace ncpp {
                 state_updater_type sate_updater(std::forward<arg_types>(args)...);
 
                 state_updater_p_ = &sate_updater;
+                state_ = coroutine_state::WAITING;
+
+                thread_fiber_p_->switch_to_this();
+
+            }
+            /**
+             *  Changes the state updater and switch to the owner thread fiber.
+             */
+            inline void yield(coroutine_state_updater&& state_updater) {
+
+                state_updater_p_ = &state_updater;
+                state_ = coroutine_state::WAITING;
 
                 thread_fiber_p_->switch_to_this();
 
@@ -196,7 +252,7 @@ namespace ncpp {
          *  Stores and manages coroutines.
          *  Capable of popping a coroutine to use and pushing it back again.
          */
-        class NCPP_DEFAULT_ALIGN coroutine_pool final
+        class NCPP_DEFAULT_SET_ALIGN coroutine_pool final
         {
 
         private:

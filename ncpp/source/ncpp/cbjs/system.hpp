@@ -20,7 +20,7 @@ namespace ncpp {
         /**
          *  Describes the settings to create job system.  
          */
-        struct NCPP_DEFAULT_ALIGN system_settings {
+        struct NCPP_DEFAULT_SET_ALIGN system_settings {
 
             /**
              *  The job to be kicked first.
@@ -39,7 +39,7 @@ namespace ncpp {
          *  Manages worker threads and overall states.
          *  To initialize cbjs, we need to create the job system and run it. 
          */
-        class NCPP_DEFAULT_ALIGN system final :
+        class NCPP_DEFAULT_SET_ALIGN system final :
             public utilities::singleton_t<system>
         {
 

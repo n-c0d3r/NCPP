@@ -21,7 +21,7 @@ namespace ncpp {
          *  Be a function, and also storing job's informations (priority, is_done,...).
          *  Usually allocated in the stack and owned by a coroutine after scheduling.
          */
-        struct NCPP_DEFAULT_ALIGN job {
+        struct NCPP_DEFAULT_SET_ALIGN job {
 
         public:
             friend class system;

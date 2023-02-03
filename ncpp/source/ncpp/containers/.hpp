@@ -3,7 +3,7 @@
 namespace ncpp { 
 	
 	/**
-	 *	Contains the containers in ncpp library
+	 *	Implements containers.
 	 */
 	namespace containers {} 
 }
@@ -14,3 +14,5 @@ namespace ncpp {
 
 #include <ncpp/containers/fixed_vector_queue.hpp>
 #include <ncpp/containers/fixed_vector_stack.hpp>
+#include <ncpp/containers/handle_map.hpp>
+#include <ncpp/containers/handle_multimap.hpp>

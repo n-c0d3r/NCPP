@@ -19,7 +19,7 @@ namespace ncpp {
          *  An object that manages a mutex object by keeping it always locked.
          */
         template<class locker_class>
-        class NCPP_DEFAULT_ALIGN unique_lock_t {
+        class NCPP_DEFAULT_SET_ALIGN unique_lock_t {
 
         private:
             locker_class& locker_;

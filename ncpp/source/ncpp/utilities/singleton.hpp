@@ -19,7 +19,7 @@ namespace ncpp {
          *  Singleton template. Only allow 1 instance at a time.
          */
         template<class _class>
-        class NCPP_DEFAULT_ALIGN singleton_t {
+        class NCPP_DEFAULT_SET_ALIGN singleton_t {
 
         private:
             static _class* instance_ps;/**< instance pointer. */

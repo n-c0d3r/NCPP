@@ -35,7 +35,7 @@ namespace ncpp {
 
 			is_running_.store(true, std::memory_order_release);
 
-			worker_thread_vector_[1]->schedule(settings_.entry_job);
+			worker_thread_vector_[0]->schedule(settings_.entry_job);
 
 			for (u16 i = 1; i < settings_.worker_thread_count; ++i) {
 

@@ -25,46 +25,65 @@ namespace ncpp {
 
 	};
 
+	struct new_mode {
+
+		struct default {};
+		struct align {};
+
+	};
+
 
 
 	/**
-	 *	Flags a memory area is allocated by a ncpp allocator.
+	 *	Signs that a memory pointer is allocated by a ncpp allocator.
 	 */
-#define NCPP_MEMORY_ALLOCATION_FLAG 0xF0362F98
+#define NCPP_MEMORY_ALLOCATION_SIGNATURE 0xF0362F98
 
 
 
 	/**
 	 *	Describes informations about allocated memory 
 	 */
-	struct NCPP_DEFAULT_ALIGN allocation_desc {
+	struct NCPP_DEFAULT_SET_ALIGN allocation_desc {
 
 		sz actual_size;
-		sz flag : 32;
+		sz signature : 32;
 		sz align : 1;
 		sz alignment_shift : 1;
 
 	};
 
+	/**
+	 *	Checks whether the memory locating at the given pointer is allocated by a ncpp allocator.
+	 */
 	inline b8 is_allocated_by_ncpp(void* ptr) { 
-		return (reinterpret_cast<allocation_desc*>(ptr) - 1)->flag == NCPP_MEMORY_ALLOCATION_FLAG;
+		return (reinterpret_cast<allocation_desc*>(ptr) - 1)->signature == NCPP_MEMORY_ALLOCATION_SIGNATURE;
 	}
 
 
 
 #pragma region Implement aligned allocation,...
+	/**
+	 *	Returns aligned address shifting from the given address and align.
+	 */
 	inline uintptr_t align_address(uintptr_t addr, sz align)
 	{
 		const sz mask = align - 1;
 		assert((align & mask) == 0 && "align value must be power of 2");
 		return (addr + mask) & ~mask;
 	}
+	/**
+	 *	Returns aligned pointer shifting from the given pointer and align.
+	 */
 	template<typename data_type>
 	inline data_type* align_pointer(data_type* ptr, sz align)
 	{
 		const uintptr_t addr = reinterpret_cast<uintptr_t>(ptr);
 		return reinterpret_cast<data_type*>(align_address(addr, align));
 	}
+	/**
+	 *	Aligned allocates a memory block from given size and align.
+	 */
 	inline void* aligned_alloc(sz size, sz align)
 	{
 
@@ -78,7 +97,7 @@ namespace ncpp {
 		allocation_desc* alloc_desc_p = reinterpret_cast<allocation_desc*>(aligned_ptr);
 
 		alloc_desc_p->actual_size = actual_size;
-		alloc_desc_p->flag = NCPP_MEMORY_ALLOCATION_FLAG;
+		alloc_desc_p->signature = NCPP_MEMORY_ALLOCATION_SIGNATURE;
 		alloc_desc_p->align = align;
 		alloc_desc_p->alignment_shift = aligned_ptr - raw_ptr;
 
@@ -86,6 +105,9 @@ namespace ncpp {
 
 		return alloc_desc_p + 1;
 	}
+	/**
+	 *	Aligned frees a memory block.
+	 */
 	inline void aligned_free(void* ptr)
 	{
 
@@ -106,22 +128,8 @@ namespace ncpp {
 
 
 #pragma region new and delete operators
-inline void* operator new(ncpp::sz size) {
-
-	return ncpp::aligned_alloc(size, NCPP_DEFAULT_ALIGNMENT);
-}
-inline void operator delete(void* ptr) {
-
-	if (ncpp::is_allocated_by_ncpp) {
-
-		ncpp::aligned_free(ptr);
-
-	}
-	else {
-
-		free(ptr);
-
-	}
-}
+extern void* operator new(ncpp::sz size);
+extern void* operator new(ncpp::sz size, ncpp::new_mode::align, ncpp::sz align);
+extern void operator delete(void* ptr);
 #pragma endregion
 

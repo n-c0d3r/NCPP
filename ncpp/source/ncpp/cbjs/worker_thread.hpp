@@ -22,7 +22,7 @@ namespace ncpp {
          *  Manages things working on a thread.
          *  It contain a fiber, a coroutine pool, coroutine pointer queues and job pointer queues.
          */
-        class NCPP_DEFAULT_ALIGN worker_thread final
+        class NCPP_DEFAULT_SET_ALIGN worker_thread final
         {
 
         public:

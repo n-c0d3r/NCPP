@@ -21,7 +21,7 @@ namespace ncpp {
          *  A fixed_vector_queue_t is a queue storing elements inside a fixed vector
          */
         template<typename item_type, template<typename item_type> class allocator_t = std::allocator>
-        class NCPP_DEFAULT_ALIGN fixed_vector_queue_t final {
+        class NCPP_DEFAULT_SET_ALIGN fixed_vector_queue_t {
 
 #pragma region Typedefs
         public:

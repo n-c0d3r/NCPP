@@ -21,7 +21,7 @@ namespace ncpp {
          *  A fixed_vector_stack_t is a stack storing elements inside a fixed vector 
          */
         template<typename item_type, template<typename item_type> class allocator_t = std::allocator>
-        class NCPP_DEFAULT_ALIGN fixed_vector_stack_t final {
+        class NCPP_DEFAULT_SET_ALIGN fixed_vector_stack_t {
 
 #pragma region Typedefs
         public:

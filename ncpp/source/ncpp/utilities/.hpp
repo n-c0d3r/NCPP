@@ -3,8 +3,8 @@
 namespace ncpp { 
 	
 	/**
-	*	Contains the utilities in ncpp library.
-	*/
+	 *	Implements utilities.
+	 */
 	namespace utilities {} 
 }
 

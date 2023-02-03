@@ -4,6 +4,14 @@ using namespace ncpp;
 
 
 
+struct transform {
+
+
+
+};
+
+
+
 int main() {
 
 	{
@@ -12,33 +20,17 @@ int main() {
 
 			[](cbjs::job& job, cbjs::coroutine& coroutine) {
 
-				std::vector<cbjs::job> job_vector;
-							
-				for (i32 i = 0; i < 8192; ++i) {
+				containers::handle_multimap<int> multimap(4, 16);
 
-					job_vector.push_back(std::move(cbjs::job{
+				auto map0 = multimap.insert_new();
+				auto map1 = multimap.insert_new();
+				auto map2 = multimap.insert_new();
 
-						[i](cbjs::job& job, cbjs::coroutine& coroutine) {
-							
-							std::cout << i << std::endl;
+				multimap[0].insert(0);
+				multimap[0].insert(1);
+				multimap[0].insert(2);
 
-						}
-
-					}));
-
-				}
-
-				for (i32 i = 0; i < job_vector.size(); ++i) {
-
-					cbjs::system::instance().worker_thread(i % 12).schedule(job_vector[i]);
-
-				}
-
-				for (i32 i = 0; i < job_vector.size(); ++i) {
-
-					coroutine.yield_t<cbjs::wait_job_done>(job_vector[i]);
-
-				}
+				std::cout << "memory usage: " << memory_usage() << "(bytes)" << std::endl;
 
 			}
 
@@ -46,7 +38,8 @@ int main() {
 
 		cbjs::system job_system({
 
-			entry_job
+			entry_job,
+			1
 
 		});
 
@@ -54,7 +47,7 @@ int main() {
 
 	}
 
-	std::cout << "memory remain: " << memory_usage() << "(bytes)" << std::endl;
+	std::cout << "unreleased memory: " << memory_usage() << "(bytes)" << std::endl;
 
 	return 0;
 }

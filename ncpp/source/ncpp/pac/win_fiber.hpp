@@ -24,7 +24,7 @@ namespace ncpp {
 		 *  Windows platform fiber.
 		 * 	Uses WinAPI to implement fiber.
 		 */
-		class NCPP_DEFAULT_ALIGN win_fiber {
+		class NCPP_DEFAULT_SET_ALIGN win_fiber {
 
 		public:
 			using functor_type = std::function<void(win_fiber&)>;

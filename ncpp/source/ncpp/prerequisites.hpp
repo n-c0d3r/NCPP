@@ -41,12 +41,10 @@ namespace ncpp {}
 #include <bitset>
 #include <cstdio>
 #include <cstdlib>
-#include <semaphore>
 
 
 
 #if defined(_WIN64) || defined(_WIN32)
-#define NCPP_WINDOWS_PLATFORM
 #include <Windows.h>
 #include <DirectXMath.h>
 #endif
@@ -72,12 +70,12 @@ namespace ncpp {}
 
 // alignment macros
 #if defined(_MSC_VER)
-#define NCPP_ALIGN(N) __declspec(align(N))
+#define NCPP_SET_ALIGN(N) __declspec(align(N))
 #elif defined( __GNUC__ ) || defined(__MINGW64__)
-#define NCPP_ALIGN(N) __attribute__((__align(N)))
+#define NCPP_SET_ALIGN(N) __attribute__((__align(N)))
 #endif
 
-#define NCPP_DEFAULT_ALIGN NCPP_ALIGN(NCPP_DEFAULT_ALIGNMENT)
+#define NCPP_DEFAULT_SET_ALIGN NCPP_SET_ALIGN(NCPP_DEFAULT_ALIGN)
 
 
 
