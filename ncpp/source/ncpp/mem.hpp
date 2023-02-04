@@ -54,9 +54,44 @@ namespace ncpp {
 	};
 
 	/**
+	 *	Checks if memory is readable.
+	 */
+	inline bool memory_readable(void* ptr, sz byteCount)
+	{
+#ifdef NCPP_WINDOWS_PLATFORM
+		MEMORY_BASIC_INFORMATION mbi;
+		if (VirtualQuery(ptr, &mbi, sizeof(MEMORY_BASIC_INFORMATION)) == 0)
+			return false;
+
+		if (mbi.State != MEM_COMMIT)
+			return false;
+
+		if (mbi.Protect == PAGE_NOACCESS || mbi.Protect == PAGE_EXECUTE)
+			return false;
+
+		// This checks that the start of memory block is in the same "region" as the
+		// end. If it isn't you "simplify" the problem into checking that the rest of 
+		// the memory is readable.
+		sz blockOffset = (sz)((i8*)ptr - (i8*)mbi.AllocationBase);
+		sz blockBytesPostPtr = mbi.RegionSize - blockOffset;
+
+		if (blockBytesPostPtr < byteCount)
+			return memory_readable((i8*)ptr + blockBytesPostPtr,
+				byteCount - blockBytesPostPtr);
+#endif
+
+		return true;
+	}
+
+	/**
 	 *	Checks whether the memory locating at the given pointer is allocated by a ncpp allocator.
 	 */
 	inline b8 is_allocated_by_ncpp(void* ptr) { 
+		
+		if (!memory_readable(ptr, 1)) {
+			return false;
+		}
+
 		return (reinterpret_cast<allocation_desc*>(ptr) - 1)->signature == NCPP_MEMORY_ALLOCATION_SIGNATURE;
 	}
 
@@ -101,7 +136,9 @@ namespace ncpp {
 		alloc_desc_p->align = align;
 		alloc_desc_p->alignment_shift = aligned_ptr - raw_ptr;
 
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
 		increase_memory_usage(actual_size);
+#endif
 
 		return alloc_desc_p + 1;
 	}
@@ -115,7 +152,9 @@ namespace ncpp {
 
 		u8* raw_ptr = reinterpret_cast<u8*>(alloc_desc_p) - alloc_desc_p->alignment_shift;
 
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
 		decrease_memory_usage(alloc_desc_p->actual_size);
+#endif
 
 		free(raw_ptr);
 

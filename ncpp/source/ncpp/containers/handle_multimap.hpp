@@ -1,8 +1,8 @@
 #pragma once
 
 /**
- *  @file ncpp/containers/fixed_vector_queue.hpp
- *  @brief Implements fixed vector queue.
+ *  @file ncpp/containers/handle_multimap.hpp
+ *  @brief Implements handle_multimap_t.
  */
 
 
@@ -20,29 +20,40 @@ namespace ncpp {
     namespace containers {
 
         /**
-         *  A handle_map is a map storing items in a dense set and linking each item to an id storing in sparse set.
+         *  A handle_multimap is a multimap storing items in dense sets and linking each item to an id storing in a sparse set.
+         *  Notes:
+         *      + 'fl' means  'free list'.
+         *      + 'mai' means 'meta and item'.
          */
         template<typename item_type, template<typename data_type> class allocator_t = std::allocator>
-		class NCPP_DEFAULT_SET_ALIGN handle_multimap
+		class NCPP_DEFAULT_SET_ALIGN handle_multimap_t
 		{
 
 #pragma region Typedefs
 		public:
-            using handle_map_type = typename containers::handle_map_t<item_type, allocator_t>;
-            using handle_map_vector_type = typename std::vector<handle_map_type, typename allocator_t<handle_map_type>>;
-            using item_set_type = typename handle_map_type::item_set_type;
-            using mai_set_type = typename handle_map_type::mai_set_type;
-            using id_set_type = typename handle_map_type::id_set_type;
-            using id_type = typename handle_map_type::id_type;
-            using mai_type = typename handle_map_type::mai_type;
+            using map_type = typename handle_map_t<item_type, allocator_t>;
+            using map_set_type = typename std::vector<map_type, typename allocator_t<map_type>>;
+            using id_type = typename map_type::id_type;
+            using mai_type = typename map_type::mai_type;
+            using item_set_type = typename std::vector<item_type, typename allocator_t<item_type>>;
+            using mai_set_type = typename std::vector<mai_type, typename allocator_t<mai_type>>;
+            using id_set_type = typename std::vector<id_type, typename allocator_t<id_type>>;
 #pragma endregion
+
+
+
+        public:
+            friend class map_type;
 
 
 
 #pragma region Properties
 		private:
-            handle_map_vector_type vector_;
-            sz map_capacity_;
+            u32 map_capacity_;
+
+            map_set_type map_set_;
+
+            u32 map_index_;
 
             id_set_type sparse_set_;
 
@@ -54,11 +65,19 @@ namespace ncpp {
 
 #pragma region Getters and Setters
 		public:
-            inline handle_map_vector_type& vector() { return vector_; }
-            inline const handle_map_vector_type& vector() const { return vector_; }
+            inline u32 map_capacity() const { return map_capacity_; }
 
-            inline sz map_capacity() const { return map_capacity_; }
-            inline sz sparse_set_capacity() const { return sparse_set_.capacity(); }
+            inline sz map_count() const { return map_set_.size(); }
+
+            inline bool is_fl_empty() const { return fl_front_ == 0xFFFFFFFF; }
+
+            inline id_set_type& sparse_set() { return sparse_set_; }
+            inline const id_set_type& sparse_set() const { return sparse_set_; }
+
+            inline u32 fl_front() const { return fl_front_; }
+            inline u32 fl_back() const { return fl_back_; }
+
+            inline bool is_fragmented() const { return is_fragmented_; }
 #pragma endregion
 
 
@@ -68,21 +87,31 @@ namespace ncpp {
             /**
              *  Initialization constructor
              */
-            inline handle_multimap(sz vector_reserve_count, sz map_reserve_count) :
+            inline handle_multimap_t(sz map_count, sz map_reserve_count) :
                 map_capacity_(map_reserve_count),
-                is_fragmented_(0),
+                sparse_set_(),
+
                 fl_front_(0xFFFFFFFF),
-                fl_back_(0xFFFFFFFF)
+                fl_back_(0xFFFFFFFF),
+
+                is_fragmented_(0)
             {
 
-                sparse_set_.reserve(map_reserve_count * vector_reserve_count);
+                map_set_.reserve(map_count);
+                sparse_set_.reserve(map_capacity_ * map_count);
+
+                for (sz i = 0; i < map_count; ++i) {
+
+                    insert_new();
+
+                }
 
             }
             /**
              *  Default constructor
              */
-            inline handle_multimap() :
-                handle_multimap(NCPP_DEFAULT_HANDLE_MAP_VECTOR_RESERVE_COUNT, NCPP_DEFAULT_HANDLE_MAP_RESERVE_COUNT)
+            inline handle_multimap_t() :
+                handle_multimap_t(NCPP_DEFAULT_HANDLE_MAP_VECTOR_RESERVE_COUNT, NCPP_DEFAULT_HANDLE_MAP_RESERVE_COUNT)
             {
 
 
@@ -91,38 +120,134 @@ namespace ncpp {
             /**
              *  Destructor
              */
-            ~handle_multimap() {
+            virtual ~handle_multimap_t() {
+
+                reset();
+
+            }
+
+            /**
+             *  Copy Constructor
+             */
+            inline handle_multimap_t(const handle_multimap_t& other) :
+                handle_multimap_t(other.map_count(), other.map_capacity())
+            {
+
+                for (sz i = 0; i < other.map_count(); ++i) {
+
+                    (*this)[i] = other[i];
+
+                }
+
+            }
+            /**
+             *  Copy Operator
+             */
+            inline handle_multimap_t& operator = (const handle_multimap_t& other)
+            {
 
                 clear();
+                for (sz i = 0; i < other.map_count(); ++i) {
 
+                    (*this)[i] = other[i];
+
+                }
+
+                return *this;
             }
 
-            inline handle_map_type& operator[](sz index) {
-                assert(index < vector_.size() && "map index out of range.");
-                return vector_.at(index);
+            /**
+             *  Move Constructor
+             */
+            inline handle_multimap_t(handle_multimap_t&& other) :
+                handle_multimap_t(other.map_count(), other.map_capacity())
+            {
+
+                for (sz i = 0; i < other.map_count(); ++i) {
+
+                    (*this)[i] = std::move(other[i]);
+
+                }
+
             }
-            inline const handle_map_type& operator[](sz index) const {
-                assert(index < vector_.size() && "map index out of range.");
-                return vector_.at(index);
+            /**
+             *  Move Operator
+             */
+            inline handle_multimap_t& operator = (handle_multimap_t&& other)
+            {
+
+                clear();
+                for (sz i = 0; i < other.map_count(); ++i) {
+
+                    (*this)[i] = std::move(other[i]);
+
+                }
+
+                return *this;
+            }
+
+            /**
+             *  [] Operators
+             */
+            inline map_type& operator [] (sz index)
+            {
+
+                return at(index);
+            }
+            inline const map_type& operator [] (sz index) const
+            {
+
+                return at(index);
             }
 #pragma endregion
 
 
 
-#pragma region Methods
+#pragma region 
+        private:
+            inline map_type& insert_new() {
+
+                map_set_.push_back(map_type(0, map_set_.size(), sparse_set_, fl_front_, fl_back_, is_fragmented_));
+
+                map_set_.back().make_shared(*this);
+
+                return map_set_.back();
+            }
+
+
+
         public:
-            inline handle_map_type& insert_new() {
+            inline map_type& at(sz index)
+            {
 
-                return vector_.emplace_back((sz)map_capacity_, (id_set_type&)sparse_set_, (u32&)fl_front_, (u32&)fl_back_, (bool&)is_fragmented_);
+                assert(index < map_set_.size() && "index out of range.");
+
+                return map_set_[index];
             }
-            inline void erase(handle_map_type& map) {
+            inline const map_type& at(sz index) const
+            {
 
-                vector_.erase(&map);
+                assert(index < map_set_.size() && "index out of range.");
+
+                return map_set_[index];
             }
 
-            void clear() {
+            inline void clear() {
 
+                for (auto& map : map_set_) {
 
+                    map.clear();
+
+                }
+
+            }
+            inline void reset() {
+
+                for (auto& map : map_set_) {
+
+                    map.reset();
+
+                }
 
             }
 #pragma endregion

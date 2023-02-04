@@ -1,8 +1,8 @@
 #pragma once
 
 /**
- *  @file ncpp/containers/fixed_vector_queue.hpp
- *  @brief Implements fixed vector queue.
+ *  @file ncpp/containers/handle_map_t.hpp
+ *  @brief Implements handle_map_t.
  */
 
 
@@ -17,6 +17,11 @@ namespace ncpp {
 
     namespace containers {
 
+        template<typename item_type, template<typename item_type> class allocator_t = std::allocator>
+        class NCPP_DEFAULT_SET_ALIGN handle_multimap_t;
+
+
+
         /**
          *  A handle_map is a map storing items in a dense set and linking each item to an id storing in sparse set.
          *  Notes: 
@@ -25,6 +30,11 @@ namespace ncpp {
          */
         template<typename item_type, template<typename item_type> class allocator_t = std::allocator>
         class NCPP_DEFAULT_SET_ALIGN handle_map_t {
+
+        public:
+            friend class handle_multimap_t<item_type, allocator_t>;
+
+
 
 #pragma region Nested Types
         public:
@@ -69,6 +79,7 @@ namespace ncpp {
 
                 u32 outer_index;
                 u32 inner_index;
+                u32 map_index : 15;
                 u32 is_sleep : 1;
 
                 item_type item;
@@ -108,24 +119,27 @@ namespace ncpp {
             using item_set_type = typename std::vector<item_type, typename allocator_t<item_type>>;
             using mai_set_type = typename std::vector<mai_type, typename allocator_t<mai_type>>;
             using id_set_type = typename std::vector<id_type, typename allocator_t<id_type>>;
+            using multimap_type = typename handle_multimap_t<item_type, allocator_t>;
 #pragma endregion
 
 
 
 #pragma region Properties
         private:
+            u32 map_index_;
+
             mai_set_type dense_set_;
             
             id_set_type unique_sparse_set_;
-            id_set_type& sparse_set_;
+            id_set_type* sparse_set_p_;
 
             u32 unique_fl_front_;
-            u32& fl_front_;
+            u32* fl_front_p_;
             u32 unique_fl_back_;
-            u32& fl_back_;
+            u32* fl_back_p_;
 
             bool unique_is_fragmented_;
-            bool& is_fragmented_;
+            bool* is_fragmented_p_;
 
             bool is_shared_;
 #pragma endregion
@@ -134,22 +148,24 @@ namespace ncpp {
 
 #pragma region Getters and Setters
         public:
+            inline u32 map_index() const { return map_index_; }
+
             inline sz size() const { return dense_set_.size(); }
             inline sz capacity() const { return dense_set_.capacity(); }
 
             inline bool is_full() const { return size() == capacity(); }
-            inline bool is_fl_empty() const { return unique_fl_front_ == 0xFFFFFFFF; }
+            inline bool is_fl_empty() const { return (*fl_front_p_) == 0xFFFFFFFF; }
 
             inline mai_set_type& dense_set() { return dense_set_; }
             inline const mai_set_type& dense_set() const { return dense_set_; }
 
-            inline id_set_type& sparse_set() { return sparse_set_; }
-            inline const id_set_type& sparse_set() const { return sparse_set_; }
+            inline id_set_type& sparse_set() { return *sparse_set_p_; }
+            inline const id_set_type& sparse_set() const { return *sparse_set_p_; }
 
-            inline u32 fl_front() const { return fl_front_; }
-            inline u32 fl_back() const { return fl_back_; }
+            inline u32 fl_front() const { return *fl_front_p_; }
+            inline u32 fl_back() const { return *fl_back_p_; }
 
-            inline bool is_fragmented() const { return is_fragmented_; }
+            inline bool is_fragmented() const { return *is_fragmented_p_; }
 
             inline bool is_shared() const { return is_shared_; }
 
@@ -167,42 +183,25 @@ namespace ncpp {
              *  Initialization constructor
              */
             inline handle_map_t(sz reserve_count) :
+                map_index_(0),
+
+                dense_set_(0),
+
                 unique_sparse_set_(),
-                sparse_set_(unique_sparse_set_),
+                sparse_set_p_(&unique_sparse_set_),
 
                 unique_fl_front_(0xFFFFFFFF),
-                fl_front_(unique_fl_front_),
+                fl_front_p_(&unique_fl_front_),
                 unique_fl_back_(0xFFFFFFFF),
-                fl_back_(unique_fl_back_),
+                fl_back_p_(&unique_fl_back_),
 
                 unique_is_fragmented_(0),
-                is_fragmented_(unique_is_fragmented_),
+                is_fragmented_p_(&unique_is_fragmented_),
 
                 is_shared_(0)
             {
 
-                unique_sparse_set_.reserve(reserve_count);
-                dense_set_.reserve(reserve_count);
-
-            }
-            /**
-             *  Initialization constructor for shared map
-             */
-            inline handle_map_t(sz reserve_count, id_set_type& shared_sparse_id_set, u32& shared_fl_front, u32& shared_fl_back, bool& shared_is_fragmented) :
-                unique_sparse_set_(),
-                sparse_set_(shared_sparse_id_set),
-
-                unique_fl_front_(0xFFFFFFFF),
-                fl_front_(shared_fl_front),
-                unique_fl_back_(0xFFFFFFFF),
-                fl_back_(shared_fl_back),
-
-                unique_is_fragmented_(0),
-                is_fragmented_(shared_is_fragmented),
-
-                is_shared_(1)
-            {
-
+                (*sparse_set_p_).reserve(reserve_count);
                 dense_set_.reserve(reserve_count);
 
             }
@@ -217,20 +216,46 @@ namespace ncpp {
 
             }
             /**
+             *  Initialization constructor (shared mode)
+             */
+            inline handle_map_t(
+                sz reserve_count, 
+                u32 map_index, 
+                id_set_type& sparse_set, 
+                u32& fl_front,
+                u32& fl_back,
+                bool& is_fragmented
+            ) :
+                map_index_(map_index),
+
+                dense_set_(0),
+
+                unique_sparse_set_(0),
+                sparse_set_p_(&sparse_set),
+
+                unique_fl_front_(0xFFFFFFFF),
+                fl_front_p_(&fl_front),
+                unique_fl_back_(0xFFFFFFFF),
+                fl_back_p_(&fl_back),
+
+                unique_is_fragmented_(0),
+                is_fragmented_p_(&is_fragmented),
+
+                is_shared_(1)
+            {
+
+                dense_set_.reserve(reserve_count);
+
+            }
+            /**
              *  Destructor
              */
             virtual ~handle_map_t() {
 
-                if (is_shared_) {
-
+                if (is_shared_)
                     clear();
-
-                }
-                else {
-
+                else
                     reset();
-
-                }
 
             }
 
@@ -241,8 +266,11 @@ namespace ncpp {
                 handle_map_t(other.capacity())
             {
 
-                unique_sparse_set_ = other.sparse_set_;
-                dense_set_ = other.dense_set_;
+                for (const auto& mai : other) {
+
+                    insert(mai.item);
+
+                }
 
             }
             /**
@@ -251,27 +279,14 @@ namespace ncpp {
             inline handle_map_t& operator = (const handle_map_t& other)
             {
 
-                if (is_shared_) {
+                clear();
+                for (const auto& mai : other) {
 
-                    clear();
-
-                    for (auto& mai : other) {
-
-                        insert(mai.item);
-
-                    }
-
-                }
-                else {
-
-                    unique_is_fragmented_ = other.is_fragmented_;
-                    unique_fl_front_ = other.fl_front_;
-                    unique_fl_back_ = other.fl_back_;
-                    unique_sparse_set_ = other.sparse_set_;
-                    dense_set_ = other.dense_set_;
+                    insert(mai.item);
 
                 }
 
+                return *this;
             }
 
             /**
@@ -280,11 +295,13 @@ namespace ncpp {
             inline handle_map_t(handle_map_t&& other) :
                 handle_map_t(other.capacity())
             {
+                
+                for (auto& mai : other) {
 
-                unique_sparse_set_ = other.sparse_set_;
-                dense_set_ = other.dense_set_;
+                    insert(mai.item);
 
-                other.~handle_map_t();
+                }
+                other.clear();
 
             }
             /**
@@ -293,29 +310,41 @@ namespace ncpp {
             inline handle_map_t& operator = (handle_map_t&& other)
             {
 
-                if (is_shared_) {
+                clear();
+                for (auto& mai : other) {
 
-                    clear();
-
-                    for (auto& mai : other) {
-
-                        insert(mai.item);
-
-                    }
+                    insert(mai.item);
 
                 }
-                else {
+                other.clear();
+                
+                return *this;
+            }
 
-                    unique_is_fragmented_ = other.is_fragmented_;
-                    unique_fl_front_ = other.fl_front_;
-                    unique_fl_back_ = other.fl_back_;
-                    unique_sparse_set_ = other.sparse_set_;
-                    dense_set_ = other.dense_set_;
 
-                }
 
-                other.~handle_map_t();
+            /**
+             *  [] Operators
+             */
+            inline mai_type& operator [] (sz inner_index)
+            {
 
+                return at(inner_index);
+            }
+            inline const mai_type& operator [] (sz inner_index) const
+            {
+
+                return at(inner_index);
+            }
+            inline mai_type& operator [] (id_type handle)
+            {
+
+                return at(handle);
+            }
+            inline const mai_type& operator [] (id_type handle) const
+            {
+
+                return at(handle);
             }
 #pragma endregion
 
@@ -323,34 +352,44 @@ namespace ncpp {
 
 #pragma region Methods
         private:
+            inline void make_shared(multimap_type& multimap) {
+
+                sparse_set_p_ = &multimap.sparse_set_;
+                fl_front_p_ = &multimap.fl_front_;
+                fl_back_p_ = &multimap.fl_back_;
+                is_fragmented_p_ = &multimap.is_fragmented_;
+                dense_set_.reserve(multimap.map_capacity_);
+
+            }
+
             template<typename item_passed_type>
             inline id_type insert_main_t(item_passed_type&& item) {
 
                 assert(!is_full() && "the handle map is full, cant insert any item.");
 
-                is_fragmented_ = true;
+                *is_fragmented_p_ = true;
 
                 id_type handle = {0, 0};
 
                 if (is_fl_empty()) {
 
-                    handle.outer_index = sparse_set_.size();
-                    sparse_set_.push_back({ (u32)dense_set_.size(), 0, 0 });
+                    handle.outer_index = sparse_set_p_->size();
+                    sparse_set_p_->push_back({ (u32)dense_set_.size(), 0, 0 });
 
                 }
                 else {
 
-                    handle.outer_index = fl_back_;
-                    id_type& id = sparse_set_[handle.outer_index];
+                    handle.outer_index = *fl_back_p_;
+                    id_type& id = (*sparse_set_p_)[handle.outer_index];
 
-                    if (fl_front_ == fl_back_) {
+                    if (*fl_front_p_ == *fl_back_p_) {
                             
-                        fl_front_ = 0xFFFFFFFF;
+                        *fl_front_p_ = 0xFFFFFFFF;
 
 
                     }
 
-                    fl_back_ = id.fl_next_index;
+                    *fl_back_p_ = id.fl_next_index;
 
                     id.is_free = 0;
                     ++id.generation;
@@ -363,6 +402,7 @@ namespace ncpp {
 
                     handle.outer_index,
                     (u32)dense_set_.size(),
+                    map_index_,
                     0,
                     std::forward<item_passed_type>(item)
 
@@ -374,25 +414,58 @@ namespace ncpp {
 
 
         public:
-            inline id_type insert(item_type& item) {
+            inline mai_type& at(sz inner_index)
+            {
 
-                return insert_main_t(std::forward<item_type&>(item));
+                return dense_set_[inner_index];
+            }
+            inline const mai_type& at(sz inner_index) const
+            {
+
+                return dense_set_[inner_index];
+            }
+            inline mai_type& at(id_type handle)
+            {
+
+                assert(handle.outer_index < *sparse_set_p_.size() && "outer index out of range.");
+                assert(!(*sparse_set_p_)[handle.outer_index].is_free && "id is already free.");
+                assert(handle.generation == *sparse_set_p_[handle.outer_index].generation && "erases old generation.");
+
+                return dense_set_[(*sparse_set_p_)[handle.outer_index].inner_index];
+            }
+            inline const mai_type& at(id_type handle) const
+            {
+
+                assert(handle.outer_index < *sparse_set_p_.size() && "outer index out of range.");
+                assert(!(*sparse_set_p_)[handle.outer_index].is_free && "id is already free.");
+                assert(handle.generation == *sparse_set_p_[handle.outer_index].generation && "erases old generation.");
+
+                return dense_set_[(*sparse_set_p_)[handle.outer_index].inner_index];
+            }
+
+
+
+            inline id_type insert(const item_type& item) {
+
+                return insert_main_t(std::forward<const item_type&>(item));
             }
             inline id_type insert(item_type&& item) {
 
                 return insert_main_t(std::forward<item_type>(item));
             }
 
-            inline void erase(id_type& handle) {
 
-                assert(handle.outer_index < sparse_set_.size() && "outer index out of range.");
-                assert(!sparse_set_[handle.outer_index].is_free && "id is already free.");
-                assert(handle.generation == sparse_set_[handle.outer_index].generation && "erases old generation.");
+
+            inline void erase(id_type handle) {
+
+                assert(handle.outer_index < *sparse_set_p_.size() && "outer index out of range.");
+                assert(!(*sparse_set_p_)[handle.outer_index].is_free && "id is already free.");
+                assert(handle.generation == *sparse_set_p_[handle.outer_index].generation && "erases old generation.");
 
                 erase(handle.outer_index);
 
             }
-            inline void erase(erase_by_handle, id_type& handle) {
+            inline void erase(erase_by_handle, id_type handle) {
 
                 erase(handle.outer_index);
 
@@ -409,29 +482,29 @@ namespace ncpp {
             }
             inline void erase(u32 outer_index) {
 
-                assert(outer_index < sparse_set_.size() && "outer index out of range.");
+                assert(outer_index < (*sparse_set_p_).size() && "outer index out of range.");
 
-                is_fragmented_ = true;
+                *is_fragmented_p_ = true;
 
-                id_type& id = sparse_set_[outer_index];
+                id_type& id = (*sparse_set_p_)[outer_index];
                 u32 inner_index = id.inner_index;
 
-                id.fl_next_index = fl_back_;
+                id.fl_next_index = *fl_back_p_;
 
                 id.is_free = 1;
 
                 if (is_fl_empty()) {
 
-                    fl_front_ = outer_index;
+                    *fl_front_p_ = outer_index;
 
                 }
 
-                fl_back_ = outer_index;
+                *fl_back_p_ = outer_index;
 
-                if (id.inner_index != dense_set_.size() - 1) {
+                if (inner_index != dense_set_.size() - 1) {
 
                     dense_set_.back().inner_index = inner_index;
-                    sparse_set_[dense_set_.back().outer_index].inner_index = inner_index;
+                    (*sparse_set_p_)[dense_set_.back().outer_index].inner_index = inner_index;
                     std::swap(dense_set_[inner_index], dense_set_.back());
 
                 }
@@ -452,15 +525,15 @@ namespace ncpp {
 
             }
 
-            inline void swap(id_type& handle1, id_type& handle2) {
+            inline void swap(id_type handle1, id_type handle2) {
 
-                assert(handle1.outer_index < sparse_set_.size() && "outer index out of range (handle1).");
-                assert(!sparse_set_[handle1.outer_index].is_free && "id is already free (handle1).");
-                assert(handle1.generation == sparse_set_[handle1.outer_index].generation && "erases old generation (handle1).");
+                assert(handle1.outer_index < *sparse_set_p_.size() && "outer index out of range (handle1).");
+                assert(!(*sparse_set_p_)[handle1.outer_index].is_free && "id is already free (handle1).");
+                assert(handle1.generation == *sparse_set_p_[handle1.outer_index].generation && "erases old generation (handle1).");
 
-                assert(handle2.outer_index < sparse_set_.size() && "outer index out of range (handle2).");
-                assert(!sparse_set_[handle2.outer_index].is_free && "id is already free (handle2).");
-                assert(handle2.generation == sparse_set_[handle2.outer_index].generation && "erases old generation (handle2).");
+                assert(handle2.outer_index < *sparse_set_p_.size() && "outer index out of range (handle2).");
+                assert(!(*sparse_set_p_)[handle2.outer_index].is_free && "id is already free (handle2).");
+                assert(handle2.generation == *sparse_set_p_[handle2.outer_index].generation && "erases old generation (handle2).");
 
                 swap(handle1.outer_index, handle2.outer_index);
 
@@ -472,10 +545,10 @@ namespace ncpp {
             }
             inline void swap(u32 outer_index1, u32 outer_index2) {
 
-                assert(outer_index1 < sparse_set_.size() && "outer index 1 out of range.");
-                assert(outer_index2 < sparse_set_.size() && "outer index 2 out of range.");
+                assert(outer_index1 < (*sparse_set_p_).size() && "outer index 1 out of range.");
+                assert(outer_index2 < (*sparse_set_p_).size() && "outer index 2 out of range.");
 
-                std::swap(sparse_set_[outer_index1].inner_index, sparse_set_[outer_index2].inner_index);
+                std::swap((*sparse_set_p_)[outer_index1].inner_index, (*sparse_set_p_)[outer_index2].inner_index);
 
             }
 
@@ -490,10 +563,10 @@ namespace ncpp {
             }
             inline void reset() {
 
-                is_fragmented_ = 0;
-                fl_front_ = 0xFFFFFFFF;
-                fl_back_ = 0xFFFFFFFF;
-                sparse_set_.clear();
+                *is_fragmented_p_ = 0;
+                *fl_front_p_ = 0xFFFFFFFF;
+                *fl_back_p_ = 0xFFFFFFFF;
+                sparse_set_p_->clear();
                 dense_set_.clear();
 
             }
