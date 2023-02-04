@@ -95,12 +95,17 @@ namespace ncpp {
             worker_thread(u32 index);
             ~worker_thread();
 
+            worker_thread(const worker_thread&) = delete;
+            worker_thread& operator = (const worker_thread&) = delete;
+            worker_thread(worker_thread&&) = delete;
+            worker_thread& operator = (worker_thread&&) = delete;
+
 
 
         public:
             /**
              *  Starts the worker thread.
-             *  Automatically creating a new C++ STL thread if not main worker thread.
+             *  Automatically creates a new C++ STL thread if not main worker thread.
              */
             void start();
             /**

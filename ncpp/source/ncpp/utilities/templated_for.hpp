@@ -18,23 +18,23 @@ namespace ncpp {
 
         namespace templated_for_helper {
 
-            template<template<sz index> typename f_type_t, b8 is_end, sz end, sz index, typename... arg_types>
+            template<template<sz index__> typename f_type_t__, b8 is_end__, sz end__, sz index__, typename... arg_types__>
             struct step_t {
 
 
 
             };
 
-            template<template<sz index> typename f_type_t, b8 is_end, sz end, sz index, typename... arg_types>
-            inline void step_invoke_t(arg_types&&... args) {
+            template<template<sz index__> typename f_type_t__, b8 is_end__, sz end__, sz index__, typename... arg_types__>
+            inline void step_invoke_t(arg_types__&&... args) {
 
-                step_t<f_type_t, is_end, end, index, arg_types...>::invoke(std::forward<arg_types>(args)...);
+                step_t<f_type_t__, is_end__, end__, index__, arg_types__...>::invoke(std::forward<arg_types__>(args)...);
             }
 
-            template<template<sz index> typename f_type_t, sz end, sz index, typename... arg_types>
-            struct step_t<f_type_t, true, end, index, arg_types...> {
+            template<template<sz index__> typename f_type_t__, sz end__, sz index__, typename... arg_types__>
+            struct step_t<f_type_t__, true, end__, index__, arg_types__...> {
 
-                static inline void invoke(arg_types&&... args) {
+                static inline void invoke(arg_types__&&... args) {
 
 
 
@@ -42,14 +42,14 @@ namespace ncpp {
 
             };
 
-            template<template<sz index> typename f_type_t, sz end, sz index, typename... arg_types>
-            struct step_t<f_type_t, false, end, index, arg_types...> {
+            template<template<sz index__> typename f_type_t__, sz end__, sz index__, typename... arg_types__>
+            struct step_t<f_type_t__, false, end__, index__, arg_types__...> {
 
-                static inline void invoke(arg_types&&... args) {
+                static inline void invoke(arg_types__&&... args) {
 
-                    f_type_t<index>::invoke(std::forward<arg_types>(args)...);
+                    f_type_t__<index__>::invoke(std::forward<arg_types__>(args)...);
 
-                    step_invoke_t<f_type_t, index + 1 == end, end, index + 1, arg_types...>(std::forward<arg_types>(args)...);
+                    step_invoke_t<f_type_t__, index__ + 1 == end__, end__, index__ + 1, arg_types__...>(std::forward<arg_types__>(args)...);
 
                 }
 
@@ -60,10 +60,14 @@ namespace ncpp {
 
 
         /**
-         *  The macro using to create the body function of loop template.
+         *  The macro using to create a function representing the body of loop template.
+         *  @param Name the function name.
+         *  @param Params the parameters.
+         *  @param IndexName__ the 'index' template argument name.
+         *  @param Body the body of loop template. 
          */
-        #define NCPP_LOOP_FUNCTION_T(Name, Params, Body) \
-        template<sz index>\
+        #define NCPP_LOOP_FUNCTION_T(Name, Params, IndexName__, Body) \
+        template<sz IndexName__>\
         struct Name {\
         \
 	        static inline void invoke Params { Body; }; \
@@ -73,19 +77,19 @@ namespace ncpp {
 
  
         /**
-        *   The function template helping run a loop which the index be a template argument.
-        *   @param <f_type_t> the struct template that has the only one template argument <index> and the invoke(args...) function. 
-        *   @param <begin> the integer representing the begin of the loop
-        *   @param <end> the integer representing the end of the loop
-        *   @param <arg_types...> types of each argument in the invoke function
+        *   The function template helping run a loop which the index__ be a template argument.
+        *   @param <f_type_t__> the struct template that has the only one template argument <index__> and the invoke(args...) function. 
+        *   @param <begin__> the integer representing the begin__ of the loop
+        *   @param <end__> the integer representing the end__ of the loop
+        *   @param <arg_types__...> types of each argument in the invoke function
         *   @param args... the arguments forwarding to invoke function
         */
-        template<template<sz index> typename f_type_t, sz begin, sz end, typename... arg_types>
-        inline void templated_for_t(arg_types&&... args) {
+        template<template<sz index__> typename f_type_t__, sz begin__, sz end__, typename... arg_types__>
+        inline void templated_for_t(arg_types__&&... args) {
 
-            static_warning(end > begin, "end > begin, templated_for_t will not be executed.");
+            static_warning(end__ > begin__, "end__ > begin__, templated_for_t will not be executed.");
 
-            templated_for_helper::step_invoke_t<f_type_t, (end <= begin), end, begin, arg_types...>(std::forward<arg_types>(args)...);
+            templated_for_helper::step_invoke_t<f_type_t__, (end__ <= begin__), end__, begin__, arg_types__...>(std::forward<arg_types__>(args)...);
 
         }
 

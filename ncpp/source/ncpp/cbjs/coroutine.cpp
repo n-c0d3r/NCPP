@@ -60,8 +60,6 @@ namespace ncpp {
 			worker_thread_(wt)
 		{
 
-			coroutine_vector_.reserve(capacity_);
-			coroutine_vector_.resize(capacity_);
 			for (sz i = 0; i < capacity_; ++i) {
 
 				coroutine_p_stack_.push(&coroutine_vector_[i]);

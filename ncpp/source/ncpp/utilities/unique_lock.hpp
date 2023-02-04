@@ -18,22 +18,22 @@ namespace ncpp {
         /**
          *  An object that manages a mutex object by keeping it always locked.
          */
-        template<class locker_class>
+        template<class locker_class__>
         class NCPP_DEFAULT_SET_ALIGN unique_lock_t {
 
         private:
-            locker_class& locker_;
+            locker_class__& locker_;
 
 
 
         public:
-            inline locker_class& locker() { return locker_; }
-            inline const locker_class& locker() const { return locker_; }
+            inline locker_class__& locker() { return locker_; }
+            inline const locker_class__& locker() const { return locker_; }
 
 
 
         public:
-            unique_lock_t(locker_class& locker) :
+            unique_lock_t(locker_class__& locker) :
                 locker_(locker)
             {
 

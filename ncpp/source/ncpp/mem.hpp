@@ -54,9 +54,9 @@ namespace ncpp {
 	};
 
 	/**
-	 *	Checks if memory is readable.
+	 *	Checks whether memory is readable.
 	 */
-	inline bool memory_readable(void* ptr, sz byteCount)
+	inline bool is_memory_readable(void* ptr, sz byteCount)
 	{
 #ifdef NCPP_WINDOWS_PLATFORM
 		MEMORY_BASIC_INFORMATION mbi;
@@ -76,7 +76,7 @@ namespace ncpp {
 		sz blockBytesPostPtr = mbi.RegionSize - blockOffset;
 
 		if (blockBytesPostPtr < byteCount)
-			return memory_readable((i8*)ptr + blockBytesPostPtr,
+			return is_memory_readable((i8*)ptr + blockBytesPostPtr,
 				byteCount - blockBytesPostPtr);
 #endif
 
@@ -88,7 +88,7 @@ namespace ncpp {
 	 */
 	inline b8 is_allocated_by_ncpp(void* ptr) { 
 		
-		if (!memory_readable(ptr, 1)) {
+		if (!is_memory_readable(ptr, 1)) {
 			return false;
 		}
 

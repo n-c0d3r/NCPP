@@ -76,6 +76,11 @@ namespace ncpp {
             system(const system_settings& settings);
             ~system();
 
+            system(const system&) = delete;
+            system& operator = (const system&) = delete;
+            system(system&&) = delete;
+            system& operator = (system&&) = delete;
+
 
 
         public:

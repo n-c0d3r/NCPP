@@ -20,14 +20,14 @@ namespace ncpp {
         /**
          *  A fixed_vector_queue_t is a queue storing elements inside a fixed vector
          */
-        template<typename item_type, template<typename item_type> class allocator_t = std::allocator>
+        template<typename item_type__, template<typename item_type__> class allocator_t__ = std::allocator>
         class NCPP_DEFAULT_SET_ALIGN fixed_vector_queue_t {
 
 #pragma region Typedefs
         public:
-            using item_vector_type = std::vector<item_type, allocator_t<item_type>>;
-            using iterator = item_type*;
-            using const_iterator = const item_type*;
+            using item_vector_type = std::vector<item_type__, allocator_t__<item_type__>>;
+            using iterator = item_type__*;
+            using const_iterator = const item_type__*;
 #pragma endregion
 
 
@@ -49,10 +49,10 @@ namespace ncpp {
             inline iterator end() { return item_vector_.data() + end_index_ % capacity; }
             inline const_iterator end() const { return item_vector_.data() + end_index_ % capacity_; }
 
-            inline item_type& front() { return *begin(); }
-            inline const item_type& front() const { return *begin(); }
-            inline item_type& back() { return *(item_vector_.data() + (end_index_ - 1) % capacity_); }
-            inline const item_type& back() const { return *(item_vector_.data() + (end_index_ - 1) % capacity_); }
+            inline item_type__& front() { return *begin(); }
+            inline const item_type__& front() const { return *begin(); }
+            inline item_type__& back() { return *(item_vector_.data() + (end_index_ - 1) % capacity_); }
+            inline const item_type__& back() const { return *(item_vector_.data() + (end_index_ - 1) % capacity_); }
 
             inline sz size() const { return end_index_ - begin_index_; }
 #pragma endregion
@@ -77,7 +77,7 @@ namespace ncpp {
             /**
              *  Default constructor
              */
-            inline explicit fixed_vector_queue_t() :  /** Automatically calling to the initialization constructor with the default capacity of 1024. */
+            inline explicit fixed_vector_queue_t() :  /** Automatically calls to the initialization constructor with the default capacity of 1024. */
                 fixed_vector_queue_t(1024)
             {
 
@@ -167,14 +167,14 @@ namespace ncpp {
             /**
              *  Pushes an item into the stack by move operation
              */
-            inline void push(item_type&& item) {
+            inline void push(item_type__&& item) {
 
-                push_main_t(std::forward<item_type>(item));
+                push_main_t(std::forward<item_type__>(item));
             }
             /**
              *  Pushes an item into the stack by copy operation
              */
-            inline void push(const item_type& item) {
+            inline void push(const item_type__& item) {
 
                 push_main_t(item);
             }

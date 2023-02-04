@@ -20,8 +20,8 @@ namespace ncpp {
         /**
          *  Finds out the last template argument.
          */
-        template<typename... arg_types>
-        using last_template_arg_t = typename nth_template_arg_t<sizeof...(arg_types) - 1, arg_types...>;
+        template<typename... arg_types__>
+        using last_template_arg_t = typename nth_template_arg_t<sizeof...(arg_types__) - 1, arg_types__...>;
 
     }
 

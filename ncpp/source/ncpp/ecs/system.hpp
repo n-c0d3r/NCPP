@@ -14,28 +14,27 @@ namespace ncpp {
 	namespace ecs {
 	
         template<typename data_type, template<typename data_type> class allocator_t = std::allocator>
-        class system_it 
+        class NCPP_DEFAULT_SET_ALIGN system_it 
         {
 
+
+
         protected:
-            system_it(sz reserve_count) {
+            inline system_it(sz reserve_count, sz thread_count)
+            {
 
 
 
             }
-            ~system_it() {
+
+        public:
+            virtual ~system_it() {
 
 
 
             }
-
 
         };
-
-
-
-        template<typename data_type>
-        using standard_system_it = typename system_it<data_type, std::allocator>;
 	
 	} 
 

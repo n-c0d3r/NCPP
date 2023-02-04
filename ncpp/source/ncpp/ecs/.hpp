@@ -13,7 +13,6 @@ namespace ncpp {
 #include <ncpp/pac/.hpp>
 #include <ncpp/cbjs/.hpp>
 
-#include <ncpp/ecs/sd_buffer.hpp>
 #include <ncpp/ecs/system.hpp>
 #include <ncpp/ecs/component.hpp>
 #include <ncpp/ecs/entity.hpp>

@@ -14,6 +14,7 @@
         + **_ppp...** (there are n "p") : `Nth Level Pointer`
     + Template:
         + **_t** : `Template`
+        + **__** : `Template Argument`
     + Multiple Prefixes:
         + Non-template:
             + **\__p\__** : `Member Pointer`

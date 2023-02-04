@@ -55,6 +55,11 @@ namespace ncpp {
 			win_fiber(fiber_creation_mode mode, functor_type&& functor = [](win_fiber& fiber) {});
             ~win_fiber();
 
+			win_fiber(const win_fiber&) = delete;
+			win_fiber& operator = (const win_fiber&) = delete;
+			win_fiber(win_fiber&&) = delete;
+			win_fiber& operator = (win_fiber&&) = delete;
+
 
 
 		public:

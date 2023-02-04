@@ -18,16 +18,16 @@ namespace ncpp {
         /**
          *  Singleton template. Only allow 1 instance at a time.
          */
-        template<class _class>
+        template<class class__>
         class NCPP_DEFAULT_SET_ALIGN singleton_t {
 
         private:
-            static _class* instance_ps;/**< instance pointer. */
+            static class__* instance_ps;/**< instance pointer. */
 
 
 
         public:
-            static inline _class& instance() { return *instance_ps; }/**< use to get the instance reference. */
+            static inline class__& instance() { return *instance_ps; }/**< use to get the instance reference. */
 
 
 
@@ -36,19 +36,26 @@ namespace ncpp {
 
                 assert(instance_ps == 0 && "only accept 1 instance at a time!");
 
-                instance_ps = (_class*)this;
+                instance_ps = (class__*)this;
 
             }
+
+        public:
             ~singleton_t() {
 
                 instance_ps = 0;
 
             }
 
+            singleton_t(const singleton_t&) = delete;
+            singleton_t& operator = (const singleton_t&) = delete;
+            singleton_t(singleton_t&&) = delete;
+            singleton_t& operator = (singleton_t&&) = delete;
+
         };
 
-        template<class _class>
-        _class* singleton_t<_class>::instance_ps = 0;
+        template<class class__>
+        class__* singleton_t<class__>::instance_ps = 0;
 
     }
 

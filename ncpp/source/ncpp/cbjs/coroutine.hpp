@@ -18,7 +18,7 @@ namespace ncpp {
 
 
         /**
-         *  Indicates whether the coroutine is able to run   .
+         *  Indicates whether the coroutine is able to run.
          */
         enum struct coroutine_state {
 
@@ -77,33 +77,33 @@ namespace ncpp {
         /**
          *  A coroutine state updater that only update coroutine state to coroutine_state::RUNNABLE when the indicated variable equal to another indicated variable.
          */
-        template<typename object_type>
+        template<typename object_type__>
         class NCPP_DEFAULT_SET_ALIGN wait_value_t : public coroutine_state_updater {
 
         private:
-            object_type* object_p_;
-            object_type* another_object_p_;
+            object_type__* object_p_;
+            object_type__* another_object_p_;
 
 
 
         public:
             wait_value_t(
-                object_type& object_reference,
-                object_type& another_object_reference
+                object_type__& object_reference,
+                object_type__& another_object_reference
             ) :
                 object_p_(&object_reference),
                 another_object_p_(&another_object_reference)
             {}
             wait_value_t(
-                object_type& object_reference,
-                object_type&& another_object_reference
+                object_type__& object_reference,
+                object_type__&& another_object_reference
             ) :
                 object_p_(&object_reference),
                 another_object_p_(&another_object_reference)
             {}
             wait_value_t(
-                object_type&& object_reference,
-                object_type& another_object_reference
+                object_type__&& object_reference,
+                object_type__& another_object_reference
             ) :
                 object_p_(&object_reference),
                 another_object_p_(&another_object_reference)
@@ -175,10 +175,10 @@ namespace ncpp {
             /**
              *  Changes the state updater by auto creating it from the passed arguments and switch to the owner thread fiber.
              */
-            template<typename state_updater_type, typename... arg_types>
-            inline void yield_t(arg_types&&... args) {
+            template<typename state_updater_type__, typename... arg_types__>
+            inline void yield_t(arg_types__&&... args) {
 
-                state_updater_type sate_updater(std::forward<arg_types>(args)...);
+                state_updater_type__ sate_updater(std::forward<arg_types__>(args)...);
 
                 state_updater_p_ = &sate_updater;
                 state_ = coroutine_state::WAITING;
@@ -273,6 +273,11 @@ namespace ncpp {
         public:
             coroutine_pool(sz capacity, worker_thread& wt_);
             ~coroutine_pool();
+
+            coroutine_pool(const coroutine_pool&) = delete;
+            coroutine_pool& operator = (const coroutine_pool&) = delete;
+            coroutine_pool(coroutine_pool&&) = delete;
+            coroutine_pool& operator = (coroutine_pool&&) = delete;
 
 
 

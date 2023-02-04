@@ -34,6 +34,11 @@ namespace ncpp {
 
 			}
 
+			spinlock(const spinlock&) = delete;
+			spinlock& operator = (const spinlock&) = delete;
+			spinlock(spinlock&&) = delete;
+			spinlock& operator = (spinlock&&) = delete;
+
 			void lock() {
 
 				while (!flag_.test_and_set(std::memory_order_acquire));
