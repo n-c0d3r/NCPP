@@ -37,6 +37,28 @@ int main() {
 
 			[](cbjs::job& job, cbjs::coroutine& coroutine) {
 
+				ecs::component_system_t<int> system(4, 128);
+
+				for (u32 i = 0; i < 4; ++i) {
+
+					system.insert(i);
+					
+				}
+
+				system.process_data(
+					job,
+					coroutine,
+					0,
+					[&system](cbjs::job& job, cbjs::coroutine& coroutine, u32 begin, u32 end) {
+
+						if(begin == 0)
+							system.thread_safe_erase(begin);
+
+					}
+				);
+
+				system.recorrect_data(job, coroutine, 0);
+
 				std::cout << "memory usage: " << memory_usage() << "(bytes)" << std::endl;
 
 			}
@@ -45,8 +67,7 @@ int main() {
 
 		cbjs::system job_system({
 
-			entry_job,
-			1
+			entry_job
 
 		});
 

@@ -21,8 +21,8 @@ namespace ncpp {
         {
 
         public:
-            component_system_t(sz reserve_count, sz thread_count) :
-                system_it(reserve_count, thread_count)
+            component_system_t(u32 thread_count, sz map_reserve_count) :
+                system_it(thread_count, map_reserve_count)
             {
 
 

@@ -1,5 +1,11 @@
 #pragma once
 
+/** @file ncpp/cbjs/job.hpp
+*	@brief Implements cbjs job.
+*/
+
+
+
 #include <ncpp/prerequisites.hpp>
 
 #include <ncpp/utilities/.hpp>

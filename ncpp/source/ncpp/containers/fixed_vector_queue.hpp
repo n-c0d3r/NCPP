@@ -25,6 +25,7 @@ namespace ncpp {
 
 #pragma region Typedefs
         public:
+            using item_type = item_type__;
             using item_vector_type = std::vector<item_type__, allocator_t__<item_type__>>;
             using iterator = item_type__*;
             using const_iterator = const item_type__*;
@@ -46,8 +47,10 @@ namespace ncpp {
         public:
             inline iterator begin() { return item_vector_.data() + begin_index_ % capacity_; }
             inline const_iterator begin() const { return item_vector_.data() + begin_index_ % capacity_; }
+            inline const_iterator cbegin() const { return item_vector_.data() + begin_index_ % capacity_; }
             inline iterator end() { return item_vector_.data() + end_index_ % capacity; }
             inline const_iterator end() const { return item_vector_.data() + end_index_ % capacity_; }
+            inline const_iterator cend() const { return item_vector_.data() + end_index_ % capacity_; }
 
             inline item_type__& front() { return *begin(); }
             inline const item_type__& front() const { return *begin(); }

@@ -14,3 +14,4 @@ namespace ncpp {
 
 #include <ncpp/containers/fixed_vector_queue.hpp>
 #include <ncpp/containers/fixed_vector_stack.hpp>
+#include <ncpp/containers/handle_map.hpp>

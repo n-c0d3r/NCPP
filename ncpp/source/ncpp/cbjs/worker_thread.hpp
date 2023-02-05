@@ -1,5 +1,11 @@
 #pragma once
 
+/** @file ncpp/cbjs/worker_thread.hpp
+*	@brief Implements cbjs worker thread.
+*/
+
+
+
 #include <ncpp/prerequisites.hpp>
 
 #include <ncpp/utilities/.hpp>

@@ -1,5 +1,11 @@
 #pragma once
 
+/** @file ncpp/cbjs/coroutine.hpp
+*	@brief Implements cbjs coroutine.
+*/
+
+
+
 #include <ncpp/prerequisites.hpp>
 
 #include <ncpp/utilities/.hpp>
