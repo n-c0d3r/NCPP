@@ -41,9 +41,11 @@ namespace ncpp {
 	inline void* aligned_alloc(sz size, sz align)
 	{
 
-		sz actual_size = size + align;
+		sz actual_size = size + sizeof(sz) + align;
 
 		u8* raw_ptr = new u8[actual_size];
+		*((sz*)raw_ptr) = actual_size;
+		raw_ptr += sizeof(sz);
 
 		u8* aligned_ptr = align_pointer(raw_ptr, align);
 
@@ -53,13 +55,18 @@ namespace ncpp {
 		ptrdiff_t shift = aligned_ptr - raw_ptr;
 		assert(shift > 0 && shift <= 256);
 
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+		increase_memory_usage(actual_size);
+#endif
+
 		aligned_ptr[-1] = static_cast<u8>(shift & 0xFF);
 		return aligned_ptr;
 	}
+
 	/**
-	 *	Gets align from given aligned pointer.
+	 *	Gets actual allocated size from aligned pointer
 	 */
-	inline ptrdiff_t get_align(void* ptr)
+	inline sz actual_size_aligned(void* ptr)
 	{
 
 		u8* aligned_ptr = reinterpret_cast<u8*>(ptr);
@@ -68,8 +75,13 @@ namespace ncpp {
 		if (shift == 0)
 			shift = 256;
 
-		return shift;
+		u8* raw_ptr = aligned_ptr - shift - sizeof(sz);
+
+		sz actual_size = *((sz*)raw_ptr);
+
+		return actual_size;
 	}
+
 	/**
 	 *	Aligned frees a memory block.
 	 */
@@ -82,7 +94,13 @@ namespace ncpp {
 		if (shift == 0)
 			shift = 256;
 
-		u8* raw_ptr = aligned_ptr - shift;
+		u8* raw_ptr = aligned_ptr - shift - sizeof(sz);
+
+		sz actual_size = *((sz*)raw_ptr);
+
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+		decrease_memory_usage(actual_size);
+#endif
 
 		delete[] raw_ptr;
 
@@ -112,18 +130,10 @@ namespace ncpp {
 
 		pointer   allocate(size_type n, sz align = NCPP_DEFAULT_ALIGN) {
 
-#ifdef NCPP_ENABLE_MEMORY_COUNTING
-			increase_memory_usage(align + n * sizeof(value_type));
-#endif
-
 			return (pointer)aligned_alloc(n * sizeof(value_type), align);
 		}
 
 		void      deallocate(void* p, sz n = sizeof(value_type)) {
-
-#ifdef NCPP_ENABLE_MEMORY_COUNTING
-			decrease_memory_usage(get_align(p) + n * sizeof(value_type));
-#endif
 
 			aligned_free(p);
 		}
