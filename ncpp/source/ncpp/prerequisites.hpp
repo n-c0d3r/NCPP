@@ -118,6 +118,26 @@ struct NCPP_PP_CAT(static_warning,__LINE__) { \
 #define static_warning_template(token, cond, msg) \
     static_warning(cond, msg) NCPP_PP_CAT(NCPP_PP_CAT(_localvar_, token),__LINE__)
 
+
+
+#define NCPP_U64_MAX 0xFFFFFFFFFFFFFFFF
+#define NCPP_U64_MIN 0
+#define NCPP_U32_MAX 0xFFFFFFFF
+#define NCPP_U32_MIN 0
+#define NCPP_U16_MAX 0xFFFF
+#define NCPP_U16_MIN 0
+#define NCPP_U8_MAX 0xFF
+#define NCPP_U8_MIN 0
+
+#define NCPP_I64_MAX 0x7FFFFFFFFFFFFFFF
+#define NCPP_I64_MIN -0x8000000000000000
+#define NCPP_I32_MAX 0x7FFFFFFF
+#define NCPP_I32_MIN -0x80000000
+#define NCPP_I16_MAX 0x7FFF
+#define NCPP_I16_MIN -0x8000
+#define NCPP_I8_MAX 0x7F
+#define NCPP_I8_MIN -0x80
+
 #pragma endregion
 
 

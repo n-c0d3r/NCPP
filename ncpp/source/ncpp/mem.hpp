@@ -16,87 +16,6 @@
 
 namespace ncpp {
 
-	/**
-	 *	Uses to indicate that something need to use ncpp overloaded version,...
-	 */
-	struct placeholder {
-
-
-
-	};
-
-	struct new_mode {
-
-		struct default {};
-		struct align {};
-
-	};
-
-
-
-	/**
-	 *	Signs that a memory pointer is allocated by a ncpp allocator.
-	 */
-#define NCPP_MEMORY_ALLOCATION_SIGNATURE 0xF0362F98
-
-
-
-	/**
-	 *	Describes informations about allocated memory 
-	 */
-	struct NCPP_DEFAULT_SET_ALIGN allocation_desc {
-
-		sz actual_size;
-		sz signature : 32;
-		sz align : 1;
-		sz alignment_shift : 1;
-
-	};
-
-	/**
-	 *	Checks whether memory is readable.
-	 */
-	inline bool is_memory_readable(void* ptr, sz byteCount)
-	{
-#ifdef NCPP_WINDOWS_PLATFORM
-		MEMORY_BASIC_INFORMATION mbi;
-		if (VirtualQuery(ptr, &mbi, sizeof(MEMORY_BASIC_INFORMATION)) == 0)
-			return false;
-
-		if (mbi.State != MEM_COMMIT)
-			return false;
-
-		if (mbi.Protect == PAGE_NOACCESS || mbi.Protect == PAGE_EXECUTE)
-			return false;
-
-		// This checks that the start of memory block is in the same "region" as the
-		// end. If it isn't you "simplify" the problem into checking that the rest of 
-		// the memory is readable.
-		sz blockOffset = (sz)((i8*)ptr - (i8*)mbi.AllocationBase);
-		sz blockBytesPostPtr = mbi.RegionSize - blockOffset;
-
-		if (blockBytesPostPtr < byteCount)
-			return is_memory_readable((i8*)ptr + blockBytesPostPtr,
-				byteCount - blockBytesPostPtr);
-#endif
-
-		return true;
-	}
-
-	/**
-	 *	Checks whether the memory locating at the given pointer is allocated by a ncpp allocator.
-	 */
-	inline b8 is_allocated_by_ncpp(void* ptr) { 
-		
-		if (!is_memory_readable(ptr, 1)) {
-			return false;
-		}
-
-		return (reinterpret_cast<allocation_desc*>(ptr) - 1)->signature == NCPP_MEMORY_ALLOCATION_SIGNATURE;
-	}
-
-
-
 #pragma region Implement aligned allocation,...
 	/**
 	 *	Returns aligned address shifting from the given address and align.
@@ -122,25 +41,34 @@ namespace ncpp {
 	inline void* aligned_alloc(sz size, sz align)
 	{
 
-		sz desc_shift = max(align, sizeof(allocation_desc));
-		sz actual_size = size + desc_shift + align;
+		sz actual_size = size + align;
 
-		u8* raw_ptr = reinterpret_cast<u8*>(malloc(actual_size));
+		u8* raw_ptr = new u8[actual_size];
 
 		u8* aligned_ptr = align_pointer(raw_ptr, align);
 
-		allocation_desc* alloc_desc_p = reinterpret_cast<allocation_desc*>(aligned_ptr);
+		if (aligned_ptr == raw_ptr)
+			aligned_ptr += align;
 
-		alloc_desc_p->actual_size = actual_size;
-		alloc_desc_p->signature = NCPP_MEMORY_ALLOCATION_SIGNATURE;
-		alloc_desc_p->align = align;
-		alloc_desc_p->alignment_shift = aligned_ptr - raw_ptr;
+		ptrdiff_t shift = aligned_ptr - raw_ptr;
+		assert(shift > 0 && shift <= 256);
 
-#ifdef NCPP_ENABLE_MEMORY_COUNTING
-		increase_memory_usage(actual_size);
-#endif
+		aligned_ptr[-1] = static_cast<u8>(shift & 0xFF);
+		return aligned_ptr;
+	}
+	/**
+	 *	Gets align from given aligned pointer.
+	 */
+	inline ptrdiff_t get_align(void* ptr)
+	{
 
-		return alloc_desc_p + 1;
+		u8* aligned_ptr = reinterpret_cast<u8*>(ptr);
+
+		ptrdiff_t shift = aligned_ptr[-1];
+		if (shift == 0)
+			shift = 256;
+
+		return shift;
 	}
 	/**
 	 *	Aligned frees a memory block.
@@ -148,27 +76,81 @@ namespace ncpp {
 	inline void aligned_free(void* ptr)
 	{
 
-		allocation_desc* alloc_desc_p = (allocation_desc*)ptr - 1;
+		u8* aligned_ptr = reinterpret_cast<u8*>(ptr);
 
-		u8* raw_ptr = reinterpret_cast<u8*>(alloc_desc_p) - alloc_desc_p->alignment_shift;
+		ptrdiff_t shift = aligned_ptr[-1];
+		if (shift == 0)
+			shift = 256;
 
-#ifdef NCPP_ENABLE_MEMORY_COUNTING
-		decrease_memory_usage(alloc_desc_p->actual_size);
-#endif
+		u8* raw_ptr = aligned_ptr - shift;
 
-		free(raw_ptr);
+		delete[] raw_ptr;
 
 		return;
 	}
 #pragma endregion
 
-}
+
+
+#pragma region Allocators
+	template <class value_type__>
+	class aligned_allocator_t
+	{
+	public:
+		typedef sz size_type;
+		typedef ptrdiff_t difference_type;
+		typedef value_type__* pointer;
+		typedef const value_type__* const_pointer;
+		typedef value_type__& reference;
+		typedef const value_type__& const_reference;
+		typedef value_type__ value_type;
+
+		aligned_allocator_t() {}
+		aligned_allocator_t(const aligned_allocator_t&) {}
 
 
 
-#pragma region new and delete operators
-extern void* operator new(ncpp::sz size);
-extern void* operator new(ncpp::sz size, ncpp::new_mode::align, ncpp::sz align);
-extern void operator delete(void* ptr);
+		pointer   allocate(size_type n, sz align = NCPP_DEFAULT_ALIGN) {
+
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+			increase_memory_usage(align + n * sizeof(value_type));
+#endif
+
+			std::cout << "memory usage: " << memory_usage() << " (bytes)" << std::endl;
+
+			return (pointer)aligned_alloc(n * sizeof(value_type), align);
+		}
+
+		void      deallocate(void* p, sz n = sizeof(value_type)) {
+
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+			decrease_memory_usage(get_align(p) + n * sizeof(value_type));
+#endif
+
+			aligned_free(p);
+		}
+
+		pointer           address(reference x) const { return &x; }
+		const_pointer     address(const_reference x) const { return &x; }
+		aligned_allocator_t<value_type>& operator=(const aligned_allocator_t&) { return *this; }
+		void              construct(pointer p, const value_type& val)
+		{
+			new ((value_type*)p) value_type(val);
+		}
+		void              destroy(pointer p) { p->~value_type(); }
+
+		size_type         max_size() const { return size_t(-1); }
+
+		template <class U>
+		struct rebind { typedef aligned_allocator_t<U> other; };
+
+		template <class U>
+		aligned_allocator_t(const aligned_allocator_t<U>&) {}
+
+		template <class U>
+		aligned_allocator_t& operator=(const aligned_allocator_t<U>&) { return *this; }
+	};
 #pragma endregion
+
+}
 

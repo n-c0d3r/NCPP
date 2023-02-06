@@ -52,7 +52,7 @@ namespace ncpp {
 
 
 		public:
-			win_fiber(fiber_creation_mode mode, functor_type&& functor = [](win_fiber& fiber) {});
+			inline win_fiber(fiber_creation_mode mode, functor_type&& functor = [](win_fiber& fiber) {});
             ~win_fiber();
 
 			win_fiber(const win_fiber&) = delete;
@@ -74,7 +74,11 @@ namespace ncpp {
             /**
              *  Switches to this fiber
              */
-			void switch_to_this();
+			inline void switch_to_this(){
+
+				SwitchToFiber(platform_fiber_);
+
+			}
 
 		};
 	

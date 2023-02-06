@@ -1,8 +1,8 @@
 #pragma once
 
 /**
- *  @file ncpp/containers/handle_map.hpp
- *  @brief Implements handle map.
+ *  @file ncpp/containers/id_map.hpp
+ *  @brief Implements id map.
  */
 
 
@@ -10,6 +10,8 @@
 #include <ncpp/prerequisites.hpp>
 
 #include <ncpp/utilities/.hpp>
+
+#include <ncpp/containers/fls_vector.hpp>
 
 
 
@@ -35,6 +37,7 @@ namespace ncpp {
                     };
 
                     u32 generation : 31;
+
                     u32 is_free : 1;
 
                 };
@@ -52,9 +55,16 @@ namespace ncpp {
 
             struct NCPP_SET_ALIGN(16) cell_type {
 
-                u32 outer_index;
+                union {
+
+                    u32 outer_index;
+                    u32 fl_next_index;
+
+                };
+
                 u32 inner_index;
-                u32 is_sleep : 1;
+
+                u32 is_free : 1;
 
                 item_type__ item;
 
@@ -73,48 +83,42 @@ namespace ncpp {
 #pragma region Typedefs
         public:
             using item_type = item_type__;
-            using item_vector_type = std::vector<item_type, allocator_t__<item_type>>;            
-            using cell_vector_type = std::vector<cell_type, allocator_t__<cell_type>>;
-            using id_vector_type = std::vector<id_type, allocator_t__<id_type>>;
-            using iterator = item_type*;
-            using const_iterator = const item_type*;
+            using id_vector_type = typename fls_vector_t<id_type, allocator_t__>;
+            using cell_vector_type = typename fls_vector_t<cell_type, allocator_t__>;
+
+            using iterator = cell_type*;
+            using const_iterator = const cell_type*;
 #pragma endregion
 
 
 
 #pragma region Properties
         private:
-            cell_vector_type dense_vector_;
-            id_vector_type sparse_vector_;
-            u32 fl_front_;
-            u32 fl_back_;
-            bool is_fragmented_;
+            u32 capacity_;
+
+            cell_vector_type cell_vector_;
+            id_vector_type id_vector_;
 #pragma endregion
 
 
 
 #pragma region Getters and Setters
         public:
-            inline sz size() const { return dense_vector_.size(); }
-            inline sz capacity() const { return dense_vector_.capacity(); }
+            inline u32 count() const { return cell_vector_.count(); }
+            inline u32 size() const { return cell_vector_.size(); }
+            inline u32 capacity() const { return capacity_; }
 
-            inline cell_vector_type& dense_vector() { return dense_vector_; }
-            inline const cell_vector_type& dense_vector() const { return dense_vector_; }
-            inline id_vector_type& sparse_vector() { return sparse_vector_; }
-            inline const id_vector_type& sparse_vector() const { return sparse_vector_; }
+            inline cell_vector_type& cell_vector() { return cell_vector_; }
+            inline const cell_vector_type& cell_vector() const { return cell_vector_; }
+            inline id_vector_type& id_vector() { return id_vector_; }
+            inline const id_vector_type& id_vector() const { return id_vector_; }
 
-            inline u32 fl_front() const { return fl_front_; }
-            inline u32 fl_back() const { return fl_back_; }
-            inline bool is_fl_empty() const { return fl_front_ == 0xFFFFFFFF; }
-            
-            inline bool is_fragmented() const { return is_fragmented_; }
-
-            inline iterator begin() { return dense_vector_.data(); }
-            inline const_iterator begin() const { return dense_vector_.data(); }
-            inline const_iterator cbegin() const { return dense_vector_.data(); }
-            inline iterator end() { return dense_vector_.data() + size(); }
-            inline const_iterator end() const { return dense_vector_.data() + size(); }
-            inline const_iterator cend() const { return dense_vector_.data() + size(); }
+            inline iterator begin() { return cell_vector_.data(); }
+            inline const_iterator begin() const { return cell_vector_.data(); }
+            inline const_iterator cbegin() const { return cell_vector_.data(); }
+            inline iterator end() { return cell_vector_.data() + cell_vector_.count(); }
+            inline const_iterator end() const { return cell_vector_.data() + cell_vector_.count(); }
+            inline const_iterator cend() const { return cell_vector_.data() + cell_vector_.count(); }
 #pragma endregion
 
 
@@ -124,21 +128,20 @@ namespace ncpp {
             /**
              *  Initialization constructor
              */
-            inline handle_map_t(sz reserve_count) :
-                fl_front_(0xFFFFFFFF),
-                fl_back_(0xFFFFFFFF),
-                is_fragmented_(0)
+            inline handle_map_t(u32 capacity) :
+                capacity_(capacity),
+                cell_vector_(capacity),
+                id_vector_(capacity)
             {
 
-                dense_vector_.reserve(reserve_count);
-                sparse_vector_.reserve(reserve_count);
+
 
             }
             /**
              *  Default constructor
              */
-            inline handle_map_t() :  /** Automatically calls to the initialization constructor with the default reserve count. */
-                handle_map_t(NCPP_DEFAULT_HANDLE_MAP_RESERVE_COUNT)
+            inline handle_map_t() :
+                handle_map_t(1024)
             {
 
 
@@ -149,36 +152,87 @@ namespace ncpp {
              */
             ~handle_map_t() {
 
-
+                reset();
 
             }
 
             /**
-             *  [] Operators
+             *  Copy constructor
              */
-            inline cell_type& operator[] (u32 inner_index) {
+            inline handle_map_t(const handle_map_t& other) :
+                handle_map_t(other.capacity_)
+            {
 
-                assert(inner_index < dense_vector_.size() && "inner index out of range.");
+                for (auto& cell : other) {
 
-                return dense_vector_[inner_index];
+                    insert(cell.item);
+
+                }
+
             }
-            inline const cell_type& operator[] (u32 inner_index) const {
+            /**
+             *  Copy operator
+             */
+            inline handle_map_t& operator = (const handle_map_t& other)
+            {
 
-                assert(inner_index < dense_vector_.size() && "inner index out of range.");
+                reset();
 
-                return dense_vector_[inner_index];
+                for (auto& cell : other) {
+
+                    insert(cell.item);
+
+                }
+
             }
-            inline cell_type& operator[] (id_type handle) {
 
-                check_handle(handle);
+            /**
+             *  Move constructor
+             */
+            inline handle_map_t(handle_map_t&& other) :
+                handle_map_t(other.capacity_)
+            {
 
-                return dense_vector_[sparse_vector_[handle.outer_index].inner_index];
+                for (auto& cell : other) {
+
+                    insert(cell.item);
+
+                }
+
+                other.clear();
+
             }
-            inline const cell_type& operator[] (id_type handle) const {
+            /**
+             *  Move operator
+             */
+            inline handle_map_t& operator = (handle_map_t&& other)
+            {
 
-                check_handle(handle);
+                reset();
 
-                return dense_vector_[sparse_vector_[handle.outer_index].inner_index];
+                for (auto& cell : other) {
+
+                    insert(cell.item);
+
+                }
+
+                other.clear();
+
+            }
+
+            /**
+             *  [] operator
+             */
+            inline cell_type& operator [] (u32 inner_index) {
+
+                return at(inner_index);
+            }
+            /**
+             *  [] operator
+             */
+            inline const cell_type& operator [] (u32 inner_index) const {
+
+                return at(inner_index);
             }
 #pragma endregion
 
@@ -186,52 +240,27 @@ namespace ncpp {
 
 #pragma region Methods
         private:
-            template<typename passed_type__>
-            inline id_type insert_main_t(passed_type__&& item) {
+            template<typename item_passed_type>
+            inline id_type insert_main_t(item_passed_type&& item, u32 insertion_index) {
 
                 id_type handle = { 0 };
 
-                is_fragmented_ = 1;
+                handle.inner_index = insertion_index;
 
-                if (is_fl_empty()) {
+                cell_type cell;
 
-                    handle.inner_index = dense_vector_.size();
+                cell.item = std::forward<item_passed_type>(item);
+                cell.outer_index = id_vector_.insertable_index();
+                cell.inner_index = handle.inner_index;
 
-                    sparse_vector_.push_back(handle);
+                if(id_vector_.size() > cell.outer_index)
+                    handle.generation = id_vector_[cell.outer_index].generation;
 
-                    handle.outer_index = sparse_vector_.size() - 1;
+                id_vector_.insert(handle);
 
-                }
-                else {
+                handle.outer_index = cell.outer_index;
 
-                    u32 outer_index = fl_back_;
-
-                    id_type& id = sparse_vector_[outer_index];
-
-                    fl_back_ = id.fl_next_index;
-
-                    if (is_fl_empty()) {
-
-                        fl_front_ = 0xFFFFFFFF;
-
-                    }
-
-                    id.is_free = 0;
-                    id.inner_index = dense_vector_.size();
-
-                    handle = id;
-                    handle.outer_index = outer_index;
-
-                }
-
-                dense_vector_.push_back({
-
-                    (u32)dense_vector_.size(),
-                    handle.outer_index,
-                    0,
-                    std::forward<passed_type__>(item)
-
-                });
+                cell_vector_.insert(std::move(cell), insertion_index);
 
                 return handle;
             }
@@ -240,10 +269,20 @@ namespace ncpp {
 
         public:
             inline id_type insert(const item_type& item) {
-                return insert_main_t(item);
+
+                return insert_main_t(std::forward<const item_type&>(item), cell_vector_.insertable_index());
             }
             inline id_type insert(item_type&& item) {
-                return insert_main_t(std::forward<item_type>(item));
+
+                return insert_main_t(std::forward<item_type>(item), cell_vector_.insertable_index());
+            }
+            inline id_type insert(const item_type& item, u32 insertion_index) {
+
+                return insert_main_t(std::forward<const item_type&>(item), insertion_index);
+            }
+            inline id_type insert(item_type&& item, u32 insertion_index) {
+
+                return insert_main_t(std::forward<item_type>(item), insertion_index);
             }
 
             inline void erase(id_type handle) {
@@ -252,84 +291,79 @@ namespace ncpp {
 
                 erase(handle.outer_index);
             }
+
+            inline void erase(cell_type& cell) {
+                              
+                erase(cell.outer_index);
+            }
+
             inline void erase(u32 outer_index) {
 
-                assert(outer_index < sparse_vector_.size() && "outer index out of range.");
+                assert(outer_index < cell_vector_.size() && "outer index out of range");
 
-                is_fragmented_ = 1;
+                id_type id = id_vector_[outer_index];
 
-                id_type id = sparse_vector_[outer_index];
-                u32 inner_index = id.inner_index; 
+                u32 inner_index = id.inner_index;
 
-                id.is_free = 1;
-                ++id.generation;
-                id.fl_next_index = fl_back_;
-
-                sparse_vector_[outer_index] = id;
-
-                if (is_fl_empty()) {
-
-                    fl_front_ = outer_index;
-
-                }
-
-                fl_back_ = outer_index;
-
-                if (inner_index != dense_vector_.size() - 1) {
-
-                    cell_type& last_cell = dense_vector_.back();
-                    last_cell.inner_index = inner_index;
-                    sparse_vector_[last_cell.outer_index].inner_index = inner_index;
-                    std::swap(dense_vector_.at(inner_index), last_cell);
-
-                }
-
-                dense_vector_.pop_back();
-
-            }
-
-            inline void check_handle(id_type handle) const {
-
-                assert(handle.outer_index < sparse_vector_.size() && "outer index out of range.");
+                u32 back_index = cell_vector_.back_index();
                 
-                id_type id = sparse_vector_[handle.outer_index];
+                if (back_index != inner_index) {
 
-                assert(!id.is_free && "handle is free.");
-                assert(id.generation == handle.generation && "old generation.");
+                    cell_vector_.swap_items(back_index, inner_index);
+
+                }
+
+                id_vector_[cell_vector_[inner_index].outer_index].inner_index = inner_index;
+                cell_vector_[inner_index].inner_index = inner_index;
+                ++(id_vector_[outer_index].generation);
+
+                id_vector_.erase(outer_index);
+                cell_vector_.erase(back_index);
 
             }
-            inline bool is_valid(id_type handle) const {
 
-                if (handle.outer_index >= sparse_vector_.size()) return false;
+            inline bool is_valid(id_type handle) {
 
-                id_type id = sparse_vector_[handle.outer_index];
+                if (outer_index >= cell_vector_.size()) return false;
 
-                return (!id.is_free && (id.generation == handle.generation));
+                id_type id = id_vector_[outer_index];
+
+                return (id.generation == handle.generation);
+            }
+
+            inline void check_handle(id_type handle) {
+
+                assert(outer_index < cell_vector_.size() && "outer index out of range"); 
+
+                id_type id = id_vector_[outer_index];
+
+                assert((id.generation == handle.generation) && "old generation");
+                
+            }
+
+            inline void clear() {
+
+                for (auto it = begin(); count() != 0;) {
+
+                    erase(it->outer_index);
+
+                }
+
+            }
+            inline void reset() {
+
+                cell_vector_.clear();
+                id_vector_.clear();
+
             }
 
             inline cell_type& at(u32 inner_index) {
 
-                assert(inner_index < dense_vector_.size() && "inner index out of range.");
-
-                return dense_vector_[inner_index];
+                return cell_vector_[inner_index];
             }
             inline const cell_type& at(u32 inner_index) const {
 
-                assert(inner_index < dense_vector_.size() && "inner index out of range.");
-
-                return dense_vector_[inner_index];
-            }
-            inline cell_type& at(id_type handle) {
-
-                check_handle(handle);
-
-                return dense_vector_[sparse_vector_[handle.outer_index].inner_index];
-            }
-            inline const cell_type& at(id_type handle) const {
-
-                check_handle(handle);
-
-                return dense_vector_[sparse_vector_[handle.outer_index].inner_index];
+                return cell_vector_[inner_index];
             }
 #pragma endregion
 

@@ -34,14 +34,6 @@ namespace ncpp {
 				ConvertFiberToThread();
 
 		}
-
-
-
-		void win_fiber::switch_to_this() {
-
-			SwitchToFiber(platform_fiber_);
-
-		}
 #endif
 
 	}

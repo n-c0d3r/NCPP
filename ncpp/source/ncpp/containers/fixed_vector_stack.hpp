@@ -168,7 +168,7 @@ namespace ncpp {
              */
             inline void push(item_type__&& item) {
 
-                push_main_t(std::forward<item_type__>(item));
+                push_main_t(std::forward<const item_type__>(item));
             }
             /**
              *  Pushes an item into the stack by copy operation
