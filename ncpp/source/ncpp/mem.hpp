@@ -116,8 +116,6 @@ namespace ncpp {
 			increase_memory_usage(align + n * sizeof(value_type));
 #endif
 
-			std::cout << "memory usage: " << memory_usage() << " (bytes)" << std::endl;
-
 			return (pointer)aligned_alloc(n * sizeof(value_type), align);
 		}
 
