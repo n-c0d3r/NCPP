@@ -36,7 +36,7 @@ namespace ncpp {
             /**
              *  The WinAPI fiber.
              */
-			LPVOID platform_fiber_;
+			LPVOID __platform__fiber_;
             /**
              *  The main function to be run inside the fiber.
              */
@@ -46,14 +46,39 @@ namespace ncpp {
 
 		public:
 			inline const fiber_creation_mode creation_mode() const { return creation_mode_; }
-			inline LPVOID platform_fiber() const { return platform_fiber_; }
+			inline LPVOID __platform__fiber() const { return __platform__fiber_; }
 			inline const functor_type& functor() const { return functor_; }
 
 
 
 		public:
-			inline win_fiber(fiber_creation_mode mode, functor_type&& functor = [](win_fiber& fiber) {});
-            ~win_fiber();
+			inline win_fiber::win_fiber(fiber_creation_mode mode, functor_type&& functor) :
+				creation_mode_(mode),
+				__platform__fiber_(0),
+				functor_(std::move(functor))
+			{
+
+				switch (creation_mode_)
+				{
+				case ncpp::pac::fiber_creation_mode::CONVERT_FROM_THREAD:
+					__platform__fiber_ = ConvertThreadToFiber(0);
+					break;
+				case ncpp::pac::fiber_creation_mode::NEW:
+					__platform__fiber_ = CreateFiber(0, proc, this);
+					break;
+				default:
+					break;
+				}
+
+			}
+			win_fiber::~win_fiber() {
+
+				if (creation_mode_ == fiber_creation_mode::NEW)
+					DeleteFiber(__platform__fiber_);
+				else
+					ConvertFiberToThread();
+
+			}
 
 			win_fiber(const win_fiber&) = delete;
 			win_fiber& operator = (const win_fiber&) = delete;
@@ -76,7 +101,7 @@ namespace ncpp {
              */
 			inline void switch_to_this(){
 
-				SwitchToFiber(platform_fiber_);
+				SwitchToFiber(__platform__fiber_);
 
 			}
 

@@ -15,8 +15,15 @@ namespace ncpp {
 
 #include <ncpp/pac/spinlock.hpp>
 #include <ncpp/pac/semaphore.hpp>
+
 #include <ncpp/pac/fiber.hpp>
 	
 #ifdef NCPP_WINDOWS_PLATFORM
 #include <ncpp/pac/win_fiber.hpp>
+#endif
+
+#include <ncpp/pac/thread.hpp>
+
+#ifdef NCPP_WINDOWS_PLATFORM
+#include <ncpp/pac/win_thread.hpp>
 #endif
