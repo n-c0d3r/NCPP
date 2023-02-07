@@ -8,15 +8,19 @@ int main() {
 
 	int a = 5;
 
-	pac::thread thread(
+	pac::thread t1(
 		[&](pac::thread& thread) {
 
-			std::cout << "Hello World" << std::endl;
+			while (true) {
+
+				std::cout << &pac::current_thread() << std::endl;
+
+			}
 
 		}
 	);
 
-	thread.wait();
+	t1.wait();
 
 	return 0;
 }
