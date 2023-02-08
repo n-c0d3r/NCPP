@@ -20,13 +20,14 @@ namespace ncpp {
         /**
          *  A fixed_vector_stack_t is a stack storing elements inside a fixed vector 
          */
-        template<typename item_type__, template<typename item_type__> class allocator_t__ = std::allocator>
-        class NCPP_DEFAULT_SET_ALIGN fixed_vector_stack_t {
+        template<typename item_type__, class allocator_type__ = NCPP_DEFAULT_ALLOCATOR_TEMPLATE<item_type__>>
+        class NCPP_DEFAULT_ALIGNAS fixed_vector_stack_t {
 
 #pragma region Typedefs
         public:
+            using allocator_type = allocator_type__;
             using item_type = item_type__;
-            using item_vector_type = std::vector<item_type__, allocator_t__<item_type__>>;
+            using item_vector_type = std::vector<item_type__, allocator_type>;
             using iterator = item_type__*;
             using const_iterator = const item_type__*;
 #pragma endregion
@@ -68,6 +69,19 @@ namespace ncpp {
              */
             inline explicit fixed_vector_stack_t(sz capacity) :
                 end_index_(0),
+                capacity_(capacity)
+            {
+
+                item_vector_.reserve(capacity_);
+                item_vector_.resize(capacity_);
+
+            }
+            /**
+             *  Initialization constructor with allocator
+             */
+            inline explicit fixed_vector_stack_t(sz capacity, const allocator_type& allocator) :
+                end_index_(0),
+                item_vector_(allocator),
                 capacity_(capacity)
             {
 

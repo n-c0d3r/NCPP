@@ -16,7 +16,7 @@
 
 namespace ncpp {
 
-#pragma region Implement aligned allocation,...
+#pragma region Implements aligned allocation,...
 	/**
 	 *	Returns aligned address shifting from the given address and align.
 	 */
@@ -112,7 +112,7 @@ namespace ncpp {
 
 #pragma region Allocators
 	template <class value_type__>
-	class aligned_allocator_t
+	class NCPP_DEFAULT_ALIGNAS aligned_allocator_t
 	{
 	public:
 		typedef sz size_type;

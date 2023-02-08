@@ -19,63 +19,76 @@ namespace ncpp {
 
     namespace containers {
 
-        template<typename item_type__, template<typename data_type__> class allocator_t__ = std::allocator>
-        class NCPP_DEFAULT_SET_ALIGN handle_map_t {
+        template<typename item_type__>
+        union NCPP_ALIGNAS(8) handle_map_id_type {
 
-#pragma region Nested Types
-        public:
-            union NCPP_SET_ALIGN(8) id_type {
-
-                struct {
-
-                    union {
-
-                        u32 outer_index;
-                        u32 inner_index;
-                        u32 fl_next_index;
-
-                    };
-
-                    u32 generation : 31;
-
-                    u32 is_free : 1;
-
-                };
-
-                u64 value;
-
-
-
-                inline bool operator != (const id_type& other) const { return value != other.value; }
-                inline bool operator == (const id_type& other) const { return value == other.value; }
-
-            };
-
-
-
-            struct NCPP_SET_ALIGN(16) cell_type {
+            struct {
 
                 union {
 
                     u32 outer_index;
+                    u32 inner_index;
                     u32 fl_next_index;
 
                 };
 
-                u32 inner_index;
+                u32 generation : 31;
 
                 u32 is_free : 1;
 
-                item_type__ item;
+            };
+
+            u64 value;
 
 
 
-                inline item_type__& operator * () { return item; }
-                inline const item_type__& operator * () const { return item; }
-                inline item_type__* operator -> () { return &item; }
-                inline const item_type__* operator -> () const { return &item; }
+            inline bool operator != (const handle_map_id_type& other) const { return value != other.value; }
+            inline bool operator == (const handle_map_id_type& other) const { return value == other.value; }
+
+        };
+
+
+
+        template<typename item_type__>
+        struct NCPP_ALIGNAS(16) handle_map_cell_type {
+
+            union {
+
+                u32 outer_index;
+                u32 fl_next_index;
 
             };
+
+            u32 inner_index;
+
+            u32 is_free : 1;
+
+            item_type__ item;
+
+
+
+            inline item_type__& operator * () { return item; }
+            inline const item_type__& operator * () const { return item; }
+            inline item_type__* operator -> () { return &item; }
+            inline const item_type__* operator -> () const { return &item; }
+
+        };
+
+
+
+        template<
+            typename item_type__, 
+            class id_allocator_type__ = typename NCPP_DEFAULT_ALLOCATOR_TEMPLATE<typename handle_map_id_type<item_type__>>,
+            class cell_allocator_type__ = typename NCPP_DEFAULT_ALLOCATOR_TEMPLATE<typename handle_map_cell_type<item_type__>>
+        >
+        class NCPP_DEFAULT_ALIGNAS handle_map_t {
+
+#pragma region Nested Types
+        public:
+            using id_type = typename handle_map_id_type<item_type__>;
+            using id_allocator_type = id_allocator_type__;
+            using cell_type = typename handle_map_cell_type<item_type__>;
+            using cell_allocator_type = cell_allocator_type__;
 #pragma endregion
 
 
@@ -83,8 +96,8 @@ namespace ncpp {
 #pragma region Typedefs
         public:
             using item_type = item_type__;
-            using id_vector_type = typename fls_vector_t<id_type, allocator_t__>;
-            using cell_vector_type = typename fls_vector_t<cell_type, allocator_t__>;
+            using id_vector_type = typename fls_vector_t<id_type, id_allocator_type>;
+            using cell_vector_type = typename fls_vector_t<cell_type, cell_allocator_type>;
 
             using iterator = cell_type*;
             using const_iterator = const cell_type*;
@@ -132,6 +145,18 @@ namespace ncpp {
                 capacity_(capacity),
                 cell_vector_(capacity),
                 id_vector_(capacity)
+            {
+
+
+
+            }
+            /**
+             *  Initialization constructor with allocators
+             */
+            inline handle_map_t(u32 capacity, const id_allocator_type& id_allocator, const cell_allocator_type& cell_allocator) :
+                capacity_(capacity),
+                cell_vector_(capacity, id_allocator),
+                id_vector_(capacity, cell_allocator)
             {
 
 
@@ -234,6 +259,20 @@ namespace ncpp {
 
                 return at(inner_index);
             }
+            /**
+             *  [] operator
+             */
+            inline cell_type& operator [] (id_type handle) {
+
+                return at(handle);
+            }
+            /**
+             *  [] operator
+             */
+            inline const cell_type& operator [] (id_type handle) const {
+
+                return at(handle);
+            }
 #pragma endregion
 
 
@@ -324,18 +363,21 @@ namespace ncpp {
 
             inline bool is_valid(id_type handle) {
 
-                if (outer_index >= cell_vector_.size()) return false;
+                if (handle.outer_index >= cell_vector_.size()) return false;
 
-                id_type id = id_vector_[outer_index];
+                id_type id = id_vector_[handle.outer_index];
 
-                return (id.generation == handle.generation);
+                return (
+                    (id.generation == handle.generation)
+                    && !id.is_free
+                );
             }
 
             inline void check_handle(id_type handle) {
 
-                assert(outer_index < cell_vector_.size() && "outer index out of range"); 
+                assert(handle.outer_index < cell_vector_.size() && "outer index out of range");
 
-                id_type id = id_vector_[outer_index];
+                id_type id = id_vector_[handle.outer_index];
 
                 assert((id.generation == handle.generation) && "old generation");
                 
@@ -364,6 +406,18 @@ namespace ncpp {
             inline const cell_type& at(u32 inner_index) const {
 
                 return cell_vector_[inner_index];
+            }
+            inline cell_type& at(id_type handle) {
+
+                check_handle(handle);
+
+                return cell_vector_[id_vector_[handle.outer_index].inner_index];
+            }
+            inline const cell_type& at(id_type handle) const {
+
+                check_handle(handle);
+
+                return cell_vector_[id_vector_[handle.outer_index].inner_index];
             }
 #pragma endregion
 

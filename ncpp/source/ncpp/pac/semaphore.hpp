@@ -21,7 +21,7 @@ namespace ncpp {
 		 *	Implements semaphore
 		 */
         template <typename mutex_type__, typename cond_var__>
-        class NCPP_DEFAULT_SET_ALIGN semaphore_t {
+        class NCPP_DEFAULT_ALIGNAS semaphore_t {
         public:
             using native_handle_type = typename cond_var__::native_handle_type;
 

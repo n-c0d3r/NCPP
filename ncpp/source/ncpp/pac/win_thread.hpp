@@ -34,19 +34,20 @@ namespace ncpp {
 
 
 
-#define NCPP_THREAD_DATA __declspec(thread)
+#define NCPP_THREAD_LOCAL_DATA __declspec(thread)
 #define NCPP_DEFAULT_THREAD_STACK_SIZE 1048576
 
 
 
 		extern win_thread& current_thread();
+		extern u32 current_thread_index();
 
 
 
 		/**
 		 *  The windows platform version of pac::thread
 		 */
-		class NCPP_DEFAULT_SET_ALIGN win_thread {
+		class NCPP_DEFAULT_ALIGNAS win_thread {
 
 		public:
 			using functor_type = std::function<void(win_thread&)>;
@@ -136,6 +137,7 @@ namespace ncpp {
 			inline win_thread::win_thread() :
 				__platform__thread_(0),
 				__platform__id_(0),
+				current_thread_pp_(0),
 				stack_size_(NCPP_DEFAULT_THREAD_STACK_SIZE),
 
 #ifdef NCPP_ENABLE_FIBER
@@ -151,6 +153,7 @@ namespace ncpp {
 			inline win_thread::win_thread(functor_type&& functor, sz stack_size = NCPP_DEFAULT_THREAD_STACK_SIZE) :
 				__platform__thread_(0),
 				__platform__id_(0),
+				current_thread_pp_(0),
 				is_ready_(0),
 				stack_size_(stack_size),
 				functor_(std::move(functor)),
@@ -188,7 +191,7 @@ namespace ncpp {
 
 			inline win_thread(const win_thread&) = delete;
 			inline win_thread& operator = (const win_thread&) = delete;
-			inline win_thread(win_thread&& other) :
+			inline win_thread(win_thread&& other) noexcept  :
 				win_thread()
 			{
 
@@ -214,7 +217,7 @@ namespace ncpp {
 				other.is_main_ = 0;
 
 			}
-			inline win_thread& operator = (win_thread&& other) {
+			inline win_thread& operator = (win_thread&& other) noexcept {
 
 				while (!other.is_ready_.load(std::memory_order_relaxed));
 				std::atomic_thread_fence(std::memory_order_acquire);
@@ -237,6 +240,7 @@ namespace ncpp {
 				other.stack_size_ = 0;
 				other.is_main_ = 0;
 
+				return *this;
 			}
 
 
@@ -268,6 +272,8 @@ namespace ncpp {
 			 */
 			inline void sleep_and_wait() {
 
+				assert(__platform__thread_ != 0 && "thread is null");
+
 				WaitForSingleObject(__platform__thread_, 0);
 
 			}
@@ -276,8 +282,20 @@ namespace ncpp {
 			 */
 			inline void wait() {
 
+				assert(__platform__thread_ != 0 && "thread is null");
+
 				while (!is_done());
 
+			}
+
+			/**
+			 *	Sets thread affinity by mask
+			 */
+			inline u64 set_affinity_mask(u64 mask) {
+
+				assert(__platform__thread_ != 0 && "thread is null");
+
+				return SetThreadAffinityMask(__platform__thread_, mask);
 			}
 
 		};

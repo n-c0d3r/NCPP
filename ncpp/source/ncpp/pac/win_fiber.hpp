@@ -24,7 +24,7 @@ namespace ncpp {
 		 *  Windows platform fiber.
 		 * 	Uses WinAPI to implement fiber.
 		 */
-		class NCPP_DEFAULT_SET_ALIGN win_fiber {
+		class NCPP_DEFAULT_ALIGNAS win_fiber {
 
 		public:
 			using functor_type = std::function<void(win_fiber&)>;
@@ -97,7 +97,7 @@ namespace ncpp {
 
 			win_fiber(const win_fiber&) = delete;
 			win_fiber& operator = (const win_fiber&) = delete;
-			inline win_fiber(win_fiber&& other) :
+			inline win_fiber(win_fiber&& other) noexcept :
 				creation_mode_(other.creation_mode_),
 				__platform__fiber_(other.__platform__fiber_),
 				functor_(std::move(other.functor_))
@@ -106,13 +106,14 @@ namespace ncpp {
 
 
 			}
-			inline win_fiber& operator = (win_fiber&& other) 
+			inline win_fiber& operator = (win_fiber&& other)  noexcept
 			{
 
 				creation_mode_ = other.creation_mode_;
 				__platform__fiber_ = other.__platform__fiber_;
 				functor_ = std::move(other.functor_);
 
+				return *this;
 			}
 
 

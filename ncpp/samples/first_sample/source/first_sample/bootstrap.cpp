@@ -6,27 +6,39 @@ using namespace ncpp;
 
 int main() {
 
-	pac::fiber f(
+	{
 
-		[](pac::fiber& f) {
+		tagged_heap_t heap(1);
 
-			std::cout << "F 1" << std::endl;
+		auto cid1 = heap.create_category();
 
-			pac::current_thread().owned_fiber().switch_to_this();
+		auto& category = heap.category(cid1);
 
-			std::cout << "F 2" << std::endl;
 
-			pac::current_thread().owned_fiber().switch_to_this();
 
-		}
-	
-	);
+		for (u32 i = 0; i < 7000; ++i)
+			heap.allocate(cid1, 1024, NCPP_DEFAULT_ALIGN);
 
-	std::cout << "T 1" << std::endl;
-	f.switch_to_this();
-	std::cout << "T 2" << std::endl;
-	f.switch_to_this();
-	std::cout << "T 3" << std::endl;
+		std::cout << "block count: " << category.block_count() << " (bytes)" << std::endl;
+		std::cout << "current block usage: " << category.current_block().usage() << " (bytes)" << std::endl;
+		std::cout << "memory usage: " << memory_usage() << " (bytes)" << std::endl << std::endl;
+
+
+
+		category.reset_blocks();
+
+
+
+		for (u32 i = 0; i < 500; ++i)
+			heap.allocate(cid1, 1024, NCPP_DEFAULT_ALIGN);
+
+		std::cout << "block count: " << category.block_count() << " (bytes)" << std::endl;
+		std::cout << "current block usage: " << category.current_block().usage() << " (bytes)" << std::endl;
+		std::cout << "memory usage: " << memory_usage() << " (bytes)" << std::endl << std::endl;
+
+	}
+
+	std::cout << "memory usage: " << memory_usage() << " (bytes)" << std::endl;
 
 	return 0;
 }

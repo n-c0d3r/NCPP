@@ -17,8 +17,8 @@ namespace ncpp {
 
     namespace containers {
 
-        template<typename item_type__, typename item_base_type__ = void, template<typename data_type__> class allocator_t__ = std::allocator>
-        class NCPP_DEFAULT_SET_ALIGN fls_vector_t {
+        template<typename item_type__, class allocator_type__  = NCPP_DEFAULT_ALLOCATOR_TEMPLATE<item_type__>>
+        class NCPP_DEFAULT_ALIGNAS fls_vector_t {
 
 #pragma region Nested Types
         public:
@@ -28,7 +28,7 @@ namespace ncpp {
              *      + U32 fl_next_index.
              *      + U32 is_free : 1.
              */
-            struct NCPP_SET_ALIGN(8) sample_item_type
+            struct NCPP_ALIGNAS(8) sample_item_type
             {
 
                 u32 fl_next_index;
@@ -41,8 +41,9 @@ namespace ncpp {
 
 #pragma region Typedefs
         public:
+            using allocator_type = allocator_type__;
             using item_type = item_type__;
-            using item_vector_type = std::vector<item_type, typename allocator_t__<item_type>>;
+            using item_vector_type = std::vector<item_type, allocator_type__>;
             using iterator = item_type*;
             using const_iterator = const item_type*;
 #pragma endregion
@@ -95,6 +96,20 @@ namespace ncpp {
                 fl_head_(NCPP_U32_MAX),
                 fl_tail_(NCPP_U32_MAX),
                 is_fragmented_(0)
+            {
+
+                item_vector_.reserve(capacity);
+
+            }
+            /**
+             *  Initialization constructor with allocator
+             */
+            inline fls_vector_t(u32 capacity, const allocator_type& allocator) :
+                count_(0),
+                fl_head_(NCPP_U32_MAX),
+                fl_tail_(NCPP_U32_MAX),
+                is_fragmented_(0),
+                item_vector_(allocator)
             {
 
                 item_vector_.reserve(capacity);

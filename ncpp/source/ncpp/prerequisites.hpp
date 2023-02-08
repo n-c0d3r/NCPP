@@ -70,12 +70,12 @@ namespace ncpp {}
 
 // alignment macros
 #if defined(_MSC_VER)
-#define NCPP_SET_ALIGN(N) __declspec(align(N))
+#define NCPP_ALIGNAS(N) __declspec(align(N))
 #elif defined( __GNUC__ ) || defined(__MINGW64__)
-#define NCPP_SET_ALIGN(N) __attribute__((__align(N)))
+#define NCPP_ALIGNAS(N) __attribute__((__align(N)))
 #endif
 
-#define NCPP_DEFAULT_SET_ALIGN NCPP_SET_ALIGN(NCPP_DEFAULT_ALIGN)
+#define NCPP_DEFAULT_ALIGNAS NCPP_ALIGNAS(NCPP_DEFAULT_ALIGN)
 
 
 
