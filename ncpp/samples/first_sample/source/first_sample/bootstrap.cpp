@@ -8,7 +8,7 @@ int main() {
 
 	{
 
-		tagged_heap_t heap(1);
+		tagged_heap_t heap;
 
 		auto cid1 = heap.create_category();
 

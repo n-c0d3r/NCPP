@@ -357,7 +357,6 @@ namespace ncpp {
 
 	private:
 		sz capacity_;
-		sz block_capacity_;
 
 		category_map category_map_;
 
@@ -365,7 +364,6 @@ namespace ncpp {
 
 	public:
 		inline sz capacity() const { return capacity_; }
-		inline sz block_capacity() const { return block_capacity_; }
 
 		inline category_map& get_category_map_() { return category_map_; }
 		inline const category_map& get_category_map_() const { return category_map_; }
@@ -374,11 +372,9 @@ namespace ncpp {
 
 	public:
 		inline tagged_heap_t(
-			sz capacity = NCPP_DEFAULT_TAGGED_HEAP_CAPACITY, 
-			sz block_capacity = NCPP_DEFAULT_TAGGED_HEAP_BLOCK_CAPACITY
+			sz capacity = NCPP_DEFAULT_TAGGED_HEAP_CAPACITY
 		) :
 			capacity_(capacity),
-			block_capacity_(block_capacity),
 			category_map_(capacity)
 		{
 
@@ -388,11 +384,9 @@ namespace ncpp {
 		inline tagged_heap_t(
 			const category_id_allocator_type& category_id_allocator,
 			const category_cell_allocator_type& category_cell_allocator,
-			sz capacity = NCPP_TAGGED_HEAP_DEFAULT_CAPACITY,
-			sz block_capacity = NCPP_TAGGED_HEAP_DEFAULT_BLOCK_CAPACITY
+			sz capacity = NCPP_TAGGED_HEAP_DEFAULT_CAPACITY
 		) :
 			capacity_(capacity),
-			block_capacity_(block_capacity),
 			category_map_(capacity, category_id_allocator, category_cell_allocator)
 		{
 
@@ -413,9 +407,12 @@ namespace ncpp {
 
 
 	public:
-		inline category_id_type create_category() {					
+		inline category_id_type create_category() {
+			return create_category(NCPP_DEFAULT_TAGGED_HEAP_BLOCK_CAPACITY);
+		}
+		inline category_id_type create_category(sz block_capacity) {					
 
-			return category_map_.insert(category_type(block_capacity_));
+			return category_map_.insert(category_type(block_capacity));
 		}
 		inline category_type& category(category_id_type handle) {
 
