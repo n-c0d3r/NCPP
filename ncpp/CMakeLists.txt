@@ -9,6 +9,9 @@ option(NCPP_ENABLE_MEMORY_COUNTING "Enable memory counting" ON)
 set(NCPP_DEFAULT_HANDLE_MAP_RESERVE_COUNT 4096 CACHE STRING "Default Handle Map Reserve Count")
 set(NCPP_DEFAULT_HANDLE_MAP_VECTOR_RESERVE_COUNT 4 CACHE STRING "Default Handle Map Vector Reserve Count")
 
+# ncpp pac options
+option(NCPP_ENABLE_FIBER "Enable fiber" ON)
+
 # ncpp job system options
 set(NCPP_DEFAULT_JOB_PRIORITY_COUNT 3 CACHE STRING "Job Priority Count")
 set(NCPP_DEFAULT_JOB_QUEUE_CAPACITY 1024 CACHE STRING "Default Job Queue Capacity")
@@ -82,6 +85,15 @@ target_include_directories(ncpp
         ${CMAKE_CURRENT_SOURCE_DIR}/source
         ${CMAKE_CURRENT_BINARY_DIR}/built_source
 )
+
+if(MSVC)
+    if(NCPP_ENABLE_FIBER)
+        # enable fiber-safe tls optimization
+        target_compile_options(ncpp 
+            PUBLIC /GT
+        )
+    endif()
+endif()
 
 
 

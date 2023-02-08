@@ -6,21 +6,27 @@ using namespace ncpp;
 
 int main() {
 
-	int a = 5;
+	pac::fiber f(
 
-	pac::thread t1(
-		[&](pac::thread& thread) {
+		[](pac::fiber& f) {
 
-			while (true) {
+			std::cout << "F 1" << std::endl;
 
-				std::cout << &pac::current_thread() << std::endl;
+			pac::current_thread().owned_fiber().switch_to_this();
 
-			}
+			std::cout << "F 2" << std::endl;
+
+			pac::current_thread().owned_fiber().switch_to_this();
 
 		}
+	
 	);
 
-	t1.wait();
+	std::cout << "T 1" << std::endl;
+	f.switch_to_this();
+	std::cout << "T 2" << std::endl;
+	f.switch_to_this();
+	std::cout << "T 3" << std::endl;
 
 	return 0;
 }

@@ -14,6 +14,10 @@
 
 #include <ncpp/pac/thread.hpp>
 
+#ifdef NCPP_ENABLE_FIBER
+#include <ncpp/pac/fiber.hpp>
+#endif
+
 
 
 #ifndef NCPP_WINDOWS_PLATFORM
@@ -40,8 +44,7 @@ namespace ncpp {
 
 
 		/**
-		 *  Windows platform thread.
-		 * 	Uses WinAPI to implement thread.
+		 *  The windows platform version of pac::thread
 		 */
 		class NCPP_DEFAULT_SET_ALIGN win_thread {
 
@@ -51,10 +54,15 @@ namespace ncpp {
 
 
 		private:
+			struct main_thread_creation_placeholder {};
+
+
+
+		private:
 			/**
 			 *  The WinAPI thread.
 			 */
-			LPVOID __platform__thread_;
+			HANDLE __platform__thread_;
 			/**
 			 *  The id of __platform__thread_.
 			 */
@@ -66,6 +74,11 @@ namespace ncpp {
 			sz stack_size_;
 			std::atomic_bool is_ready_;
 			win_thread** current_thread_pp_;
+			bool is_main_;
+
+#ifdef NCPP_ENABLE_FIBER
+			fiber owned_fiber_;
+#endif
 
 
 
@@ -84,6 +97,38 @@ namespace ncpp {
 
 				return (!r) || (ex_code != STILL_ACTIVE);
 			}
+			inline bool is_main() { return is_main_; }
+			inline fiber& owned_fiber() { return owned_fiber_; }
+
+
+
+		private:
+			/**
+			 *  The constructor to create main thread instance.
+			 */
+			inline win_thread::win_thread(main_thread_creation_placeholder) :
+				__platform__thread_(GetCurrentThread()),
+				__platform__id_(GetCurrentThreadId()),
+				stack_size_(0),
+				
+#ifdef NCPP_ENABLE_FIBER
+				owned_fiber_(fiber_creation_mode::CONVERT_FROM_THREAD),
+#endif
+				
+				is_main_(1)
+			{
+
+				sz sl_low = 0;
+				sz sl_high = 0;
+				GetCurrentThreadStackLimits(&sl_low, &sl_high);
+
+				stack_size_ = sl_high - sl_low;
+
+				set_current_thread_pg(*this);
+
+			}
+
+			static win_thread main_thread_g;
 
 
 
@@ -91,7 +136,13 @@ namespace ncpp {
 			inline win_thread::win_thread() :
 				__platform__thread_(0),
 				__platform__id_(0),
-				stack_size_(NCPP_DEFAULT_THREAD_STACK_SIZE)
+				stack_size_(NCPP_DEFAULT_THREAD_STACK_SIZE),
+
+#ifdef NCPP_ENABLE_FIBER
+				owned_fiber_(),
+#endif
+
+				is_main_(0)
 			{
 
 
@@ -102,7 +153,13 @@ namespace ncpp {
 				__platform__id_(0),
 				is_ready_(0),
 				stack_size_(stack_size),
-				functor_(std::move(functor))
+				functor_(std::move(functor)),
+
+#ifdef NCPP_ENABLE_FIBER
+				owned_fiber_(fiber_creation_mode::CONVERT_FROM_THREAD),
+#endif
+
+				is_main_(0)
 			{
 
 				__platform__thread_ = CreateThread(
@@ -119,7 +176,13 @@ namespace ncpp {
 			}
 			win_thread::~win_thread() {
 
+				if (!is_main_) {
 
+					assert(is_done() && "Cant release currently running thread");
+
+					CloseHandle(__platform__thread_);
+
+				}
 
 			}
 
@@ -138,11 +201,17 @@ namespace ncpp {
 				__platform__thread_ = other.__platform__thread_;
 				__platform__id_ = other.__platform__id_;
 				stack_size_ = other.stack_size_;
+				is_main_ = other.is_main_;
 				functor_ = std::move(other.functor_);
+
+#ifdef NCPP_ENABLE_FIBER
+				owned_fiber_ = std::move(other.owned_fiber_);
+#endif
 
 				other.__platform__thread_ = 0;
 				other.__platform__id_ = 0;
 				other.stack_size_ = 0;
+				other.is_main_ = 0;
 
 			}
 			inline win_thread& operator = (win_thread&& other) {
@@ -156,11 +225,17 @@ namespace ncpp {
 				__platform__thread_ = other.__platform__thread_;
 				__platform__id_ = other.__platform__id_;
 				stack_size_ = other.stack_size_;
+				is_main_ = other.is_main_;
 				functor_ = std::move(other.functor_);
+
+#ifdef NCPP_ENABLE_FIBER
+				owned_fiber_ = std::move(other.owned_fiber_);
+#endif
 
 				other.__platform__thread_ = 0;
 				other.__platform__id_ = 0;
 				other.stack_size_ = 0;
+				other.is_main_ = 0;
 
 			}
 
@@ -188,7 +263,8 @@ namespace ncpp {
 			}
 
 			/**
-			 *  Sleeps and waits until the thread proc done
+			 *  Sleeps and waits until the thread proc done.
+			 *	Notes: calling this method in main thread can cause std::cout not working.
 			 */
 			inline void sleep_and_wait() {
 

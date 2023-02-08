@@ -32,7 +32,7 @@ namespace ncpp {
 
 
 		private:
-			const fiber_creation_mode creation_mode_;
+			fiber_creation_mode creation_mode_;
             /**
              *  The WinAPI fiber.
              */
@@ -52,7 +52,15 @@ namespace ncpp {
 
 
 		public:
-			inline win_fiber::win_fiber(fiber_creation_mode mode, functor_type&& functor) :
+			inline win_fiber() :
+				creation_mode_(fiber_creation_mode::UNKNOWN),
+				__platform__fiber_(0) 
+			{
+
+
+
+			}
+			inline win_fiber::win_fiber(fiber_creation_mode mode, functor_type&& functor = [](win_fiber&){}) :
 				creation_mode_(mode),
 				__platform__fiber_(0),
 				functor_(std::move(functor))
@@ -71,6 +79,13 @@ namespace ncpp {
 				}
 
 			}
+			inline win_fiber::win_fiber(functor_type&& functor) :
+				win_fiber(fiber_creation_mode::NEW, std::move(functor))
+			{
+
+
+
+			}
 			win_fiber::~win_fiber() {
 
 				if (creation_mode_ == fiber_creation_mode::NEW)
@@ -82,8 +97,23 @@ namespace ncpp {
 
 			win_fiber(const win_fiber&) = delete;
 			win_fiber& operator = (const win_fiber&) = delete;
-			win_fiber(win_fiber&&) = delete;
-			win_fiber& operator = (win_fiber&&) = delete;
+			inline win_fiber(win_fiber&& other) :
+				creation_mode_(other.creation_mode_),
+				__platform__fiber_(other.__platform__fiber_),
+				functor_(std::move(other.functor_))
+			{
+
+
+
+			}
+			inline win_fiber& operator = (win_fiber&& other) 
+			{
+
+				creation_mode_ = other.creation_mode_;
+				__platform__fiber_ = other.__platform__fiber_;
+				functor_ = std::move(other.functor_);
+
+			}
 
 
 

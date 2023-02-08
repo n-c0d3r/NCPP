@@ -26,8 +26,9 @@ namespace ncpp {
 		 */
 		enum class fiber_creation_mode {
 
-			CONVERT_FROM_THREAD,
-			NEW
+			UNKNOWN = 0,
+			CONVERT_FROM_THREAD = 1,
+			NEW = 2			
 
 		};		
 

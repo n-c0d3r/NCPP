@@ -142,6 +142,9 @@ struct NCPP_PP_CAT(static_warning,__LINE__) { \
 
 
 
+
+
+
 #pragma region Typedefs
 
 namespace ncpp {
@@ -171,6 +174,7 @@ namespace ncpp {
     
     /** 8bit boolean. */
     using b8 = bool; 
+
     /** the same as size_t. */
     using sz = size_t; 
 
