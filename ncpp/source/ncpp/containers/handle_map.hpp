@@ -83,18 +83,13 @@ namespace ncpp {
         >
         class NCPP_DEFAULT_ALIGNAS handle_map_t {
 
-#pragma region Nested Types
+#pragma region Typedefs
         public:
             using id_type = typename handle_map_id_type<item_type__>;
             using id_allocator_type = id_allocator_type__;
             using cell_type = typename handle_map_cell_type<item_type__>;
             using cell_allocator_type = cell_allocator_type__;
-#pragma endregion
 
-
-
-#pragma region Typedefs
-        public:
             using item_type = item_type__;
             using id_vector_type = typename fls_vector_t<id_type, id_allocator_type>;
             using cell_vector_type = typename fls_vector_t<cell_type, cell_allocator_type>;

@@ -11,6 +11,7 @@ namespace ncpp {
 #include <ncpp/prerequisites.hpp>
 
 #include <ncpp/mem.hpp>
+#include <ncpp/tagged_heap.hpp>
 
 #include <ncpp/utilities/nth_template_arg.hpp>
 #include <ncpp/utilities/first_template_arg.hpp>
@@ -19,3 +20,5 @@ namespace ncpp {
 
 #include <ncpp/utilities/singleton.hpp>
 #include <ncpp/utilities/unique_lock.hpp>
+
+#include <ncpp/utilities/smart_pointer.hpp>

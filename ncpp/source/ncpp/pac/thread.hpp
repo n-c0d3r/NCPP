@@ -21,7 +21,10 @@ namespace ncpp {
 
 
 
-		static inline u32 hardware_concurrency() {
+		/**
+		 *  Returns the thread count of CPUs.
+		 */
+		static inline u8 hardware_concurrency() {
 
 			return std::thread::hardware_concurrency();
 		}

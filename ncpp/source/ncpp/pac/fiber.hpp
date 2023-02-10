@@ -28,7 +28,11 @@ namespace ncpp {
 
 			UNKNOWN = 0,
 			CONVERT_FROM_THREAD = 1,
-			NEW = 2			
+			NEW = 2,
+			/** Delayed Init */
+			CONVERT_FROM_THREAD_DI = 3,
+			/** Delayed Init */
+			NEW_DI = 4
 
 		};		
 

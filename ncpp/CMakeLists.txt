@@ -14,11 +14,12 @@ set(NCPP_DEFAULT_HANDLE_MAP_VECTOR_RESERVE_COUNT 4 CACHE STRING "Default Handle 
 
 # ncpp pac options
 option(NCPP_ENABLE_FIBER "Enable fiber" ON)
+set(NCPP_DEFAULT_THREAD_STACK_SIZE 1048576 CACHE STRING "Default Stack Size Of Thread")
+set(NCPP_DEFAULT_FIBER_STACK_SIZE 256 CACHE STRING "Default Stack Size Of Fiber")
 
 # ncpp job system options
-set(NCPP_DEFAULT_JOB_PRIORITY_COUNT 3 CACHE STRING "Job Priority Count")
-set(NCPP_DEFAULT_JOB_QUEUE_CAPACITY 1024 CACHE STRING "Default Job Queue Capacity")
-set(NCPP_DEFAULT_COROUTINE_COUNT_PER_WORKER_THREAD 1024 CACHE STRING "Default Coroutine Count Per Worker Thread")
+set(NCPP_JOB_QUEUE_CAPACITY 1024 CACHE STRING "Job Queue Capacity")
+set(NCPP_COROUTINE_COUNT_PER_WORKER_THREAD 1024 CACHE STRING "Coroutine Count Per Worker Thread")
 
 
 
@@ -52,17 +53,11 @@ file(GLOB pac_source_files
 )
 source_group("source\\ncpp\\pac" FILES ${pac_source_files})
 
-file(GLOB cbjs_source_files
-    "source/ncpp/cbjs/*.cpp"
-    "source/ncpp/cbjs/*.hpp"
+file(GLOB dop_source_files
+    "source/ncpp/dop/*.cpp"
+    "source/ncpp/dop/*.hpp"
 )
-source_group("source\\ncpp\\cbjs" FILES ${cbjs_source_files})
-
-file(GLOB ecs_source_files
-    "source/ncpp/ecs/*.cpp"
-    "source/ncpp/ecs/*.hpp"
-)
-source_group("source\\ncpp\\ecs" FILES ${ecs_source_files})
+source_group("source\\ncpp\\dop" FILES ${dop_source_files})
 
 
 
@@ -72,8 +67,7 @@ add_library(ncpp STATIC
     ${utilities_source_files}
     ${containers_source_files}
     ${pac_source_files}
-    ${cbjs_source_files}
-    ${ecs_source_files}
+    ${dop_source_files}
 )
 
 

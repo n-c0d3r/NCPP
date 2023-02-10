@@ -4,38 +4,54 @@ using namespace ncpp;
 
 
 
+void foo() {
+
+
+
+
+	pac::thread wt([&]() {
+
+		while (true);
+
+		});
+
+	pac::fiber f([&](pac::fiber& f) {
+
+		std::cout << "ok" << std::endl;
+
+		});
+
+	f.switch_to_this();
+
+	while (true);
+
+
+}
+
+
+
 int main() {
 
 	{
 
-		tagged_heap_t heap;
+		dop::cbjs({
 
-		auto cid1 = heap.create_category();
+			dop::job(
 
-		auto& category = heap.category(cid1);
+				[](dop::coroutine& coroutine) {
 
+					std::cout << "hello world" << std::endl;
 
+					std::cout << "hello world" << std::endl;
 
-		for (u32 i = 0; i < 7000; ++i)
-			heap.allocate(cid1, 1024, NCPP_DEFAULT_ALIGN);
+				}
 
-		std::cout << "block count: " << category.block_count() << " (bytes)" << std::endl;
-		std::cout << "current block usage: " << category.current_block().usage() << " (bytes)" << std::endl;
-		std::cout << "memory usage: " << memory_usage() << " (bytes)" << std::endl << std::endl;
+			),
 
+			2
 
-
-		category.reset_blocks();
-
-
-
-		for (u32 i = 0; i < 500; ++i)
-			heap.allocate(cid1, 1024, NCPP_DEFAULT_ALIGN);
-
-		std::cout << "block count: " << category.block_count() << " (bytes)" << std::endl;
-		std::cout << "current block usage: " << category.current_block().usage() << " (bytes)" << std::endl;
-		std::cout << "memory usage: " << memory_usage() << " (bytes)" << std::endl << std::endl;
-
+		});
+		
 	}
 
 	std::cout << "memory usage: " << memory_usage() << " (bytes)" << std::endl;

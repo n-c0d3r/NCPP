@@ -1,6 +1,7 @@
 #pragma once
 
 /** @file ncpp/tagged_heap.hpp
+ * 	@brief Implements tagged heap.
 */
 
 
@@ -14,6 +15,11 @@
 
 namespace ncpp {
 
+	/**
+	 *	A tagged heap block represents a block of memory allocated by a tagged heap category.
+	 * 	When the allocate(sz size, sz align) method called, it will increase the memory usage and then return the pointer data_p_ + usage_. 
+	 * 	All memory allocation inside tagged heap block cannot be deallocated individually. The only way to deallocate it is deallocating all of the blocks in a tagged heap category. 
+	 */
 	struct NCPP_DEFAULT_ALIGNAS tagged_heap_block {
 
 
@@ -56,7 +62,7 @@ namespace ncpp {
 
 	private:
 		/**
-		 *	Returns aligned address shifting from the given address and align.
+		 *	Returns aligned address shifting by the given address and align.
 		 */
 		inline uintptr_t align_address(uintptr_t addr, sz align)
 		{
@@ -65,7 +71,7 @@ namespace ncpp {
 			return (addr + mask) & ~mask;
 		}
 		/**
-		 *	Returns aligned pointer shifting from the given pointer and align.
+		 *	Returns aligned pointer shifting by the given pointer and align.
 		 */
 		template<typename data_type>
 		inline data_type* align_pointer(data_type* ptr, sz align)
@@ -74,7 +80,7 @@ namespace ncpp {
 			return reinterpret_cast<data_type*>(align_address(addr, align));
 		}
 		/**
-		 *	Aligned allocates a memory block from given size and align.
+		 *	Aligned allocates a memory block by given size and align.
 		 */
 		inline u8* aligned_alloc(sz size, sz align)
 		{
@@ -120,12 +126,18 @@ namespace ncpp {
 
 
 	public:
+		/**
+		 *	Checks if there is enough 'offset' free space.
+		 */
 		inline bool is_full(sz offset) {
 
 			return usage_ + offset > capacity_;
 
 		}
 
+		/**
+		 *	Allocates memory by given size and align.
+		 */
 		inline u8* allocate(sz size, sz align) {
 
 			assert(size + sizeof(sz) + align + usage_ <= capacity_ && "block out of memory");
@@ -135,6 +147,9 @@ namespace ncpp {
 			return result;
 		}
 
+		/**
+		 *	Resets the usage to 0 and we can reuse the block.
+		 */
 		inline void reset() {
 
 			usage_ = 0;
@@ -144,6 +159,9 @@ namespace ncpp {
 
 
 
+	/**
+	 *	A tagged heap category is a category of allocations inside a tagged heap.
+	 */
 	template<
 		class allocator_type__
 	>
@@ -290,11 +308,17 @@ namespace ncpp {
 
 
 	public:
+		/**
+		 *	Deallocates all blocks in the current thread.
+		 */
 		inline void deallocate() {
 
 			internal_deallocate(pac::current_thread_index());
 
 		}
+		/**
+		 *	Resets all blocks in the current thread.
+		 */
 		inline void reset_blocks() {
 
 			internal_reset_blocks(pac::current_thread_index());
@@ -327,6 +351,9 @@ namespace ncpp {
 
 
 
+	/**
+	 *	A tagged heap manages memory block allocations and categories.
+	 */
 	template<
 		class allocator_type__ = typename NCPP_DEFAULT_ALLOCATOR_TEMPLATE<u8>,
 		class category_cell_allocator_type__ = typename NCPP_DEFAULT_ALLOCATOR_TEMPLATE<
@@ -435,8 +462,144 @@ namespace ncpp {
 			category_cell.item.deallocate();
 
 		}
+		inline void reset_blocks(category_id_type category_id) {
+
+			category_cell_type& category_cell = category_map_.at(category_id);
+
+			category_cell.item.reset_blocks();
+
+		}
 
 	};
+
+
+
+#pragma region Allocators
+	template <class value_type__, class tagged_heap_type__ = tagged_heap_t<>>
+	class NCPP_DEFAULT_ALIGNAS tgh_allocator_t
+	{
+	public:
+		using size_type = sz;
+		using difference_type = ptrdiff_t;
+		using pointer = value_type__*;
+		using const_pointer = const value_type__*;
+		using reference = value_type__&;
+		using const_reference = const value_type__&;
+		using value_type = value_type__;
+		using tagged_heap_type = tagged_heap_type__;
+		using tagged_heap_cid_type = typename tagged_heap_type::category_id_type;
+
+
+
+	private:
+		tagged_heap_type* tagged_heap_p_;
+
+		tagged_heap_cid_type category_id_;
+
+
+
+	public:
+		inline tagged_heap_type& tagged_heap() { return *tagged_heap_p_; }
+		inline const tagged_heap_type& tagged_heap() const { return *tagged_heap_p_; }
+
+		inline tagged_heap_cid_type category_id() const { return category_id_; }
+
+
+
+	public:
+		inline tgh_allocator_t() :
+			tagged_heap_p_(0),
+			category_id_({ 0 })
+		{
+
+
+
+		}
+		inline tgh_allocator_t(tagged_heap_type& tagged_heap, tagged_heap_cid_type category_id) :
+			tagged_heap_p_(&tagged_heap),
+			category_id_(category_id)
+		{
+		
+
+		
+		}
+		inline tgh_allocator_t(const tgh_allocator_t& other) :
+			tgh_allocator_t((tagged_heap_type&)(*other.tagged_heap_p_), other.category_id_)
+		{
+
+
+		
+		}
+
+		inline tgh_allocator_t<value_type>& operator=(const tgh_allocator_t& other) {
+			
+			tagged_heap_p_ = other.tagged_heap_p_;
+			category_id_ = other.category_id_;
+
+			return *this; 
+		}
+
+		template <class other_value_type__>
+		inline tgh_allocator_t(typename const tgh_allocator_t<other_value_type__, tagged_heap_type>& other) :
+			tgh_allocator_t((tagged_heap_type&)other.tagged_heap(), other.category_id())
+		{
+
+
+
+		}
+
+		template <class other_value_type__>
+		inline tgh_allocator_t& operator=(typename const tgh_allocator_t<other_value_type__, tagged_heap_type>& other) {
+
+			tagged_heap_p_ = &(other.other.tagged_heap());
+			category_id_ = other.category_id();
+
+			return *this;
+		}
+
+
+
+		inline pointer   allocate(size_type n, sz align = NCPP_DEFAULT_ALIGN) {
+
+			assert(tagged_heap_p_ && "tagged heap is null");
+
+			return (pointer)(tagged_heap_p_->allocate(category_id_, n * sizeof(value_type), align));
+		}
+
+		inline void      deallocate(void* p, sz n = sizeof(value_type)) {
+
+
+		}
+
+		inline void reset_blocks() {
+
+			assert(tagged_heap_p_ && "tagged heap is null");
+
+			tagged_heap_p_->reset_blocks(category_id_);
+
+		}
+		inline void deallocate_blocks() {
+
+			assert(tagged_heap_p_ && "tagged heap is null");
+
+			tagged_heap_p_->deallocate(category_id_);
+
+		}
+
+		inline pointer           address(reference x) const { return &x; }
+		inline const_pointer     address(const_reference x) const { return &x; }
+		inline void              construct(pointer p, const value_type& val)
+		{
+			new ((value_type*)p) value_type(val);
+		}
+		inline void              destroy(pointer p) { p->~value_type(); }
+
+		inline size_type         max_size() const { return size_t(-1); }
+
+		template <class U>
+		struct rebind { typedef tgh_allocator_t<U> other; };
+	};
+#pragma endregion
 
 }
 

@@ -33,14 +33,25 @@ namespace ncpp {
 		class win_thread;
 
 
-
+		/**
+		 *	Specifies a variable storing in thread local storage. 
+		 */
 #define NCPP_THREAD_LOCAL_DATA __declspec(thread)
-#define NCPP_DEFAULT_THREAD_STACK_SIZE 1048576
 
 
 
-		extern win_thread& current_thread();
+		/**
+		 *	Gets current thread id
+		 */
+		extern u32 current_thread_id();
+		/**
+		 *	Gets current thread index
+		 */
 		extern u32 current_thread_index();
+		/**
+		 *	Gets main thread
+		 */
+		extern win_thread& main_thread();
 
 
 
@@ -50,15 +61,25 @@ namespace ncpp {
 		class NCPP_DEFAULT_ALIGNAS win_thread {
 
 		public:
-			using functor_type = std::function<void(win_thread&)>;
+			friend win_thread& main_thread();
 
 
 
+#pragma region Typedefs
+		public:
+			using functor_type = std::function<void()>;
+#pragma endregion
+
+
+
+#pragma region Nested Types
 		private:
 			struct main_thread_creation_placeholder {};
+#pragma endregion
 
 
 
+#pragma region Properties
 		private:
 			/**
 			 *  The WinAPI thread.
@@ -74,18 +95,20 @@ namespace ncpp {
 			functor_type functor_;
 			sz stack_size_;
 			std::atomic_bool is_ready_;
-			win_thread** current_thread_pp_;
 			bool is_main_;
 
 #ifdef NCPP_ENABLE_FIBER
 			fiber owned_fiber_;
 #endif
+#pragma endregion
 
 
 
+#pragma region Getters and Setters
 		public:
 			inline LPVOID __platform__thread() const { return __platform__thread_; }
 			inline DWORD __platform__id() const { return __platform__id_; }
+			inline u32 id() const { return __platform__id_; }
 			inline const functor_type& functor() const { return functor_; }
 			inline bool is_done() const {
 
@@ -99,10 +122,13 @@ namespace ncpp {
 				return (!r) || (ex_code != STILL_ACTIVE);
 			}
 			inline bool is_main() { return is_main_; }
+
 			inline fiber& owned_fiber() { return owned_fiber_; }
+#pragma endregion
 
 
 
+#pragma region Constructors, Destrutor and Operators
 		private:
 			/**
 			 *  The constructor to create main thread instance.
@@ -111,6 +137,7 @@ namespace ncpp {
 				__platform__thread_(GetCurrentThread()),
 				__platform__id_(GetCurrentThreadId()),
 				stack_size_(0),
+				is_ready_(1),
 				
 #ifdef NCPP_ENABLE_FIBER
 				owned_fiber_(fiber_creation_mode::CONVERT_FROM_THREAD),
@@ -125,8 +152,6 @@ namespace ncpp {
 
 				stack_size_ = sl_high - sl_low;
 
-				set_current_thread_pg(*this);
-
 			}
 
 			static win_thread main_thread_g;
@@ -134,10 +159,13 @@ namespace ncpp {
 
 
 		public:
+			/**
+			 *	Default constructor.
+			 *	This constructor will construct an empty thread object
+			 */
 			inline win_thread::win_thread() :
 				__platform__thread_(0),
 				__platform__id_(0),
-				current_thread_pp_(0),
 				stack_size_(NCPP_DEFAULT_THREAD_STACK_SIZE),
 
 #ifdef NCPP_ENABLE_FIBER
@@ -150,16 +178,18 @@ namespace ncpp {
 
 
 			}
+			/**
+			 *	Initialization constructor.
+			 */
 			inline win_thread::win_thread(functor_type&& functor, sz stack_size = NCPP_DEFAULT_THREAD_STACK_SIZE) :
 				__platform__thread_(0),
 				__platform__id_(0),
-				current_thread_pp_(0),
 				is_ready_(0),
 				stack_size_(stack_size),
 				functor_(std::move(functor)),
 
 #ifdef NCPP_ENABLE_FIBER
-				owned_fiber_(fiber_creation_mode::CONVERT_FROM_THREAD),
+				owned_fiber_(fiber_creation_mode::CONVERT_FROM_THREAD_DI),
 #endif
 
 				is_main_(0)
@@ -176,8 +206,15 @@ namespace ncpp {
 
 				assert(__platform__thread_ != 0 && "thread creating failed");
 
+				while (!is_ready_.load(std::memory_order_acquire));
+
 			}
+			/**
+			 *	Destructor
+			 */
 			win_thread::~win_thread() {
+
+				if (__platform__thread_ == 0) return;
 
 				if (!is_main_) {
 
@@ -191,15 +228,16 @@ namespace ncpp {
 
 			inline win_thread(const win_thread&) = delete;
 			inline win_thread& operator = (const win_thread&) = delete;
+
+			/**
+			 *	Move constructor
+			 */
 			inline win_thread(win_thread&& other) noexcept  :
 				win_thread()
 			{
 
 				while (!other.is_ready_.load(std::memory_order_relaxed));
 				std::atomic_thread_fence(std::memory_order_acquire);
-
-				std::atomic_thread_fence(std::memory_order_release);
-				*(other.current_thread_pp_) = this;
 
 				__platform__thread_ = other.__platform__thread_;
 				__platform__id_ = other.__platform__id_;
@@ -217,13 +255,14 @@ namespace ncpp {
 				other.is_main_ = 0;
 
 			}
+
+			/**
+			 *	Move operator
+			 */
 			inline win_thread& operator = (win_thread&& other) noexcept {
 
 				while (!other.is_ready_.load(std::memory_order_relaxed));
 				std::atomic_thread_fence(std::memory_order_acquire);
-
-				std::atomic_thread_fence(std::memory_order_release);
-				*(other.current_thread_pp_) = this;
 
 				__platform__thread_ = other.__platform__thread_;
 				__platform__id_ = other.__platform__id_;
@@ -242,29 +281,16 @@ namespace ncpp {
 
 				return *this;
 			}
+#pragma endregion
 
 
 
-		private:
-			static void set_current_thread_pg(win_thread& thread);
-
-
-
+#pragma region Methods
 		public:
 			/**
 			 *  The main procedure of the thread.
 			 */
-			static inline DWORD WINAPI proc(LPVOID lpParam)
-			{
-
-				set_current_thread_pg(*reinterpret_cast<win_thread*>(lpParam));
-
-				reinterpret_cast<win_thread*>(lpParam)->is_ready_.store(1, std::memory_order_release);
-
-				reinterpret_cast<win_thread*>(lpParam)->functor_(*reinterpret_cast<win_thread*>(lpParam));
-
-				return 0;
-			}
+			static DWORD WINAPI proc(LPVOID lpParam);
 
 			/**
 			 *  Sleeps and waits until the thread proc done.
@@ -297,6 +323,7 @@ namespace ncpp {
 
 				return SetThreadAffinityMask(__platform__thread_, mask);
 			}
+#pragma endregion
 
 		};
 

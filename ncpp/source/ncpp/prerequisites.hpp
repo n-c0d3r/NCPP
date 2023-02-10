@@ -120,6 +120,13 @@ struct NCPP_PP_CAT(static_warning,__LINE__) { \
 
 
 
+#ifndef NDEBUG 
+#define warning(cond, msg) if(!(cond)) std::cout << "Warning: " << #msg << std::endl;
+#endif
+
+
+
+
 #define NCPP_U64_MAX 0xFFFFFFFFFFFFFFFF
 #define NCPP_U64_MIN 0
 #define NCPP_U32_MAX 0xFFFFFFFF
@@ -177,6 +184,11 @@ namespace ncpp {
 
     /** the same as size_t. */
     using sz = size_t; 
+
+
+
+    template<typename type__>
+    inline type__& null_reference_t() { return *((type__*)0); }
 
 }
 

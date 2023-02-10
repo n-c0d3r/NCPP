@@ -115,48 +115,70 @@ namespace ncpp {
 	class NCPP_DEFAULT_ALIGNAS aligned_allocator_t
 	{
 	public:
-		typedef sz size_type;
-		typedef ptrdiff_t difference_type;
-		typedef value_type__* pointer;
-		typedef const value_type__* const_pointer;
-		typedef value_type__& reference;
-		typedef const value_type__& const_reference;
-		typedef value_type__ value_type;
-
-		aligned_allocator_t() {}
-		aligned_allocator_t(const aligned_allocator_t&) {}
+		using size_type = sz;
+		using difference_type = ptrdiff_t;
+		using pointer = value_type__*;
+		using const_pointer = const value_type__*;
+		using reference = value_type__&;
+		using const_reference = const value_type__&;
+		using value_type = value_type__;
 
 
 
-		pointer   allocate(size_type n, sz align = NCPP_DEFAULT_ALIGN) {
+	public:
+		inline aligned_allocator_t()
+		{
+
+
+
+		}
+
+		inline aligned_allocator_t<value_type>& operator=(const aligned_allocator_t& other) {
+
+
+
+			return *this;
+		}
+
+		template <class other_value_type__>
+		inline aligned_allocator_t(const aligned_allocator_t<other_value_type__>& other) {
+
+
+
+		}
+
+		template <class other_value_type__>
+		inline aligned_allocator_t& operator=(const aligned_allocator_t<other_value_type__>& other) {
+
+
+
+			return *this;
+		}
+
+
+
+		inline pointer   allocate(size_type n, sz align = NCPP_DEFAULT_ALIGN) {
 
 			return (pointer)aligned_alloc(n * sizeof(value_type), align);
 		}
 
-		void      deallocate(void* p, sz n = sizeof(value_type)) {
+		inline void      deallocate(void* p, sz n = sizeof(value_type)) {
 
 			aligned_free(p);
 		}
 
-		pointer           address(reference x) const { return &x; }
-		const_pointer     address(const_reference x) const { return &x; }
-		aligned_allocator_t<value_type>& operator=(const aligned_allocator_t&) { return *this; }
-		void              construct(pointer p, const value_type& val)
+		inline pointer           address(reference x) const { return &x; }
+		inline const_pointer     address(const_reference x) const { return &x; }
+		inline void              construct(pointer p, const value_type& val)
 		{
 			new ((value_type*)p) value_type(val);
 		}
-		void              destroy(pointer p) { p->~value_type(); }
+		inline void              destroy(pointer p) { p->~value_type(); }
 
-		size_type         max_size() const { return size_t(-1); }
+		inline size_type         max_size() const { return size_t(-1); }
 
 		template <class U>
 		struct rebind { typedef aligned_allocator_t<U> other; };
-
-		template <class U>
-		aligned_allocator_t(const aligned_allocator_t<U>&) {}
-
-		template <class U>
-		aligned_allocator_t& operator=(const aligned_allocator_t<U>&) { return *this; }
 	};
 #pragma endregion
 
