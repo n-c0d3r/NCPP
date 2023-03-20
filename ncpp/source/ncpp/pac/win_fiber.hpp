@@ -304,6 +304,7 @@ namespace ncpp {
 					__platform__fiber_ = CreateFiber(stack_size_, proc, this);
 					break;
 				default:
+					assert(false && "cant delayed init non-DI fiber");
 					break;
 				}
 

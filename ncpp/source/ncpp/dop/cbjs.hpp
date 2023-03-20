@@ -61,6 +61,12 @@ namespace ncpp {
 
 
 
+#define NCPP_DOP_JOB_HIGH_STEP 8
+#define NCPP_DOP_JOB_NORMAL_STEP 4
+#define NCPP_DOP_JOB_LOW_STEP 2
+
+
+
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,6 +83,7 @@ namespace ncpp {
 
 		struct job;
 		class job_coroutine;
+		class job_coroutine_pool;
 		class cbjs;
 		class worker_thread;
 
@@ -106,8 +113,102 @@ namespace ncpp {
 		
 		struct NCPP_DEFAULT_ALIGNAS job {
 
-			std::function<void(job_coroutine&)> entry_point;
-			job_priority priority;
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+
+#pragma region Friends
+		public:
+			friend class worker_thread;
+#pragma endregion
+
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+
+#pragma region Typedefs
+			using entry_point_type = std::function<void(u32 index, job_coroutine& coroutine)>;
+#pragma endregion
+
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+
+#pragma region Properties
+		private:
+			ab8 is_done_ = false;
+			entry_point_type entry_point_;
+			u32 instance_count_;
+			u32 batch_size_;
+			u32 batch_count_;
+			job_priority priority_ = job_priority::HIGH;
+
+			au32 ran_instance_count_;
+			au32 queued_instance_count_;
+			au32 done_instance_count_;
+
+
+
+		public:
+			inline ab8 is_done() const { return is_done_.load(std::memory_order_acquire); }
+			inline const entry_point_type& entry_point() const { return entry_point_; }
+			inline u32 instance_count() const { return instance_count_; }
+			inline u32 batch_size() const { return batch_size_; }
+			inline u32 batch_count() const { return batch_count_; }
+			inline job_priority priority() const { return priority_; }
+
+			inline u32 ran_instance_count() const { return ran_instance_count_.load(std::memory_order_acquire); }
+			inline u32 queued_instance_count() const { return queued_instance_count_.load(std::memory_order_acquire); }
+			inline u32 done_instance_count() const { return done_instance_count_.load(std::memory_order_acquire); }
+#pragma endregion
+
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+
+#pragma region Constructors, Destructor and Operators
+			/**
+			 *  Constructor
+			 */
+			inline job(
+				entry_point_type&& entry_point,
+				u32 instance_count = 1,
+				u32 batch_size = 16, 
+				job_priority priority = job_priority::HIGH
+			) :
+				is_done_(false),
+				entry_point_(std::move(entry_point)),
+				instance_count_(instance_count),
+				batch_size_(batch_size),
+				batch_count_(instance_count_ / batch_size_ + (instance_count_ % batch_size_ != 0)),
+				priority_(priority),
+
+				ran_instance_count_(0),
+				queued_instance_count_(0),
+				done_instance_count_(0)
+			{
+
+
+
+			}
+			/**
+			 *  Destructor
+			 */
+			~job() {
+
+
+
+			}
+#pragma endregion
+
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+
+#pragma region Methods
+		public:
+			void execute(job_coroutine& coroutine);
+#pragma endregion
 
 		};
 
@@ -155,17 +256,31 @@ namespace ncpp {
 			////////////////////////////////////////////////////////////////////////////////////
 			////////////////////////////////////////////////////////////////////////////////////
 
+#pragma region Friends
+		public:
+			friend class job_coroutine_pool;
+			friend class worker_thread;
+#pragma endregion
+
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+
 #pragma region Properties
 		private:
 			/**
 			 *  The job to be run.
 			 */
-			dop::job* job_p_;
+			utilities::a_lref_t<job> job_;
+			utilities::a_lref_t<au32> counter_;
 
 			/**
 			 *  The fiber to implement a function that can suspend execution to be resumed later.
 			 */
 			pac::fiber fiber_;
+			utilities::lref_t<pac::fiber> caller_thread_fiber_;
+
+			au8 worker_thread_index_;
 #pragma endregion
 
 			////////////////////////////////////////////////////////////////////////////////////
@@ -174,7 +289,16 @@ namespace ncpp {
 
 #pragma region Getters and Setters
 		public:
-			inline dop::job& job() const { return *job_p_; }
+			inline dop::job& job() { return *job_; }
+			inline au32& counter() { return counter_.get(); }
+			inline b8 is_waiting() {
+
+				if(counter_.is_null())
+					return false; 
+				
+				return counter().load(std::memory_order_acquire);
+			}
+			inline u8 worker_thread_index() const { return worker_thread_index_.load(std::memory_order_acquire); }
 #pragma endregion
 
 			////////////////////////////////////////////////////////////////////////////////////
@@ -187,9 +311,10 @@ namespace ncpp {
 			 *  Default constructor
 			 */
 			inline job_coroutine() :
-				job_p_(0),
+				job_(),
+				worker_thread_index_(0xFF),
 				fiber_(
-					pac::fiber_creation_mode::NEW,
+					pac::fiber_creation_mode::NEW_DI,
 					[&](pac::fiber& fiber) {
 
 						worker_loop();
@@ -209,6 +334,27 @@ namespace ncpp {
 
 
 			}
+
+
+
+			job_coroutine(const job_coroutine&) {
+
+
+
+			}
+			job_coroutine& operator = (const job_coroutine&) {
+
+				return *this;
+			}
+			job_coroutine(job_coroutine&&) {
+
+
+
+			}
+			job_coroutine& operator = (job_coroutine&&) {
+
+				return *this;
+			}
 #pragma endregion
 
 			////////////////////////////////////////////////////////////////////////////////////
@@ -219,14 +365,17 @@ namespace ncpp {
 		private:
 			void worker_loop();
 
+			void delayed_init();
+
+
 
 		public:
 			/**
 			 *  Binds the job to run in the next time "switch_to_this" called
 			 */
-			inline void bind_job(dop::job& j) {
+			inline void bind_job(utilities::a_lref_t<dop::job> j) {
 
-				job_p_ = &j;
+				job_ = j;
 
 			}
 
@@ -256,6 +405,133 @@ namespace ncpp {
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+		/**
+		 *  A job coroutine pool is a pool of job coroutines.
+		 */
+		class NCPP_DEFAULT_ALIGNAS job_coroutine_pool {
+
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+
+#pragma region Friends
+		public:
+			friend class worker_thread;
+#pragma endregion
+
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+
+#pragma region Typedefs
+		public:
+			using coroutine_ref_allocator_type = typename cbjs_allocator_t<
+				typename utilities::lref_t<job_coroutine>
+			>;
+			using coroutine_ref_queue_type = typename containers::cfv_queue_t<
+				typename utilities::lref_t<job_coroutine>, 
+				coroutine_ref_allocator_type
+			>;
+			using coroutine_allocator_type = typename cbjs_allocator_t<job_coroutine>;
+			using coroutine_vector_type = typename std::vector<
+				job_coroutine,
+				coroutine_allocator_type
+			>;
+#pragma endregion
+
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+
+#pragma region Properties
+		private:
+			sz count_;
+			coroutine_ref_allocator_type coroutine_ref_allocator_;
+			coroutine_ref_queue_type coroutine_ref_queue_;
+			coroutine_allocator_type coroutine_allocator_;
+			coroutine_vector_type coroutine_vector_;
+#pragma endregion
+
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+
+#pragma region Getters and Setters
+		public:
+			inline sz count() const { return count_; }
+#pragma endregion
+
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+
+#pragma region Constructors, Destructor and Operators
+		public:
+			/**
+			 *  Main constructor
+			 */
+			job_coroutine_pool(sz count);
+
+			/**
+			 *  Destructor
+			 */
+			~job_coroutine_pool() {
+
+
+
+			}
+#pragma endregion
+
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+
+#pragma region Methods
+		private:
+			inline void delayed_init() {
+
+				for (auto& coroutine : coroutine_vector_) {
+
+					coroutine.delayed_init();
+
+				}
+			}
+
+
+
+		public:
+			inline void push(const job_coroutine& coroutine) {
+
+				coroutine_ref_queue_.push(coroutine);
+
+			}
+
+			inline bool try_pop(utilities::lref_t<job_coroutine>& coroutine) {
+
+				return coroutine_ref_queue_.try_pop(coroutine);
+			}
+#pragma endregion
+
+		};
+
+
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+		extern worker_thread& current_worker_thread();
+
 
 
 		/**
@@ -267,9 +543,41 @@ namespace ncpp {
 			////////////////////////////////////////////////////////////////////////////////////
 			////////////////////////////////////////////////////////////////////////////////////
 
+#pragma region Friends
+		public:
+			friend class cbjs;
+#pragma endregion
+
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+
+#pragma region Typedefs
+		public:
+			using coroutine_ref_allocator_type = typename cbjs_allocator_t<
+				typename utilities::lref_t<job_coroutine>
+			>;
+			using coroutine_ref_queue_type = typename containers::cfv_queue_t<
+				typename utilities::lref_t<job_coroutine>,
+				coroutine_ref_allocator_type
+			>;
+#pragma endregion
+
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+
 #pragma region Properties
 		private:
 			u8 index_;
+			pac::thread unique_pac_thread_;
+			utilities::lref_t<pac::thread> pac_thread_;
+			job_coroutine_pool coroutine_pool_;
+
+			coroutine_ref_allocator_type coroutine_ref_allocator_;
+			coroutine_ref_queue_type coroutine_ref_queue_HIGH_;
+			coroutine_ref_queue_type coroutine_ref_queue_NORMAL_;
+			coroutine_ref_queue_type coroutine_ref_queue_LOW_;
 #pragma endregion
 
 			////////////////////////////////////////////////////////////////////////////////////
@@ -278,7 +586,10 @@ namespace ncpp {
 
 #pragma region Getters and Setters
 		public:
+			inline b8 is_main() const { return index_ == 0; }
 			inline u8 index() const { return index_; }
+			inline pac::thread& unique_pac_thread() { return unique_pac_thread_; }
+			inline pac::thread& pac_thread() { return *pac_thread_; }
 #pragma endregion
 
 			////////////////////////////////////////////////////////////////////////////////////
@@ -288,9 +599,10 @@ namespace ncpp {
 #pragma region Constructors, Destructor and Operators
 		public:
 			/**
-			 *  Default constructor
+			 *  Main constructor
 			 */
-			worker_thread(u8 index);
+			worker_thread(u8 index, sz coroutine_count);
+
 			/**
 			 *  Destructor
 			 */
@@ -306,7 +618,20 @@ namespace ncpp {
 			////////////////////////////////////////////////////////////////////////////////////
 
 #pragma region Methods
+		private:
+			void worker_loop();
 
+			bool pick_or_steal_coroutine_HIGH(utilities::lref_t<job_coroutine>& coroutine);
+			bool pick_or_steal_coroutine_NORMAL(utilities::lref_t<job_coroutine>& coroutine);
+			bool pick_or_steal_coroutine_LOW(utilities::lref_t<job_coroutine>& coroutine);
+
+
+
+		public:
+			void start();
+			void join();
+
+			void schedule(utilities::lref_t<job> job);
 #pragma endregion
 
 		};
@@ -332,8 +657,9 @@ namespace ncpp {
 		 */
 		struct NCPP_DEFAULT_ALIGNAS cbjs_settings {
 
-			job& entry_job;
+			utilities::lref_t<job> entry_job;
 			u8 worker_thread_count = pac::hardware_concurrency();
+			sz coroutine_count_per_worker_thread = NCPP_COROUTINE_COUNT_PER_WORKER_THREAD;
 
 		};
 
@@ -364,6 +690,15 @@ namespace ncpp {
 			////////////////////////////////////////////////////////////////////////////////////
 			////////////////////////////////////////////////////////////////////////////////////
 
+#pragma region Friends
+		public:
+			friend class worker_thread;
+#pragma endregion
+
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////
+
 #pragma region Typedefs
 		public:
 			using worker_thread_ptr_type = typename cbjs_unique_ptr_t<worker_thread>;
@@ -381,11 +716,14 @@ namespace ncpp {
 			cbjs_settings settings_;
 
 			tagged_heap_t<> tagged_heap_;
-			tagged_heap_t<>::category_id_type tgh_forever_cid_;
+			tagged_heap_t<>::category_id_type tgh_sys_lifetime_cid_;
 
 			worker_thread_allocator_type worker_thread_allocator_;
 			worker_thread_ptr_allocator_type worker_thread_ptr_allocator_;
 			worker_thread_ptr_vector_type worker_thread_ptr_vector_;
+
+			au8 not_initialized_wthread_count_;
+			ab8 is_running_;
 #pragma endregion
 
 			////////////////////////////////////////////////////////////////////////////////////
@@ -399,10 +737,23 @@ namespace ncpp {
 			inline tagged_heap_t<>& tagged_heap() { return tagged_heap_; }
 			inline const tagged_heap_t<>& tagged_heap() const { return tagged_heap_; }
 
-			inline tagged_heap_t<>::category_id_type tgh_forever_cid() const { return tgh_forever_cid_; }
+			inline tagged_heap_t<>::category_id_type tgh_sys_lifetime_cid() const { return tgh_sys_lifetime_cid_; }
 
 			inline worker_thread& get_worker_thread(u8 index) { return *worker_thread_ptr_vector_[index]; }
 			inline const worker_thread& get_worker_thread(u8 index) const { return *worker_thread_ptr_vector_[index]; }
+
+			inline u8 not_initialized_wthread_count() const {
+
+				return not_initialized_wthread_count_.load(std::memory_order_acquire);
+			}
+			inline b8 is_initialized_done() const {
+
+				return not_initialized_wthread_count() == 0;
+			}
+			inline b8 is_running() const {
+
+				return is_running_.load(std::memory_order_acquire);
+			}
 #pragma endregion
 
 			////////////////////////////////////////////////////////////////////////////////////
@@ -418,14 +769,37 @@ namespace ncpp {
 				settings_(settings),
 
 				tagged_heap_(16),
-				tgh_forever_cid_(tagged_heap_.create_category()),
+				tgh_sys_lifetime_cid_(tagged_heap_.create_category()),
 
-				worker_thread_allocator_(tagged_heap_, tgh_forever_cid_),
-				worker_thread_ptr_allocator_(tagged_heap_, tgh_forever_cid_),
-				worker_thread_ptr_vector_(settings.worker_thread_count, worker_thread_ptr_allocator_)
+				worker_thread_allocator_(tagged_heap_, tgh_sys_lifetime_cid_),
+				worker_thread_ptr_allocator_(tagged_heap_, tgh_sys_lifetime_cid_),
+				worker_thread_ptr_vector_(settings.worker_thread_count, worker_thread_ptr_allocator_),
+
+				not_initialized_wthread_count_(settings.worker_thread_count),
+				is_running_(true)
 			{
 
-				std::cout << settings.worker_thread_count << std::endl;
+				assert(settings.worker_thread_count > 0 && "cbjs worker thread count must be non zero.");
+
+
+
+				for (u8 i = 0; i < settings.worker_thread_count; ++i) {
+
+					worker_thread_ptr_vector_[i] = utilities::allocate_unique_t<worker_thread>(worker_thread_ptr_allocator_, i, settings_.coroutine_count_per_worker_thread);
+
+				}
+
+				for (u8 i = settings.worker_thread_count; i > 0; --i) {
+
+					worker_thread_ptr_vector_[i - 1]->start();
+
+				}
+
+				for (u8 i = settings.worker_thread_count; i > 0; --i) {
+
+					worker_thread_ptr_vector_[i - 1]->join();
+
+				}
 
 			}
 			/**
@@ -443,7 +817,8 @@ namespace ncpp {
 			////////////////////////////////////////////////////////////////////////////////////
 
 #pragma region Methods
-
+		public:
+			void schedule(utilities::lref_t<job> job);
 #pragma endregion
 
 		};

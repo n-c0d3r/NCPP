@@ -273,6 +273,35 @@ namespace ncpp {
 
     /** the same as size_t. */
     using sz = size_t;
+
+
+
+    /** 8bit atomic unsigned integer. */
+    using au8 = std::atomic_uint8_t;
+    /** 16bit atomic unsigned integer. */
+    using au16 = std::atomic_uint16_t;
+    /** 32bit atomic unsigned integer. */
+    using au32 = std::atomic_uint32_t;
+    /** 64bit atomic unsigned integer. */
+    using au64 = std::atomic_uint64_t;
+
+    /** 8bit atomic signed integer. */
+    using ai8 = std::atomic_int8_t;
+    /** 16bit atomic signed integer. */
+    using ai16 = std::atomic_int16_t;
+    /** 32bit atomic signed integer. */
+    using ai32 = std::atomic_int32_t;
+    /** 64bit atomic signed integer. */
+    using ai64 = std::atomic_int64_t;
+
+    /** 8bit atomic boolean. */
+    using ab8 = std::atomic_bool;
+
+    /** 8bit atomic flag. */
+    using aflag = std::atomic_flag;
+
+    /** the same as size_t but is atomic. */
+    using asz = std::atomic_size_t;
 #pragma endregion
 
     ////////////////////////////////////////////////////////////////////////////////////
