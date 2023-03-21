@@ -113,7 +113,7 @@ namespace ncpp {
             }
             inline na_lref_t(type__& raw_ref) noexcept :
                 raw_pointer_(&raw_ref)
-            { 
+            {
 
 
 
@@ -141,7 +141,7 @@ namespace ncpp {
             {
             }
             inline na_lref_t& operator = (const na_lref_t& other) noexcept {
-                
+
                 raw_pointer_ = other.raw_pointer_;
 
                 return *this;
@@ -160,7 +160,7 @@ namespace ncpp {
 
             }
             inline na_lref_t& operator = (na_lref_t&& other) noexcept {
-                
+
                 raw_pointer_ = other.raw_pointer_;
                 other.raw_pointer_ = 0;
 
@@ -242,7 +242,7 @@ namespace ncpp {
             inline void set(const type__& value) { *(aptr_.load(std::memory_order_acquire)) = value; }
             inline void set(type__&& value) { *(aptr_.load(std::memory_order_acquire)) = std::move(value); }
             inline type__* pointer() { return aptr_.load(std::memory_order_acquire); }
-            inline const type__* pointer() const  { return aptr_.load(std::memory_order_acquire); }
+            inline const type__* pointer() const { return aptr_.load(std::memory_order_acquire); }
             inline b8 is_null() const { return aptr_.load(std::memory_order_acquire) == 0; }/**< checks if the pointer is null. */
 
             ////////////////////////////////////////////////////////////////////////////////////
@@ -375,7 +375,7 @@ namespace ncpp {
          */
         template<typename type__, b8 is_atomic__ = false>
         using lref_t = typename utilities::nth_template_arg_t<
-            (sz)is_atomic__, 
+            (sz)is_atomic__,
             typename na_lref_t<type__>,
             typename a_lref_t<type__>
         >::type;

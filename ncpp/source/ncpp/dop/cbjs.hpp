@@ -102,7 +102,7 @@ namespace ncpp {
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-		
+
 		enum class job_priority {
 
 			HIGH = 0,
@@ -110,7 +110,7 @@ namespace ncpp {
 			LOW = 2
 
 		};
-		
+
 		struct NCPP_DEFAULT_ALIGNAS job {
 
 			////////////////////////////////////////////////////////////////////////////////////
@@ -173,7 +173,7 @@ namespace ncpp {
 			inline job(
 				entry_point_type&& entry_point,
 				u32 instance_count = 1,
-				u32 batch_size = 16, 
+				u32 batch_size = 16,
 				job_priority priority = job_priority::HIGH
 			) :
 				is_done_(false),
@@ -293,9 +293,9 @@ namespace ncpp {
 			inline au32& counter() { return counter_.get(); }
 			inline b8 is_waiting() {
 
-				if(counter_.is_null())
-					return false; 
-				
+				if (counter_.is_null())
+					return false;
+
 				return counter().load(std::memory_order_acquire);
 			}
 			inline u8 worker_thread_index() const { return worker_thread_index_.load(std::memory_order_acquire); }
@@ -326,40 +326,40 @@ namespace ncpp {
 
 
 			}
-			/**
-			 *  Destructor
-			 */
-			~job_coroutine() {
+					/**
+					 *  Destructor
+					 */
+					~job_coroutine() {
 
 
 
-			}
+					}
 
 
 
-			job_coroutine(const job_coroutine&) {
+					job_coroutine(const job_coroutine&) {
 
 
 
-			}
-			job_coroutine& operator = (const job_coroutine&) {
+					}
+					job_coroutine& operator = (const job_coroutine&) {
 
-				return *this;
-			}
-			job_coroutine(job_coroutine&&) {
+						return *this;
+					}
+					job_coroutine(job_coroutine&&) {
 
 
 
-			}
-			job_coroutine& operator = (job_coroutine&&) {
+					}
+					job_coroutine& operator = (job_coroutine&&) {
 
-				return *this;
-			}
+						return *this;
+					}
 #pragma endregion
 
-			////////////////////////////////////////////////////////////////////////////////////
-			////////////////////////////////////////////////////////////////////////////////////
-			////////////////////////////////////////////////////////////////////////////////////
+					////////////////////////////////////////////////////////////////////////////////////
+					////////////////////////////////////////////////////////////////////////////////////
+					////////////////////////////////////////////////////////////////////////////////////
 
 #pragma region Methods
 		private:
@@ -500,7 +500,7 @@ namespace ncpp {
 
 
 		public:
-			inline void push(const job_coroutine& coroutine) {
+			inline void push(utilities::a_lref_t<job_coroutine> coroutine) {
 
 				coroutine_ref_queue_.push(coroutine);
 

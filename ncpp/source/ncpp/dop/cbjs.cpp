@@ -56,7 +56,7 @@ namespace ncpp {
 			entry_point_(index, coroutine);
 
 
-			
+
 			u32 done_instance_count = done_instance_count_.load(std::memory_order_relaxed);
 
 			while (!done_instance_count_.compare_exchange_weak(done_instance_count, done_instance_count + 1));
@@ -278,7 +278,7 @@ namespace ncpp {
 
 
 					if (pick_or_steal_coroutine_HIGH(coroutine)) {
-						
+
 						job& job = coroutine->job();
 
 
@@ -300,10 +300,6 @@ namespace ncpp {
 							}
 
 						}
-
-
-
-						std::atomic_thread_fence(std::memory_order_release);
 
 
 
@@ -335,10 +331,6 @@ namespace ncpp {
 							coroutine_ref_queue_HIGH_.push(nextCoroutine);
 
 						}
-
-
-
-						std::atomic_thread_fence(std::memory_order_acquire);
 
 					}
 					else
@@ -394,7 +386,6 @@ namespace ncpp {
 
 				if (coroutine.pointer() == 0) {
 
-					auto a = coroutine_ref_queue_HIGH_.front();
 					std::cout << "error" << std::endl;
 
 				}
@@ -450,7 +441,7 @@ namespace ncpp {
 			if (index_ != 0) {
 
 				pac_thread_->wait();
-				
+
 			}
 
 		}
@@ -460,7 +451,7 @@ namespace ncpp {
 			utilities::a_lref_t<job_coroutine> coroutine;
 
 
-			
+
 			u32 job_queued_instance_count = job->queued_instance_count();
 			while (!job->queued_instance_count_.compare_exchange_weak(job_queued_instance_count, job_queued_instance_count + 1));
 
@@ -480,7 +471,7 @@ namespace ncpp {
 			coroutine->bind_job(*job);
 
 			switch (job->priority_)
-			{	
+			{
 			case job_priority::HIGH:
 				coroutine_ref_queue_HIGH_.push(coroutine);
 				break;

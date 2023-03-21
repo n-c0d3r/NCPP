@@ -12,10 +12,10 @@ int main() {
 			dop::job entry_job = dop::job(
 				[&entry_job](u32 index, dop::job_coroutine& coroutine) {
 
-					//std::cout << index << " " << pac::current_thread_index() << std::endl;
+
 
 				},
-				9000,
+				2048,
 				512
 			);
 
@@ -25,7 +25,7 @@ int main() {
 
 				entry_job,
 				12,
-				4000
+				4096
 
 			});
 
