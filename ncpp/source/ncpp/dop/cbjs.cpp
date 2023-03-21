@@ -273,13 +273,72 @@ namespace ncpp {
 
 				for (u32 i = 0; i < NCPP_DOP_JOB_HIGH_STEP; ++i) {
 
-					utilities::lref_t<job_coroutine> coroutine;
+					utilities::a_lref_t<job_coroutine> coroutine;
 
 
 
 					if (pick_or_steal_coroutine_HIGH(coroutine)) {
+						
+						job& job = coroutine->job();
 
 
+
+						if (coroutine->is_waiting()) {
+
+							coroutine_ref_queue_HIGH_.push(coroutine);
+
+						}
+						else {
+
+							coroutine->caller_thread_fiber_ = pac_thread_->owned_fiber();
+							coroutine->switch_to_this();
+
+							if (coroutine->is_waiting()) {
+
+								coroutine_ref_queue_HIGH_.push(coroutine);
+
+							}
+
+						}
+
+
+
+						std::atomic_thread_fence(std::memory_order_release);
+
+
+
+						/// schedules new job instance
+						utilities::a_lref_t<job_coroutine> nextCoroutine;
+
+
+
+						u32 job_queued_instance_count = job.queued_instance_count();
+						while (!job.queued_instance_count_.compare_exchange_weak(job_queued_instance_count, job_queued_instance_count + 1));
+
+
+
+						if (job_queued_instance_count >= job.instance_count_)
+							continue;
+
+
+
+						assert(coroutine_pool_.try_pop(nextCoroutine) && "ran out of coroutines.");
+
+
+
+						nextCoroutine->bind_job(job);
+
+
+
+						if (job_queued_instance_count < job.instance_count_) {
+
+							coroutine_ref_queue_HIGH_.push(nextCoroutine);
+
+						}
+
+
+
+						std::atomic_thread_fence(std::memory_order_acquire);
 
 					}
 					else
@@ -291,7 +350,7 @@ namespace ncpp {
 
 				for (u32 i = 0; i < NCPP_DOP_JOB_NORMAL_STEP; ++i) {
 
-					utilities::lref_t<job_coroutine> coroutine;
+					utilities::a_lref_t<job_coroutine> coroutine;
 
 
 
@@ -309,7 +368,7 @@ namespace ncpp {
 
 				for (u32 i = 0; i < NCPP_DOP_JOB_LOW_STEP; ++i) {
 
-					utilities::lref_t<job_coroutine> coroutine;
+					utilities::a_lref_t<job_coroutine> coroutine;
 
 
 
@@ -327,66 +386,35 @@ namespace ncpp {
 
 		}
 
-		bool worker_thread::pick_or_steal_coroutine_HIGH(utilities::lref_t<job_coroutine>& coroutine) {
+		bool worker_thread::pick_or_steal_coroutine_HIGH(utilities::a_lref_t<job_coroutine>& coroutine) {
 
 			bool hr = coroutine_ref_queue_HIGH_.try_pop(coroutine);
 
-			if (!hr) {
+			if (hr) {
 
+				if (coroutine.pointer() == 0) {
 
+					auto a = coroutine_ref_queue_HIGH_.front();
+					std::cout << "error" << std::endl;
+
+				}
 
 			}
 			else {
 
-				job& job = coroutine->job();
 
-
-
-				if (coroutine->is_waiting()) {
-
-					coroutine_ref_queue_HIGH_.push(coroutine);
-
-				}
-				else {
-
-					coroutine->caller_thread_fiber_ = pac_thread_->owned_fiber();
-					coroutine->switch_to_this();
-
-				}
-
-
-
-				/// schedules new job instance
-				utilities::lref_t<job_coroutine> nextCoroutine;
-
-				assert(coroutine_pool_.try_pop(nextCoroutine) && "ran out of coroutines.");
-
-
-
-				u32 job_queued_instance_count = job.queued_instance_count();
-				while (!job.queued_instance_count_.compare_exchange_weak(job_queued_instance_count, job_queued_instance_count + 1));
-
-
-
-				nextCoroutine->bind_job(job);
-
-				if (job_queued_instance_count < job.instance_count_) {
-
-					coroutine_ref_queue_HIGH_.push(nextCoroutine);
-
-				}
 
 			}
 
 			return hr;
 		}
-		bool worker_thread::pick_or_steal_coroutine_NORMAL(utilities::lref_t<job_coroutine>& coroutine) {
+		bool worker_thread::pick_or_steal_coroutine_NORMAL(utilities::a_lref_t<job_coroutine>& coroutine) {
 
 			bool hr = false;
 
 			return hr;
 		}
-		bool worker_thread::pick_or_steal_coroutine_LOW(utilities::lref_t<job_coroutine>& coroutine) {
+		bool worker_thread::pick_or_steal_coroutine_LOW(utilities::a_lref_t<job_coroutine>& coroutine) {
 
 			bool hr = false;
 
@@ -429,9 +457,7 @@ namespace ncpp {
 
 		void worker_thread::schedule(utilities::lref_t<job> job) {
 
-			utilities::lref_t<job_coroutine> coroutine;
-
-			assert(coroutine_pool_.try_pop(coroutine) && "ran out of coroutines.");
+			utilities::a_lref_t<job_coroutine> coroutine;
 
 
 			
@@ -440,7 +466,14 @@ namespace ncpp {
 
 
 
-			if (job_queued_instance_count >= job->instance_count_) return;
+			if (job_queued_instance_count >= job->instance_count_) {
+
+				return;
+			}
+
+
+
+			assert(coroutine_pool_.try_pop(coroutine) && "ran out of coroutines.");
 
 
 

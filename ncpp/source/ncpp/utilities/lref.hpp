@@ -96,6 +96,8 @@ namespace ncpp {
             inline void set(const type__& value) { *raw_pointer_ = value; }
             inline void set(type__&& value) { *raw_pointer_ = std::move(value); }
             inline b8 is_null() const { return raw_pointer_ == 0; }/**< checks if the raw pointer is null. */
+            inline type__* pointer() { return raw_pointer_; }
+            inline const type__* pointer() const { return raw_pointer_; }
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -228,18 +230,20 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         private:
-            asz uptr_;/**< unsigned int pointer. */
+            std::atomic<type__*> aptr_;/**< unsigned int pointer. */
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
-            inline type__& get() { return *reinterpret_cast<type__*>(uptr_.load(std::memory_order_acquire)); }/**< uses to get the object. */
-            inline const type__& get() const { return *reinterpret_cast<const type__*>(uptr_.load(std::memory_order_acquire)); }/**< uses to get the object. */
-            inline void set(const type__& value) { *reinterpret_cast<type__*>(uptr_.load(std::memory_order_acquire)) = value; }
-            inline void set(type__&& value) { *reinterpret_cast<type__*>(uptr_.load(std::memory_order_acquire)) = std::move(value); }
-            inline b8 is_null() const { return uptr_.load(std::memory_order_acquire) == 0; }/**< checks if the pointer is null. */
+            inline type__& get() { return *aptr_.load(std::memory_order_acquire); }/**< uses to get the object. */
+            inline const type__& get() const { return *aptr_.load(std::memory_order_acquire); }/**< uses to get the object. */
+            inline void set(const type__& value) { *(aptr_.load(std::memory_order_acquire)) = value; }
+            inline void set(type__&& value) { *(aptr_.load(std::memory_order_acquire)) = std::move(value); }
+            inline type__* pointer() { return aptr_.load(std::memory_order_acquire); }
+            inline const type__* pointer() const  { return aptr_.load(std::memory_order_acquire); }
+            inline b8 is_null() const { return aptr_.load(std::memory_order_acquire) == 0; }/**< checks if the pointer is null. */
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -247,28 +251,28 @@ namespace ncpp {
 
         public:
             inline a_lref_t() noexcept :
-                uptr_(0)
+                aptr_(0)
             {
 
 
 
             }
             inline a_lref_t(type__& raw_ref) noexcept :
-                uptr_(reinterpret_cast<sz>(&raw_ref))
+                aptr_(&raw_ref)
             {
 
 
 
             }
             inline a_lref_t(const type__& raw_ref) noexcept :
-                uptr_(reinterpret_cast<sz>(&raw_ref))
+                aptr_((type__*)&raw_ref)
             {
 
 
 
             }
             inline a_lref_t(type__&& raw_ref) noexcept :
-                uptr_(reinterpret_cast<sz>(&raw_ref))
+                aptr_(&raw_ref)
             {
 
                 static_assert(false && "cant reference to rvalue.");
@@ -279,14 +283,14 @@ namespace ncpp {
             }
 
             inline a_lref_t(const a_lref_t& other) noexcept :
-                uptr_(other.uptr_.load(std::memory_order_acquire))
+                aptr_(other.aptr_.load(std::memory_order_acquire))
             {
             }
             inline a_lref_t& operator = (const a_lref_t& other) noexcept {
 
                 std::atomic_thread_fence(std::memory_order_release);
 
-                uptr_.store(other.uptr_.load(std::memory_order_acquire), std::memory_order_relaxed);
+                aptr_.store(other.aptr_.load(std::memory_order_acquire), std::memory_order_relaxed);
 
                 return *this;
             }
@@ -294,58 +298,58 @@ namespace ncpp {
 
                 std::atomic_thread_fence(std::memory_order_release);
 
-                uptr_.store(reinterpret_cast<sz>(&other), std::memory_order_relaxed);
+                aptr_.store((type__*)&other, std::memory_order_relaxed);
 
                 return *this;
             }
             inline a_lref_t(a_lref_t&& other) noexcept :
-                uptr_(other.uptr_.load(std::memory_order_acquire))
+                aptr_(other.aptr_.load(std::memory_order_acquire))
             {
 
-                other.uptr_.store(0, std::memory_order_release);
+                other.aptr_.store(0, std::memory_order_release);
 
             }
             inline a_lref_t& operator = (a_lref_t&& other) noexcept {
 
                 std::atomic_thread_fence(std::memory_order_release);
 
-                uptr_.store(other.uptr_.load(std::memory_order_acquire), std::memory_order_relaxed);
-                other.uptr_.store(0, std::memory_order_relaxed);
+                aptr_.store(other.aptr_.load(std::memory_order_acquire), std::memory_order_relaxed);
+                other.aptr_.store(0, std::memory_order_relaxed);
 
                 return *this;
             }
             inline b8 operator == (const a_lref_t& other) const noexcept {
 
-                return other.uptr_.load(std::memory_order_acquire) == &uptr_.load(std::memory_order_acquire);
+                return other.aptr_.load(std::memory_order_acquire) == (aptr_.load(std::memory_order_acquire));
             }
             inline b8 operator == (const type__& other) const noexcept {
 
-                return reinterpret_cast<sz>(&other) != &uptr_.load(std::memory_order_acquire);
+                return &other != aptr_.load(std::memory_order_acquire);
             }
             inline b8 operator != (const a_lref_t& other) const noexcept {
 
-                return other.uptr_.load(std::memory_order_acquire) != &uptr_.load(std::memory_order_acquire);
+                return other.aptr_.load(std::memory_order_acquire) != aptr_.load(std::memory_order_acquire);
             }
             inline b8 operator != (const type__& other) const noexcept {
 
-                return reinterpret_cast<sz>(&other) != &uptr_.load(std::memory_order_acquire);
+                return &other != aptr_.load(std::memory_order_acquire);
             }
 
             inline type__* operator -> () {
 
-                return reinterpret_cast<type__*>(uptr_.load(std::memory_order_acquire));
+                return (aptr_.load(std::memory_order_acquire));
             }
             inline const type__* operator -> () const {
 
-                return reinterpret_cast<type__*>(uptr_.load(std::memory_order_acquire));
+                return (aptr_.load(std::memory_order_acquire));
             }
             inline type__& operator * () {
 
-                return *reinterpret_cast<type__*>(uptr_.load(std::memory_order_acquire));
+                return *(aptr_.load(std::memory_order_acquire));
             }
             inline const type__& operator * () const {
 
-                return *reinterpret_cast<type__*>(uptr_.load(std::memory_order_acquire));
+                return *(aptr_.load(std::memory_order_acquire));
             }
 
         };

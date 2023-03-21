@@ -35,6 +35,12 @@
 
 #include <ncpp/utilities/.hpp>
 
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
+#include <ncpp/pac/spinlock.hpp>
+
 #pragma endregion
 
 
@@ -102,6 +108,7 @@ namespace ncpp {
             std::atomic_size_t begin_index_;
             std::atomic_size_t end_index_;
             std::atomic_size_t capacity_;
+            pac::spinlock writer_lock_;
 #pragma endregion
 
             ////////////////////////////////////////////////////////////////////////////////////
@@ -122,7 +129,11 @@ namespace ncpp {
             inline item_type__& back() { return *(item_vector_.data() + (end_index_.load(std::memory_order_acquire) - 1) % capacity_); }
             inline const item_type__& back() const { return *(item_vector_.data() + (end_index_.load(std::memory_order_acquire) - 1) % capacity_); }
 
-            inline sz size() const { return (std::ptrdiff_t)(end_index_.load(std::memory_order_acquire)) - (std::ptrdiff_t)(begin_index_.load(std::memory_order_acquire)); }
+            inline sz size() const { 
+                sz end_index = end_index_.load(std::memory_order_acquire);
+                sz begin_index = begin_index_.load(std::memory_order_acquire);
+                return (end_index >= begin_index) ? (end_index - begin_index) : 0;
+            }
 #pragma endregion
 
             ////////////////////////////////////////////////////////////////////////////////////
@@ -230,9 +241,15 @@ namespace ncpp {
             template<typename item_param_type>
             inline void push_main_t(item_param_type&& item) {
 
+                std::atomic_thread_fence(std::memory_order_release);
+
+                utilities::unique_lock_t<pac::spinlock> lock_guard(writer_lock_);
+
+
+
                 warning(size() <= capacity_, "the queue is full");
 
-                std::atomic_thread_fence(std::memory_order_release);
+
 
                 sz index = end_index_.load(std::memory_order_relaxed);
 
@@ -282,20 +299,19 @@ namespace ncpp {
 
                 std::atomic_thread_fence(std::memory_order_release);
 
+                utilities::unique_lock_t<pac::spinlock> lock_guard(writer_lock_);
+
                 sz index = begin_index_.load(std::memory_order_relaxed);
+
                 sz end_index = end_index_.load(std::memory_order_relaxed);
-
-                while (!begin_index_.compare_exchange_weak(index, (end_index > index) ? (index + 1) : (index), std::memory_order_relaxed)) {
-
-                    end_index = end_index_.load(std::memory_order_relaxed);
-
-                }
-
-                std::atomic_thread_fence(std::memory_order_acquire);
 
                 if (end_index <= index) return false;
 
+                begin_index_.store(index + 1, std::memory_order_relaxed);
+
                 output = item_vector_[index % capacity_];
+
+                std::atomic_thread_fence(std::memory_order_acquire);
 
                 return true;
             }

@@ -426,10 +426,10 @@ namespace ncpp {
 #pragma region Typedefs
 		public:
 			using coroutine_ref_allocator_type = typename cbjs_allocator_t<
-				typename utilities::lref_t<job_coroutine>
+				typename utilities::a_lref_t<job_coroutine>
 			>;
 			using coroutine_ref_queue_type = typename containers::cfv_queue_t<
-				typename utilities::lref_t<job_coroutine>, 
+				typename utilities::a_lref_t<job_coroutine>,
 				coroutine_ref_allocator_type
 			>;
 			using coroutine_allocator_type = typename cbjs_allocator_t<job_coroutine>;
@@ -506,7 +506,7 @@ namespace ncpp {
 
 			}
 
-			inline bool try_pop(utilities::lref_t<job_coroutine>& coroutine) {
+			inline bool try_pop(utilities::a_lref_t<job_coroutine>& coroutine) {
 
 				return coroutine_ref_queue_.try_pop(coroutine);
 			}
@@ -555,10 +555,10 @@ namespace ncpp {
 #pragma region Typedefs
 		public:
 			using coroutine_ref_allocator_type = typename cbjs_allocator_t<
-				typename utilities::lref_t<job_coroutine>
+				typename utilities::a_lref_t<job_coroutine>
 			>;
 			using coroutine_ref_queue_type = typename containers::cfv_queue_t<
-				typename utilities::lref_t<job_coroutine>,
+				typename utilities::a_lref_t<job_coroutine>,
 				coroutine_ref_allocator_type
 			>;
 #pragma endregion
@@ -621,9 +621,9 @@ namespace ncpp {
 		private:
 			void worker_loop();
 
-			bool pick_or_steal_coroutine_HIGH(utilities::lref_t<job_coroutine>& coroutine);
-			bool pick_or_steal_coroutine_NORMAL(utilities::lref_t<job_coroutine>& coroutine);
-			bool pick_or_steal_coroutine_LOW(utilities::lref_t<job_coroutine>& coroutine);
+			bool pick_or_steal_coroutine_HIGH(utilities::a_lref_t<job_coroutine>& coroutine);
+			bool pick_or_steal_coroutine_NORMAL(utilities::a_lref_t<job_coroutine>& coroutine);
+			bool pick_or_steal_coroutine_LOW(utilities::a_lref_t<job_coroutine>& coroutine);
 
 
 
