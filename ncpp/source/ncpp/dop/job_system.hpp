@@ -116,7 +116,7 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
-            using tagged_heap_type = tagged_heap_t<>;
+            using tagged_heap_type = tgh;
             using tgh_cid_type = typename tagged_heap_type::category_id_type;
 
             using wthread_ref_vector_type = typename tgh_vector_t<utilities::lref_t<job_wthread>>;

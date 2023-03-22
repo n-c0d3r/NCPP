@@ -553,7 +553,7 @@ namespace ncpp {
 		inline tagged_heap_t(
 			const category_id_allocator_type& category_id_allocator,
 			const category_cell_allocator_type& category_cell_allocator,
-			sz capacity = NCPP_TAGGED_HEAP_DEFAULT_CAPACITY
+			sz capacity = NCPP_DEFAULT_TAGGED_HEAP_CAPACITY
 		) :
 			capacity_(capacity),
 			category_map_(capacity, category_id_allocator, category_cell_allocator)
@@ -618,16 +618,6 @@ namespace ncpp {
 #pragma endregion
 
 	};
-
-
-
-	template<
-		typename tagged_heap_getter__
-	>
-	auto& global_tagged_heap_t() {
-
-		return tagged_heap_getter__::get();
-	}
 
 
 

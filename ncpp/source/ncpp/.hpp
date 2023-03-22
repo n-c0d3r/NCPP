@@ -51,6 +51,7 @@ namespace ncpp { }
 
 #include <ncpp/mem.hpp>
 #include <ncpp/tagged_heap.hpp>
+#include <ncpp/pool_heap.hpp>
 #include <ncpp/utilities/.hpp>
 #include <ncpp/containers/.hpp>
 #include <ncpp/pac/.hpp>

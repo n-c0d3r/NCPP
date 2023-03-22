@@ -36,11 +36,6 @@ namespace ncpp {
 
 
 
-		tagged_heap_t<>& tagged_heap_getter::get() {
-
-			return job_system::instance().tagged_heap();
-		}
-
 	}
 
 }
