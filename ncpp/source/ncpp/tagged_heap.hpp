@@ -621,6 +621,16 @@ namespace ncpp {
 
 
 
+	template<
+		typename tagged_heap_getter__
+	>
+	auto& global_tagged_heap_t() {
+
+		return tagged_heap_getter__::get();
+	}
+
+
+
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -678,6 +688,8 @@ namespace ncpp {
 		inline const tagged_heap_type& tagged_heap() const { return *tagged_heap_p_; }
 
 		inline tagged_heap_cid_type category_id() const { return category_id_; }
+
+		inline b8 is_null() const { return tagged_heap_p_ == 0; }
 #pragma endregion
 
 		////////////////////////////////////////////////////////////////////////////////////
@@ -771,10 +783,10 @@ namespace ncpp {
 
 		inline pointer           address(reference x) const { return &x; }
 		inline const_pointer     address(const_reference x) const { return &x; }
-		inline void              construct(pointer p, const value_type& val)
+		/*inline void              construct(pointer p, const value_type& val)
 		{
-			new ((value_type*)p) value_type(val);
-		}
+			*p = val;
+		}*/
 		inline void              destroy(pointer p) { p->~value_type(); }
 
 		inline size_type         max_size() const { return size_t(-1); }

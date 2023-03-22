@@ -156,6 +156,19 @@ namespace ncpp {
 
             }
             /**
+             *  Initialization constructor with allocator
+             */
+            inline explicit fixed_vector_stack_t(const allocator_type& allocator) :
+                end_index_(0),
+                item_vector_(allocator),
+                capacity_(1024)
+            {
+
+                item_vector_.reserve(capacity_);
+                item_vector_.resize(capacity_);
+
+            }
+            /**
              *  Default constructor
              */
             inline explicit fixed_vector_stack_t() : /** Automatically calls to the initialization constructor with the default capacity of 1024. */

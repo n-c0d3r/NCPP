@@ -175,7 +175,8 @@ namespace ncpp {
 			 */
 			inline win_fiber() :
 				creation_mode_(fiber_creation_mode::UNKNOWN),
-				__platform__fiber_(0) 
+				__platform__fiber_(0),
+				stack_size_(0)
 			{
 
 
@@ -243,7 +244,8 @@ namespace ncpp {
 			inline win_fiber(win_fiber&& other) noexcept :
 				creation_mode_(other.creation_mode_),
 				__platform__fiber_(other.__platform__fiber_),
-				functor_(std::move(other.functor_))
+				functor_(std::move(other.functor_)),
+				stack_size_(other.stack_size_)
 			{
 
 

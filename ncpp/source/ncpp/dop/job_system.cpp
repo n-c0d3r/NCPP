@@ -18,7 +18,7 @@
 
 namespace ncpp {
 
-	namespace pac {
+	namespace dop {
 
 
 
@@ -36,72 +36,114 @@ namespace ncpp {
 
 
 
-#ifdef NCPP_WINDOWS_PLATFORM
-		NCPP_THREAD_LOCAL_DATA u32 current_thread_index_g = 0;
-		static std::atomic_uint32_t thread_created_count_g = 1;
+		job_system::job_system(
+			utilities::lref_t<dop::job> entry_job_ref,
+			u8 wthread_count,
+			u32 job_handle_queue_capacity,
+			u32 job_instance_pool_capacity
+		) :
+			entry_job_ref_(entry_job_ref),
+			wthread_count_(wthread_count),
+			job_handle_queue_capacity_(job_handle_queue_capacity),
+			job_instance_pool_capacity_(job_instance_pool_capacity),
 
+			tagged_heap_(),
+			tgh_sys_lifetime_cid_(tagged_heap_.create_category()),
 
+			wthread_ref_vector_(tgh_global_allocator_t<utilities::lref_t<job_wthread>>()),
 
-		u32 current_thread_id() {
-
-			return GetCurrentThreadId();
-		}
-		u32 current_thread_index() {
-
-			return current_thread_index_g;
-		}
-		win_thread& main_thread() {
-
-			return win_thread::main_thread_g;
-		}
-
-		void reset_thread_indices() {
-
-			thread_created_count_g.store(1, std::memory_order_release);
-		}
-
-
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-		DWORD WINAPI win_thread::proc(LPVOID lpParam)
+			is_running_(false)
 		{
 
-			win_thread& wt = *reinterpret_cast<win_thread*>(lpParam);
+			pac::reset_thread_indices();
 
-			auto functor = std::move(wt.functor_);
-
-			current_thread_index_g = thread_created_count_g.load(std::memory_order_acquire);
-
-			thread_created_count_g.fetch_add(1, std::memory_order_release);
-
-#ifdef NCPP_ENABLE_FIBER
-			wt.owned_fiber_.delayed_init();
-#endif
-
-			wt.is_ready_.store(1, std::memory_order_release);
-
-			functor();
-
-			return 0;
+			create_wthreads();
+			init_wthreads();
+			
 		}
-#endif
+
+		job_system::~job_system() {
 
 
 
-		win_thread win_thread::main_thread_g = win_thread(win_thread::main_thread_creation_placeholder());
+		}
+
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+
+		void job_system::create_wthreads() {
+
+			wthread_ref_vector_.resize(wthread_count_);
+
+			for (u8 i = 0; i < wthread_count_; ++i) {
+
+				wthread_ref_vector_[i] = tgh_create_sys_lifetime_t<job_wthread>(
+					i,
+					job_handle_queue_capacity_,
+					job_instance_pool_capacity_
+				);
+
+			}
+
+		}
+		void job_system::init_wthreads() {
+			
+			for (u8 i = 0; i < wthread_count_; ++i) {
+
+				wthread_ref_vector_[i]->init();
+
+			}
+
+		}
+		void job_system::run_wthreads() {
+
+			is_running_.store(true, std::memory_order_release);
+
+
+
+			for (u8 i = 1; i < wthread_count_; ++i) {
+
+				wthread_ref_vector_[i]->run();
+
+			}
+
+			wthread_ref_vector_[0]->run();
+
+		}
+		void job_system::wait_wthreads() {
+
+			for (u8 i = 0; i < wthread_count_; ++i) {
+
+				wthread_ref_vector_[i]->wait();
+
+			}
+
+			pac::reset_thread_indices();
+
+		}
+
+
+
+		void job_system::run() {
+
+			run_wthreads();
+
+		}
+		void job_system::wait() {
+
+			wait_wthreads();
+
+		}
+
+		job_handle& job_system::schedule(job& j) {
+
+			job_handle handle(j);
+
+			job_wthread& current_thread = current_wthread();
+
+			return handle;
+		}
 
 	}
 

@@ -60,6 +60,14 @@ namespace ncpp {
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
-#include <ncpp/dop/cbjs.hpp>
+#include <ncpp/dop/job_system.hpp>
+#include <ncpp/dop/job_wthread.hpp>
+#include <ncpp/dop/job_wthread_scheduler.hpp>
+#include <ncpp/dop/job_instance.hpp>
+#include <ncpp/dop/job_instance_pool.hpp>
+#include <ncpp/dop/job.hpp>
+#include <ncpp/dop/job_handle.hpp>
+
+#include <ncpp/dop/tgh.hpp>
 
 #pragma endregion
