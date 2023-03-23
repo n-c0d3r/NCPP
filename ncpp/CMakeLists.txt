@@ -8,7 +8,7 @@ set(NCPP_DEFAULT_TAGGED_HEAP_CAPACITY 2048 CACHE STRING "Default Max Category Co
 set(NCPP_DEFAULT_TAGGED_HEAP_BLOCK_CAPACITY 2097152 CACHE STRING "Default Tagged Heap Block Capacity")
 set(NCPP_DEFAULT_ALLOCATOR_TEMPLATE "ncpp::aligned_allocator_t" CACHE STRING "Default Allocator Template")
 set(NCPP_DEFAULT_STACK_CAPACITY 65536 CACHE STRING "Default Stack Capacity")
-set(NCPP_DEFAULT_STACK_COUNT_PER_CHUNK 32768 CACHE STRING "Default Stack Count Per Chunk")
+set(NCPP_DEFAULT_STACK_COUNT_PER_CHUNK 32 CACHE STRING "Default Stack Count Per Chunk")
 
 # ncpp containers options
 set(NCPP_DEFAULT_HANDLE_MAP_RESERVE_COUNT 4096 CACHE STRING "Default Handle Map Reserve Count")

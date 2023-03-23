@@ -62,7 +62,7 @@
 
 namespace ncpp {
 
-	struct stack_storage;
+	struct stack_group;
 	struct stack_chunk;
 	struct stack_chunk_list;
 	struct stack;
@@ -94,7 +94,7 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 	public:
-		friend struct stack_storage;
+		friend struct stack_group;
 		friend struct stack_chunk;
 		friend struct stack_chunk_list;
 		friend struct stack;
@@ -172,7 +172,7 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 	public:
-		friend struct stack_storage;
+		friend struct stack_group;
 		friend struct stack_chunk;
 		friend struct stack_chunk_list;
 		friend struct stack;
@@ -322,7 +322,7 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 	public:
-		friend struct stack_storage;
+		friend struct stack_group;
 		friend struct stack_chunk;
 		friend struct stack_chunk_list;
 		friend struct stack;
@@ -492,7 +492,7 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 	public:
-		friend struct stack_storage;
+		friend struct stack_group;
 		friend struct stack_chunk;
 		friend struct stack_chunk_list;
 		friend struct stack;
@@ -642,7 +642,7 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 	public:
-		friend struct stack_storage;
+		friend struct stack_group;
 		friend struct stack_chunk;
 		friend struct stack_chunk_list;
 		friend struct stack;
@@ -792,7 +792,7 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 	public:
-		friend struct stack_storage;
+		friend struct stack_group;
 		friend struct stack_chunk;
 		friend struct stack_chunk_list;
 		friend struct stack;
@@ -928,7 +928,7 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 	public:
-		friend struct stack_storage;
+		friend struct stack_group;
 		friend struct stack_chunk;
 		friend struct stack_chunk_list;
 		friend struct stack;
@@ -1078,14 +1078,14 @@ namespace ncpp {
 
 
 
-	struct stack_storage {
+	struct stack_group {
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
 	public:
-		friend struct stack_storage;
+		friend struct stack_group;
 		friend struct stack_chunk;
 		friend struct stack_chunk_list;
 		friend struct stack;
@@ -1117,13 +1117,13 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 	public:
-		inline stack_storage()
+		inline stack_group()
 		{
 
 
 
 		}
-		~stack_storage() {
+		~stack_group() {
 
 
 
@@ -1159,7 +1159,7 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 	public:
-		friend struct stack_storage;
+		friend struct stack_group;
 		friend struct stack_chunk;
 		friend struct stack_chunk_list;
 		friend struct stack;
@@ -1324,15 +1324,15 @@ namespace ncpp {
 
 
 	public:
-		inline u8* allocate(stack_storage& storage, sz size, sz align = NCPP_DEFAULT_ALIGN) {
+		inline u8* allocate(stack_group& group, sz size, sz align = NCPP_DEFAULT_ALIGN) {
 
 			assert(size + sizeof(stack_allocation) + align <= stack_capacity_ && "allocation size is too large to be allocated in this stack heap.");
 
 
 
-			if (storage.is_pushable(size, align)) {
+			if (group.is_pushable(size, align)) {
 
-				stack& s = storage.out_stack_list().tail();
+				stack& s = group.out_stack_list().tail();
 
 				return s.allocate(size, align);
 
@@ -1341,7 +1341,7 @@ namespace ncpp {
 
 				stack& s = pick_a_stack(size, align);
 
-				storage.out_stack_list().insert(s);
+				group.out_stack_list().insert(s);
 
 				return s.allocate(size, align);
 
@@ -1351,7 +1351,7 @@ namespace ncpp {
 
 			return 0;
 		}
-		inline void deallocate(stack_storage& storage, void* ptr) {
+		inline void deallocate(stack_group& group, void* ptr) {
 
 			stack_allocation* allocation_p = reinterpret_cast<stack_allocation*>(ptr) - 1;
 
@@ -1363,7 +1363,7 @@ namespace ncpp {
 			if (s.is_empty()) {
 
 				chunk.erase_stack(s);
-				storage.out_stack_list().erase(s);
+				group.out_stack_list().erase(s);
 
 			}
 

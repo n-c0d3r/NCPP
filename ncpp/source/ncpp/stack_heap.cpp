@@ -86,7 +86,7 @@ namespace ncpp {
 
 
 
-	b8 stack_storage::is_pushable(sz size, sz align) {
+	b8 stack_group::is_pushable(sz size, sz align) {
 
 		if (out_stack_list_.is_empty()) {
 

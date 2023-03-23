@@ -10,15 +10,15 @@ int main() {
 
 		stack_heap_t<> heap;
 
-		stack_storage storage;
+		stack_group group;
 
-		u8* p1 = heap.allocate(storage, 512);
-		u8* p2 = heap.allocate(storage, 512);
-		u8* p3 = heap.allocate(storage, 512);
+		u8* p1 = heap.allocate(group, 512);
+		u8* p2 = heap.allocate(group, 512);
+		u8* p3 = heap.allocate(group, 512);
 
-		heap.deallocate(storage, p1);
-		heap.deallocate(storage, p2);
-		heap.deallocate(storage, p3);
+		heap.deallocate(group, p1);
+		heap.deallocate(group, p2);
+		heap.deallocate(group, p3);
 
 		std::cout << "memory usage: " << memory_usage() << "(bytes)" << std::endl;
 		std::cout << std::endl;
