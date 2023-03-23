@@ -33,7 +33,15 @@
 ////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/containers/.hpp>
+#include <ncpp/utilities/lref.hpp>
 #include <ncpp/mem.hpp>
+
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
+#include <ncpp/native_heap.hpp>
+#include <ncpp/native_allocator.hpp>
 
 #pragma endregion
 
@@ -493,7 +501,9 @@ namespace ncpp {
 			typename containers::handle_map_id_type<typename tagged_heap_category_t<allocator_type__>>
 		>
 	>
-	class NCPP_DEFAULT_ALIGNAS tagged_heap_t {
+	class NCPP_DEFAULT_ALIGNAS tagged_heap_t : 
+		public native_heap
+	{
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
@@ -637,7 +647,8 @@ namespace ncpp {
 
 #pragma region Allocators
 	template <class value_type__, class tagged_heap_type__ = tagged_heap_t<>>
-	class NCPP_DEFAULT_ALIGNAS tgh_allocator_t
+	class NCPP_DEFAULT_ALIGNAS tgh_allocator_t :
+		public native_allocator_t<value_type__>
 	{
 
 		////////////////////////////////////////////////////////////////////////////////////
@@ -663,7 +674,7 @@ namespace ncpp {
 
 #pragma region Properties
 	private:
-		tagged_heap_type* tagged_heap_p_;
+		utilities::lref_t<tagged_heap_type> tagged_heap_ref_;
 
 		tagged_heap_cid_type category_id_;
 #pragma endregion
@@ -674,12 +685,12 @@ namespace ncpp {
 
 #pragma region Getters
 	public:
-		inline tagged_heap_type& tagged_heap() { return *tagged_heap_p_; }
-		inline const tagged_heap_type& tagged_heap() const { return *tagged_heap_p_; }
+		inline tagged_heap_type& tagged_heap() { return *tagged_heap_ref_; }
+		inline const tagged_heap_type& tagged_heap() const { return *tagged_heap_ref_; }
 
 		inline tagged_heap_cid_type category_id() const { return category_id_; }
 
-		inline b8 is_null() const { return tagged_heap_p_ == 0; }
+		inline b8 is_null() const { return tagged_heap_ref_.is_null(); }
 #pragma endregion
 
 		////////////////////////////////////////////////////////////////////////////////////
@@ -689,7 +700,7 @@ namespace ncpp {
 #pragma region Constructors, Destructor and Operators
 	public:
 		inline tgh_allocator_t() :
-			tagged_heap_p_(0),
+			tagged_heap_ref_(),
 			category_id_({ 0 })
 		{
 
@@ -697,7 +708,7 @@ namespace ncpp {
 
 		}
 		inline tgh_allocator_t(tagged_heap_type& tagged_heap, tagged_heap_cid_type category_id) :
-			tagged_heap_p_(&tagged_heap),
+			tagged_heap_ref_(tagged_heap),
 			category_id_(category_id)
 		{
 		
@@ -705,7 +716,7 @@ namespace ncpp {
 		
 		}
 		inline tgh_allocator_t(const tgh_allocator_t& other) :
-			tgh_allocator_t((tagged_heap_type&)(*other.tagged_heap_p_), other.category_id_)
+			tgh_allocator_t((tagged_heap_type&)(*other.tagged_heap_ref_), other.category_id_)
 		{
 
 
@@ -714,7 +725,7 @@ namespace ncpp {
 
 		inline tgh_allocator_t<value_type>& operator=(const tgh_allocator_t& other) {
 			
-			tagged_heap_p_ = other.tagged_heap_p_;
+			tagged_heap_ref_ = other.tagged_heap_ref_;
 			category_id_ = other.category_id_;
 
 			return *this; 
@@ -732,7 +743,7 @@ namespace ncpp {
 		template <class other_value_type__>
 		inline tgh_allocator_t& operator=(typename const tgh_allocator_t<other_value_type__, tagged_heap_type>& other) {
 
-			tagged_heap_p_ = &(other.other.tagged_heap());
+			tagged_heap_ref_ = other.tagged_heap();
 			category_id_ = other.category_id();
 
 			return *this;
@@ -744,11 +755,28 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 #pragma region Methods
+	private:
+		inline pointer internal_allocate(size_type n, sz align = NCPP_DEFAULT_ALIGN) {
+
+			assert(!tagged_heap_ref_.is_null() && "tagged heap is null");
+
+			return (pointer)(tagged_heap_ref_->allocate(category_id_, n * sizeof(value_type), align));
+		}
+
+
+
+	protected:
+		pointer abstract_allocate(size_type n, sz align = NCPP_DEFAULT_ALIGN) {
+
+			return internal_allocate(n, align);
+		}
+
+
+
+	public:
 		inline pointer   allocate(size_type n, sz align = NCPP_DEFAULT_ALIGN) {
 
-			assert(tagged_heap_p_ && "tagged heap is null");
-
-			return (pointer)(tagged_heap_p_->allocate(category_id_, n * sizeof(value_type), align));
+			return internal_allocate(n, align);
 		}
 
 		inline void      deallocate(void* p, sz n = sizeof(value_type)) {
@@ -758,25 +786,21 @@ namespace ncpp {
 
 		inline void reset_blocks() {
 
-			assert(tagged_heap_p_ && "tagged heap is null");
+			assert(!tagged_heap_ref_.is_null() && "tagged heap is null");
 
-			tagged_heap_p_->reset_blocks(category_id_);
+			tagged_heap_ref_->reset_blocks(category_id_);
 
 		}
 		inline void deallocate_blocks() {
 
-			assert(tagged_heap_p_ && "tagged heap is null");
+			assert(!tagged_heap_ref_.is_null() && "tagged heap is null");
 
-			tagged_heap_p_->deallocate(category_id_);
+			tagged_heap_ref_->deallocate(category_id_);
 
 		}
 
 		inline pointer           address(reference x) const { return &x; }
 		inline const_pointer     address(const_reference x) const { return &x; }
-		/*inline void              construct(pointer p, const value_type& val)
-		{
-			*p = val;
-		}*/
 		inline void              destroy(pointer p) { p->~value_type(); }
 
 		inline size_type         max_size() const { return size_t(-1); }
