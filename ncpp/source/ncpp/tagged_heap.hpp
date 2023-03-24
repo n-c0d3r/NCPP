@@ -320,10 +320,10 @@ namespace ncpp {
 			block_capacity_(block_capacity)
 		{
 
-			memset(block_count_array_, 0, sizeof(block_count_array_));
-			memset(head_block_p_array_, 0, sizeof(head_block_p_array_));
-			memset(tail_block_p_array_, 0, sizeof(tail_block_p_array_));
-			memset(curr_block_p_array_, 0, sizeof(curr_block_p_array_));
+			memset(block_count_array_, 0, sizeof(block_type*) * 64);
+			memset(head_block_p_array_, 0, sizeof(block_type*) * 64);
+			memset(tail_block_p_array_, 0, sizeof(block_type*) * 64);
+			memset(curr_block_p_array_, 0, sizeof(block_type*) * 64);
 
 		}
 		~tagged_heap_category_t() {
@@ -766,9 +766,13 @@ namespace ncpp {
 
 
 	protected:
-		pointer abstract_allocate(size_type n, sz align = NCPP_DEFAULT_ALIGN) {
+		void* abstract_allocate(size_type size, sz align = NCPP_DEFAULT_ALIGN) {
 
-			return internal_allocate(n, align);
+			return (void*)internal_allocate(size / sizeof(value_type__), align);
+		}
+		void abstract_deallocate(void* ptr, sz size = sizeof(value_type__)) {
+
+
 		}
 
 
@@ -779,7 +783,7 @@ namespace ncpp {
 			return internal_allocate(n, align);
 		}
 
-		inline void      deallocate(void* p, sz n = sizeof(value_type)) {
+		inline void      deallocate(void* p, sz n = 1) {
 
 
 		}

@@ -37,12 +37,10 @@ namespace ncpp {
 
 
 		job_wthread_scheduler::job_wthread_scheduler(
-			job_wthread& scheduling_wthread,
-			job_wthread& performing_wthread,
+			job_wthread& owner_wthread,
 			u32 job_handle_queue_capacity
 		) :
-			scheduling_wthread_ref_(scheduling_wthread),
-			performing_wthread_ref_(performing_wthread),
+			owner_wthread_ref_(owner_wthread),
 			job_handle_queue_capacity_(job_handle_queue_capacity),
 
 			job_handle_queue_(job_handle_queue_capacity_, tgh_global_allocator_t<job_handle>())

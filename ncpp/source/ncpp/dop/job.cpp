@@ -39,7 +39,9 @@ namespace ncpp {
 		job::job(
 			entry_point_type&& entry_point,
 			u32 instance_count,
-			u32 batch_size
+			u32 batch_size,
+
+			job_stack_allocator_option stack_allocator_option
 		) :
 			entry_point_(std::move(entry_point)),
 			instance_count_(instance_count),
@@ -49,7 +51,12 @@ namespace ncpp {
 			scheduler_wthread_index_(0),
 
 			is_done_(false),
-			instance_creation_attemp_count_(0)
+			instance_creation_attemp_count_(0),
+
+			stack_group_(),
+			stack_allocator_option_(stack_allocator_option),
+			stack_allocator_(stack_heap(), stack_group_),
+			allocator_ref_(stack_allocator_)
 		{
 
 
@@ -66,6 +73,33 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
+		stack_heap_t<>& job::stack_heap() {
+
+			switch (stack_allocator_option_)
+			{
+			case ncpp::dop::job_stack_allocator_option::LARGE:
+				return current_stack_heap_LARGE();
+				break;
+			case ncpp::dop::job_stack_allocator_option::NORMAL:
+				return current_stack_heap_NORMAL();
+				break;
+			case ncpp::dop::job_stack_allocator_option::SMALL:
+				return current_stack_heap_SMALL();
+				break;
+			default:
+				return current_stack_heap_NORMAL();
+				break;
+			}
+
+			return current_stack_heap_NORMAL();
+		}
+
+		void job::setup_as_entry_job() {
+
+			stack_allocator_ = stack_allocator_t<u8>(stack_heap(), stack_group_);
+
+		}
+
 		void job::execute(job_instance& instance) {
 
 			entry_point_(instance);
@@ -79,6 +113,12 @@ namespace ncpp {
 			while (!instance_creation_attemp_count_.compare_exchange_weak(instance_index, std::memory_order_acq_rel));
 
 			return instance_index < instance_count_;
+		}
+		
+		void job::use_allocator(const native_allocator_t<u8>& another_allocator) {
+
+			allocator_ref_ = another_allocator;
+
 		}
 
 	}

@@ -6,19 +6,27 @@ using namespace ncpp;
 
 int main() {
 
+	/// while(true)
 	{
 
-		stack_heap_t<> heap;
+		dop::job entry_job = dop::job(
+			[&](dop::job_instance& instance) {
 
-		stack_group group;
+				std::cout << "Hello World" << std::endl;
 
-		u8* p1 = heap.allocate(group, 512);
-		u8* p2 = heap.allocate(group, 512);
-		u8* p3 = heap.allocate(group, 512);
+			}
+		);
 
-		heap.deallocate(group, p1);
-		heap.deallocate(group, p2);
-		heap.deallocate(group, p3);
+
+
+		dop::job_system system(
+			entry_job
+		);
+
+		system.run();
+		system.wait();
+
+
 
 		std::cout << "memory usage: " << memory_usage() << "(bytes)" << std::endl;
 		std::cout << std::endl;

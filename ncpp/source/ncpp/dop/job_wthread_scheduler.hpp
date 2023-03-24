@@ -117,8 +117,7 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         private:
-            utilities::lref_t<job_wthread> scheduling_wthread_ref_;
-            utilities::lref_t<job_wthread> performing_wthread_ref_;
+            utilities::lref_t<job_wthread> owner_wthread_ref_;
             u32 job_handle_queue_capacity_;
 
             job_handle_queue_type job_handle_queue_;
@@ -128,8 +127,7 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
-            inline job_wthread& scheduling_wthread() { return *scheduling_wthread_ref_; }
-            inline job_wthread& performing_wthread() { return *performing_wthread_ref_; }
+            inline job_wthread& owner_wthread() { return *owner_wthread_ref_; }
             inline u32 job_handle_queue_capacity() const { return job_handle_queue_capacity_; }
 
             ////////////////////////////////////////////////////////////////////////////////////
@@ -138,8 +136,7 @@ namespace ncpp {
 
         public:
             job_wthread_scheduler(
-                job_wthread& scheduling_wthread,
-                job_wthread& performing_wthread,
+                job_wthread& owner_wthread,
                 u32 job_handle_queue_capacity
             );
             ~job_wthread_scheduler();

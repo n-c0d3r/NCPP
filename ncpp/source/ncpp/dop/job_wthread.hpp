@@ -90,6 +90,9 @@ namespace ncpp {
 
 
         extern job_wthread& current_wthread();
+        extern stack_heap_t<>& current_stack_heap_LARGE();
+        extern stack_heap_t<>& current_stack_heap_NORMAL();
+        extern stack_heap_t<>& current_stack_heap_SMALL();
 
 
 
@@ -127,7 +130,6 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
-            using scheduler_ref_vector_type = tgh_vector_t<utilities::lref_t<job_wthread_scheduler>>;
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -142,7 +144,18 @@ namespace ncpp {
 
             utilities::lref_t<job_instance_pool> job_instance_pool_ref_;
 
-            scheduler_ref_vector_type scheduler_ref_vector_;
+            utilities::lref_t<job_wthread_scheduler> scheduler_ref_;
+
+            sz stack_heap_LARGE_stack_capacity_;
+            sz stack_heap_LARGE_stack_count_;
+            sz stack_heap_NORMAL_stack_capacity_;
+            sz stack_heap_NORMAL_stack_count_;
+            sz stack_heap_SMALL_stack_capacity_;
+            sz stack_heap_SMALL_stack_count_;
+
+            stack_heap_t<> stack_heap_LARGE_;
+            stack_heap_t<> stack_heap_NORMAL_;
+            stack_heap_t<> stack_heap_SMALL_;
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -153,9 +166,16 @@ namespace ncpp {
             inline u32 job_handle_queue_capacity() const { return job_handle_queue_capacity_; }
             inline u32 job_instance_pool_capacity() const { return job_instance_pool_capacity_; }
 
-            inline pac::thread& pac_thread() { return *pac_thread_ref_; }
+            inline sz stack_heap_LARGE_stack_capacity() { return stack_heap_LARGE_stack_capacity_; }
+            inline sz stack_heap_LARGE_stack_count() { return stack_heap_LARGE_stack_count_; }
+            inline sz stack_heap_NORMAL_stack_capacity() { return stack_heap_NORMAL_stack_capacity_; }
+            inline sz stack_heap_NORMAL_stack_count() { return stack_heap_NORMAL_stack_count_; }
+            inline sz stack_heap_SMALL_stack_capacity() { return stack_heap_SMALL_stack_capacity_; }
+            inline sz stack_heap_SMALL_stack_count() { return stack_heap_SMALL_stack_count_; }
 
-            inline job_instance_pool& job_instance_pool_ref() { return *job_instance_pool_ref_; }
+            inline stack_heap_t<>& stack_heap_LARGE() { return stack_heap_LARGE_; }
+            inline stack_heap_t<>& stack_heap_NORMAL() { return stack_heap_NORMAL_; }
+            inline stack_heap_t<>& stack_heap_SMALL() { return stack_heap_SMALL_; }
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -165,7 +185,14 @@ namespace ncpp {
             job_wthread(
                 u8 index,
                 u32 job_handle_queue_capacity = NCPP_DEFAULT_JOB_HANDLE_QUEUE_CAPACITY,
-                u32 job_instance_pool_capacity = NCPP_DEFAULT_JOB_INSTANCE_POOL_CAPACITY
+                u32 job_instance_pool_capacity = NCPP_DEFAULT_JOB_INSTANCE_POOL_CAPACITY,
+
+                sz stack_heap_LARGE_stack_capacity = NCPP_DEFAULT_STACK_HEAP_STACK_CAPACITY_LARGE,
+                sz stack_heap_LARGE_stack_count = NCPP_DEFAULT_STACK_COUNT_PER_CHUNK_LARGE,
+                sz stack_heap_NORMAL_stack_capacity = NCPP_DEFAULT_STACK_HEAP_STACK_CAPACITY_NORMAL,
+                sz stack_heap_NORMAL_stack_count = NCPP_DEFAULT_STACK_COUNT_PER_CHUNK_NORMAL,
+                sz stack_heap_SMALL_stack_capacity = NCPP_DEFAULT_STACK_HEAP_STACK_CAPACITY_SMALL,
+                sz stack_heap_SMALL_stack_count = NCPP_DEFAULT_STACK_COUNT_PER_CHUNK_SMALL
             );
             ~job_wthread();
 
@@ -176,10 +203,7 @@ namespace ncpp {
         private:
             void worker_loop();
 
-            void create_schedulers();
-
             void init();
-            void init_schedulers();
 
             bool try_make_job_instance(job_handle& handle);
 

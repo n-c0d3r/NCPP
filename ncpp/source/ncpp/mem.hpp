@@ -241,7 +241,7 @@ namespace ncpp {
 			return (pointer)aligned_alloc(n * sizeof(value_type), align);
 		}
 
-		inline void      deallocate(void* p, sz n = sizeof(value_type)) {
+		inline void      deallocate(void* p, sz n = 1) {
 
 			aligned_free(p);
 		}

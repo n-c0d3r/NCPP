@@ -40,12 +40,26 @@ namespace ncpp {
 			utilities::lref_t<dop::job> entry_job_ref,
 			u8 wthread_count,
 			u32 job_handle_queue_capacity,
-			u32 job_instance_pool_capacity
+			u32 job_instance_pool_capacity,
+
+			sz stack_heap_LARGE_stack_capacity,
+			sz stack_heap_LARGE_stack_count,
+			sz stack_heap_NORMAL_stack_capacity,
+			sz stack_heap_NORMAL_stack_count,
+			sz stack_heap_SMALL_stack_capacity,
+			sz stack_heap_SMALL_stack_count
 		) :
 			entry_job_ref_(entry_job_ref),
 			wthread_count_(wthread_count),
 			job_handle_queue_capacity_(job_handle_queue_capacity),
 			job_instance_pool_capacity_(job_instance_pool_capacity),
+
+			stack_heap_LARGE_stack_capacity_(stack_heap_LARGE_stack_capacity),
+			stack_heap_LARGE_stack_count_(stack_heap_LARGE_stack_count),
+			stack_heap_NORMAL_stack_capacity_(stack_heap_NORMAL_stack_capacity),
+			stack_heap_NORMAL_stack_count_(stack_heap_NORMAL_stack_count),
+			stack_heap_SMALL_stack_capacity_(stack_heap_SMALL_stack_capacity),
+			stack_heap_SMALL_stack_count_(stack_heap_SMALL_stack_count),
 
 			tagged_heap_(),
 			tgh_sys_lifetime_cid_(tagged_heap_.create_category()),
@@ -59,6 +73,8 @@ namespace ncpp {
 
 			create_wthreads();
 			init_wthreads();
+
+			entry_job_ref_->setup_as_entry_job();
 			
 		}
 
@@ -81,7 +97,14 @@ namespace ncpp {
 				wthread_ref_vector_[i] = tgh_create_sys_lifetime_t<job_wthread>(
 					i,
 					job_handle_queue_capacity_,
-					job_instance_pool_capacity_
+					job_instance_pool_capacity_,
+
+					stack_heap_LARGE_stack_capacity_,
+					stack_heap_LARGE_stack_count_,
+					stack_heap_NORMAL_stack_capacity_,
+					stack_heap_NORMAL_stack_count_,
+					stack_heap_SMALL_stack_capacity_,
+					stack_heap_SMALL_stack_count_
 				);
 
 			}

@@ -37,10 +37,25 @@ namespace ncpp {
 
 
 		thread_local utilities::lref_t<job_wthread> current_wthread_g;
-
 		job_wthread& current_wthread() {
 
 			return *current_wthread_g;
+		}
+
+		thread_local utilities::lref_t<stack_heap_t<>> current_stack_heap_LARGE_g;
+		thread_local utilities::lref_t<stack_heap_t<>> current_stack_heap_NORMAL_g;
+		thread_local utilities::lref_t<stack_heap_t<>> current_stack_heap_SMALL_g;
+		stack_heap_t<>& current_stack_heap_LARGE() {
+
+			return *current_stack_heap_LARGE_g;
+		}
+		stack_heap_t<>& current_stack_heap_NORMAL() {
+
+			return *current_stack_heap_NORMAL_g;
+		}
+		stack_heap_t<>& current_stack_heap_SMALL() {
+
+			return *current_stack_heap_SMALL_g;
 		}
 
 
@@ -62,13 +77,29 @@ namespace ncpp {
 		job_wthread::job_wthread(
 			u8 index,
 			u32 job_handle_queue_capacity,
-			u32 job_instance_pool_capacity
+			u32 job_instance_pool_capacity,
+
+			sz stack_heap_LARGE_stack_capacity,
+			sz stack_heap_LARGE_stack_count,
+			sz stack_heap_NORMAL_stack_capacity,
+			sz stack_heap_NORMAL_stack_count,
+			sz stack_heap_SMALL_stack_capacity,
+			sz stack_heap_SMALL_stack_count
 		) :
 			index_(index),
 			job_handle_queue_capacity_(job_handle_queue_capacity),
 			job_instance_pool_capacity_(job_instance_pool_capacity),
 
-			scheduler_ref_vector_(tgh_global_allocator_t<utilities::lref_t<job_wthread_scheduler>>())
+			stack_heap_LARGE_stack_capacity_(stack_heap_LARGE_stack_capacity),
+			stack_heap_LARGE_stack_count_(stack_heap_LARGE_stack_count),
+			stack_heap_NORMAL_stack_capacity_(stack_heap_NORMAL_stack_capacity),
+			stack_heap_NORMAL_stack_count_(stack_heap_NORMAL_stack_count),
+			stack_heap_SMALL_stack_capacity_(stack_heap_SMALL_stack_capacity),
+			stack_heap_SMALL_stack_count_(stack_heap_SMALL_stack_count),
+
+			stack_heap_LARGE_(stack_heap_LARGE_stack_capacity_, stack_heap_LARGE_stack_count_),
+			stack_heap_NORMAL_(stack_heap_NORMAL_stack_capacity_, stack_heap_NORMAL_stack_count_),
+			stack_heap_SMALL_(stack_heap_SMALL_stack_capacity_, stack_heap_SMALL_stack_count_)
 		{
 
 			job_instance_pool_ref_ = tgh_create_sys_lifetime_t<job_instance_pool>(
@@ -76,7 +107,16 @@ namespace ncpp {
 				job_instance_pool_capacity_
 			);
 
-			create_schedulers();
+			scheduler_ref_ = tgh_create_sys_lifetime_t<job_wthread_scheduler>(
+				*this,
+				job_handle_queue_capacity
+			);
+
+
+
+			current_stack_heap_LARGE_g = stack_heap_LARGE_;
+			current_stack_heap_NORMAL_g = stack_heap_NORMAL_;
+			current_stack_heap_SMALL_g = stack_heap_SMALL_;
 
 		}
 
@@ -134,30 +174,7 @@ namespace ncpp {
 
 		}
 
-		void job_wthread::create_schedulers() {
-
-			u8 wthread_count = job_system::instance().wthread_count_;
-
-			scheduler_ref_vector_.resize(wthread_count);
-
-			for (u8 i = 0; i < wthread_count; ++i) {
-
-				scheduler_ref_vector_[i] = tgh_create_sys_lifetime_t<job_wthread_scheduler>(
-					*this,
-					*job_system::instance().wthread_ref_vector_[i],
-					job_handle_queue_capacity_
-				);
-
-			}
-
-		}
-
 		void job_wthread::init() {
-
-			init_schedulers();
-
-		}
-		void job_wthread::init_schedulers() {
 
 
 

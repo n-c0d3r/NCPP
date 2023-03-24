@@ -131,6 +131,13 @@ namespace ncpp {
             u32 job_handle_queue_capacity_;
             u32 job_instance_pool_capacity_;
 
+            sz stack_heap_LARGE_stack_capacity_;
+            sz stack_heap_LARGE_stack_count_;
+            sz stack_heap_NORMAL_stack_capacity_;
+            sz stack_heap_NORMAL_stack_count_;
+            sz stack_heap_SMALL_stack_capacity_;
+            sz stack_heap_SMALL_stack_count_;
+
             tagged_heap_type tagged_heap_;
             tgh_cid_type tgh_sys_lifetime_cid_;
 
@@ -148,6 +155,13 @@ namespace ncpp {
             inline u32 job_handle_queue_capacity() const { return job_handle_queue_capacity_; }
             inline u32 job_instance_pool_capacity() const { return job_instance_pool_capacity_; }
 
+            inline sz stack_heap_LARGE_stack_capacity() { return stack_heap_LARGE_stack_capacity_; }
+            inline sz stack_heap_LARGE_stack_count() { return stack_heap_LARGE_stack_count_; }
+            inline sz stack_heap_NORMAL_stack_capacity() { return stack_heap_NORMAL_stack_capacity_; }
+            inline sz stack_heap_NORMAL_stack_count() { return stack_heap_NORMAL_stack_count_; }
+            inline sz stack_heap_SMALL_stack_capacity() { return stack_heap_SMALL_stack_capacity_; }
+            inline sz stack_heap_SMALL_stack_count() { return stack_heap_SMALL_stack_count_; }
+
             inline tagged_heap_type& tagged_heap() { return tagged_heap_; }
             inline tgh_cid_type tgh_sys_lifetime_cid() const { return tgh_sys_lifetime_cid_; }
 
@@ -162,7 +176,14 @@ namespace ncpp {
                 utilities::lref_t<dop::job> entry_job_ref,
                 u8 wthread_count = pac::hardware_concurrency(),
                 u32 job_handle_queue_capacity = NCPP_DEFAULT_JOB_HANDLE_QUEUE_CAPACITY,
-                u32 job_instance_pool_capacity = NCPP_DEFAULT_JOB_INSTANCE_POOL_CAPACITY
+                u32 job_instance_pool_capacity = NCPP_DEFAULT_JOB_INSTANCE_POOL_CAPACITY,
+
+                sz stack_heap_LARGE_stack_capacity = NCPP_DEFAULT_STACK_HEAP_STACK_CAPACITY_LARGE,
+                sz stack_heap_LARGE_stack_count = NCPP_DEFAULT_STACK_COUNT_PER_CHUNK_LARGE,
+                sz stack_heap_NORMAL_stack_capacity = NCPP_DEFAULT_STACK_HEAP_STACK_CAPACITY_NORMAL,
+                sz stack_heap_NORMAL_stack_count = NCPP_DEFAULT_STACK_COUNT_PER_CHUNK_NORMAL,
+                sz stack_heap_SMALL_stack_capacity = NCPP_DEFAULT_STACK_HEAP_STACK_CAPACITY_SMALL,
+                sz stack_heap_SMALL_stack_count = NCPP_DEFAULT_STACK_COUNT_PER_CHUNK_SMALL
             );
             ~job_system();
 
