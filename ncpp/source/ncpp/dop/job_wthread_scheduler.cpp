@@ -44,7 +44,7 @@ namespace ncpp {
 			job_handle_queue_capacity_(job_handle_queue_capacity),
 
 			local_job_handle_queue_(job_handle_queue_capacity, tgh_global_allocator_t<job_handle>()),
-			shared_job_handle_ref_queue_(job_handle_queue_capacity, tgh_global_allocator_t<job_handle>())
+			shared_job_handle_ref_queue_(job_handle_queue_capacity, tgh_global_allocator_t<utilities::lref_t<job_handle>>())
 		{
 
 			index_ = owner_wthread_ref_->index_;
@@ -113,21 +113,27 @@ namespace ncpp {
 
 			utilities::lref_t<job_handle> handle_ref;
 
-			b8 hr = local_job_handle_queue_.try_pop(handle_ref);
+			if (local_job_handle_queue_.try_pop(handle_ref)) {
 
-			out_handle_ref = handle_ref;
+				out_handle_ref = handle_ref;
 
-			return hr;
+				return true;
+			}
+
+			return false;
 		}
 		b8 job_wthread_scheduler::try_pop_shared(utilities::lref_t<job_handle>& out_handle_ref) {
 
 			utilities::lref_t<job_handle> handle_ref;
 
-			b8 hr = shared_job_handle_ref_queue_.try_pop(handle_ref);
+			if (shared_job_handle_ref_queue_.try_pop(handle_ref)) {
 
-			out_handle_ref = handle_ref;
+				out_handle_ref = handle_ref;
 
-			return hr;
+				return true;
+			}
+			
+			return false;
 		}
 		b8 job_wthread_scheduler::try_steal(utilities::lref_t<job_handle>& out_handle_ref) {
 

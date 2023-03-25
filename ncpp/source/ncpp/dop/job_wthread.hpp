@@ -130,6 +130,7 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
+            using job_instance_ref_queue_type = tgh_fv_queue_t<utilities::lref_t<job_instance>>;
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -145,6 +146,8 @@ namespace ncpp {
             utilities::lref_t<job_instance_pool> job_instance_pool_ref_;
 
             utilities::lref_t<job_wthread_scheduler> scheduler_ref_;
+
+            job_instance_ref_queue_type job_instance_ref_queue_;
 
             sz stack_heap_LARGE_stack_capacity_;
             sz stack_heap_LARGE_stack_count_;

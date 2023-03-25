@@ -277,6 +277,46 @@ namespace ncpp {
             /**
              *  Pops the front element
              */
+            inline bool try_pop(utilities::lref_t<item_type__>& out_item) {
+
+                if (size() == 0)
+                    return false;
+
+                --end_index_;
+
+                out_item = item_vector_[end_index_];
+
+                return true;
+            }
+            /**
+             *  Pops the front element
+             */
+            inline bool try_pop(item_type__& out_item) {
+
+                if (size() == 0)
+                    return false;
+
+                --end_index_;
+
+                out_item = item_vector_[end_index_];
+
+                return true;
+            }
+            /**
+             *  Pops the front element
+             */
+            inline bool try_pop() {
+
+                if(size() == 0)
+                    return false;
+
+                --end_index_;
+
+                return true;
+            }
+            /**
+             *  Pops the front element
+             */
             inline void pop() {
 
                 assert(size() > 0);

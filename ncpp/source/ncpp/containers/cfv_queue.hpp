@@ -254,9 +254,9 @@ namespace ncpp {
 
                 sz end_index = end_index_.load(std::memory_order_relaxed);
 
-                end_index_.fetch_add(1, std::memory_order_relaxed);
-
                 item_vector_[end_index % capacity_] = std::forward<item_param_type>(item);
+
+                end_index_.fetch_add(1, std::memory_order_relaxed);
 
             }
 
@@ -308,7 +308,7 @@ namespace ncpp {
 
                 begin_index_.fetch_add(1, std::memory_order_relaxed);
 
-                output = item_vector_[begin_index_ % capacity_];
+                output = item_vector_[begin_index % capacity_];
 
                 return true;
             }
@@ -329,7 +329,7 @@ namespace ncpp {
 
                 begin_index_.fetch_add(1, std::memory_order_relaxed);
 
-                output = item_vector_[begin_index_ % capacity_];
+                output = item_vector_[begin_index % capacity_];
 
                 return true;
             }

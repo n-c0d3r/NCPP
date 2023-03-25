@@ -41,7 +41,9 @@ namespace ncpp {
 			u32 capacity
 		) :
 			owner_wthread_ref_(owner_wthread),
-			capacity_(capacity)
+			capacity_(capacity),
+
+			instance_ref_stack_(capacity, tgh_global_allocator_t<utilities::lref_t<job_instance>>())
 		{
 
 
@@ -57,6 +59,29 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
+
+		void job_instance_pool::init() {
+
+			for (u32 i = 0; i < capacity_; ++i) {
+
+				instance_ref_stack_.push(
+					tgh_create_sys_lifetime_t<job_instance>()
+				);
+
+			}
+
+		}
+
+		void job_instance_pool::push(job_instance& instance) {
+
+			instance_ref_stack_.push(instance);
+
+		}
+		void job_instance_pool::pop(utilities::lref_t<job_instance>& instance) {
+
+			assert(instance_ref_stack_.try_pop(instance) && "out of job instance pool.");
+
+		}
 
 	}
 

@@ -90,6 +90,8 @@ namespace ncpp {
 			job_handle_queue_capacity_(job_handle_queue_capacity),
 			job_instance_pool_capacity_(job_instance_pool_capacity),
 
+			job_instance_ref_queue_(job_instance_pool_capacity, tgh_global_allocator_t<utilities::lref_t<job_instance>>()),
+
 			stack_heap_LARGE_stack_capacity_(stack_heap_LARGE_stack_capacity),
 			stack_heap_LARGE_stack_count_(stack_heap_LARGE_stack_count),
 			stack_heap_NORMAL_stack_capacity_(stack_heap_NORMAL_stack_capacity),
@@ -137,7 +139,12 @@ namespace ncpp {
 
 
 
-			/// increas ready wthread count
+			/// init job instance pool
+			job_instance_pool_ref_->init();
+
+
+
+			/// increase ready wthread count
 			job_system::instance().ready_wthread_count_.fetch_add(1, std::memory_order_release);
 
 			/// wait job system ready
@@ -193,6 +200,18 @@ namespace ncpp {
 
 
 
+			utilities::lref_t<job_instance> instance;
+
+
+
+			job_instance_pool_ref_->pop(instance);
+
+
+
+			job_instance_ref_queue_.push(instance);
+
+
+
 			return true;
 		}
 
@@ -220,7 +239,7 @@ namespace ncpp {
 
 
 
-			/// shared job handle
+			/// steal job handle
 			if (scheduler_ref_->try_steal(handle_ref)) {
 
 				try_make_job_instance(*handle_ref);

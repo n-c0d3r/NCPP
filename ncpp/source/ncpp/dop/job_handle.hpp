@@ -207,7 +207,11 @@ namespace ncpp {
 
                 u32 instance_index = instance_creation_attemp_count();
 
-                while (!instance_creation_attemp_count_.compare_exchange_weak(instance_index, std::memory_order_acq_rel));
+                while (!instance_creation_attemp_count_.compare_exchange_weak(instance_index, instance_index + 1, std::memory_order_acq_rel)) {
+
+                    instance_index = instance_creation_attemp_count();
+
+                }
 
                 return instance_index < instance_count_;
             }
