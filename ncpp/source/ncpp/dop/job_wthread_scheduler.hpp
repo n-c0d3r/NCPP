@@ -111,6 +111,7 @@ namespace ncpp {
 
         public:
             using job_handle_queue_type = tgh_fv_queue_t<job_handle>;
+            using job_handle_ref_queue_type = tgh_cfv_queue_t<utilities::lref_t<job_handle>>;
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -119,8 +120,10 @@ namespace ncpp {
         private:
             utilities::lref_t<job_wthread> owner_wthread_ref_;
             u32 job_handle_queue_capacity_;
+            u8 index_;
 
-            job_handle_queue_type job_handle_queue_;
+            job_handle_queue_type local_job_handle_queue_;
+            job_handle_ref_queue_type shared_job_handle_ref_queue_;
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -129,6 +132,7 @@ namespace ncpp {
         public:
             inline job_wthread& owner_wthread() { return *owner_wthread_ref_; }
             inline u32 job_handle_queue_capacity() const { return job_handle_queue_capacity_; }
+            inline u8 index() const { return index_; }
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -151,7 +155,10 @@ namespace ncpp {
 
 
         public:
-
+            void schedule(job& j);
+            b8 try_pop_local(utilities::lref_t<job_handle>& out_handle_ref);
+            b8 try_pop_shared(utilities::lref_t<job_handle>& out_handle_ref);
+            b8 try_steal(utilities::lref_t<job_handle>& out_handle_ref);
 
         };
 

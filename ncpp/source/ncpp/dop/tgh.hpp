@@ -161,6 +161,9 @@ namespace ncpp {
         using tgh_vector_t = typename std::vector<data_type__, typename tgh_allocator_t<data_type__>>;
 
         template<typename data_type__>
+        using tgh_cfv_queue_t = typename containers::cfv_queue_t<data_type__, typename tgh_allocator_t<data_type__>>;
+
+        template<typename data_type__>
         using tgh_fv_queue_t = typename containers::fixed_vector_queue_t<data_type__, typename tgh_allocator_t<data_type__>>;
 
         template<typename data_type__>

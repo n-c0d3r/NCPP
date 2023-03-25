@@ -105,10 +105,11 @@ namespace ncpp {
 #pragma region Properties
         private:
             item_vector_type item_vector_;
-            std::atomic_size_t begin_index_;
-            std::atomic_size_t end_index_;
-            std::atomic_size_t capacity_;
+            asz begin_index_;
+            asz end_index_;
+            sz capacity_;
             pac::spinlock writer_lock_;
+            pac::spinlock reader_lock_;
 #pragma endregion
 
             ////////////////////////////////////////////////////////////////////////////////////
@@ -126,13 +127,13 @@ namespace ncpp {
 
             inline item_type__& front() { return *begin(); }
             inline const item_type__& front() const { return *begin(); }
-            inline item_type__& back() { return *(item_vector_.data() + (end_index_.load(std::memory_order_acquire) - 1) % capacity_); }
-            inline const item_type__& back() const { return *(item_vector_.data() + (end_index_.load(std::memory_order_acquire) - 1) % capacity_); }
+            inline item_type__& back() { return *(item_vector_.data() + (end_index_.load(std::memory_order_acquire) + capacity_ - 1) % capacity_); }
+            inline const item_type__& back() const { return *(item_vector_.data() + (end_index_.load(std::memory_order_acquire) + capacity_ - 1) % capacity_); }
 
             inline sz size() const { 
                 sz end_index = end_index_.load(std::memory_order_acquire);
                 sz begin_index = begin_index_.load(std::memory_order_acquire);
-                return (end_index >= begin_index) ? (end_index - begin_index) : 0;
+                return end_index - begin_index;
             }
 #pragma endregion
 
@@ -241,7 +242,7 @@ namespace ncpp {
             template<typename item_param_type>
             inline void push_main_t(item_param_type&& item) {
 
-                std::atomic_thread_fence(std::memory_order_release);
+                std::atomic_thread_fence(std::memory_order_acq_rel);
 
                 utilities::unique_lock_t<pac::spinlock> lock_guard(writer_lock_);
 
@@ -251,13 +252,12 @@ namespace ncpp {
 
 
 
-                sz index = end_index_.load(std::memory_order_relaxed);
+                sz end_index = end_index_.load(std::memory_order_relaxed);
 
-                while (!end_index_.compare_exchange_weak(index, index + 1, std::memory_order_relaxed));
+                end_index_.fetch_add(1, std::memory_order_relaxed);
 
-                item_vector_[index % capacity_] = std::forward<item_param_type>(item);
+                item_vector_[end_index % capacity_] = std::forward<item_param_type>(item);
 
-                std::atomic_thread_fence(std::memory_order_acquire);
             }
 
             ////////////////////////////////////////////////////////////////////////////////////
@@ -295,25 +295,81 @@ namespace ncpp {
             /**
              *  Tries to pop the front element
              */
+            inline bool try_pop(utilities::lref_t<item_type>& output) {
+
+                std::atomic_thread_fence(std::memory_order_acq_rel);
+
+                utilities::unique_lock_t<pac::spinlock> lock_guard(reader_lock_);
+
+                sz begin_index = begin_index_.load(std::memory_order_relaxed);
+
+                sz end_index = end_index_.load(std::memory_order_relaxed);
+                if (end_index <= begin_index) return false;
+
+                begin_index_.fetch_add(1, std::memory_order_relaxed);
+
+                output = item_vector_[begin_index_ % capacity_];
+
+                return true;
+            }
+
+            /**
+             *  Tries to pop the front element
+             */
             inline bool try_pop(item_type& output) {
 
-                std::atomic_thread_fence(std::memory_order_release);
+                std::atomic_thread_fence(std::memory_order_acq_rel);
 
-                utilities::unique_lock_t<pac::spinlock> lock_guard(writer_lock_);
+                utilities::unique_lock_t<pac::spinlock> lock_guard(reader_lock_);
 
-                sz index = begin_index_.load(std::memory_order_relaxed);
+                sz begin_index = begin_index_.load(std::memory_order_relaxed);
+
+                sz end_index = end_index_.load(std::memory_order_relaxed);
+                if (end_index <= begin_index) return false;
+
+                begin_index_.fetch_add(1, std::memory_order_relaxed);
+
+                output = item_vector_[begin_index_ % capacity_];
+
+                return true;
+            }
+
+            /**
+             *  Tries to pop the front element
+             */
+            inline bool try_pop() {
+
+                std::atomic_thread_fence(std::memory_order_acq_rel);
+
+                utilities::unique_lock_t<pac::spinlock> lock_guard(reader_lock_);
+
+                sz begin_index = begin_index_.load(std::memory_order_relaxed);
+
+                sz end_index = end_index_.load(std::memory_order_relaxed);
+                if (end_index <= begin_index) return false;
+
+                begin_index_.fetch_add(1, std::memory_order_relaxed);
+
+                return true;
+            }
+
+            /**
+             *  Tries to pop the front element
+             */
+            inline void pop() {
+
+                std::atomic_thread_fence(std::memory_order_acq_rel);
+
+                utilities::unique_lock_t<pac::spinlock> lock_guard(reader_lock_);
+
+                sz begin_index = begin_index_.load(std::memory_order_relaxed);
 
                 sz end_index = end_index_.load(std::memory_order_relaxed);
 
-                if (end_index <= index) return false;
+                assert(end_index > begin_index && "the queue is empty.");
 
-                begin_index_.store(index + 1, std::memory_order_relaxed);
+                begin_index_.fetch_add(1, std::memory_order_relaxed);
 
-                output = item_vector_[index % capacity_];
-
-                std::atomic_thread_fence(std::memory_order_acquire);
-
-                return true;
             }
 #pragma endregion
 

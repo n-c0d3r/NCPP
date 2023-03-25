@@ -115,7 +115,10 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         private:
-            utilities::lref_t<job> owner_job_ref_;
+            utilities::a_lref_t<job> owner_job_ref_;
+            asz generation_index_;
+            au32 instance_creation_attemp_count_;
+            au32 instance_count_;
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -123,23 +126,91 @@ namespace ncpp {
 
         public:
             inline job& owner_job_ref() { return *owner_job_ref_; }
+            inline sz generation_index() const { return generation_index_.load(std::memory_order_acquire); }
+            inline void increase_generation_index() { generation_index_.store((generation_index_.load(std::memory_order_acquire) + 1) % NCPP_U64_MAX, std::memory_order_release); }
+            inline u32 instance_creation_attemp_count() const { return instance_creation_attemp_count_.load(std::memory_order_acquire); }
+            inline u32 instance_count() const { return instance_count_.load(std::memory_order_acquire); }
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
-            inline job_handle() {}
-            job_handle(
-                job& owner_job
-            );
-            ~job_handle();
+            inline job_handle() :
+                generation_index_(0),
+                instance_creation_attemp_count_(0),
+                instance_count_(0)
+            {
+            
+
+            
+            }
+            ~job_handle() {
+
+
+
+            }
+
+            inline job_handle(const job_handle& other) :
+                owner_job_ref_(other.owner_job_ref_),
+                generation_index_(other.generation_index()),
+                instance_creation_attemp_count_(other.instance_creation_attemp_count()),
+                instance_count_(other.instance_count())
+            {
+
+
+
+            }
+            inline job_handle& operator = (const job_handle& other)
+            {
+                owner_job_ref_ = other.owner_job_ref_;
+                generation_index_ = other.generation_index();
+                instance_creation_attemp_count_ = other.instance_creation_attemp_count();
+                instance_count_ = other.instance_count();
+
+                return *this;
+            }
+            inline job_handle(job_handle&& other) :
+                owner_job_ref_(other.owner_job_ref_),
+                generation_index_(other.generation_index()),
+                instance_creation_attemp_count_(other.instance_creation_attemp_count()),
+                instance_count_(other.instance_count())
+            {
+
+                other.owner_job_ref_ = utilities::a_lref_t<job>();
+                other.generation_index_ = 0;
+                other.instance_creation_attemp_count_.store(0, std::memory_order_release);
+                other.instance_count_ = 0;
+
+            }
+            inline job_handle& operator = (job_handle&& other)
+            {
+                owner_job_ref_ = other.owner_job_ref_;
+                generation_index_ = other.generation_index();
+                instance_creation_attemp_count_ = other.instance_creation_attemp_count();
+                instance_count_ = other.instance_count();
+
+                other.owner_job_ref_ = utilities::a_lref_t<job>();
+                other.generation_index_ = 0;
+                other.instance_creation_attemp_count_.store(0, std::memory_order_release);
+                other.instance_count_ = 0;
+
+                return *this;
+            }
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
+            inline bool try_optain_instance_index(u32& index) {
+
+                u32 instance_index = instance_creation_attemp_count();
+
+                while (!instance_creation_attemp_count_.compare_exchange_weak(instance_index, std::memory_order_acq_rel));
+
+                return instance_index < instance_count_;
+            }
 
         };
 

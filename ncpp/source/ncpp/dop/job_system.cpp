@@ -65,6 +65,7 @@ namespace ncpp {
 			tgh_sys_lifetime_cid_(tagged_heap_.create_category()),
 
 			wthread_ref_vector_(tgh_global_allocator_t<utilities::lref_t<job_wthread>>()),
+			ready_wthread_count_(0),
 
 			is_running_(false)
 		{
@@ -73,8 +74,6 @@ namespace ncpp {
 
 			create_wthreads();
 			init_wthreads();
-
-			entry_job_ref_->setup_as_entry_job();
 			
 		}
 
@@ -157,15 +156,6 @@ namespace ncpp {
 
 			wait_wthreads();
 
-		}
-
-		job_handle& job_system::schedule(job& j) {
-
-			job_handle handle(j);
-
-			job_wthread& current_thread = current_wthread();
-
-			return handle;
 		}
 
 	}

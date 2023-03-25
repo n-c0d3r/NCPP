@@ -132,33 +132,37 @@ namespace ncpp {
 
 		void job_wthread::worker_loop() {
 
-			/// setups
+			/// setup
 			current_wthread_g = *this;
+
+
+
+			/// increas ready wthread count
+			job_system::instance().ready_wthread_count_.fetch_add(1, std::memory_order_release);
+
+			/// wait job system ready
+			while (!job_system::instance().is_ready());
+
+
+
+			if (index_ == 0) {
+
+				/// schedule entry job
+				schedule(job_system::instance().entry_job());
+
+			}
 
 
 
 			/// main loop
 			while (job_system::instance().is_running()) {
 
-				/// processes job queues
-				{
+				process_job_handles();
+				process_job_instances();
 
 
 
-				}
-
-
-
-				/// processes job instances
-				{
-
-
-
-				}
-
-
-
-				/// checks if entry job was done
+				/// check if entry job was done
 				if (index_ == 0)
 				{
 
@@ -184,12 +188,50 @@ namespace ncpp {
 
 			u32 job_instance_index = 0;
 				
-			if (!handle.owner_job_ref_->try_optain_instance_index(job_instance_index))
+			if (!handle.try_optain_instance_index(job_instance_index))
 				return false;
 
-			
+
 
 			return true;
+		}
+
+		void job_wthread::process_job_handles() {
+
+			utilities::lref_t<job_handle> handle_ref;
+
+
+
+			/// local job handle
+			if (scheduler_ref_->try_pop_local(handle_ref)) {
+
+				try_make_job_instance(*handle_ref);
+
+			}
+
+
+
+			/// shared job handle
+			if (scheduler_ref_->try_pop_shared(handle_ref)) {
+
+				try_make_job_instance(*handle_ref);
+
+			}
+
+
+
+			/// shared job handle
+			if (scheduler_ref_->try_steal(handle_ref)) {
+
+				try_make_job_instance(*handle_ref);
+
+			}
+
+		}
+		void job_wthread::process_job_instances() {
+
+
+
 		}
 
 
@@ -221,6 +263,11 @@ namespace ncpp {
 			if(index_ != 0)
 				pac_thread_ref_->wait();
 
+		}
+
+		void job_wthread::schedule(job& j) {
+
+			scheduler_ref_->schedule(j);
 		}
 
 	}

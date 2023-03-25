@@ -142,6 +142,7 @@ namespace ncpp {
             tgh_cid_type tgh_sys_lifetime_cid_;
 
             wthread_ref_vector_type wthread_ref_vector_;
+            au8 ready_wthread_count_;
 
             ab8 is_running_;
                       
@@ -164,6 +165,9 @@ namespace ncpp {
 
             inline tagged_heap_type& tagged_heap() { return tagged_heap_; }
             inline tgh_cid_type tgh_sys_lifetime_cid() const { return tgh_sys_lifetime_cid_; }
+
+            inline u8 ready_wthread_count() const { return ready_wthread_count_.load(std::memory_order_acquire); }
+            inline b8 is_ready() const { return ready_wthread_count() == wthread_count_; }
 
             inline b8 is_running() const { return is_running_.load(std::memory_order_acquire); }
 
@@ -202,8 +206,6 @@ namespace ncpp {
         public:
             void run();
             void wait();
-
-            job_handle& schedule(job& j);
 
         };
 

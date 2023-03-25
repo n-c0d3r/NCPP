@@ -113,7 +113,7 @@ namespace ncpp {
             inline iterator begin() { return item_vector_.data() + begin_index_ % capacity_; }
             inline const_iterator begin() const { return item_vector_.data() + begin_index_ % capacity_; }
             inline const_iterator cbegin() const { return item_vector_.data() + begin_index_ % capacity_; }
-            inline iterator end() { return item_vector_.data() + end_index_ % capacity; }
+            inline iterator end() { return item_vector_.data() + end_index_ % capacity_; }
             inline const_iterator end() const { return item_vector_.data() + end_index_ % capacity_; }
             inline const_iterator cend() const { return item_vector_.data() + end_index_ % capacity_; }
 
@@ -283,12 +283,52 @@ namespace ncpp {
             /**
              *  Pops the front element
              */
+            inline bool try_pop(utilities::lref_t<item_type__>& output) {
+
+                if (begin_index_ == end_index_)
+                    return false;
+
+                output = item_vector_[begin_index_ % capacity_];
+
+                ++begin_index_;
+
+                return true;
+            }
+            /**
+             *  Pops the front element
+             */
+            inline bool try_pop(item_type__& output) {
+
+                if (begin_index_ == end_index_)
+                    return false;
+
+                output = item_vector_[begin_index_ % capacity_];
+
+                ++begin_index_;
+                     
+                return true;
+            }
+            /**
+             *  Pops the front element
+             */
+            inline bool try_pop() {
+
+                if (begin_index_ == end_index_)
+                    return false;
+
+                ++begin_index_;
+
+                return true;
+            }
+            /**
+             *  Pops the front element
+             */
             inline void pop() {
 
                 assert(size() > 0);
+                assert(begin_index_ != end_index_);
 
                 ++begin_index_;
-                                                
             }
 
             /**

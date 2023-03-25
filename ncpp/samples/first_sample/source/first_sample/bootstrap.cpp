@@ -14,14 +14,13 @@ int main() {
 
 				std::cout << "Hello World" << std::endl;
 
-			}
+			},
+			64
 		);
 
 
 
-		dop::job_system system(
-			entry_job
-		);
+		dop::job_system system(entry_job);
 
 		system.run();
 		system.wait();

@@ -207,11 +207,16 @@ namespace ncpp {
 
             bool try_make_job_instance(job_handle& handle);
 
+            void process_job_handles();
+            void process_job_instances();
+
 
 
         public:
             void run();
             void wait();
+
+            void schedule(job& j);
 
         };
 
