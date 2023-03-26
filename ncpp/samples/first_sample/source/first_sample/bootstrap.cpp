@@ -9,13 +9,13 @@ int main() {
 	/// while(true)
 	{
 
-		dop::job entry_job = dop::job(
+		dop::job entry_job(
 			[&](dop::job_instance& instance) {
 
-				std::cout << "Hello World" << std::endl;
+				std::cout << instance.instance_index() << std::endl;
 
 			},
-			64
+			2048
 		);
 
 

@@ -116,9 +116,9 @@ namespace ncpp {
 
         private:
             utilities::a_lref_t<job> owner_job_ref_;
-            asz generation_index_;
             au32 instance_creation_attemp_count_;
             au32 instance_count_;
+            au32 counter_;
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -126,10 +126,11 @@ namespace ncpp {
 
         public:
             inline job& owner_job_ref() { return *owner_job_ref_; }
-            inline sz generation_index() const { return generation_index_.load(std::memory_order_acquire); }
-            inline void increase_generation_index() { generation_index_.store((generation_index_.load(std::memory_order_acquire) + 1) % NCPP_U64_MAX, std::memory_order_release); }
             inline u32 instance_creation_attemp_count() const { return instance_creation_attemp_count_.load(std::memory_order_acquire); }
             inline u32 instance_count() const { return instance_count_.load(std::memory_order_acquire); }
+            inline u32 counter() const { return counter_.load(std::memory_order_acquire); }
+            inline utilities::lref_t<au32> counter_ref() { return counter_; }
+            inline void decrease_counter() { counter_.fetch_sub(1, std::memory_order_release); }
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -137,9 +138,9 @@ namespace ncpp {
 
         public:
             inline job_handle() :
-                generation_index_(0),
                 instance_creation_attemp_count_(0),
-                instance_count_(0)
+                instance_count_(0),
+                counter_(0)
             {
             
 
@@ -153,9 +154,9 @@ namespace ncpp {
 
             inline job_handle(const job_handle& other) :
                 owner_job_ref_(other.owner_job_ref_),
-                generation_index_(other.generation_index()),
                 instance_creation_attemp_count_(other.instance_creation_attemp_count()),
-                instance_count_(other.instance_count())
+                instance_count_(other.instance_count()),
+                counter_(other.counter())
             {
 
 
@@ -164,36 +165,36 @@ namespace ncpp {
             inline job_handle& operator = (const job_handle& other)
             {
                 owner_job_ref_ = other.owner_job_ref_;
-                generation_index_ = other.generation_index();
                 instance_creation_attemp_count_ = other.instance_creation_attemp_count();
                 instance_count_ = other.instance_count();
+                counter_ = other.counter();
 
                 return *this;
             }
             inline job_handle(job_handle&& other) :
                 owner_job_ref_(other.owner_job_ref_),
-                generation_index_(other.generation_index()),
                 instance_creation_attemp_count_(other.instance_creation_attemp_count()),
-                instance_count_(other.instance_count())
+                instance_count_(other.instance_count()),
+                counter_(other.counter())
             {
 
                 other.owner_job_ref_ = utilities::a_lref_t<job>();
-                other.generation_index_ = 0;
                 other.instance_creation_attemp_count_.store(0, std::memory_order_release);
                 other.instance_count_ = 0;
+                other.counter_ = 0;
 
             }
             inline job_handle& operator = (job_handle&& other)
             {
                 owner_job_ref_ = other.owner_job_ref_;
-                generation_index_ = other.generation_index();
                 instance_creation_attemp_count_ = other.instance_creation_attemp_count();
                 instance_count_ = other.instance_count();
+                counter_ = other.counter();
 
                 other.owner_job_ref_ = utilities::a_lref_t<job>();
-                other.generation_index_ = 0;
                 other.instance_creation_attemp_count_.store(0, std::memory_order_release);
                 other.instance_count_ = 0;
+                other.counter_ = 0;
 
                 return *this;
             }
@@ -207,11 +208,9 @@ namespace ncpp {
 
                 u32 instance_index = instance_creation_attemp_count();
 
-                while (!instance_creation_attemp_count_.compare_exchange_weak(instance_index, instance_index + 1, std::memory_order_acq_rel)) {
+                while (!instance_creation_attemp_count_.compare_exchange_weak(instance_index, instance_index + 1, std::memory_order_acq_rel));
 
-                    instance_index = instance_creation_attemp_count();
-
-                }
+                index = instance_index;
 
                 return instance_index < instance_count_;
             }

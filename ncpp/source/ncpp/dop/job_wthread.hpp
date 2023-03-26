@@ -124,6 +124,7 @@ namespace ncpp {
             friend class job_instance_pool;
             friend struct job;
             friend struct job_handle;
+            friend job_handle& dop::schedule_job(job& j);
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -213,13 +214,13 @@ namespace ncpp {
             void process_job_handles();
             void process_job_instances();
 
+            job_handle& schedule(job& j);
+
 
 
         public:
             void run();
             void wait();
-
-            void schedule(job& j);
 
         };
 

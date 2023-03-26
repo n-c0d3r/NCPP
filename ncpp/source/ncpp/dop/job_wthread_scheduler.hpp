@@ -155,7 +155,7 @@ namespace ncpp {
 
 
         public:
-            void schedule(job& j);
+            job_handle& schedule(job& j);
             b8 try_pop_local(utilities::lref_t<job_handle>& out_handle_ref);
             b8 try_pop_shared(utilities::lref_t<job_handle>& out_handle_ref);
             b8 try_steal(utilities::lref_t<job_handle>& out_handle_ref);

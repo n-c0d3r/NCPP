@@ -201,6 +201,11 @@ namespace ncpp {
                 return *raw_pointer_;
             }
 
+            inline void clear() {
+
+                raw_pointer_ = 0;
+            }
+
         };
 
 
@@ -350,6 +355,11 @@ namespace ncpp {
             inline const type__& operator * () const {
 
                 return *(aptr_.load(std::memory_order_acquire));
+            }
+
+            inline void clear() {
+
+                aptr_.store((type__*)0, std::memory_order_release);
             }
 
         };

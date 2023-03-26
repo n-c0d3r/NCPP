@@ -155,7 +155,7 @@ namespace ncpp {
 			if (index_ == 0) {
 
 				/// schedule entry job
-				schedule(job_system::instance().entry_job());
+				job_system::instance().entry_job_handle_ref_ = schedule(job_system::instance().entry_job());
 
 			}
 
@@ -173,7 +173,7 @@ namespace ncpp {
 				if (index_ == 0)
 				{
 
-					if (job_system::instance().entry_job_ref_->is_done_) {
+					if (job_system::instance().entry_job_handle_ref_->counter_ == 0) {
 
 						job_system::instance().is_running_.store(false, std::memory_order_release);
 
@@ -200,15 +200,17 @@ namespace ncpp {
 
 
 
-			utilities::lref_t<job_instance> instance;
+			utilities::lref_t<job_instance> instance_ref;
 
 
 
-			job_instance_pool_ref_->pop(instance);
+			job_instance_pool_ref_->pop(instance_ref);
 
 
 
-			job_instance_ref_queue_.push(instance);
+			instance_ref->setup_for_handle(handle, job_instance_index);
+
+			job_instance_ref_queue_.push(instance_ref);
 
 
 
@@ -249,7 +251,31 @@ namespace ncpp {
 		}
 		void job_wthread::process_job_instances() {
 
+			utilities::lref_t<job_instance> instance_ref;
 
+			if (job_instance_ref_queue_.try_pop(instance_ref)) {
+
+				if (instance_ref->is_waiting()) {
+
+					job_instance_ref_queue_.push(instance_ref);
+
+				}
+				else {
+
+					instance_ref->stack_allocator_.apply_native_use();
+					instance_ref->switch_to_this();
+
+					if (instance_ref->is_waiting()) {
+
+						job_instance_ref_queue_.push(instance_ref);
+
+					}
+
+				}
+
+				try_make_job_instance(*(instance_ref->handle_ref_));
+
+			}
 
 		}
 
@@ -284,9 +310,9 @@ namespace ncpp {
 
 		}
 
-		void job_wthread::schedule(job& j) {
+		job_handle& job_wthread::schedule(job& j) {
 
-			scheduler_ref_->schedule(j);
+			return scheduler_ref_->schedule(j);
 		}
 
 	}

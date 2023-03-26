@@ -132,6 +132,7 @@ namespace ncpp {
 
 	public:
 		void apply_native_use();
+		void clear_native_use();
 #pragma endregion
 
 	};

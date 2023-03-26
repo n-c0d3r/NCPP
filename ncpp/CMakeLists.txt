@@ -12,9 +12,9 @@ set(NCPP_DEFAULT_STACK_COUNT_PER_CHUNK 32 CACHE STRING "Default Stack Count Per 
 set(NCPP_DEFAULT_STACK_HEAP_STACK_CAPACITY_LARGE 65536 CACHE STRING "Default Stack Capacity Of Large Stack Heap")
 set(NCPP_DEFAULT_STACK_COUNT_PER_CHUNK_LARGE 32 CACHE STRING "Default Stack Count Per Chunk Of Large Stack Heap")
 set(NCPP_DEFAULT_STACK_HEAP_STACK_CAPACITY_NORMAL 32768 CACHE STRING "Default Stack Capacity Of Normal Stack Heap")
-set(NCPP_DEFAULT_STACK_COUNT_PER_CHUNK_NORMAL 32 CACHE STRING "Default Stack Count Per Chunk Of Normal Stack Heap")
+set(NCPP_DEFAULT_STACK_COUNT_PER_CHUNK_NORMAL 64 CACHE STRING "Default Stack Count Per Chunk Of Normal Stack Heap")
 set(NCPP_DEFAULT_STACK_HEAP_STACK_CAPACITY_SMALL 8192 CACHE STRING "Default Stack Capacity Of Small Stack Heap")
-set(NCPP_DEFAULT_STACK_COUNT_PER_CHUNK_SMALL 32 CACHE STRING "Default Stack Count Per Chunk Of Small Stack Heap")
+set(NCPP_DEFAULT_STACK_COUNT_PER_CHUNK_SMALL 128 CACHE STRING "Default Stack Count Per Chunk Of Small Stack Heap")
 
 # ncpp containers options
 set(NCPP_DEFAULT_HANDLE_MAP_RESERVE_COUNT 4096 CACHE STRING "Default Handle Map Reserve Count")

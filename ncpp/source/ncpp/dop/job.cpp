@@ -93,9 +93,9 @@ namespace ncpp {
 
 
 
-		void schedule_job(job& j) {
+		job_handle& schedule_job(job& j) {
 
-			current_wthread().schedule(j);
+			return current_wthread().schedule(j);
 		}
 
 	}

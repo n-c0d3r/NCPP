@@ -74,7 +74,7 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
-		void job_wthread_scheduler::schedule(job& j) {
+		job_handle& job_wthread_scheduler::schedule(job& j) {
 
 			assert((index_ == current_wthread().index_) && "schedule is not allowed to be called in another thread.");
 
@@ -84,8 +84,8 @@ namespace ncpp {
 
 			job_handle& handle = *local_job_handle_queue_.end();
 
-			handle.increase_generation_index();
 			handle.instance_count_.store(j.instance_count_, std::memory_order_relaxed);
+			handle.counter_.store(j.instance_count_, std::memory_order_relaxed);
 			handle.owner_job_ref_ = j;
 
 
@@ -107,6 +107,7 @@ namespace ncpp {
 
 			local_job_handle_queue_.push(handle);
 			
+			return handle;
 		}
 
 		b8 job_wthread_scheduler::try_pop_local(utilities::lref_t<job_handle>& out_handle_ref) {

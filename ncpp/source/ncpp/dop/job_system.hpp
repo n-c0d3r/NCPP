@@ -127,6 +127,7 @@ namespace ncpp {
 
         private:
             utilities::lref_t<dop::job> entry_job_ref_;
+            utilities::lref_t<dop::job_handle> entry_job_handle_ref_;
             u8 wthread_count_;
             u32 job_handle_queue_capacity_;
             u32 job_instance_pool_capacity_;
@@ -152,6 +153,7 @@ namespace ncpp {
 
         public:
             inline dop::job& entry_job() { return *entry_job_ref_; }
+            inline dop::job_handle& entry_job_handle() { return *entry_job_handle_ref_; }
             inline u8 wthread_count() const { return wthread_count_; }
             inline u32 job_handle_queue_capacity() const { return job_handle_queue_capacity_; }
             inline u32 job_instance_pool_capacity() const { return job_instance_pool_capacity_; }
@@ -200,6 +202,7 @@ namespace ncpp {
             void init_wthreads();
             void run_wthreads();
             void wait_wthreads();
+            void release_wthreads();
 
 
 

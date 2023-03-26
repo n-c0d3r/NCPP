@@ -295,6 +295,9 @@ namespace ncpp {
 
 			}
 
+			s.next_p_ = 0;
+			s.prev_p_ = 0;
+
 		}
 
 	};
@@ -463,6 +466,7 @@ namespace ncpp {
 		}
 		inline void deallocate(stack_allocation* allocation_p) {
 
+			usage_ -= allocation_p->size_;
 			allocation_list_.erase(*allocation_p);
 
 		}
@@ -615,6 +619,9 @@ namespace ncpp {
 
 			}
 
+			s.in_next_p_ = 0;
+			s.in_prev_p_ = 0;
+
 		}
 
 	};
@@ -764,6 +771,9 @@ namespace ncpp {
 				tail_p_ = s.out_prev_p_;
 
 			}
+
+			s.out_next_p_ = 0;
+			s.out_prev_p_ = 0;
 
 		}
 
@@ -1051,6 +1061,9 @@ namespace ncpp {
 
 			}
 
+			s.next_p_ = 0;
+			s.prev_p_ = 0;
+
 		}
 
 		inline void reset() {
@@ -1285,11 +1298,25 @@ namespace ncpp {
 			/// pick a chunk
 			if (available_chunk_list_.is_empty()) {
 
-				chunk_ref = push_chunk();
+				if (empty_chunk_list_.is_empty()) {
 
-				empty_chunk_list_.erase(*chunk_ref);
+					chunk_ref = push_chunk();
 
-				available_chunk_list_.insert(*chunk_ref);
+					empty_chunk_list_.erase(*chunk_ref);
+
+					available_chunk_list_.insert(*chunk_ref);
+
+				}
+				else {
+
+					chunk_ref = empty_chunk_list_.head();
+					empty_chunk_list_.erase(*chunk_ref);
+
+					new(chunk_ref.pointer()) stack_chunk(stack_capacity_, stack_count_per_chunk_);
+
+					available_chunk_list_.insert(*chunk_ref);
+
+				}
 
 			}
 			else {
@@ -1382,6 +1409,40 @@ namespace ncpp {
 					release_chunk(chunk);
 
 				}
+
+			}
+
+		}
+		inline void clear_group(stack_group& group) {
+
+			stack* stack_p = &(group.out_stack_list().tail());
+			while (stack_p != 0) {
+
+				stack* prev_stack_p = &(stack_p->out_prev());
+
+				stack_chunk& chunk = stack_p->chunk();
+
+				stack_p->chunk().erase_stack(*stack_p);
+				
+				if (chunk.is_empty()) {
+
+					if (empty_chunk_list_.is_empty()) {
+
+						available_chunk_list_.erase(chunk);
+						empty_chunk_list_.insert(chunk);
+
+					}
+					else {
+
+						available_chunk_list_.erase(chunk);
+
+						release_chunk(chunk);
+
+					}
+
+				}
+				
+				stack_p = prev_stack_p;
 
 			}
 

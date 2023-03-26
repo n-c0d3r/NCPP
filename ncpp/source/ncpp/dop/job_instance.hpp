@@ -115,13 +115,28 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         private:
+            pac::fiber pac_fiber_;
+            utilities::lref_t<au32> counter_ref_;
+            utilities::lref_t<job_handle> handle_ref_;
+            u32 instance_index_;
+            stack_allocator_t<u8> stack_allocator_;
+            stack_group stack_group_;
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
+            inline b8 is_waiting() const {
 
+                if (counter_ref_.is_null())
+                    return false;
+
+                return counter_ref_->load(std::memory_order_acquire) != 0;
+            }
+            inline u32 instance_index() const { return instance_index_; }
+            inline stack_allocator_t<u8>& stack_allocator() { return stack_allocator_; }
+            inline stack_group& get_stack_group() { return stack_group_; }
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -135,7 +150,15 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
 
+        private:
+            void worker_loop();
+
+
+
         public:
+            void setup_for_handle(job_handle& handle, u32 instance_index);
+            void switch_to_this();
+            void wait_for_counter(utilities::lref_t<au32> counter_ref);
 
         };
 

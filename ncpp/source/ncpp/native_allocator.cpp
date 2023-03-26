@@ -63,7 +63,10 @@ namespace ncpp {
 
 		current_native_allocator_ref_g = *this;
 	}
+	void native_allocator_i::clear_native_use() {
 
+		current_native_allocator_ref_g.clear();
 
+	}
 
 }

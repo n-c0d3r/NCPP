@@ -181,7 +181,7 @@ namespace ncpp {
                 entry_point_type&& entry_point,
                 u32 instance_count = 1,
                 u32 batch_size = 16,
-                job_stack_allocator_option stack_allocator_option = job_stack_allocator_option::NORMAL
+                job_stack_allocator_option stack_allocator_option = job_stack_allocator_option::SMALL
             );
             ~job();
 
@@ -210,7 +210,7 @@ namespace ncpp {
 
 
 
-        extern void schedule_job(job& j);
+        extern job_handle& schedule_job(job& j);
 
     }
 

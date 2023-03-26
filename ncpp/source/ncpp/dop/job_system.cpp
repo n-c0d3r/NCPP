@@ -79,7 +79,7 @@ namespace ncpp {
 
 		job_system::~job_system() {
 
-
+			release_wthreads();
 
 		}
 
@@ -142,6 +142,15 @@ namespace ncpp {
 			}
 
 			pac::reset_thread_indices();
+
+		}
+		void job_system::release_wthreads() {
+
+			for (u8 i = 0; i < wthread_count_; ++i) {
+
+				wthread_ref_vector_[i]->~job_wthread();
+
+			}
 
 		}
 
