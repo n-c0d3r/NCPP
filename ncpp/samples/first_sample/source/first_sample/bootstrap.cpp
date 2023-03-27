@@ -6,21 +6,31 @@ using namespace ncpp;
 
 int main() {
 
-	/// while(true)
+	while(true)
 	{
 
-		dop::job entry_job(
+		asz a = 0;
+
+		pac::spinlock lock;
+
+		dop::job entry_job = dop::job(
 			[&](dop::job_instance& instance) {
 
-				std::cout << instance.instance_index() << std::endl;
+				a.fetch_add(1);
+
+				if (a.load() > 2048) {
+
+					system("pause");
+
+				}
 
 			},
-			2048
+			2048//, 2048
 		);
 
 
 
-		dop::job_system system(entry_job);
+		dop::job_system system(entry_job, 12, 4000, 4000);
 
 		system.run();
 		system.wait();

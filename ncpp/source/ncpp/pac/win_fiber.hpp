@@ -229,7 +229,7 @@ namespace ncpp {
 				}
 				else {
 
-					//ConvertFiberToThread();
+					ConvertFiberToThread();
 
 				}
 
