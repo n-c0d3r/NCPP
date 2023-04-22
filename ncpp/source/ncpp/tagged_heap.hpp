@@ -282,6 +282,7 @@ namespace ncpp {
 #pragma region Properties
 	private:
 		sz block_capacity_;
+		sz min_block_count_;
 		
 		u32 block_count_array_[64];
 		block_type* head_block_p_array_[64];
@@ -298,6 +299,7 @@ namespace ncpp {
 #pragma region Getters
 	public:
 		inline sz block_capacity() const { return block_capacity_; }
+		inline sz min_block_count() const { return min_block_count_; }
 
 		inline allocator_type& block_allocator() { return allocator_; }
 		inline const allocator_type& block_allocator() const { return allocator_; }
@@ -316,8 +318,9 @@ namespace ncpp {
 
 
 		}
-		inline tagged_heap_category_t(sz block_capacity) :
-			block_capacity_(block_capacity)
+		inline tagged_heap_category_t(sz block_capacity, sz min_block_count) :
+			block_capacity_(block_capacity),
+			min_block_count_(min_block_count)
 		{
 
 			memset(block_count_array_, 0, sizeof(block_type*) * 64);
@@ -329,7 +332,7 @@ namespace ncpp {
 		~tagged_heap_category_t() {
 
 			for(u8 i = 0; i < 64; ++i)
-				internal_deallocate(i);
+				internal_clear(i);
 
 		}
 #pragma endregion
@@ -362,6 +365,15 @@ namespace ncpp {
 		}
 		inline block_type* pick_a_block(sz offset) {
 
+			while (block_count_array_[pac::current_thread_index()] < min_block_count_) {
+
+				push_block();
+				curr_block_p_array_[pac::current_thread_index()] = head_block_p_array_[pac::current_thread_index()];
+
+			}
+
+
+
 			block_type* block_p = curr_block_p_array_[pac::current_thread_index()];
 
 			if (block_p == 0) {
@@ -391,7 +403,7 @@ namespace ncpp {
 			return block_p;
 		}
 
-		inline void internal_deallocate(u8 thread_index) {
+		inline void internal_clear(u8 thread_index) {
 
 			block_type* block_p = tail_block_p_array_[thread_index];
 
@@ -404,6 +416,28 @@ namespace ncpp {
 			}
 
 			block_count_array_[pac::current_thread_index()] = 0;
+			head_block_p_array_[pac::current_thread_index()] = 0;
+			tail_block_p_array_[pac::current_thread_index()] = 0;
+			curr_block_p_array_[pac::current_thread_index()] = 0;
+
+		}
+
+		inline void internal_deallocate(u8 thread_index) {
+
+			block_type* block_p = tail_block_p_array_[thread_index];
+
+			while (block_p != 0 && block_count_array_[pac::current_thread_index()] > min_block_count_) {
+
+				block_type* block_prev_p = block_p->prev_p;
+				allocator_.deallocate(block_p, block_capacity_ + sizeof(block_type));
+				block_p = block_prev_p;
+
+				block_count_array_[pac::current_thread_index()]--;
+				tail_block_p_array_[pac::current_thread_index()] = block_p;
+
+			}
+
+			curr_block_p_array_[pac::current_thread_index()] = head_block_p_array_[pac::current_thread_index()];
 
 		}
 		inline void internal_reset_blocks(u8 thread_index) {
@@ -431,6 +465,14 @@ namespace ncpp {
 
 #pragma region Public Methods
 	public:
+		/**
+		 *	Deallocates all blocks in the current thread.
+		 */
+		inline void clear() {
+
+			internal_clear(pac::current_thread_index());
+
+		}
 		/**
 		 *	Deallocates all blocks in the current thread.
 		 */
@@ -590,12 +632,9 @@ namespace ncpp {
 
 #pragma region Public Methods
 	public:
-		inline category_id_type create_category() {
-			return create_category(NCPP_DEFAULT_TAGGED_HEAP_BLOCK_CAPACITY);
-		}
-		inline category_id_type create_category(sz block_capacity) {					
+		inline category_id_type create_category(sz block_capacity = NCPP_DEFAULT_TAGGED_HEAP_BLOCK_CAPACITY, sz min_block_count = 1) {
 
-			return category_map_.insert(category_type(block_capacity));
+			return category_map_.insert(category_type(block_capacity, min_block_count));
 		}
 		inline category_type& category(category_id_type handle) {
 

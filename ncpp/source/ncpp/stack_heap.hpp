@@ -1259,7 +1259,7 @@ namespace ncpp {
 
 			for (sz i = 0; i < min_chunk_count_; ++i) {
 
-				empty_chunk_list_.insert(push_chunk());
+				empty_chunk_list_.insert(create_chunk());
 
 			}
 
@@ -1282,7 +1282,7 @@ namespace ncpp {
 
 #pragma region Public Methods
 	private:
-		inline stack_chunk& push_chunk() {
+		inline stack_chunk& create_chunk() {
 
 			utilities::lref_t<stack_chunk> chunk_ref;
 
@@ -1291,18 +1291,7 @@ namespace ncpp {
 			sz stack_size = stack_capacity_ + sizeof(stack);
 			sz allocation_size = sizeof(stack_chunk) + stack_size * stack_count_per_chunk_;
 
-			stack_chunk* chunk_p = 0; ;
-
-			if (empty_chunk_list_.is_empty()) {
-
-				chunk_p = (stack_chunk*)allocator_.allocate(allocation_size);
-
-			}
-			else {
-
-				chunk_p = &(empty_chunk_list_.tail());
-
-			}
+			stack_chunk* chunk_p = (stack_chunk*)allocator_.allocate(allocation_size);
 
 			new(chunk_p) stack_chunk(stack_capacity_, stack_count_per_chunk_);
 
@@ -1310,7 +1299,33 @@ namespace ncpp {
 
 
 
-			empty_chunk_list_.insert(*chunk_ref);
+			return *chunk_ref;
+		}
+
+		inline stack_chunk& push_chunk() {
+
+			utilities::lref_t<stack_chunk> chunk_ref;
+
+
+
+			stack_chunk* chunk_p = 0;
+
+			if (empty_chunk_list_.is_empty()) {
+
+				chunk_p = &create_chunk();
+
+			}
+			else {
+
+				chunk_p = &(empty_chunk_list_.tail());
+
+				empty_chunk_list_.erase(*chunk_p);
+
+			}
+
+			new(chunk_p) stack_chunk(stack_capacity_, stack_count_per_chunk_);
+
+			chunk_ref = *chunk_p;
 
 
 
@@ -1337,25 +1352,9 @@ namespace ncpp {
 			/// pick a chunk
 			if (available_chunk_list_.is_empty()) {
 
-				if (empty_chunk_list_.is_empty()) {
+				chunk_ref = push_chunk();
 
-					chunk_ref = push_chunk();
-
-					empty_chunk_list_.erase(*chunk_ref);
-
-					available_chunk_list_.insert(*chunk_ref);
-
-				}
-				else {
-
-					chunk_ref = empty_chunk_list_.head();
-					empty_chunk_list_.erase(*chunk_ref);
-
-					new(chunk_ref.pointer()) stack_chunk(stack_capacity_, stack_count_per_chunk_);
-
-					available_chunk_list_.insert(*chunk_ref);
-
-				}
+				available_chunk_list_.insert(*chunk_ref);
 
 			}
 			else {
@@ -1368,7 +1367,6 @@ namespace ncpp {
 				else {
 
 					chunk_ref = push_chunk();
-					empty_chunk_list_.erase(*chunk_ref);
 
 					available_chunk_list_.insert(*chunk_ref);
 

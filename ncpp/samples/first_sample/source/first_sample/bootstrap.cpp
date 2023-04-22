@@ -8,7 +8,7 @@ int main() {
 
 	{
 
-		stack_heap sheap(NCPP_DEFAULT_STACK_CAPACITY, NCPP_DEFAULT_STACK_COUNT_PER_CHUNK, 10);
+		stack_heap sheap(NCPP_DEFAULT_STACK_CAPACITY, NCPP_DEFAULT_STACK_COUNT_PER_CHUNK, 40);
 		stack_group sgroup;
 
 		stack_allocator_t<u8> sallocator(sheap, sgroup);
@@ -16,7 +16,7 @@ int main() {
 
 		tagged_heap tghheap;
 
-		tgh_allocator_t<u8> tghallocator(tghheap, tghheap.create_category(NCPP_DEFAULT_TAGGED_HEAP_BLOCK_CAPACITY));
+		tgh_allocator_t<u8> tghallocator(tghheap, tghheap.create_category(NCPP_DEFAULT_TAGGED_HEAP_BLOCK_CAPACITY, 40));
 		tghallocator.allocate(1);
 
 		int loopTime = 10000;
