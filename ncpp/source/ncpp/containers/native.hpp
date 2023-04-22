@@ -1,8 +1,8 @@
 #pragma once
 
 /**
- *  @file ncpp/containers/native_string.hpp
- *  @brief Implements native string.
+ *  @file ncpp/containers/native.hpp
+ *  @brief Implements native containers.
  */
 
 
@@ -98,6 +98,8 @@ namespace ncpp {
         >;
 
         using native_string = typename native_string_t<>;
+
+        using native_wstring = typename native_string_t<wchar_t>;
 
 
 

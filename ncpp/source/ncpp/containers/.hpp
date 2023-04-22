@@ -65,5 +65,6 @@ namespace ncpp {
 #include <ncpp/containers/handle_map.hpp>
 
 #include <ncpp/containers/native.hpp>
+#include <ncpp/containers/tgh.hpp>
 
 #pragma endregion

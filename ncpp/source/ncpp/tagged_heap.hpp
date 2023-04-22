@@ -32,7 +32,7 @@
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
-#include <ncpp/containers/.hpp>
+#include <ncpp/containers/handle_map.hpp>
 #include <ncpp/utilities/lref.hpp>
 #include <ncpp/mem.hpp>
 
@@ -815,6 +815,10 @@ namespace ncpp {
 
 	};
 #pragma endregion
+
+
+
+	using tagged_heap = tagged_heap_t<>;
 
 }
 

@@ -242,21 +242,17 @@ namespace ncpp {
             template<typename item_param_type>
             inline void push_main_t(item_param_type&& item) {
 
-                std::atomic_thread_fence(std::memory_order_acq_rel);
-
                 utilities::unique_lock_t<pac::spinlock> lock_guard(writer_lock_);
 
 
 
-                warning(size() <= capacity_, "the queue is full");
+                sz next = (end_index_ + 1) % capacity_;
 
+                assert(next != begin_index_);
 
+                item_vector_[next] = std::forward<item_param_type>(item);
 
-                sz end_index = end_index_.load(std::memory_order_relaxed);
-
-                item_vector_[end_index % capacity_] = std::forward<item_param_type>(item);
-
-                end_index_.fetch_add(1, std::memory_order_relaxed);
+                begin_index_ = next;
 
             }
 
@@ -297,7 +293,21 @@ namespace ncpp {
              */
             inline bool try_pop(utilities::lref_t<item_type>& output) {
 
-                std::atomic_thread_fence(std::memory_order_acq_rel);
+                if (begin_index_ != end_index_) {
+
+                    utilities::unique_lock_t<pac::spinlock> lock_guard(reader_lock_);
+
+                    if (begin_index_ != end_index_) {
+
+                        output = item_vector_[begin_index_ % capacity_];
+                    
+                        begin_index_ = 
+
+                        return true;
+                    }
+                }
+
+                return false;
 
                 utilities::unique_lock_t<pac::spinlock> lock_guard(reader_lock_);
 

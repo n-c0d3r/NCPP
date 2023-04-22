@@ -1,8 +1,8 @@
 #pragma once
 
 /**
- *  @file ncpp/dop/job.hpp
- *  @brief Implements job.
+ *  @file ncpp/containers/tgh.hpp
+ *  @brief Implements tagged heap containers.
  */
 
 
@@ -34,14 +34,22 @@
 ////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/utilities/.hpp>
-#include <ncpp/containers/.hpp>
-#include <ncpp/pac/.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
-#include <ncpp/dop/tgh.hpp>
+#include <ncpp/tagged_heap.hpp>
+
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
+#include <ncpp/containers/cfv_queue.hpp>
+#include <ncpp/containers/fixed_vector_queue.hpp>
+#include <ncpp/containers/fixed_vector_stack.hpp>
+#include <ncpp/containers/fls_vector.hpp>
+#include <ncpp/containers/handle_map.hpp>
 
 #pragma endregion
 
@@ -63,15 +71,7 @@
 
 namespace ncpp {
 
-    namespace dop {
-
-        class job_system;
-        class job_wthread;
-        class job_wthread_scheduler;
-        class job_instance;
-        class job_instance_pool;
-        struct job;
-        struct job_handle;
+    namespace containers {
 
 
 
@@ -89,110 +89,58 @@ namespace ncpp {
 
 
 
-        enum class job_stack_allocator_option {
+#pragma region C++ STL Containers
+        template<typename char_type__ = char, typename char_traits__ = std::char_traits<char>, class tagged_heap_type__ = tagged_heap_t<>>
+        using tgh_string_t = typename std::basic_string<
+            char_type__, 
+            char_traits__, 
+            typename tgh_allocator_t<char_type__, tagged_heap_type__>
+        >;
 
-            LARGE,
-            NORMAL,
-            SMALL,
-
-        };
-
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        using tgh_string = typename tgh_string_t<>;
 
 
 
-        struct NCPP_DEFAULT_ALIGNAS job final {
+        template<typename item_type__, typename tagged_heap_type__ = tagged_heap_t<>>
+        using tgh_vector_t = typename std::vector<
+            item_type__,
+            typename tgh_allocator_t<item_type__, tagged_heap_type__>
+        >;
 
-            ////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////
 
-        public:
-            friend class job_system;
-            friend class job_wthread;
-            friend class job_wthread_scheduler;
-            friend class job_instance;
-            friend class job_instance_pool;
-            friend struct job;
-            friend struct job_handle;
 
-            ////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////
+        template<typename key_type__, typename value_type__, typename pr__ = std::less<key_type__>, class tagged_heap_type__ = tagged_heap_t<>>
+        using tgh_map_t = typename std::map<
+            key_type__,
+            value_type__,
+            pr__,
+            typename tgh_allocator_t<std::pair<const key_type__, value_type__>, tagged_heap_type__>
+        >;
 
-        public:
-            using entry_point_type = std::function<void(job_instance& instance)>;
+        template<typename key_type__, typename value_type__, typename pr__ = std::less<key_type__>, class tagged_heap_type__ = tagged_heap_t<>>
+        using tgh_unordered_map_t = typename std::unordered_map<
+            key_type__,
+            value_type__,
+            pr__,
+            typename tgh_allocator_t<std::pair<const key_type__, value_type__>, tagged_heap_type__>
+        >;
 
-            ////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////
 
-        private:
-            entry_point_type entry_point_;
-            u32 instance_count_;
-            u32 batch_size_;
 
-            u32 batch_count_;
+        template<typename key_type__, typename pr__ = std::less<key_type__>, class tagged_heap_type__ = tagged_heap_t<>>
+        using tgh_set_t = typename std::set<
+            key_type__,
+            pr__,
+            typename tgh_allocator_t<key_type__, tagged_heap_type__>
+        >;
 
-            u8 scheduler_wthread_index_;
-            
-            ab8 is_done_;
-
-            job_stack_allocator_option stack_allocator_option_;
-
-            sz generation_index_;
-
-            ////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////
-
-        public:
-            inline u32 instance_count() const { return instance_count_; }
-            inline u32 batch_size() const { return batch_size_; }
-            
-            inline u32 batch_count() const { return batch_count_; }
-
-            inline u32 scheduler_wthread_index() const { return scheduler_wthread_index_; }
-
-            inline b8 is_done() const { return is_done_.load(std::memory_order_acquire); }
-
-            inline job_stack_allocator_option stack_allocator_option() { return stack_allocator_option_; }
-
-            inline sz generation_index() const { return generation_index_; }
-
-            ////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////
-
-        public:
-            job(
-                entry_point_type&& entry_point,
-                u32 instance_count = 1,
-                u32 batch_size = 16,
-                job_stack_allocator_option stack_allocator_option = job_stack_allocator_option::SMALL
-            );
-            ~job();
-
-            ////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////
-
-        public:
-            void execute(job_instance& instance);
-
-        };
+        template<typename key_type__, typename pr__ = std::less<key_type__>, class tagged_heap_type__ = tagged_heap_t<>>
+        using tgh_unordered_set_t = typename std::unordered_set<
+            key_type__,
+            pr__,
+            typename tgh_allocator_t<key_type__, tagged_heap_type__>
+        >;
+#pragma endregion
 
 
 
@@ -210,7 +158,17 @@ namespace ncpp {
 
 
 
-        extern job_handle& schedule_job(job& j);
+#pragma region NCPP Containers
+        template<
+            typename item_type__
+        >
+        template<typename item_type__, class tagged_heap_type__ = tagged_heap_t<>>
+        using tgh_handle_map_t = typename handle_map_t<
+            item_type__,
+            typename tgh_allocator_t<typename handle_map_id_type<item_type__>, tagged_heap_type__>,
+            typename tgh_allocator_t<typename handle_map_cell_type<item_type__>, tagged_heap_type__>
+        >;
+#pragma endregion
 
     }
 

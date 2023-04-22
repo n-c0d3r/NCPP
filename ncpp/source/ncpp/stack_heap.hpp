@@ -889,6 +889,8 @@ namespace ncpp {
 				stack_ref = *((stack*)(data_p_ + stack_size * initialized_stack_count_));
 				new(stack_ref.pointer()) stack(stack_capacity_, *this);
 
+				++initialized_stack_count_;
+
 			}
 			else {
 
@@ -955,6 +957,8 @@ namespace ncpp {
 		stack_chunk* head_p_;
 		stack_chunk* tail_p_;
 
+		sz count_;
+
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
@@ -964,6 +968,7 @@ namespace ncpp {
 		inline stack_chunk& tail() { return *tail_p_; }
 
 		inline b8 is_empty() const { return head_p_ == 0; }
+		inline sz count() const { return count_; }
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
@@ -972,7 +977,8 @@ namespace ncpp {
 	public:
 		inline stack_chunk_list() :
 			head_p_(0),
-			tail_p_(0)
+			tail_p_(0),
+			count_(0)
 		{
 
 
@@ -980,7 +986,8 @@ namespace ncpp {
 		}
 		inline stack_chunk_list(stack_chunk& head, stack_chunk& tail) :
 			head_p_(&head),
-			tail_p_(&tail)
+			tail_p_(&tail),
+			count_(0)
 		{
 
 
@@ -988,7 +995,7 @@ namespace ncpp {
 		}
 		~stack_chunk_list() {
 
-
+			count_ = 0;
 
 		}
 
@@ -997,11 +1004,13 @@ namespace ncpp {
 
 		inline stack_chunk_list(stack_chunk_list&& other) :
 			head_p_(other.head_p_),
-			tail_p_(other.tail_p_)
+			tail_p_(other.tail_p_),
+			count_(0)
 		{
 
 			other.head_p_ = 0;
 			other.tail_p_ = 0;
+			other.count_ = 0;
 
 		}
 		inline stack_chunk_list& operator = (stack_chunk_list&& other)
@@ -1012,6 +1021,7 @@ namespace ncpp {
 
 			other.head_p_ = 0;
 			other.tail_p_ = 0;
+			other.count_ = 0;
 
 			return *this;
 		}
@@ -1037,8 +1047,12 @@ namespace ncpp {
 
 			}
 
+			++count_;
+
 		}
 		inline void erase(stack_chunk& s) {
+
+			assert(count_ != 0 && "invalid stack chunk list");
 
 			if (s.prev_p_ != 0) {
 
@@ -1063,6 +1077,8 @@ namespace ncpp {
 
 			s.next_p_ = 0;
 			s.prev_p_ = 0;
+
+			--count_;
 
 		}
 
@@ -1198,6 +1214,7 @@ namespace ncpp {
 	private:
 		sz stack_capacity_;
 		sz stack_count_per_chunk_;
+		sz min_chunk_count_;
 
 		stack_chunk_list available_chunk_list_;
 		stack_chunk_list empty_chunk_list_;
@@ -1218,6 +1235,8 @@ namespace ncpp {
 		inline stack_chunk_list& empty_chunk_list() { return empty_chunk_list_; }
 
 		inline allocator_type__& allocator() { return allocator_; }
+
+		inline sz min_chunk_count() const { return min_chunk_count_; }
 #pragma endregion
 
 		////////////////////////////////////////////////////////////////////////////////////
@@ -1228,13 +1247,21 @@ namespace ncpp {
 	public:
 		inline stack_heap_t(
 			sz stack_capacity = NCPP_DEFAULT_STACK_CAPACITY,
-			sz stack_count_per_chunk = NCPP_DEFAULT_STACK_COUNT_PER_CHUNK
+			sz stack_count_per_chunk = NCPP_DEFAULT_STACK_COUNT_PER_CHUNK,
+			sz min_chunk_count = 1
 		) :
 			stack_capacity_(stack_capacity),
-			stack_count_per_chunk_(stack_count_per_chunk)
+			stack_count_per_chunk_(stack_count_per_chunk),
+			min_chunk_count_(min_chunk_count)
 		{
 
+			assert(min_chunk_count_ > 0 && "invalid min chunk count");
 
+			for (sz i = 0; i < min_chunk_count_; ++i) {
+
+				empty_chunk_list_.insert(push_chunk());
+
+			}
 
 		}
 		~stack_heap_t() {
@@ -1264,7 +1291,19 @@ namespace ncpp {
 			sz stack_size = stack_capacity_ + sizeof(stack);
 			sz allocation_size = sizeof(stack_chunk) + stack_size * stack_count_per_chunk_;
 
-			stack_chunk* chunk_p = (stack_chunk*)allocator_.allocate(allocation_size);
+			stack_chunk* chunk_p = 0; ;
+
+			if (empty_chunk_list_.is_empty()) {
+
+				chunk_p = (stack_chunk*)allocator_.allocate(allocation_size);
+
+			}
+			else {
+
+				chunk_p = &(empty_chunk_list_.tail());
+
+			}
+
 			new(chunk_p) stack_chunk(stack_capacity_, stack_count_per_chunk_);
 
 			chunk_ref = *chunk_p;
@@ -1329,7 +1368,6 @@ namespace ncpp {
 				else {
 
 					chunk_ref = push_chunk();
-
 					empty_chunk_list_.erase(*chunk_ref);
 
 					available_chunk_list_.insert(*chunk_ref);
@@ -1396,7 +1434,7 @@ namespace ncpp {
 
 			if (chunk.is_empty()) {
 
-				if (empty_chunk_list_.is_empty()) {
+				if (empty_chunk_list_.count() < min_chunk_count_) {
 
 					available_chunk_list_.erase(chunk);
 					empty_chunk_list_.insert(chunk);
@@ -1426,7 +1464,7 @@ namespace ncpp {
 				
 				if (chunk.is_empty()) {
 
-					if (empty_chunk_list_.is_empty()) {
+					if (empty_chunk_list_.count() < min_chunk_count_) {
 
 						available_chunk_list_.erase(chunk);
 						empty_chunk_list_.insert(chunk);
@@ -1653,6 +1691,10 @@ namespace ncpp {
 
 	};
 #pragma endregion
+
+
+
+	using stack_heap = stack_heap_t<>;
 
 }
 

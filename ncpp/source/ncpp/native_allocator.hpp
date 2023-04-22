@@ -1,7 +1,7 @@
 #pragma once
 
-/** @file ncpp/abstract_allocator.hpp
- * 	@brief Implements abstract allocator.
+/** @file ncpp/native_allocator.hpp
+ * 	@brief Implements native allocator.
 */
 
 

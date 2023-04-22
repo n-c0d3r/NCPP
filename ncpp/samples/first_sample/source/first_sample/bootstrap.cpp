@@ -6,36 +6,44 @@ using namespace ncpp;
 
 int main() {
 
-	while(true)
 	{
 
-		asz a = 0;
+		stack_heap sheap(NCPP_DEFAULT_STACK_CAPACITY, NCPP_DEFAULT_STACK_COUNT_PER_CHUNK, 10);
+		stack_group sgroup;
 
-		pac::spinlock lock;
+		stack_allocator_t<u8> sallocator(sheap, sgroup);
+		sallocator.allocate(1);
 
-		dop::job entry_job = dop::job(
-			[&](dop::job_instance& instance) {
+		tagged_heap tghheap;
 
-				a.fetch_add(1);
+		tgh_allocator_t<u8> tghallocator(tghheap, tghheap.create_category(NCPP_DEFAULT_TAGGED_HEAP_BLOCK_CAPACITY));
+		tghallocator.allocate(1);
 
-				if (a.load() > 2048) {
+		int loopTime = 10000;
+		{
 
-					system("pause");
+			clock_t start = clock();
+			for (int i = 0; i < loopTime; ++i) {
 
-				}
+				u8* a = sallocator.allocate(5000);
 
-			},
-			2048//, 2048
-		);
+			}
+			clock_t end = clock();
+			std::cout << end - start << std::endl;
 
+		}
+		{
 
+			clock_t start = clock();
+			for (int i = 0; i < loopTime; ++i) {
 
-		dop::job_system system(entry_job, 12, 4000, 4000);
+				u8* a = (u8*)malloc(5000);
 
-		system.run();
-		system.wait();
+			}
+			clock_t end = clock();
+			std::cout << end - start << std::endl;
 
-
+		}
 
 		std::cout << "memory usage: " << memory_usage() << "(bytes)" << std::endl;
 		std::cout << std::endl;
