@@ -23,6 +23,7 @@ set(NCPP_DEFAULT_HANDLE_MAP_VECTOR_RESERVE_COUNT 4 CACHE STRING "Default Handle 
 option(NCPP_ENABLE_FIBER "Enable fiber" ON)
 set(NCPP_DEFAULT_THREAD_STACK_SIZE 1048576 CACHE STRING "Default Stack Size Of Thread")
 set(NCPP_DEFAULT_FIBER_STACK_SIZE 262144 CACHE STRING "Default Stack Size Of Fiber")
+option(NCPP_ENABLE_WEAKLOCK_WARNING "Enable Weaklock Warning" ON)
 
 # ncpp job system options
 set(NCPP_DEFAULT_JOB_HANDLE_QUEUE_CAPACITY 1024 CACHE STRING "Default Job Handle Queue Capacity")

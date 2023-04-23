@@ -1,8 +1,8 @@
 #pragma once
 
 /**
- *  @file ncpp/pac/spinlock.hpp
- *  @brief Implementing spinlock.
+ *  @file ncpp/pac/nonelock.hpp
+ *  @brief Implementing nonelock.
  */
 
 
@@ -74,32 +74,25 @@ namespace ncpp {
 
 	
 		/**
-		 *	Implements spinlock
+		 *	Implements nonelock
 		 */
-		class NCPP_DEFAULT_ALIGNAS spinlock {
-
-			////////////////////////////////////////////////////////////////////////////////////
-			////////////////////////////////////////////////////////////////////////////////////
-			////////////////////////////////////////////////////////////////////////////////////
-
-		private:
-			std::atomic_flag flag_;
+		class NCPP_DEFAULT_ALIGNAS nonelock {
 
 			////////////////////////////////////////////////////////////////////////////////////
 			////////////////////////////////////////////////////////////////////////////////////
 			////////////////////////////////////////////////////////////////////////////////////
 
 		public:
-			spinlock() {
+			nonelock() {
 
 
 
 			}
 
-			spinlock(const spinlock&) = delete;
-			spinlock& operator = (const spinlock&) = delete;
-			spinlock(spinlock&&) = delete;
-			spinlock& operator = (spinlock&&) = delete;
+			nonelock(const nonelock&) = delete;
+			nonelock& operator = (const nonelock&) = delete;
+			nonelock(nonelock&&) = delete;
+			nonelock& operator = (nonelock&&) = delete;
 
 			////////////////////////////////////////////////////////////////////////////////////
 			////////////////////////////////////////////////////////////////////////////////////
@@ -107,12 +100,12 @@ namespace ncpp {
 
 			inline void lock() {
 
-				while (flag_.test_and_set(std::memory_order_acquire));
+
 
 			}
 			inline void unlock() {
 
-				flag_.clear(std::memory_order_release);
+
 
 			}
 

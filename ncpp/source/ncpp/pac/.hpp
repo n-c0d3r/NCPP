@@ -60,6 +60,8 @@ namespace ncpp {
 ////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/pac/spinlock.hpp>
+#include <ncpp/pac/weaklock.hpp>
+#include <ncpp/pac/nonelock.hpp>
 #include <ncpp/pac/semaphore.hpp>
 
 #ifdef NCPP_ENABLE_FIBER

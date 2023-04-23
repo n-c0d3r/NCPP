@@ -34,6 +34,8 @@
 
 #include <ncpp/utilities/lref.hpp>
 #include <ncpp/mem.hpp>
+#include <ncpp/pac/spinlock.hpp>
+#include <ncpp/utilities/unique_lock.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
@@ -1177,7 +1179,8 @@ namespace ncpp {
 
 
 	template<
-		class allocator_type__ = typename NCPP_DEFAULT_ALLOCATOR_TEMPLATE<u8>
+		class allocator_type__ = typename NCPP_DEFAULT_ALLOCATOR_TEMPLATE<u8>,
+		class lock_type__ = pac::spinlock
 	>
 	class stack_heap_t :
 		public native_heap
@@ -1204,6 +1207,7 @@ namespace ncpp {
 #pragma region Typedefs
 	public:
 		using allocator_type = allocator_type__;
+		using lock_type = lock_type__;
 #pragma endregion
 
 		////////////////////////////////////////////////////////////////////////////////////
@@ -1220,6 +1224,8 @@ namespace ncpp {
 		stack_chunk_list empty_chunk_list_;
 
 		allocator_type__ allocator_;
+
+		lock_type__ lock_;
 #pragma endregion 
 
 		////////////////////////////////////////////////////////////////////////////////////
@@ -1389,6 +1395,8 @@ namespace ncpp {
 	public:
 		inline u8* allocate(stack_group& group, sz size, sz align = NCPP_DEFAULT_ALIGN) {
 
+			utilities::unique_lock_t<lock_type> lock_guard(lock_);
+
 			assert(size + sizeof(stack_allocation) + align <= stack_capacity_ && "allocation size is too large to be allocated in this stack heap.");
 
 
@@ -1415,6 +1423,8 @@ namespace ncpp {
 			return 0;
 		}
 		inline void deallocate(stack_group& group, void* ptr) {
+
+			utilities::unique_lock_t<lock_type> lock_guard(lock_);
 
 			stack_allocation* allocation_p = reinterpret_cast<stack_allocation*>(ptr) - 1;
 
@@ -1451,6 +1461,8 @@ namespace ncpp {
 		}
 		inline void clear_group(stack_group& group) {
 
+			utilities::unique_lock_t<lock_type> lock_guard(lock_);
+
 			stack* stack_p = &(group.out_stack_list().tail());
 			while (stack_p != 0) {
 
@@ -1485,6 +1497,8 @@ namespace ncpp {
 		}
 
 		inline void clear() {
+
+			utilities::unique_lock_t<lock_type> lock_guard(lock_);
 
 			stack_chunk* chunk_p = &(empty_chunk_list_.head());
 			while (chunk_p != 0) {
@@ -1648,6 +1662,8 @@ namespace ncpp {
 			return (pointer)(stack_heap_ref_->allocate(*stack_group_ref_, n * sizeof(value_type), align));
 		}
 		inline void internal_deallocate(pointer ptr, sz n = 1) {
+			
+			assert(!stack_heap_ref_.is_null() && "tagged heap is null");
 
 			stack_heap_ref_->deallocate(*stack_group_ref_, ptr);
 		}

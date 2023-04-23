@@ -34,6 +34,8 @@
 
 #include <ncpp/utilities/lref.hpp>
 #include <ncpp/mem.hpp>
+#include <ncpp/pac/spinlock.hpp>
+#include <ncpp/utilities/unique_lock.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
@@ -1192,7 +1194,8 @@ namespace ncpp {
 
 	template<
 		class object_type__,
-		class allocator_type__ = typename NCPP_DEFAULT_ALLOCATOR_TEMPLATE<u8>
+		class allocator_type__ = typename NCPP_DEFAULT_ALLOCATOR_TEMPLATE<u8>,
+		class lock_type__ = pac::spinlock
 	>
 	class pool_heap_t :
 		public native_heap
@@ -1219,6 +1222,7 @@ namespace ncpp {
 #pragma region Typedefs
 	public:
 		using allocator_type = allocator_type__;
+		using lock_type = lock_type__;
 #pragma endregion
 
 		////////////////////////////////////////////////////////////////////////////////////
@@ -1236,6 +1240,8 @@ namespace ncpp {
 		pool_chunk_list empty_chunk_list_;
 
 		allocator_type__ allocator_;
+
+		lock_type__ lock_;
 #pragma endregion 
 
 		////////////////////////////////////////////////////////////////////////////////////
@@ -1407,6 +1413,8 @@ namespace ncpp {
 	public:
 		inline u8* allocate(pool_group& group, sz n, sz align = NCPP_DEFAULT_ALIGN) {
 
+			utilities::unique_lock_t<lock_type> lock_guard(lock_);
+
 			sz size = n * sizeof(object_type__);
 
 			assert(size + sizeof(pool_allocation) + align <= pool_capacity_ && "allocation size is too large to be allocated in this pool heap.");
@@ -1435,6 +1443,8 @@ namespace ncpp {
 			return 0;
 		}
 		inline void deallocate(pool_group& group, void* ptr) {
+
+			utilities::unique_lock_t<lock_type> lock_guard(lock_);
 
 			pool_allocation* allocation_p = reinterpret_cast<pool_allocation*>(ptr) - 1;
 
@@ -1471,6 +1481,8 @@ namespace ncpp {
 		}
 		inline void clear_group(pool_group& group) {
 
+			utilities::unique_lock_t<lock_type> lock_guard(lock_);
+
 			pool* pool_p = &(group.out_pool_list().tail());
 			while (pool_p != 0) {
 
@@ -1505,6 +1517,8 @@ namespace ncpp {
 		}
 
 		inline void clear() {
+
+			utilities::unique_lock_t<lock_type> lock_guard(lock_);
 
 			pool_chunk* chunk_p = &(empty_chunk_list_.head());
 			while (chunk_p != 0) {
@@ -1650,6 +1664,8 @@ namespace ncpp {
 			return (pointer)(pool_heap_ref_->allocate(*pool_group_ref_, n, align));
 		}
 		inline void internal_deallocate(pointer ptr, sz n = 1) {
+			
+			assert(!pool_heap_ref_.is_null() && "tagged heap is null");
 
 			pool_heap_ref_->deallocate(*pool_group_ref_, ptr);
 		}

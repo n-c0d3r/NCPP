@@ -1,8 +1,8 @@
 #pragma once
 
 /**
- *  @file ncpp/pac/spinlock.hpp
- *  @brief Implementing spinlock.
+ *  @file ncpp/pac/weaklock.hpp
+ *  @brief Implementing weaklock.
  */
 
 
@@ -74,9 +74,17 @@ namespace ncpp {
 
 	
 		/**
-		 *	Implements spinlock
+		 *	Implements weaklock
+		 *	Note: Only support 8bit ascii char string
 		 */
-		class NCPP_DEFAULT_ALIGNAS spinlock {
+		template<
+			class string_type__ = typename std::basic_string<
+				char,
+				std::char_traits<char>,
+				native_allocator_t<char>
+			>
+		>
+		class NCPP_DEFAULT_ALIGNAS weaklock_t {
 
 			////////////////////////////////////////////////////////////////////////////////////
 			////////////////////////////////////////////////////////////////////////////////////
@@ -85,38 +93,77 @@ namespace ncpp {
 		private:
 			std::atomic_flag flag_;
 
+#ifdef NCPP_ENABLE_WEAKLOCK_WARNING
+			string_type__ warning_content_;
+#endif
+
+
+
+		public:
+#ifdef NCPP_ENABLE_WEAKLOCK_WARNING
+			inline string_type__ warning_content() const { return warning_content_; }
+#endif
+
+
+
 			////////////////////////////////////////////////////////////////////////////////////
 			////////////////////////////////////////////////////////////////////////////////////
 			////////////////////////////////////////////////////////////////////////////////////
 
 		public:
-			spinlock() {
+			weaklock_t()
+#ifdef NCPP_ENABLE_WEAKLOCK_WARNING
+				:
+				warning_content_("data race caused")
+#endif
+			{
+
+
+
+			}
+			weaklock_t(const string_type__& warning_content)
+#ifdef NCPP_ENABLE_WEAKLOCK_WARNING
+				:
+				warning_content_(warning_content)
+#endif
+			{
+
+
+
+			}
+			~weaklock_t() {
 
 
 
 			}
 
-			spinlock(const spinlock&) = delete;
-			spinlock& operator = (const spinlock&) = delete;
-			spinlock(spinlock&&) = delete;
-			spinlock& operator = (spinlock&&) = delete;
+			weaklock_t(const weaklock_t&) = delete;
+			weaklock_t& operator = (const weaklock_t&) = delete;
+			weaklock_t(weaklock_t&&) = delete;
+			weaklock_t& operator = (weaklock_t&&) = delete;
 
 			////////////////////////////////////////////////////////////////////////////////////
 			////////////////////////////////////////////////////////////////////////////////////
 			////////////////////////////////////////////////////////////////////////////////////
 
 			inline void lock() {
-
-				while (flag_.test_and_set(std::memory_order_acquire));
+                
+#ifdef NCPP_ENABLE_WEAKLOCK_WARNING
+				warning(!flag_.test_and_set(std::memory_order_acquire), warning_content_);
+#endif
 
 			}
 			inline void unlock() {
 
+#ifdef NCPP_ENABLE_WEAKLOCK_WARNING
 				flag_.clear(std::memory_order_release);
+#endif
 
 			}
 
 		};
+
+		using weaklock = weaklock_t<>;
 	
 	} 
 
