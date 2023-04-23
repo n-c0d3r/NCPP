@@ -456,6 +456,10 @@ namespace ncpp {
 
 			curr_block_p_array_[thread_index] = head_block_p_array_[thread_index];
 
+
+
+			internal_deallocate(thread_index);
+
 		}
 #pragma endregion
 
@@ -632,7 +636,10 @@ namespace ncpp {
 
 #pragma region Public Methods
 	public:
-		inline category_id_type create_category(sz block_capacity = NCPP_DEFAULT_TAGGED_HEAP_BLOCK_CAPACITY, sz min_block_count = 1) {
+		inline category_id_type create_category(
+			sz block_capacity = NCPP_DEFAULT_TAGGED_HEAP_BLOCK_CAPACITY, 
+			sz min_block_count = NCPP_DEFAULT_TAGGED_HEAP_MIN_BLOCK_COUNT_PER_CATEGORY
+		) {
 
 			return category_map_.insert(category_type(block_capacity, min_block_count));
 		}

@@ -1248,7 +1248,7 @@ namespace ncpp {
 		inline stack_heap_t(
 			sz stack_capacity = NCPP_DEFAULT_STACK_CAPACITY,
 			sz stack_count_per_chunk = NCPP_DEFAULT_STACK_COUNT_PER_CHUNK,
-			sz min_chunk_count = 1
+			sz min_chunk_count = NCPP_DEFAULT_STACK_HEAP_MIN_CHUNK_COUNT
 		) :
 			stack_capacity_(stack_capacity),
 			stack_count_per_chunk_(stack_count_per_chunk),
