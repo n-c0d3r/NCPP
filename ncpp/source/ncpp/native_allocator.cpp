@@ -34,11 +34,13 @@ namespace ncpp {
 
 
 
+	NCPP_DEFAULT_ALLOCATOR_TEMPLATE<u8> dèault_native_allocator;
 	thread_local utilities::lref_t<native_allocator_i> current_native_allocator_ref_g;
 
 	native_allocator_i& current_native_allocator() {
 
-		assert(!current_native_allocator_ref_g.is_null() && "no native allocator found.");
+		if (current_native_allocator_ref_g.is_null())
+			return dèault_native_allocator;
 
 		return *current_native_allocator_ref_g;
 	}

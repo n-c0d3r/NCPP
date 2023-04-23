@@ -36,6 +36,12 @@
 #include <ncpp/memory_counting.hpp>
 #endif
 
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
+#include <ncpp/native_allocator.hpp>
+
 #pragma endregion
 
 
@@ -182,7 +188,8 @@ namespace ncpp {
 
 #pragma region Allocators
 	template <class value_type__>
-	class NCPP_DEFAULT_ALIGNAS aligned_allocator_t
+	class NCPP_DEFAULT_ALIGNAS aligned_allocator_t :
+		public native_allocator_t<value_type__>
 	{
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -236,14 +243,35 @@ namespace ncpp {
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		inline pointer   allocate(size_type n, sz align = NCPP_DEFAULT_ALIGN) {
+	private:
+		inline pointer internal_allocate(size_type n, sz align = NCPP_DEFAULT_ALIGN) {
 
 			return (pointer)aligned_alloc(n * sizeof(value_type), align);
 		}
+		inline void internal_deallocate(pointer ptr, sz n = 1) {
 
-		inline void      deallocate(void* p, sz n = 1) {
+			aligned_free(ptr);
+		}
 
-			aligned_free(p);
+	protected:
+		void* abstract_allocate(size_type size, sz align = NCPP_DEFAULT_ALIGN) {
+
+			return (void*)internal_allocate(size / sizeof(value_type__), align);
+		}
+		void abstract_deallocate(void* ptr, sz size = sizeof(value_type__)) {
+
+			internal_deallocate((pointer)ptr, size / sizeof(value_type__));
+		}
+
+	public:
+		inline pointer   allocate(size_type n, sz align = NCPP_DEFAULT_ALIGN) {
+
+			return internal_allocate(n, align);
+		}
+
+		inline void      deallocate(pointer ptr, sz n = 1) {
+
+			internal_deallocate(ptr, n);
 		}
 
 		inline pointer           address(reference x) const { return &x; }

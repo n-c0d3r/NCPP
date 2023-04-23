@@ -410,7 +410,7 @@ namespace ncpp {
 			while (block_p != 0) {
 
 				block_type* block_prev_p = block_p->prev_p;
-				allocator_.deallocate(block_p, block_capacity_ + sizeof(block_type));
+				allocator_.deallocate((u8*)block_p, block_capacity_ + sizeof(block_type));
 				block_p = block_prev_p;
 
 			}
