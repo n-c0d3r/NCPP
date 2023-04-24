@@ -457,7 +457,7 @@ namespace ncpp {
 
 			}
 
-			usage_ += size + align + sizeof(sz);
+			usage_ += actual_size;
 
 			u8* aligned_ptr = align_pointer(raw_ptr, align);
 
@@ -1653,14 +1653,14 @@ namespace ncpp {
 
 		}
 		inline pool_allocator_t(const pool_allocator_t& other) :
-			pool_allocator_t((pool_heap_type&)(*other.pool_heap_ref_), (pool_heap_type&)(*other.pool_group_ref_))
+			pool_allocator_t((pool_heap_type&)(other.pool_heap()), (pool_group&)(other.group()))
 		{
 
 
 
 		}
 
-		inline pool_allocator_t<value_type>& operator=(const pool_allocator_t& other) {
+		inline pool_allocator_t<value_type, pool_heap_type>& operator=(const pool_allocator_t& other) {
 
 			pool_heap_ref_ = other.pool_heap_ref_;
 			pool_group_ref_ = other.pool_group_ref_;
@@ -1720,7 +1720,7 @@ namespace ncpp {
 		inline size_type         max_size() const { return size_t(-1); }
 
 		template <class U>
-		struct rebind { typedef pool_allocator_t<U> other; };
+		struct rebind { typedef pool_allocator_t<U, pool_heap_type> other; };
 #pragma endregion
 
 	};

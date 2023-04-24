@@ -444,7 +444,7 @@ namespace ncpp {
 			sz actual_size = size + sizeof(stack_allocation) + align;
 
 			u8* raw_ptr = pushable_pointer();
-			usage_ += size + align + sizeof(sz);
+			usage_ += actual_size;
 
 			u8* aligned_ptr = align_pointer(raw_ptr, align);
 
@@ -1633,14 +1633,14 @@ namespace ncpp {
 
 		}
 		inline stack_allocator_t(const stack_allocator_t& other) :
-			stack_allocator_t((stack_heap_type&)(*other.stack_heap_ref_), (stack_heap_type&)(*other.stack_group_ref_))
+			stack_allocator_t((stack_heap_type&)(*other.stack_heap_ref_), (stack_group&)(*other.stack_group_ref_))
 		{
 
 
 
 		}
 
-		inline stack_allocator_t<value_type>& operator=(const stack_allocator_t& other) {
+		inline stack_allocator_t<value_type, stack_heap_type>& operator=(const stack_allocator_t& other) {
 
 			stack_heap_ref_ = other.stack_heap_ref_;
 			stack_group_ref_ = other.stack_group_ref_;
@@ -1650,7 +1650,7 @@ namespace ncpp {
 
 		template <class other_value_type__>
 		inline stack_allocator_t(typename const stack_allocator_t<other_value_type__, stack_heap_type>& other) :
-			stack_allocator_t((stack_heap_type&)(*other.stack_heap_ref_), (stack_heap_type&)(*other.stack_group_ref_))
+			stack_allocator_t((stack_heap_type&)(other.stack_heap()), (stack_group&)(other.group()))
 		{
 
 
@@ -1718,7 +1718,7 @@ namespace ncpp {
 		inline size_type         max_size() const { return size_t(-1); }
 
 		template <class U>
-		struct rebind { typedef stack_allocator_t<U> other; };
+		struct rebind { typedef stack_allocator_t<U, stack_heap_type> other; };
 #pragma endregion
 
 	};

@@ -74,7 +74,7 @@ namespace ncpp {
 
 	
 		/**
-		 *	Implements weaklock
+		 *	Implements weaklock.
 		 *	Note: Only support 8bit ascii char string
 		 */
 		template<
