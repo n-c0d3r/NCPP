@@ -179,6 +179,14 @@ namespace ncpp {
 			ptrdiff_t shift = aligned_ptr - raw_ptr;
 			assert(shift > 0 && shift <= 256);
 
+
+
+#ifdef NCPP_ENABLE_NATIVE_MEMORY_COUNTING
+			increase_native_used_heap_memory(actual_size);
+#endif
+
+
+
 			aligned_ptr[-1] = static_cast<u8>(shift & 0xFF);
 			return reinterpret_cast<u8*>(aligned_ptr);
 		}
@@ -234,6 +242,14 @@ namespace ncpp {
 		 *	Resets the usage to 0 and we can reuse the block.
 		 */
 		inline void reset() {
+
+
+
+#ifdef NCPP_ENABLE_NATIVE_MEMORY_COUNTING
+			decrease_native_used_heap_memory(usage_);
+#endif
+
+
 
 			usage_ = 0;
 		}
@@ -410,6 +426,7 @@ namespace ncpp {
 			while (block_p != 0) {
 
 				block_type* block_prev_p = block_p->prev_p;
+				block_p->reset();
 				allocator_.deallocate((u8*)block_p, block_capacity_ + sizeof(block_type));
 				block_p = block_prev_p;
 

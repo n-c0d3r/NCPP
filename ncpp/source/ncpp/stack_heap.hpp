@@ -454,6 +454,14 @@ namespace ncpp {
 			stack_allocation* allocation_p = reinterpret_cast<stack_allocation*>(aligned_ptr);
 			new(allocation_p) stack_allocation(actual_size, *this);
 
+
+
+#ifdef NCPP_ENABLE_NATIVE_MEMORY_COUNTING
+			increase_native_used_heap_memory(allocation_p->size());
+#endif
+
+
+
 			allocation_list_.insert(*allocation_p);
 
 			return reinterpret_cast<u8*>(allocation_p + 1);
@@ -467,6 +475,14 @@ namespace ncpp {
 			return aligned_alloc(size, align);
 		}
 		inline void deallocate(stack_allocation* allocation_p) {
+
+
+
+#ifdef NCPP_ENABLE_NATIVE_MEMORY_COUNTING
+			decrease_native_used_heap_memory(allocation_p->size());
+#endif
+
+
 
 			usage_ -= allocation_p->size_;
 			allocation_list_.erase(*allocation_p);
@@ -1427,6 +1443,8 @@ namespace ncpp {
 			utilities::unique_lock_t<lock_type> lock_guard(lock_);
 
 			stack_allocation* allocation_p = reinterpret_cast<stack_allocation*>(ptr) - 1;
+
+
 
 			stack& s = allocation_p->stack();
 			stack_chunk& chunk = s.chunk();

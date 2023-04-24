@@ -32,8 +32,8 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifdef NCPP_ENABLE_MEMORY_COUNTING
-#include <ncpp/memory_counting.hpp>
+#ifdef NCPP_ENABLE_NATIVE_MEMORY_COUNTING
+#include <ncpp/native_memory_counting.hpp>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -117,8 +117,8 @@ namespace ncpp {
 		ptrdiff_t shift = aligned_ptr - raw_ptr;
 		assert(shift > 0 && shift <= 256);
 
-#ifdef NCPP_ENABLE_MEMORY_COUNTING
-		increase_memory_usage(actual_size);
+#ifdef NCPP_ENABLE_NATIVE_MEMORY_COUNTING
+		increase_native_allocated_memory(actual_size);
 #endif
 
 		aligned_ptr[-1] = static_cast<u8>(shift & 0xFF);
@@ -160,8 +160,8 @@ namespace ncpp {
 
 		sz actual_size = *((sz*)raw_ptr);
 
-#ifdef NCPP_ENABLE_MEMORY_COUNTING
-		decrease_memory_usage(actual_size);
+#ifdef NCPP_ENABLE_NATIVE_MEMORY_COUNTING
+		decrease_native_allocated_memory(actual_size);
 #endif
 
 		delete[] raw_ptr;

@@ -3,7 +3,7 @@
 set(NCPP_DEFAULT_ALIGN 16 CACHE STRING "Default Data Align")
 
 # ncpp mem options
-option(NCPP_ENABLE_MEMORY_COUNTING "Enable memory counting" ON)
+option(NCPP_ENABLE_NATIVE_MEMORY_COUNTING "Enable Native Memory Counting" ON)
 set(NCPP_DEFAULT_TAGGED_HEAP_CAPACITY 64 CACHE STRING "Default Max Category Count In A Tagged Heap")
 set(NCPP_DEFAULT_TAGGED_HEAP_BLOCK_CAPACITY 2097152 CACHE STRING "Default Tagged Heap Block Capacity")
 set(NCPP_DEFAULT_TAGGED_HEAP_MIN_BLOCK_COUNT_PER_CATEGORY 4 CACHE STRING "Default Min Block Count Per Tagged Heap Category")
