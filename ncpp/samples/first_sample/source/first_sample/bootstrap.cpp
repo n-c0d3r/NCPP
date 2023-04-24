@@ -18,13 +18,13 @@ int main() {
 		containers::native_fv_queue_t<i32> queue;
 
 		std::cout << "native allocated memory: " << native_allocated_memory() << "(bytes)" << std::endl;
-		std::cout << "native heap used memory: " << native_used_heap_memory() << "(bytes)" << std::endl;
+		std::cout << "native used heap memory: " << native_used_heap_memory() << "(bytes)" << std::endl;
 		std::cout << std::endl;
 
 	}
 
 	std::cout << "native allocated memory: " << native_allocated_memory() << "(bytes)" << std::endl;
-	std::cout << "native heap used memory: " << native_used_heap_memory() << "(bytes)" << std::endl;
+	std::cout << "native used heap memory: " << native_used_heap_memory() << "(bytes)" << std::endl;
 	std::cout << std::endl;
 
 	return 0;
