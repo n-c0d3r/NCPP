@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 3.1)
 
 
 
+set(NCPP_VERSION_MAJOR "0")
+set(NCPP_VERSION_MINOR "1")
+
+
+
 project(ncpp)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -11,3 +16,10 @@ set(CMAKE_C_STANDARD 17)
 
 
 add_subdirectory(ncpp)
+
+include(InstallRequiredSystemLibraries)
+set (CPACK_OUTPUT_CONFIG_FILE "${CMAKE_BINARY_DIR}/NCPPConfig.cmake")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_PACKAGE_VERSION_MAJOR "${NCPP_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${NCPP_VERSION_MINOR}")
+include(CPack)

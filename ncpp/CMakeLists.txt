@@ -102,5 +102,10 @@ endif()
 
 
 
+# install
+install(TARGETS ncpp DESTINATION bin)
+
+
+
 # sub directories
 add_subdirectory(samples)
