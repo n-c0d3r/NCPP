@@ -99,6 +99,8 @@ namespace ncpp {
 
         using tgh_string = typename tgh_string_t<>;
 
+        using tgh_wstring = typename tgh_string_t<wchar_t>;
+
 
 
         template<typename item_type__, typename tagged_heap_type__ = tagged_heap_t<>>
@@ -167,6 +169,18 @@ namespace ncpp {
             item_type__,
             typename tgh_allocator_t<typename handle_map_id_type<item_type__>, tagged_heap_type__>,
             typename tgh_allocator_t<typename handle_map_cell_type<item_type__>, tagged_heap_type__>
+        >;
+
+        template<typename item_type__>
+        using tgh_fv_queue_t = typename fixed_vector_queue_t<
+            item_type__,
+            tgh_allocator_t<item_type__>
+        >;
+
+        template<typename item_type__>
+        using tgh_fv_stack_t = typename fixed_vector_stack_t<
+            item_type__,
+            tgh_allocator_t<item_type__>
         >;
 #pragma endregion
 

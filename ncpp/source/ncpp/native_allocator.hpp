@@ -133,6 +133,11 @@ namespace ncpp {
 	public:
 		void apply_native_use();
 		void clear_native_use();
+
+		inline bool operator != (const native_allocator_i& other) {
+
+			return true;
+		}
 #pragma endregion
 
 	};

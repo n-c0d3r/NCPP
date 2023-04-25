@@ -173,6 +173,12 @@ namespace ncpp {
             item_type__,
             native_allocator_t<item_type__>
         >;
+
+        template<typename item_type__>
+        using native_fv_stack_t = typename fixed_vector_stack_t<
+            item_type__,
+            native_allocator_t<item_type__>
+        >;
 #pragma endregion
 
     }
