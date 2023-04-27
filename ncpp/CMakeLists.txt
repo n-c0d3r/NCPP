@@ -102,20 +102,8 @@ endif()
 
 
 
-# install
-install(
-    TARGETS ncpp     
-    EXPORT ncpp
-    DESTINATION bin
-)
-
-# export
-export(EXPORT ncpp
-  FILE "${CMAKE_CURRENT_BINARY_DIR}/ncpp.cmake"
-  NAMESPACE ncpp::
-)
-
-
-
 # sub directories
 add_subdirectory(samples)
+
+
+
