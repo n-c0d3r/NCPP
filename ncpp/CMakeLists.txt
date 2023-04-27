@@ -103,7 +103,11 @@ endif()
 
 
 # install
-install(TARGETS ncpp DESTINATION bin)
+install(
+    TARGETS ncpp     
+    EXPORT ncpp
+    DESTINATION bin
+)
 
 
 
