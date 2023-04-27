@@ -109,6 +109,12 @@ install(
     DESTINATION bin
 )
 
+# export
+export(EXPORT ncpp
+  FILE "${CMAKE_CURRENT_BINARY_DIR}/ncpp.cmake"
+  NAMESPACE ncpp::
+)
+
 
 
 # sub directories
