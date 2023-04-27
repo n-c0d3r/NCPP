@@ -4,7 +4,7 @@ file(GLOB source_files
     "source/first_sample/*.cpp"
     "source/first_sample/*.hpp"
 )
-source_group("source\\ncpp.samples.first_sample" FILES ${source_files})
+source_group("source\\first_sample" FILES ${source_files})
 
 
 
