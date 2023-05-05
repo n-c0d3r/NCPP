@@ -58,6 +58,9 @@ namespace ncpp {
 	class native_heap;
 	class native_allocator_i;
 
+	template <class value_type__>
+	class NCPP_DEFAULT_ALIGNAS native_allocator_t;
+
 
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,6 +78,12 @@ namespace ncpp {
 
 
 	extern native_allocator_i& current_native_allocator();
+
+	template<typename value_type__>
+	inline native_allocator_t<value_type__>& current_native_allocator_t() {
+
+		return (native_allocator_t<value_type__>&)current_native_allocator();
+	}
 
 
 
@@ -118,7 +127,7 @@ namespace ncpp {
 
 #pragma region Methods
 	protected:
-		virtual void* abstract_allocate(sz size, sz align = NCPP_DEFAULT_ALIGN) {
+		virtual void* abstract_allocate(sz size, sz align = 1) {
 
 			return current_native_allocator().abstract_allocate(size, align);
 		}
@@ -239,7 +248,7 @@ namespace ncpp {
 
 #pragma region Methods
 	public:
-		inline pointer   allocate(size_type n, sz align = NCPP_DEFAULT_ALIGN) {
+		inline pointer   allocate(size_type n, sz align = 1) {
 
 			return (pointer)abstract_allocate(sizeof(value_type__) * n, align);
 		}

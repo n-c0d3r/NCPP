@@ -1,0 +1,310 @@
+\hypertarget{win__thread_8hpp_source}{}\doxysection{win\+\_\+thread.\+hpp}
+\label{win__thread_8hpp_source}\index{F:/NCoder/NCPP/ncpp/source/ncpp/pac/win\_thread.hpp@{F:/NCoder/NCPP/ncpp/source/ncpp/pac/win\_thread.hpp}}
+\mbox{\hyperlink{win__thread_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#pragma\ region\ Includes}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{prerequisites_8hpp}{ncpp/prerequisites.hpp}}>}}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#include\ <ncpp/utilities/.hpp>}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{thread_8hpp}{ncpp/pac/thread.hpp}}>}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#ifdef\ NCPP\_ENABLE\_FIBER}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{fiber_8hpp}{ncpp/pac/fiber.hpp}}>}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00051\ }
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#ifndef\ NCPP\_WINDOWS\_PLATFORM}}
+\DoxyCodeLine{00068\ \textcolor{keyword}{static\_assert}(\textcolor{keyword}{false},\ \textcolor{stringliteral}{"{}Must\ be\ included\ with\ \#ifdef\ NCPP\_WINDOWS\_PLATFORM"{}});}
+\DoxyCodeLine{00069\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ }
+\DoxyCodeLine{00087\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacencpp}{ncpp}}\ \{}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ \ \ \ \ \textcolor{keyword}{namespace\ }pac\ \{}
+\DoxyCodeLine{00090\ }
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }win\_thread;}
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00128\ \textcolor{preprocessor}{\#define\ NCPP\_THREAD\_LOCAL\_DATA\ \_\_declspec(thread)}}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \textcolor{keyword}{extern}\ \mbox{\hyperlink{namespacencpp_a74cd32b52d6ec0fc0972bfe75223751a}{u32}}\ \mbox{\hyperlink{namespacencpp_1_1pac_a51ee0a2388b244e27c7a61ce2858512c}{current\_thread\_id}}();}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \textcolor{keyword}{extern}\ \mbox{\hyperlink{namespacencpp_a74cd32b52d6ec0fc0972bfe75223751a}{u32}}\ \mbox{\hyperlink{namespacencpp_1_1pac_aa21f88dac6f5573ecfda2f638bca1690}{current\_thread\_index}}();}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \textcolor{keyword}{extern}\ \mbox{\hyperlink{classncpp_1_1pac_1_1win__thread}{win\_thread}}\&\ \mbox{\hyperlink{namespacencpp_1_1pac_ab57213644a749e245dd937883b10f157}{main\_thread}}();}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \textcolor{keyword}{extern}\ \textcolor{keywordtype}{void}\ reset\_thread\_indices();}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }NCPP\_DEFAULT\_ALIGNAS\ \mbox{\hyperlink{classncpp_1_1pac_1_1win__thread}{win\_thread}}\ \{}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{friend}\ \mbox{\hyperlink{classncpp_1_1pac_1_1win__thread}{win\_thread}}\&\ \mbox{\hyperlink{classncpp_1_1pac_1_1win__thread_a0ca86c6b1c6986189820f8407fe927dd}{main\_thread}}();}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \textcolor{preprocessor}{\#pragma\ region\ Typedefs}}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }functor\_type\ =\ std::function<void()>;}
+\DoxyCodeLine{00182\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00188\ \textcolor{preprocessor}{\#pragma\ region\ Nested\ Types}}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }main\_thread\_creation\_placeholder\ \{\};}
+\DoxyCodeLine{00191\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \textcolor{preprocessor}{\#pragma\ region\ Properties}}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ HANDLE\ \_\_platform\_\_thread\_;}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ DWORD\ \_\_platform\_\_id\_;}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ functor\_type\ functor\_;}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ stack\_size\_;}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \ \ \ \ std::atomic\_bool\ is\_ready\_;}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ is\_main\_;}
+\DoxyCodeLine{00214\ }
+\DoxyCodeLine{00215\ \textcolor{preprocessor}{\#ifdef\ NCPP\_ENABLE\_FIBER}}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ fiber\ owned\_fiber\_;}
+\DoxyCodeLine{00217\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00218\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00223\ }
+\DoxyCodeLine{00224\ \textcolor{preprocessor}{\#pragma\ region\ Getters\ and\ Setters}}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ LPVOID\ \_\_platform\_\_thread()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_\_platform\_\_thread\_;\ \}}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ DWORD\ \_\_platform\_\_id()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_\_platform\_\_id\_;\ \}}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ u32\ id()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \_\_platform\_\_id\_;\ \}}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ functor\_type\&\ functor()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ functor\_;\ \}}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ is\_done()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ DWORD\ ex\_code;}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ r\ =\ GetExitCodeThread(}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_\_platform\_\_thread\_,}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&ex\_code}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00238\ }
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (!r)\ ||\ (ex\_code\ !=\ STILL\_ACTIVE);}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ is\_main()\ \{\ \textcolor{keywordflow}{return}\ is\_main\_;\ \}}
+\DoxyCodeLine{00242\ }
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ fiber\&\ owned\_fiber()\ \{\ \textcolor{keywordflow}{return}\ owned\_fiber\_;\ \}}
+\DoxyCodeLine{00244\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00249\ }
+\DoxyCodeLine{00250\ \textcolor{preprocessor}{\#pragma\ region\ Constructors,\ Destrutor\ and\ Operators}}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ win\_thread::win\_thread(main\_thread\_creation\_placeholder)\ :}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_\_platform\_\_thread\_(GetCurrentThread()),}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_\_platform\_\_id\_(GetCurrentThreadId()),}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ stack\_size\_(0),}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ is\_ready\_(1),}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00261\ \#ifdef\ NCPP\_ENABLE\_FIBER}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ owned\_fiber\_(\mbox{\hyperlink{namespacencpp_1_1pac_a60446d445abb1985eb31f68a7413cf85}{fiber\_creation\_mode}}::CONVERT\_FROM\_THREAD),}
+\DoxyCodeLine{00263\ \#endif}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ is\_main\_(1)}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00267\ }
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ sl\_low\ =\ 0;}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ sl\_high\ =\ 0;}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ GetCurrentThreadStackLimits(\&sl\_low,\ \&sl\_high);}
+\DoxyCodeLine{00271\ }
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ stack\_size\_\ =\ sl\_high\ -\/\ sl\_low;}
+\DoxyCodeLine{00273\ }
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00275\ }
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ win\_thread\ main\_thread\_g;}
+\DoxyCodeLine{00277\ }
+\DoxyCodeLine{00281\ }
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1pac_1_1win__thread_a06ae612d382e35e405c867c36b161e66}{win\_thread::win\_thread}}()\ :}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_\_platform\_\_thread\_(0),}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_\_platform\_\_id\_(0),}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ stack\_size\_(NCPP\_DEFAULT\_THREAD\_STACK\_SIZE),}
+\DoxyCodeLine{00291\ }
+\DoxyCodeLine{00292\ \#ifdef\ NCPP\_ENABLE\_FIBER}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ owned\_fiber\_(),}
+\DoxyCodeLine{00294\ \#endif}
+\DoxyCodeLine{00295\ }
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ is\_main\_(0)}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00298\ }
+\DoxyCodeLine{00299\ }
+\DoxyCodeLine{00300\ }
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1pac_1_1win__thread_a06ae612d382e35e405c867c36b161e66}{win\_thread::win\_thread}}(functor\_type\&\&\ functor,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ stack\_size\ =\ NCPP\_DEFAULT\_THREAD\_STACK\_SIZE)\ :}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_\_platform\_\_thread\_(0),}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_\_platform\_\_id\_(0),}
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ is\_ready\_(0),}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ stack\_size\_(stack\_size),}
+\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ functor\_(std::move(functor)),}
+\DoxyCodeLine{00311\ }
+\DoxyCodeLine{00312\ \#ifdef\ NCPP\_ENABLE\_FIBER}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ owned\_fiber\_(\mbox{\hyperlink{namespacencpp_1_1pac_a60446d445abb1985eb31f68a7413cf85}{fiber\_creation\_mode}}::\mbox{\hyperlink{namespacencpp_1_1pac_a60446d445abb1985eb31f68a7413cf85a23f39d0a15e7be12d3f9f34130960f35}{CONVERT\_FROM\_THREAD\_DI}}),}
+\DoxyCodeLine{00314\ \#endif}
+\DoxyCodeLine{00315\ }
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ is\_main\_(0)}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00318\ }
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_\_platform\_\_thread\_\ =\ CreateThread(}
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ 0,}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ stack\_size,}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classncpp_1_1pac_1_1win__thread_a10daae40101e87aec6734d1764f4645c}{proc}},}
+\DoxyCodeLine{00323\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{this},}
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ STACK\_SIZE\_PARAM\_IS\_A\_RESERVATION,}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \&\_\_platform\_\_id\_}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{00327\ }
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ assert(\_\_platform\_\_thread\_\ !=\ 0\ \&\&\ \textcolor{stringliteral}{"{}thread\ creating\ failed"{}});}
+\DoxyCodeLine{00329\ }
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (!is\_ready\_.load(std::memory\_order\_acquire));}
+\DoxyCodeLine{00331\ }
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classncpp_1_1pac_1_1win__thread_a2effdaeabd69d8adc58b055c8797c04e}{win\_thread::\string~win\_thread}}()\ \{}
+\DoxyCodeLine{00337\ }
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_\_platform\_\_thread\_\ ==\ 0)\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00339\ }
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!is\_main\_)\ \{}
+\DoxyCodeLine{00341\ }
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ assert(is\_done()\ \&\&\ \textcolor{stringliteral}{"{}Cant\ release\ currently\ running\ thread"{}});}
+\DoxyCodeLine{00343\ }
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CloseHandle(\_\_platform\_\_thread\_);}
+\DoxyCodeLine{00345\ }
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00347\ }
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00349\ }
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1pac_1_1win__thread}{win\_thread}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classncpp_1_1pac_1_1win__thread}{win\_thread}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1pac_1_1win__thread}{win\_thread}}\&\ operator\ =\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{classncpp_1_1pac_1_1win__thread}{win\_thread}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00352\ }
+\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1pac_1_1win__thread_a0295ac5cf994fe9b50601665138410f7}{win\_thread}}(\mbox{\hyperlink{classncpp_1_1pac_1_1win__thread}{win\_thread}}\&\&\ other)\ noexcept\ \ :}
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classncpp_1_1pac_1_1win__thread}{win\_thread}}()}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00359\ }
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (!other.is\_ready\_.load(std::memory\_order\_relaxed));}
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::atomic\_thread\_fence(std::memory\_order\_acquire);}
+\DoxyCodeLine{00362\ }
+\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_\_platform\_\_thread\_\ =\ other.\_\_platform\_\_thread\_;}
+\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_\_platform\_\_id\_\ =\ other.\_\_platform\_\_id\_;}
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ stack\_size\_\ =\ other.stack\_size\_;}
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ is\_main\_\ =\ other.is\_main\_;}
+\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ functor\_\ =\ std::move(other.functor\_);}
+\DoxyCodeLine{00368\ }
+\DoxyCodeLine{00369\ \textcolor{preprocessor}{\#ifdef\ NCPP\_ENABLE\_FIBER}}
+\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ owned\_fiber\_\ =\ std::move(other.owned\_fiber\_);}
+\DoxyCodeLine{00371\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00372\ }
+\DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other.\_\_platform\_\_thread\_\ =\ 0;}
+\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other.\_\_platform\_\_id\_\ =\ 0;}
+\DoxyCodeLine{00375\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other.stack\_size\_\ =\ 0;}
+\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other.is\_main\_\ =\ 0;}
+\DoxyCodeLine{00377\ }
+\DoxyCodeLine{00378\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00379\ }
+\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1pac_1_1win__thread}{win\_thread}}\&\ operator\ =\ (\mbox{\hyperlink{classncpp_1_1pac_1_1win__thread}{win\_thread}}\&\&\ other)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00384\ }
+\DoxyCodeLine{00385\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (!other.is\_ready\_.load(std::memory\_order\_relaxed));}
+\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::atomic\_thread\_fence(std::memory\_order\_acquire);}
+\DoxyCodeLine{00387\ }
+\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_\_platform\_\_thread\_\ =\ other.\_\_platform\_\_thread\_;}
+\DoxyCodeLine{00389\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_\_platform\_\_id\_\ =\ other.\_\_platform\_\_id\_;}
+\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ stack\_size\_\ =\ other.stack\_size\_;}
+\DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ is\_main\_\ =\ other.is\_main\_;}
+\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ functor\_\ =\ std::move(other.functor\_);}
+\DoxyCodeLine{00393\ }
+\DoxyCodeLine{00394\ \textcolor{preprocessor}{\#ifdef\ NCPP\_ENABLE\_FIBER}}
+\DoxyCodeLine{00395\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ owned\_fiber\_\ =\ std::move(other.owned\_fiber\_);}
+\DoxyCodeLine{00396\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00397\ }
+\DoxyCodeLine{00398\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other.\_\_platform\_\_thread\_\ =\ 0;}
+\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other.\_\_platform\_\_id\_\ =\ 0;}
+\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other.stack\_size\_\ =\ 0;}
+\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other.is\_main\_\ =\ 0;}
+\DoxyCodeLine{00402\ }
+\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00405\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00406\ }
+\DoxyCodeLine{00410\ }
+\DoxyCodeLine{00411\ \textcolor{preprocessor}{\#pragma\ region\ Methods}}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ DWORD\ WINAPI\ \mbox{\hyperlink{classncpp_1_1pac_1_1win__thread_a10daae40101e87aec6734d1764f4645c}{proc}}(LPVOID\ lpParam);}
+\DoxyCodeLine{00417\ }
+\DoxyCodeLine{00422\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classncpp_1_1pac_1_1win__thread_a854b1f16a25b11a078715ac0575e2b2f}{sleep\_and\_wait}}()\ \{}
+\DoxyCodeLine{00423\ }
+\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ assert(\_\_platform\_\_thread\_\ !=\ 0\ \&\&\ \textcolor{stringliteral}{"{}thread\ is\ null"{}});}
+\DoxyCodeLine{00425\ }
+\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ WaitForSingleObject(\_\_platform\_\_thread\_,\ 0);}
+\DoxyCodeLine{00427\ }
+\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00432\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classncpp_1_1pac_1_1win__thread_a7be629b2d75a3305a394e1404cc2dfa2}{wait}}()\ \{}
+\DoxyCodeLine{00433\ }
+\DoxyCodeLine{00434\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ assert(\_\_platform\_\_thread\_\ !=\ 0\ \&\&\ \textcolor{stringliteral}{"{}thread\ is\ null"{}});}
+\DoxyCodeLine{00435\ }
+\DoxyCodeLine{00436\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (!is\_done());}
+\DoxyCodeLine{00437\ }
+\DoxyCodeLine{00438\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00439\ }
+\DoxyCodeLine{00443\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacencpp_abea3680fc16f71355a78e25085f5ceec}{u64}}\ \mbox{\hyperlink{classncpp_1_1pac_1_1win__thread_ad6671a24faa48c402e632ec1eb186eb9}{set\_affinity\_mask}}(\mbox{\hyperlink{namespacencpp_abea3680fc16f71355a78e25085f5ceec}{u64}}\ mask)\ \{}
+\DoxyCodeLine{00444\ }
+\DoxyCodeLine{00445\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ assert(\_\_platform\_\_thread\_\ !=\ 0\ \&\&\ \textcolor{stringliteral}{"{}thread\ is\ null"{}});}
+\DoxyCodeLine{00446\ }
+\DoxyCodeLine{00447\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ SetThreadAffinityMask(\_\_platform\_\_thread\_,\ mask);}
+\DoxyCodeLine{00448\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00449\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00450\ }
+\DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00452\ }
+\DoxyCodeLine{00453\ \ \ \ \ \}}
+\DoxyCodeLine{00454\ }
+\DoxyCodeLine{00455\ \}}
+
+\end{DoxyCode}

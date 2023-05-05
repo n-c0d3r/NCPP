@@ -1,0 +1,77 @@
+\hypertarget{spinlock_8hpp_source}{}\doxysection{spinlock.\+hpp}
+\label{spinlock_8hpp_source}\index{F:/NCoder/NCPP/ncpp/source/ncpp/pac/spinlock.hpp@{F:/NCoder/NCPP/ncpp/source/ncpp/pac/spinlock.hpp}}
+\mbox{\hyperlink{spinlock_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#pragma\ region\ Includes}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{prerequisites_8hpp}{ncpp/prerequisites.hpp}}>}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#include\ <ncpp/utilities/.hpp>}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacencpp}{ncpp}}\ \{}
+\DoxyCodeLine{00057\ \ \ \ \ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{namespace\ }pac\ \{}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ }
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }NCPP\_DEFAULT\_ALIGNAS\ \mbox{\hyperlink{classncpp_1_1pac_1_1spinlock}{spinlock}}\ \{}
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ std::atomic\_flag\ flag\_;}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classncpp_1_1pac_1_1spinlock}{spinlock}}()\ \{}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classncpp_1_1pac_1_1spinlock}{spinlock}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classncpp_1_1pac_1_1spinlock}{spinlock}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classncpp_1_1pac_1_1spinlock}{spinlock}}\&\ operator\ =\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{classncpp_1_1pac_1_1spinlock}{spinlock}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classncpp_1_1pac_1_1spinlock}{spinlock}}(\mbox{\hyperlink{classncpp_1_1pac_1_1spinlock}{spinlock}}\&\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classncpp_1_1pac_1_1spinlock}{spinlock}}\&\ operator\ =\ (\mbox{\hyperlink{classncpp_1_1pac_1_1spinlock}{spinlock}}\&\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ lock()\ \{}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (flag\_.test\_and\_set(std::memory\_order\_acquire));}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ unlock()\ \{}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ flag\_.clear(std::memory\_order\_release);}
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00120\ \ \ \ \ }
+\DoxyCodeLine{00121\ \ \ \ \ \}\ }
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \}}
+
+\end{DoxyCode}

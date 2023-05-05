@@ -1,0 +1,720 @@
+\hypertarget{tagged__heap_8hpp_source}{}\doxysection{tagged\+\_\+heap.\+hpp}
+\label{tagged__heap_8hpp_source}\index{F:/NCoder/NCPP/ncpp/source/ncpp/tagged\_heap.hpp@{F:/NCoder/NCPP/ncpp/source/ncpp/tagged\_heap.hpp}}
+\mbox{\hyperlink{tagged__heap_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#pragma\ region\ Includes}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{prerequisites_8hpp}{ncpp/prerequisites.hpp}}>}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#include\ <ncpp/containers/handle\_map.hpp>}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{lref_8hpp}{ncpp/utilities/lref.hpp}}>}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{mem_8hpp}{ncpp/mem.hpp}}>}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#include\ <ncpp/native\_heap.hpp>}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{native__allocator_8hpp}{ncpp/native\_allocator.hpp}}>}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacencpp}{ncpp}}\ \{}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ }
+\DoxyCodeLine{00071\ }
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00087\ \ \ \ \ \textcolor{keyword}{struct\ }NCPP\_DEFAULT\_ALIGNAS\ \mbox{\hyperlink{structncpp_1_1tagged__heap__block}{tagged\_heap\_block}}\ \{}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \textcolor{preprocessor}{\#pragma\ region\ Properties}}
+\DoxyCodeLine{00094\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ capacity\_;}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ usage\_;}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}}*\ data\_p\_;}
+\DoxyCodeLine{00098\ }
+\DoxyCodeLine{00099\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1tagged__heap__block}{tagged\_heap\_block}}*\ prev\_p\ =\ 0;}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1tagged__heap__block}{tagged\_heap\_block}}*\ next\_p\ =\ 0;}
+\DoxyCodeLine{00102\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \textcolor{preprocessor}{\#pragma\ region\ Getters}}
+\DoxyCodeLine{00109\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ capacity()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ capacity\_;\ \}}
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ usage()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ usage\_;\ \}}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}}*\ data\_p()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ data\_p\_;\ \}}
+\DoxyCodeLine{00113\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ \textcolor{preprocessor}{\#pragma\ region\ Constructors,\ Destructor\ and\ Operators}}
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{structncpp_1_1tagged__heap__block}{tagged\_heap\_block}}(\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ capacity)\ :}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ capacity\_(capacity),}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ usage\_(0),}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ data\_p\_((\mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}}*)(\textcolor{keyword}{this}\ +\ 1))}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ }
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1tagged__heap__block}{\string~tagged\_heap\_block}}()\ \{}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00135\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ \textcolor{preprocessor}{\#pragma\ region\ Private\ Methods}}
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ uintptr\_t\ \mbox{\hyperlink{namespacencpp_aa8941d73e81a9d423ddd6d79633c8f3f}{align\_address}}(uintptr\_t\ addr,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ align)}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ mask\ =\ align\ -\/\ 1;}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ assert((align\ \&\ mask)\ ==\ 0\ \&\&\ \textcolor{stringliteral}{"{}align\ value\ must\ be\ power\ of\ 2"{}});}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (addr\ +\ mask)\ \&\ \string~mask;}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ data\_type>}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ data\_type*\ \mbox{\hyperlink{namespacencpp_ac74c7a12af4f316217ed60b92bb2abe7}{align\_pointer}}(data\_type*\ ptr,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ align)}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00158\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ uintptr\_t\ addr\ =\ \textcolor{keyword}{reinterpret\_cast<}uintptr\_t\textcolor{keyword}{>}(ptr);}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{reinterpret\_cast<}data\_type*\textcolor{keyword}{>}(\mbox{\hyperlink{namespacencpp_aa8941d73e81a9d423ddd6d79633c8f3f}{align\_address}}(addr,\ align));}
+\DoxyCodeLine{00160\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}}*\ \mbox{\hyperlink{namespacencpp_a0142152a8ff7d3309ff9bc50b1da78d4}{aligned\_alloc}}(\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ size,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ align)}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ actual\_size\ =\ size\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}})\ +\ align;}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}}*\ raw\_ptr\ =\ data\_p\_\ +\ usage\_;}
+\DoxyCodeLine{00170\ \ \ \ \ \ \ \ \ \ \ \ \ usage\_\ +=\ size\ +\ align\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}});}
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ *((\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}*)raw\_ptr)\ =\ actual\_size;}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ raw\_ptr\ +=\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}});}
+\DoxyCodeLine{00173\ }
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}}*\ aligned\_ptr\ =\ \mbox{\hyperlink{namespacencpp_ac74c7a12af4f316217ed60b92bb2abe7}{align\_pointer}}(raw\_ptr,\ align);}
+\DoxyCodeLine{00175\ }
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (aligned\_ptr\ ==\ raw\_ptr)}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ aligned\_ptr\ +=\ align;}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ ptrdiff\_t\ shift\ =\ aligned\_ptr\ -\/\ raw\_ptr;}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ assert(shift\ >\ 0\ \&\&\ shift\ <=\ 256);}
+\DoxyCodeLine{00181\ }
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ }
+\DoxyCodeLine{00184\ \textcolor{preprocessor}{\#ifdef\ NCPP\_ENABLE\_NATIVE\_MEMORY\_COUNTING}}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacencpp_a53599d6c172ee22d08732f40151762fe}{increase\_native\_used\_heap\_memory}}(actual\_size);}
+\DoxyCodeLine{00186\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00188\ }
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ aligned\_ptr[-\/1]\ =\ \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}}\textcolor{keyword}{>}(shift\ \&\ 0xFF);}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{reinterpret\_cast<}\mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}}*\textcolor{keyword}{>}(aligned\_ptr);}
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ \mbox{\hyperlink{namespacencpp_a81a5c838e9b17ce47cdbb9f8b804afb3}{actual\_size\_aligned}}(\textcolor{keywordtype}{void}*\ ptr)}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}}*\ aligned\_ptr\ =\ \textcolor{keyword}{reinterpret\_cast<}\mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}}*\textcolor{keyword}{>}(ptr);}
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ ptrdiff\_t\ shift\ =\ aligned\_ptr[-\/1];}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (shift\ ==\ 0)}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ shift\ =\ 256;}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}}*\ raw\_ptr\ =\ aligned\_ptr\ -\/\ shift\ -\/\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}});}
+\DoxyCodeLine{00207\ }
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ actual\_size\ =\ *((\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}*)raw\_ptr);}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ actual\_size;}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00212\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00217\ }
+\DoxyCodeLine{00218\ \textcolor{preprocessor}{\#pragma\ region\ Public\ Methods}}
+\DoxyCodeLine{00219\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structncpp_1_1tagged__heap__block_aa35f3115f9720a6abf31dce506a224e4}{is\_full}}(\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ offset)\ \{}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ usage\_\ +\ offset\ >\ capacity\_;}
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}}*\ \mbox{\hyperlink{structncpp_1_1tagged__heap__block_abd4bdd7ef0e341fba6f7528ddab9d78b}{allocate}}(\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ size,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ align)\ \{}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ assert(size\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}})\ +\ align\ +\ usage\_\ <=\ capacity\_\ \&\&\ \textcolor{stringliteral}{"{}block\ out\ of\ memory"{}});}
+\DoxyCodeLine{00235\ }
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}}*\ result\ =\ \mbox{\hyperlink{namespacencpp_a0142152a8ff7d3309ff9bc50b1da78d4}{aligned\_alloc}}(size,\ align);}
+\DoxyCodeLine{00237\ }
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ result;}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00240\ }
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{structncpp_1_1tagged__heap__block_a0f6c71d3e13ee36548d966f081879a0c}{reset}}()\ \{}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00246\ }
+\DoxyCodeLine{00247\ }
+\DoxyCodeLine{00248\ \textcolor{preprocessor}{\#ifdef\ NCPP\_ENABLE\_NATIVE\_MEMORY\_COUNTING}}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacencpp_a13db7a794503c49cbed4fc7b4a6480e0}{decrease\_native\_used\_heap\_memory}}(usage\_);}
+\DoxyCodeLine{00250\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00251\ }
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ }
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \ \ \ \ usage\_\ =\ 0;}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00256\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00258\ \ \ \ \ \};}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00260\ }
+\DoxyCodeLine{00261\ }
+\DoxyCodeLine{00265\ }
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00273\ }
+\DoxyCodeLine{00274\ }
+\DoxyCodeLine{00275\ }
+\DoxyCodeLine{00279\ \ \ \ \ \textcolor{keyword}{template}<}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }allocator\_type\_\_}
+\DoxyCodeLine{00281\ \ \ \ \ >}
+\DoxyCodeLine{00282\ \ \ \ \ \textcolor{keyword}{class\ }NCPP\_DEFAULT\_ALIGNAS\ \mbox{\hyperlink{classncpp_1_1tagged__heap__category__t}{tagged\_heap\_category\_t}}\ \{}
+\DoxyCodeLine{00283\ }
+\DoxyCodeLine{00287\ }
+\DoxyCodeLine{00288\ \textcolor{preprocessor}{\#pragma\ region\ Typedefs}}
+\DoxyCodeLine{00289\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }allocator\_type\ =\ allocator\_type\_\_;}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}}\ =\ \mbox{\hyperlink{structncpp_1_1tagged__heap__block}{tagged\_heap\_block}};}
+\DoxyCodeLine{00292\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00293\ }
+\DoxyCodeLine{00297\ }
+\DoxyCodeLine{00298\ \textcolor{preprocessor}{\#pragma\ region\ Properties}}
+\DoxyCodeLine{00299\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ block\_capacity\_;}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ min\_block\_count\_;}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacencpp_a74cd32b52d6ec0fc0972bfe75223751a}{u32}}\ block\_count\_array\_[64];}
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}}*\ head\_block\_p\_array\_[64];}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}}*\ tail\_block\_p\_array\_[64];}
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}}*\ curr\_block\_p\_array\_[64];}
+\DoxyCodeLine{00307\ }
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ allocator\_type\ allocator\_;}
+\DoxyCodeLine{00309\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00310\ }
+\DoxyCodeLine{00314\ }
+\DoxyCodeLine{00315\ \textcolor{preprocessor}{\#pragma\ region\ Getters}}
+\DoxyCodeLine{00316\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ block\_capacity()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ block\_capacity\_;\ \}}
+\DoxyCodeLine{00318\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ min\_block\_count()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ min\_block\_count\_;\ \}}
+\DoxyCodeLine{00319\ }
+\DoxyCodeLine{00320\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ allocator\_type\&\ block\_allocator()\ \{\ \textcolor{keywordflow}{return}\ allocator\_;\ \}}
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ allocator\_type\&\ block\_allocator()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ allocator\_;\ \}}
+\DoxyCodeLine{00322\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00323\ }
+\DoxyCodeLine{00327\ }
+\DoxyCodeLine{00328\ \textcolor{preprocessor}{\#pragma\ region\ Constructors,\ Destructor\ and\ Operators}}
+\DoxyCodeLine{00329\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1tagged__heap__category__t}{tagged\_heap\_category\_t}}()\ :}
+\DoxyCodeLine{00331\ \ \ \ \ \ \ \ \ \ \ \ \ block\_capacity\_(0)}
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00333\ }
+\DoxyCodeLine{00334\ }
+\DoxyCodeLine{00335\ }
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1tagged__heap__category__t}{tagged\_heap\_category\_t}}(\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ block\_capacity,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ min\_block\_count)\ :}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \ \ \ \ block\_capacity\_(block\_capacity),}
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \ \ \ \ min\_block\_count\_(min\_block\_count)}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00341\ }
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \ \ \ \ memset(block\_count\_array\_,\ 0,\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}}*)\ *\ 64);}
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \ \ \ \ memset(head\_block\_p\_array\_,\ 0,\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}}*)\ *\ 64);}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \ \ \ \ memset(tail\_block\_p\_array\_,\ 0,\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}}*)\ *\ 64);}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ memset(curr\_block\_p\_array\_,\ 0,\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}}*)\ *\ 64);}
+\DoxyCodeLine{00346\ }
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classncpp_1_1tagged__heap__category__t}{\string~tagged\_heap\_category\_t}}()\ \{}
+\DoxyCodeLine{00349\ }
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}}\ i\ =\ 0;\ i\ <\ 64;\ ++i)}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ internal\_clear(i);}
+\DoxyCodeLine{00352\ }
+\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00354\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00355\ }
+\DoxyCodeLine{00359\ }
+\DoxyCodeLine{00360\ \textcolor{preprocessor}{\#pragma\ region\ Private\ Methods}}
+\DoxyCodeLine{00361\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}}*\ push\_block()\ \{}
+\DoxyCodeLine{00363\ }
+\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}}*\ prev\_block\_p\ =\ tail\_block\_p\_array\_[pac::current\_thread\_index()];}
+\DoxyCodeLine{00365\ }
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}}*\ block\_p\ =\ (\mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}}*)allocator\_.\mbox{\hyperlink{structncpp_1_1tagged__heap__block_abd4bdd7ef0e341fba6f7528ddab9d78b}{allocate}}(\textcolor{keyword}{sizeof}(\mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}})\ +\ block\_capacity\_);}
+\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{new}(block\_p)\ \mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}}(block\_capacity\_);}
+\DoxyCodeLine{00368\ }
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \ \ \ \ block\_p-\/>prev\_p\ =\ prev\_block\_p;}
+\DoxyCodeLine{00370\ }
+\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (prev\_block\_p\ !=\ 0)}
+\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ prev\_block\_p-\/>next\_p\ =\ block\_p;}
+\DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ head\_block\_p\_array\_[pac::current\_thread\_index()]\ =\ block\_p;}
+\DoxyCodeLine{00375\ }
+\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ \ \ \ \ tail\_block\_p\_array\_[pac::current\_thread\_index()]\ =\ block\_p;}
+\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ \ \ \ \ curr\_block\_p\_array\_[pac::current\_thread\_index()]\ =\ block\_p;}
+\DoxyCodeLine{00378\ \ \ \ \ \ \ \ \ \ \ \ \ block\_count\_array\_[pac::current\_thread\_index()]++;}
+\DoxyCodeLine{00379\ }
+\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ block\_p;}
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00382\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}}*\ pick\_a\_block(\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ offset)\ \{}
+\DoxyCodeLine{00383\ }
+\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (block\_count\_array\_[pac::current\_thread\_index()]\ <\ min\_block\_count\_)\ \{}
+\DoxyCodeLine{00385\ }
+\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ push\_block();}
+\DoxyCodeLine{00387\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ curr\_block\_p\_array\_[pac::current\_thread\_index()]\ =\ head\_block\_p\_array\_[pac::current\_thread\_index()];}
+\DoxyCodeLine{00388\ }
+\DoxyCodeLine{00389\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00390\ }
+\DoxyCodeLine{00391\ }
+\DoxyCodeLine{00392\ }
+\DoxyCodeLine{00393\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}}*\ block\_p\ =\ curr\_block\_p\_array\_[pac::current\_thread\_index()];}
+\DoxyCodeLine{00394\ }
+\DoxyCodeLine{00395\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (block\_p\ ==\ 0)\ \{}
+\DoxyCodeLine{00396\ }
+\DoxyCodeLine{00397\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ block\_p\ =\ push\_block();}
+\DoxyCodeLine{00398\ }
+\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00401\ }
+\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (block\_p-\/>\mbox{\hyperlink{structncpp_1_1tagged__heap__block_aa35f3115f9720a6abf31dce506a224e4}{is\_full}}(offset))\ \{}
+\DoxyCodeLine{00403\ }
+\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (block\_p-\/>next\_p\ ==\ 0)\ \{}
+\DoxyCodeLine{00405\ }
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ block\_p\ =\ push\_block();}
+\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00408\ }
+\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00410\ }
+\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ block\_p\ =\ block\_p-\/>next\_p;}
+\DoxyCodeLine{00412\ }
+\DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00414\ }
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00416\ }
+\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \ \ \ \ curr\_block\_p\_array\_[pac::current\_thread\_index()]\ =\ block\_p;}
+\DoxyCodeLine{00418\ }
+\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ block\_p;}
+\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00421\ }
+\DoxyCodeLine{00422\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ internal\_clear(\mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}}\ thread\_index)\ \{}
+\DoxyCodeLine{00423\ }
+\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}}*\ block\_p\ =\ tail\_block\_p\_array\_[thread\_index];}
+\DoxyCodeLine{00425\ }
+\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (block\_p\ !=\ 0)\ \{}
+\DoxyCodeLine{00427\ }
+\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}}*\ block\_prev\_p\ =\ block\_p-\/>prev\_p;}
+\DoxyCodeLine{00429\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ block\_p-\/>\mbox{\hyperlink{structncpp_1_1tagged__heap__block_a0f6c71d3e13ee36548d966f081879a0c}{reset}}();}
+\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ allocator\_.deallocate((\mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}}*)block\_p,\ block\_capacity\_\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}}));}
+\DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ block\_p\ =\ block\_prev\_p;}
+\DoxyCodeLine{00432\ }
+\DoxyCodeLine{00433\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00434\ }
+\DoxyCodeLine{00435\ \ \ \ \ \ \ \ \ \ \ \ \ block\_count\_array\_[pac::current\_thread\_index()]\ =\ 0;}
+\DoxyCodeLine{00436\ \ \ \ \ \ \ \ \ \ \ \ \ head\_block\_p\_array\_[pac::current\_thread\_index()]\ =\ 0;}
+\DoxyCodeLine{00437\ \ \ \ \ \ \ \ \ \ \ \ \ tail\_block\_p\_array\_[pac::current\_thread\_index()]\ =\ 0;}
+\DoxyCodeLine{00438\ \ \ \ \ \ \ \ \ \ \ \ \ curr\_block\_p\_array\_[pac::current\_thread\_index()]\ =\ 0;}
+\DoxyCodeLine{00439\ }
+\DoxyCodeLine{00440\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00441\ }
+\DoxyCodeLine{00442\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ internal\_deallocate(\mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}}\ thread\_index)\ \{}
+\DoxyCodeLine{00443\ }
+\DoxyCodeLine{00444\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}}*\ block\_p\ =\ tail\_block\_p\_array\_[thread\_index];}
+\DoxyCodeLine{00445\ }
+\DoxyCodeLine{00446\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (block\_p\ !=\ 0\ \&\&\ block\_count\_array\_[pac::current\_thread\_index()]\ >\ min\_block\_count\_)\ \{}
+\DoxyCodeLine{00447\ }
+\DoxyCodeLine{00448\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}}*\ block\_prev\_p\ =\ block\_p-\/>prev\_p;}
+\DoxyCodeLine{00449\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ allocator\_.deallocate(block\_p,\ block\_capacity\_\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}}));}
+\DoxyCodeLine{00450\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ block\_p\ =\ block\_prev\_p;}
+\DoxyCodeLine{00451\ }
+\DoxyCodeLine{00452\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ block\_count\_array\_[pac::current\_thread\_index()]-\/-\/;}
+\DoxyCodeLine{00453\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tail\_block\_p\_array\_[pac::current\_thread\_index()]\ =\ block\_p;}
+\DoxyCodeLine{00454\ }
+\DoxyCodeLine{00455\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00456\ }
+\DoxyCodeLine{00457\ \ \ \ \ \ \ \ \ \ \ \ \ curr\_block\_p\_array\_[pac::current\_thread\_index()]\ =\ head\_block\_p\_array\_[pac::current\_thread\_index()];}
+\DoxyCodeLine{00458\ }
+\DoxyCodeLine{00459\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00460\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ internal\_reset\_blocks(\mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}}\ thread\_index)\ \{}
+\DoxyCodeLine{00461\ }
+\DoxyCodeLine{00462\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}}*\ block\_p\ =\ tail\_block\_p\_array\_[thread\_index];}
+\DoxyCodeLine{00463\ }
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (block\_p\ !=\ 0)\ \{}
+\DoxyCodeLine{00465\ }
+\DoxyCodeLine{00466\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}}*\ block\_prev\_p\ =\ block\_p-\/>prev\_p;}
+\DoxyCodeLine{00467\ }
+\DoxyCodeLine{00468\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ block\_p-\/>\mbox{\hyperlink{structncpp_1_1tagged__heap__block_a0f6c71d3e13ee36548d966f081879a0c}{reset}}();}
+\DoxyCodeLine{00469\ }
+\DoxyCodeLine{00470\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ block\_p\ =\ block\_prev\_p;}
+\DoxyCodeLine{00471\ }
+\DoxyCodeLine{00472\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00473\ }
+\DoxyCodeLine{00474\ \ \ \ \ \ \ \ \ \ \ \ \ curr\_block\_p\_array\_[thread\_index]\ =\ head\_block\_p\_array\_[thread\_index];}
+\DoxyCodeLine{00475\ }
+\DoxyCodeLine{00476\ }
+\DoxyCodeLine{00477\ }
+\DoxyCodeLine{00478\ \ \ \ \ \ \ \ \ \ \ \ \ internal\_deallocate(thread\_index);}
+\DoxyCodeLine{00479\ }
+\DoxyCodeLine{00480\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00481\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00482\ }
+\DoxyCodeLine{00486\ }
+\DoxyCodeLine{00487\ \textcolor{preprocessor}{\#pragma\ region\ Public\ Methods}}
+\DoxyCodeLine{00488\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00492\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classncpp_1_1tagged__heap__category__t_ae21ecda5fbd488fa2a164a265affadf3}{clear}}()\ \{}
+\DoxyCodeLine{00493\ }
+\DoxyCodeLine{00494\ \ \ \ \ \ \ \ \ \ \ \ \ internal\_clear(pac::current\_thread\_index());}
+\DoxyCodeLine{00495\ }
+\DoxyCodeLine{00496\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00500\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classncpp_1_1tagged__heap__category__t_af9219a8b94c8cff43ce0614a38e61973}{deallocate}}()\ \{}
+\DoxyCodeLine{00501\ }
+\DoxyCodeLine{00502\ \ \ \ \ \ \ \ \ \ \ \ \ internal\_deallocate(pac::current\_thread\_index());}
+\DoxyCodeLine{00503\ }
+\DoxyCodeLine{00504\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00508\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classncpp_1_1tagged__heap__category__t_a681508ab71dd7fe72cb73a3bbbf5ccbc}{reset\_blocks}}()\ \{}
+\DoxyCodeLine{00509\ }
+\DoxyCodeLine{00510\ \ \ \ \ \ \ \ \ \ \ \ \ internal\_reset\_blocks(pac::current\_thread\_index());}
+\DoxyCodeLine{00511\ }
+\DoxyCodeLine{00512\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00513\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}}*\ allocate(\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ size,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ align)\ \{}
+\DoxyCodeLine{00514\ }
+\DoxyCodeLine{00515\ \ \ \ \ \ \ \ \ \ \ \ \ block\_type*\ block\_p\ =\ pick\_a\_block(size\ +\ \textcolor{keyword}{sizeof}(\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}})\ +\ align);\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00516\ }
+\DoxyCodeLine{00517\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ block\_p-\/>allocate(size,\ align);}
+\DoxyCodeLine{00518\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00519\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ block\_type\&\ head\_block()\ \{}
+\DoxyCodeLine{00520\ }
+\DoxyCodeLine{00521\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *head\_block\_p\_array\_[pac::current\_thread\_index()];}
+\DoxyCodeLine{00522\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00523\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ block\_type\&\ tail\_block()\ \{}
+\DoxyCodeLine{00524\ }
+\DoxyCodeLine{00525\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *tail\_block\_p\_array\_[pac::current\_thread\_index()];}
+\DoxyCodeLine{00526\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00527\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ block\_type\&\ current\_block()\ \{}
+\DoxyCodeLine{00528\ }
+\DoxyCodeLine{00529\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *curr\_block\_p\_array\_[pac::current\_thread\_index()];}
+\DoxyCodeLine{00530\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00531\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacencpp_a74cd32b52d6ec0fc0972bfe75223751a}{u32}}\ block\_count()\ \{}
+\DoxyCodeLine{00532\ }
+\DoxyCodeLine{00533\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ block\_count\_array\_[pac::current\_thread\_index()];}
+\DoxyCodeLine{00534\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00535\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00536\ }
+\DoxyCodeLine{00537\ \ \ \ \ \};}
+\DoxyCodeLine{00538\ }
+\DoxyCodeLine{00539\ }
+\DoxyCodeLine{00540\ }
+\DoxyCodeLine{00544\ }
+\DoxyCodeLine{00548\ }
+\DoxyCodeLine{00552\ }
+\DoxyCodeLine{00553\ }
+\DoxyCodeLine{00554\ }
+\DoxyCodeLine{00558\ \ \ \ \ \textcolor{keyword}{template}<}
+\DoxyCodeLine{00559\ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }allocator\_type\_\_\ =\ \textcolor{keyword}{typename}\ NCPP\_DEFAULT\_ALLOCATOR\_TEMPLATE<u8>,}
+\DoxyCodeLine{00560\ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }category\_cell\_allocator\_type\_\_\ =\ \textcolor{keyword}{typename}\ NCPP\_DEFAULT\_ALLOCATOR\_TEMPLATE<}
+\DoxyCodeLine{00561\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ containers::handle\_map\_cell\_type<typename\ tagged\_heap\_category\_t<allocator\_type\_\_>>}
+\DoxyCodeLine{00562\ \ \ \ \ \ \ \ \ >,}
+\DoxyCodeLine{00563\ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }category\_id\_allocator\_type\_\_\ =\ \textcolor{keyword}{typename}\ NCPP\_DEFAULT\_ALLOCATOR\_TEMPLATE<}
+\DoxyCodeLine{00564\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ containers::handle\_map\_id\_type<typename\ tagged\_heap\_category\_t<allocator\_type\_\_>>}
+\DoxyCodeLine{00565\ \ \ \ \ \ \ \ \ >}
+\DoxyCodeLine{00566\ \ \ \ \ >}
+\DoxyCodeLine{00567\ \ \ \ \ \textcolor{keyword}{class\ }NCPP\_DEFAULT\_ALIGNAS\ \mbox{\hyperlink{classncpp_1_1tagged__heap__t}{tagged\_heap\_t}}\ :\ }
+\DoxyCodeLine{00568\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \mbox{\hyperlink{classncpp_1_1native__heap}{native\_heap}}}
+\DoxyCodeLine{00569\ \ \ \ \ \{}
+\DoxyCodeLine{00570\ }
+\DoxyCodeLine{00574\ }
+\DoxyCodeLine{00575\ \textcolor{preprocessor}{\#pragma\ region\ Typedefs}}
+\DoxyCodeLine{00576\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00577\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }allocator\_type\ =\ allocator\_type\_\_;}
+\DoxyCodeLine{00578\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\_type}}\ =\ \mbox{\hyperlink{structncpp_1_1tagged__heap__block}{tagged\_heap\_block}};}
+\DoxyCodeLine{00579\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }category\_type\ =\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classncpp_1_1tagged__heap__category__t}{tagged\_heap\_category\_t<allocator\_type\_\_>}};}
+\DoxyCodeLine{00580\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }category\_cell\_allocator\_type\ =\ category\_cell\_allocator\_type\_\_;}
+\DoxyCodeLine{00581\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }category\_id\_allocator\_type\ =\ category\_id\_allocator\_type\_\_;}
+\DoxyCodeLine{00582\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }category\_map\ =\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{classncpp_1_1containers_1_1handle__map__t}{containers::handle\_map\_t<category\_type,\ category\_id\_allocator\_type,\ category\_cell\_allocator\_type>}};}
+\DoxyCodeLine{00583\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }category\_id\_type\ =\ \textcolor{keyword}{typename}\ category\_map::id\_type;}
+\DoxyCodeLine{00584\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }category\_cell\_type\ =\ \textcolor{keyword}{typename}\ category\_map::cell\_type;}
+\DoxyCodeLine{00585\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00586\ }
+\DoxyCodeLine{00590\ }
+\DoxyCodeLine{00591\ \textcolor{preprocessor}{\#pragma\ region\ Properties}}
+\DoxyCodeLine{00592\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00593\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ capacity\_;}
+\DoxyCodeLine{00594\ }
+\DoxyCodeLine{00595\ \ \ \ \ \ \ \ \ category\_map\ category\_map\_;}
+\DoxyCodeLine{00596\ \textcolor{preprocessor}{\#pragma\ endregion\ }}
+\DoxyCodeLine{00597\ }
+\DoxyCodeLine{00601\ }
+\DoxyCodeLine{00602\ \textcolor{preprocessor}{\#pragma\ region\ Getters}}
+\DoxyCodeLine{00603\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00604\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ capacity()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ capacity\_;\ \}}
+\DoxyCodeLine{00605\ }
+\DoxyCodeLine{00606\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ category\_map\&\ get\_category\_map\_()\ \{\ \textcolor{keywordflow}{return}\ category\_map\_;\ \}}
+\DoxyCodeLine{00607\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ category\_map\&\ get\_category\_map\_()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ category\_map\_;\ \}}
+\DoxyCodeLine{00608\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00609\ }
+\DoxyCodeLine{00613\ }
+\DoxyCodeLine{00614\ \textcolor{preprocessor}{\#pragma\ region\ Constructors,\ Destructor\ and\ Operators}}
+\DoxyCodeLine{00615\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00616\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1tagged__heap__t}{tagged\_heap\_t}}(}
+\DoxyCodeLine{00617\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ capacity\ =\ NCPP\_DEFAULT\_TAGGED\_HEAP\_CAPACITY}
+\DoxyCodeLine{00618\ \ \ \ \ \ \ \ \ )\ :}
+\DoxyCodeLine{00619\ \ \ \ \ \ \ \ \ \ \ \ \ capacity\_(capacity),}
+\DoxyCodeLine{00620\ \ \ \ \ \ \ \ \ \ \ \ \ category\_map\_(capacity)}
+\DoxyCodeLine{00621\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00622\ }
+\DoxyCodeLine{00623\ }
+\DoxyCodeLine{00624\ }
+\DoxyCodeLine{00625\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00626\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1tagged__heap__t}{tagged\_heap\_t}}(}
+\DoxyCodeLine{00627\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ category\_id\_allocator\_type\&\ category\_id\_allocator,}
+\DoxyCodeLine{00628\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ category\_cell\_allocator\_type\&\ category\_cell\_allocator,}
+\DoxyCodeLine{00629\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ capacity\ =\ NCPP\_DEFAULT\_TAGGED\_HEAP\_CAPACITY}
+\DoxyCodeLine{00630\ \ \ \ \ \ \ \ \ )\ :}
+\DoxyCodeLine{00631\ \ \ \ \ \ \ \ \ \ \ \ \ capacity\_(capacity),}
+\DoxyCodeLine{00632\ \ \ \ \ \ \ \ \ \ \ \ \ category\_map\_(capacity,\ category\_id\_allocator,\ category\_cell\_allocator)}
+\DoxyCodeLine{00633\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00634\ }
+\DoxyCodeLine{00635\ }
+\DoxyCodeLine{00636\ }
+\DoxyCodeLine{00637\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00638\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classncpp_1_1tagged__heap__t}{\string~tagged\_heap\_t}}()\ \{}
+\DoxyCodeLine{00639\ }
+\DoxyCodeLine{00640\ }
+\DoxyCodeLine{00641\ }
+\DoxyCodeLine{00642\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00643\ }
+\DoxyCodeLine{00644\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1tagged__heap__t}{tagged\_heap\_t}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classncpp_1_1tagged__heap__t}{tagged\_heap\_t}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00645\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1tagged__heap__t}{tagged\_heap\_t}}\&\ operator\ =\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{classncpp_1_1tagged__heap__t}{tagged\_heap\_t}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00646\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1tagged__heap__t}{tagged\_heap\_t}}(\mbox{\hyperlink{classncpp_1_1tagged__heap__t}{tagged\_heap\_t}}\&\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00647\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1tagged__heap__t}{tagged\_heap\_t}}\&\ operator\ =\ (\mbox{\hyperlink{classncpp_1_1tagged__heap__t}{tagged\_heap\_t}}\&\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00648\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00649\ }
+\DoxyCodeLine{00653\ }
+\DoxyCodeLine{00654\ \textcolor{preprocessor}{\#pragma\ region\ Public\ Methods}}
+\DoxyCodeLine{00655\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00656\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ category\_id\_type\ create\_category(}
+\DoxyCodeLine{00657\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ block\_capacity\ =\ NCPP\_DEFAULT\_TAGGED\_HEAP\_BLOCK\_CAPACITY,\ }
+\DoxyCodeLine{00658\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ min\_block\_count\ =\ NCPP\_DEFAULT\_TAGGED\_HEAP\_MIN\_BLOCK\_COUNT\_PER\_CATEGORY}
+\DoxyCodeLine{00659\ \ \ \ \ \ \ \ \ )\ \{}
+\DoxyCodeLine{00660\ }
+\DoxyCodeLine{00661\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ category\_map\_.insert(category\_type(block\_capacity,\ min\_block\_count));}
+\DoxyCodeLine{00662\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00663\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ category\_type\&\ category(category\_id\_type\ handle)\ \{}
+\DoxyCodeLine{00664\ }
+\DoxyCodeLine{00665\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ category\_map\_.at(handle).item;}
+\DoxyCodeLine{00666\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00667\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ delete\_category(category\_id\_type\ handle)\ \{}
+\DoxyCodeLine{00668\ }
+\DoxyCodeLine{00669\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ category\_map\_.erase(handle);}
+\DoxyCodeLine{00670\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00671\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}}*\ allocate(category\_id\_type\ category\_id,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ size,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ align\ =\ NCPP\_DEFAULT\_ALIGN)\ \{}
+\DoxyCodeLine{00672\ }
+\DoxyCodeLine{00673\ \ \ \ \ \ \ \ \ \ \ \ \ category\_cell\_type\&\ category\_cell\ =\ category\_map\_.at(category\_id);}
+\DoxyCodeLine{00674\ }
+\DoxyCodeLine{00675\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ category\_cell.item.allocate(size,\ align);}
+\DoxyCodeLine{00676\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00677\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ deallocate(category\_id\_type\ category\_id)\ \{}
+\DoxyCodeLine{00678\ }
+\DoxyCodeLine{00679\ \ \ \ \ \ \ \ \ \ \ \ \ category\_cell\_type\&\ category\_cell\ =\ category\_map\_.at(category\_id);}
+\DoxyCodeLine{00680\ }
+\DoxyCodeLine{00681\ \ \ \ \ \ \ \ \ \ \ \ \ category\_cell.item.deallocate();}
+\DoxyCodeLine{00682\ }
+\DoxyCodeLine{00683\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00684\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ reset\_blocks(category\_id\_type\ category\_id)\ \{}
+\DoxyCodeLine{00685\ }
+\DoxyCodeLine{00686\ \ \ \ \ \ \ \ \ \ \ \ \ category\_cell\_type\&\ category\_cell\ =\ category\_map\_.at(category\_id);}
+\DoxyCodeLine{00687\ }
+\DoxyCodeLine{00688\ \ \ \ \ \ \ \ \ \ \ \ \ category\_cell.item.reset\_blocks();}
+\DoxyCodeLine{00689\ }
+\DoxyCodeLine{00690\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00691\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00692\ }
+\DoxyCodeLine{00693\ \ \ \ \ \};}
+\DoxyCodeLine{00694\ }
+\DoxyCodeLine{00695\ }
+\DoxyCodeLine{00696\ }
+\DoxyCodeLine{00700\ }
+\DoxyCodeLine{00704\ }
+\DoxyCodeLine{00708\ }
+\DoxyCodeLine{00709\ }
+\DoxyCodeLine{00710\ }
+\DoxyCodeLine{00711\ \textcolor{preprocessor}{\#pragma\ region\ Allocators}}
+\DoxyCodeLine{00712\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}\ value\_type\_\_,\ \textcolor{keyword}{class}\ tagged\_heap\_type\_\_\ =\ tagged\_heap\_t<>>}
+\DoxyCodeLine{00713\ \ \ \ \ \textcolor{keyword}{class\ }NCPP\_DEFAULT\_ALIGNAS\ \mbox{\hyperlink{classncpp_1_1tgh__allocator__t}{tgh\_allocator\_t}}\ :}
+\DoxyCodeLine{00714\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \mbox{\hyperlink{classncpp_1_1native__allocator__t}{native\_allocator\_t}}<value\_type\_\_>}
+\DoxyCodeLine{00715\ \ \ \ \ \{}
+\DoxyCodeLine{00716\ }
+\DoxyCodeLine{00720\ }
+\DoxyCodeLine{00721\ \textcolor{preprocessor}{\#pragma\ region\ Typedefs}}
+\DoxyCodeLine{00722\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00723\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }size\_type\ =\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}};}
+\DoxyCodeLine{00724\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }difference\_type\ =\ ptrdiff\_t;}
+\DoxyCodeLine{00725\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }pointer\ =\ value\_type\_\_*;}
+\DoxyCodeLine{00726\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }const\_pointer\ =\ \textcolor{keyword}{const}\ value\_type\_\_*;}
+\DoxyCodeLine{00727\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }reference\ =\ value\_type\_\_\&;}
+\DoxyCodeLine{00728\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }const\_reference\ =\ \textcolor{keyword}{const}\ value\_type\_\_\&;}
+\DoxyCodeLine{00729\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }value\_type\ =\ value\_type\_\_;}
+\DoxyCodeLine{00730\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }tagged\_heap\_type\ =\ tagged\_heap\_type\_\_;}
+\DoxyCodeLine{00731\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }tagged\_heap\_cid\_type\ =\ \textcolor{keyword}{typename}\ tagged\_heap\_type::category\_id\_type;}
+\DoxyCodeLine{00732\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00733\ }
+\DoxyCodeLine{00737\ }
+\DoxyCodeLine{00738\ \textcolor{preprocessor}{\#pragma\ region\ Properties}}
+\DoxyCodeLine{00739\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00740\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{namespacencpp_1_1utilities_aac8793b5c8100c55124fa2cac242bfc1}{utilities::lref\_t<tagged\_heap\_type>}}\ tagged\_heap\_ref\_;}
+\DoxyCodeLine{00741\ }
+\DoxyCodeLine{00742\ \ \ \ \ \ \ \ \ tagged\_heap\_cid\_type\ category\_id\_;}
+\DoxyCodeLine{00743\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00744\ }
+\DoxyCodeLine{00748\ }
+\DoxyCodeLine{00749\ \textcolor{preprocessor}{\#pragma\ region\ Getters}}
+\DoxyCodeLine{00750\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00751\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ tagged\_heap\_type\&\ \mbox{\hyperlink{classncpp_1_1tagged__heap__t}{tagged\_heap}}()\ \{\ \textcolor{keywordflow}{return}\ *tagged\_heap\_ref\_;\ \}}
+\DoxyCodeLine{00752\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ tagged\_heap\_type\&\ \mbox{\hyperlink{classncpp_1_1tagged__heap__t}{tagged\_heap}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ *tagged\_heap\_ref\_;\ \}}
+\DoxyCodeLine{00753\ }
+\DoxyCodeLine{00754\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ tagged\_heap\_cid\_type\ category\_id()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ category\_id\_;\ \}}
+\DoxyCodeLine{00755\ }
+\DoxyCodeLine{00756\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacencpp_a82bf51a534e48e8f4ce2b1cd4e9586e5}{b8}}\ is\_null()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ tagged\_heap\_ref\_.is\_null();\ \}}
+\DoxyCodeLine{00757\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00758\ }
+\DoxyCodeLine{00762\ }
+\DoxyCodeLine{00763\ \textcolor{preprocessor}{\#pragma\ region\ Constructors,\ Destructor\ and\ Operators}}
+\DoxyCodeLine{00764\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00765\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1tgh__allocator__t}{tgh\_allocator\_t}}()\ :}
+\DoxyCodeLine{00766\ \ \ \ \ \ \ \ \ \ \ \ \ tagged\_heap\_ref\_(),}
+\DoxyCodeLine{00767\ \ \ \ \ \ \ \ \ \ \ \ \ category\_id\_(\{\ 0\ \})}
+\DoxyCodeLine{00768\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00769\ }
+\DoxyCodeLine{00770\ }
+\DoxyCodeLine{00771\ }
+\DoxyCodeLine{00772\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00773\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1tgh__allocator__t}{tgh\_allocator\_t}}(tagged\_heap\_type\&\ \mbox{\hyperlink{classncpp_1_1tagged__heap__t}{tagged\_heap}},\ tagged\_heap\_cid\_type\ category\_id)\ :}
+\DoxyCodeLine{00774\ \ \ \ \ \ \ \ \ \ \ \ \ tagged\_heap\_ref\_(\mbox{\hyperlink{classncpp_1_1tagged__heap__t}{tagged\_heap}}),}
+\DoxyCodeLine{00775\ \ \ \ \ \ \ \ \ \ \ \ \ category\_id\_(category\_id)}
+\DoxyCodeLine{00776\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00777\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00778\ }
+\DoxyCodeLine{00779\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00780\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00781\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1tgh__allocator__t}{tgh\_allocator\_t}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classncpp_1_1tgh__allocator__t}{tgh\_allocator\_t}}\&\ other)\ :}
+\DoxyCodeLine{00782\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classncpp_1_1tgh__allocator__t}{tgh\_allocator\_t}}((tagged\_heap\_type\&)(*other.tagged\_heap\_ref\_),\ other.category\_id\_)}
+\DoxyCodeLine{00783\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00784\ }
+\DoxyCodeLine{00785\ }
+\DoxyCodeLine{00786\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00787\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00788\ }
+\DoxyCodeLine{00789\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1tgh__allocator__t}{tgh\_allocator\_t<value\_type>}}\&\ operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{classncpp_1_1tgh__allocator__t}{tgh\_allocator\_t}}\&\ other)\ \{}
+\DoxyCodeLine{00790\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00791\ \ \ \ \ \ \ \ \ \ \ \ \ tagged\_heap\_ref\_\ =\ other.tagged\_heap\_ref\_;}
+\DoxyCodeLine{00792\ \ \ \ \ \ \ \ \ \ \ \ \ category\_id\_\ =\ other.category\_id\_;}
+\DoxyCodeLine{00793\ }
+\DoxyCodeLine{00794\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};\ }
+\DoxyCodeLine{00795\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00796\ }
+\DoxyCodeLine{00797\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}\ other\_value\_type\_\_>}
+\DoxyCodeLine{00798\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1tgh__allocator__t}{tgh\_allocator\_t}}(\textcolor{keyword}{typename}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classncpp_1_1tgh__allocator__t}{tgh\_allocator\_t<other\_value\_type\_\_,\ tagged\_heap\_type>}}\&\ other)\ :}
+\DoxyCodeLine{00799\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classncpp_1_1tgh__allocator__t}{tgh\_allocator\_t}}((tagged\_heap\_type\&)other.tagged\_heap(),\ other.category\_id())}
+\DoxyCodeLine{00800\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00801\ }
+\DoxyCodeLine{00802\ }
+\DoxyCodeLine{00803\ }
+\DoxyCodeLine{00804\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00805\ }
+\DoxyCodeLine{00806\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}\ other\_value\_type\_\_>}
+\DoxyCodeLine{00807\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1tgh__allocator__t}{tgh\_allocator\_t}}\&\ operator=(\textcolor{keyword}{typename}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classncpp_1_1tgh__allocator__t}{tgh\_allocator\_t<other\_value\_type\_\_,\ tagged\_heap\_type>}}\&\ other)\ \{}
+\DoxyCodeLine{00808\ }
+\DoxyCodeLine{00809\ \ \ \ \ \ \ \ \ \ \ \ \ tagged\_heap\_ref\_\ =\ other.tagged\_heap();}
+\DoxyCodeLine{00810\ \ \ \ \ \ \ \ \ \ \ \ \ category\_id\_\ =\ other.category\_id();}
+\DoxyCodeLine{00811\ }
+\DoxyCodeLine{00812\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00813\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00814\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00815\ }
+\DoxyCodeLine{00819\ }
+\DoxyCodeLine{00820\ \textcolor{preprocessor}{\#pragma\ region\ Methods}}
+\DoxyCodeLine{00821\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00822\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ pointer\ internal\_allocate(size\_type\ n,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ align\ =\ NCPP\_DEFAULT\_ALIGN)\ \{}
+\DoxyCodeLine{00823\ }
+\DoxyCodeLine{00824\ \ \ \ \ \ \ \ \ \ \ \ \ assert(!tagged\_heap\_ref\_.is\_null()\ \&\&\ \textcolor{stringliteral}{"{}tagged\ heap\ is\ null"{}});}
+\DoxyCodeLine{00825\ }
+\DoxyCodeLine{00826\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (pointer)(tagged\_heap\_ref\_-\/>allocate(category\_id\_,\ n\ *\ \textcolor{keyword}{sizeof}(value\_type),\ align));}
+\DoxyCodeLine{00827\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00828\ }
+\DoxyCodeLine{00829\ }
+\DoxyCodeLine{00830\ }
+\DoxyCodeLine{00831\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00832\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}*\ abstract\_allocate(size\_type\ size,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ align\ =\ NCPP\_DEFAULT\_ALIGN)\ \{}
+\DoxyCodeLine{00833\ }
+\DoxyCodeLine{00834\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (\textcolor{keywordtype}{void}*)internal\_allocate(size\ /\ \textcolor{keyword}{sizeof}(value\_type\_\_),\ align);}
+\DoxyCodeLine{00835\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00836\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ abstract\_deallocate(\textcolor{keywordtype}{void}*\ ptr,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ size\ =\ \textcolor{keyword}{sizeof}(value\_type\_\_))\ \{}
+\DoxyCodeLine{00837\ }
+\DoxyCodeLine{00838\ }
+\DoxyCodeLine{00839\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00840\ }
+\DoxyCodeLine{00841\ }
+\DoxyCodeLine{00842\ }
+\DoxyCodeLine{00843\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00844\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ pointer\ \ \ allocate(size\_type\ n,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ align\ =\ NCPP\_DEFAULT\_ALIGN)\ \{}
+\DoxyCodeLine{00845\ }
+\DoxyCodeLine{00846\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ internal\_allocate(n,\ align);}
+\DoxyCodeLine{00847\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00848\ }
+\DoxyCodeLine{00849\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ deallocate(\textcolor{keywordtype}{void}*\ p,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ n\ =\ 1)\ \{}
+\DoxyCodeLine{00850\ }
+\DoxyCodeLine{00851\ }
+\DoxyCodeLine{00852\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00853\ }
+\DoxyCodeLine{00854\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ reset\_blocks()\ \{}
+\DoxyCodeLine{00855\ }
+\DoxyCodeLine{00856\ \ \ \ \ \ \ \ \ \ \ \ \ assert(!tagged\_heap\_ref\_.is\_null()\ \&\&\ \textcolor{stringliteral}{"{}tagged\ heap\ is\ null"{}});}
+\DoxyCodeLine{00857\ }
+\DoxyCodeLine{00858\ \ \ \ \ \ \ \ \ \ \ \ \ tagged\_heap\_ref\_-\/>reset\_blocks(category\_id\_);}
+\DoxyCodeLine{00859\ }
+\DoxyCodeLine{00860\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00861\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ deallocate\_blocks()\ \{}
+\DoxyCodeLine{00862\ }
+\DoxyCodeLine{00863\ \ \ \ \ \ \ \ \ \ \ \ \ assert(!tagged\_heap\_ref\_.is\_null()\ \&\&\ \textcolor{stringliteral}{"{}tagged\ heap\ is\ null"{}});}
+\DoxyCodeLine{00864\ }
+\DoxyCodeLine{00865\ \ \ \ \ \ \ \ \ \ \ \ \ tagged\_heap\_ref\_-\/>deallocate(category\_id\_);}
+\DoxyCodeLine{00866\ }
+\DoxyCodeLine{00867\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00868\ }
+\DoxyCodeLine{00869\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ pointer\ \ \ \ \ \ \ \ \ \ \ address(reference\ x)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \&x;\ \}}
+\DoxyCodeLine{00870\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ const\_pointer\ \ \ \ \ address(const\_reference\ x)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \&x;\ \}}
+\DoxyCodeLine{00871\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ destroy(pointer\ p)\ \{\ p-\/>\string~value\_type();\ \}}
+\DoxyCodeLine{00872\ }
+\DoxyCodeLine{00873\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ size\_type\ \ \ \ \ \ \ \ \ max\_size()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ size\_t(-\/1);\ \}}
+\DoxyCodeLine{00874\ }
+\DoxyCodeLine{00875\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}\ U>}
+\DoxyCodeLine{00876\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structncpp_1_1tgh__allocator__t_1_1rebind}{rebind}}\ \{\ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{classncpp_1_1tgh__allocator__t}{tgh\_allocator\_t<U>}}\ \mbox{\hyperlink{classncpp_1_1tgh__allocator__t}{other}};\ \};}
+\DoxyCodeLine{00877\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00878\ }
+\DoxyCodeLine{00879\ \ \ \ \ \};}
+\DoxyCodeLine{00880\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00881\ }
+\DoxyCodeLine{00882\ }
+\DoxyCodeLine{00883\ }
+\DoxyCodeLine{00884\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classncpp_1_1tagged__heap__t}{tagged\_heap}}\ =\ \mbox{\hyperlink{classncpp_1_1tagged__heap__t}{tagged\_heap\_t<>}};}
+\DoxyCodeLine{00885\ }
+\DoxyCodeLine{00886\ \}}
+\DoxyCodeLine{00887\ }
+
+\end{DoxyCode}

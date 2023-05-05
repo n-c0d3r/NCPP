@@ -1,0 +1,42 @@
+\hypertarget{tagged__heap_8hpp}{}\doxysection{F\+:/\+NCoder/\+NCPP/ncpp/source/ncpp/tagged\+\_\+heap.hpp File Reference}
+\label{tagged__heap_8hpp}\index{F:/NCoder/NCPP/ncpp/source/ncpp/tagged\_heap.hpp@{F:/NCoder/NCPP/ncpp/source/ncpp/tagged\_heap.hpp}}
+
+
+Implements tagged heap.  
+
+
+{\ttfamily \#include $<$ncpp/prerequisites.\+hpp$>$}\newline
+{\ttfamily \#include $<$ncpp/containers/handle\+\_\+map.\+hpp$>$}\newline
+{\ttfamily \#include $<$ncpp/utilities/lref.\+hpp$>$}\newline
+{\ttfamily \#include $<$ncpp/mem.\+hpp$>$}\newline
+{\ttfamily \#include $<$ncpp/native\+\_\+heap.\+hpp$>$}\newline
+{\ttfamily \#include $<$ncpp/native\+\_\+allocator.\+hpp$>$}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structncpp_1_1tagged__heap__block}{ncpp\+::tagged\+\_\+heap\+\_\+block}}
+\begin{DoxyCompactList}\small\item\em A tagged heap block represents a block of memory allocated by a tagged heap category. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classncpp_1_1tagged__heap__category__t}{ncpp\+::tagged\+\_\+heap\+\_\+category\+\_\+t$<$ allocator\+\_\+type\+\_\+\+\_\+ $>$}}
+\begin{DoxyCompactList}\small\item\em A tagged heap category is a category of allocations inside a tagged heap. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classncpp_1_1tagged__heap__t}{ncpp\+::tagged\+\_\+heap\+\_\+t$<$ allocator\+\_\+type\+\_\+\+\_\+, category\+\_\+cell\+\_\+allocator\+\_\+type\+\_\+\+\_\+, category\+\_\+id\+\_\+allocator\+\_\+type\+\_\+\+\_\+ $>$}}
+\begin{DoxyCompactList}\small\item\em A tagged heap manages memory block allocations and categories. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classncpp_1_1tgh__allocator__t}{ncpp\+::tgh\+\_\+allocator\+\_\+t$<$ value\+\_\+type\+\_\+\+\_\+, tagged\+\_\+heap\+\_\+type\+\_\+\+\_\+ $>$}}
+\item 
+struct \mbox{\hyperlink{structncpp_1_1tgh__allocator__t_1_1rebind}{ncpp\+::tgh\+\_\+allocator\+\_\+t$<$ value\+\_\+type\+\_\+\+\_\+, tagged\+\_\+heap\+\_\+type\+\_\+\+\_\+ $>$\+::rebind$<$ U $>$}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacencpp}{ncpp}}
+\begin{DoxyCompactList}\small\item\em The root namespace of ncpp library. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacencpp_ab00e443858cb4185f95359fa9cc22170}\label{namespacencpp_ab00e443858cb4185f95359fa9cc22170}} 
+using {\bfseries ncpp\+::tagged\+\_\+heap} = tagged\+\_\+heap\+\_\+t$<$$>$
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Implements tagged heap. 
+

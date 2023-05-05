@@ -1,0 +1,9 @@
+var searchData=
+[
+  ['actual_5fsize_5faligned_0',['actual_size_aligned',['../structncpp_1_1tagged__heap__block.html#a655ee4076f15ee64720fe96fe1ef6222',1,'ncpp::tagged_heap_block::actual_size_aligned()'],['../namespacencpp.html#a81a5c838e9b17ce47cdbb9f8b804afb3',1,'ncpp::actual_size_aligned()']]],
+  ['align_5faddress_1',['align_address',['../structncpp_1_1pool.html#a6053ef6b3dec3e91d14ca1ec2b6a541e',1,'ncpp::pool::align_address()'],['../structncpp_1_1stack.html#aeb45b5115f939c0845acafc0aeebd0f3',1,'ncpp::stack::align_address()'],['../structncpp_1_1tagged__heap__block.html#affcdeb97a6c066194be2cd1c9adbe212',1,'ncpp::tagged_heap_block::align_address()'],['../namespacencpp.html#aa8941d73e81a9d423ddd6d79633c8f3f',1,'ncpp::align_address()']]],
+  ['align_5fpointer_2',['align_pointer',['../structncpp_1_1pool.html#a3d06523e80e3d9f1c83c68d36a13e66b',1,'ncpp::pool::align_pointer()'],['../structncpp_1_1stack.html#a704fa46e731c0b5521ffde2ce8fcef27',1,'ncpp::stack::align_pointer()'],['../structncpp_1_1tagged__heap__block.html#a7cde402f102cf4adc4dc6fe93be43e34',1,'ncpp::tagged_heap_block::align_pointer()'],['../namespacencpp.html#ac74c7a12af4f316217ed60b92bb2abe7',1,'ncpp::align_pointer()']]],
+  ['aligned_5falloc_3',['aligned_alloc',['../structncpp_1_1pool.html#a9a1ec1b9afc78f6649fa2eb1e373d1ea',1,'ncpp::pool::aligned_alloc()'],['../structncpp_1_1stack.html#abd9f923c73f3e06f8fa29e2f8b307c06',1,'ncpp::stack::aligned_alloc()'],['../structncpp_1_1tagged__heap__block.html#aa1644ef3508e81378fd8e064da141505',1,'ncpp::tagged_heap_block::aligned_alloc()'],['../namespacencpp.html#a0142152a8ff7d3309ff9bc50b1da78d4',1,'ncpp::aligned_alloc(sz size, sz align)']]],
+  ['aligned_5ffree_4',['aligned_free',['../namespacencpp.html#aeb58c6bc876921b00fe138a940e0d406',1,'ncpp']]],
+  ['allocate_5',['allocate',['../structncpp_1_1tagged__heap__block.html#abd4bdd7ef0e341fba6f7528ddab9d78b',1,'ncpp::tagged_heap_block']]]
+];

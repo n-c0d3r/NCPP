@@ -1,0 +1,47 @@
+\hypertarget{mem_8hpp}{}\doxysection{F\+:/\+NCoder/\+NCPP/ncpp/source/ncpp/mem.hpp File Reference}
+\label{mem_8hpp}\index{F:/NCoder/NCPP/ncpp/source/ncpp/mem.hpp@{F:/NCoder/NCPP/ncpp/source/ncpp/mem.hpp}}
+
+
+Contains the memory management utilities.  
+
+
+{\ttfamily \#include $<$ncpp/prerequisites.\+hpp$>$}\newline
+{\ttfamily \#include $<$ncpp/native\+\_\+allocator.\+hpp$>$}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classncpp_1_1aligned__allocator__t}{ncpp\+::aligned\+\_\+allocator\+\_\+t$<$ value\+\_\+type\+\_\+\+\_\+ $>$}}
+\item 
+struct \mbox{\hyperlink{structncpp_1_1aligned__allocator__t_1_1rebind}{ncpp\+::aligned\+\_\+allocator\+\_\+t$<$ value\+\_\+type\+\_\+\+\_\+ $>$\+::rebind$<$ U $>$}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacencpp}{ncpp}}
+\begin{DoxyCompactList}\small\item\em The root namespace of ncpp library. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacencpp_ad512e31a93c1b4982e7b9af30b0eb3c9}\label{namespacencpp_ad512e31a93c1b4982e7b9af30b0eb3c9}} 
+void {\bfseries ncpp\+::log\+\_\+memory\+\_\+stats} ()
+\item 
+\mbox{\Hypertarget{namespacencpp_aa8941d73e81a9d423ddd6d79633c8f3f}\label{namespacencpp_aa8941d73e81a9d423ddd6d79633c8f3f}} 
+uintptr\+\_\+t {\bfseries ncpp\+::align\+\_\+address} (uintptr\+\_\+t addr, sz align)
+\begin{DoxyCompactList}\small\item\em Returns aligned address shifting from the given address and align. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{namespacencpp_ac74c7a12af4f316217ed60b92bb2abe7}\label{namespacencpp_ac74c7a12af4f316217ed60b92bb2abe7}} 
+{\footnotesize template$<$typename data\+\_\+type $>$ }\\data\+\_\+type $\ast$ {\bfseries ncpp\+::align\+\_\+pointer} (data\+\_\+type $\ast$ptr, sz align)
+\begin{DoxyCompactList}\small\item\em Returns aligned pointer shifting from the given pointer and align. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{namespacencpp_a0142152a8ff7d3309ff9bc50b1da78d4}\label{namespacencpp_a0142152a8ff7d3309ff9bc50b1da78d4}} 
+void $\ast$ {\bfseries ncpp\+::aligned\+\_\+alloc} (sz size, sz align)
+\begin{DoxyCompactList}\small\item\em Aligned allocates a memory block from given size and align. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{namespacencpp_a81a5c838e9b17ce47cdbb9f8b804afb3}\label{namespacencpp_a81a5c838e9b17ce47cdbb9f8b804afb3}} 
+sz {\bfseries ncpp\+::actual\+\_\+size\+\_\+aligned} (void $\ast$ptr)
+\begin{DoxyCompactList}\small\item\em Gets actual allocated size from aligned pointer. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{namespacencpp_aeb58c6bc876921b00fe138a940e0d406}\label{namespacencpp_aeb58c6bc876921b00fe138a940e0d406}} 
+void {\bfseries ncpp\+::aligned\+\_\+free} (void $\ast$ptr)
+\begin{DoxyCompactList}\small\item\em Aligned frees a memory block. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Contains the memory management utilities. 
+

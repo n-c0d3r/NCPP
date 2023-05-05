@@ -119,11 +119,12 @@ namespace ncpp {
             native_allocator_t<std::pair<const key_type__, value_type__>>
         >;
 
-        template<typename key_type__, typename value_type__, typename pr__ = std::less<key_type__>>
+        template<typename key_type__, typename value_type__, typename hs__ = std::hash<key_type__>, typename eq__ = std::equal_to<key_type__>>
         using native_unordered_map_t = typename std::unordered_map<
             key_type__,
             value_type__,
-            pr__,
+            hs__,
+            eq__,
             native_allocator_t<std::pair<const key_type__, value_type__>>
         >;
 
@@ -136,10 +137,11 @@ namespace ncpp {
             native_allocator_t<key_type__>
         >;
 
-        template<typename key_type__, typename pr__ = std::less<key_type__>>
+        template<typename key_type__, typename hs__ = std::hash<key_type__>, typename eq__ = std::equal_to<key_type__>>
         using native_unordered_set_t = typename std::unordered_set<
             key_type__,
-            pr__,
+            hs__,
+            eq__,
             native_allocator_t<key_type__>
         >;
 #pragma endregion

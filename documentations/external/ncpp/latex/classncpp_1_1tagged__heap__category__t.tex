@@ -1,0 +1,72 @@
+\hypertarget{classncpp_1_1tagged__heap__category__t}{}\doxysection{ncpp\+::tagged\+\_\+heap\+\_\+category\+\_\+t\texorpdfstring{$<$}{<} allocator\+\_\+type\+\_\+\+\_\+ \texorpdfstring{$>$}{>} Class Template Reference}
+\label{classncpp_1_1tagged__heap__category__t}\index{ncpp::tagged\_heap\_category\_t$<$ allocator\_type\_\_ $>$@{ncpp::tagged\_heap\_category\_t$<$ allocator\_type\_\_ $>$}}
+
+
+A tagged heap category is a category of allocations inside a tagged heap.  
+
+
+
+
+{\ttfamily \#include $<$tagged\+\_\+heap.\+hpp$>$}
+
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classncpp_1_1tagged__heap__category__t_a88c2ae7d24ae4f2d5be8b50dddbfd6cb}\label{classncpp_1_1tagged__heap__category__t_a88c2ae7d24ae4f2d5be8b50dddbfd6cb}} 
+using {\bfseries allocator\+\_\+type} = allocator\+\_\+type\+\_\+\+\_\+
+\item 
+\mbox{\Hypertarget{classncpp_1_1tagged__heap__category__t_a3f63ec8380e34a1126114b5d6c6a118f}\label{classncpp_1_1tagged__heap__category__t_a3f63ec8380e34a1126114b5d6c6a118f}} 
+using {\bfseries block\+\_\+type} = \mbox{\hyperlink{structncpp_1_1tagged__heap__block}{tagged\+\_\+heap\+\_\+block}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classncpp_1_1tagged__heap__category__t_aee252c6bb54251c280668a9fe66d58da}\label{classncpp_1_1tagged__heap__category__t_aee252c6bb54251c280668a9fe66d58da}} 
+\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} {\bfseries block\+\_\+capacity} () const
+\item 
+\mbox{\Hypertarget{classncpp_1_1tagged__heap__category__t_a75cf78143faca9e8ce22bd47e0f2966e}\label{classncpp_1_1tagged__heap__category__t_a75cf78143faca9e8ce22bd47e0f2966e}} 
+\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} {\bfseries min\+\_\+block\+\_\+count} () const
+\item 
+\mbox{\Hypertarget{classncpp_1_1tagged__heap__category__t_a45549c53656593c65e152704c135eda0}\label{classncpp_1_1tagged__heap__category__t_a45549c53656593c65e152704c135eda0}} 
+allocator\+\_\+type \& {\bfseries block\+\_\+allocator} ()
+\item 
+\mbox{\Hypertarget{classncpp_1_1tagged__heap__category__t_a1c108759c1351dfb9bd9ac9bc9affadd}\label{classncpp_1_1tagged__heap__category__t_a1c108759c1351dfb9bd9ac9bc9affadd}} 
+const allocator\+\_\+type \& {\bfseries block\+\_\+allocator} () const
+\item 
+\mbox{\Hypertarget{classncpp_1_1tagged__heap__category__t_a5ac8c9718345c564524f718fee4fca82}\label{classncpp_1_1tagged__heap__category__t_a5ac8c9718345c564524f718fee4fca82}} 
+{\bfseries tagged\+\_\+heap\+\_\+category\+\_\+t} (\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} block\+\_\+capacity, \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} min\+\_\+block\+\_\+count)
+\item 
+\mbox{\Hypertarget{classncpp_1_1tagged__heap__category__t_ae21ecda5fbd488fa2a164a265affadf3}\label{classncpp_1_1tagged__heap__category__t_ae21ecda5fbd488fa2a164a265affadf3}} 
+void {\bfseries clear} ()
+\begin{DoxyCompactList}\small\item\em Deallocates all blocks in the current thread. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classncpp_1_1tagged__heap__category__t_af9219a8b94c8cff43ce0614a38e61973}\label{classncpp_1_1tagged__heap__category__t_af9219a8b94c8cff43ce0614a38e61973}} 
+void {\bfseries deallocate} ()
+\begin{DoxyCompactList}\small\item\em Deallocates all blocks in the current thread. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classncpp_1_1tagged__heap__category__t_a681508ab71dd7fe72cb73a3bbbf5ccbc}\label{classncpp_1_1tagged__heap__category__t_a681508ab71dd7fe72cb73a3bbbf5ccbc}} 
+void {\bfseries reset\+\_\+blocks} ()
+\begin{DoxyCompactList}\small\item\em Resets all blocks in the current thread. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classncpp_1_1tagged__heap__category__t_a61cde11a0b455e1137af1618497431a4}\label{classncpp_1_1tagged__heap__category__t_a61cde11a0b455e1137af1618497431a4}} 
+\mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}} $\ast$ {\bfseries allocate} (\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} size, \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} align)
+\item 
+\mbox{\Hypertarget{classncpp_1_1tagged__heap__category__t_a42ab22ff28e960ab6650372aef5b2f38}\label{classncpp_1_1tagged__heap__category__t_a42ab22ff28e960ab6650372aef5b2f38}} 
+\mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\+\_\+type}} \& {\bfseries head\+\_\+block} ()
+\item 
+\mbox{\Hypertarget{classncpp_1_1tagged__heap__category__t_a6439e268f4fa2d27e701cd94566741c3}\label{classncpp_1_1tagged__heap__category__t_a6439e268f4fa2d27e701cd94566741c3}} 
+\mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\+\_\+type}} \& {\bfseries tail\+\_\+block} ()
+\item 
+\mbox{\Hypertarget{classncpp_1_1tagged__heap__category__t_a1b010ee573c5d735a4ce8285d82ccd51}\label{classncpp_1_1tagged__heap__category__t_a1b010ee573c5d735a4ce8285d82ccd51}} 
+\mbox{\hyperlink{structncpp_1_1tagged__heap__block}{block\+\_\+type}} \& {\bfseries current\+\_\+block} ()
+\item 
+\mbox{\Hypertarget{classncpp_1_1tagged__heap__category__t_a9def8fdbacbe50eecdb21b8ac6cb1043}\label{classncpp_1_1tagged__heap__category__t_a9def8fdbacbe50eecdb21b8ac6cb1043}} 
+\mbox{\hyperlink{namespacencpp_a74cd32b52d6ec0fc0972bfe75223751a}{u32}} {\bfseries block\+\_\+count} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$class allocator\+\_\+type\+\_\+\+\_\+$>$\newline
+class ncpp\+::tagged\+\_\+heap\+\_\+category\+\_\+t$<$ allocator\+\_\+type\+\_\+\+\_\+ $>$}
+A tagged heap category is a category of allocations inside a tagged heap. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+F\+:/\+NCoder/\+NCPP/ncpp/source/ncpp/\mbox{\hyperlink{tagged__heap_8hpp}{tagged\+\_\+heap.\+hpp}}\end{DoxyCompactItemize}

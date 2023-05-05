@@ -1,0 +1,313 @@
+\hypertarget{lref_8hpp_source}{}\doxysection{lref.\+hpp}
+\label{lref_8hpp_source}\index{F:/NCoder/NCPP/ncpp/source/ncpp/utilities/lref.hpp@{F:/NCoder/NCPP/ncpp/source/ncpp/utilities/lref.hpp}}
+\mbox{\hyperlink{lref_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#pragma\ region\ Includes}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{prerequisites_8hpp}{ncpp/prerequisites.hpp}}>}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#include\ <ncpp/utilities/nth\_template\_arg.hpp>}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacencpp}{ncpp}}\ \{}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{namespace\ }utilities\ \{}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ type\_\_>}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t}{na\_lref\_t}}\ \{}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ type\_\_*\ \mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}};}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ type\_\_\&\ \mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_a0dcc57085aef8e394058c2e32658cca7}{get}}()\ \{\ \textcolor{keywordflow}{return}\ *\mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}};\ \}}
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ type\_\_\&\ \mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_a2decc0224eec07b42874a029e2358251}{get}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ *\mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}};\ \}}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ set(\textcolor{keyword}{const}\ type\_\_\&\ value)\ \{\ *\mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}}\ =\ value;\ \}}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ set(type\_\_\&\&\ value)\ \{\ *\mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}}\ =\ std::move(value);\ \}}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacencpp_a82bf51a534e48e8f4ce2b1cd4e9586e5}{b8}}\ \mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_a7db464a93743246b2b84f10d96691508}{is\_null}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}}\ ==\ 0;\ \}}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ type\_\_*\ pointer()\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}};\ \}}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ type\_\_*\ pointer()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}};\ \}}
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00107\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ na\_lref\_t()\ noexcept\ :}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}}(0)}
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ na\_lref\_t(type\_\_\&\ raw\_ref)\ noexcept\ :}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}}(\&raw\_ref)}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ na\_lref\_t(\textcolor{keyword}{const}\ type\_\_\&\ raw\_ref)\ noexcept\ :}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}}((type\_\_*)\&raw\_ref)}
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00124\ }
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ na\_lref\_t(type\_\_\&\&\ raw\_ref)\ noexcept\ :}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}}(\&raw\_ref)}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(\textcolor{keyword}{false}\ \&\&\ \textcolor{stringliteral}{"{}cant\ reference\ to\ rvalue."{}});}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \ \ \ \ \string~na\_lref\_t()\ \{}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00138\ }
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ na\_lref\_t(\textcolor{keyword}{const}\ na\_lref\_t\&\ other)\ noexcept\ :}
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}}(other.raw\_pointer\_)}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ na\_lref\_t\&\ operator\ =\ (\textcolor{keyword}{const}\ na\_lref\_t\&\ other)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}}\ =\ other.raw\_pointer\_;}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ na\_lref\_t\&\ operator\ =\ (\textcolor{keyword}{const}\ type\_\_\&\ other)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00150\ }
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}}\ =\ (type\_\_*)(\&other);}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ na\_lref\_t(na\_lref\_t\&\&\ other)\ noexcept\ :}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}}(other.raw\_pointer\_)}
+\DoxyCodeLine{00157\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other.raw\_pointer\_\ =\ 0;}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ na\_lref\_t\&\ operator\ =\ (na\_lref\_t\&\&\ other)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}}\ =\ other.raw\_pointer\_;}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other.raw\_pointer\_\ =\ 0;}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00168\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00169\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacencpp_a82bf51a534e48e8f4ce2b1cd4e9586e5}{b8}}\ operator\ ==\ (\textcolor{keyword}{const}\ na\_lref\_t\&\ other)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ other.raw\_pointer\_\ ==\ \mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}};}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacencpp_a82bf51a534e48e8f4ce2b1cd4e9586e5}{b8}}\ operator\ ==\ (\textcolor{keyword}{const}\ type\_\_\&\ other)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ other.raw\_pointer\_\ ==\ \&\mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}};}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacencpp_a82bf51a534e48e8f4ce2b1cd4e9586e5}{b8}}\ operator\ !=\ (\textcolor{keyword}{const}\ na\_lref\_t\&\ other)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ other.raw\_pointer\_\ !=\ \mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}};}
+\DoxyCodeLine{00180\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacencpp_a82bf51a534e48e8f4ce2b1cd4e9586e5}{b8}}\ operator\ !=\ (\textcolor{keyword}{const}\ type\_\_\&\ other)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ other.raw\_pointer\_\ !=\ \&\mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}};}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00185\ }
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ type\_\_*\ operator\ -\/>\ ()\ \{}
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}};}
+\DoxyCodeLine{00189\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ type\_\_*\ operator\ -\/>\ ()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}};}
+\DoxyCodeLine{00193\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ type\_\_\&\ operator\ *\ ()\ \{}
+\DoxyCodeLine{00196\ }
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}};}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ type\_\_\&\ operator\ *\ ()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00200\ }
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}};}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ clear()\ \{}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t_af9f27d1f851c5ccfcd9060c5aca66165}{raw\_pointer\_}}\ =\ 0;}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00210\ }
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00216\ }
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ type\_\_>}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t}{a\_lref\_t}}\ \{}
+\DoxyCodeLine{00232\ }
+\DoxyCodeLine{00236\ }
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ std::atomic<type\_\_*>\ \mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}};}
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00245\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ type\_\_\&\ \mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_ab72368db5ef340ceba46859510dbd15f}{get}}()\ \{\ \textcolor{keywordflow}{return}\ *\mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}.load(std::memory\_order\_acquire);\ \}}
+\DoxyCodeLine{00246\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ type\_\_\&\ \mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a70d92499bd31071c1881468a1e75e179}{get}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ *\mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}.load(std::memory\_order\_acquire);\ \}}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ set(\textcolor{keyword}{const}\ type\_\_\&\ value)\ \{\ *(\mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}.load(std::memory\_order\_acquire))\ =\ value;\ \}}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ set(type\_\_\&\&\ value)\ \{\ *(\mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}.load(std::memory\_order\_acquire))\ =\ std::move(value);\ \}}
+\DoxyCodeLine{00249\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ type\_\_*\ pointer()\ \{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}.load(std::memory\_order\_acquire);\ \}}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ type\_\_*\ pointer()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}.load(std::memory\_order\_acquire);\ \}}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacencpp_a82bf51a534e48e8f4ce2b1cd4e9586e5}{b8}}\ \mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a4eeb1c58a35e7520b559758d522a6ab0}{is\_null}}()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}.load(std::memory\_order\_acquire)\ ==\ 0;\ \}}
+\DoxyCodeLine{00256\ }
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t}{a\_lref\_t}}()\ noexcept\ :}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}(0)}
+\DoxyCodeLine{00260\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00261\ }
+\DoxyCodeLine{00262\ }
+\DoxyCodeLine{00263\ }
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ a\_lref\_t(type\_\_\&\ raw\_ref)\ noexcept\ :}
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}(\&raw\_ref)}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00268\ }
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00270\ }
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ a\_lref\_t(\textcolor{keyword}{const}\ type\_\_\&\ raw\_ref)\ noexcept\ :}
+\DoxyCodeLine{00273\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}((type\_\_*)\&raw\_ref)}
+\DoxyCodeLine{00274\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00275\ }
+\DoxyCodeLine{00276\ }
+\DoxyCodeLine{00277\ }
+\DoxyCodeLine{00278\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00279\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ a\_lref\_t(type\_\_\&\&\ raw\_ref)\ noexcept\ :}
+\DoxyCodeLine{00280\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}(\&raw\_ref)}
+\DoxyCodeLine{00281\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00282\ }
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static\_assert}(\textcolor{keyword}{false}\ \&\&\ \textcolor{stringliteral}{"{}cant\ reference\ to\ rvalue."{}});}
+\DoxyCodeLine{00284\ }
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ \ \ \ \ \string~a\_lref\_t()\ \{}
+\DoxyCodeLine{00287\ }
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00289\ }
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ a\_lref\_t(\textcolor{keyword}{const}\ a\_lref\_t\&\ other)\ noexcept\ :}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}(other.aptr\_.load(std::memory\_order\_acquire))}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ a\_lref\_t\&\ operator\ =\ (\textcolor{keyword}{const}\ a\_lref\_t\&\ other)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00295\ }
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::atomic\_thread\_fence(std::memory\_order\_release);}
+\DoxyCodeLine{00297\ }
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}.store(other.aptr\_.load(std::memory\_order\_acquire),\ std::memory\_order\_relaxed);}
+\DoxyCodeLine{00299\ }
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ a\_lref\_t\&\ operator\ =\ (\textcolor{keyword}{const}\ type\_\_\&\ other)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00303\ }
+\DoxyCodeLine{00304\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::atomic\_thread\_fence(std::memory\_order\_release);}
+\DoxyCodeLine{00305\ }
+\DoxyCodeLine{00306\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}.store((type\_\_*)\&other,\ std::memory\_order\_relaxed);}
+\DoxyCodeLine{00307\ }
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ a\_lref\_t(a\_lref\_t\&\&\ other)\ noexcept\ :}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}(other.aptr\_.load(std::memory\_order\_acquire))}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00313\ }
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other.aptr\_.store(0,\ std::memory\_order\_release);}
+\DoxyCodeLine{00315\ }
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00317\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ a\_lref\_t\&\ operator\ =\ (a\_lref\_t\&\&\ other)\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00318\ }
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::atomic\_thread\_fence(std::memory\_order\_release);}
+\DoxyCodeLine{00320\ }
+\DoxyCodeLine{00321\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}.store(other.aptr\_.load(std::memory\_order\_acquire),\ std::memory\_order\_relaxed);}
+\DoxyCodeLine{00322\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ other.aptr\_.store(0,\ std::memory\_order\_relaxed);}
+\DoxyCodeLine{00323\ }
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacencpp_a82bf51a534e48e8f4ce2b1cd4e9586e5}{b8}}\ operator\ ==\ (\textcolor{keyword}{const}\ a\_lref\_t\&\ other)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00327\ }
+\DoxyCodeLine{00328\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ other.aptr\_.load(std::memory\_order\_acquire)\ ==\ (\mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}.load(std::memory\_order\_acquire));}
+\DoxyCodeLine{00329\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00330\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacencpp_a82bf51a534e48e8f4ce2b1cd4e9586e5}{b8}}\ operator\ ==\ (\textcolor{keyword}{const}\ type\_\_\&\ other)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00331\ }
+\DoxyCodeLine{00332\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \&other\ !=\ \mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}.load(std::memory\_order\_acquire);}
+\DoxyCodeLine{00333\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00334\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacencpp_a82bf51a534e48e8f4ce2b1cd4e9586e5}{b8}}\ operator\ !=\ (\textcolor{keyword}{const}\ a\_lref\_t\&\ other)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00335\ }
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ other.aptr\_.load(std::memory\_order\_acquire)\ !=\ \mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}.load(std::memory\_order\_acquire);}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{namespacencpp_a82bf51a534e48e8f4ce2b1cd4e9586e5}{b8}}\ operator\ !=\ (\textcolor{keyword}{const}\ type\_\_\&\ other)\ \textcolor{keyword}{const}\ \textcolor{keyword}{noexcept}\ \{}
+\DoxyCodeLine{00339\ }
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \&other\ !=\ \mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}.load(std::memory\_order\_acquire);}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00342\ }
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ type\_\_*\ operator\ -\/>\ ()\ \{}
+\DoxyCodeLine{00344\ }
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (\mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}.load(std::memory\_order\_acquire));}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ type\_\_*\ operator\ -\/>\ ()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00348\ }
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (\mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}.load(std::memory\_order\_acquire));}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ type\_\_\&\ operator\ *\ ()\ \{}
+\DoxyCodeLine{00352\ }
+\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *(\mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}.load(std::memory\_order\_acquire));}
+\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keyword}{const}\ type\_\_\&\ operator\ *\ ()\textcolor{keyword}{\ const\ }\{}
+\DoxyCodeLine{00356\ }
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *(\mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}.load(std::memory\_order\_acquire));}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00359\ }
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ clear()\ \{}
+\DoxyCodeLine{00361\ }
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t_a47bbaa25e625c7e09e8c1fe753a1b75b}{aptr\_}}.store((type\_\_*)0,\ std::memory\_order\_release);}
+\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00364\ }
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00366\ }
+\DoxyCodeLine{00367\ }
+\DoxyCodeLine{00368\ }
+\DoxyCodeLine{00372\ }
+\DoxyCodeLine{00376\ }
+\DoxyCodeLine{00380\ }
+\DoxyCodeLine{00381\ }
+\DoxyCodeLine{00382\ }
+\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ type\_\_,\ b8\ is\_atomic\_\_\ =\ false>}
+\DoxyCodeLine{00387\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{namespacencpp_1_1utilities_aac8793b5c8100c55124fa2cac242bfc1}{lref\_t}}\ =\ \textcolor{keyword}{typename}\ \mbox{\hyperlink{structncpp_1_1utilities_1_1nth__template__arg__t}{utilities::nth\_template\_arg\_t}}<}
+\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ \ \ \ \ (\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}})is\_atomic\_\_,}
+\DoxyCodeLine{00389\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{structncpp_1_1utilities_1_1na__lref__t}{na\_lref\_t<type\_\_>}},}
+\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{typename}\ \mbox{\hyperlink{structncpp_1_1utilities_1_1a__lref__t}{a\_lref\_t<type\_\_>}}}
+\DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ >::type;}
+\DoxyCodeLine{00392\ }
+\DoxyCodeLine{00393\ \ \ \ \ \}}
+\DoxyCodeLine{00394\ }
+\DoxyCodeLine{00395\ \}}
+
+\end{DoxyCode}

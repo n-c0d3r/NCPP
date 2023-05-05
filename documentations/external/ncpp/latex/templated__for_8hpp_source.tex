@@ -1,0 +1,120 @@
+\hypertarget{templated__for_8hpp_source}{}\doxysection{templated\+\_\+for.\+hpp}
+\label{templated__for_8hpp_source}\index{F:/NCoder/NCPP/ncpp/source/ncpp/utilities/templated\_for.hpp@{F:/NCoder/NCPP/ncpp/source/ncpp/utilities/templated\_for.hpp}}
+\mbox{\hyperlink{templated__for_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#pragma\ region\ Includes}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{prerequisites_8hpp}{ncpp/prerequisites.hpp}}>}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#include\ <ncpp/utilities/nth\_template\_arg.hpp>}}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00052\ }
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacencpp}{ncpp}}\ \{}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{namespace\ }utilities\ \{}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00068\ }
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \textcolor{keyword}{namespace\ }templated\_for\_helper\ \{}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{template}<sz\ index\_\_>\ \textcolor{keyword}{typename}\ f\_type\_t\_\_,\ \mbox{\hyperlink{namespacencpp_a82bf51a534e48e8f4ce2b1cd4e9586e5}{b8}}\ is\_end\_\_,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ end\_\_,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ index\_\_,\ \textcolor{keyword}{typename}...\ arg\_types\_\_>}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structncpp_1_1utilities_1_1templated__for__helper_1_1step__t}{step\_t}}\ \{}
+\DoxyCodeLine{00083\ }
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{template}<sz\ index\_\_>\ \textcolor{keyword}{typename}\ f\_type\_t\_\_,\ \mbox{\hyperlink{namespacencpp_a82bf51a534e48e8f4ce2b1cd4e9586e5}{b8}}\ is\_end\_\_,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ end\_\_,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ index\_\_,\ \textcolor{keyword}{typename}...\ arg\_types\_\_>}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ step\_invoke\_t(arg\_types\_\_\&\&...\ args)\ \{}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structncpp_1_1utilities_1_1templated__for__helper_1_1step__t}{step\_t<f\_type\_t\_\_,\ is\_end\_\_,\ end\_\_,\ index\_\_,\ arg\_types\_\_...>::invoke}}(std::forward<arg\_types\_\_>(args)...);}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{template}<sz\ index\_\_>\ \textcolor{keyword}{typename}\ f\_type\_t\_\_,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ end\_\_,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ index\_\_,\ \textcolor{keyword}{typename}...\ arg\_types\_\_>}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structncpp_1_1utilities_1_1templated__for__helper_1_1step__t}{step\_t}}<f\_type\_t\_\_,\ true,\ end\_\_,\ index\_\_,\ arg\_types\_\_...>\ \{}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ invoke(arg\_types\_\_\&\&...\ args)\ \{}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00116\ }
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{template}<sz\ index\_\_>\ \textcolor{keyword}{typename}\ f\_type\_t\_\_,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ end\_\_,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ index\_\_,\ \textcolor{keyword}{typename}...\ arg\_types\_\_>}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structncpp_1_1utilities_1_1templated__for__helper_1_1step__t}{step\_t}}<f\_type\_t\_\_,\ false,\ end\_\_,\ index\_\_,\ arg\_types\_\_...>\ \{}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ invoke(arg\_types\_\_\&\&...\ args)\ \{}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ f\_type\_t\_\_<index\_\_>::invoke(std::forward<arg\_types\_\_>(args)...);}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ step\_invoke\_t<f\_type\_t\_\_,\ index\_\_\ +\ 1\ ==\ end\_\_,\ end\_\_,\ index\_\_\ +\ 1,\ arg\_types\_\_...>(std::forward<arg\_types\_\_>(args)...);}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \ \ \ \ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00155\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \#define\ NCPP\_LOOP\_FUNCTION\_T(Name,\ Params,\ IndexName\_\_,\ Body)\ \(\backslash\)}}
+\DoxyCodeLine{00156\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ template<sz\ IndexName\_\_>\(\backslash\)}}
+\DoxyCodeLine{00157\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ struct\ Name\ \{\(\backslash\)}}
+\DoxyCodeLine{00158\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00159\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \ \ \ \ static\ inline\ void\ invoke\ Params\ \{\ Body;\ \};\ \(\backslash\)}}
+\DoxyCodeLine{00160\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \(\backslash\)}}
+\DoxyCodeLine{00161\ \textcolor{preprocessor}{\ \ \ \ \ \ \ \ \};}}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00178\ \ }
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{template}<sz\ index\_\_>\ \textcolor{keyword}{typename}\ f\_type\_t\_\_,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ begin\_\_,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ end\_\_,\ \textcolor{keyword}{typename}...\ arg\_types\_\_>}
+\DoxyCodeLine{00188\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{namespacencpp_1_1utilities_a4d605c6313d945901bc7a2b67b147025}{templated\_for\_t}}(arg\_types\_\_\&\&...\ args)\ \{}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \ \ \ \ \ \ \ \ \ \ \ \ static\_warning(end\_\_\ >\ begin\_\_,\ \textcolor{stringliteral}{"{}end\_\_\ >\ begin\_\_,\ templated\_for\_t\ will\ not\ be\ executed."{}});}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \ \ \ \ \ \ \ \ \ \ \ \ templated\_for\_helper::step\_invoke\_t<f\_type\_t\_\_,\ (end\_\_\ <=\ begin\_\_),\ end\_\_,\ begin\_\_,\ arg\_types\_\_...>(std::forward<arg\_types\_\_>(args)...);}
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00196\ \ \ \ \ \}}
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00198\ \}}
+
+\end{DoxyCode}

@@ -1,0 +1,27 @@
+\hypertarget{last__template__arg_8hpp}{}\doxysection{F\+:/\+NCoder/\+NCPP/ncpp/source/ncpp/utilities/last\+\_\+template\+\_\+arg.hpp File Reference}
+\label{last__template__arg_8hpp}\index{F:/NCoder/NCPP/ncpp/source/ncpp/utilities/last\_template\_arg.hpp@{F:/NCoder/NCPP/ncpp/source/ncpp/utilities/last\_template\_arg.hpp}}
+
+
+Implements last\+\_\+template\+\_\+arg\+\_\+t.  
+
+
+{\ttfamily \#include $<$ncpp/prerequisites.\+hpp$>$}\newline
+{\ttfamily \#include $<$ncpp/utilities/nth\+\_\+template\+\_\+arg.\+hpp$>$}\newline
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacencpp}{ncpp}}
+\begin{DoxyCompactList}\small\item\em The root namespace of ncpp library. \end{DoxyCompactList}\item 
+namespace \mbox{\hyperlink{namespacencpp_1_1utilities}{ncpp\+::utilities}}
+\begin{DoxyCompactList}\small\item\em Implements utilities. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacencpp_1_1utilities_a58477ed8328761fa86308c97e2a0a58e}\label{namespacencpp_1_1utilities_a58477ed8328761fa86308c97e2a0a58e}} 
+{\footnotesize template$<$typename... arg\+\_\+types\+\_\+\+\_\+$>$ }\\using {\bfseries ncpp\+::utilities\+::last\+\_\+template\+\_\+arg\+\_\+t} = typename nth\+\_\+template\+\_\+arg\+\_\+t$<$ sizeof...(arg\+\_\+types\+\_\+\+\_\+) -\/ 1, arg\+\_\+types\+\_\+\+\_\+... $>$
+\begin{DoxyCompactList}\small\item\em Finds out the last template argument. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Implements last\+\_\+template\+\_\+arg\+\_\+t. 
+

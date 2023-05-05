@@ -1,0 +1,51 @@
+\hypertarget{win__thread_8hpp}{}\doxysection{F\+:/\+NCoder/\+NCPP/ncpp/source/ncpp/pac/win\+\_\+thread.hpp File Reference}
+\label{win__thread_8hpp}\index{F:/NCoder/NCPP/ncpp/source/ncpp/pac/win\_thread.hpp@{F:/NCoder/NCPP/ncpp/source/ncpp/pac/win\_thread.hpp}}
+
+
+Implements thread for windows platform.  
+
+
+{\ttfamily \#include $<$ncpp/prerequisites.\+hpp$>$}\newline
+{\ttfamily \#include $<$ncpp/utilities/.\+hpp$>$}\newline
+{\ttfamily \#include $<$ncpp/pac/thread.\+hpp$>$}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classncpp_1_1pac_1_1win__thread}{ncpp\+::pac\+::win\+\_\+thread}}
+\begin{DoxyCompactList}\small\item\em The windows platform version of pac\+::thread. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structncpp_1_1pac_1_1win__thread_1_1main__thread__creation__placeholder}{ncpp\+::pac\+::win\+\_\+thread\+::main\+\_\+thread\+\_\+creation\+\_\+placeholder}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacencpp}{ncpp}}
+\begin{DoxyCompactList}\small\item\em The root namespace of ncpp library. \end{DoxyCompactList}\item 
+namespace \mbox{\hyperlink{namespacencpp_1_1pac}{ncpp\+::pac}}
+\begin{DoxyCompactList}\small\item\em Implements parallelism and concurrency functionalities. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{win__thread_8hpp_ab698791f2df806b4ff8aff05d4cf9900}\label{win__thread_8hpp_ab698791f2df806b4ff8aff05d4cf9900}} 
+\#define {\bfseries NCPP\+\_\+\+THREAD\+\_\+\+LOCAL\+\_\+\+DATA}~\+\_\+\+\_\+declspec(thread)
+\begin{DoxyCompactList}\small\item\em Specifies a variable storing in thread local storage. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacencpp_1_1pac_a51ee0a2388b244e27c7a61ce2858512c}\label{namespacencpp_1_1pac_a51ee0a2388b244e27c7a61ce2858512c}} 
+u32 {\bfseries ncpp\+::pac\+::current\+\_\+thread\+\_\+id} ()
+\begin{DoxyCompactList}\small\item\em Gets current thread id. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{namespacencpp_1_1pac_aa21f88dac6f5573ecfda2f638bca1690}\label{namespacencpp_1_1pac_aa21f88dac6f5573ecfda2f638bca1690}} 
+u32 {\bfseries ncpp\+::pac\+::current\+\_\+thread\+\_\+index} ()
+\begin{DoxyCompactList}\small\item\em Gets current thread index. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{namespacencpp_1_1pac_ab57213644a749e245dd937883b10f157}\label{namespacencpp_1_1pac_ab57213644a749e245dd937883b10f157}} 
+win\+\_\+thread \& {\bfseries ncpp\+::pac\+::main\+\_\+thread} ()
+\begin{DoxyCompactList}\small\item\em Gets main thread. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{namespacencpp_1_1pac_a3beed7184e10e2cc5e8dbea78f08e446}\label{namespacencpp_1_1pac_a3beed7184e10e2cc5e8dbea78f08e446}} 
+void {\bfseries ncpp\+::pac\+::reset\+\_\+thread\+\_\+indices} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Implements thread for windows platform. 
+
+Must be included with \#ifdef NCPP\+\_\+\+WINDOWS\+\_\+\+PLATFORM. 

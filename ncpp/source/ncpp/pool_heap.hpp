@@ -390,7 +390,7 @@ namespace ncpp {
 			return data_p_;
 		}
 
-		b8 is_pushable(sz size, sz align = NCPP_DEFAULT_ALIGN);
+		b8 is_pushable(sz size, sz align = 1);
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
@@ -483,7 +483,7 @@ namespace ncpp {
 
 
 	public:
-		inline u8* allocate(sz size, sz align = NCPP_DEFAULT_ALIGN) {
+		inline u8* allocate(sz size, sz align = 1) {
 
 			return aligned_alloc(size, align);
 		}
@@ -877,7 +877,7 @@ namespace ncpp {
 
 		inline b8 is_empty() const { return available_list_.is_empty(); }
 
-		b8 is_pushable(sz size, sz align = NCPP_DEFAULT_ALIGN);
+		b8 is_pushable(sz size, sz align = 1);
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
@@ -906,7 +906,7 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 	public:
-		inline pool& pick_a_pool(sz size, sz align = NCPP_DEFAULT_ALIGN) {
+		inline pool& pick_a_pool(sz size, sz align = 1) {
 
 
 
@@ -1171,7 +1171,7 @@ namespace ncpp {
 
 		inline b8 is_empty() const { return out_pool_list_.is_empty(); }
 
-		b8 is_pushable(sz size, sz align = NCPP_DEFAULT_ALIGN);
+		b8 is_pushable(sz size, sz align = 1);
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
@@ -1379,7 +1379,7 @@ namespace ncpp {
 			allocator_.deallocate((u8*)&chunk, allocation_size);
 		}
 
-		inline pool& pick_a_pool(sz size, sz align = NCPP_DEFAULT_ALIGN) {
+		inline pool& pick_a_pool(sz size, sz align = 1) {
 
 
 
@@ -1427,7 +1427,7 @@ namespace ncpp {
 
 
 	public:
-		inline u8* allocate(pool_group& group, sz n, sz align = NCPP_DEFAULT_ALIGN) {
+		inline u8* allocate(pool_group& group, sz n, sz align = 1) {
 
 			utilities::unique_lock_t<lock_type> lock_guard(lock_);
 
@@ -1675,7 +1675,7 @@ namespace ncpp {
 
 #pragma region Methods
 	private:
-		inline pointer internal_allocate(size_type n, sz align = NCPP_DEFAULT_ALIGN) {
+		inline pointer internal_allocate(size_type n, sz align = 1) {
 
 			assert(!pool_heap_ref_.is_null() && "tagged heap is null");
 
@@ -1691,7 +1691,7 @@ namespace ncpp {
 
 
 	protected:
-		void* abstract_allocate(size_type size, sz align = NCPP_DEFAULT_ALIGN) {
+		void* abstract_allocate(size_type size, sz align = 1) {
 
 			return (void*)internal_allocate(size / sizeof(value_type__), align);
 		}
@@ -1703,7 +1703,7 @@ namespace ncpp {
 
 
 	public:
-		inline pointer   allocate(size_type n, sz align = NCPP_DEFAULT_ALIGN) {
+		inline pointer   allocate(size_type n, sz align = 1) {
 
 			return internal_allocate(n, align);
 		}

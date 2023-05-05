@@ -1,0 +1,202 @@
+\hypertarget{native__allocator_8hpp_source}{}\doxysection{native\+\_\+allocator.\+hpp}
+\label{native__allocator_8hpp_source}\index{F:/NCoder/NCPP/ncpp/source/ncpp/native\_allocator.hpp@{F:/NCoder/NCPP/ncpp/source/ncpp/native\_allocator.hpp}}
+\mbox{\hyperlink{native__allocator_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#pragma\ region\ Includes}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{prerequisites_8hpp}{ncpp/prerequisites.hpp}}>}}
+\DoxyCodeLine{00030\ }
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{lref_8hpp}{ncpp/utilities/lref.hpp}}>}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{mem_8hpp}{ncpp/mem.hpp}}>}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacencpp}{ncpp}}\ \{}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{class\ }native\_heap;}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keyword}{class\ }native\_allocator\_i;}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}\ value\_type\_\_>}
+\DoxyCodeLine{00062\ \ \ \ \ \textcolor{keyword}{class\ }NCPP\_DEFAULT\_ALIGNAS\ native\_allocator\_t;}
+\DoxyCodeLine{00063\ }
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ \ \ \ \ \textcolor{keyword}{extern}\ native\_allocator\_i\&\ current\_native\_allocator();}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ value\_type\_\_>}
+\DoxyCodeLine{00083\ \ \ \ \ \textcolor{keyword}{inline}\ native\_allocator\_t<value\_type\_\_>\&\ current\_native\_allocator\_t()\ \{}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (native\_allocator\_t<value\_type\_\_>\&)(*current\_native\_allocator\_ref\_g);}
+\DoxyCodeLine{00086\ \ \ \ \ \}}
+\DoxyCodeLine{00087\ }
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00104\ \ \ \ \ \textcolor{keyword}{class\ }NCPP\_DEFAULT\_ALIGNAS\ \mbox{\hyperlink{classncpp_1_1native__allocator__i}{native\_allocator\_i}}\ \{}
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \textcolor{preprocessor}{\#pragma\ region\ Constructors,\ Destructor\ and\ Operators}}
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1native__allocator__i}{native\_allocator\_i}}()\ \{}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classncpp_1_1native__allocator__i}{\string~native\_allocator\_i}}()\ \{}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00122\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \textcolor{preprocessor}{\#pragma\ region\ Methods}}
+\DoxyCodeLine{00129\ \ \ \ \ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00130\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}*\ abstract\_allocate(\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ size,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ align\ =\ NCPP\_DEFAULT\_ALIGN)\ \{}
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ current\_native\_allocator().abstract\_allocate(size,\ align);}
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ abstract\_deallocate(\textcolor{keywordtype}{void}*\ p,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ size\ =\ 1)\ \{}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ current\_native\_allocator().abstract\_deallocate(p,\ size);}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ }
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ apply\_native\_use();}
+\DoxyCodeLine{00144\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ clear\_native\_use();}
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{bool}\ operator\ !=\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{classncpp_1_1native__allocator__i}{native\_allocator\_i}}\&\ other)\ \{}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00150\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ \ \ \ \ \};}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}\ value\_type\_\_>}
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keyword}{class\ }NCPP\_DEFAULT\_ALIGNAS\ \mbox{\hyperlink{classncpp_1_1native__allocator__t}{native\_allocator\_t}}\ :}
+\DoxyCodeLine{00172\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}\ \mbox{\hyperlink{classncpp_1_1native__allocator__i}{native\_allocator\_i}}}
+\DoxyCodeLine{00173\ \ \ \ \ \{}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \textcolor{preprocessor}{\#pragma\ region\ Typedefs}}
+\DoxyCodeLine{00180\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00181\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }size\_type\ =\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}};}
+\DoxyCodeLine{00182\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }difference\_type\ =\ ptrdiff\_t;}
+\DoxyCodeLine{00183\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }pointer\ =\ value\_type\_\_*;}
+\DoxyCodeLine{00184\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }const\_pointer\ =\ \textcolor{keyword}{const}\ value\_type\_\_*;}
+\DoxyCodeLine{00185\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }reference\ =\ value\_type\_\_\&;}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }const\_reference\ =\ \textcolor{keyword}{const}\ value\_type\_\_\&;}
+\DoxyCodeLine{00187\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }value\_type\ =\ value\_type\_\_;}
+\DoxyCodeLine{00188\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ \textcolor{preprocessor}{\#pragma\ region\ Properties}}
+\DoxyCodeLine{00195\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00196\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \textcolor{preprocessor}{\#pragma\ region\ Getters}}
+\DoxyCodeLine{00203\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00204\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ \textcolor{preprocessor}{\#pragma\ region\ Constructors,\ Destructor\ and\ Operators}}
+\DoxyCodeLine{00211\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1native__allocator__t}{native\_allocator\_t}}()}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00214\ }
+\DoxyCodeLine{00215\ }
+\DoxyCodeLine{00216\ }
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1native__allocator__t}{native\_allocator\_t}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classncpp_1_1native__allocator__t}{native\_allocator\_t}}\&\ other)}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ }
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00224\ }
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1native__allocator__t}{native\_allocator\_t<value\_type>}}\&\ operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{classncpp_1_1native__allocator__t}{native\_allocator\_t}}\&\ other)\ \{}
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}\ other\_value\_type\_\_>}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1native__allocator__t}{native\_allocator\_t}}(\textcolor{keyword}{typename}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classncpp_1_1native__allocator__t}{native\_allocator\_t<other\_value\_type\_\_>}}\&\ other)}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00234\ }
+\DoxyCodeLine{00235\ }
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00237\ }
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}\ other\_value\_type\_\_>}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \mbox{\hyperlink{classncpp_1_1native__allocator__t}{native\_allocator\_t}}\&\ operator=(\textcolor{keyword}{typename}\ \textcolor{keyword}{const}\ \mbox{\hyperlink{classncpp_1_1native__allocator__t}{native\_allocator\_t<other\_value\_type\_\_>}}\&\ other)\ \{}
+\DoxyCodeLine{00240\ }
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ *\textcolor{keyword}{this};}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00243\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00244\ }
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00249\ \textcolor{preprocessor}{\#pragma\ region\ Methods}}
+\DoxyCodeLine{00250\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ pointer\ \ \ allocate(size\_type\ n,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ align\ =\ NCPP\_DEFAULT\_ALIGN)\ \{}
+\DoxyCodeLine{00252\ }
+\DoxyCodeLine{00253\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (pointer)abstract\_allocate(\textcolor{keyword}{sizeof}(value\_type\_\_)\ *\ n,\ align);}
+\DoxyCodeLine{00254\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ deallocate(\textcolor{keywordtype}{void}*\ p,\ \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ n\ =\ 1)\ \{}
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ abstract\_deallocate(p,\ \textcolor{keyword}{sizeof}(value\_type\_\_)\ *\ n);}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00260\ }
+\DoxyCodeLine{00261\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ pointer\ \ \ \ \ \ \ \ \ \ \ address(reference\ x)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \&x;\ \}}
+\DoxyCodeLine{00262\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ const\_pointer\ \ \ \ \ address(const\_reference\ x)\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ \&x;\ \}}
+\DoxyCodeLine{00263\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ \ \ \ \ \ \ \ \ \ \ \ \ \ destroy(pointer\ p)\ \{\ p-\/>\string~value\_type();\ \}}
+\DoxyCodeLine{00264\ }
+\DoxyCodeLine{00265\ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ size\_type\ \ \ \ \ \ \ \ \ max\_size()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ size\_t(-\/1);\ \}}
+\DoxyCodeLine{00266\ }
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}\ U>}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structncpp_1_1native__allocator__t_1_1rebind}{rebind}}\ \{\ \textcolor{keyword}{typedef}\ \mbox{\hyperlink{classncpp_1_1native__allocator__t}{native\_allocator\_t<U>}}\ \mbox{\hyperlink{classncpp_1_1native__allocator__t}{other}};\ \};}
+\DoxyCodeLine{00269\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00270\ }
+\DoxyCodeLine{00271\ \ \ \ \ \};}
+\DoxyCodeLine{00272\ }
+\DoxyCodeLine{00273\ \}}
+\DoxyCodeLine{00274\ }
+
+\end{DoxyCode}

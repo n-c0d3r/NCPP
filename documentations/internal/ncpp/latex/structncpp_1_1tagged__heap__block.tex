@@ -1,0 +1,81 @@
+\hypertarget{structncpp_1_1tagged__heap__block}{}\doxysection{ncpp\+::tagged\+\_\+heap\+\_\+block Struct Reference}
+\label{structncpp_1_1tagged__heap__block}\index{ncpp::tagged\_heap\_block@{ncpp::tagged\_heap\_block}}
+
+
+A tagged heap block represents a block of memory allocated by a tagged heap category.  
+
+
+
+
+{\ttfamily \#include $<$tagged\+\_\+heap.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structncpp_1_1tagged__heap__block_a996868b828600ee12832913c68fc614a}\label{structncpp_1_1tagged__heap__block_a996868b828600ee12832913c68fc614a}} 
+\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} {\bfseries capacity} () const
+\item 
+\mbox{\Hypertarget{structncpp_1_1tagged__heap__block_a02aa610e3bfcfdc7f10a2deefeceaf8c}\label{structncpp_1_1tagged__heap__block_a02aa610e3bfcfdc7f10a2deefeceaf8c}} 
+\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} {\bfseries usage} () const
+\item 
+\mbox{\Hypertarget{structncpp_1_1tagged__heap__block_a02f4d3a31b06e144eb5efeb13461583d}\label{structncpp_1_1tagged__heap__block_a02f4d3a31b06e144eb5efeb13461583d}} 
+\mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}} $\ast$ {\bfseries data\+\_\+p} () const
+\item 
+\mbox{\Hypertarget{structncpp_1_1tagged__heap__block_aaf4ed72c3bd45286ccd98c0a20af5456}\label{structncpp_1_1tagged__heap__block_aaf4ed72c3bd45286ccd98c0a20af5456}} 
+{\bfseries tagged\+\_\+heap\+\_\+block} (\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} capacity)
+\item 
+\mbox{\Hypertarget{structncpp_1_1tagged__heap__block_aa35f3115f9720a6abf31dce506a224e4}\label{structncpp_1_1tagged__heap__block_aa35f3115f9720a6abf31dce506a224e4}} 
+bool {\bfseries is\+\_\+full} (\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} offset)
+\begin{DoxyCompactList}\small\item\em Checks if there is enough \textquotesingle{}offset\textquotesingle{} free space. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structncpp_1_1tagged__heap__block_abd4bdd7ef0e341fba6f7528ddab9d78b}\label{structncpp_1_1tagged__heap__block_abd4bdd7ef0e341fba6f7528ddab9d78b}} 
+\mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}} $\ast$ {\bfseries allocate} (\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} size, \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} align)
+\begin{DoxyCompactList}\small\item\em Allocates memory by given size and align. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structncpp_1_1tagged__heap__block_a0f6c71d3e13ee36548d966f081879a0c}\label{structncpp_1_1tagged__heap__block_a0f6c71d3e13ee36548d966f081879a0c}} 
+void {\bfseries reset} ()
+\begin{DoxyCompactList}\small\item\em Resets the usage to 0 and we can reuse the block. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structncpp_1_1tagged__heap__block_ab5cabe989beee39c24bc9666f7f597f3}\label{structncpp_1_1tagged__heap__block_ab5cabe989beee39c24bc9666f7f597f3}} 
+\mbox{\hyperlink{structncpp_1_1tagged__heap__block}{tagged\+\_\+heap\+\_\+block}} $\ast$ {\bfseries prev\+\_\+p} = 0
+\item 
+\mbox{\Hypertarget{structncpp_1_1tagged__heap__block_aa12fba79ae619e945f9c3a692d7d7368}\label{structncpp_1_1tagged__heap__block_aa12fba79ae619e945f9c3a692d7d7368}} 
+\mbox{\hyperlink{structncpp_1_1tagged__heap__block}{tagged\+\_\+heap\+\_\+block}} $\ast$ {\bfseries next\+\_\+p} = 0
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structncpp_1_1tagged__heap__block_affcdeb97a6c066194be2cd1c9adbe212}\label{structncpp_1_1tagged__heap__block_affcdeb97a6c066194be2cd1c9adbe212}} 
+uintptr\+\_\+t {\bfseries align\+\_\+address} (uintptr\+\_\+t addr, \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} align)
+\begin{DoxyCompactList}\small\item\em Returns aligned address shifting by the given address and align. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structncpp_1_1tagged__heap__block_a7cde402f102cf4adc4dc6fe93be43e34}\label{structncpp_1_1tagged__heap__block_a7cde402f102cf4adc4dc6fe93be43e34}} 
+{\footnotesize template$<$typename data\+\_\+type $>$ }\\data\+\_\+type $\ast$ {\bfseries align\+\_\+pointer} (data\+\_\+type $\ast$ptr, \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} align)
+\begin{DoxyCompactList}\small\item\em Returns aligned pointer shifting by the given pointer and align. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structncpp_1_1tagged__heap__block_aa1644ef3508e81378fd8e064da141505}\label{structncpp_1_1tagged__heap__block_aa1644ef3508e81378fd8e064da141505}} 
+\mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}} $\ast$ {\bfseries aligned\+\_\+alloc} (\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} size, \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} align)
+\begin{DoxyCompactList}\small\item\em Aligned allocates a memory block by given size and align. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{structncpp_1_1tagged__heap__block_a655ee4076f15ee64720fe96fe1ef6222}\label{structncpp_1_1tagged__heap__block_a655ee4076f15ee64720fe96fe1ef6222}} 
+\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} {\bfseries actual\+\_\+size\+\_\+aligned} (void $\ast$ptr)
+\begin{DoxyCompactList}\small\item\em Gets actual allocated size from aligned pointer. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{structncpp_1_1tagged__heap__block_a2f9d3f85bd0dd25d95a4f19e55a09378}\label{structncpp_1_1tagged__heap__block_a2f9d3f85bd0dd25d95a4f19e55a09378}} 
+\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} {\bfseries capacity\+\_\+}
+\item 
+\mbox{\Hypertarget{structncpp_1_1tagged__heap__block_a8afd21cecfe82f4a9527abfc9fadff77}\label{structncpp_1_1tagged__heap__block_a8afd21cecfe82f4a9527abfc9fadff77}} 
+\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} {\bfseries usage\+\_\+}
+\item 
+\mbox{\Hypertarget{structncpp_1_1tagged__heap__block_ad9e51c398e797c67000830850f90eb1d}\label{structncpp_1_1tagged__heap__block_ad9e51c398e797c67000830850f90eb1d}} 
+\mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}} $\ast$ {\bfseries data\+\_\+p\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A tagged heap block represents a block of memory allocated by a tagged heap category. 
+
+When the \mbox{\hyperlink{structncpp_1_1tagged__heap__block_abd4bdd7ef0e341fba6f7528ddab9d78b}{allocate(sz size, sz align)}} method called, it will increase the memory usage and then return the pointer data\+\_\+p\+\_\+ + usage\+\_\+. All memory allocation inside tagged heap block cannot be deallocated individually. The only way to deallocate it is deallocating all of the blocks in a tagged heap category. 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+F\+:/\+NCoder/\+NCPP/ncpp/source/ncpp/\mbox{\hyperlink{tagged__heap_8hpp}{tagged\+\_\+heap.\+hpp}}\end{DoxyCompactItemize}

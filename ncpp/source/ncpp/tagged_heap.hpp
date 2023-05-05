@@ -668,7 +668,7 @@ namespace ncpp {
 
 			return category_map_.erase(handle);
 		}
-		inline u8* allocate(category_id_type category_id, sz size, sz align = NCPP_DEFAULT_ALIGN) {
+		inline u8* allocate(category_id_type category_id, sz size, sz align = 1) {
 
 			category_cell_type& category_cell = category_map_.at(category_id);
 
@@ -819,7 +819,7 @@ namespace ncpp {
 
 #pragma region Methods
 	private:
-		inline pointer internal_allocate(size_type n, sz align = NCPP_DEFAULT_ALIGN) {
+		inline pointer internal_allocate(size_type n, sz align = 1) {
 
 			assert(!tagged_heap_ref_.is_null() && "tagged heap is null");
 
@@ -829,7 +829,7 @@ namespace ncpp {
 
 
 	protected:
-		void* abstract_allocate(size_type size, sz align = NCPP_DEFAULT_ALIGN) {
+		void* abstract_allocate(size_type size, sz align = 1) {
 
 			return (void*)internal_allocate(size / sizeof(value_type__), align);
 		}
@@ -841,7 +841,7 @@ namespace ncpp {
 
 
 	public:
-		inline pointer   allocate(size_type n, sz align = NCPP_DEFAULT_ALIGN) {
+		inline pointer   allocate(size_type n, sz align = 1) {
 
 			return internal_allocate(n, align);
 		}

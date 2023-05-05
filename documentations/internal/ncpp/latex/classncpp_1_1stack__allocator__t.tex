@@ -1,0 +1,223 @@
+\hypertarget{classncpp_1_1stack__allocator__t}{}\doxysection{ncpp\+::stack\+\_\+allocator\+\_\+t\texorpdfstring{$<$}{<} value\+\_\+type\+\_\+\+\_\+, stack\+\_\+heap\+\_\+type\+\_\+\+\_\+ \texorpdfstring{$>$}{>} Class Template Reference}
+\label{classncpp_1_1stack__allocator__t}\index{ncpp::stack\_allocator\_t$<$ value\_type\_\_, stack\_heap\_type\_\_ $>$@{ncpp::stack\_allocator\_t$<$ value\_type\_\_, stack\_heap\_type\_\_ $>$}}
+Inheritance diagram for ncpp\+::stack\+\_\+allocator\+\_\+t\texorpdfstring{$<$}{<} value\+\_\+type\+\_\+\+\_\+, stack\+\_\+heap\+\_\+type\+\_\+\+\_\+ \texorpdfstring{$>$}{>}\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classncpp_1_1stack__allocator__t}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structncpp_1_1stack__allocator__t_1_1rebind}{rebind}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_abbf3c646ec9d76994d2ac540b3170c6f}\label{classncpp_1_1stack__allocator__t_abbf3c646ec9d76994d2ac540b3170c6f}} 
+using {\bfseries size\+\_\+type} = \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_a52ac26f318af578735233b28bc20232d}\label{classncpp_1_1stack__allocator__t_a52ac26f318af578735233b28bc20232d}} 
+using {\bfseries difference\+\_\+type} = ptrdiff\+\_\+t
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_a189f09f5ea72167cce96574b33198649}\label{classncpp_1_1stack__allocator__t_a189f09f5ea72167cce96574b33198649}} 
+using {\bfseries pointer} = value\+\_\+type\+\_\+\+\_\+ $\ast$
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_a899d39a89c121eda66199ece4a892f7d}\label{classncpp_1_1stack__allocator__t_a899d39a89c121eda66199ece4a892f7d}} 
+using {\bfseries const\+\_\+pointer} = const value\+\_\+type\+\_\+\+\_\+ $\ast$
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_a678571467d6dfe8ae9dceb314f0129b7}\label{classncpp_1_1stack__allocator__t_a678571467d6dfe8ae9dceb314f0129b7}} 
+using {\bfseries reference} = value\+\_\+type\+\_\+\+\_\+ \&
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_ac33a31149a03d24735025374ecfa3ac2}\label{classncpp_1_1stack__allocator__t_ac33a31149a03d24735025374ecfa3ac2}} 
+using {\bfseries const\+\_\+reference} = const value\+\_\+type\+\_\+\+\_\+ \&
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_aaf0baaf4fc88b013a9937c22a6bae007}\label{classncpp_1_1stack__allocator__t_aaf0baaf4fc88b013a9937c22a6bae007}} 
+using {\bfseries value\+\_\+type} = value\+\_\+type\+\_\+\+\_\+
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_affa6325be9cc10d144f6d25bf727cdbc}\label{classncpp_1_1stack__allocator__t_affa6325be9cc10d144f6d25bf727cdbc}} 
+using {\bfseries stack\+\_\+heap\+\_\+type} = stack\+\_\+heap\+\_\+type\+\_\+\+\_\+
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Types inherited from \mbox{\hyperlink{classncpp_1_1native__allocator__t}{ncpp\+::native\+\_\+allocator\+\_\+t$<$ value\+\_\+type\+\_\+\+\_\+ $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classncpp_1_1native__allocator__t_a7b0f5321cd9c70f9bc939811eec01e74}\label{classncpp_1_1native__allocator__t_a7b0f5321cd9c70f9bc939811eec01e74}} 
+using {\bfseries size\+\_\+type} = \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}
+\item 
+\mbox{\Hypertarget{classncpp_1_1native__allocator__t_a67ac2515b88fd0ad73d289cf983f4f57}\label{classncpp_1_1native__allocator__t_a67ac2515b88fd0ad73d289cf983f4f57}} 
+using {\bfseries difference\+\_\+type} = ptrdiff\+\_\+t
+\item 
+\mbox{\Hypertarget{classncpp_1_1native__allocator__t_a1de1a69861c40502df89d72bc21e3d07}\label{classncpp_1_1native__allocator__t_a1de1a69861c40502df89d72bc21e3d07}} 
+using {\bfseries pointer} = value\+\_\+type\+\_\+\+\_\+ $\ast$
+\item 
+\mbox{\Hypertarget{classncpp_1_1native__allocator__t_a112b992d184feb85a747bf5638146053}\label{classncpp_1_1native__allocator__t_a112b992d184feb85a747bf5638146053}} 
+using {\bfseries const\+\_\+pointer} = const value\+\_\+type\+\_\+\+\_\+ $\ast$
+\item 
+\mbox{\Hypertarget{classncpp_1_1native__allocator__t_ab46795282d86c6897e720967d11aec28}\label{classncpp_1_1native__allocator__t_ab46795282d86c6897e720967d11aec28}} 
+using {\bfseries reference} = value\+\_\+type\+\_\+\+\_\+ \&
+\item 
+\mbox{\Hypertarget{classncpp_1_1native__allocator__t_a307b2d0f8dc23da5ec9385d298316ad2}\label{classncpp_1_1native__allocator__t_a307b2d0f8dc23da5ec9385d298316ad2}} 
+using {\bfseries const\+\_\+reference} = const value\+\_\+type\+\_\+\+\_\+ \&
+\item 
+\mbox{\Hypertarget{classncpp_1_1native__allocator__t_abe5f46a9c784b67787a4b84baf7281e4}\label{classncpp_1_1native__allocator__t_abe5f46a9c784b67787a4b84baf7281e4}} 
+using {\bfseries value\+\_\+type} = value\+\_\+type\+\_\+\+\_\+
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_a33aa47434c2b0045f2f15cd78110fff2}\label{classncpp_1_1stack__allocator__t_a33aa47434c2b0045f2f15cd78110fff2}} 
+stack\+\_\+heap\+\_\+type \& {\bfseries stack\+\_\+heap} ()
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_aaa227e6eb111b125691e4446caa5ee5b}\label{classncpp_1_1stack__allocator__t_aaa227e6eb111b125691e4446caa5ee5b}} 
+const stack\+\_\+heap\+\_\+type \& {\bfseries stack\+\_\+heap} () const
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_aa8e196f2f3503126ba0fdc1ca8c2b834}\label{classncpp_1_1stack__allocator__t_aa8e196f2f3503126ba0fdc1ca8c2b834}} 
+\mbox{\hyperlink{structncpp_1_1stack__group}{stack\+\_\+group}} \& {\bfseries group} ()
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_a6088a20e5c493a66bbc2888f91d2e369}\label{classncpp_1_1stack__allocator__t_a6088a20e5c493a66bbc2888f91d2e369}} 
+const \mbox{\hyperlink{structncpp_1_1stack__group}{stack\+\_\+group}} \& {\bfseries group} () const
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_afa70de0619a4868ac4619c8d744be9cd}\label{classncpp_1_1stack__allocator__t_afa70de0619a4868ac4619c8d744be9cd}} 
+\mbox{\hyperlink{namespacencpp_a82bf51a534e48e8f4ce2b1cd4e9586e5}{b8}} {\bfseries is\+\_\+null} () const
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_ae155f19889b53bd11c9b1c02b0256ff4}\label{classncpp_1_1stack__allocator__t_ae155f19889b53bd11c9b1c02b0256ff4}} 
+{\bfseries stack\+\_\+allocator\+\_\+t} (stack\+\_\+heap\+\_\+type \&\mbox{\hyperlink{classncpp_1_1stack__heap__t}{stack\+\_\+heap}}, \mbox{\hyperlink{structncpp_1_1stack__group}{stack\+\_\+group}} \&group)
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_add228bc6a969a39f5e45ae751f3d0d30}\label{classncpp_1_1stack__allocator__t_add228bc6a969a39f5e45ae751f3d0d30}} 
+{\bfseries stack\+\_\+allocator\+\_\+t} (const \mbox{\hyperlink{classncpp_1_1stack__allocator__t}{stack\+\_\+allocator\+\_\+t}} \&other)
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_a6c06843e8edcc64bac430aa12b15e796}\label{classncpp_1_1stack__allocator__t_a6c06843e8edcc64bac430aa12b15e796}} 
+\mbox{\hyperlink{classncpp_1_1stack__allocator__t}{stack\+\_\+allocator\+\_\+t}}$<$ value\+\_\+type, stack\+\_\+heap\+\_\+type $>$ \& {\bfseries operator=} (const \mbox{\hyperlink{classncpp_1_1stack__allocator__t}{stack\+\_\+allocator\+\_\+t}} \&other)
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_a07c7c2e7b9e8c5513a5540f62763e02b}\label{classncpp_1_1stack__allocator__t_a07c7c2e7b9e8c5513a5540f62763e02b}} 
+{\footnotesize template$<$class other\+\_\+value\+\_\+type\+\_\+\+\_\+ $>$ }\\{\bfseries stack\+\_\+allocator\+\_\+t} (typename const \mbox{\hyperlink{classncpp_1_1stack__allocator__t}{stack\+\_\+allocator\+\_\+t}}$<$ other\+\_\+value\+\_\+type\+\_\+\+\_\+, stack\+\_\+heap\+\_\+type $>$ \&other)
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_ab37a844ebb84600a41ae9dde703b03a2}\label{classncpp_1_1stack__allocator__t_ab37a844ebb84600a41ae9dde703b03a2}} 
+{\footnotesize template$<$class other\+\_\+value\+\_\+type\+\_\+\+\_\+ $>$ }\\\mbox{\hyperlink{classncpp_1_1stack__allocator__t}{stack\+\_\+allocator\+\_\+t}} \& {\bfseries operator=} (typename const \mbox{\hyperlink{classncpp_1_1stack__allocator__t}{stack\+\_\+allocator\+\_\+t}}$<$ other\+\_\+value\+\_\+type\+\_\+\+\_\+, stack\+\_\+heap\+\_\+type $>$ \&other)
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_a61d5f90721b229f449caf74b666572b4}\label{classncpp_1_1stack__allocator__t_a61d5f90721b229f449caf74b666572b4}} 
+pointer {\bfseries allocate} (size\+\_\+type n, \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} align=NCPP\+\_\+\+DEFAULT\+\_\+\+ALIGN)
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_a78f9a5b83c3b69670e707a5acb360b6b}\label{classncpp_1_1stack__allocator__t_a78f9a5b83c3b69670e707a5acb360b6b}} 
+void {\bfseries deallocate} (pointer ptr, \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} n=1)
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_a99f8d04939ec960524d1258d91a056fd}\label{classncpp_1_1stack__allocator__t_a99f8d04939ec960524d1258d91a056fd}} 
+pointer {\bfseries address} (reference x) const
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_a079d37c9fa1b318065cd5be04fb8bcfc}\label{classncpp_1_1stack__allocator__t_a079d37c9fa1b318065cd5be04fb8bcfc}} 
+const\+\_\+pointer {\bfseries address} (const\+\_\+reference x) const
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_a1957682a325258f8bef4df982d49a4f0}\label{classncpp_1_1stack__allocator__t_a1957682a325258f8bef4df982d49a4f0}} 
+void {\bfseries destroy} (pointer p)
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_a46aa406cba0e003a0e0141906fc1bb4c}\label{classncpp_1_1stack__allocator__t_a46aa406cba0e003a0e0141906fc1bb4c}} 
+size\+\_\+type {\bfseries max\+\_\+size} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions inherited from \mbox{\hyperlink{classncpp_1_1native__allocator__t}{ncpp\+::native\+\_\+allocator\+\_\+t$<$ value\+\_\+type\+\_\+\+\_\+ $>$}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classncpp_1_1native__allocator__t_ac4daefe31a534cf3b529d87d19b093be}\label{classncpp_1_1native__allocator__t_ac4daefe31a534cf3b529d87d19b093be}} 
+{\bfseries native\+\_\+allocator\+\_\+t} (const \mbox{\hyperlink{classncpp_1_1native__allocator__t}{native\+\_\+allocator\+\_\+t}} \&other)
+\item 
+\mbox{\Hypertarget{classncpp_1_1native__allocator__t_acc52a7372cb5b24b97c8dcbb605f02e6}\label{classncpp_1_1native__allocator__t_acc52a7372cb5b24b97c8dcbb605f02e6}} 
+\mbox{\hyperlink{classncpp_1_1native__allocator__t}{native\+\_\+allocator\+\_\+t}}$<$ value\+\_\+type $>$ \& {\bfseries operator=} (const \mbox{\hyperlink{classncpp_1_1native__allocator__t}{native\+\_\+allocator\+\_\+t}} \&other)
+\item 
+\mbox{\Hypertarget{classncpp_1_1native__allocator__t_ace7aebcce4c88b940786f8237b0ce87a}\label{classncpp_1_1native__allocator__t_ace7aebcce4c88b940786f8237b0ce87a}} 
+{\footnotesize template$<$class other\+\_\+value\+\_\+type\+\_\+\+\_\+ $>$ }\\{\bfseries native\+\_\+allocator\+\_\+t} (typename const \mbox{\hyperlink{classncpp_1_1native__allocator__t}{native\+\_\+allocator\+\_\+t}}$<$ other\+\_\+value\+\_\+type\+\_\+\+\_\+ $>$ \&other)
+\item 
+\mbox{\Hypertarget{classncpp_1_1native__allocator__t_a048a1848665f77f6a44115cf708e6b57}\label{classncpp_1_1native__allocator__t_a048a1848665f77f6a44115cf708e6b57}} 
+{\footnotesize template$<$class other\+\_\+value\+\_\+type\+\_\+\+\_\+ $>$ }\\\mbox{\hyperlink{classncpp_1_1native__allocator__t}{native\+\_\+allocator\+\_\+t}} \& {\bfseries operator=} (typename const \mbox{\hyperlink{classncpp_1_1native__allocator__t}{native\+\_\+allocator\+\_\+t}}$<$ other\+\_\+value\+\_\+type\+\_\+\+\_\+ $>$ \&other)
+\item 
+\mbox{\Hypertarget{classncpp_1_1native__allocator__t_a61e469ad74018f3b65e886d294a05513}\label{classncpp_1_1native__allocator__t_a61e469ad74018f3b65e886d294a05513}} 
+pointer {\bfseries allocate} (size\+\_\+type n, \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} align=NCPP\+\_\+\+DEFAULT\+\_\+\+ALIGN)
+\item 
+\mbox{\Hypertarget{classncpp_1_1native__allocator__t_ab8908847065c68a1e8b8d7f8a1b21701}\label{classncpp_1_1native__allocator__t_ab8908847065c68a1e8b8d7f8a1b21701}} 
+void {\bfseries deallocate} (void $\ast$p, \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} n=1)
+\item 
+\mbox{\Hypertarget{classncpp_1_1native__allocator__t_a0cecef298f25c33c30917cc76750379c}\label{classncpp_1_1native__allocator__t_a0cecef298f25c33c30917cc76750379c}} 
+pointer {\bfseries address} (reference x) const
+\item 
+\mbox{\Hypertarget{classncpp_1_1native__allocator__t_a26c1c8e4d210fe4587ec97a5b1e312fb}\label{classncpp_1_1native__allocator__t_a26c1c8e4d210fe4587ec97a5b1e312fb}} 
+const\+\_\+pointer {\bfseries address} (const\+\_\+reference x) const
+\item 
+\mbox{\Hypertarget{classncpp_1_1native__allocator__t_a8936aa61d32bd63f98a9e7eca6ec351d}\label{classncpp_1_1native__allocator__t_a8936aa61d32bd63f98a9e7eca6ec351d}} 
+void {\bfseries destroy} (pointer p)
+\item 
+\mbox{\Hypertarget{classncpp_1_1native__allocator__t_ac311e13cca34a0885dac2f7227584c12}\label{classncpp_1_1native__allocator__t_ac311e13cca34a0885dac2f7227584c12}} 
+size\+\_\+type {\bfseries max\+\_\+size} () const
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions inherited from \mbox{\hyperlink{classncpp_1_1native__allocator__i}{ncpp\+::native\+\_\+allocator\+\_\+i}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classncpp_1_1native__allocator__i_aa7d294751067fce4fba1017c070767e8}\label{classncpp_1_1native__allocator__i_aa7d294751067fce4fba1017c070767e8}} 
+void {\bfseries apply\+\_\+native\+\_\+use} ()
+\item 
+\mbox{\Hypertarget{classncpp_1_1native__allocator__i_ab69ed6fc6af520f71a58ed003e58e6aa}\label{classncpp_1_1native__allocator__i_ab69ed6fc6af520f71a58ed003e58e6aa}} 
+void {\bfseries clear\+\_\+native\+\_\+use} ()
+\item 
+\mbox{\Hypertarget{classncpp_1_1native__allocator__i_ab53c6c09342156d5839bcdc7ad7c7ba6}\label{classncpp_1_1native__allocator__i_ab53c6c09342156d5839bcdc7ad7c7ba6}} 
+bool {\bfseries operator!=} (const \mbox{\hyperlink{classncpp_1_1native__allocator__i}{native\+\_\+allocator\+\_\+i}} \&other)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \mbox{\hyperlink{classncpp_1_1stack__allocator__t_ac46d4b1f59d2b3636eccacd0330c5622}{abstract\+\_\+allocate}} (size\+\_\+type size, \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} align=NCPP\+\_\+\+DEFAULT\+\_\+\+ALIGN)
+\item 
+void \mbox{\hyperlink{classncpp_1_1stack__allocator__t_a8a2f467861627a11447edbae2c535dbe}{abstract\+\_\+deallocate}} (void $\ast$ptr, \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} size=sizeof(value\+\_\+type\+\_\+\+\_\+))
+\end{DoxyCompactItemize}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classncpp_1_1native__allocator__i_af247a72996159fd185c9f8fef25da98b}\label{classncpp_1_1native__allocator__i_af247a72996159fd185c9f8fef25da98b}} 
+virtual void $\ast$ {\bfseries abstract\+\_\+allocate} (\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} size, \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} align=NCPP\+\_\+\+DEFAULT\+\_\+\+ALIGN)
+\item 
+\mbox{\Hypertarget{classncpp_1_1native__allocator__i_abfd25272c3c716d851f222501a377504}\label{classncpp_1_1native__allocator__i_abfd25272c3c716d851f222501a377504}} 
+virtual void {\bfseries abstract\+\_\+deallocate} (void $\ast$p, \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} size=1)
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_a2e339908bb27cf7c4a54aff5440dce72}\label{classncpp_1_1stack__allocator__t_a2e339908bb27cf7c4a54aff5440dce72}} 
+pointer {\bfseries internal\+\_\+allocate} (size\+\_\+type n, \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} align=NCPP\+\_\+\+DEFAULT\+\_\+\+ALIGN)
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_a0dc21291b8c6094190dede7ed0d193e6}\label{classncpp_1_1stack__allocator__t_a0dc21291b8c6094190dede7ed0d193e6}} 
+void {\bfseries internal\+\_\+deallocate} (pointer ptr, \mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} n=1)
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_a113aeed33d856f70882b6771b58ce875}\label{classncpp_1_1stack__allocator__t_a113aeed33d856f70882b6771b58ce875}} 
+\mbox{\hyperlink{namespacencpp_1_1utilities_aac8793b5c8100c55124fa2cac242bfc1}{utilities\+::lref\+\_\+t}}$<$ stack\+\_\+heap\+\_\+type $>$ {\bfseries stack\+\_\+heap\+\_\+ref\+\_\+}
+\item 
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_a3db69cb04d53b54e83c7e9afd7e631d7}\label{classncpp_1_1stack__allocator__t_a3db69cb04d53b54e83c7e9afd7e631d7}} 
+\mbox{\hyperlink{namespacencpp_1_1utilities_aac8793b5c8100c55124fa2cac242bfc1}{utilities\+::lref\+\_\+t}}$<$ \mbox{\hyperlink{structncpp_1_1stack__group}{stack\+\_\+group}} $>$ {\bfseries stack\+\_\+group\+\_\+ref\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_ac46d4b1f59d2b3636eccacd0330c5622}\label{classncpp_1_1stack__allocator__t_ac46d4b1f59d2b3636eccacd0330c5622}} 
+\index{ncpp::stack\_allocator\_t$<$ value\_type\_\_, stack\_heap\_type\_\_ $>$@{ncpp::stack\_allocator\_t$<$ value\_type\_\_, stack\_heap\_type\_\_ $>$}!abstract\_allocate@{abstract\_allocate}}
+\index{abstract\_allocate@{abstract\_allocate}!ncpp::stack\_allocator\_t$<$ value\_type\_\_, stack\_heap\_type\_\_ $>$@{ncpp::stack\_allocator\_t$<$ value\_type\_\_, stack\_heap\_type\_\_ $>$}}
+\doxysubsubsection{\texorpdfstring{abstract\_allocate()}{abstract\_allocate()}}
+{\footnotesize\ttfamily template$<$class value\+\_\+type\+\_\+\+\_\+ , class stack\+\_\+heap\+\_\+type\+\_\+\+\_\+  = stack\+\_\+heap\+\_\+t$<$$>$$>$ \\
+void $\ast$ \mbox{\hyperlink{classncpp_1_1stack__allocator__t}{ncpp\+::stack\+\_\+allocator\+\_\+t}}$<$ value\+\_\+type\+\_\+\+\_\+, stack\+\_\+heap\+\_\+type\+\_\+\+\_\+ $>$\+::abstract\+\_\+allocate (\begin{DoxyParamCaption}\item[{size\+\_\+type}]{size,  }\item[{\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}}]{align = {\ttfamily NCPP\+\_\+DEFAULT\+\_\+ALIGN} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classncpp_1_1native__allocator__i}{ncpp\+::native\+\_\+allocator\+\_\+i}}.
+
+\mbox{\Hypertarget{classncpp_1_1stack__allocator__t_a8a2f467861627a11447edbae2c535dbe}\label{classncpp_1_1stack__allocator__t_a8a2f467861627a11447edbae2c535dbe}} 
+\index{ncpp::stack\_allocator\_t$<$ value\_type\_\_, stack\_heap\_type\_\_ $>$@{ncpp::stack\_allocator\_t$<$ value\_type\_\_, stack\_heap\_type\_\_ $>$}!abstract\_deallocate@{abstract\_deallocate}}
+\index{abstract\_deallocate@{abstract\_deallocate}!ncpp::stack\_allocator\_t$<$ value\_type\_\_, stack\_heap\_type\_\_ $>$@{ncpp::stack\_allocator\_t$<$ value\_type\_\_, stack\_heap\_type\_\_ $>$}}
+\doxysubsubsection{\texorpdfstring{abstract\_deallocate()}{abstract\_deallocate()}}
+{\footnotesize\ttfamily template$<$class value\+\_\+type\+\_\+\+\_\+ , class stack\+\_\+heap\+\_\+type\+\_\+\+\_\+  = stack\+\_\+heap\+\_\+t$<$$>$$>$ \\
+void \mbox{\hyperlink{classncpp_1_1stack__allocator__t}{ncpp\+::stack\+\_\+allocator\+\_\+t}}$<$ value\+\_\+type\+\_\+\+\_\+, stack\+\_\+heap\+\_\+type\+\_\+\+\_\+ $>$\+::abstract\+\_\+deallocate (\begin{DoxyParamCaption}\item[{void $\ast$}]{ptr,  }\item[{\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}}]{size = {\ttfamily sizeof(value\+\_\+type\+\_\+\+\_\+)} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Reimplemented from \mbox{\hyperlink{classncpp_1_1native__allocator__i}{ncpp\+::native\+\_\+allocator\+\_\+i}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+F\+:/\+NCoder/\+NCPP/ncpp/source/ncpp/\mbox{\hyperlink{stack__heap_8hpp}{stack\+\_\+heap.\+hpp}}\end{DoxyCompactItemize}

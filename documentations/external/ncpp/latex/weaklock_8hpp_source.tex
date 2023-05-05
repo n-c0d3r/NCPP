@@ -1,0 +1,123 @@
+\hypertarget{weaklock_8hpp_source}{}\doxysection{weaklock.\+hpp}
+\label{weaklock_8hpp_source}\index{F:/NCoder/NCPP/ncpp/source/ncpp/pac/weaklock.hpp@{F:/NCoder/NCPP/ncpp/source/ncpp/pac/weaklock.hpp}}
+\mbox{\hyperlink{weaklock_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00013\ }
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#pragma\ region\ Includes}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#include\ <\mbox{\hyperlink{prerequisites_8hpp}{ncpp/prerequisites.hpp}}>}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#include\ <ncpp/utilities/.hpp>}}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00049\ }
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacencpp}{ncpp}}\ \{}
+\DoxyCodeLine{00057\ \ \ \ \ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keyword}{namespace\ }pac\ \{}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00061\ }
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00073\ }
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00075\ \ \ \ \ }
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}<}
+\DoxyCodeLine{00081\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }string\_type\_\_\ =\ \textcolor{keyword}{typename}\ std::basic\_string<}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ char,}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::char\_traits<char>,}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ native\_allocator\_t<char>}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ >}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ >}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \textcolor{keyword}{class\ }NCPP\_DEFAULT\_ALIGNAS\ \mbox{\hyperlink{classncpp_1_1pac_1_1weaklock__t}{weaklock\_t}}\ \{}
+\DoxyCodeLine{00088\ }
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00094\ \ \ \ \ \ \ \ \ \ \ \ \ std::atomic\_flag\ flag\_;}
+\DoxyCodeLine{00095\ }
+\DoxyCodeLine{00096\ \textcolor{preprocessor}{\#ifdef\ NCPP\_ENABLE\_WEAKLOCK\_WARNING}}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ string\_type\_\_\ warning\_content\_;}
+\DoxyCodeLine{00098\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ }
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00103\ \textcolor{preprocessor}{\#ifdef\ NCPP\_ENABLE\_WEAKLOCK\_WARNING}}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ string\_type\_\_\ warning\_content()\textcolor{keyword}{\ const\ }\{\ \textcolor{keywordflow}{return}\ warning\_content\_;\ \}}
+\DoxyCodeLine{00105\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ }
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classncpp_1_1pac_1_1weaklock__t}{weaklock\_t}}()}
+\DoxyCodeLine{00115\ \textcolor{preprocessor}{\#ifdef\ NCPP\_ENABLE\_WEAKLOCK\_WARNING}}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ warning\_content\_(\textcolor{stringliteral}{"{}data\ race\ caused"{}})}
+\DoxyCodeLine{00118\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classncpp_1_1pac_1_1weaklock__t}{weaklock\_t}}(\textcolor{keyword}{const}\ string\_type\_\_\&\ warning\_content)}
+\DoxyCodeLine{00125\ \textcolor{preprocessor}{\#ifdef\ NCPP\_ENABLE\_WEAKLOCK\_WARNING}}
+\DoxyCodeLine{00126\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ :}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ warning\_content\_(warning\_content)}
+\DoxyCodeLine{00128\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00129\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00134\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classncpp_1_1pac_1_1weaklock__t}{\string~weaklock\_t}}()\ \{}
+\DoxyCodeLine{00135\ }
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classncpp_1_1pac_1_1weaklock__t}{weaklock\_t}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{classncpp_1_1pac_1_1weaklock__t}{weaklock\_t}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00141\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classncpp_1_1pac_1_1weaklock__t}{weaklock\_t}}\&\ operator\ =\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{classncpp_1_1pac_1_1weaklock__t}{weaklock\_t}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00142\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classncpp_1_1pac_1_1weaklock__t}{weaklock\_t}}(\mbox{\hyperlink{classncpp_1_1pac_1_1weaklock__t}{weaklock\_t}}\&\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00143\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classncpp_1_1pac_1_1weaklock__t}{weaklock\_t}}\&\ operator\ =\ (\mbox{\hyperlink{classncpp_1_1pac_1_1weaklock__t}{weaklock\_t}}\&\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00144\ }
+\DoxyCodeLine{00148\ }
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ lock()\ \{}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00151\ \textcolor{preprocessor}{\#ifdef\ NCPP\_ENABLE\_WEAKLOCK\_WARNING}}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ warning(!flag\_.test\_and\_set(std::memory\_order\_acquire),\ warning\_content\_);}
+\DoxyCodeLine{00153\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00156\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ unlock()\ \{}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \textcolor{preprocessor}{\#ifdef\ NCPP\_ENABLE\_WEAKLOCK\_WARNING}}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ flag\_.clear(std::memory\_order\_release);}
+\DoxyCodeLine{00160\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00165\ }
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{classncpp_1_1pac_1_1weaklock__t}{weaklock}}\ =\ \mbox{\hyperlink{classncpp_1_1pac_1_1weaklock__t}{weaklock\_t<>}};}
+\DoxyCodeLine{00167\ \ \ \ \ }
+\DoxyCodeLine{00168\ \ \ \ \ \}\ }
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \}}
+
+\end{DoxyCode}

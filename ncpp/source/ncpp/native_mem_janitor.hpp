@@ -88,21 +88,58 @@ namespace ncpp {
 
 
 	public:
-		native_mem_janitor(const native_allocator_i& target_allocator) :
+		inline native_mem_janitor(const native_allocator_i& target_allocator) :
 			last_allocator_ref_(current_native_allocator()),
 			target_allocator_ref_(target_allocator)
 		{
 
-			target_allocator_ref_->apply_native_use();
+			if(!target_allocator_ref_.is_null())
+				target_allocator_ref_->apply_native_use();
 
 		}
-		~native_mem_janitor() {
+		virtual ~native_mem_janitor() {
 
 			last_allocator_ref_->apply_native_use();
 
 		}
 
 	};
+
+
+
+	template<class allocator_type>
+	class native_mem_auto_janitor_t : public native_mem_janitor{
+
+	private:
+		allocator_type target_allocator_;
+
+
+
+	public:
+		inline allocator_type& target_allocator() { return target_allocator_; }
+
+
+
+	public:
+		inline native_mem_auto_janitor_t() :
+			native_mem_janitor(*utilities::lref_t<allocator_type>())
+		{
+
+			target_allocator_.apply_native_use();
+
+		}
+		~native_mem_auto_janitor_t() {
+
+
+
+		}
+
+	};
+
+
+
+#define NCPP_NATIVE_MEM_JANITOR(target_allocator, ...) ncpp::native_native_mem_janitor mem_janitor_##__VA_ARGS__(target_allocator);
+#define NCPP_NATIVE_MEM_AUTO_JANITOR(target_allocator_type, ...) ncpp::native_mem_auto_janitor_t<target_allocator_type> mem_janitor_##__VA_ARGS__;
 
 }
 

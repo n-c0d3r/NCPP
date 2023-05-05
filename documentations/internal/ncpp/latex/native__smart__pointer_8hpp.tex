@@ -1,0 +1,42 @@
+\hypertarget{native__smart__pointer_8hpp}{}\doxysection{F\+:/\+NCoder/\+NCPP/ncpp/source/ncpp/utilities/native\+\_\+smart\+\_\+pointer.hpp File Reference}
+\label{native__smart__pointer_8hpp}\index{F:/NCoder/NCPP/ncpp/source/ncpp/utilities/native\_smart\_pointer.hpp@{F:/NCoder/NCPP/ncpp/source/ncpp/utilities/native\_smart\_pointer.hpp}}
+
+
+Implements native smart pointers.  
+
+
+{\ttfamily \#include $<$ncpp/prerequisites.\+hpp$>$}\newline
+{\ttfamily \#include $<$ncpp/utilities/smart\+\_\+pointer.\+hpp$>$}\newline
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacencpp}{ncpp}}
+\begin{DoxyCompactList}\small\item\em The root namespace of ncpp library. \end{DoxyCompactList}\item 
+namespace \mbox{\hyperlink{namespacencpp_1_1utilities}{ncpp\+::utilities}}
+\begin{DoxyCompactList}\small\item\em Implements utilities. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacencpp_1_1utilities_a72b4bd45e791df555e498d0f9fe5c823}\label{namespacencpp_1_1utilities_a72b4bd45e791df555e498d0f9fe5c823}} 
+{\footnotesize template$<$typename class\+\_\+\+\_\+ $>$ }\\using {\bfseries ncpp\+::utilities\+::native\+\_\+allocator\+\_\+delete\+\_\+t} = allocator\+\_\+deleter\+\_\+t$<$ native\+\_\+allocator\+\_\+t$<$ class\+\_\+\+\_\+ $>$ $>$
+\item 
+\mbox{\Hypertarget{namespacencpp_1_1utilities_a97a16f5595181f4409f59914d4dffaeb}\label{namespacencpp_1_1utilities_a97a16f5595181f4409f59914d4dffaeb}} 
+{\footnotesize template$<$typename class\+\_\+\+\_\+ $>$ }\\using {\bfseries ncpp\+::utilities\+::native\+\_\+unique\+\_\+ptr\+\_\+t} = std\+::unique\+\_\+ptr$<$ class\+\_\+\+\_\+, native\+\_\+allocator\+\_\+delete\+\_\+t$<$ class\+\_\+\+\_\+ $>$ $>$
+\item 
+\mbox{\Hypertarget{namespacencpp_1_1utilities_a7f6e49e63a91768ca16ce0609c1e9b55}\label{namespacencpp_1_1utilities_a7f6e49e63a91768ca16ce0609c1e9b55}} 
+{\footnotesize template$<$typename class\+\_\+\+\_\+ $>$ }\\using {\bfseries ncpp\+::utilities\+::native\+\_\+shared\+\_\+ptr\+\_\+t} = std\+::shared\+\_\+ptr$<$ class\+\_\+\+\_\+ $>$
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespacencpp_1_1utilities_aa49fef9ae8d0ec35fdb5b7b738bdaeca}\label{namespacencpp_1_1utilities_aa49fef9ae8d0ec35fdb5b7b738bdaeca}} 
+{\footnotesize template$<$typename class\+\_\+\+\_\+ , typename... arg\+\_\+types\+\_\+\+\_\+$>$ }\\native\+\_\+unique\+\_\+ptr\+\_\+t$<$ class\+\_\+\+\_\+ $>$ {\bfseries ncpp\+::utilities\+::native\+\_\+allocate\+\_\+unique\+\_\+t} (arg\+\_\+types\+\_\+\+\_\+ \&\&... args)
+\item 
+\mbox{\Hypertarget{namespacencpp_1_1utilities_a6fbfb0397fc5a16b7cbda049a1f9be8f}\label{namespacencpp_1_1utilities_a6fbfb0397fc5a16b7cbda049a1f9be8f}} 
+{\footnotesize template$<$typename class\+\_\+\+\_\+ , typename... arg\+\_\+types\+\_\+\+\_\+$>$ }\\native\+\_\+shared\+\_\+ptr\+\_\+t$<$ class\+\_\+\+\_\+ $>$ {\bfseries ncpp\+::utilities\+::native\+\_\+allocate\+\_\+shared\+\_\+t} (arg\+\_\+types\+\_\+\+\_\+ \&\&... args)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Implements native smart pointers. 
+

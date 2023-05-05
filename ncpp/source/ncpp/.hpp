@@ -54,6 +54,7 @@ namespace ncpp { }
 #include <ncpp/native_allocator.hpp>
 #include <ncpp/log.hpp>
 #include <ncpp/native_mem_janitor.hpp>
+#include <ncpp/native.hpp>
 #include <ncpp/tagged_heap.hpp>
 #include <ncpp/stack_heap.hpp>
 #include <ncpp/pool_heap.hpp>
@@ -62,6 +63,7 @@ namespace ncpp { }
 #include <ncpp/containers/.hpp>
 #include <ncpp/pac/.hpp>
 #include <ncpp/dop/.hpp>
+#include <ncpp/rtti/.hpp>
 
 #pragma endregion
 

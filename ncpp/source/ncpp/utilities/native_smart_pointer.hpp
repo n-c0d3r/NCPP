@@ -95,7 +95,7 @@ namespace ncpp {
         template<typename class__, typename... arg_types__>
         native_shared_ptr_t<class__> native_allocate_shared_t(arg_types__&&... args) {
 
-            return std::allocate_shared<A, native_allocator_t<class__>>(native_allocator_t<class__>(), std::forward<arg_types__>(args)...);
+            return std::allocate_shared<class__, native_allocator_t<class__>>(native_allocator_t<class__>(), std::forward<arg_types__>(args)...);
         }
 
     }

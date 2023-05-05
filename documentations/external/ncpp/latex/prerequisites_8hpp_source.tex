@@ -1,0 +1,225 @@
+\hypertarget{prerequisites_8hpp_source}{}\doxysection{prerequisites.\+hpp}
+\label{prerequisites_8hpp_source}\index{F:/NCoder/NCPP/ncpp/source/ncpp/prerequisites.hpp@{F:/NCoder/NCPP/ncpp/source/ncpp/prerequisites.hpp}}
+\mbox{\hyperlink{prerequisites_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacencpp}{ncpp}}\ \{\}}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#pragma\ region\ Includes}}
+\DoxyCodeLine{00044\ }
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{preprocessor}{\#include\ <ncpp/config.hpp>}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00054\ }
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#pragma\ region\ STL\ Headers}}
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00057\ \textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{00058\ \textcolor{preprocessor}{\#include\ <array>}}
+\DoxyCodeLine{00059\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00060\ \textcolor{preprocessor}{\#include\ <set>}}
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#include\ <map>}}
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\#include\ <unordered\_set>}}
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\#include\ <unordered\_map>}}
+\DoxyCodeLine{00064\ \textcolor{preprocessor}{\#include\ <tuple>}}
+\DoxyCodeLine{00065\ \textcolor{preprocessor}{\#include\ <variant>}}
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\#include\ <thread>}}
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#include\ <atomic>}}
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\#include\ <mutex>}}
+\DoxyCodeLine{00069\ \textcolor{preprocessor}{\#include\ <sstream>}}
+\DoxyCodeLine{00070\ \textcolor{preprocessor}{\#include\ <functional>}}
+\DoxyCodeLine{00071\ \textcolor{preprocessor}{\#include\ <random>}}
+\DoxyCodeLine{00072\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\#include\ <bitset>}}
+\DoxyCodeLine{00074\ \textcolor{preprocessor}{\#include\ <cstdio>}}
+\DoxyCodeLine{00075\ \textcolor{preprocessor}{\#include\ <cstdlib>}}
+\DoxyCodeLine{00076\ \textcolor{preprocessor}{\#include\ <string\_view>}}
+\DoxyCodeLine{00077\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00078\ }
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00083\ \textcolor{preprocessor}{\#pragma\ region\ Windows\ Platform\ }}
+\DoxyCodeLine{00084\ \textcolor{preprocessor}{\#if\ defined(\_WIN64)\ ||\ defined(\_WIN32)}}
+\DoxyCodeLine{00085\ \textcolor{preprocessor}{\#include\ <Windows.h>}}
+\DoxyCodeLine{00086\ \textcolor{preprocessor}{\#include\ <DirectXMath.h>}}
+\DoxyCodeLine{00087\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00088\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00091\ }
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00097\ }
+\DoxyCodeLine{00101\ }
+\DoxyCodeLine{00105\ }
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00108\ \textcolor{preprocessor}{\#pragma\ region\ Macros}}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \textcolor{preprocessor}{\#pragma\ region\ Platform\ }}
+\DoxyCodeLine{00115\ \textcolor{preprocessor}{\#if\ defined(\_WIN64)\ ||\ defined(\_WIN32)}}
+\DoxyCodeLine{00116\ \textcolor{preprocessor}{\#define\ NCPP\_WINDOWS\_PLATFORM}}
+\DoxyCodeLine{00117\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00118\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \textcolor{preprocessor}{\#pragma\ region\ C++\ Utilities}}
+\DoxyCodeLine{00125\ \textcolor{preprocessor}{\#define\ NCPP\_CONSTEXPR\ inline\ constexpr}}
+\DoxyCodeLine{00126\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00131\ }
+\DoxyCodeLine{00132\ \textcolor{preprocessor}{\#pragma\ region\ Alignment\ utility\ macros}}
+\DoxyCodeLine{00133\ \textcolor{comment}{//\ alignment\ macros}}
+\DoxyCodeLine{00134\ \textcolor{preprocessor}{\#if\ defined(\_MSC\_VER)}}
+\DoxyCodeLine{00135\ \textcolor{preprocessor}{\#define\ NCPP\_ALIGNAS(N)\ \_\_declspec(align(N))}}
+\DoxyCodeLine{00136\ \textcolor{preprocessor}{\#elif\ defined(\ \_\_GNUC\_\_\ )\ ||\ defined(\_\_MINGW64\_\_)}}
+\DoxyCodeLine{00137\ \textcolor{preprocessor}{\#define\ NCPP\_ALIGNAS(N)\ \_\_attribute\_\_((\_\_align(N)))}}
+\DoxyCodeLine{00138\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \textcolor{preprocessor}{\#define\ NCPP\_DEFAULT\_ALIGNAS\ NCPP\_ALIGNAS(NCPP\_DEFAULT\_ALIGN)}}
+\DoxyCodeLine{00141\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \textcolor{preprocessor}{\#pragma\ region\ Implements\ warning\ macros}}
+\DoxyCodeLine{00148\ \textcolor{comment}{//\ Implements\ static\ warning}}
+\DoxyCodeLine{00149\ \textcolor{preprocessor}{\#if\ defined(\_\_GNUC\_\_)}}
+\DoxyCodeLine{00150\ \textcolor{preprocessor}{\#define\ DEPRECATE(foo,\ msg)\ foo\ \_\_attribute\_\_((deprecated(msg)))}}
+\DoxyCodeLine{00151\ \textcolor{preprocessor}{\#elif\ defined(\_MSC\_VER)}}
+\DoxyCodeLine{00152\ \textcolor{preprocessor}{\#define\ DEPRECATE(foo,\ msg)\ \_\_declspec(deprecated(msg))\ foo}}
+\DoxyCodeLine{00153\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00154\ \textcolor{preprocessor}{\#error\ This\ compiler\ is\ not\ supported}}
+\DoxyCodeLine{00155\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ \textcolor{preprocessor}{\#define\ NCPP\_PP\_CAT(x,y)\ NCPP\_PP\_CAT1(x,y)}}
+\DoxyCodeLine{00158\ \textcolor{preprocessor}{\#define\ NCPP\_PP\_CAT1(x,y)\ x\#\#y}}
+\DoxyCodeLine{00159\ }
+\DoxyCodeLine{00160\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacencpp}{ncpp}}\ \{}
+\DoxyCodeLine{00161\ }
+\DoxyCodeLine{00162\ \ \ \ \ \textcolor{keyword}{namespace\ }static\_warning\_helper}
+\DoxyCodeLine{00163\ \ \ \ \ \{}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structncpp_1_1static__warning__helper_1_1true__type}{true\_type}}\ \{\};}
+\DoxyCodeLine{00165\ \ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structncpp_1_1static__warning__helper_1_1false__type}{false\_type}}\ \{\};}
+\DoxyCodeLine{00166\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keywordtype}{int}\ test>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structncpp_1_1static__warning__helper_1_1converter}{converter}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structncpp_1_1static__warning__helper_1_1true__type}{true\_type}}\ \{\};}
+\DoxyCodeLine{00167\ \ \ \ \ \ \ \ \ \textcolor{keyword}{template}\ <>\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structncpp_1_1static__warning__helper_1_1converter}{converter}}<0>\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{structncpp_1_1static__warning__helper_1_1false__type}{false\_type}}\ \{\};}
+\DoxyCodeLine{00168\ \ \ \ \ \}}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \}}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \textcolor{preprocessor}{\#define\ static\_warning(cond,\ msg)\ \(\backslash\)}}
+\DoxyCodeLine{00173\ \textcolor{preprocessor}{struct\ NCPP\_PP\_CAT(static\_warning,\_\_LINE\_\_)\ \{\ \(\backslash\)}}
+\DoxyCodeLine{00174\ \textcolor{preprocessor}{\ \ DEPRECATE(void\ \_(::ncpp::static\_warning\_helper::false\_type\ const\&\ ),msg)\ \{\};\ \(\backslash\)}}
+\DoxyCodeLine{00175\ \textcolor{preprocessor}{\ \ void\ \_(::ncpp::static\_warning\_helper::true\_type\ const\&\ )\ \{\};\ \(\backslash\)}}
+\DoxyCodeLine{00176\ \textcolor{preprocessor}{\ \ NCPP\_PP\_CAT(static\_warning,\_\_LINE\_\_)()\ \{\_(ncpp::static\_warning\_helper::converter<(cond)>());\}\ \(\backslash\)}}
+\DoxyCodeLine{00177\ \textcolor{preprocessor}{\}}}
+\DoxyCodeLine{00178\ }
+\DoxyCodeLine{00179\ \textcolor{comment}{//\ Note:\ using\ static\_warning\_template\ changes\ the\ meaning\ of\ a\ program\ in\ a\ small\ way.}}
+\DoxyCodeLine{00180\ \textcolor{comment}{//\ It\ introduces\ a\ member/variable\ declaration.\ \ This\ means\ at\ least\ one\ byte\ of\ space}}
+\DoxyCodeLine{00181\ \textcolor{comment}{//\ in\ each\ structure/class\ instantiation.\ \ static\_warning\ should\ be\ preferred\ in\ any\ }}
+\DoxyCodeLine{00182\ \textcolor{comment}{//\ non-\/template\ situation.}}
+\DoxyCodeLine{00183\ \textcolor{comment}{//\ \ 'token'\ must\ be\ a\ program-\/wide\ unique\ identifier.}}
+\DoxyCodeLine{00184\ \textcolor{preprocessor}{\#define\ static\_warning\_template(token,\ cond,\ msg)\ \(\backslash\)}}
+\DoxyCodeLine{00185\ \textcolor{preprocessor}{\ \ \ \ static\_warning(cond,\ msg)\ NCPP\_PP\_CAT(NCPP\_PP\_CAT(\_localvar\_,\ token),\_\_LINE\_\_)}}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00190\ }
+\DoxyCodeLine{00191\ \textcolor{preprocessor}{\#ifndef\ NDEBUG\ }}
+\DoxyCodeLine{00192\ \textcolor{preprocessor}{\#define\ warning(cond,\ msg)\ if(!(cond))\ std::cout\ <<\ "{}Warning:\ "{}}\ <<\ msg\ <<\ std::endl;}
+\DoxyCodeLine{00193\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{00194\ \textcolor{preprocessor}{\#define\ warning(cond,\ msg)\ ;}}
+\DoxyCodeLine{00195\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00196\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00201\ }
+\DoxyCodeLine{00202\ \textcolor{preprocessor}{\#pragma\ region\ Primitive\ type\ limits}}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \textcolor{preprocessor}{\#define\ NCPP\_U64\_MAX\ 0xFFFFFFFFFFFFFFFF}}
+\DoxyCodeLine{00205\ \textcolor{preprocessor}{\#define\ NCPP\_U64\_MIN\ 0}}
+\DoxyCodeLine{00206\ \textcolor{preprocessor}{\#define\ NCPP\_U32\_MAX\ 0xFFFFFFFF}}
+\DoxyCodeLine{00207\ \textcolor{preprocessor}{\#define\ NCPP\_U32\_MIN\ 0}}
+\DoxyCodeLine{00208\ \textcolor{preprocessor}{\#define\ NCPP\_U16\_MAX\ 0xFFFF}}
+\DoxyCodeLine{00209\ \textcolor{preprocessor}{\#define\ NCPP\_U16\_MIN\ 0}}
+\DoxyCodeLine{00210\ \textcolor{preprocessor}{\#define\ NCPP\_U8\_MAX\ 0xFF}}
+\DoxyCodeLine{00211\ \textcolor{preprocessor}{\#define\ NCPP\_U8\_MIN\ 0}}
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ \textcolor{preprocessor}{\#define\ NCPP\_I64\_MAX\ 0x7FFFFFFFFFFFFFFF}}
+\DoxyCodeLine{00214\ \textcolor{preprocessor}{\#define\ NCPP\_I64\_MIN\ -\/0x8000000000000000}}
+\DoxyCodeLine{00215\ \textcolor{preprocessor}{\#define\ NCPP\_I32\_MAX\ 0x7FFFFFFF}}
+\DoxyCodeLine{00216\ \textcolor{preprocessor}{\#define\ NCPP\_I32\_MIN\ -\/0x80000000}}
+\DoxyCodeLine{00217\ \textcolor{preprocessor}{\#define\ NCPP\_I16\_MAX\ 0x7FFF}}
+\DoxyCodeLine{00218\ \textcolor{preprocessor}{\#define\ NCPP\_I16\_MIN\ -\/0x8000}}
+\DoxyCodeLine{00219\ \textcolor{preprocessor}{\#define\ NCPP\_I8\_MAX\ 0x7F}}
+\DoxyCodeLine{00220\ \textcolor{preprocessor}{\#define\ NCPP\_I8\_MIN\ -\/0x80}}
+\DoxyCodeLine{00221\ }
+\DoxyCodeLine{00222\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00223\ }
+\DoxyCodeLine{00224\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00226\ }
+\DoxyCodeLine{00227\ }
+\DoxyCodeLine{00231\ }
+\DoxyCodeLine{00235\ }
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ }
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00242\ \textcolor{preprocessor}{\#pragma\ region\ Typedefs}}
+\DoxyCodeLine{00243\ }
+\DoxyCodeLine{00244\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespacencpp}{ncpp}}\ \{}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00249\ \ \ \ \ }
+\DoxyCodeLine{00250\ \textcolor{preprocessor}{\#pragma\ region\ Primitive\ data\ types}}
+\DoxyCodeLine{00252\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{namespacencpp_a08f4f1f708c47978eedb7b5fdb926c1c}{u8}}\ =\ uint8\_t;\ }
+\DoxyCodeLine{00254\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{namespacencpp_ac639dbecb13818df840f0f32d4c27c5f}{u16}}\ =\ uint16\_t;\ }
+\DoxyCodeLine{00256\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{namespacencpp_a74cd32b52d6ec0fc0972bfe75223751a}{u32}}\ =\ uint32\_t;\ }
+\DoxyCodeLine{00258\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{namespacencpp_abea3680fc16f71355a78e25085f5ceec}{u64}}\ =\ uint64\_t;\ }
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00261\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{namespacencpp_a2effbb72917027f50063789945039aed}{i8}}\ =\ int8\_t;\ }
+\DoxyCodeLine{00263\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{namespacencpp_a2e4d3b7ee4bc1aebc5f3316c2fcd35fc}{i16}}\ =\ int16\_t;\ }
+\DoxyCodeLine{00265\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{namespacencpp_a2cfcadebf19da9723133123bbf3d9bbc}{i32}}\ =\ int32\_t;\ }
+\DoxyCodeLine{00267\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{namespacencpp_a6210edcd44290f3f8b4a34ac7ff37b19}{i64}}\ =\ int64\_t;\ }
+\DoxyCodeLine{00268\ }
+\DoxyCodeLine{00270\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{namespacencpp_a609d57fd0d903f667c43c803493f958f}{f32}}\ =\ float;\ }
+\DoxyCodeLine{00272\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{namespacencpp_a233bba7d356dd21e50b35340c3290306}{f64}}\ =\ double;\ }
+\DoxyCodeLine{00273\ \ \ \ \ }
+\DoxyCodeLine{00275\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{namespacencpp_a82bf51a534e48e8f4ce2b1cd4e9586e5}{b8}}\ =\ bool;\ }
+\DoxyCodeLine{00276\ }
+\DoxyCodeLine{00278\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}}\ =\ size\_t;}
+\DoxyCodeLine{00279\ }
+\DoxyCodeLine{00280\ }
+\DoxyCodeLine{00281\ }
+\DoxyCodeLine{00283\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{namespacencpp_abcfc2eeb15f6b84d7a7765b02d5a8c1f}{au8}}\ =\ std::atomic\_uint8\_t;}
+\DoxyCodeLine{00285\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{namespacencpp_a3f859283c7139f064aa88878e0ecafcf}{au16}}\ =\ std::atomic\_uint16\_t;}
+\DoxyCodeLine{00287\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{namespacencpp_a9ede855d95b28c4dde1759c873248057}{au32}}\ =\ std::atomic\_uint32\_t;}
+\DoxyCodeLine{00289\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{namespacencpp_a13c9990894096ea394dc19f25988a526}{au64}}\ =\ std::atomic\_uint64\_t;}
+\DoxyCodeLine{00290\ }
+\DoxyCodeLine{00292\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{namespacencpp_a2d2a0d24da37b1e05ef8e90e9b40b822}{ai8}}\ =\ std::atomic\_int8\_t;}
+\DoxyCodeLine{00294\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{namespacencpp_a1b50bcd7329a4e1914e34b7a33738d0f}{ai16}}\ =\ std::atomic\_int16\_t;}
+\DoxyCodeLine{00296\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{namespacencpp_a0c602e8a68c40ed34eefdb6df29c0d93}{ai32}}\ =\ std::atomic\_int32\_t;}
+\DoxyCodeLine{00298\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{namespacencpp_a673f049d24fd9b9a7d6f3596b054ec84}{ai64}}\ =\ std::atomic\_int64\_t;}
+\DoxyCodeLine{00299\ }
+\DoxyCodeLine{00301\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{namespacencpp_a1edae3c63bae3d1389d0f0e11b8ca30a}{ab8}}\ =\ std::atomic\_bool;}
+\DoxyCodeLine{00302\ }
+\DoxyCodeLine{00304\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{namespacencpp_ac736795c9fa0653cec998a3f2bd9cb2a}{aflag}}\ =\ std::atomic\_flag;}
+\DoxyCodeLine{00305\ }
+\DoxyCodeLine{00307\ \ \ \ \ \textcolor{keyword}{using\ }\mbox{\hyperlink{namespacencpp_a791b88810c88f77c9ad90748af867efa}{asz}}\ =\ std::atomic\_size\_t;}
+\DoxyCodeLine{00308\ \textcolor{preprocessor}{\#pragma\ endregion}}
+\DoxyCodeLine{00309\ }
+\DoxyCodeLine{00313\ }
+\DoxyCodeLine{00314\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ type\_\_>}
+\DoxyCodeLine{00315\ \ \ \ \ \textcolor{keyword}{inline}\ type\_\_\&\ null\_reference\_t()\ \{\ \textcolor{keywordflow}{return}\ *((type\_\_*)0);\ \}}
+\DoxyCodeLine{00316\ }
+\DoxyCodeLine{00317\ \}}
+\DoxyCodeLine{00318\ }
+\DoxyCodeLine{00319\ \textcolor{preprocessor}{\#pragma\ endregion}}
+
+\end{DoxyCode}

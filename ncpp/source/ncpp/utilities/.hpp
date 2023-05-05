@@ -72,4 +72,6 @@ namespace ncpp {
 
 #include <ncpp/utilities/lref.hpp>
 
+#include <ncpp/utilities/member_offset.hpp>
+
 #pragma endregion

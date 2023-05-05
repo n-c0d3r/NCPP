@@ -1,0 +1,77 @@
+\hypertarget{templated__for_8hpp}{}\doxysection{F\+:/\+NCoder/\+NCPP/ncpp/source/ncpp/utilities/templated\+\_\+for.hpp File Reference}
+\label{templated__for_8hpp}\index{F:/NCoder/NCPP/ncpp/source/ncpp/utilities/templated\_for.hpp@{F:/NCoder/NCPP/ncpp/source/ncpp/utilities/templated\_for.hpp}}
+
+
+Contains macros and functions to create the loop template.  
+
+
+{\ttfamily \#include $<$ncpp/prerequisites.\+hpp$>$}\newline
+{\ttfamily \#include $<$ncpp/utilities/nth\+\_\+template\+\_\+arg.\+hpp$>$}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structncpp_1_1utilities_1_1templated__for__helper_1_1step__t}{ncpp\+::utilities\+::templated\+\_\+for\+\_\+helper\+::step\+\_\+t$<$ f\+\_\+type\+\_\+t\+\_\+\+\_\+, is\+\_\+end\+\_\+\+\_\+, end\+\_\+\+\_\+, index\+\_\+\+\_\+, arg\+\_\+types\+\_\+\+\_\+ $>$}}
+\item 
+struct \mbox{\hyperlink{structncpp_1_1utilities_1_1templated__for__helper_1_1step__t_3_01f__type__t_____00_01true_00_01eb921587f08bb3cb26bce416f152d073d}{ncpp\+::utilities\+::templated\+\_\+for\+\_\+helper\+::step\+\_\+t$<$ f\+\_\+type\+\_\+t\+\_\+\+\_\+, true, end\+\_\+\+\_\+, index\+\_\+\+\_\+, arg\+\_\+types\+\_\+\+\_\+... $>$}}
+\item 
+struct \mbox{\hyperlink{structncpp_1_1utilities_1_1templated__for__helper_1_1step__t_3_01f__type__t_____00_01false_00_01e803adec8ed1656356ae5bf1fe698db3}{ncpp\+::utilities\+::templated\+\_\+for\+\_\+helper\+::step\+\_\+t$<$ f\+\_\+type\+\_\+t\+\_\+\+\_\+, false, end\+\_\+\+\_\+, index\+\_\+\+\_\+, arg\+\_\+types\+\_\+\+\_\+... $>$}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespacencpp}{ncpp}}
+\begin{DoxyCompactList}\small\item\em The root namespace of ncpp library. \end{DoxyCompactList}\item 
+namespace \mbox{\hyperlink{namespacencpp_1_1utilities}{ncpp\+::utilities}}
+\begin{DoxyCompactList}\small\item\em Implements utilities. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{templated__for_8hpp_a7141a047b70c8672880ed1bdd23aace3}{NCPP\+\_\+\+LOOP\+\_\+\+FUNCTION\+\_\+T}}(Name,  Params,  Index\+Name\+\_\+\+\_\+,  Body)
+\begin{DoxyCompactList}\small\item\em The macro using to create a function representing the body of loop template. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{templated__for_8hpp_a65b2099f61769e05be16442ce4dcf279}\label{templated__for_8hpp_a65b2099f61769e05be16442ce4dcf279}} 
+{\footnotesize template$<$template$<$ sz index\+\_\+\+\_\+ $>$ typename f\+\_\+type\+\_\+t\+\_\+\+\_\+, b8 is\+\_\+end\+\_\+\+\_\+, sz end\+\_\+\+\_\+, sz index\+\_\+\+\_\+, typename... arg\+\_\+types\+\_\+\+\_\+$>$ }\\void {\bfseries ncpp\+::utilities\+::templated\+\_\+for\+\_\+helper\+::step\+\_\+invoke\+\_\+t} (arg\+\_\+types\+\_\+\+\_\+ \&\&... args)
+\item 
+{\footnotesize template$<$template$<$ sz index\+\_\+\+\_\+ $>$ typename f\+\_\+type\+\_\+t\+\_\+\+\_\+, sz begin\+\_\+\+\_\+, sz end\+\_\+\+\_\+, typename... arg\+\_\+types\+\_\+\+\_\+$>$ }\\void \mbox{\hyperlink{namespacencpp_1_1utilities_a4d605c6313d945901bc7a2b67b147025}{ncpp\+::utilities\+::templated\+\_\+for\+\_\+t}} (arg\+\_\+types\+\_\+\+\_\+ \&\&... args)
+\begin{DoxyCompactList}\small\item\em The function template helping run a loop which the index\+\_\+\+\_\+ be a template argument. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Contains macros and functions to create the loop template. 
+
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{templated__for_8hpp_a7141a047b70c8672880ed1bdd23aace3}\label{templated__for_8hpp_a7141a047b70c8672880ed1bdd23aace3}} 
+\index{templated\_for.hpp@{templated\_for.hpp}!NCPP\_LOOP\_FUNCTION\_T@{NCPP\_LOOP\_FUNCTION\_T}}
+\index{NCPP\_LOOP\_FUNCTION\_T@{NCPP\_LOOP\_FUNCTION\_T}!templated\_for.hpp@{templated\_for.hpp}}
+\doxysubsubsection{\texorpdfstring{NCPP\_LOOP\_FUNCTION\_T}{NCPP\_LOOP\_FUNCTION\_T}}
+{\footnotesize\ttfamily \#define NCPP\+\_\+\+LOOP\+\_\+\+FUNCTION\+\_\+T(\begin{DoxyParamCaption}\item[{}]{Name,  }\item[{}]{Params,  }\item[{}]{Index\+Name\+\_\+\+\_\+,  }\item[{}]{Body }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{template}<sz\ IndexName\_\_>\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keyword}{struct\ }Name\ \{\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{inline}\ \textcolor{keywordtype}{void}\ invoke\ Params\ \{\ Body;\ \};\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \};}
+
+\end{DoxyCode}
+
+
+The macro using to create a function representing the body of loop template. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Name} & the function name. \\
+\hline
+{\em Params} & the parameters. \\
+\hline
+{\em Index\+Name\+\_\+\+\_\+} & the \textquotesingle{}index\textquotesingle{} template argument name. \\
+\hline
+{\em Body} & the body of loop template. \\
+\hline
+\end{DoxyParams}

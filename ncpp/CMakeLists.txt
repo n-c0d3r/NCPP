@@ -67,6 +67,12 @@ file(GLOB dop_source_files
 )
 source_group("source\\ncpp\\dop" FILES ${dop_source_files})
 
+file(GLOB rtti_source_files
+    "source/ncpp/rtti/*.cpp"
+    "source/ncpp/rtti/*.hpp"
+)
+source_group("source\\ncpp\\rtti" FILES ${rtti_source_files})
+
 
 
 # Create ncpp target
@@ -76,6 +82,7 @@ add_library(ncpp STATIC
     ${containers_source_files}
     ${pac_source_files}
     ${dop_source_files}
+    ${rtti_source_files}
 )
 
 

@@ -1,0 +1,160 @@
+\hypertarget{classncpp_1_1containers_1_1cfv__queue__t}{}\doxysection{ncpp\+::containers\+::cfv\+\_\+queue\+\_\+t\texorpdfstring{$<$}{<} item\+\_\+type\+\_\+\+\_\+, allocator\+\_\+type\+\_\+\+\_\+ \texorpdfstring{$>$}{>} Class Template Reference}
+\label{classncpp_1_1containers_1_1cfv__queue__t}\index{ncpp::containers::cfv\_queue\_t$<$ item\_type\_\_, allocator\_type\_\_ $>$@{ncpp::containers::cfv\_queue\_t$<$ item\_type\_\_, allocator\_type\_\_ $>$}}
+
+
+A \mbox{\hyperlink{classncpp_1_1containers_1_1cfv__queue__t}{cfv\+\_\+queue\+\_\+t}} is a concurrent queue storing elements inside a fixed vector.  
+
+
+
+
+{\ttfamily \#include $<$cfv\+\_\+queue.\+hpp$>$}
+
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_a383dcf3df304d5cdb68865768ac54da2}\label{classncpp_1_1containers_1_1cfv__queue__t_a383dcf3df304d5cdb68865768ac54da2}} 
+using {\bfseries allocator\+\_\+type} = allocator\+\_\+type\+\_\+\+\_\+
+\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_ad90ba768e4ffc5566dabee6194efe01d}\label{classncpp_1_1containers_1_1cfv__queue__t_ad90ba768e4ffc5566dabee6194efe01d}} 
+using {\bfseries item\+\_\+type} = item\+\_\+type\+\_\+\+\_\+
+\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_a2c7f2dc3891b9314d6bd4b279aa4716e}\label{classncpp_1_1containers_1_1cfv__queue__t_a2c7f2dc3891b9314d6bd4b279aa4716e}} 
+using {\bfseries item\+\_\+vector\+\_\+type} = std\+::vector$<$ item\+\_\+type\+\_\+\+\_\+, allocator\+\_\+type $>$
+\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_aa37320cd52c37936a1699cba62fb35ae}\label{classncpp_1_1containers_1_1cfv__queue__t_aa37320cd52c37936a1699cba62fb35ae}} 
+using {\bfseries iterator} = item\+\_\+type\+\_\+\+\_\+ $\ast$
+\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_a20bf4bb9bdbef4e1687eaa92b296c833}\label{classncpp_1_1containers_1_1cfv__queue__t_a20bf4bb9bdbef4e1687eaa92b296c833}} 
+using {\bfseries const\+\_\+iterator} = const item\+\_\+type\+\_\+\+\_\+ $\ast$
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_a9ad37753d13f15f01f487d41c98b4782}\label{classncpp_1_1containers_1_1cfv__queue__t_a9ad37753d13f15f01f487d41c98b4782}} 
+iterator {\bfseries begin} ()
+\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_a13b8d38de699c0dd40844cfc0d49848e}\label{classncpp_1_1containers_1_1cfv__queue__t_a13b8d38de699c0dd40844cfc0d49848e}} 
+const\+\_\+iterator {\bfseries begin} () const
+\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_a1bf1d9e41011aa52f6eac99980f975c2}\label{classncpp_1_1containers_1_1cfv__queue__t_a1bf1d9e41011aa52f6eac99980f975c2}} 
+const\+\_\+iterator {\bfseries cbegin} () const
+\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_acb1d3230d2d08566a70489fffad087e6}\label{classncpp_1_1containers_1_1cfv__queue__t_acb1d3230d2d08566a70489fffad087e6}} 
+iterator {\bfseries end} ()
+\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_aec25e14fcba990f44851322ce2851fb5}\label{classncpp_1_1containers_1_1cfv__queue__t_aec25e14fcba990f44851322ce2851fb5}} 
+const\+\_\+iterator {\bfseries end} () const
+\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_ac6de8511fc6fc9469841844e06ea6916}\label{classncpp_1_1containers_1_1cfv__queue__t_ac6de8511fc6fc9469841844e06ea6916}} 
+const\+\_\+iterator {\bfseries cend} () const
+\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_a19b6d9e3c36b15a40b01a7553a53d159}\label{classncpp_1_1containers_1_1cfv__queue__t_a19b6d9e3c36b15a40b01a7553a53d159}} 
+item\+\_\+type\+\_\+\+\_\+ \& {\bfseries front} ()
+\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_aa3c7379e4a2cb94c68ba97751cdb463e}\label{classncpp_1_1containers_1_1cfv__queue__t_aa3c7379e4a2cb94c68ba97751cdb463e}} 
+const item\+\_\+type\+\_\+\+\_\+ \& {\bfseries front} () const
+\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_ae5dc6d7a6172c1c32084afa853eb2899}\label{classncpp_1_1containers_1_1cfv__queue__t_ae5dc6d7a6172c1c32084afa853eb2899}} 
+item\+\_\+type\+\_\+\+\_\+ \& {\bfseries back} ()
+\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_abc8ee95ca13eb5bdca83d223528afb1e}\label{classncpp_1_1containers_1_1cfv__queue__t_abc8ee95ca13eb5bdca83d223528afb1e}} 
+const item\+\_\+type\+\_\+\+\_\+ \& {\bfseries back} () const
+\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_a7112727d262cc091f2318ab921772d5b}\label{classncpp_1_1containers_1_1cfv__queue__t_a7112727d262cc091f2318ab921772d5b}} 
+\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} {\bfseries size} () const
+\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_a879fb85c4606e381a062f4c200d56734}\label{classncpp_1_1containers_1_1cfv__queue__t_a879fb85c4606e381a062f4c200d56734}} 
+{\bfseries cfv\+\_\+queue\+\_\+t} (\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} capacity)
+\begin{DoxyCompactList}\small\item\em Initialization constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_ab0b1b03965f6acf7a06f93b5c63ad351}\label{classncpp_1_1containers_1_1cfv__queue__t_ab0b1b03965f6acf7a06f93b5c63ad351}} 
+{\bfseries cfv\+\_\+queue\+\_\+t} (\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} capacity, const allocator\+\_\+type \&allocator)
+\begin{DoxyCompactList}\small\item\em Initialization constructor with allocator. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classncpp_1_1containers_1_1cfv__queue__t_aa9dd9ea02b54685da51b977e9c41abb9}{cfv\+\_\+queue\+\_\+t}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_a3d709c7fb81ac5dd84bd11b18c19f230}\label{classncpp_1_1containers_1_1cfv__queue__t_a3d709c7fb81ac5dd84bd11b18c19f230}} 
+{\bfseries $\sim$cfv\+\_\+queue\+\_\+t} ()
+\begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_a4e945cb7369b1885abaa41d753d0c369}\label{classncpp_1_1containers_1_1cfv__queue__t_a4e945cb7369b1885abaa41d753d0c369}} 
+{\bfseries cfv\+\_\+queue\+\_\+t} (const \mbox{\hyperlink{classncpp_1_1containers_1_1cfv__queue__t}{cfv\+\_\+queue\+\_\+t}} \&other)
+\begin{DoxyCompactList}\small\item\em Copy constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_a1801be7606cd530e895608de8c6cf276}\label{classncpp_1_1containers_1_1cfv__queue__t_a1801be7606cd530e895608de8c6cf276}} 
+\mbox{\hyperlink{classncpp_1_1containers_1_1cfv__queue__t}{cfv\+\_\+queue\+\_\+t}} \& {\bfseries operator=} (const \mbox{\hyperlink{classncpp_1_1containers_1_1cfv__queue__t}{cfv\+\_\+queue\+\_\+t}} \&other)
+\begin{DoxyCompactList}\small\item\em Copy operator. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_ab0189d3d663c9f6f4692e75426436487}\label{classncpp_1_1containers_1_1cfv__queue__t_ab0189d3d663c9f6f4692e75426436487}} 
+{\bfseries cfv\+\_\+queue\+\_\+t} (\mbox{\hyperlink{classncpp_1_1containers_1_1cfv__queue__t}{cfv\+\_\+queue\+\_\+t}} \&\&other)
+\begin{DoxyCompactList}\small\item\em Move constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_a1e0f50d973677a2e2ed6027bd7ed363d}\label{classncpp_1_1containers_1_1cfv__queue__t_a1e0f50d973677a2e2ed6027bd7ed363d}} 
+\mbox{\hyperlink{classncpp_1_1containers_1_1cfv__queue__t}{cfv\+\_\+queue\+\_\+t}} \& {\bfseries operator=} (\mbox{\hyperlink{classncpp_1_1containers_1_1cfv__queue__t}{cfv\+\_\+queue\+\_\+t}} \&\&other)
+\begin{DoxyCompactList}\small\item\em Move operator. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_a0ae43c3351fcee667990483b02591022}\label{classncpp_1_1containers_1_1cfv__queue__t_a0ae43c3351fcee667990483b02591022}} 
+void {\bfseries clear} ()
+\begin{DoxyCompactList}\small\item\em Clears the queue by resetting the end index and the begin index. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_a2f6332854bc7fc6bca7b992de749da7a}\label{classncpp_1_1containers_1_1cfv__queue__t_a2f6332854bc7fc6bca7b992de749da7a}} 
+void {\bfseries push} (item\+\_\+type\+\_\+\+\_\+ \&\&item)
+\begin{DoxyCompactList}\small\item\em Pushes an item into the stack by move operation. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_ae0820c02ef84f7029914bde5ccee8a74}\label{classncpp_1_1containers_1_1cfv__queue__t_ae0820c02ef84f7029914bde5ccee8a74}} 
+void {\bfseries push} (const item\+\_\+type\+\_\+\+\_\+ \&item)
+\begin{DoxyCompactList}\small\item\em Pushes an item into the stack by copy operation. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_a29074a9a87e54921707b5b6768d107f1}\label{classncpp_1_1containers_1_1cfv__queue__t_a29074a9a87e54921707b5b6768d107f1}} 
+bool {\bfseries try\+\_\+pop} (\mbox{\hyperlink{namespacencpp_1_1utilities_aac8793b5c8100c55124fa2cac242bfc1}{utilities\+::lref\+\_\+t}}$<$ item\+\_\+type $>$ \&output)
+\begin{DoxyCompactList}\small\item\em Tries to pop the front element. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_ac0649e66eae5dc50cb0c13200f12dfad}\label{classncpp_1_1containers_1_1cfv__queue__t_ac0649e66eae5dc50cb0c13200f12dfad}} 
+bool {\bfseries try\+\_\+pop} (item\+\_\+type \&output)
+\begin{DoxyCompactList}\small\item\em Tries to pop the front element. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_ac1db5d73c0836de47b268a2473a1d682}\label{classncpp_1_1containers_1_1cfv__queue__t_ac1db5d73c0836de47b268a2473a1d682}} 
+bool {\bfseries try\+\_\+pop} ()
+\begin{DoxyCompactList}\small\item\em Tries to pop the front element. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_add495754e0e944328776a206a13c4c6e}\label{classncpp_1_1containers_1_1cfv__queue__t_add495754e0e944328776a206a13c4c6e}} 
+void {\bfseries pop} ()
+\begin{DoxyCompactList}\small\item\em Tries to pop the front element. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_a8b109fc59f90c3de83fa57b9fc8960d9}\label{classncpp_1_1containers_1_1cfv__queue__t_a8b109fc59f90c3de83fa57b9fc8960d9}} 
+{\footnotesize template$<$typename item\+\_\+param\+\_\+type $>$ }\\void {\bfseries push\+\_\+main\+\_\+t} (item\+\_\+param\+\_\+type \&\&item)
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_a1a609c77f066a3516638ad484872983d}\label{classncpp_1_1containers_1_1cfv__queue__t_a1a609c77f066a3516638ad484872983d}} 
+item\+\_\+vector\+\_\+type {\bfseries item\+\_\+vector\+\_\+}
+\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_a1af000e91c56227ef721fd68721f7d71}\label{classncpp_1_1containers_1_1cfv__queue__t_a1af000e91c56227ef721fd68721f7d71}} 
+\mbox{\hyperlink{namespacencpp_a791b88810c88f77c9ad90748af867efa}{asz}} {\bfseries begin\+\_\+index\+\_\+}
+\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_a297e2b86950fecb245a5ad88e80585b6}\label{classncpp_1_1containers_1_1cfv__queue__t_a297e2b86950fecb245a5ad88e80585b6}} 
+\mbox{\hyperlink{namespacencpp_a791b88810c88f77c9ad90748af867efa}{asz}} {\bfseries end\+\_\+index\+\_\+}
+\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_ac21c0c59d5e653afebf3022e1462afa9}\label{classncpp_1_1containers_1_1cfv__queue__t_ac21c0c59d5e653afebf3022e1462afa9}} 
+\mbox{\hyperlink{namespacencpp_a9c908a636a39a8df2bbc0cd4b6399eb4}{sz}} {\bfseries capacity\+\_\+}
+\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_abd68629d985178be2538b0cfa9f286dd}\label{classncpp_1_1containers_1_1cfv__queue__t_abd68629d985178be2538b0cfa9f286dd}} 
+\mbox{\hyperlink{classncpp_1_1pac_1_1spinlock}{pac\+::spinlock}} {\bfseries writer\+\_\+lock\+\_\+}
+\item 
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_aed545107816a582bb558616dde821d87}\label{classncpp_1_1containers_1_1cfv__queue__t_aed545107816a582bb558616dde821d87}} 
+\mbox{\hyperlink{classncpp_1_1pac_1_1spinlock}{pac\+::spinlock}} {\bfseries reader\+\_\+lock\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename item\+\_\+type\+\_\+\+\_\+, class allocator\+\_\+type\+\_\+\+\_\+ = NCPP\+\_\+\+DEFAULT\+\_\+\+ALLOCATOR\+\_\+\+TEMPLATE$<$item\+\_\+type\+\_\+\+\_\+$>$$>$\newline
+class ncpp\+::containers\+::cfv\+\_\+queue\+\_\+t$<$ item\+\_\+type\+\_\+\+\_\+, allocator\+\_\+type\+\_\+\+\_\+ $>$}
+A \mbox{\hyperlink{classncpp_1_1containers_1_1cfv__queue__t}{cfv\+\_\+queue\+\_\+t}} is a concurrent queue storing elements inside a fixed vector. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classncpp_1_1containers_1_1cfv__queue__t_aa9dd9ea02b54685da51b977e9c41abb9}\label{classncpp_1_1containers_1_1cfv__queue__t_aa9dd9ea02b54685da51b977e9c41abb9}} 
+\index{ncpp::containers::cfv\_queue\_t$<$ item\_type\_\_, allocator\_type\_\_ $>$@{ncpp::containers::cfv\_queue\_t$<$ item\_type\_\_, allocator\_type\_\_ $>$}!cfv\_queue\_t@{cfv\_queue\_t}}
+\index{cfv\_queue\_t@{cfv\_queue\_t}!ncpp::containers::cfv\_queue\_t$<$ item\_type\_\_, allocator\_type\_\_ $>$@{ncpp::containers::cfv\_queue\_t$<$ item\_type\_\_, allocator\_type\_\_ $>$}}
+\doxysubsubsection{\texorpdfstring{cfv\_queue\_t()}{cfv\_queue\_t()}}
+{\footnotesize\ttfamily template$<$typename item\+\_\+type\+\_\+\+\_\+ , class allocator\+\_\+type\+\_\+\+\_\+  = NCPP\+\_\+\+DEFAULT\+\_\+\+ALLOCATOR\+\_\+\+TEMPLATE$<$item\+\_\+type\+\_\+\+\_\+$>$$>$ \\
+\mbox{\hyperlink{classncpp_1_1containers_1_1cfv__queue__t}{ncpp\+::containers\+::cfv\+\_\+queue\+\_\+t}}$<$ item\+\_\+type\+\_\+\+\_\+, allocator\+\_\+type\+\_\+\+\_\+ $>$\+::cfv\+\_\+queue\+\_\+t (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
+
+
+
+Default constructor. 
+
+Automatically calls to the initialization constructor with the default capacity of 1024. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+F\+:/\+NCoder/\+NCPP/ncpp/source/ncpp/containers/\mbox{\hyperlink{cfv__queue_8hpp}{cfv\+\_\+queue.\+hpp}}\end{DoxyCompactItemize}
