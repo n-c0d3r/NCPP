@@ -37,10 +37,7 @@ public:
 
 public:
 	NCPP_RCFUNCTION(
-		void(i32, b8), foo,
-		1,
-		4,
-		8
+		void(i32, b8), foo
 	);
 
 };
@@ -61,11 +58,7 @@ int main() {
 
 		aobject aobj;
 
-		for (sz arg : aobj.get_rfunction_handle("foo").args_array) {
 
-			std::cout << arg << std::endl;
-
-		}
 
 		log_memory_stats();
 

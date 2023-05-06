@@ -62,7 +62,6 @@ namespace ncpp {}
 #include <unordered_set>
 #include <unordered_map>
 #include <tuple>
-#include <variant>
 #include <thread>
 #include <atomic>
 #include <mutex>
@@ -73,7 +72,6 @@ namespace ncpp {}
 #include <bitset>
 #include <cstdio>
 #include <cstdlib>
-#include <string_view>
 #pragma endregion
 
 ////////////////////////////////////////////////////////////////////////////////////

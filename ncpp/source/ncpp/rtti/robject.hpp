@@ -544,18 +544,15 @@ namespace ncpp {
 
             object_type__& robj = (object_type__&)current_constructing_object();
 
-            robject_variable_handle var{ 
-                {              
-                    {
-                        (robj.*args_member_ptr).data(),
-                        (robj.*args_member_ptr).size()
-                    }
-                },
-                &robj, 
-                &(robj.*member_ptr) 
+            robject_variable_handle rvar_handle;
+            rvar_handle.args_array = {
+                (robj.*args_member_ptr).data(),
+                (robj.*args_member_ptr).size()
             };
+            rvar_handle.robject_p = &robj;
+            rvar_handle.variable_p = &(robj.*member_ptr);
 
-            robj.add_rvariable_handle(robj.*name_member_ptr, var);
+            robj.add_rvariable_handle(robj.*name_member_ptr, rvar_handle);
 
         }
 
@@ -639,16 +636,13 @@ namespace ncpp {
                         
             executer_type rfunc_executer = executer_getter_type::get(robj);
 
-            robject_function_handle rfunc_handle {
-                {
-                    {
-                        (robj.*args_member_ptr).data(),
-                        (robj.*args_member_ptr).size()
-                    }
-                },
-                &robj, 
-                reinterpret_cast<robject_function_handle::rfunc_executer_type>(rfunc_executer)
+            robject_function_handle rfunc_handle;
+            rfunc_handle.args_array = {
+                (robj.*args_member_ptr).data(),
+                (robj.*args_member_ptr).size()
             };
+            rfunc_handle.robject_p = &robj;
+            rfunc_handle.rfunc_executer = reinterpret_cast<robject_function_handle::rfunc_executer_type>(rfunc_executer);
 
             robj.add_rfunction_handle(robj.*name_member_ptr, rfunc_handle);
 
