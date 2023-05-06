@@ -82,37 +82,62 @@ namespace ncpp {
         private:\
             using current_rclass = ClassName;
 
-#define NCPP_RCVARIABLE(MemberType, MemberName) \
+#define NCPP_REFLECT_CLASS(ClassName) \
+        ncpp::rtti::robject_constructor_scope __robject_constructor_scope__(*this);
+
+#define NCPP_RCVARIABLE(MemberType, MemberName, ...) \
         MemberType MemberName;\
         char MemberName##_name_cstr[sizeof(#MemberName)] = #MemberName;\
+        typename ncpp::rtti::robject_member_args_t<__VA_ARGS__> MemberName##_args = {__VA_ARGS__}; \
         using MemberName##_reflecter_type = ncpp::rtti::robject_variable_reflecter_t<\
             current_rclass, \
             MemberType, \
             decltype(&current_rclass::MemberName##_name_cstr),\
             &current_rclass::MemberName##_name_cstr,\
+            decltype(&current_rclass::MemberName##_args),\
+            &current_rclass::MemberName##_args,\
             decltype(&current_rclass::MemberName),\
             &current_rclass::MemberName\
         >; \
         friend class MemberName##_reflecter_type; \
         MemberName##_reflecter_type MemberName##_reflecter;
 
-#define NCPP_RCFUNCTION(MemberReturnType, MemberName, MemberArgTypes,...) \
-        MemberReturnType MemberName(MemberArgTypes); \
+#define NCPP_RCFUNCTION(MemberFunctionType, MemberName,...) \
+        using MemberName##_type = MemberFunctionType; \
+        MemberName##_type MemberName; \
         char MemberName##_name_cstr[sizeof(#MemberName)] = #MemberName;\
+        typename ncpp::rtti::robject_member_args_t<__VA_ARGS__> MemberName##_args = {__VA_ARGS__}; \
         using MemberName##_reflecter_type = ncpp::rtti::robject_function_reflecter_t<\
             current_rclass, \
-            MemberReturnType, \
+            MemberFunctionType, \
             decltype(&current_rclass::MemberName##_name_cstr),\
             &current_rclass::MemberName##_name_cstr,\
+            decltype(&current_rclass::MemberName##_args),\
+            &current_rclass::MemberName##_args,\
             decltype(&current_rclass::MemberName), \
-            &current_rclass::MemberName, \
-            MemberArgTypes\
+            &current_rclass::MemberName \
         >; \
         friend class MemberName##_reflecter_type; \
         MemberName##_reflecter_type MemberName##_reflecter;
 
-#define NCPP_REFLECT_CLASS(ClassName) \
-        ncpp::rtti::robject_constructor_scope __robject_constructor_scope__(*this);
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+        template<sz... args__>
+        using robject_member_args_t = typename std::array<sz, sizeof... (args__)>;
 
 
 
@@ -175,43 +200,26 @@ namespace ncpp {
 
 
 
-        class robject_variable {
+        struct robject_member_handle {
 
-        private:
-            void* object_p_;
-            void* var_p_;
+            sz* head_arg_p = 0;
+            sz arg_count = 0;
 
+            inline const sz& head() const {
 
-
-        public:
-            robject_variable() :
-                object_p_(0),
-                var_p_(0)
-            {}
-            robject_variable(void* object_p, void* var_p) :
-                object_p_(object_p),
-                var_p_(var_p)
-            {
-
-
-
+                return *head_arg_p;
             }
-            ~robject_variable() {
+            inline const sz& tail() const {
 
-
-
+                return *(head_arg_p + arg_count - 1);
             }
+            inline const sz* begin() const {
 
-            template<typename type__>
-            type__& get_t() {
-
-                return *((type__*)var_p_);
+                return head_arg_p;
             }
+            inline const sz* end() const {
 
-            template<typename type__, typename target_type>
-            void set_t(target_type target) {
-
-                *((type__*)var_p_) = std::forward<target_type>(target);
+                return head_arg_p + arg_count;
             }
 
         };
@@ -232,12 +240,60 @@ namespace ncpp {
 
 
 
-        struct robject_function_handle {
+        struct robject_variable_handle : 
+            public robject_member_handle
+        {
+
+            robject_i* robject_p;
+            void* variable_p;
+
+
+
+            template<typename type__>
+            type__& get_t() {
+
+                return *((type__*)variable_p);
+            }
+            template<typename type__>
+            const type__& get_t() const {
+
+                return *((const type__*)variable_p);
+            }
+
+            template<typename type__, typename target_type>
+            void set_t(target_type target) {
+
+                *((type__*)variable_p) = std::forward<target_type>(target);
+            }
+
+        };
+
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+        struct robject_function_handle :
+            public robject_member_handle
+        {
 
             using rfunc_executer_type = void*;
 
             robject_i* robject_p = 0;
             rfunc_executer_type rfunc_executer;
+
+
 
             template<typename function_type__>
             inline std::function<function_type__>& get_t() {
@@ -270,6 +326,8 @@ namespace ncpp {
             typename variable_type__,
             typename name_member_ptr_type,
             name_member_ptr_type name_member_ptr,
+            typename args_member_ptr_type,
+            args_member_ptr_type args_member_ptr,
             typename member_ptr_type,
             member_ptr_type member_ptr
         >
@@ -300,12 +358,13 @@ namespace ncpp {
 
         template<
             class object_type__,
-            typename return_type__,
+            typename function_type__,
             typename name_member_ptr_type,
             name_member_ptr_type name_member_ptr,
+            typename args_member_ptr_type,
+            args_member_ptr_type args_member_ptr,
             typename member_ptr_type,
-            member_ptr_type member_ptr,
-            typename... arg_types
+            member_ptr_type member_ptr
         >
         class robject_function_reflecter_t
         {
@@ -328,13 +387,14 @@ namespace ncpp {
 
         template<
             class object_type__,
-            typename return_type__,
+            typename function_type__,
             b8 is_void_return__,
             typename name_member_ptr_type,
             name_member_ptr_type name_member_ptr,
+            typename args_member_ptr_type,
+            args_member_ptr_type args_member_ptr,
             typename member_ptr_type,
-            member_ptr_type member_ptr,
-            typename... arg_types
+            member_ptr_type member_ptr
         >
         struct robject_function_reflecter_executer_get_t {
 
@@ -370,7 +430,7 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
-            using name_to_variable_map_type = typename containers::native_unordered_map_t<containers::native_string, robject_variable>;
+            using name_to_variable_map_type = typename containers::native_unordered_map_t<containers::native_string, robject_variable_handle>;
             using name_to_function_handle_map_type = typename containers::native_unordered_map_t<containers::native_string, robject_function_handle>;
 
             ////////////////////////////////////////////////////////////////////////////////////
@@ -383,7 +443,9 @@ namespace ncpp {
             robject_constructor_scope constructor_scope_;
 
         public:
-            NCPP_RCVARIABLE(containers::native_string, name);
+            NCPP_RCVARIABLE(
+                containers::native_string, name
+            );
 
 			////////////////////////////////////////////////////////////////////////////////////
 			////////////////////////////////////////////////////////////////////////////////////
@@ -401,14 +463,19 @@ namespace ncpp {
 
 #pragma region Methods
 		public:
-            inline void add_rvariable(const containers::native_string& var_name, const robject_variable& var) {
+            inline void add_rvariable_handle(const containers::native_string& var_name, const robject_variable_handle& var) {
 
                 name_to_variable_map_[var_name] = var;
 
             }
-            inline const robject_variable& get_rvariable(const containers::native_string& var_name) {
+            inline robject_variable_handle& get_rvariable_handle(const containers::native_string& var_name) {
 
                 return name_to_variable_map_[var_name];
+            }
+            template<typename variable_type__>
+            inline variable_type__& get_rvariable_t(const containers::native_string& var_name) {
+
+                return get_rvariable_handle(var_name).get_t<variable_type__>();
             }
 
             inline void add_rfunction_handle(const containers::native_string& func_name, robject_function_handle func_handle) {
@@ -416,12 +483,12 @@ namespace ncpp {
                 name_to_function_handle_map_[func_name] = func_handle;
 
             }
-            inline robject_function_handle get_rfunction_handle(const containers::native_string& func_name) {
+            inline robject_function_handle& get_rfunction_handle(const containers::native_string& func_name) {
 
                 return name_to_function_handle_map_[func_name];
             }
             template<typename function_type__>
-            inline std::function<function_type__>& get_rfunction(const containers::native_string& func_name) {
+            inline std::function<function_type__>& get_rfunction_t(const containers::native_string& func_name) {
 
                 return get_rfunction_handle(func_name).get_t<function_type__>();
             }
@@ -451,6 +518,8 @@ namespace ncpp {
             typename variable_type__,
             typename name_member_ptr_type,
             name_member_ptr_type name_member_ptr,
+            typename args_member_ptr_type,
+            args_member_ptr_type args_member_ptr,
             typename member_ptr_type,
             member_ptr_type member_ptr
         >
@@ -459,15 +528,24 @@ namespace ncpp {
             variable_type__,
             name_member_ptr_type,
             name_member_ptr,
+            args_member_ptr_type,
+            args_member_ptr,
             member_ptr_type,
             member_ptr
         >::robject_variable_reflecter_t() {
 
             object_type__& robj = (object_type__&)current_constructing_object();
 
-            robject_variable var(&robj, &(robj.*member_ptr));
+            robject_variable_handle var{ 
+                {                
+                    (robj.*args_member_ptr).data(),
+                    (robj.*args_member_ptr).size()
+                },
+                &robj, 
+                &(robj.*member_ptr) 
+            };
 
-            robj.add_rvariable(robj.*name_member_ptr, var);
+            robj.add_rvariable_handle(robj.*name_member_ptr, var);
 
         }
 
@@ -476,6 +554,8 @@ namespace ncpp {
             typename variable_type__,
             typename name_member_ptr_type,
             name_member_ptr_type name_member_ptr,
+            typename args_member_ptr_type,
+            args_member_ptr_type args_member_ptr,
             typename member_ptr_type,
             member_ptr_type member_ptr
         >
@@ -484,6 +564,8 @@ namespace ncpp {
             variable_type__,
             name_member_ptr_type,
             name_member_ptr,
+            args_member_ptr_type,
+            args_member_ptr,
             member_ptr_type,
             member_ptr
         >::~robject_variable_reflecter_t() {
@@ -510,39 +592,48 @@ namespace ncpp {
 
         template<
             class object_type__,
-            typename return_type__,
+            typename function_type__,
             typename name_member_ptr_type,
             name_member_ptr_type name_member_ptr,
+            typename args_member_ptr_type,
+            args_member_ptr_type args_member_ptr,
             typename member_ptr_type,
-            member_ptr_type member_ptr,
-            typename... arg_types
+            member_ptr_type member_ptr
         >
         robject_function_reflecter_t<
             object_type__,
-            return_type__,
+            function_type__,
             name_member_ptr_type,
             name_member_ptr,
+            args_member_ptr_type,
+            args_member_ptr,
             member_ptr_type,
-            member_ptr,
-            arg_types...
+            member_ptr
         >::robject_function_reflecter_t(){
 
             object_type__& robj = (object_type__&)current_constructing_object();
 
+            using function_traits = typename utilities::function_traits_t<function_type__>;
+
             using executer_getter_type = typename robject_function_reflecter_executer_get_t<
                 object_type__,
-                return_type__,
-                std::is_same_v<return_type__, void>,
+                function_type__,
+                std::is_same_v<function_traits::result_type, void>,
                 name_member_ptr_type,
                 name_member_ptr,
+                args_member_ptr_type,
+                args_member_ptr,
                 member_ptr_type,
-                member_ptr,
-                arg_types...
+                member_ptr
             >;
                         
             executer_type rfunc_executer = executer_getter_type::get(robj);
 
-            robject_function_handle rfunc_handle { 
+            robject_function_handle rfunc_handle {
+                {
+                    (robj.*args_member_ptr).data(),
+                    (robj.*args_member_ptr).size()
+                },
                 &robj, 
                 reinterpret_cast<robject_function_handle::rfunc_executer_type>(rfunc_executer)
             };
@@ -553,21 +644,23 @@ namespace ncpp {
 
         template<
             class object_type__,
-            typename return_type__,
+            typename function_type__,
             typename name_member_ptr_type,
             name_member_ptr_type name_member_ptr,
+            typename args_member_ptr_type,
+            args_member_ptr_type args_member_ptr,
             typename member_ptr_type,
-            member_ptr_type member_ptr,
-            typename... arg_types
+            member_ptr_type member_ptr
         >
         robject_function_reflecter_t<
             object_type__,
-            return_type__,
+            function_type__,
             name_member_ptr_type,
             name_member_ptr,
+            args_member_ptr_type,
+            args_member_ptr,
             member_ptr_type,
-            member_ptr,
-            arg_types...
+            member_ptr
         >::~robject_function_reflecter_t() {
 
 
@@ -576,40 +669,45 @@ namespace ncpp {
 
         template<
             class object_type__,
-            typename return_type__,
+            typename function_type__,
             typename name_member_ptr_type,
             name_member_ptr_type name_member_ptr,
+            typename args_member_ptr_type,
+            args_member_ptr_type args_member_ptr,
             typename member_ptr_type,
-            member_ptr_type member_ptr,
-            typename... arg_types
+            member_ptr_type member_ptr
         >
         struct robject_function_reflecter_executer_get_t <
             object_type__,
-            return_type__,
+            function_type__,
             true,
             name_member_ptr_type,
             name_member_ptr,
+            args_member_ptr_type,
+            args_member_ptr,
             member_ptr_type,
-            member_ptr,
-            arg_types...
+            member_ptr
         >
         {
 
             using executer_type = typename robject_function_reflecter_t<
                 object_type__,
-                return_type__,
+                function_type__,
                 name_member_ptr_type,
                 name_member_ptr,
+                args_member_ptr_type,
+                args_member_ptr,
                 member_ptr_type,
-                member_ptr,
-                arg_types...
+                member_ptr
             >::executer_type;
+
+            using function_traits = typename utilities::function_traits_t<function_type__>;
 
             static inline executer_type get(object_type__& robj) {
 
-                static std::function<return_type__(arg_types... args)> func_s = [&robj](arg_types... args)->return_type__ {
+                static std::function<function_type__> func_s = [&robj](auto... args) -> function_traits::result_type {
 
-                    (robj.*member_ptr)(std::forward<arg_types>(args)...);
+                    (robj.*member_ptr)(std::forward<decltype(args)>(args)...);
 
                 };
 
@@ -620,40 +718,45 @@ namespace ncpp {
 
         template<
             class object_type__,
-            typename return_type__,
+            typename function_type__,
             typename name_member_ptr_type,
             name_member_ptr_type name_member_ptr,
+            typename args_member_ptr_type,
+            args_member_ptr_type args_member_ptr,
             typename member_ptr_type,
-            member_ptr_type member_ptr,
-            typename... arg_types
+            member_ptr_type member_ptr
         >
         struct robject_function_reflecter_executer_get_t <
             object_type__,
-            return_type__,
+            function_type__,
             false,
             name_member_ptr_type,
             name_member_ptr,
+            args_member_ptr_type,
+            args_member_ptr,
             member_ptr_type,
-            member_ptr,
-            arg_types...
+            member_ptr
         >
         {
 
             using executer_type = typename robject_function_reflecter_t<
                 object_type__,
-                return_type__,
+                function_type__,
                 name_member_ptr_type,
                 name_member_ptr,
+                args_member_ptr_type,
+                args_member_ptr,
                 member_ptr_type,
-                member_ptr,
-                arg_types...
+                member_ptr
             >::executer_type;
+
+            using function_traits = typename utilities::function_traits_t<function_type__>;
 
             static inline executer_type get(object_type__& robj) {
 
-                static std::function<return_type__(arg_types... args)> func_s = [&robj](arg_types... args)->return_type__ {
+                static std::function<function_type__> func_s = [&robj](auto... args) -> function_traits::result_type {
 
-                    return (robj.*member_ptr)(std::forward<arg_types>(args)...);
+                    return (robj.*member_ptr)(std::forward<decltype(args)>(args)...);
 
                 };
 

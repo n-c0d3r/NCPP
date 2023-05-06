@@ -74,4 +74,6 @@ namespace ncpp {
 
 #include <ncpp/utilities/member_offset.hpp>
 
+#include <ncpp/utilities/function_traits.hpp>
+
 #pragma endregion

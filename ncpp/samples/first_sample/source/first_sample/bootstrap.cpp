@@ -13,9 +13,9 @@ class aobject :
 
 
 public:
-	NCPP_RCVARIABLE(i32, a);
-	NCPP_RCVARIABLE(i32, b);
-	NCPP_RCVARIABLE(b8, c);
+	NCPP_RCVARIABLE(
+		i32, ivar
+	);
 
 
 
@@ -37,9 +37,10 @@ public:
 
 public:
 	NCPP_RCFUNCTION(
-		void, 
-		foo, 
-		NCPP_MP_GROUP(i32, b8)
+		void(i32, b8), foo,
+		1,
+		4,
+		8
 	);
 
 };
@@ -59,8 +60,6 @@ int main() {
 	{
 
 		aobject aobj;
-
-		aobj.get_rfunction<void(i32, b8)>("foo")(3, true);
 
 		log_memory_stats();
 
