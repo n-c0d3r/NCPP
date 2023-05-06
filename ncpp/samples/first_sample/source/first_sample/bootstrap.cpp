@@ -61,6 +61,12 @@ int main() {
 
 		aobject aobj;
 
+		for (sz arg : aobj.get_rfunction_handle("foo").args_array) {
+
+			std::cout << arg << std::endl;
+
+		}
+
 		log_memory_stats();
 
 	}

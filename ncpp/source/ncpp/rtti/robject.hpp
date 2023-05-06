@@ -202,25 +202,33 @@ namespace ncpp {
 
         struct robject_member_handle {
 
-            sz* head_arg_p = 0;
-            sz arg_count = 0;
+            struct args_array_type {
 
-            inline const sz& head() const {
+                sz* head_arg_p = 0;
+                sz arg_count = 0;
 
-                return *head_arg_p;
-            }
-            inline const sz& tail() const {
+                inline const sz& head() const {
 
-                return *(head_arg_p + arg_count - 1);
-            }
-            inline const sz* begin() const {
+                    return *head_arg_p;
+                }
+                inline const sz& tail() const {
 
-                return head_arg_p;
-            }
-            inline const sz* end() const {
+                    return *(head_arg_p + arg_count - 1);
+                }
+                inline const sz* begin() const {
 
-                return head_arg_p + arg_count;
-            }
+                    return head_arg_p;
+                }
+                inline const sz* end() const {
+
+                    return head_arg_p + arg_count;
+                }
+
+            };
+
+
+
+            args_array_type args_array;
 
         };
 
@@ -537,9 +545,11 @@ namespace ncpp {
             object_type__& robj = (object_type__&)current_constructing_object();
 
             robject_variable_handle var{ 
-                {                
-                    (robj.*args_member_ptr).data(),
-                    (robj.*args_member_ptr).size()
+                {              
+                    {
+                        (robj.*args_member_ptr).data(),
+                        (robj.*args_member_ptr).size()
+                    }
                 },
                 &robj, 
                 &(robj.*member_ptr) 
@@ -631,8 +641,10 @@ namespace ncpp {
 
             robject_function_handle rfunc_handle {
                 {
-                    (robj.*args_member_ptr).data(),
-                    (robj.*args_member_ptr).size()
+                    {
+                        (robj.*args_member_ptr).data(),
+                        (robj.*args_member_ptr).size()
+                    }
                 },
                 &robj, 
                 reinterpret_cast<robject_function_handle::rfunc_executer_type>(rfunc_executer)
