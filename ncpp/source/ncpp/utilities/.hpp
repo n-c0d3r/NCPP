@@ -76,4 +76,6 @@ namespace ncpp {
 
 #include <ncpp/utilities/function_traits.hpp>
 
+#include <ncpp/utilities/is_derived_from.hpp>
+
 #pragma endregion

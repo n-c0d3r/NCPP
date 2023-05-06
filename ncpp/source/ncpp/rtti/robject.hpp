@@ -38,6 +38,12 @@
 #include <ncpp/dop/.hpp>
 #include <ncpp/pac/.hpp>
 
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
+#include <ncpp/rtti/rclass.hpp>
+
 #pragma endregion 
 
 
@@ -80,7 +86,12 @@ namespace ncpp {
 
 #define NCPP_RCLASS(ClassName) \
         private:\
-            using current_rclass = ClassName;
+            using current_rclass = ClassName;\
+        public:\
+            virtual ncpp::rtti::rclass_t<ncpp::rtti::robject_i> get_rclass(){\
+                \
+                return ncpp::rtti::rclass_t<ClassName>();\
+            }
 
 #define NCPP_REFLECT_CLASS(ClassName) \
         ncpp::rtti::robject_constructor_scope __robject_constructor_scope__(*this);

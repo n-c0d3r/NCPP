@@ -187,6 +187,7 @@ struct NCPP_PP_CAT(static_warning,__LINE__) { \
 ////////////////////////////////////////////////////////////////////////////////////
 
 #ifndef NDEBUG 
+#define NCPP_DEBUG
 #define warning(cond, msg) if(!(cond)) std::cout << "Warning: " << msg << std::endl;
 #else
 #define warning(cond, msg) ;
