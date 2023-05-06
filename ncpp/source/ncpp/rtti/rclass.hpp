@@ -61,10 +61,6 @@ namespace ncpp {
     namespace rtti {
 
         class robject_i;
-        template<
-            class object_type__
-        >
-        class robject_t;
 
 
 
