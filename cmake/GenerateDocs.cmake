@@ -72,5 +72,5 @@ execute_process(
 file(
     COPY 
     "${NCPP_DOCUMENTATIONS_DIR}/doxygen_themes"
-    DESTINATION "${NCPP_OUTPUT_DOCUMENTATIONS_DIR}/doxygen_themes"
+    DESTINATION "${NCPP_OUTPUT_DOCUMENTATIONS_DIR}"
 )
