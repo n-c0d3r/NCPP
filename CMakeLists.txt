@@ -15,7 +15,20 @@ set(CMAKE_C_STANDARD 14)
 
 
 
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CheckDependencies.cmake)
+
+
+
 add_subdirectory(ncpp)
+
+
+
+option(GENERATE_DOCS "Generate External And Internal Docs" ON)
+if(${GENERATE_DOCS})
+    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/GenerateDocs.cmake)
+endif()
+
+
 
 include(InstallRequiredSystemLibraries)
 set (CPACK_OUTPUT_CONFIG_FILE "${CMAKE_BINARY_DIR}/ncppConfig.cmake")

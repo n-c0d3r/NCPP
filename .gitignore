@@ -11,7 +11,5 @@ CTestTestfile.cmake
 _deps
 
 build
-/documentations/external/ncpp
-/documentations/internal/ncpp
 
 gitignores

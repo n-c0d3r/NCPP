@@ -36,6 +36,10 @@ configure_file(source/ncpp/.config ${CMAKE_CURRENT_BINARY_DIR}/built_source/ncpp
 
 
 
+set(NCPP_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source" PARENT_SCOPE)
+
+
+
 # ncpp target source files
 file(GLOB source_files
     "source/ncpp/*.cpp"

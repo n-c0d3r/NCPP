@@ -46,8 +46,9 @@
 ## **Getting Started**
 ### Requirements:
   + Windows (**only support Windows**):
-    + CMake
     + Visual Studio 2022 with essential C++, SDK Installation
+    + CMake
+    + Doxygen
 ### Building:
   + Windows (**only support Windows**):
     + Step 1: Clone [NCPP git repository](https://github.com/n-c0d3r/ncpp) from GitHub
