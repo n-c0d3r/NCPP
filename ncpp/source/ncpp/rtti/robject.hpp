@@ -478,7 +478,7 @@ namespace ncpp {
 #pragma region Constructors, Destructor and Operators
 		public:
             robject_i();
-            ~robject_i();
+            virtual ~robject_i();
 #pragma endregion
 
 			////////////////////////////////////////////////////////////////////////////////////
