@@ -23,8 +23,8 @@ add_subdirectory(ncpp)
 
 
 
-option(GENERATE_DOCS "Generate External And Internal Docs" ON)
-if(${GENERATE_DOCS})
+option(NCPP_GENERATE_DOCS "Generate External And Internal Docs" ON)
+if(${NCPP_GENERATE_DOCS})
     include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/GenerateDocs.cmake)
 endif()
 

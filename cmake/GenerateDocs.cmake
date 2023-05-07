@@ -23,6 +23,14 @@ set(NCPP_INTERNAL_DOCUMENTATIONS_DIR "${NCPP_DOCUMENTATIONS_DIR}/internal")
 
 
 
+file(
+    COPY 
+    "${NCPP_DOCUMENTATIONS_DIR}/doxygen_themes"
+    DESTINATION "${NCPP_OUTPUT_DOCUMENTATIONS_DIR}"
+)
+
+
+
 function(NCPPGenerateDocs docs_dir output_dir)
     set(DOXYFILE_TEMPLATE "${docs_dir}/Doxyfile.template")
     set(OUTPUT_DOXYFILE "${output_dir}/Doxyfile")
@@ -30,18 +38,24 @@ function(NCPPGenerateDocs docs_dir output_dir)
     string(
         REPLACE
         "OUTPUT_DIRECTORY       ="
-        "OUTPUT_DIRECTORY       =${output_dir}"
+        "OUTPUT_DIRECTORY       = ${output_dir}/ncpp"
         DOXYFILE_TEMPLATE_CONTENT
         ${DOXYFILE_TEMPLATE_CONTENT}
     )
     string(
         REPLACE
         "INPUT                  ="
-        "INPUT                  =${NCPP_SOURCE_DIR}"
+        "INPUT                  = ${NCPP_SOURCE_DIR}"
         DOXYFILE_TEMPLATE_CONTENT
         ${DOXYFILE_TEMPLATE_CONTENT}
     )
     file(WRITE ${OUTPUT_DOXYFILE} ${DOXYFILE_TEMPLATE_CONTENT})    
+    
+    execute_process(
+        COMMAND ${DOXYGEN_EXECUTABLE}
+        WORKING_DIRECTORY ${output_dir}
+    )
+
 endfunction()
 
 
@@ -55,22 +69,3 @@ NCPPGenerateDocs(
     ${NCPP_OUTPUT_INTERNAL_DOCUMENTATIONS_DIR}
 )
 
-
-
-execute_process(
-    COMMAND ${DOXYGEN_EXECUTABLE} Doxyfile
-    WORKING_DIRECTORY ${NCPP_OUTPUT_EXTERNAL_DOCUMENTATIONS_DIR}
-)
-
-execute_process(
-    COMMAND ${DOXYGEN_EXECUTABLE} Doxyfile
-    WORKING_DIRECTORY ${NCPP_OUTPUT_INTERNAL_DOCUMENTATIONS_DIR}
-)
-
-
-
-file(
-    COPY 
-    "${NCPP_DOCUMENTATIONS_DIR}/doxygen_themes"
-    DESTINATION "${NCPP_OUTPUT_DOCUMENTATIONS_DIR}"
-)
