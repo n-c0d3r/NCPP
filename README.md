@@ -1,5 +1,4 @@
-# **NCPP**
-A Game Engine Learning Aimed C++ Library
+<img src="https://i.ibb.co/VxJhd4b/BG4-wide-0-25x.png" border="0" width="100%"/>
 
 ## **Features**
 + Memory management:
@@ -52,3 +51,27 @@ A Game Engine Learning Aimed C++ Library
   + [Internal Documentations](https://n-c0d3r.github.io/project_docs/ncpp/internal/ncpp/html) :
     + Show private members.
     + For who want to use ncpp or contribute to ncpp project.
+
+## **Getting Started**
+### Requirements:
+  + Windows (**only support Windows**):
+    + CMake
+    + Visual Studio 2022 with essential C++, SDK Installation
+### Building:
+  + Windows (**only support Windows**):
+    + Step 1: Clone ncpp git repository from GitHub
+        ```
+        git clone https://github.com/n-c0d3r/ncpp.git --recurse-submodules
+        cd ncpp
+        ```
+        or
+        ```
+        git clone https://github.com/n-c0d3r/ncpp.git
+        cd ncpp
+        git submodule update --init --recursive
+        ```
+    + Step 2: Generate Visual Studio 2022 solution by running `generate_vs2022.bat`
+    + Step 3: Navigate to `/build/vs2022`
+    + Step 4: Open `npp.sln`
+    + Step 5: Set `ncpp.samples.firt_sample` as startup project
+    + Step 6: Run and enjoy!
