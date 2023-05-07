@@ -50,7 +50,7 @@
     + Visual Studio 2022 with essential C++, SDK Installation
 ### Building:
   + Windows (**only support Windows**):
-    + Step 1: Clone NCPP git repository from GitHub
+    + Step 1: Clone [NCPP git repository](https://github.com/n-c0d3r/ncpp) from GitHub
         ```
         git clone https://github.com/n-c0d3r/ncpp.git --recurse-submodules
         cd ncpp
