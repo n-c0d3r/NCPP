@@ -66,3 +66,11 @@ execute_process(
     COMMAND ${DOXYGEN_EXECUTABLE} Doxyfile
     WORKING_DIRECTORY ${NCPP_OUTPUT_INTERNAL_DOCUMENTATIONS_DIR}
 )
+
+
+
+file(
+    COPY 
+    "${NCPP_DOCUMENTATIONS_DIR}/doxygen_themes"
+    DESTINATION "${NCPP_OUTPUT_DOCUMENTATIONS_DIR}/doxygen_themes"
+)
