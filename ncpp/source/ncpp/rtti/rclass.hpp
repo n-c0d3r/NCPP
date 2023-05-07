@@ -288,6 +288,10 @@ namespace ncpp {
 
         };
 
+
+
+        using rclass = typename rclass_t<robject_i>;
+
     }
 
 }

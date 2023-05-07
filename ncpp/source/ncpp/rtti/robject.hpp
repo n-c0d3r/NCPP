@@ -91,6 +91,10 @@ namespace ncpp {
             virtual ncpp::rtti::rclass_t<ncpp::rtti::robject_i> get_rclass(){\
                 \
                 return ncpp::rtti::rclass_t<ClassName>();\
+            }\
+            static inline ncpp::rtti::rclass_t<ClassName> get_static_rclass() {\
+                \
+                return ncpp::rtti::rclass_t<ClassName>(); \
             }
 
 #define NCPP_REFLECT_CLASS(ClassName) \
@@ -99,7 +103,8 @@ namespace ncpp {
 #define NCPP_RCVARIABLE(MemberType, MemberName, ...) \
         MemberType MemberName;\
         char MemberName##_name_cstr[sizeof(#MemberName)] = #MemberName;\
-        typename ncpp::rtti::robject_member_args_t<__VA_ARGS__> MemberName##_args = {__VA_ARGS__}; \
+        using MemberName##_args_type = typename ncpp::rtti::robject_member_args_t<__VA_ARGS__>;\
+        MemberName##_args_type MemberName##_args = {__VA_ARGS__}; \
         using MemberName##_reflecter_type = ncpp::rtti::robject_variable_reflecter_t<\
             current_rclass, \
             MemberType, \
