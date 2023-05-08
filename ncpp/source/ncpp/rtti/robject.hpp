@@ -101,7 +101,12 @@ namespace ncpp {
             static inline ncpp::rtti::rclass_t<ClassName> get_static_rclass() {\
                 \
                 return ncpp::rtti::rclass_t<ClassName>(); \
-            }
+            }\
+        public:\
+            ClassName(const ClassName&) = delete;\
+            ClassName& operator = (const ClassName&) = delete;\
+            ClassName(ClassName&&) = delete; \
+            ClassName& operator = (ClassName&&) = delete;
 
         /**
          *  Setups the constructing scope of a reflected class.
@@ -627,6 +632,9 @@ namespace ncpp {
             robject_i();
             virtual ~robject_i();
 
+
+
+        public:
             /**
              *  Gets member handle by name.
              */
@@ -986,31 +994,13 @@ namespace ncpp {
         inline std::ostream& operator << (std::ostream& os, const robject_i& obj)
         {
 
-            static asz tab_count = 0;
-
             os << "{" << std::endl;
-
-            ++tab_count;
 
             for (const auto& member_handle : obj) {
 
-                for (sz i = 0; i < tab_count; ++i) {
-
-                    os << "    ";
-
-                }
-
                 os << '"' << member_handle.first << '"' << ": ";
                 safe_ostream_t(os, member_handle.second);
-                os << std::endl;
-
-            }
-
-            --tab_count;
-
-            for (sz i = 0; i < tab_count; ++i) {
-
-                os << "    ";
+                os << "," << std::endl;
 
             }
             os << "}";
