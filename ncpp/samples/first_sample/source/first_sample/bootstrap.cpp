@@ -37,6 +37,13 @@ public:
 
 	}
 
+	NCPP_RCCOPY(const bobject&, other) {
+
+		i1 = (other.i1);
+		i2 = (other.i2);
+
+	}
+
 };
 
 
@@ -71,6 +78,13 @@ public:
 	~cobject() {
 
 
+
+	}
+	
+	NCPP_RCCOPY(const cobject&, other) {
+
+		i3 = (other.i3);
+		i4 = (other.i4);
 
 	}
 
@@ -118,6 +132,9 @@ public:
 
 		i1 = (other.i1);
 		i2 = (other.i2);
+		b = (other.b);
+
+		cobject::copy_from(other);
 
 	}
 
@@ -131,6 +148,7 @@ int main() {
 
 		aobject a1;
 		a1.i1 = 5;
+		a1.i3 = 19;
 		aobject a2 = a1;
 
 		std::cout << a1 << std::endl;

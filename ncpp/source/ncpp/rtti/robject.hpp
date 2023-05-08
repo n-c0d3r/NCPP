@@ -90,33 +90,29 @@ namespace ncpp {
          *  Must be added first in class body.
          */
 #define NCPP_RCLASS(ClassName) \
-        private:\
+        private: \
             using current_rclass = ClassName;\
-            ncpp::rtti::robject_constructor_begin_scope __##ClassName##_constructor_begin_scope__;\
-        public:\
-            virtual ncpp::rtti::rclass_t<ncpp::rtti::robject_i> get_rclass() const {\
-                \
-                return ncpp::rtti::rclass_t<ClassName>();\
-            }\
-            static inline ncpp::rtti::rclass_t<ClassName> get_static_rclass() {\
-                \
+            ncpp::rtti::robject_constructor_begin_scope __##ClassName##_constructor_begin_scope__; \
+        public: \
+            virtual ncpp::rtti::rclass_t<ncpp::rtti::robject_i> get_rclass() const { \
                 return ncpp::rtti::rclass_t<ClassName>(); \
-            }\
+            } \
+            static inline ncpp::rtti::rclass_t<ClassName> get_static_rclass() { \
+                return ncpp::rtti::rclass_t<ClassName>(); \
+            } \
         private:
 
-#define NCPP_RCCOPY(FromVarType, FromVarName)\
-        current_rclass(FromVarType FromVarName) :\
-            current_rclass()\
+#define NCPP_RCCOPY(FromVarType, FromVarName) \
+        current_rclass(FromVarType FromVarName) : current_rclass() \
         {\
-        \
             *this = FromVarName;\
-        \
         }\
         current_rclass& operator = (FromVarType FromVarName) {\
-            __##ClassName##_copy_from__(FromVarName);\
+            copy_from(FromVarName);\
             return *this;\
         }\
-        void __##ClassName##_copy_from__(FromVarType FromVarName)
+        virtual void copy_from(const ncpp::rtti::robject_i& other) { __custom_copy_from_##FromVarName##__((FromVarType)other); } void __custom_copy_from_##FromVarName##__(FromVarType FromVarName)        
+                
 
         /**
          *  Setups the constructing scope of a reflected class.
@@ -649,16 +645,10 @@ namespace ncpp {
             robject_i();
             virtual ~robject_i();
 
-            inline robject_i(const robject_i&) {
+            NCPP_RCCOPY(const robject_i&, other) {
 
-                assert(false && "no copy constructor overloaded");
+                 assert(false && "no copy operator overloaded");
 
-            }
-            inline robject_i& operator = (const robject_i&) {
-
-                assert(false && "no copy operator overloaded");
-
-                return *this;
             }
 
 
