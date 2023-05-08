@@ -63,15 +63,14 @@ namespace ncpp {
 
 
         robject_i::robject_i() :
-            name_to_variable_map_(),
-            name_to_function_handle_map_(),
+            name_to_member_handle_map_(),
 
             constructor_scope_(*this)
         {
 
             constructor_scope_.prev_robject_ref_ = utilities::lref_t<robject_i>();
 
-            NCPP_REFLECT_CLASS(robject_i);
+            NCPP_RCSCOPE(robject_i);
 
         }
         robject_i::~robject_i() {

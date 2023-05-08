@@ -111,13 +111,6 @@ namespace ncpp {
 
 
             }
-            inline na_lref_t(type__& raw_ref) noexcept :
-                raw_pointer_(&raw_ref)
-            {
-
-
-
-            }
             inline na_lref_t(const type__& raw_ref) noexcept :
                 raw_pointer_((type__*)&raw_ref)
             {
@@ -257,13 +250,6 @@ namespace ncpp {
         public:
             inline a_lref_t() noexcept :
                 aptr_(0)
-            {
-
-
-
-            }
-            inline a_lref_t(type__& raw_ref) noexcept :
-                aptr_(&raw_ref)
             {
 
 

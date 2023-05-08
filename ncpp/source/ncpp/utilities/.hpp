@@ -75,6 +75,7 @@ namespace ncpp {
 #include <ncpp/utilities/member_offset.hpp>
 
 #include <ncpp/utilities/function_traits.hpp>
+#include <ncpp/utilities/is_function.hpp>
 
 #include <ncpp/utilities/is_derived_from.hpp>
 

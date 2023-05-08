@@ -97,7 +97,7 @@ namespace ncpp {
                 return ncpp::rtti::rclass_t<ClassName>(); \
             }
 
-#define NCPP_REFLECT_CLASS(ClassName) \
+#define NCPP_RCSCOPE(ClassName) \
         ncpp::rtti::robject_constructor_scope __robject_constructor_scope__(*this);
 
 #define NCPP_RCVARIABLE(MemberType, MemberName, ...) \
@@ -216,6 +216,11 @@ namespace ncpp {
 
 
 
+        struct robject_member_handle;
+        struct robject_member_handle;
+
+
+
         struct robject_member_handle {
 
             struct args_array_type {
@@ -245,86 +250,64 @@ namespace ncpp {
 
 
             args_array_type args_array;
-
-        };
-
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-        struct robject_variable_handle : 
-            public robject_member_handle
-        {
-
-            robject_i* robject_p;
-            void* variable_p;
-
-
-
-            template<typename type__>
-            type__& get_t() {
-
-                return *((type__*)variable_p);
-            }
-            template<typename type__>
-            const type__& get_t() const {
-
-                return *((const type__*)variable_p);
-            }
-
-            template<typename type__, typename target_type>
-            void set_t(target_type target) {
-
-                *((type__*)variable_p) = std::forward<target_type>(target);
-            }
-
-        };
-
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-        struct robject_function_handle :
-            public robject_member_handle
-        {
-
-            using rfunc_executer_type = void*;
-
             robject_i* robject_p = 0;
-            rfunc_executer_type rfunc_executer;
+            void* member_ptr_p = 0;
 
 
 
-            template<typename function_type__>
-            inline std::function<function_type__>& get_t() {
+            inline robject_member_handle() {
 
-                using func_ptr_type = std::function<function_type__>*;
 
-                return *reinterpret_cast<func_ptr_type>(rfunc_executer);
+            }
+            inline robject_member_handle(const robject_member_handle& other) :
+                args_array(other.args_array),
+                robject_p(other.robject_p),
+                member_ptr_p(other.member_ptr_p)
+            {
+
+
+
+            }
+            inline robject_member_handle& operator = (const robject_member_handle& other) {
+
+                args_array = other.args_array;
+                robject_p = other.robject_p;
+                member_ptr_p = other.member_ptr_p;
+
+                return *this;
+            }
+
+
+
+            template<typename type__>
+            using recorrected_type_t = typename utilities::nth_template_arg_t<
+                utilities::is_function_t<type__>::value,
+                type__,
+                typename std::function<type__>
+            >::type;
+
+
+
+            template<typename type__>
+            inline recorrected_type_t<type__>& to_t() {
+
+                return *reinterpret_cast<recorrected_type_t<type__>*>(member_ptr_p);
+            }
+
+            template<typename type__>
+            inline recorrected_type_t<const type__>& to_t() const {
+
+                return *reinterpret_cast<recorrected_type_t<const type__>*>(member_ptr_p);
+            }
+
+
+
+            template<typename type__>
+            inline robject_member_handle& operator = (type__&& other) {
+
+                *((std::remove_reference<type__>::type*)member_ptr_p) = std::forward<type__>(other);
+
+                return *this;
             }
 
         };
@@ -454,16 +437,14 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
-            using name_to_variable_map_type = typename containers::native_unordered_map_t<containers::native_string, robject_variable_handle>;
-            using name_to_function_handle_map_type = typename containers::native_unordered_map_t<containers::native_string, robject_function_handle>;
+            using name_to_member_handle_map_type = typename containers::native_unordered_map_t<containers::native_string, robject_member_handle>;
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
 
         private:
-            name_to_variable_map_type name_to_variable_map_;
-            name_to_function_handle_map_type name_to_function_handle_map_;
+            name_to_member_handle_map_type name_to_member_handle_map_;
             robject_constructor_scope constructor_scope_;
 
         public:
@@ -479,6 +460,21 @@ namespace ncpp {
 		public:
             robject_i();
             virtual ~robject_i();
+
+            inline robject_member_handle& operator [] (const containers::native_string& member_name) {
+
+                if (name_to_member_handle_map_.find(member_name) != name_to_member_handle_map_.end())
+                    return name_to_member_handle_map_.find(member_name)->second;
+
+                return *utilities::lref_t<robject_member_handle>();
+            }
+            inline const robject_member_handle& operator [] (const containers::native_string& member_name) const {
+
+                if (name_to_member_handle_map_.find(member_name) != name_to_member_handle_map_.end())
+                    return name_to_member_handle_map_.find(member_name)->second;
+
+                return *utilities::lref_t<const robject_member_handle>();
+            }
 #pragma endregion
 
 			////////////////////////////////////////////////////////////////////////////////////
@@ -487,34 +483,32 @@ namespace ncpp {
 
 #pragma region Methods
 		public:
-            inline void add_rvariable_handle(const containers::native_string& var_name, const robject_variable_handle& var) {
+            inline b8 is_has_member(const containers::native_string& member_name) {
 
-                name_to_variable_map_[var_name] = var;
+                if (name_to_member_handle_map_.find(member_name) != name_to_member_handle_map_.end())
+                    return true;
+
+                return false;
+            }
+
+            inline void add_member_handle(const containers::native_string& member_name, const robject_member_handle& handle) {
+
+                assert(!is_has_member(member_name) && "member already existed");
+
+                name_to_member_handle_map_[member_name] = handle;
 
             }
-            inline robject_variable_handle& get_rvariable_handle(const containers::native_string& var_name) {
 
-                return name_to_variable_map_[var_name];
-            }
             template<typename variable_type__>
-            inline variable_type__& get_rvariable_t(const containers::native_string& var_name) {
+            inline variable_type__& var_t(const containers::native_string& var_name) {
 
-                return get_rvariable_handle(var_name).get_t<variable_type__>();
+                return var_handle(var_name).get_t<variable_type__>();
             }
 
-            inline void add_rfunction_handle(const containers::native_string& func_name, robject_function_handle func_handle) {
-
-                name_to_function_handle_map_[func_name] = func_handle;
-
-            }
-            inline robject_function_handle& get_rfunction_handle(const containers::native_string& func_name) {
-
-                return name_to_function_handle_map_[func_name];
-            }
             template<typename function_type__>
-            inline std::function<function_type__>& get_rfunction_t(const containers::native_string& func_name) {
+            inline std::function<function_type__>& func_t(const containers::native_string& func_name) {
 
-                return get_rfunction_handle(func_name).get_t<function_type__>();
+                return func_handle(func_name).get_t<function_type__>();
             }
 #pragma endregion
 
@@ -560,15 +554,15 @@ namespace ncpp {
 
             object_type__& robj = (object_type__&)current_constructing_object();
 
-            robject_variable_handle rvar_handle;
+            robject_member_handle rvar_handle;
             rvar_handle.args_array = {
                 (robj.*args_member_ptr).data(),
                 (robj.*args_member_ptr).size()
             };
             rvar_handle.robject_p = &robj;
-            rvar_handle.variable_p = &(robj.*member_ptr);
+            rvar_handle.member_ptr_p = &(robj.*member_ptr);
 
-            robj.add_rvariable_handle(robj.*name_member_ptr, rvar_handle);
+            robj.add_member_handle(robj.*name_member_ptr, rvar_handle);
 
         }
 
@@ -652,15 +646,15 @@ namespace ncpp {
                         
             executer_type rfunc_executer = executer_getter_type::get(robj);
 
-            robject_function_handle rfunc_handle;
+            robject_member_handle rfunc_handle;
             rfunc_handle.args_array = {
                 (robj.*args_member_ptr).data(),
                 (robj.*args_member_ptr).size()
             };
             rfunc_handle.robject_p = &robj;
-            rfunc_handle.rfunc_executer = reinterpret_cast<robject_function_handle::rfunc_executer_type>(rfunc_executer);
+            rfunc_handle.member_ptr_p = reinterpret_cast<void*>(rfunc_executer);
 
-            robj.add_rfunction_handle(robj.*name_member_ptr, rfunc_handle);
+            robj.add_member_handle(robj.*name_member_ptr, rfunc_handle);
 
         }
 
@@ -727,7 +721,7 @@ namespace ncpp {
 
             static inline executer_type get(object_type__& robj) {
 
-                static std::function<function_type__> func_s = [&robj](auto... args) -> function_traits::result_type {
+                static std::function<function_type__> func_s = [&robj](auto&&... args) -> function_traits::result_type {
 
                     (robj.*member_ptr)(std::forward<decltype(args)>(args)...);
 
@@ -776,7 +770,7 @@ namespace ncpp {
 
             static inline executer_type get(object_type__& robj) {
 
-                static std::function<function_type__> func_s = [&robj](auto... args) -> function_traits::result_type {
+                static std::function<function_type__> func_s = [&robj](auto&&... args) -> function_traits::result_type {
 
                     return (robj.*member_ptr)(std::forward<decltype(args)>(args)...);
 
@@ -786,6 +780,30 @@ namespace ncpp {
             }
 
         };
+
+
+        /*
+        template<typename item_type__>
+        std::ostream& operator << (std::ostream& os, const robject_i& obj)
+        {
+
+            os << "{" << std::endl;
+
+            for (sz i = 0; i < v.size(); ++i) {
+
+                os << "    " << v[i];
+
+                if (i != v.size() - 1)
+                    os << ",";
+
+                os << std::endl;
+
+            }
+
+            os << "}" << std::endl;
+
+            return os;
+        }*/
 
     }
 
