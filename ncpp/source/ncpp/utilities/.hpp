@@ -79,4 +79,6 @@ namespace ncpp {
 
 #include <ncpp/utilities/is_derived_from.hpp>
 
+#include <ncpp/utilities/is_streamable.hpp>
+
 #pragma endregion

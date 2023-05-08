@@ -37,6 +37,7 @@
 #include <ncpp/containers/.hpp>
 #include <ncpp/dop/.hpp>
 #include <ncpp/pac/.hpp>
+#include <ncpp/iostream.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
@@ -747,7 +748,7 @@ namespace ncpp {
 
             rvar_handle.logger_func_ptr = [](std::ostream& os, const robject_member_handle& member_handle) {
 
-                os << *reinterpret_cast<variable_type__*>(member_handle.member_ptr_p);
+                safe_stream_t(os, *reinterpret_cast<variable_type__*>(member_handle.member_ptr_p));
 
             };
 
@@ -845,7 +846,11 @@ namespace ncpp {
 
             rfunc_handle.logger_func_ptr = [](std::ostream& os, const robject_member_handle& member_handle) {
 
-                os << typeid(function_type__).name() << " { " << member_handle.member_ptr_p << " }";
+                os << typeid(function_type__).name() << " { ";
+
+                safe_stream_t(os, member_handle.member_ptr_p);
+                
+                os << " }";
 
             };
 
@@ -995,7 +1000,9 @@ namespace ncpp {
 
                 }
 
-                os << '"' << member_handle.first << '"' << ": " << member_handle.second << std::endl;
+                os << '"' << member_handle.first << '"' << ": ";
+                safe_stream_t(os, member_handle.second);
+                os << std::endl;
 
             }
 

@@ -4,6 +4,14 @@ using namespace ncpp;
 
 
 
+struct ddata {
+
+
+
+};
+
+
+
 class bobject :
 	public rtti::robject_i
 {
@@ -18,6 +26,9 @@ public:
 	);
 	NCPP_RCVARIABLE(
 		i32, b
+	);
+	NCPP_RCVARIABLE(
+		ddata, c
 	);
 
 

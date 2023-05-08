@@ -33,6 +33,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/containers/.hpp>
+#include <ncpp/iostream.hpp>
 
 #pragma endregion
 
@@ -78,7 +79,8 @@ namespace ncpp {
 
 		for (sz i = 0; i < v.size(); ++i) {
 
-			os << "    " << v[i];
+			os << "    ";
+			safe_stream_t(os, v[i]);
 
 			if(i != v.size() - 1)
 				os << ",";
@@ -106,7 +108,8 @@ namespace ncpp {
 
 		for (sz i = 0; i < handle_map.count(); ++i) {
 
-			os << "    " << handle_map[i].item;
+			os << "    ";
+			safe_stream_t(os, handle_map[i].item);
 
 			if (i != handle_map.count() - 1)
 				os << ",";
