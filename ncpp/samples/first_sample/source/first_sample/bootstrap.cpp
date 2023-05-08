@@ -4,6 +4,43 @@ using namespace ncpp;
 
 
 
+class bobject :
+	public rtti::robject_i
+{
+
+	NCPP_RCLASS(bobject);
+
+
+
+public:
+	NCPP_RCVARIABLE(
+		i32, a
+	);
+	NCPP_RCVARIABLE(
+		i32, b
+	);
+
+
+
+public:
+	bobject() :
+		a(4),
+		b(5)
+	{
+
+		NCPP_RCSCOPE(bobject);
+
+	}
+	~bobject() {
+
+
+
+	}
+
+};
+
+
+
 class aobject :
 	public rtti::robject_i
 {
@@ -18,6 +55,9 @@ public:
 	);
 	NCPP_RCVARIABLE(
 		i32, b
+	);
+	NCPP_RCVARIABLE(
+		bobject, c
 	);
 
 
@@ -58,9 +98,7 @@ int main() {
 
 		aobject aobj;
 
-		aobj["a"] = 5;
-		aobj["b"] = 6;
-		aobj["foo"].to_t<i32(b8)>()(1);
+		std::cout << aobj << std::endl;
 
 		log_memory_stats();
 

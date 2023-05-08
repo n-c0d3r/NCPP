@@ -122,6 +122,10 @@ namespace ncpp {
 
 #pragma region Constructors, Destructor and Operators
         public:
+			/**
+			 *	Default constructor.
+			 *	Stores the create "object_type__" instance function pointer.
+			 */
             inline rclass_t() :
                 create_instance_func_ptr_(0)
             {
@@ -137,6 +141,10 @@ namespace ncpp {
 
 
 
+			/**
+			 *	Copy constructor.
+			 *	Stores the create instance function pointer of another rclass.
+			 */
             inline rclass_t(const rclass_t& other) :
                 create_instance_func_ptr_(
                     other.create_instance_func_ptr_
@@ -146,6 +154,10 @@ namespace ncpp {
 
 
             }
+			/**
+			 *	Copy operator.
+			 *	Stores the create instance function pointer of another rclass.
+			 */
             inline rclass_t& operator = (const rclass_t& other)
             {
 
@@ -154,6 +166,10 @@ namespace ncpp {
                 return *this;
             }
 
+			/**
+			 *	Move constructor.
+			 *	Stores the create instance function pointer of another rclass and resets that rclass.
+			 */
             inline rclass_t(rclass_t&& other) :
                 create_instance_func_ptr_(
                     std::move(other.create_instance_func_ptr_)
@@ -163,6 +179,10 @@ namespace ncpp {
                 other.reset();
 
             }
+			/**
+			 *	Move operator.
+			 *	Stores the create instance function pointer of another rclass and resets that rclass.
+			 */
             inline rclass_t& operator = (rclass_t&& other)
             {
 
@@ -175,6 +195,10 @@ namespace ncpp {
 
 
 
+			/**
+			 *	Copy constructor.
+			 *	Stores the create instance function pointer of another rclass.
+			 */
             template<typename other_object_type__>
             inline rclass_t(const rclass_t<other_object_type__>& other) :
                 create_instance_func_ptr_(
@@ -185,6 +209,10 @@ namespace ncpp {
                 static_assert(is_convertible_t<other_object_type__>() && "other object type is not base of object type");
 
             }
+			/**
+			 *	Copy operator.
+			 *	Stores the create instance function pointer of another rclass.
+			 */
             template<typename other_object_type__>
             inline rclass_t& operator = (const rclass_t<other_object_type__>& other)
             {
@@ -196,6 +224,10 @@ namespace ncpp {
                 return *this;
             }
 
+			/**
+			 *	Move constructor.
+			 *	Stores the create instance function pointer of another rclass and resets that rclass.
+			 */
             template<typename other_object_type__>
             inline rclass_t(rclass_t<other_object_type__>&& other) :
                 create_instance_func_ptr_(
@@ -208,6 +240,10 @@ namespace ncpp {
                 other.reset();
 
             }
+			/**
+			 *	Move operator.
+			 *	Stores the create instance function pointer of another rclass and resets that rclass.
+			 */
             template<typename other_object_type__>
             inline rclass_t& operator = (rclass_t<other_object_type__>&& other)
             {
@@ -228,6 +264,9 @@ namespace ncpp {
 
 #pragma region Methods
         public:
+			/**
+			 *	Creates instance and returns instance reference.
+			 */
             inline object_type__& create_instance() {
 
                 object_type__* result;
@@ -236,6 +275,9 @@ namespace ncpp {
 
                 return *result;
             }
+			/**
+			 *	Creates instance and returns instance shared pointer.
+			 */
             inline utilities::native_shared_ptr_t<object_type__> create_shared_instance() {
 
                 utilities::native_shared_ptr_t<object_type__> result;
@@ -244,6 +286,9 @@ namespace ncpp {
 
                 return result;
             }
+			/**
+			 *	Creates instance and returns instance unique pointer.
+			 */
             inline utilities::native_unique_ptr_t<object_type__> create_unique_instance() {
 
                 utilities::native_unique_ptr_t<object_type__> result;
@@ -253,6 +298,9 @@ namespace ncpp {
                 return std::move(result);
             }
 
+			/**
+			 *	Stores the create "object_type__" instance function pointer.
+			 */
             inline void reset() {
 
                 create_instance_func_ptr_ = [](void* class_p, void* output_p, rclass_create_mode create_mode) -> void {
@@ -276,6 +324,9 @@ namespace ncpp {
 
             }
 
+			/**
+			 *	Checks if rclass_t<object_type__> and rclass_t<other_object_type__> are convertible.
+			 */
             template<typename other_object_type__>
             static inline constexpr b8 is_convertible_t() {
 
@@ -290,6 +341,9 @@ namespace ncpp {
 
 
 
+        /**
+         *  The default rclass which object_type__ is robject_i.
+         */
         using rclass = typename rclass_t<robject_i>;
 
     }

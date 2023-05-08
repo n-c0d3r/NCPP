@@ -23,6 +23,7 @@ namespace ncpp {
 
 
         thread_local utilities::lref_t<robject_i> current_constructing_robject_ref_g;
+        thread_local utilities::lref_t<robject_i> last_constructor_called_robject_ref_g;
 
         robject_i& current_constructing_object() {
 
@@ -31,18 +32,29 @@ namespace ncpp {
 
 
 
-        robject_constructor_scope::robject_constructor_scope(robject_i& robject_) :
-            prev_robject_ref_(robject_),
-            target_robject_ref_(robject_)
+        robject_constructor_begin_scope::robject_constructor_begin_scope() :
+            prev_robject_ref(current_constructing_object())
         {
 
-            current_constructing_robject_ref_g = robject_;
+            current_constructing_robject_ref_g = last_constructor_called_robject_ref_g;
 
         }
-        robject_constructor_scope::~robject_constructor_scope() {
+        robject_constructor_begin_scope::~robject_constructor_begin_scope() {
 
-            if(!(prev_robject_ref_.is_null()))
-                current_constructing_robject_ref_g = prev_robject_ref_;
+
+
+        }
+
+        robject_constructor_end_scope::robject_constructor_end_scope(robject_i& robject, robject_i& prev_robject) :
+            prev_robject_ref(prev_robject)
+        {
+
+
+
+        }
+        robject_constructor_end_scope::~robject_constructor_end_scope() {
+
+            current_constructing_robject_ref_g = prev_robject_ref;
 
         }
 
@@ -63,14 +75,10 @@ namespace ncpp {
 
 
         robject_i::robject_i() :
-            name_to_member_handle_map_(),
-
-            constructor_scope_(*this)
+            name_to_member_handle_map_()
         {
 
-            constructor_scope_.prev_robject_ref_ = utilities::lref_t<robject_i>();
-
-            NCPP_RCSCOPE(robject_i);
+            last_constructor_called_robject_ref_g = *this;
 
         }
         robject_i::~robject_i() {

@@ -115,7 +115,7 @@ namespace ncpp {
 
 		}
 
-		os << "}" << std::endl;
+		os << "}";
 
 		return os;
 	}
