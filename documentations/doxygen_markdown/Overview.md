@@ -47,12 +47,12 @@ Overview {#mainpage}
     + Class representation object
 
 ## Getting Started
-+ Requirements
++ **Requirements**
   + Windows (**only support Windows**):
     + Visual Studio 2022 with essential C++, SDK Installation
     + CMake
     + Doxygen
-+ Building
++ **Building**
   + Windows (**only support Windows**):
     + Step 1: Clone [NCPP git repository](https://github.com/n-c0d3r/ncpp) from GitHub  
 ```batch
