@@ -94,7 +94,7 @@ namespace ncpp {
             using current_rclass = ClassName;\
             ncpp::rtti::robject_constructor_begin_scope __##ClassName##_constructor_begin_scope__;\
         public:\
-            virtual ncpp::rtti::rclass_t<ncpp::rtti::robject_i> get_rclass(){\
+            virtual ncpp::rtti::rclass_t<ncpp::rtti::robject_i> get_rclass() const {\
                 \
                 return ncpp::rtti::rclass_t<ClassName>();\
             }\
@@ -102,11 +102,21 @@ namespace ncpp {
                 \
                 return ncpp::rtti::rclass_t<ClassName>(); \
             }\
-        public:\
-            ClassName(const ClassName&) = delete;\
-            ClassName& operator = (const ClassName&) = delete;\
-            ClassName(ClassName&&) = delete; \
-            ClassName& operator = (ClassName&&) = delete;
+        private:
+
+#define NCPP_RCCOPY(FromVarType, FromVarName)\
+        current_rclass(FromVarType FromVarName) :\
+            current_rclass()\
+        {\
+        \
+            *this = FromVarName;\
+        \
+        }\
+        current_rclass& operator = (FromVarType FromVarName) {\
+            __##ClassName##_copy_from__(FromVarName);\
+            return *this;\
+        }\
+        void __##ClassName##_copy_from__(FromVarType FromVarName)
 
         /**
          *  Setups the constructing scope of a reflected class.
@@ -374,7 +384,14 @@ namespace ncpp {
              *  Sets the value of member data from other data.
              */
             template<typename type__>
-            inline robject_member_handle& operator = (type__&& other) {
+            inline robject_member_handle& operator = (
+                typename utilities::nth_template_arg_t<
+                    std::is_same_v<type__, robject_member_handle>,
+                    type__,
+                    void
+                >::type&& 
+                other
+            ) {
 
                 static_assert(!utilities::is_function_t<type__>::value && "type__ must not be function type");
                 assert(!is_function && "this is not function");
@@ -628,9 +645,21 @@ namespace ncpp {
 			////////////////////////////////////////////////////////////////////////////////////
 
 #pragma region Constructors, Destructor and Operators
-		public:
+        public:
             robject_i();
             virtual ~robject_i();
+
+            inline robject_i(const robject_i&) {
+
+                assert(false && "no copy constructor overloaded");
+
+            }
+            inline robject_i& operator = (const robject_i&) {
+
+                assert(false && "no copy operator overloaded");
+
+                return *this;
+            }
 
 
 
@@ -662,11 +691,16 @@ namespace ncpp {
 			////////////////////////////////////////////////////////////////////////////////////
 
 #pragma region Methods
+        protected:
+            void copy_name_to_member_handle_map(const robject_i& other);
+
+
+
 		public:
             /**
              *  Checks if the robject has member named <member_name>
              */
-            inline b8 is_has_member(const containers::native_string& member_name) {
+            inline b8 is_has_member(const containers::native_string& member_name) const {
 
                 if (name_to_member_handle_map_.find(member_name) != name_to_member_handle_map_.end())
                     return true;

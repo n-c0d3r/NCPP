@@ -87,6 +87,44 @@ namespace ncpp {
 
         }
 
+
+
+        void robject_i::copy_name_to_member_handle_map(const robject_i& other) {
+
+            for (auto& member_handle_it : other) {
+
+                if (other.is_has_member(member_handle_it.first)) {
+
+                    robject_member_handle member_handle = other[member_handle_it.first];
+
+                    member_handle.args_array.head_arg_p = reinterpret_cast<sz*>(
+                        reinterpret_cast<sz>(this)
+                        + (
+                            reinterpret_cast<sz>(member_handle.args_array.head_arg_p)
+                            - reinterpret_cast<sz>(&other)
+                            )
+                        );
+
+                    if (!member_handle.is_function) {
+
+                        member_handle.member_ptr_p = reinterpret_cast<sz*>(
+                            reinterpret_cast<sz>(this)
+                            + (
+                                reinterpret_cast<sz>(member_handle.member_ptr_p)
+                                - reinterpret_cast<sz>(&other)
+                                )
+                            );
+
+                    }
+
+                    name_to_member_handle_map_[member_handle_it.first] = member_handle;
+
+                }
+
+            }
+
+        }
+
 	}
 
 }

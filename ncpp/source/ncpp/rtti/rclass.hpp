@@ -82,7 +82,8 @@ namespace ncpp {
 
             DEFAULT = 0,
             SHARED = 1,
-            UNIQUE = 2
+            UNIQUE = 2,
+            CONSTRUCT = 3
 
         };
 
@@ -267,35 +268,43 @@ namespace ncpp {
 			/**
 			 *	Creates instance and returns instance reference.
 			 */
-            inline object_type__& create_instance() {
+            inline object_type__& create_instance() const {
 
                 object_type__* result;
 
-                create_instance_func_ptr_(this, &result, rclass_create_mode::DEFAULT);
+                create_instance_func_ptr_((void*)this, (void*)&result, rclass_create_mode::DEFAULT);
 
                 return *result;
             }
 			/**
 			 *	Creates instance and returns instance shared pointer.
 			 */
-            inline utilities::native_shared_ptr_t<object_type__> create_shared_instance() {
+            inline utilities::native_shared_ptr_t<object_type__> create_shared_instance() const {
 
                 utilities::native_shared_ptr_t<object_type__> result;
 
-                create_instance_func_ptr_(this, &result, rclass_create_mode::SHARED);
+                create_instance_func_ptr_((void*)this, (void*)&result, rclass_create_mode::SHARED);
 
                 return result;
             }
 			/**
 			 *	Creates instance and returns instance unique pointer.
 			 */
-            inline utilities::native_unique_ptr_t<object_type__> create_unique_instance() {
+            inline utilities::native_unique_ptr_t<object_type__> create_unique_instance() const {
 
                 utilities::native_unique_ptr_t<object_type__> result;
 
-                create_instance_func_ptr_(this, &result, rclass_create_mode::UNIQUE);
+                create_instance_func_ptr_((void*)this, (void*)&result, rclass_create_mode::UNIQUE);
 
                 return std::move(result);
+            }
+            /**
+             *	.
+             */
+            inline void construct_instance(object_type__& robject) const {
+
+                create_instance_func_ptr_((void*)this, (void*)&robject, rclass_create_mode::CONSTRUCT);
+
             }
 
 			/**
@@ -315,6 +324,9 @@ namespace ncpp {
                         break;
                     case ncpp::rtti::rclass_create_mode::UNIQUE:
                         *((utilities::native_unique_ptr_t<object_type__>*)output_p) = utilities::native_allocate_unique_t<object_type__>();
+                        break;
+                    case ncpp::rtti::rclass_create_mode::CONSTRUCT:
+                        new((object_type__*)class_p) object_type__();
                         break;
                     default:
                         break;
