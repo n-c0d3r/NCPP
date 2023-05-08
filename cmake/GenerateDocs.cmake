@@ -21,6 +21,8 @@ set(NCPP_DOCUMENTATIONS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/documentations")
 set(NCPP_EXTERNAL_DOCUMENTATIONS_DIR "${NCPP_DOCUMENTATIONS_DIR}/external")
 set(NCPP_INTERNAL_DOCUMENTATIONS_DIR "${NCPP_DOCUMENTATIONS_DIR}/internal")
 
+set(NCPP_MARKDOWN_DOCUMENTATIONS_DIR "${NCPP_DOCUMENTATIONS_DIR}/doxygen_markdown")
+
 
 
 file(
@@ -45,7 +47,13 @@ function(NCPPGenerateDocs docs_dir output_dir)
     string(
         REPLACE
         "INPUT                  ="
-        "INPUT                  = ${NCPP_SOURCE_DIR}"
+        "INPUT                  = ${NCPP_MARKDOWN_DOCUMENTATIONS_DIR}
+        INPUT += ${NCPP_SOURCE_DIR}
+        FILE_PATTERNS += *.md *.markdown
+        MARKDOWN_SUPPORT = YES
+        TAB_SIZE = 2
+        USE_MDFILE_AS_MAINPAGE = ${NCPP_MARKDOWN_DOCUMENTATIONS_DIR}/Overview.md
+        "
         DOXYFILE_TEMPLATE_CONTENT
         ${DOXYFILE_TEMPLATE_CONTENT}
     )
@@ -60,12 +68,20 @@ endfunction()
 
 
 
+message("Generate external docs")
 NCPPGenerateDocs(
     ${NCPP_EXTERNAL_DOCUMENTATIONS_DIR}
     ${NCPP_OUTPUT_EXTERNAL_DOCUMENTATIONS_DIR}
 )
+message("Generate external docs done")
+
+message("Generate internal docs")
 NCPPGenerateDocs(
     ${NCPP_INTERNAL_DOCUMENTATIONS_DIR}
     ${NCPP_OUTPUT_INTERNAL_DOCUMENTATIONS_DIR}
 )
+message("Generate internal docs done")
 
+
+
+message("Generate docs done")

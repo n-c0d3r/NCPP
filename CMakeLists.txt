@@ -15,6 +15,10 @@ set(CMAKE_C_STANDARD 14)
 
 
 
+set(NCPP_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+
+
+
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CheckDependencies.cmake)
 
 
