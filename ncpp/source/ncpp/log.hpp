@@ -80,7 +80,7 @@ namespace ncpp {
 		for (sz i = 0; i < v.size(); ++i) {
 
 			os << "    ";
-			safe_stream_t(os, v[i]);
+			safe_ostream_t(os, v[i]);
 
 			if(i != v.size() - 1)
 				os << ",";
@@ -109,7 +109,7 @@ namespace ncpp {
 		for (sz i = 0; i < handle_map.count(); ++i) {
 
 			os << "    ";
-			safe_stream_t(os, handle_map[i].item);
+			safe_ostream_t(os, handle_map[i].item);
 
 			if (i != handle_map.count() - 1)
 				os << ",";

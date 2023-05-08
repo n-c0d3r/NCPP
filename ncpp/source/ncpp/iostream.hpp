@@ -80,12 +80,12 @@ namespace ncpp {
 
 
 	template<typename stream_type__, typename type__, b8 is_streamable__>
-	struct safe_stream_forwarder_t {
+	struct safe_ostream_forwarder_t {
 
 	};
 
 	template<typename stream_type__, typename type__>
-	struct safe_stream_forwarder_t<stream_type__, type__, true> {
+	struct safe_ostream_forwarder_t<stream_type__, type__, true> {
 
 		static inline stream_type__& forward(stream_type__& stream, type__&& data) {
 
@@ -96,7 +96,7 @@ namespace ncpp {
 	};
 
 	template<typename stream_type__, typename type__>
-	struct safe_stream_forwarder_t<stream_type__, type__, false> {
+	struct safe_ostream_forwarder_t<stream_type__, type__, false> {
 
 		static inline stream_type__& forward(stream_type__& stream, type__&& data) {
 
@@ -109,18 +109,65 @@ namespace ncpp {
 
 
 	template<typename stream_type__, typename type__>
-	inline stream_type__& safe_stream_t(stream_type__& stream, type__&& data) {
+	inline stream_type__& safe_ostream_t(stream_type__& stream, type__&& data) {
 
-		using safe_stream_forward_type = typename safe_stream_forwarder_t<
+		using safe_ostream_forward_type = typename safe_ostream_forwarder_t<
 			stream_type__,
 			type__,
-			utilities::is_streamable_t<
+			utilities::is_ostreamable_t<
 				stream_type__,
 				type__
 			>::value
 		>;
 			
-		return safe_stream_forward_type::forward(stream, std::forward<type__>(data));
+		return safe_ostream_forward_type::forward(stream, std::forward<type__>(data));
 	}
+
+
+
+	template<typename stream_type__, typename type__, b8 is_streamable__>
+	struct safe_istream_forwarder_t {
+
+	};
+
+	template<typename stream_type__, typename type__>
+	struct safe_istream_forwarder_t<stream_type__, type__, true> {
+
+		static inline stream_type__& forward(stream_type__& stream, type__&& data) {
+
+			stream >> data;
+
+			return stream;
+		}
+	};
+
+	template<typename stream_type__, typename type__>
+	struct safe_istream_forwarder_t<stream_type__, type__, false> {
+
+		static inline stream_type__& forward(stream_type__& stream, type__&& data) {
+
+
+
+			return stream;
+		}
+	};
+
+
+
+	template<typename stream_type__, typename type__>
+	inline stream_type__& safe_istream_t(stream_type__& stream, type__&& data) {
+
+		using safe_istream_forward_type = typename safe_istream_forwarder_t<
+			stream_type__,
+			type__,
+			utilities::is_istreamable_t<
+			stream_type__,
+			type__
+			>::value
+		>;
+
+		return safe_istream_forward_type::forward(stream, std::forward<type__>(data));
+	}
+
 }
 

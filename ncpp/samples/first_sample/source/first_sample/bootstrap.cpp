@@ -109,7 +109,7 @@ int main() {
 
 		aobject aobj;
 
-		std::cout << aobj << std::endl;
+
 
 		log_memory_stats();
 

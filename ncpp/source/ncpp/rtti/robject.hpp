@@ -748,7 +748,7 @@ namespace ncpp {
 
             rvar_handle.logger_func_ptr = [](std::ostream& os, const robject_member_handle& member_handle) {
 
-                safe_stream_t(os, *reinterpret_cast<variable_type__*>(member_handle.member_ptr_p));
+                safe_ostream_t(os, *reinterpret_cast<variable_type__*>(member_handle.member_ptr_p));
 
             };
 
@@ -848,7 +848,7 @@ namespace ncpp {
 
                 os << typeid(function_type__).name() << " { ";
 
-                safe_stream_t(os, member_handle.member_ptr_p);
+                safe_ostream_t(os, member_handle.member_ptr_p);
                 
                 os << " }";
 
@@ -1001,7 +1001,7 @@ namespace ncpp {
                 }
 
                 os << '"' << member_handle.first << '"' << ": ";
-                safe_stream_t(os, member_handle.second);
+                safe_ostream_t(os, member_handle.second);
                 os << std::endl;
 
             }

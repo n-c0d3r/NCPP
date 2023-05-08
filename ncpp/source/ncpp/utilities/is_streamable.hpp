@@ -71,11 +71,28 @@ namespace ncpp {
          *  .
          */
         template<typename stream_type__, typename type__> 
-        class is_streamable_t 
+        class is_ostreamable_t 
         {
             template<typename SS, typename TT>
             static auto test(int)
                 -> decltype(std::declval<SS&>() << std::declval<TT>(), std::true_type());
+
+            template<typename, typename>
+            static auto test(...) -> std::false_type;
+
+        public:
+            static const bool value = decltype(test<stream_type__, type__>(0))::value;
+        };
+
+        /**
+         *  .
+         */
+        template<typename stream_type__, typename type__>
+        class is_istreamable_t
+        {
+            template<typename SS, typename TT>
+            static auto test(int)
+                -> decltype(std::declval<SS&>() >> std::declval<TT&>(), std::true_type());
 
             template<typename, typename>
             static auto test(...) -> std::false_type;

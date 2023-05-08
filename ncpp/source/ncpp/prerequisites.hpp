@@ -72,6 +72,7 @@ namespace ncpp {}
 #include <bitset>
 #include <cstdio>
 #include <cstdlib>
+#include <fstream>
 #pragma endregion
 
 ////////////////////////////////////////////////////////////////////////////////////
