@@ -138,7 +138,17 @@ public:
 
 	}
 
+	NCPP_RCFUNCTION(
+		void(), foo
+	);
+
 };
+
+void aobject::foo() {
+
+	std::cout << i3 << std::endl;
+
+}
 
 
 
@@ -150,6 +160,7 @@ int main() {
 		a1.i1 = 5;
 		a1.i3 = 19;
 		aobject a2 = a1;
+		a2.i3 = 12;
 
 		std::cout << a1 << std::endl;
 		std::cout << a2 << std::endl;

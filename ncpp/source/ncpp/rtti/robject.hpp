@@ -150,6 +150,7 @@ namespace ncpp {
         MemberName##_type MemberName; \
         char MemberName##_name_cstr[sizeof(#MemberName)] = #MemberName;\
         typename ncpp::rtti::robject_member_args_t<__VA_ARGS__> MemberName##_args = {__VA_ARGS__}; \
+        typename std::function<MemberFunctionType> MemberName##_functor; \
         using MemberName##_reflecter_type = ncpp::rtti::robject_function_reflecter_t<\
             current_rclass, \
             MemberFunctionType, \
@@ -157,6 +158,8 @@ namespace ncpp {
             &current_rclass::MemberName##_name_cstr,\
             decltype(&current_rclass::MemberName##_args),\
             &current_rclass::MemberName##_args,\
+            decltype(&current_rclass::MemberName##_functor),\
+            &current_rclass::MemberName##_functor,\
             decltype(&current_rclass::MemberName), \
             &current_rclass::MemberName \
         >; \
@@ -531,6 +534,8 @@ namespace ncpp {
             name_member_ptr_type name_member_ptr,
             typename args_member_ptr_type,
             args_member_ptr_type args_member_ptr,
+            typename functor_member_ptr_type,
+            functor_member_ptr_type functor_member_ptr,
             typename member_ptr_type,
             member_ptr_type member_ptr
         >
@@ -561,6 +566,8 @@ namespace ncpp {
             name_member_ptr_type name_member_ptr,
             typename args_member_ptr_type,
             args_member_ptr_type args_member_ptr,
+            typename functor_member_ptr_type,
+            functor_member_ptr_type functor_member_ptr,
             typename member_ptr_type,
             member_ptr_type member_ptr
         >
@@ -836,6 +843,8 @@ namespace ncpp {
             name_member_ptr_type name_member_ptr,
             typename args_member_ptr_type,
             args_member_ptr_type args_member_ptr,
+            typename functor_member_ptr_type,
+            functor_member_ptr_type functor_member_ptr,
             typename member_ptr_type,
             member_ptr_type member_ptr
         >
@@ -846,6 +855,8 @@ namespace ncpp {
             name_member_ptr,
             args_member_ptr_type,
             args_member_ptr,
+            functor_member_ptr_type,
+            functor_member_ptr,
             member_ptr_type,
             member_ptr
         >::robject_function_reflecter_t(){
@@ -862,6 +873,8 @@ namespace ncpp {
                 name_member_ptr,
                 args_member_ptr_type,
                 args_member_ptr,
+                functor_member_ptr_type,
+                functor_member_ptr,
                 member_ptr_type,
                 member_ptr
             >;
@@ -897,6 +910,8 @@ namespace ncpp {
             name_member_ptr_type name_member_ptr,
             typename args_member_ptr_type,
             args_member_ptr_type args_member_ptr,
+            typename functor_member_ptr_type,
+            functor_member_ptr_type functor_member_ptr,
             typename member_ptr_type,
             member_ptr_type member_ptr
         >
@@ -907,6 +922,8 @@ namespace ncpp {
             name_member_ptr,
             args_member_ptr_type,
             args_member_ptr,
+            functor_member_ptr_type,
+            functor_member_ptr,
             member_ptr_type,
             member_ptr
         >::~robject_function_reflecter_t() {
@@ -922,6 +939,8 @@ namespace ncpp {
             name_member_ptr_type name_member_ptr,
             typename args_member_ptr_type,
             args_member_ptr_type args_member_ptr,
+            typename functor_member_ptr_type,
+            functor_member_ptr_type functor_member_ptr,
             typename member_ptr_type,
             member_ptr_type member_ptr
         >
@@ -933,6 +952,8 @@ namespace ncpp {
             name_member_ptr,
             args_member_ptr_type,
             args_member_ptr,
+            functor_member_ptr_type,
+            functor_member_ptr,
             member_ptr_type,
             member_ptr
         >
@@ -945,6 +966,8 @@ namespace ncpp {
                 name_member_ptr,
                 args_member_ptr_type,
                 args_member_ptr,
+                functor_member_ptr_type,
+                functor_member_ptr,
                 member_ptr_type,
                 member_ptr
             >::executer_type;
@@ -953,13 +976,13 @@ namespace ncpp {
 
             static inline executer_type get(object_type__& robj) {
 
-                static std::function<function_type__> func_s = [&robj](auto&&... args) -> function_traits::result_type {
+                (robj.*functor_member_ptr) = [&robj](auto&&... args) -> function_traits::result_type {
 
                     (robj.*member_ptr)(std::forward<decltype(args)>(args)...);
 
                 };
 
-                return &func_s;
+                return &(robj.*functor_member_ptr);
             }
 
         };
@@ -971,6 +994,8 @@ namespace ncpp {
             name_member_ptr_type name_member_ptr,
             typename args_member_ptr_type,
             args_member_ptr_type args_member_ptr,
+            typename functor_member_ptr_type,
+            functor_member_ptr_type functor_member_ptr,
             typename member_ptr_type,
             member_ptr_type member_ptr
         >
@@ -982,6 +1007,8 @@ namespace ncpp {
             name_member_ptr,
             args_member_ptr_type,
             args_member_ptr,
+            functor_member_ptr_type,
+            functor_member_ptr,
             member_ptr_type,
             member_ptr
         >
@@ -994,6 +1021,8 @@ namespace ncpp {
                 name_member_ptr,
                 args_member_ptr_type,
                 args_member_ptr,
+                functor_member_ptr_type,
+                functor_member_ptr,
                 member_ptr_type,
                 member_ptr
             >::executer_type;
@@ -1002,13 +1031,13 @@ namespace ncpp {
 
             static inline executer_type get(object_type__& robj) {
 
-                static std::function<function_type__> func_s = [&robj](auto&&... args) -> function_traits::result_type {
+                (robj.*functor_member_ptr) = [&robj](auto&&... args) -> function_traits::result_type {
 
                     return (robj.*member_ptr)(std::forward<decltype(args)>(args)...);
 
                 };
 
-                return &func_s;
+                return &(robj.*functor_member_ptr);
             }
 
         };
