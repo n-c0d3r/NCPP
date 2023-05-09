@@ -417,12 +417,7 @@ namespace ncpp {
              */
             template<typename type__>
             inline robject_member_handle& operator = (
-                typename utilities::nth_template_arg_t<
-                    std::is_same_v<type__, robject_member_handle>,
-                    type__,
-                    void
-                >::type&& 
-                other
+                type__&& other
             ) {
 
                 static_assert(!utilities::is_function_t<type__>::value && "type__ must not be function type");
