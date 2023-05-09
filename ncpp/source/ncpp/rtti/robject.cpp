@@ -87,39 +87,43 @@ namespace ncpp {
 
         }
 
+        void robject_i::copy(const robject_i& other) {
+
+            copy_variable_members(other);
+
+        }
 
 
-        void robject_i::copy_name_to_member_handle_map(const robject_i& other) {
 
-            for (auto& member_handle_it : other) {
+        void robject_i::copy_variable_members(const robject_i& other) {
+
+            for (auto& member_handle_it : name_to_member_handle_map_) {
 
                 if (other.is_has_member(member_handle_it.first)) {
 
-                    robject_member_handle member_handle = other[member_handle_it.first];
+                    robject_member_handle& member_handle = member_handle_it.second;
 
-                    member_handle.args_array.head_arg_p = reinterpret_cast<sz*>(
-                        reinterpret_cast<sz>(this)
-                        + (
-                            reinterpret_cast<sz>(member_handle.args_array.head_arg_p)
-                            - reinterpret_cast<sz>(&other)
-                            )
-                        );
+
 
                     if (!member_handle.is_function) {
 
-                        member_handle.member_ptr_p = reinterpret_cast<sz*>(
-                            reinterpret_cast<sz>(this)
-                            + (
-                                reinterpret_cast<sz>(member_handle.member_ptr_p)
-                                - reinterpret_cast<sz>(&other)
-                                )
-                            );
+                        copy_variable_member(other, member_handle_it.first);
 
                     }
 
-                    name_to_member_handle_map_[member_handle_it.first] = member_handle;
-
                 }
+
+            }
+
+        }
+
+        void robject_i::copy_variable_member(const robject_i& other, const containers::native_string& member_name) {
+
+            if (other.is_has_member(member_name)) {
+
+                robject_member_handle& member_handle = at(member_name);
+
+                member_handle.copy_func_ptr(other, *this);
 
             }
 

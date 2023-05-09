@@ -100,19 +100,30 @@ namespace ncpp {
             static inline ncpp::rtti::rclass_t<ClassName> get_static_rclass() { \
                 return ncpp::rtti::rclass_t<ClassName>(); \
             } \
-        private:
-
-#define NCPP_RCCOPY(FromVarType, FromVarName) \
-        current_rclass(FromVarType FromVarName) : current_rclass() \
-        {\
-            *this = FromVarName;\
-        }\
-        current_rclass& operator = (FromVarType FromVarName) {\
-            copy_from(FromVarName);\
-            return *this;\
-        }\
-        virtual void copy_from(const ncpp::rtti::robject_i& other) { __custom_copy_from_##FromVarName##__((FromVarType)other); } void __custom_copy_from_##FromVarName##__(FromVarType FromVarName)        
-                
+            inline ClassName(const ClassName& other) : ClassName() \
+            {\
+                *this = other;\
+            }\
+            inline ClassName& operator = (const ClassName& other) {\
+                copy(other);\
+                return *this;\
+            }\
+            inline ClassName& instantiate() const {\
+                ClassName& result = (ClassName&)get_rclass().create_instance();\
+                result = *this;\
+                return result;\
+            }\
+            inline ncpp::utilities::native_shared_ptr_t<ClassName> shared_instantiate() const {\
+                ncpp::utilities::native_shared_ptr_t<ClassName> result = ncpp::utilities::native_shared_ptr_cast_t<ClassName>(get_rclass().create_shared_instance());\
+                *result = *this;\
+                return result;\
+            }\
+            inline ncpp::utilities::native_unique_ptr_t<ClassName> unique_instantiate() const {\
+                ncpp::utilities::native_unique_ptr_t<ClassName> result = ncpp::utilities::native_unique_ptr_cast_t<ClassName>(get_rclass().create_unique_instance());\
+                *result = *this;\
+                return result;\
+            }\
+        private:  
 
         /**
          *  Setups the constructing scope of a reflected class.
@@ -298,14 +309,21 @@ namespace ncpp {
 
 
 
-            using logger_func_type = void(*)(std::ostream& os, const robject_member_handle& member_handle);
+            using logger_func_ptr_type = void(*)(
+                std::ostream& os, 
+                const ostream_input_t<
+                    robject_member_handle
+                >& input
+            );
+            using copy_func_ptr_type = void(*)(const robject_i& from, robject_i& to);
 
 
 
             args_array_type args_array;
             b8 is_function = 0;
-            logger_func_type logger_func_ptr = 0;
+            logger_func_ptr_type logger_func_ptr = 0;
             void* member_ptr_p = 0;
+            copy_func_ptr_type copy_func_ptr = 0;
 
 
 
@@ -317,7 +335,8 @@ namespace ncpp {
                 args_array(other.args_array),
                 is_function(other.is_function),
                 logger_func_ptr(other.logger_func_ptr),
-                member_ptr_p(other.member_ptr_p)
+                member_ptr_p(other.member_ptr_p),
+                copy_func_ptr(other.copy_func_ptr)
             {
 
 
@@ -329,16 +348,30 @@ namespace ncpp {
                 is_function = other.is_function;
                 logger_func_ptr = other.logger_func_ptr;
                 member_ptr_p = other.member_ptr_p;
+                copy_func_ptr = other.copy_func_ptr;
 
                 return *this;
             }
 
 
 
+            friend inline std::ostream& operator << (
+                std::ostream& os,
+                const ostream_input_t<
+                    robject_member_handle
+                >& input
+            )
+            {
+
+                input.first.logger_func_ptr(os, input);
+
+                return os;
+            }
+
             friend inline std::ostream& operator << (std::ostream& os, const robject_member_handle& member_handle)
             {
 
-                member_handle.logger_func_ptr(os, member_handle);
+                os << ostream_input_t<robject_member_handle> { member_handle, 0 };
 
                 return os;
             }
@@ -652,11 +685,7 @@ namespace ncpp {
             robject_i();
             virtual ~robject_i();
 
-            NCPP_RCCOPY(const robject_i&, other) {
-
-                 assert(false && "no copy operator overloaded");
-
-            }
+            virtual void copy(const robject_i& other);
 
 
 
@@ -689,7 +718,8 @@ namespace ncpp {
 
 #pragma region Methods
         protected:
-            void copy_name_to_member_handle_map(const robject_i& other);
+            void copy_variable_members(const robject_i& other);
+            void copy_variable_member(const robject_i& other, const containers::native_string& member_name);
 
 
 
@@ -722,16 +752,46 @@ namespace ncpp {
             template<typename variable_type__>
             inline variable_type__& var_t(const containers::native_string& var_name) {
 
-                return var_handle(var_name).get_t<variable_type__>();
+                return at(var_name).to_t<variable_type__>();
             }
 
             /**
              *  Gets reflected function by name.
              */
             template<typename function_type__>
-            inline std::function<function_type__>& func_t(const containers::native_string& func_name) {
+            inline const std::function<function_type__>& func_t(const containers::native_string& func_name) const {
 
-                return func_handle(func_name).get_t<function_type__>();
+                return at(var_name).to_t<function_type__>();
+            }
+
+            /**
+             *  Gets reflected variable by name.
+             */
+            template<typename variable_type__>
+            inline const variable_type__& var_t(const containers::native_string& var_name) const {
+
+                return at(var_name).to_t<variable_type__>();
+            }
+
+            /**
+             *  Gets member handle by name.
+             */
+            inline robject_member_handle& at(const containers::native_string& member_name) {
+
+                if (name_to_member_handle_map_.find(member_name) != name_to_member_handle_map_.end())
+                    return name_to_member_handle_map_.find(member_name)->second;
+
+                return *utilities::lref_t<robject_member_handle>();
+            }
+            /**
+             *  Gets member handle by name.
+             */
+            inline const robject_member_handle& at(const containers::native_string& member_name) const {
+
+                if (name_to_member_handle_map_.find(member_name) != name_to_member_handle_map_.end())
+                    return name_to_member_handle_map_.find(member_name)->second;
+
+                return *utilities::lref_t<const robject_member_handle>();
             }
 #pragma endregion
 
@@ -785,9 +845,27 @@ namespace ncpp {
             rvar_handle.is_function = 0;
             rvar_handle.member_ptr_p = &(robj.*member_ptr);
 
-            rvar_handle.logger_func_ptr = [](std::ostream& os, const robject_member_handle& member_handle) {
+            rvar_handle.logger_func_ptr = [](
+                std::ostream& os, 
+                const ostream_input_t<
+                    robject_member_handle
+                >& input
+            ) {
 
-                safe_ostream_t(os, *reinterpret_cast<variable_type__*>(member_handle.member_ptr_p));
+                safe_ostream_with_tab_t<std::ostream, variable_type__>(
+                    os, 
+                    { 
+                        *reinterpret_cast<variable_type__*>(input.first.member_ptr_p),
+                        input.second + 1 
+                    }
+                );
+                //safe_ostream_t(os, *reinterpret_cast<variable_type__*>(member_handle.member_ptr_p));
+
+            };
+
+            rvar_handle.copy_func_ptr = [](const robject_i& from, robject_i& to) {
+
+                (((object_type__&)to).*member_ptr) = (((object_type__&)from).*member_ptr);
 
             };
 
@@ -889,11 +967,16 @@ namespace ncpp {
             rfunc_handle.is_function = 1;
             rfunc_handle.member_ptr_p = reinterpret_cast<void*>(rfunc_executer);
 
-            rfunc_handle.logger_func_ptr = [](std::ostream& os, const robject_member_handle& member_handle) {
+            rfunc_handle.logger_func_ptr = [](
+                std::ostream& os,
+                const ostream_input_t<
+                    robject_member_handle
+                >& input
+            ) {
 
                 os << typeid(function_type__).name() << " { ";
 
-                safe_ostream_t(os, member_handle.member_ptr_p);
+                safe_ostream_t(os, input.first.member_ptr_p);
                 
                 os << " }";
 
@@ -1043,20 +1126,45 @@ namespace ncpp {
         };
 
 
-        
-        inline std::ostream& operator << (std::ostream& os, const robject_i& obj)
+
+        inline std::ostream& operator << (
+            std::ostream& os,
+            const ostream_input_t<
+                robject_i
+            >& input
+        )
         {
 
             os << "{" << std::endl;
 
-            for (const auto& member_handle : obj) {
+            for (const auto& member_handle : input.first) {
+
+                for (u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+                    os << " ";
+
+                }
 
                 os << '"' << member_handle.first << '"' << ": ";
-                safe_ostream_t(os, member_handle.second);
+                safe_ostream_with_tab_t<std::ostream, decltype(member_handle.second)>(os, { member_handle.second, input.second + 1});
                 os << "," << std::endl;
 
             }
+
+            for (u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+                os << " ";
+
+            }
             os << "}";
+
+            return os;
+        }
+
+        inline std::ostream& operator << (std::ostream& os, const robject_i& obj)
+        {
+
+            os << ostream_input_t<robject_i> { obj, 0 };
 
             return os;
         }

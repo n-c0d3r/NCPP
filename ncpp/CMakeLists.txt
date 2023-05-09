@@ -29,6 +29,9 @@ option(NCPP_ENABLE_WEAKLOCK_WARNING "Enable Weaklock Warning" ON)
 set(NCPP_DEFAULT_JOB_HANDLE_QUEUE_CAPACITY 1024 CACHE STRING "Default Job Handle Queue Capacity")
 set(NCPP_DEFAULT_JOB_INSTANCE_POOL_CAPACITY 1024 CACHE STRING "Default Job Instance Pool Capacity")
 
+# ncpp other options
+set(NCPP_TAB_SIZE 4 CACHE STRING "Tab Size")
+
 
 
 # ncpp target configure file

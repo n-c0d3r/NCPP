@@ -79,6 +79,11 @@ namespace ncpp {
 
 
 
+	template<typename type__>
+	using ostream_input_t = typename std::pair<const type__&, i32>;
+
+
+
 	template<typename stream_type__, typename type__, b8 is_streamable__>
 	struct safe_ostream_forwarder_t {
 
@@ -125,6 +130,52 @@ namespace ncpp {
 
 
 
+	template<typename stream_type__, typename input_type__, b8 is_streamable__>
+	struct safe_ostream_with_tab_forwarder_t {
+
+	};
+
+	template<typename stream_type__, typename input_type__>
+	struct safe_ostream_with_tab_forwarder_t<stream_type__, input_type__, true> {
+
+		static inline stream_type__& forward(stream_type__& stream, input_type__&& input) {
+
+			stream << input;
+
+			return stream;
+		}
+	};
+
+	template<typename stream_type__, typename input_type__>
+	struct safe_ostream_with_tab_forwarder_t<stream_type__, input_type__, false> {
+
+		static inline stream_type__& forward(stream_type__& stream, input_type__&& input) {
+
+			safe_ostream_t(stream, input.first);
+
+			return stream;
+		}
+	};
+
+
+
+	template<typename stream_type__, typename type__, typename input_type__ = typename ostream_input_t<type__>>
+	inline stream_type__& safe_ostream_with_tab_t(stream_type__& stream, input_type__&& input) {
+
+		using safe_ostream_with_tab_forward_type = typename safe_ostream_with_tab_forwarder_t<
+			stream_type__,
+			input_type__,
+			utilities::is_ostreamable_t<
+				stream_type__,
+				input_type__
+			>::value
+		>;
+
+		return safe_ostream_with_tab_forward_type::forward(stream, std::forward<input_type__>(input));
+	}
+
+
+
 	template<typename stream_type__, typename type__, b8 is_streamable__>
 	struct safe_istream_forwarder_t {
 
@@ -161,8 +212,8 @@ namespace ncpp {
 			stream_type__,
 			type__,
 			utilities::is_istreamable_t<
-			stream_type__,
-			type__
+				stream_type__,
+				type__
 			>::value
 		>;
 
