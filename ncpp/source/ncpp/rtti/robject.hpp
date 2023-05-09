@@ -1137,7 +1137,18 @@ namespace ncpp {
 
             os << "{" << std::endl;
 
+            b8 is_first_member = true;
+
             for (const auto& member_handle : input.first) {
+
+                if (!is_first_member) {
+
+                    os << ",";
+                    os << std::endl;
+
+                }
+
+                is_first_member = false;
 
                 for (u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -1146,10 +1157,11 @@ namespace ncpp {
                 }
 
                 os << '"' << member_handle.first << '"' << ": ";
-                safe_ostream_with_tab_t<std::ostream, decltype(member_handle.second)>(os, { member_handle.second, input.second + 1});
-                os << "," << std::endl;
+                safe_ostream_with_tab_t<std::ostream, decltype(member_handle.second)>(os, { member_handle.second, input.second });
 
             }
+
+            os << std::endl;
 
             for (u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
 
