@@ -1,5 +1,5 @@
 
-message("Generate docs")
+message(STATUS "Generate docs")
 
 
 
@@ -68,20 +68,20 @@ endfunction()
 
 
 
-message("Generate external docs")
+message(STATUS "Generate external docs")
 NCPPGenerateDocs(
     ${NCPP_EXTERNAL_DOCUMENTATIONS_DIR}
     ${NCPP_OUTPUT_EXTERNAL_DOCUMENTATIONS_DIR}
 )
-message("Generate external docs done")
+message(STATUS "Generate external docs done")
 
-message("Generate internal docs")
+message(STATUS "Generate internal docs")
 NCPPGenerateDocs(
     ${NCPP_INTERNAL_DOCUMENTATIONS_DIR}
     ${NCPP_OUTPUT_INTERNAL_DOCUMENTATIONS_DIR}
 )
-message("Generate internal docs done")
+message(STATUS "Generate internal docs done")
 
 
 
-message("Generate docs done")
+message(STATUS "Generate docs done")

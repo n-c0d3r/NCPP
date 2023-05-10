@@ -1,6 +1,6 @@
 
-message("Check dependencies")
+message(STATUS "Check dependencies")
 
 find_package(Doxygen REQUIRED)
 
-message("Check dependencies done")
+message(STATUS "Check dependencies done")
