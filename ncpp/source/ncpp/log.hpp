@@ -80,6 +80,13 @@ namespace ncpp {
 	)
 	{
 
+		if (input.second > NCPP_MAX_TAB_COUNT) {
+
+			os << "...";
+
+			return os;
+		}
+
 		os << "{" << std::endl;
 
 		for (sz i = 0; i < input.first.size(); ++i) {
@@ -134,6 +141,13 @@ namespace ncpp {
 		>& input
 	)
 	{
+
+		if (input.second > NCPP_MAX_TAB_COUNT) {
+
+			os << "...";
+
+			return os;
+		}
 
 		os << "{" << std::endl;
 

@@ -31,6 +31,7 @@ set(NCPP_DEFAULT_JOB_INSTANCE_POOL_CAPACITY 1024 CACHE STRING "Default Job Insta
 
 # ncpp other options
 set(NCPP_TAB_SIZE 4 CACHE STRING "Tab Size")
+set(NCPP_MAX_TAB_COUNT 8 CACHE STRING "Max Tab Count")
 
 
 

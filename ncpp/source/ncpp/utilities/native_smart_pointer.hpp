@@ -34,6 +34,7 @@
 ////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/utilities/smart_pointer.hpp>
+#include <ncpp/iostream.hpp>
 
 #pragma endregion
 
@@ -112,20 +113,49 @@ namespace ncpp {
 
 
 
+
         template<typename item_type__>
-        std::ostream& operator << (std::ostream& os, const native_unique_ptr_t<item_type__>& ptr)
+        inline std::ostream& operator << (
+            std::ostream& os,
+            const ostream_input_t<
+                native_unique_ptr_t<item_type__>
+            >& input
+        )
         {
 
-            os << *ptr;
+            if (input.first == 0) {
+
+                os << "null";
+
+            }
+            else {
+
+                safe_ostream_with_tab_t<std::ostream, rtti::robject_i>(os, { *input.first, input.second });
+
+            }
 
             return os;
         }
 
         template<typename item_type__>
-        std::ostream& operator << (std::ostream& os, const native_shared_ptr_t<item_type__>& ptr)
+        inline std::ostream& operator << (
+            std::ostream& os,
+            const ostream_input_t<
+                native_shared_ptr_t<item_type__>
+            >& input
+        )
         {
 
-            os << *ptr;
+            if (input.first == 0) {
+
+                os << "null";
+
+            }
+            else {
+
+                safe_ostream_with_tab_t<std::ostream, rtti::robject_i>(os, { *input.first, input.second });
+
+            }
 
             return os;
         }

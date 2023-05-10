@@ -80,7 +80,7 @@ namespace ncpp {
 
 
 	template<typename type__>
-	using ostream_input_t = typename std::pair<const type__&, i32>;
+	using ostream_input_t = typename std::pair<const type__&, u32>;
 
 
 
