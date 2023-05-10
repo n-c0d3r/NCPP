@@ -4,7 +4,7 @@
 
 namespace ncpp {
 
-	namespace rtti {
+    namespace rtti {
 
 
 
@@ -75,7 +75,7 @@ namespace ncpp {
 
 
         robject_i::robject_i() :
-            name_to_member_handle_map_()
+            name_to_member_handle_offset_map_()
         {
 
             last_constructor_called_robject_ref_g = *this;
@@ -87,48 +87,6 @@ namespace ncpp {
 
         }
 
-        void robject_i::copy(const robject_i& other) {
-
-            copy_variable_members(other);
-
-        }
-
-
-
-        void robject_i::copy_variable_members(const robject_i& other) {
-
-            for (auto& member_handle_it : name_to_member_handle_map_) {
-
-                if (other.is_has_member(member_handle_it.first)) {
-
-                    robject_member_handle& member_handle = member_handle_it.second;
-
-
-
-                    if (!member_handle.is_function) {
-
-                        copy_variable_member(other, member_handle_it.first);
-
-                    }
-
-                }
-
-            }
-
-        }
-
-        void robject_i::copy_variable_member(const robject_i& other, const containers::native_string& member_name) {
-
-            if (other.is_has_member(member_name)) {
-
-                robject_member_handle& member_handle = at(member_name);
-
-                member_handle.copy_func_ptr(other, *this);
-
-            }
-
-        }
-
-	}
+    }
 
 }

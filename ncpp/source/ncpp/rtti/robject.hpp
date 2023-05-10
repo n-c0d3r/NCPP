@@ -100,14 +100,6 @@ namespace ncpp {
             static inline ncpp::rtti::rclass_t<ClassName> get_static_rclass() { \
                 return ncpp::rtti::rclass_t<ClassName>(); \
             } \
-            inline ClassName(const ClassName& other) : ClassName() \
-            {\
-                *this = other;\
-            }\
-            inline ClassName& operator = (const ClassName& other) {\
-                copy(other);\
-                return *this;\
-            }\
             inline ClassName& instantiate() const {\
                 ClassName& result = (ClassName&)get_rclass().create_instance();\
                 result = *this;\
@@ -125,17 +117,18 @@ namespace ncpp {
             }\
         private:  
 
-        /**
-         *  Setups the constructing scope of a reflected class.
-         *  Must be added first in constructor body.
-         */
+         /**
+          *  Setups the constructing scope of a reflected class.
+          *  Must be added first in constructor body.
+          */
 #define NCPP_RCSCOPE(ClassName) \
         ncpp::rtti::robject_constructor_end_scope __robject_constructor_end_scope__(*this, *(__##ClassName##_constructor_begin_scope__.prev_robject_ref));
 
-        /**
-         *  Declares a reflected member variable.
-         */
+          /**
+           *  Declares a reflected member variable.
+           */
 #define NCPP_RCVARIABLE(MemberType, MemberName, ...) \
+        ncpp::rtti::robject_member_handle MemberName##_member_handle; \
         MemberType MemberName;\
         char MemberName##_name_cstr[sizeof(#MemberName)] = #MemberName;\
         using MemberName##_args_type = typename ncpp::rtti::robject_member_args_t<__VA_ARGS__>;\
@@ -147,18 +140,24 @@ namespace ncpp {
             &current_rclass::MemberName##_name_cstr,\
             decltype(&current_rclass::MemberName##_args),\
             &current_rclass::MemberName##_args,\
+            decltype(&current_rclass::MemberName##_member_handle),\
+            &current_rclass::MemberName##_member_handle,\
             decltype(&current_rclass::MemberName),\
             &current_rclass::MemberName\
         >; \
         friend class MemberName##_reflecter_type; \
         MemberName##_reflecter_type MemberName##_reflecter;
 
-        /**
-         *  Declares a reflected member function.
-         */
+           /**
+            *  Declares a reflected member function.
+            */
 #define NCPP_RCFUNCTION(MemberFunctionType, MemberName,...) \
+        ncpp::rtti::robject_member_handle MemberName##_member_handle; \
         using MemberName##_type = MemberFunctionType; \
         MemberName##_type MemberName; \
+        ncpp::rtti::robject_function_executer_t<\
+            MemberName##_type \
+        > MemberName##_executer; \
         char MemberName##_name_cstr[sizeof(#MemberName)] = #MemberName;\
         typename ncpp::rtti::robject_member_args_t<__VA_ARGS__> MemberName##_args = {__VA_ARGS__}; \
         typename std::function<MemberFunctionType> MemberName##_functor; \
@@ -171,31 +170,35 @@ namespace ncpp {
             &current_rclass::MemberName##_args,\
             decltype(&current_rclass::MemberName##_functor),\
             &current_rclass::MemberName##_functor,\
-            decltype(&current_rclass::MemberName), \
-            &current_rclass::MemberName \
+            decltype(&current_rclass::MemberName##_member_handle),\
+            &current_rclass::MemberName##_member_handle,\
+            decltype(&current_rclass::MemberName##_executer), \
+            &current_rclass::MemberName##_executer, \
+            decltype(&current_rclass::MemberName),\
+            &current_rclass::MemberName\
         >; \
         friend class MemberName##_reflecter_type; \
         MemberName##_reflecter_type MemberName##_reflecter;
 
 
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-        /**
-         *  Stores member's arguments.
-         */
+            /**
+             *  Stores member's arguments.
+             */
         template<sz... args__>
         using robject_member_args_t = typename std::array<sz, sizeof... (args__)>;
 
@@ -278,6 +281,127 @@ namespace ncpp {
 
 
 
+        template<
+            class object_type__,
+            typename variable_type__,
+            typename name_member_ptr_type,
+            name_member_ptr_type name_member_ptr,
+            typename args_member_ptr_type,
+            args_member_ptr_type args_member_ptr,
+            typename member_handle_ptr_type,
+            member_handle_ptr_type member_handle_ptr,
+            typename member_ptr_type,
+            member_ptr_type member_ptr
+        >
+        class robject_variable_reflecter_t
+        {
+
+        public:
+            robject_variable_reflecter_t();
+            ~robject_variable_reflecter_t();
+
+        };
+
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+        template<
+            class object_type__,
+            typename function_type__,
+            typename name_member_ptr_type,
+            name_member_ptr_type name_member_ptr,
+            typename args_member_ptr_type,
+            args_member_ptr_type args_member_ptr,
+            typename functor_member_ptr_type,
+            functor_member_ptr_type functor_member_ptr,
+            typename member_handle_ptr_type,
+            member_handle_ptr_type member_handle_ptr,
+            typename member_executer_ptr_type,
+            member_executer_ptr_type member_executer_ptr,
+            typename member_ptr_type,
+            member_ptr_type member_ptr
+        >
+        class robject_function_reflecter_t
+        {
+
+        public:
+            typedef void* executer_type;
+
+
+
+        public:
+            robject_function_reflecter_t();
+            ~robject_function_reflecter_t();
+
+            template<b8 is_void_return__>
+            struct executer_get_t;
+
+        };
+
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+        template<
+            typename function_type__,
+            b8 is_void_return__
+        >
+        struct robject_function_executer_impl_t {
+
+        };
+
+
+
+        template<typename function_type__>
+        using robject_function_executer_t = typename robject_function_executer_impl_t<
+            function_type__,
+            std::is_same_v<
+                typename utilities::function_traits_t<function_type__>::return_type,
+                void
+            >
+        >;
+
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
         /**
          *  Stores member's arguments pointer, robject pointer and member pointer.
          */
@@ -310,20 +434,26 @@ namespace ncpp {
 
 
             using logger_func_ptr_type = void(*)(
-                std::ostream& os, 
+                std::ostream& os,
                 const ostream_input_t<
-                    robject_member_handle
+                robject_member_handle
                 >& input
-            );
-            using copy_func_ptr_type = void(*)(const robject_i& from, robject_i& to);
+                );
 
 
 
             args_array_type args_array;
             b8 is_function = 0;
             logger_func_ptr_type logger_func_ptr = 0;
-            void* member_ptr_p = 0;
-            copy_func_ptr_type copy_func_ptr = 0;
+            sz member_offset = 0;
+
+            inline void* member_p() const {
+
+                return reinterpret_cast<void*>(
+                    reinterpret_cast<sz>(this)
+                    + member_offset
+                    );
+            }
 
 
 
@@ -335,8 +465,7 @@ namespace ncpp {
                 args_array(other.args_array),
                 is_function(other.is_function),
                 logger_func_ptr(other.logger_func_ptr),
-                member_ptr_p(other.member_ptr_p),
-                copy_func_ptr(other.copy_func_ptr)
+                member_offset(other.member_offset)
             {
 
 
@@ -347,8 +476,7 @@ namespace ncpp {
                 args_array = other.args_array;
                 is_function = other.is_function;
                 logger_func_ptr = other.logger_func_ptr;
-                member_ptr_p = other.member_ptr_p;
-                copy_func_ptr = other.copy_func_ptr;
+                member_offset = other.member_offset;
 
                 return *this;
             }
@@ -358,9 +486,9 @@ namespace ncpp {
             friend inline std::ostream& operator << (
                 std::ostream& os,
                 const ostream_input_t<
-                    robject_member_handle
+                robject_member_handle
                 >& input
-            )
+                )
             {
 
                 input.first.logger_func_ptr(os, input);
@@ -387,7 +515,7 @@ namespace ncpp {
             using recorrected_type_t = typename utilities::nth_template_arg_t<
                 utilities::is_function_t<type__>::value,
                 type__,
-                typename std::function<type__>
+                typename robject_function_executer_t<type__>
             >::type;
 
 
@@ -398,7 +526,7 @@ namespace ncpp {
             template<typename type__>
             inline recorrected_type_t<type__>& to_t() {
 
-                return *reinterpret_cast<recorrected_type_t<type__>*>(member_ptr_p);
+                return *reinterpret_cast<recorrected_type_t<type__>*>(member_p());
             }
 
             /**
@@ -407,7 +535,7 @@ namespace ncpp {
             template<typename type__>
             inline recorrected_type_t<const type__>& to_t() const {
 
-                return *reinterpret_cast<recorrected_type_t<const type__>*>(member_ptr_p);
+                return *reinterpret_cast<recorrected_type_t<const type__>*>(member_p());
             }
 
 
@@ -418,7 +546,7 @@ namespace ncpp {
             template<typename type__>
             inline robject_member_handle& operator = (
                 type__&& other
-            ) {
+                ) {
 
                 static_assert(!utilities::is_function_t<type__>::value && "type__ must not be function type");
                 assert(!is_function && "this is not function");
@@ -470,7 +598,7 @@ namespace ncpp {
              *  Checks if the value of member data less than other data.
              */
             template<typename type__>
-            inline b8 operator < (type__ && other) {
+            inline b8 operator < (type__&& other) {
 
                 static_assert(!utilities::is_function_t<type__>::value && "type__ must not be function type");
                 assert(!is_function && "this is not function");
@@ -521,85 +649,79 @@ namespace ncpp {
 
 
         template<
-            class object_type__,
-            typename variable_type__,
-            typename name_member_ptr_type,
-            name_member_ptr_type name_member_ptr,
-            typename args_member_ptr_type,
-            args_member_ptr_type args_member_ptr,
-            typename member_ptr_type,
-            member_ptr_type member_ptr
+            typename map_iterator_type__ = typename containers::native_unordered_map_t<containers::native_string, sz>::iterator
         >
-        class robject_variable_reflecter_t
-        {
+        struct robject_iterator_t {
 
-        public:
-            robject_variable_reflecter_t();
-            ~robject_variable_reflecter_t();
-
-        };
+            const robject_i* robject_p = 0;
+            map_iterator_type__ map_iterator;
 
 
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            inline containers::native_string name() const {
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                return map_iterator->first;
+            }
 
 
 
-        template<
-            class object_type__,
-            typename function_type__,
-            typename name_member_ptr_type,
-            name_member_ptr_type name_member_ptr,
-            typename args_member_ptr_type,
-            args_member_ptr_type args_member_ptr,
-            typename functor_member_ptr_type,
-            functor_member_ptr_type functor_member_ptr,
-            typename member_ptr_type,
-            member_ptr_type member_ptr
-        >
-        class robject_function_reflecter_t
-        {
+            inline robject_iterator_t& operator ++ () {
 
-        public:
-            typedef void* executer_type;
+                ++map_iterator;
+
+                return *this;
+            }
+            inline robject_iterator_t& operator -- () {
+
+                --map_iterator;
+
+                return *this;
+            }
 
 
 
-        public:
-            robject_function_reflecter_t();
-            ~robject_function_reflecter_t();
+            inline b8 operator == (const robject_iterator_t& other) const {
 
-            template<b8 is_void_return__>
-            struct executer_get_t;
+                return map_iterator == other.map_iterator;
+            }
+            inline b8 operator != (const robject_iterator_t& other) const {
 
-        };
+                return map_iterator != other.map_iterator;
+            }
 
 
 
-        template<
-            class object_type__,
-            typename function_type__,
-            b8 is_void_return__,
-            typename name_member_ptr_type,
-            name_member_ptr_type name_member_ptr,
-            typename args_member_ptr_type,
-            args_member_ptr_type args_member_ptr,
-            typename functor_member_ptr_type,
-            functor_member_ptr_type functor_member_ptr,
-            typename member_ptr_type,
-            member_ptr_type member_ptr
-        >
-        struct robject_function_reflecter_executer_get_t {
+            inline robject_member_handle& operator * () {
+
+                return *reinterpret_cast<robject_member_handle*>(
+                    reinterpret_cast<sz>(robject_p)
+                    + map_iterator->second
+                    );
+            }
+            inline const robject_member_handle& operator * () const {
+
+                return *reinterpret_cast<const robject_member_handle*>(
+                    reinterpret_cast<sz>(robject_p)
+                    + map_iterator->second
+                    );
+            }
+
+
+
+            inline robject_member_handle* operator -> () {
+
+                return reinterpret_cast<robject_member_handle*>(
+                    reinterpret_cast<sz>(robject_p)
+                    + map_iterator->second
+                    );
+            }
+            inline const robject_member_handle* operator -> () const {
+
+                return reinterpret_cast<const robject_member_handle*>(
+                    reinterpret_cast<sz>(robject_p)
+                    + map_iterator->second
+                    );
+            }
 
         };
 
@@ -631,7 +753,10 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
-            using name_to_member_handle_map_type = typename containers::native_unordered_map_t<containers::native_string, robject_member_handle>;
+            using name_to_member_handle_offset_map_type = typename containers::native_unordered_map_t<containers::native_string, sz>;
+
+            using iterator = robject_iterator_t<name_to_member_handle_offset_map_type::iterator>;
+            using const_iterator = robject_iterator_t<name_to_member_handle_offset_map_type::const_iterator>;
 
             friend class robject_constructor_scope;
 
@@ -640,45 +765,43 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         private:
-            name_to_member_handle_map_type name_to_member_handle_map_;
+            name_to_member_handle_offset_map_type name_to_member_handle_offset_map_;
 
         public:
-            inline name_to_member_handle_map_type::iterator begin() {
+            inline iterator begin() {
 
-                return name_to_member_handle_map_.begin();
+                return { this, name_to_member_handle_offset_map_.begin() };
             }
-            inline name_to_member_handle_map_type::const_iterator begin() const {
+            inline const_iterator begin() const {
 
-                return name_to_member_handle_map_.cbegin();
+                return { this, name_to_member_handle_offset_map_.cbegin() };
             }
-            inline name_to_member_handle_map_type::const_iterator cbegin() const {
+            inline const_iterator cbegin() const {
 
-                return name_to_member_handle_map_.cbegin();
-            }
-
-            inline name_to_member_handle_map_type::iterator end() {
-
-                return name_to_member_handle_map_.end();
-            }
-            inline name_to_member_handle_map_type::const_iterator end() const {
-
-                return name_to_member_handle_map_.cend();
-            }
-            inline name_to_member_handle_map_type::const_iterator cend() const {
-
-                return name_to_member_handle_map_.cend();
+                return { this, name_to_member_handle_offset_map_.cbegin() };
             }
 
-			////////////////////////////////////////////////////////////////////////////////////
-			////////////////////////////////////////////////////////////////////////////////////
-			////////////////////////////////////////////////////////////////////////////////////
+            inline iterator end() {
+
+                return { this, name_to_member_handle_offset_map_.end() };
+            }
+            inline const_iterator end() const {
+
+                return { this, name_to_member_handle_offset_map_.cend() };
+            }
+            inline const_iterator cend() const {
+
+                return { this, name_to_member_handle_offset_map_.cend() };
+            }
+
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
 
 #pragma region Constructors, Destructor and Operators
         public:
             robject_i();
             virtual ~robject_i();
-
-            virtual void copy(const robject_i& other);
 
 
 
@@ -688,8 +811,11 @@ namespace ncpp {
              */
             inline robject_member_handle& operator [] (const containers::native_string& member_name) {
 
-                if (name_to_member_handle_map_.find(member_name) != name_to_member_handle_map_.end())
-                    return name_to_member_handle_map_.find(member_name)->second;
+                if (name_to_member_handle_offset_map_.find(member_name) != name_to_member_handle_offset_map_.end())
+                    return *reinterpret_cast<robject_member_handle*>(
+                        reinterpret_cast<sz>(this)
+                        + name_to_member_handle_offset_map_.find(member_name)->second
+                        );
 
                 return *utilities::lref_t<robject_member_handle>();
             }
@@ -698,31 +824,28 @@ namespace ncpp {
              */
             inline const robject_member_handle& operator [] (const containers::native_string& member_name) const {
 
-                if (name_to_member_handle_map_.find(member_name) != name_to_member_handle_map_.end())
-                    return name_to_member_handle_map_.find(member_name)->second;
+                if (name_to_member_handle_offset_map_.find(member_name) != name_to_member_handle_offset_map_.end())
+                    return *reinterpret_cast<const robject_member_handle*>(
+                        reinterpret_cast<sz>(this)
+                        + name_to_member_handle_offset_map_.find(member_name)->second
+                        );
 
-                return *utilities::lref_t<const robject_member_handle>();
+                return *utilities::lref_t<robject_member_handle>();
             }
 #pragma endregion
 
-			////////////////////////////////////////////////////////////////////////////////////
-			////////////////////////////////////////////////////////////////////////////////////
-			////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
 
 #pragma region Methods
-        protected:
-            void copy_variable_members(const robject_i& other);
-            void copy_variable_member(const robject_i& other, const containers::native_string& member_name);
-
-
-
-		public:
+        public:
             /**
              *  Checks if the robject has member named <member_name>
              */
             inline b8 is_has_member(const containers::native_string& member_name) const {
 
-                if (name_to_member_handle_map_.find(member_name) != name_to_member_handle_map_.end())
+                if (name_to_member_handle_offset_map_.find(member_name) != name_to_member_handle_offset_map_.end())
                     return true;
 
                 return false;
@@ -735,7 +858,7 @@ namespace ncpp {
 
                 assert(!is_has_member(member_name) && "member already existed");
 
-                name_to_member_handle_map_[member_name] = handle;
+                name_to_member_handle_offset_map_[member_name] = reinterpret_cast<sz>(&handle) - reinterpret_cast<sz>(this);
 
             }
 
@@ -743,27 +866,27 @@ namespace ncpp {
              *  Gets reflected variable by name.
              */
             template<typename variable_type__>
-            inline variable_type__& var_t(const containers::native_string& var_name) {
+            inline variable_type__& var_t(const containers::native_string& member_name) {
 
-                return at(var_name).to_t<variable_type__>();
+                return at(member_name).to_t<variable_type__>();
+            }
+
+            /**
+             *  Gets reflected variable by name.
+             */
+            template<typename variable_type__>
+            inline const variable_type__& var_t(const containers::native_string& member_name) const {
+
+                return at(member_name).to_t<variable_type__>();
             }
 
             /**
              *  Gets reflected function by name.
              */
             template<typename function_type__>
-            inline const std::function<function_type__>& func_t(const containers::native_string& func_name) const {
+            inline const std::function<function_type__>& func_t(const containers::native_string& member_name) const {
 
-                return at(var_name).to_t<function_type__>();
-            }
-
-            /**
-             *  Gets reflected variable by name.
-             */
-            template<typename variable_type__>
-            inline const variable_type__& var_t(const containers::native_string& var_name) const {
-
-                return at(var_name).to_t<variable_type__>();
+                return at(member_name).to_t<function_type__>();
             }
 
             /**
@@ -771,8 +894,11 @@ namespace ncpp {
              */
             inline robject_member_handle& at(const containers::native_string& member_name) {
 
-                if (name_to_member_handle_map_.find(member_name) != name_to_member_handle_map_.end())
-                    return name_to_member_handle_map_.find(member_name)->second;
+                if (name_to_member_handle_offset_map_.find(member_name) != name_to_member_handle_offset_map_.end())
+                    return *reinterpret_cast<robject_member_handle*>(
+                        reinterpret_cast<sz>(this)
+                        + name_to_member_handle_offset_map_.find(member_name)->second
+                        );
 
                 return *utilities::lref_t<robject_member_handle>();
             }
@@ -781,10 +907,13 @@ namespace ncpp {
              */
             inline const robject_member_handle& at(const containers::native_string& member_name) const {
 
-                if (name_to_member_handle_map_.find(member_name) != name_to_member_handle_map_.end())
-                    return name_to_member_handle_map_.find(member_name)->second;
+                if (name_to_member_handle_offset_map_.find(member_name) != name_to_member_handle_offset_map_.end())
+                    return *reinterpret_cast<const robject_member_handle*>(
+                        reinterpret_cast<sz>(this)
+                        + name_to_member_handle_offset_map_.find(member_name)->second
+                        );
 
-                return *utilities::lref_t<const robject_member_handle>();
+                return *utilities::lref_t<robject_member_handle>();
             }
 #pragma endregion
 
@@ -814,6 +943,8 @@ namespace ncpp {
             name_member_ptr_type name_member_ptr,
             typename args_member_ptr_type,
             args_member_ptr_type args_member_ptr,
+            typename member_handle_ptr_type,
+            member_handle_ptr_type member_handle_ptr,
             typename member_ptr_type,
             member_ptr_type member_ptr
         >
@@ -824,45 +955,43 @@ namespace ncpp {
             name_member_ptr,
             args_member_ptr_type,
             args_member_ptr,
+            member_handle_ptr_type,
+            member_handle_ptr,
             member_ptr_type,
             member_ptr
         >::robject_variable_reflecter_t() {
 
             object_type__& robj = (object_type__&)current_constructing_object();
 
-            robject_member_handle rvar_handle;
-            rvar_handle.args_array = {
+            robject_member_handle& member_handle = robj.*member_handle_ptr;
+
+            member_handle.args_array = {
                 (robj.*args_member_ptr).data(),
                 (robj.*args_member_ptr).size()
             };
-            rvar_handle.is_function = 0;
-            rvar_handle.member_ptr_p = &(robj.*member_ptr);
+            member_handle.is_function = 0;
+            member_handle.member_offset = reinterpret_cast<sz>(&(robj.*member_ptr)) - reinterpret_cast<sz>(&member_handle);
 
-            rvar_handle.logger_func_ptr = [](
-                std::ostream& os, 
+            member_handle.logger_func_ptr = [](
+                std::ostream& os,
                 const ostream_input_t<
-                    robject_member_handle
+                robject_member_handle
                 >& input
-            ) {
+                ) {
 
-                safe_ostream_with_tab_t<std::ostream, variable_type__>(
-                    os, 
-                    { 
-                        *reinterpret_cast<variable_type__*>(input.first.member_ptr_p),
-                        input.second
-                    }
-                );
-                //safe_ostream_t(os, *reinterpret_cast<variable_type__*>(member_handle.member_ptr_p));
-
-            };
-
-            rvar_handle.copy_func_ptr = [](const robject_i& from, robject_i& to) {
-
-                (((object_type__&)to).*member_ptr) = (((object_type__&)from).*member_ptr);
+                    safe_ostream_with_tab_t<std::ostream, variable_type__>(
+                        os,
+                        {
+                            *reinterpret_cast<variable_type__*>(input.first.member_p()),
+                            input.second
+                        }
+                    );
 
             };
 
-            robj.add_member_handle(robj.*name_member_ptr, rvar_handle);
+
+
+            robj.add_member_handle(robj.*name_member_ptr, member_handle);
 
         }
 
@@ -873,6 +1002,8 @@ namespace ncpp {
             name_member_ptr_type name_member_ptr,
             typename args_member_ptr_type,
             args_member_ptr_type args_member_ptr,
+            typename member_handle_ptr_type,
+            member_handle_ptr_type member_handle_ptr,
             typename member_ptr_type,
             member_ptr_type member_ptr
         >
@@ -883,6 +1014,8 @@ namespace ncpp {
             name_member_ptr,
             args_member_ptr_type,
             args_member_ptr,
+            member_handle_ptr_type,
+            member_handle_ptr,
             member_ptr_type,
             member_ptr
         >::~robject_variable_reflecter_t() {
@@ -916,6 +1049,10 @@ namespace ncpp {
             args_member_ptr_type args_member_ptr,
             typename functor_member_ptr_type,
             functor_member_ptr_type functor_member_ptr,
+            typename member_handle_ptr_type,
+            member_handle_ptr_type member_handle_ptr,
+            typename member_executer_ptr_type,
+            member_executer_ptr_type member_executer_ptr,
             typename member_ptr_type,
             member_ptr_type member_ptr
         >
@@ -928,54 +1065,55 @@ namespace ncpp {
             args_member_ptr,
             functor_member_ptr_type,
             functor_member_ptr,
+            member_handle_ptr_type,
+            member_handle_ptr,
+            member_executer_ptr_type,
+            member_executer_ptr,
             member_ptr_type,
             member_ptr
-        >::robject_function_reflecter_t(){
+        >::robject_function_reflecter_t() {
 
             object_type__& robj = (object_type__&)current_constructing_object();
 
             using function_traits = typename utilities::function_traits_t<function_type__>;
 
-            using executer_getter_type = typename robject_function_reflecter_executer_get_t<
+
+
+            using executer_type = typename robject_function_executer_t<function_type__>;
+
+            executer_type& rfunc_executer = robj.*member_executer_ptr;
+
+            rfunc_executer.inv_object_offset = reinterpret_cast<sz>(&rfunc_executer) - reinterpret_cast<sz>(&robj);
+            rfunc_executer.bind_t<
                 object_type__,
-                function_type__,
-                std::is_same_v<function_traits::result_type, void>,
-                name_member_ptr_type,
-                name_member_ptr,
-                args_member_ptr_type,
-                args_member_ptr,
-                functor_member_ptr_type,
-                functor_member_ptr,
                 member_ptr_type,
                 member_ptr
-            >;
-                        
-            executer_type rfunc_executer = executer_getter_type::get(robj);
+            >();
 
-            robject_member_handle rfunc_handle;
-            rfunc_handle.args_array = {
+
+
+            robject_member_handle& member_handle = robj.*member_handle_ptr;
+            member_handle.args_array = {
                 (robj.*args_member_ptr).data(),
                 (robj.*args_member_ptr).size()
             };
-            rfunc_handle.is_function = 1;
-            rfunc_handle.member_ptr_p = reinterpret_cast<void*>(rfunc_executer);
+            member_handle.is_function = 1;
+            member_handle.member_offset = reinterpret_cast<sz>(&rfunc_executer) - reinterpret_cast<sz>(&member_handle);
 
-            rfunc_handle.logger_func_ptr = [](
+            member_handle.logger_func_ptr = [](
                 std::ostream& os,
                 const ostream_input_t<
-                    robject_member_handle
+                robject_member_handle
                 >& input
-            ) {
+                ) {
 
-                os << typeid(function_type__).name() << " { ";
-
-                safe_ostream_t(os, input.first.member_ptr_p);
-                
-                os << " }";
+                    os << typeid(function_type__).name();
 
             };
 
-            robj.add_member_handle(robj.*name_member_ptr, rfunc_handle);
+
+
+            robj.add_member_handle(robj.*name_member_ptr, member_handle);
 
         }
 
@@ -988,6 +1126,10 @@ namespace ncpp {
             args_member_ptr_type args_member_ptr,
             typename functor_member_ptr_type,
             functor_member_ptr_type functor_member_ptr,
+            typename member_handle_ptr_type,
+            member_handle_ptr_type member_handle_ptr,
+            typename member_executer_ptr_type,
+            member_executer_ptr_type member_executer_ptr,
             typename member_ptr_type,
             member_ptr_type member_ptr
         >
@@ -1000,6 +1142,10 @@ namespace ncpp {
             args_member_ptr,
             functor_member_ptr_type,
             functor_member_ptr,
+            member_handle_ptr_type,
+            member_handle_ptr,
+            member_executer_ptr_type,
+            member_executer_ptr,
             member_ptr_type,
             member_ptr
         >::~robject_function_reflecter_t() {
@@ -1008,112 +1154,112 @@ namespace ncpp {
 
         }
 
+
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
         template<
-            class object_type__,
-            typename function_type__,
-            typename name_member_ptr_type,
-            name_member_ptr_type name_member_ptr,
-            typename args_member_ptr_type,
-            args_member_ptr_type args_member_ptr,
-            typename functor_member_ptr_type,
-            functor_member_ptr_type functor_member_ptr,
-            typename member_ptr_type,
-            member_ptr_type member_ptr
+            typename return_type__,
+            typename... arg_types__
         >
-        struct robject_function_reflecter_executer_get_t <
-            object_type__,
-            function_type__,
-            true,
-            name_member_ptr_type,
-            name_member_ptr,
-            args_member_ptr_type,
-            args_member_ptr,
-            functor_member_ptr_type,
-            functor_member_ptr,
-            member_ptr_type,
-            member_ptr
+        struct robject_function_executer_impl_t <
+            return_type__(arg_types__...),
+            true
         >
         {
 
-            using executer_type = typename robject_function_reflecter_t<
-                object_type__,
-                function_type__,
-                name_member_ptr_type,
-                name_member_ptr,
-                args_member_ptr_type,
-                args_member_ptr,
-                functor_member_ptr_type,
-                functor_member_ptr,
-                member_ptr_type,
-                member_ptr
-            >::executer_type;
+            using function_type = typename return_type__(robject_i* obj_p, arg_types__&&...);
 
-            using function_traits = typename utilities::function_traits_t<function_type__>;
+            sz inv_object_offset = 0;
+            function_type* func_ptr = 0;
 
-            static inline executer_type get(object_type__& robj) {
 
-                (robj.*functor_member_ptr) = [&robj](auto&&... args) -> function_traits::result_type {
 
-                    (robj.*member_ptr)(std::forward<decltype(args)>(args)...);
+            inline robject_i* object_p() const {
+
+                return reinterpret_cast<robject_i*>(
+                    reinterpret_cast<sz>(this) - inv_object_offset
+                    );
+            }
+
+            inline return_type__ operator () (arg_types__&&... args) const {
+
+                func_ptr(object_p(), std::forward<arg_types__>(args)...);
+            }
+
+            template<
+                class robject_type__,
+                typename member_ptr_type,
+                member_ptr_type member_ptr
+            >
+            inline void bind_t() {
+
+                func_ptr = [](robject_i* obj_p, arg_types__&&... args)->return_type__ {
+
+                    (((robject_type__*)obj_p)->*member_ptr)(std::forward<arg_types__>(args)...);
 
                 };
 
-                return &(robj.*functor_member_ptr);
             }
 
         };
 
+
+
         template<
-            class object_type__,
-            typename function_type__,
-            typename name_member_ptr_type,
-            name_member_ptr_type name_member_ptr,
-            typename args_member_ptr_type,
-            args_member_ptr_type args_member_ptr,
-            typename functor_member_ptr_type,
-            functor_member_ptr_type functor_member_ptr,
-            typename member_ptr_type,
-            member_ptr_type member_ptr
+            typename return_type__,
+            typename... arg_types__
         >
-        struct robject_function_reflecter_executer_get_t <
-            object_type__,
-            function_type__,
-            false,
-            name_member_ptr_type,
-            name_member_ptr,
-            args_member_ptr_type,
-            args_member_ptr,
-            functor_member_ptr_type,
-            functor_member_ptr,
-            member_ptr_type,
-            member_ptr
+        struct robject_function_executer_impl_t <
+            return_type__(arg_types__...),
+            false
         >
         {
 
-            using executer_type = typename robject_function_reflecter_t<
-                object_type__,
-                function_type__,
-                name_member_ptr_type,
-                name_member_ptr,
-                args_member_ptr_type,
-                args_member_ptr,
-                functor_member_ptr_type,
-                functor_member_ptr,
-                member_ptr_type,
-                member_ptr
-            >::executer_type;
+            using function_type = typename return_type__(robject_i* obj_p, arg_types__&&...);
 
-            using function_traits = typename utilities::function_traits_t<function_type__>;
+            sz inv_object_offset = 0;
+            function_type* func_ptr = 0;
 
-            static inline executer_type get(object_type__& robj) {
 
-                (robj.*functor_member_ptr) = [&robj](auto&&... args) -> function_traits::result_type {
 
-                    return (robj.*member_ptr)(std::forward<decltype(args)>(args)...);
+            inline robject_i* object_p() const {
+
+                return reinterpret_cast<robject_i*>(
+                    reinterpret_cast<sz>(this) - inv_object_offset
+                    );
+            }
+
+            inline return_type__ operator () (arg_types__&&... args) const {
+
+                return func_ptr(object_p(), std::forward<arg_types__>(args)...);
+            }
+
+            template<
+                class robject_type__,
+                typename member_ptr_type,
+                member_ptr_type member_ptr
+            >
+            inline void bind_t() {
+
+                func_ptr = [](robject_i* obj_p, arg_types__&&... args)->return_type__ {
+
+                    return (((robject_type__*)obj_p)->*member_ptr)(std::forward<arg_types__>(args)...);
 
                 };
 
-                return &(robj.*functor_member_ptr);
             }
 
         };
@@ -1137,9 +1283,9 @@ namespace ncpp {
         inline std::ostream& operator << (
             std::ostream& os,
             const ostream_input_t<
-                robject_i
+            robject_i
             >& input
-        )
+            )
         {
 
             if (input.second > NCPP_MAX_TAB_COUNT) {
@@ -1153,7 +1299,7 @@ namespace ncpp {
 
             b8 is_first_member = true;
 
-            for (const auto& member_handle : input.first) {
+            for (auto member_handle_it = input.first.begin(); member_handle_it != input.first.end(); ++member_handle_it) {
 
                 if (!is_first_member) {
 
@@ -1170,8 +1316,8 @@ namespace ncpp {
 
                 }
 
-                os << '"' << member_handle.first << '"' << ": ";
-                safe_ostream_with_tab_t<std::ostream, decltype(member_handle.second)>(os, { member_handle.second, input.second + 1 });
+                os << '"' << member_handle_it.name() << '"' << ": ";
+                safe_ostream_with_tab_t<std::ostream, decltype(*member_handle_it)>(os, { *member_handle_it, input.second + 1 });
 
             }
 
@@ -1200,7 +1346,7 @@ namespace ncpp {
             const ostream_input_t<
                 rtti::robject_i*
             >& input
-        )
+            )
         {
 
             if (input.first == 0) {

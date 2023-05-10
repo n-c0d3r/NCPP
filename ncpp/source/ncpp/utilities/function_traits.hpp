@@ -82,7 +82,7 @@ namespace ncpp {
 
             static const sz nargs = sizeof...(arg_types__);
 
-            using result_type = typename return_type__;
+            using return_type = typename return_type__;
 
             template <sz i>
             using arg_t = typename std::tuple_element<i, std::tuple<arg_types__...>>::type;
