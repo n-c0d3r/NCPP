@@ -142,6 +142,16 @@ namespace ncpp {
 
 
 
+            inline rclass_t(create_instance_func_ptr_type create_instance_func_ptr) :
+                create_instance_func_ptr_(create_instance_func_ptr)
+            {
+
+
+
+            }
+
+
+
 			/**
 			 *	Copy constructor.
 			 *	Stores the create instance function pointer of another rclass.
@@ -336,6 +346,15 @@ namespace ncpp {
 
             }
 
+            /**
+             *	Checks if rclass_t<object_type__> and rclass_t<other_object_type__> are convertible.
+             */
+            template<typename other_object_type__>
+            inline const rclass_t<other_object_type__> rebind_t() {
+
+                return rclass_t<other_object_type__>(create_instance_func_ptr_);
+            }
+
 			/**
 			 *	Checks if rclass_t<object_type__> and rclass_t<other_object_type__> are convertible.
 			 */
@@ -343,8 +362,9 @@ namespace ncpp {
             static inline constexpr b8 is_convertible_t() {
 
                 return (
-                    utilities::is_derived_from_t<other_object_type__, object_type__>()
-                    || utilities::is_derived_from_t<object_type__, other_object_type__>()
+                    //utilities::is_derived_from_t<other_object_type__, object_type__>()
+                    //|| utilities::is_derived_from_t<object_type__, other_object_type__>()
+                    utilities::is_derived_from_t<object_type__, other_object_type__>()
                 );
             }
 #pragma endregion

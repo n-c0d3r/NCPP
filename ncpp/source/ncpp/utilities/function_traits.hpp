@@ -73,6 +73,14 @@ namespace ncpp {
         template<typename function_type__> 
         struct function_traits_t {
 
+            static const sz nargs = 0;
+
+            static const b8 is_function = false;
+
+            using return_type = void;
+
+            template <sz i>
+            using arg_t = void;
 
         };
 
@@ -82,10 +90,13 @@ namespace ncpp {
 
             static const sz nargs = sizeof...(arg_types__);
 
+            static const b8 is_function = true;
+
             using return_type = typename return_type__;
 
             template <sz i>
             using arg_t = typename std::tuple_element<i, std::tuple<arg_types__...>>::type;
+
         };
 
     }

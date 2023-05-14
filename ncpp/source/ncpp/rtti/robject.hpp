@@ -94,24 +94,24 @@ namespace ncpp {
             using current_rclass = ClassName;\
             ncpp::rtti::robject_constructor_begin_scope __##ClassName##_constructor_begin_scope__; \
         public: \
-            virtual ncpp::rtti::rclass_t<ncpp::rtti::robject_i> get_rclass() const { \
-                return ncpp::rtti::rclass_t<ClassName>(); \
+            virtual ncpp::rtti::rclass_t<ncpp::rtti::robject_i> get_class() const { \
+                return ncpp::rtti::rclass_t<ClassName>().rebind_t<ncpp::rtti::robject_i>(); \
             } \
-            static inline ncpp::rtti::rclass_t<ClassName> get_static_rclass() { \
+            static inline ncpp::rtti::rclass_t<ClassName> get_static_class() { \
                 return ncpp::rtti::rclass_t<ClassName>(); \
             } \
             inline ClassName& instantiate() const {\
-                ClassName& result = (ClassName&)get_rclass().create_instance();\
+                ClassName& result = (ClassName&)get_class().create_instance();\
                 result = *this;\
                 return result;\
             }\
             inline ncpp::utilities::native_shared_ptr_t<ClassName> shared_instantiate() const {\
-                ncpp::utilities::native_shared_ptr_t<ClassName> result = ncpp::utilities::native_shared_ptr_cast_t<ClassName>(get_rclass().create_shared_instance());\
+                ncpp::utilities::native_shared_ptr_t<ClassName> result = ncpp::utilities::native_shared_ptr_cast_t<ClassName>(get_class().create_shared_instance());\
                 *result = *this;\
                 return result;\
             }\
             inline ncpp::utilities::native_unique_ptr_t<ClassName> unique_instantiate() const {\
-                ncpp::utilities::native_unique_ptr_t<ClassName> result = ncpp::utilities::native_unique_ptr_cast_t<ClassName>(get_rclass().create_unique_instance());\
+                ncpp::utilities::native_unique_ptr_t<ClassName> result = ncpp::utilities::native_unique_ptr_cast_t<ClassName>(get_class().create_unique_instance());\
                 *result = *this;\
                 return result;\
             }\
@@ -884,7 +884,7 @@ namespace ncpp {
              *  Gets reflected function by name.
              */
             template<typename function_type__>
-            inline const std::function<function_type__>& func_t(const containers::native_string& member_name) const {
+            inline const robject_function_executer_t<function_type__>& func_t(const containers::native_string& member_name) const {
 
                 return at(member_name).to_t<function_type__>();
             }
@@ -1180,7 +1180,8 @@ namespace ncpp {
         >
         {
 
-            using function_type = typename return_type__(robject_i* obj_p, arg_types__&&...);
+            using function_type = typename return_type__(robject_i* obj_p, arg_types__...);
+            using functor_type = typename std::function<typename return_type__(arg_types__...)>;
 
             sz inv_object_offset = 0;
             function_type* func_ptr = 0;
@@ -1194,7 +1195,7 @@ namespace ncpp {
                     );
             }
 
-            inline return_type__ operator () (arg_types__&&... args) const {
+            inline return_type__ operator () (arg_types__... args) const {
 
                 func_ptr(object_p(), std::forward<arg_types__>(args)...);
             }
@@ -1206,12 +1207,24 @@ namespace ncpp {
             >
             inline void bind_t() {
 
-                func_ptr = [](robject_i* obj_p, arg_types__&&... args)->return_type__ {
+                func_ptr = [](robject_i* obj_p, arg_types__... args)->return_type__ {
 
                     (((robject_type__*)obj_p)->*member_ptr)(std::forward<arg_types__>(args)...);
 
                 };
 
+            }
+
+
+
+            inline functor_type to_functor() const {
+
+                robject_i* obj_p = object_p();
+
+                return [=](arg_types__... args) -> return_type__ {
+
+                    func_ptr(obj_p, std::forward<arg_types__>(args)...);
+                };
             }
 
         };
@@ -1228,7 +1241,8 @@ namespace ncpp {
         >
         {
 
-            using function_type = typename return_type__(robject_i* obj_p, arg_types__&&...);
+            using function_type = typename return_type__(robject_i* obj_p, arg_types__...);
+            using functor_type = typename std::function<typename return_type__(arg_types__...)>;
 
             sz inv_object_offset = 0;
             function_type* func_ptr = 0;
@@ -1242,7 +1256,7 @@ namespace ncpp {
                     );
             }
 
-            inline return_type__ operator () (arg_types__&&... args) const {
+            inline return_type__ operator () (arg_types__... args) const {
 
                 return func_ptr(object_p(), std::forward<arg_types__>(args)...);
             }
@@ -1254,12 +1268,24 @@ namespace ncpp {
             >
             inline void bind_t() {
 
-                func_ptr = [](robject_i* obj_p, arg_types__&&... args)->return_type__ {
+                func_ptr = [](robject_i* obj_p, arg_types__... args)->return_type__ {
 
                     return (((robject_type__*)obj_p)->*member_ptr)(std::forward<arg_types__>(args)...);
 
                 };
 
+            }
+
+
+
+            inline functor_type to_functor() const {
+
+                robject_i* obj_p = object_p();
+
+                return [=](arg_types__... args) -> return_type__ {
+
+                    return func_ptr(obj_p, std::forward<arg_types__>(args)...);
+                };
             }
 
         };
