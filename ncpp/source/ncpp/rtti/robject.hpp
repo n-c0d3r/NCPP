@@ -124,9 +124,9 @@ namespace ncpp {
 #define NCPP_RCSCOPE(ClassName) \
         ncpp::rtti::robject_constructor_end_scope __robject_constructor_end_scope__(*this, *(__##ClassName##_constructor_begin_scope__.prev_robject_ref));
 
-          /**
-           *  Declares a reflected member variable.
-           */
+         /**
+          *  Declares a reflected member variable.
+          */
 #define NCPP_RCVARIABLE(MemberType, MemberName, ...) \
         ncpp::rtti::robject_member_handle MemberName##_member_handle; \
         MemberType MemberName;\
@@ -148,9 +148,9 @@ namespace ncpp {
         friend class MemberName##_reflecter_type; \
         MemberName##_reflecter_type MemberName##_reflecter;
 
-           /**
-            *  Declares a reflected member function.
-            */
+        /**
+        *  Declares a reflected member function.
+        */
 #define NCPP_RCFUNCTION(MemberFunctionType, MemberName,...) \
         ncpp::rtti::robject_member_handle MemberName##_member_handle; \
         using MemberName##_type = MemberFunctionType; \
@@ -160,7 +160,6 @@ namespace ncpp {
         > MemberName##_executer; \
         char MemberName##_name_cstr[sizeof(#MemberName)] = #MemberName;\
         typename ncpp::rtti::robject_member_args_t<__VA_ARGS__> MemberName##_args = {__VA_ARGS__}; \
-        typename std::function<MemberFunctionType> MemberName##_functor; \
         using MemberName##_reflecter_type = ncpp::rtti::robject_function_reflecter_t<\
             current_rclass, \
             MemberFunctionType, \
@@ -168,8 +167,35 @@ namespace ncpp {
             &current_rclass::MemberName##_name_cstr,\
             decltype(&current_rclass::MemberName##_args),\
             &current_rclass::MemberName##_args,\
-            decltype(&current_rclass::MemberName##_functor),\
-            &current_rclass::MemberName##_functor,\
+            decltype(&current_rclass::MemberName##_member_handle),\
+            &current_rclass::MemberName##_member_handle,\
+            decltype(&current_rclass::MemberName##_executer), \
+            &current_rclass::MemberName##_executer, \
+            decltype(&current_rclass::MemberName),\
+            &current_rclass::MemberName\
+        >; \
+        friend class MemberName##_reflecter_type; \
+        MemberName##_reflecter_type MemberName##_reflecter;
+
+        /**
+        *  Declares a reflected member function.
+        */
+#define NCPP_RCFUNCTION_VIRTUAL(MemberFunctionType, MemberName,...) \
+        ncpp::rtti::robject_member_handle MemberName##_member_handle; \
+        using MemberName##_type = MemberFunctionType; \
+        virtual MemberName##_type MemberName; \
+        ncpp::rtti::robject_function_executer_t<\
+            MemberName##_type \
+        > MemberName##_executer; \
+        char MemberName##_name_cstr[sizeof(#MemberName)] = #MemberName;\
+        typename ncpp::rtti::robject_member_args_t<__VA_ARGS__> MemberName##_args = {__VA_ARGS__}; \
+        using MemberName##_reflecter_type = ncpp::rtti::robject_function_reflecter_t<\
+            current_rclass, \
+            MemberFunctionType, \
+            decltype(&current_rclass::MemberName##_name_cstr),\
+            &current_rclass::MemberName##_name_cstr,\
+            decltype(&current_rclass::MemberName##_args),\
+            &current_rclass::MemberName##_args,\
             decltype(&current_rclass::MemberName##_member_handle),\
             &current_rclass::MemberName##_member_handle,\
             decltype(&current_rclass::MemberName##_executer), \
@@ -325,8 +351,6 @@ namespace ncpp {
             name_member_ptr_type name_member_ptr,
             typename args_member_ptr_type,
             args_member_ptr_type args_member_ptr,
-            typename functor_member_ptr_type,
-            functor_member_ptr_type functor_member_ptr,
             typename member_handle_ptr_type,
             member_handle_ptr_type member_handle_ptr,
             typename member_executer_ptr_type,
@@ -1047,8 +1071,6 @@ namespace ncpp {
             name_member_ptr_type name_member_ptr,
             typename args_member_ptr_type,
             args_member_ptr_type args_member_ptr,
-            typename functor_member_ptr_type,
-            functor_member_ptr_type functor_member_ptr,
             typename member_handle_ptr_type,
             member_handle_ptr_type member_handle_ptr,
             typename member_executer_ptr_type,
@@ -1063,8 +1085,6 @@ namespace ncpp {
             name_member_ptr,
             args_member_ptr_type,
             args_member_ptr,
-            functor_member_ptr_type,
-            functor_member_ptr,
             member_handle_ptr_type,
             member_handle_ptr,
             member_executer_ptr_type,
@@ -1124,8 +1144,6 @@ namespace ncpp {
             name_member_ptr_type name_member_ptr,
             typename args_member_ptr_type,
             args_member_ptr_type args_member_ptr,
-            typename functor_member_ptr_type,
-            functor_member_ptr_type functor_member_ptr,
             typename member_handle_ptr_type,
             member_handle_ptr_type member_handle_ptr,
             typename member_executer_ptr_type,
@@ -1140,8 +1158,6 @@ namespace ncpp {
             name_member_ptr,
             args_member_ptr_type,
             args_member_ptr,
-            functor_member_ptr_type,
-            functor_member_ptr,
             member_handle_ptr_type,
             member_handle_ptr,
             member_executer_ptr_type,

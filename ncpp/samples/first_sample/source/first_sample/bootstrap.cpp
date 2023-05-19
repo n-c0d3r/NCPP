@@ -13,15 +13,7 @@ class A :
 
 
 public:
-	NCPP_RCVARIABLE(
-		i32, i
-	);
-
-
-
-public:
-	A() :
-		i(1)
+	A()
 	{
 
 		NCPP_RCSCOPE(A);
@@ -34,14 +26,14 @@ public:
 	}
 
 	NCPP_RCFUNCTION(
-		i32(f32), foo
+		i32(f32 f), foo
 	);
 
 };
 
 i32 A::foo(f32 f) {
 
-	std::cout << f << std::endl;
+	std::cout << "A " << f << std::endl;
 
 	return 3;
 }
@@ -50,13 +42,15 @@ i32 A::foo(f32 f) {
 
 int main() {
 
-	auto aclass = A::get_static_class();
+	{
 
-	auto a_p = aclass.create_unique_instance();
+		A a;    
 
-	auto foo_executer = a_p->func_t<i32(f32)>("foo");
+		std::cout << sizeof(a) << std::endl;
 
-	foo_executer.to_functor()(3.5f);
+		log_memory_stats();
+
+	}
 
 	log_memory_stats();
 
