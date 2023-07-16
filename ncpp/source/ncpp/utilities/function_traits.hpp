@@ -92,10 +92,10 @@ namespace ncpp {
 
             static const b8 is_function = true;
 
-            using return_type = typename return_type__;
+            using return_type = return_type__;
 
             template <sz i>
-            using arg_t = typename std::tuple_element<i, std::tuple<arg_types__...>>::type;
+            using arg_t = std::tuple_element<i, std::tuple<arg_types__...>>::type;
 
         };
 
@@ -111,7 +111,7 @@ namespace ncpp {
         template<typename new_return_type__, typename org_return_type__, typename... arg_types__>
         struct replace_function_return_type_t<org_return_type__(arg_types__...), new_return_type__> {
 
-            using type = typename org_return_type__(arg_types__...);
+            using type = org_return_type__(arg_types__...);
 
         };
 

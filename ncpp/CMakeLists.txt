@@ -2,6 +2,10 @@
 set(NCPP_CXX_STANDARD 20 CACHE STRING "CXX Standard")
 set(CMAKE_CXX_STANDARD ${NCPP_CXX_STANDARD})
 
+if(CMAKE_COMPILER_IS_GNUCXX)
+    add_definitions(-fpermissive)
+endif()
+
 
 
 # ncpp utility options

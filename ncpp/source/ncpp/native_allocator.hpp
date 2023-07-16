@@ -229,7 +229,7 @@ namespace ncpp {
 		}
 
 		template <class other_value_type__>
-		inline native_allocator_t(typename const native_allocator_t<other_value_type__>& other)
+		inline native_allocator_t(const native_allocator_t<other_value_type__>& other)
 		{
 
 
@@ -237,7 +237,7 @@ namespace ncpp {
 		}
 
 		template <class other_value_type__>
-		inline native_allocator_t& operator=(typename const native_allocator_t<other_value_type__>& other) {
+		inline native_allocator_t& operator=(const native_allocator_t<other_value_type__>& other) {
 
 			return *this;
 		}

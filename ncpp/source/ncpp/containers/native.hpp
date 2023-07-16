@@ -91,20 +91,20 @@ namespace ncpp {
 
 #pragma region C++ STL Containers
         template<typename char_type__ = char, typename char_traits__ = std::char_traits<char>>
-        using native_string_t = typename std::basic_string<
+        using native_string_t = std::basic_string<
             char_type__, 
             char_traits__, 
             native_allocator_t<char_type__>
         >;
 
-        using native_string = typename native_string_t<>;
+        using native_string = native_string_t<>;
 
-        using native_wstring = typename native_string_t<wchar_t>;
+        using native_wstring = native_string_t<wchar_t>;
 
 
 
         template<typename item_type__>
-        using native_vector_t = typename std::vector<
+        using native_vector_t = std::vector<
             item_type__,
             native_allocator_t<item_type__>
         >;
@@ -112,7 +112,7 @@ namespace ncpp {
 
 
         template<typename key_type__, typename value_type__, typename pr__ = std::less<key_type__>>
-        using native_map_t = typename std::map<
+        using native_map_t = std::map<
             key_type__,
             value_type__,
             pr__,
@@ -120,7 +120,7 @@ namespace ncpp {
         >;
 
         template<typename key_type__, typename value_type__, typename hs__ = std::hash<key_type__>, typename eq__ = std::equal_to<key_type__>>
-        using native_unordered_map_t = typename std::unordered_map<
+        using native_unordered_map_t = std::unordered_map<
             key_type__,
             value_type__,
             hs__,
@@ -131,14 +131,14 @@ namespace ncpp {
 
 
         template<typename key_type__, typename pr__ = std::less<key_type__>>
-        using native_set_t = typename std::set<
+        using native_set_t = std::set<
             key_type__,
             pr__,
             native_allocator_t<key_type__>
         >;
 
         template<typename key_type__, typename hs__ = std::hash<key_type__>, typename eq__ = std::equal_to<key_type__>>
-        using native_unordered_set_t = typename std::unordered_set<
+        using native_unordered_set_t = std::unordered_set<
             key_type__,
             hs__,
             eq__,

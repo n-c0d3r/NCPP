@@ -1202,7 +1202,7 @@ namespace ncpp {
 
 
 	template<
-		class allocator_type__ = typename NCPP_DEFAULT_ALLOCATOR_TEMPLATE<u8>,
+		class allocator_type__ = NCPP_DEFAULT_ALLOCATOR_TEMPLATE<u8>,
 		class lock_type__ = pac::spinlock
 	>
 	class stack_heap_t :
@@ -1657,7 +1657,7 @@ namespace ncpp {
 		}
 
 		template <class other_value_type__>
-		inline stack_allocator_t(typename const stack_allocator_t<other_value_type__, stack_heap_type>& other) :
+		inline stack_allocator_t(const stack_allocator_t<other_value_type__, stack_heap_type>& other) :
 			stack_allocator_t((stack_heap_type&)(other.stack_heap()), (stack_group&)(other.group()))
 		{
 
@@ -1666,7 +1666,7 @@ namespace ncpp {
 		}
 
 		template <class other_value_type__>
-		inline stack_allocator_t& operator=(typename const stack_allocator_t<other_value_type__, stack_heap_type>& other) {
+		inline stack_allocator_t& operator=(const stack_allocator_t<other_value_type__, stack_heap_type>& other) {
 
 			stack_heap_ref_ = other.stack_heap();
 			stack_group_ref_ = other.group();

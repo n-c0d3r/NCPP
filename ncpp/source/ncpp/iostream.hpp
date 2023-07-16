@@ -159,7 +159,7 @@ namespace ncpp {
 
 
 
-	template<typename stream_type__, typename type__, typename input_type__ = typename ostream_input_t<type__>>
+	template<typename stream_type__, typename type__, typename input_type__ = ostream_input_t<type__>>
 	inline stream_type__& safe_ostream_with_tab_t(stream_type__& stream, input_type__&& input) {
 
 		using safe_ostream_with_tab_forward_type = safe_ostream_with_tab_forwarder_t<

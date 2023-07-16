@@ -288,7 +288,7 @@ namespace ncpp {
 #pragma region Typedefs
 	public:
 		using allocator_type = allocator_type__;
-		using block_type = typename tagged_heap_block;
+		using block_type = tagged_heap_block;
 #pragma endregion
 
 		////////////////////////////////////////////////////////////////////////////////////
@@ -556,12 +556,12 @@ namespace ncpp {
 	 *	A tagged heap manages memory block allocations and categories.
 	 */
 	template<
-		class allocator_type__ = typename NCPP_DEFAULT_ALLOCATOR_TEMPLATE<u8>,
-		class category_cell_allocator_type__ = typename NCPP_DEFAULT_ALLOCATOR_TEMPLATE<
-			typename containers::handle_map_cell_type<typename tagged_heap_category_t<allocator_type__>>
+		class allocator_type__ = NCPP_DEFAULT_ALLOCATOR_TEMPLATE<u8>,
+		class category_cell_allocator_type__ = NCPP_DEFAULT_ALLOCATOR_TEMPLATE<
+			containers::handle_map_cell_type<tagged_heap_category_t<allocator_type__>>
 		>,
-		class category_id_allocator_type__ = typename NCPP_DEFAULT_ALLOCATOR_TEMPLATE<
-			typename containers::handle_map_id_type<typename tagged_heap_category_t<allocator_type__>>
+		class category_id_allocator_type__ = NCPP_DEFAULT_ALLOCATOR_TEMPLATE<
+			containers::handle_map_id_type<tagged_heap_category_t<allocator_type__>>
 		>
 	>
 	class NCPP_DEFAULT_ALIGNAS tagged_heap_t : 
@@ -576,10 +576,10 @@ namespace ncpp {
 	public:
 		using allocator_type = allocator_type__;
 		using block_type = tagged_heap_block;
-		using category_type = typename tagged_heap_category_t<allocator_type__>;
+		using category_type = tagged_heap_category_t<allocator_type__>;
 		using category_cell_allocator_type = category_cell_allocator_type__;
 		using category_id_allocator_type = category_id_allocator_type__;
-		using category_map = typename containers::handle_map_t<category_type, category_id_allocator_type, category_cell_allocator_type>;
+		using category_map = containers::handle_map_t<category_type, category_id_allocator_type, category_cell_allocator_type>;
 		using category_id_type = typename category_map::id_type;
 		using category_cell_type = typename category_map::cell_type;
 #pragma endregion
@@ -795,7 +795,7 @@ namespace ncpp {
 		}
 
 		template <class other_value_type__>
-		inline tgh_allocator_t(typename const tgh_allocator_t<other_value_type__, tagged_heap_type>& other) :
+		inline tgh_allocator_t(const tgh_allocator_t<other_value_type__, tagged_heap_type>& other) :
 			tgh_allocator_t((tagged_heap_type&)other.tagged_heap(), other.category_id())
 		{
 
@@ -804,7 +804,7 @@ namespace ncpp {
 		}
 
 		template <class other_value_type__>
-		inline tgh_allocator_t& operator=(typename const tgh_allocator_t<other_value_type__, tagged_heap_type>& other) {
+		inline tgh_allocator_t& operator=(const tgh_allocator_t<other_value_type__, tagged_heap_type>& other) {
 
 			tagged_heap_ref_ = other.tagged_heap();
 			category_id_ = other.category_id();

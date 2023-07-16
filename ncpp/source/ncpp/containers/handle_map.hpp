@@ -170,8 +170,8 @@ namespace ncpp {
 
         template<
             typename item_type__, 
-            class id_allocator_type__ = typename NCPP_DEFAULT_ALLOCATOR_TEMPLATE<typename handle_map_id_type<item_type__>>,
-            class cell_allocator_type__ = typename NCPP_DEFAULT_ALLOCATOR_TEMPLATE<typename handle_map_cell_type<item_type__>>
+            class id_allocator_type__ = NCPP_DEFAULT_ALLOCATOR_TEMPLATE<handle_map_id_type<item_type__>>,
+            class cell_allocator_type__ = NCPP_DEFAULT_ALLOCATOR_TEMPLATE<handle_map_cell_type<item_type__>>
         >
         class NCPP_DEFAULT_ALIGNAS handle_map_t {
 
@@ -181,14 +181,14 @@ namespace ncpp {
 
 #pragma region Typedefs
         public:
-            using id_type = typename handle_map_id_type<item_type__>;
+            using id_type = handle_map_id_type<item_type__>;
             using id_allocator_type = id_allocator_type__;
-            using cell_type = typename handle_map_cell_type<item_type__>;
+            using cell_type = handle_map_cell_type<item_type__>;
             using cell_allocator_type = cell_allocator_type__;
 
             using item_type = item_type__;
-            using id_vector_type = typename fls_vector_t<id_type, id_allocator_type>;
-            using cell_vector_type = typename fls_vector_t<cell_type, cell_allocator_type>;
+            using id_vector_type = fls_vector_t<id_type, id_allocator_type>;
+            using cell_vector_type = fls_vector_t<cell_type, cell_allocator_type>;
 
             using iterator = cell_type*;
             using const_iterator = const cell_type*;

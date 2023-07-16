@@ -56,6 +56,7 @@ namespace ncpp {}
 #include <iostream>
 #include <algorithm>
 #include <array>
+#include <cassert>
 #include <vector>
 #include <set>
 #include <map>
@@ -73,6 +74,8 @@ namespace ncpp {}
 #include <cstdio>
 #include <cstdlib>
 #include <fstream>
+#include <memory>
+#include <condition_variable>
 #pragma endregion
 
 ////////////////////////////////////////////////////////////////////////////////////
