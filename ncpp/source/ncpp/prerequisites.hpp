@@ -136,7 +136,7 @@ namespace ncpp {}
 #if defined(_MSC_VER)
 #define NCPP_ALIGNAS(N) __declspec(align(N))
 #elif defined( __GNUC__ ) || defined(__MINGW64__)
-#define NCPP_ALIGNAS(N) __attribute__((__align(N)))
+#define NCPP_ALIGNAS(N) alignas(N)
 #endif
 
 #define NCPP_DEFAULT_ALIGNAS NCPP_ALIGNAS(NCPP_DEFAULT_ALIGN)

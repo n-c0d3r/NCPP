@@ -67,27 +67,27 @@ namespace ncpp {
 	/**
 	 *	Uses to get current native allocated memory. 
 	 */
-	extern inline sz native_allocated_memory();
+	extern sz native_allocated_memory();
 	/**
 	 *	Increases native allocated memory by given bytes.
 	 */
-	extern inline void increase_native_allocated_memory(sz bytes);
+	extern void increase_native_allocated_memory(sz bytes);
 	/**
 	 *	Decreases native allocated memory by given bytes.
 	 */
-	extern inline void decrease_native_allocated_memory(sz bytes);
+	extern void decrease_native_allocated_memory(sz bytes);
 
 	/**
 	 *	Uses to get current native used_heap memory.
 	 */
-	extern inline sz native_used_heap_memory();
+	extern sz native_used_heap_memory();
 	/**
 	 *	Increases native used_heap memory by given bytes.
 	 */
-	extern inline void increase_native_used_heap_memory(sz bytes);
+	extern void increase_native_used_heap_memory(sz bytes);
 	/**
 	 *	Decreases native used_heap memory by given bytes.
 	 */
-	extern inline void decrease_native_used_heap_memory(sz bytes);
+	extern void decrease_native_used_heap_memory(sz bytes);
 
 }
