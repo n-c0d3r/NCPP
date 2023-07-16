@@ -89,7 +89,7 @@ namespace ncpp {
 
 
 
-	struct NCPP_DEFAULT_ALIGNAS stack_allocation {
+	struct stack_allocation {
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
@@ -441,17 +441,24 @@ namespace ncpp {
 		inline u8* aligned_alloc(sz size, sz align)
 		{
 
-			sz actual_size = size + sizeof(stack_allocation) + align;
+			const sz additional_size = sizeof(stack_allocation) + sizeof(native_allocator_i*);
+
+			sz actual_size = additional_size + size + align;
 
 			u8* raw_ptr = pushable_pointer();
 			usage_ += actual_size;
 
-			u8* aligned_ptr = align_pointer(raw_ptr, align);
+			u8* aligned_ptr = align_pointer(raw_ptr + additional_size, align);
 
-			if (aligned_ptr == raw_ptr)
+			if (aligned_ptr == (raw_ptr + additional_size))
 				aligned_ptr += align;
 
-			stack_allocation* allocation_p = reinterpret_cast<stack_allocation*>(aligned_ptr);
+
+
+			native_allocator_i** allocator_pp = reinterpret_cast<native_allocator_i**>(aligned_ptr) - 1;
+			*allocator_pp = &current_native_allocator();
+
+			stack_allocation* allocation_p = reinterpret_cast<stack_allocation*>(allocator_pp) - 1;
 			new(allocation_p) stack_allocation(actual_size, *this);
 
 
@@ -464,7 +471,7 @@ namespace ncpp {
 
 			allocation_list_.insert(*allocation_p);
 
-			return reinterpret_cast<u8*>(allocation_p + 1);
+			return aligned_ptr;
 		}
 
 
@@ -1442,7 +1449,8 @@ namespace ncpp {
 
 			utilities::unique_lock_t<lock_type> lock_guard(lock_);
 
-			stack_allocation* allocation_p = reinterpret_cast<stack_allocation*>(ptr) - 1;
+			native_allocator_i** allocator_pp = reinterpret_cast<native_allocator_i**>(ptr) - 1;
+			stack_allocation* allocation_p = reinterpret_cast<stack_allocation*>(allocator_pp) - 1;
 
 
 

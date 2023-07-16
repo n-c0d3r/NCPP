@@ -99,6 +99,22 @@ namespace ncpp {
 
         };
 
+       
+        
+        template<typename function_type__, typename new_return_type__>
+        struct replace_function_return_type_t {
+
+
+
+        };
+
+        template<typename new_return_type__, typename org_return_type__, typename... arg_types__>
+        struct replace_function_return_type_t<org_return_type__(arg_types__...), new_return_type__> {
+
+            using type = typename org_return_type__(arg_types__...);
+
+        };
+
     }
 
 }

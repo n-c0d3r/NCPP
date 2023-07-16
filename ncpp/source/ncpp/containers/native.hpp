@@ -164,20 +164,20 @@ namespace ncpp {
 
 #pragma region NCPP Containers
         template<typename item_type__>
-        using native_handle_map_t = typename handle_map_t<
+        using native_handle_map_t = handle_map_t<
             item_type__,
-            native_allocator_t<typename handle_map_id_type<item_type__>>,
-            native_allocator_t<typename handle_map_cell_type<item_type__>>
+            native_allocator_t<handle_map_id_type<item_type__>>,
+            native_allocator_t<handle_map_cell_type<item_type__>>
         >;
 
         template<typename item_type__>
-        using native_fv_queue_t = typename fixed_vector_queue_t<
+        using native_fv_queue_t = fixed_vector_queue_t<
             item_type__,
             native_allocator_t<item_type__>
         >;
 
         template<typename item_type__>
-        using native_fv_stack_t = typename fixed_vector_stack_t<
+        using native_fv_stack_t = fixed_vector_stack_t<
             item_type__,
             native_allocator_t<item_type__>
         >;

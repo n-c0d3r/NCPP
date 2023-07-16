@@ -185,7 +185,7 @@ namespace ncpp {
 			/**
 			 *  Initialization constructor.
 			 */
-			inline win_fiber::win_fiber(fiber_creation_mode mode, functor_type&& functor = [](win_fiber&) {}, sz stack_size = NCPP_DEFAULT_FIBER_STACK_SIZE) :
+			inline win_fiber(fiber_creation_mode mode, functor_type&& functor = [](win_fiber&) {}, sz stack_size = NCPP_DEFAULT_FIBER_STACK_SIZE) :
 				creation_mode_(mode),
 				__platform__fiber_(0),
 				functor_(std::move(functor)),
@@ -208,7 +208,7 @@ namespace ncpp {
 			/**
 			 *  NEW-mode fiber constructor.
 			 */
-			inline win_fiber::win_fiber(functor_type&& functor, sz stack_size = NCPP_DEFAULT_FIBER_STACK_SIZE):
+			inline win_fiber(functor_type&& functor, sz stack_size = NCPP_DEFAULT_FIBER_STACK_SIZE):
 				win_fiber(fiber_creation_mode::NEW, std::forward<functor_type>(functor), stack_size)
 			{
 
@@ -218,7 +218,7 @@ namespace ncpp {
 			/**
 			 *  Destructor
 			 */
-			win_fiber::~win_fiber() {
+			~win_fiber() {
 
 				if (__platform__fiber_ == 0) return;
 
@@ -287,7 +287,7 @@ namespace ncpp {
             /**
              *  Switches to this fiber
              */
-			inline void switch_to_this(){
+			inline void resume(){
 
 				SwitchToFiber(__platform__fiber_);
 

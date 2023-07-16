@@ -122,7 +122,7 @@ namespace ncpp {
                 raw_pointer_(&raw_ref)
             {
 
-                static_assert(false && "cant reference to rvalue.");
+                static_assert(!std::is_same_v<type__&&, std::remove_reference<type__>&&> && "cant reference to rvalue.");
 
             }
             ~na_lref_t() {
@@ -266,7 +266,7 @@ namespace ncpp {
                 aptr_(&raw_ref)
             {
 
-                static_assert(false && "cant reference to rvalue.");
+                static_assert(!std::is_same_v<type__&&, std::remove_reference<type__>&&> && "cant reference to rvalue.");
 
             }
             ~a_lref_t() {
@@ -372,8 +372,8 @@ namespace ncpp {
         template<typename type__, b8 is_atomic__ = false>
         using lref_t = typename utilities::nth_template_arg_t<
             (sz)is_atomic__,
-            typename na_lref_t<type__>,
-            typename a_lref_t<type__>
+            na_lref_t<type__>,
+            a_lref_t<type__>
         >::type;
 
     }

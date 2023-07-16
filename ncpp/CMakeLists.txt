@@ -1,4 +1,9 @@
 
+set(NCPP_CXX_STANDARD 20 CACHE STRING "CXX Standard")
+set(CMAKE_CXX_STANDARD ${NCPP_CXX_STANDARD})
+
+
+
 # ncpp utility options
 set(NCPP_DEFAULT_ALIGN 16 CACHE STRING "Default Data Align")
 
@@ -20,18 +25,32 @@ set(NCPP_DEFAULT_HANDLE_MAP_RESERVE_COUNT 4096 CACHE STRING "Default Handle Map 
 set(NCPP_DEFAULT_HANDLE_MAP_VECTOR_RESERVE_COUNT 4 CACHE STRING "Default Handle Map Vector Reserve Count")
 
 # ncpp pac options
-option(NCPP_ENABLE_FIBER "Enable fiber" ON)
+if(MSVC)
+    set(NCPP_SUPPORT_FIBER ON)
+else()
+    set(NCPP_SUPPORT_FIBER OFF)
+endif()
+
+if(${NCPP_SUPPORT_FIBER})
+    option(NCPP_ENABLE_FIBER "Enable fiber" ON)
+else()
+    set(NCPP_ENABLE_FIBER OFF)
+endif()
+
 set(NCPP_DEFAULT_THREAD_STACK_SIZE 1048576 CACHE STRING "Default Stack Size Of Thread")
 set(NCPP_DEFAULT_FIBER_STACK_SIZE 262144 CACHE STRING "Default Stack Size Of Fiber")
 option(NCPP_ENABLE_WEAKLOCK_WARNING "Enable Weaklock Warning" ON)
 
-# ncpp job system options
-set(NCPP_DEFAULT_JOB_HANDLE_QUEUE_CAPACITY 1024 CACHE STRING "Default Job Handle Queue Capacity")
-set(NCPP_DEFAULT_JOB_INSTANCE_POOL_CAPACITY 1024 CACHE STRING "Default Job Instance Pool Capacity")
-
 # ncpp other options
 set(NCPP_TAB_SIZE 4 CACHE STRING "Tab Size")
 set(NCPP_MAX_TAB_COUNT 8 CACHE STRING "Max Tab Count")
+
+# ncpp dop options
+if(CMAKE_CXX_STANDARD GREATER_EQUAL 20)
+    option(NCPP_ENABLE_TASK_SYSTEM "Enable Task System" ON)
+else()
+    set(NCPP_ENABLE_TASK_SYSTEM OFF)
+endif()
 
 
 

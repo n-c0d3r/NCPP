@@ -121,7 +121,7 @@ namespace ncpp {
             inline iterator begin() { return item_vector_.data() + begin_index_.load(std::memory_order_acquire) % capacity_; }
             inline const_iterator begin() const { return item_vector_.data() + begin_index_.load(std::memory_order_acquire) % capacity_; }
             inline const_iterator cbegin() const { return item_vector_.data() + begin_index_.load(std::memory_order_acquire) % capacity_; }
-            inline iterator end() { return item_vector_.data() + end_index_.load(std::memory_order_acquire) % capacity; }
+            inline iterator end() { return item_vector_.data() + end_index_.load(std::memory_order_acquire) % capacity_; }
             inline const_iterator end() const { return item_vector_.data() + end_index_.load(std::memory_order_acquire) % capacity_; }
             inline const_iterator cend() const { return item_vector_.data() + end_index_.load(std::memory_order_acquire) % capacity_; }
 
@@ -246,13 +246,9 @@ namespace ncpp {
 
 
 
-                sz next = (end_index_ + 1) % capacity_;
+                item_vector_[end_index_.load(std::memory_order_acquire) % capacity_] = std::forward<item_param_type>(item);
 
-                assert(next != begin_index_);
-
-                item_vector_[next] = std::forward<item_param_type>(item);
-
-                begin_index_ = next;
+                end_index_.fetch_add(1, std::memory_order_release);
 
             }
 
@@ -293,30 +289,14 @@ namespace ncpp {
              */
             inline bool try_pop(utilities::lref_t<item_type>& output) {
 
-                if (begin_index_ != end_index_) {
-
-                    utilities::unique_lock_t<pac::spinlock> lock_guard(reader_lock_);
-
-                    if (begin_index_ != end_index_) {
-
-                        output = item_vector_[begin_index_ % capacity_];
-                    
-                        begin_index_ = 
-
-                        return true;
-                    }
-                }
-
-                return false;
-
                 utilities::unique_lock_t<pac::spinlock> lock_guard(reader_lock_);
 
-                sz begin_index = begin_index_.load(std::memory_order_relaxed);
+                sz begin_index = begin_index_.load(std::memory_order_acquire);
 
-                sz end_index = end_index_.load(std::memory_order_relaxed);
+                sz end_index = end_index_.load(std::memory_order_acquire);
                 if (end_index <= begin_index) return false;
 
-                begin_index_.fetch_add(1, std::memory_order_relaxed);
+                begin_index_.fetch_add(1, std::memory_order_release);
 
                 output = item_vector_[begin_index % capacity_];
 
@@ -328,16 +308,14 @@ namespace ncpp {
              */
             inline bool try_pop(item_type& output) {
 
-                std::atomic_thread_fence(std::memory_order_acq_rel);
-
                 utilities::unique_lock_t<pac::spinlock> lock_guard(reader_lock_);
 
-                sz begin_index = begin_index_.load(std::memory_order_relaxed);
+                sz begin_index = begin_index_.load(std::memory_order_acquire);
 
-                sz end_index = end_index_.load(std::memory_order_relaxed);
+                sz end_index = end_index_.load(std::memory_order_acquire);
                 if (end_index <= begin_index) return false;
 
-                begin_index_.fetch_add(1, std::memory_order_relaxed);
+                begin_index_.fetch_add(1, std::memory_order_release);
 
                 output = item_vector_[begin_index % capacity_];
 
@@ -349,16 +327,14 @@ namespace ncpp {
              */
             inline bool try_pop() {
 
-                std::atomic_thread_fence(std::memory_order_acq_rel);
-
                 utilities::unique_lock_t<pac::spinlock> lock_guard(reader_lock_);
 
-                sz begin_index = begin_index_.load(std::memory_order_relaxed);
+                sz begin_index = begin_index_.load(std::memory_order_acquire);
 
-                sz end_index = end_index_.load(std::memory_order_relaxed);
+                sz end_index = end_index_.load(std::memory_order_acquire);
                 if (end_index <= begin_index) return false;
 
-                begin_index_.fetch_add(1, std::memory_order_relaxed);
+                begin_index_.fetch_add(1, std::memory_order_release);
 
                 return true;
             }
@@ -368,13 +344,11 @@ namespace ncpp {
              */
             inline void pop() {
 
-                std::atomic_thread_fence(std::memory_order_acq_rel);
-
                 utilities::unique_lock_t<pac::spinlock> lock_guard(reader_lock_);
 
-                sz begin_index = begin_index_.load(std::memory_order_relaxed);
+                sz begin_index = begin_index_.load(std::memory_order_acquire);
 
-                sz end_index = end_index_.load(std::memory_order_relaxed);
+                sz end_index = end_index_.load(std::memory_order_acquire);
 
                 assert(end_index > begin_index && "the queue is empty.");
 

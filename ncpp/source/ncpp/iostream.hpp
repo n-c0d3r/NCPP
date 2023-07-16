@@ -116,7 +116,7 @@ namespace ncpp {
 	template<typename stream_type__, typename type__>
 	inline stream_type__& safe_ostream_t(stream_type__& stream, type__&& data) {
 
-		using safe_ostream_forward_type = typename safe_ostream_forwarder_t<
+		using safe_ostream_forward_type = safe_ostream_forwarder_t<
 			stream_type__,
 			type__,
 			utilities::is_ostreamable_t<
@@ -162,7 +162,7 @@ namespace ncpp {
 	template<typename stream_type__, typename type__, typename input_type__ = typename ostream_input_t<type__>>
 	inline stream_type__& safe_ostream_with_tab_t(stream_type__& stream, input_type__&& input) {
 
-		using safe_ostream_with_tab_forward_type = typename safe_ostream_with_tab_forwarder_t<
+		using safe_ostream_with_tab_forward_type = safe_ostream_with_tab_forwarder_t<
 			stream_type__,
 			input_type__,
 			utilities::is_ostreamable_t<
@@ -208,7 +208,7 @@ namespace ncpp {
 	template<typename stream_type__, typename type__>
 	inline stream_type__& safe_istream_t(stream_type__& stream, type__&& data) {
 
-		using safe_istream_forward_type = typename safe_istream_forwarder_t<
+		using safe_istream_forward_type = safe_istream_forwarder_t<
 			stream_type__,
 			type__,
 			utilities::is_istreamable_t<

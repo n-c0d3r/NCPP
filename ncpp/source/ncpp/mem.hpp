@@ -105,45 +105,53 @@ namespace ncpp {
 	inline void* aligned_alloc(sz size, sz align)
 	{
 
-		sz actual_size = size + sizeof(sz) + align;
+		sz additional_size = sizeof(sz) + sizeof(native_allocator_i**);
+
+		sz actual_size = additional_size + size + align;
 
 		u8* raw_ptr = new u8[actual_size];
-		*((sz*)raw_ptr) = actual_size;
-		raw_ptr += sizeof(sz);
 
-		u8* aligned_ptr = align_pointer(raw_ptr, align);
 
-		if (aligned_ptr == raw_ptr)
+
+		u8* additionized_ptr = raw_ptr + additional_size;
+
+
+
+		u8* aligned_ptr = align_pointer(additionized_ptr, align);
+
+		if (aligned_ptr == additionized_ptr)
 			aligned_ptr += align;
 
-		ptrdiff_t shift = aligned_ptr - raw_ptr;
+		ptrdiff_t shift = aligned_ptr - additionized_ptr;
 		assert(shift > 0 && shift <= 256);
+
+
+
+		native_allocator_i** allocator_pp = reinterpret_cast<native_allocator_i**>(aligned_ptr) - 1;
+		*allocator_pp = &current_native_allocator();
+
+		*(reinterpret_cast<sz*>(allocator_pp) - 1) = actual_size;
+		*(reinterpret_cast<u8*>(allocator_pp) - sizeof(sz) - 1) = static_cast<u8>(shift & 0xFF);
+
+
 
 #ifdef NCPP_ENABLE_NATIVE_MEMORY_COUNTING
 		increase_native_allocated_memory(actual_size);
 #endif
-
-		aligned_ptr[-1] = static_cast<u8>(shift & 0xFF);
+				
 		return aligned_ptr;
 	}
 
 	/**
-	 *	Gets actual allocated size from aligned pointer
+	 *	Gets actual size from aligned pointer
 	 */
 	inline sz actual_size_aligned(void* ptr)
 	{
 
-		u8* aligned_ptr = reinterpret_cast<u8*>(ptr);
+		native_allocator_i** allocator_pp = reinterpret_cast<native_allocator_i**>(ptr) - 1;
+		*allocator_pp = &current_native_allocator();
 
-		ptrdiff_t shift = aligned_ptr[-1];
-		if (shift == 0)
-			shift = 256;
-
-		u8* raw_ptr = aligned_ptr - shift - sizeof(sz);
-
-		sz actual_size = *((sz*)raw_ptr);
-
-		return actual_size;
+		return *(reinterpret_cast<sz*>(allocator_pp) - 1);
 	}
 
 	/**
@@ -154,21 +162,28 @@ namespace ncpp {
 
 		u8* aligned_ptr = reinterpret_cast<u8*>(ptr);
 
-		ptrdiff_t shift = aligned_ptr[-1];
+		native_allocator_i** allocator_pp = reinterpret_cast<native_allocator_i**>(aligned_ptr) - 1;
+
+		sz actual_size = *(reinterpret_cast<sz*>(allocator_pp) - 1);
+
+		ptrdiff_t shift = *(reinterpret_cast<u8*>(allocator_pp) - sizeof(sz) - 1);
 		if (shift == 0)
 			shift = 256;
 
-		u8* raw_ptr = aligned_ptr - shift - sizeof(sz);
 
-		sz actual_size = *((sz*)raw_ptr);
+
+		u8* raw_ptr = (reinterpret_cast<u8*>(allocator_pp) - sizeof(sz)) - shift;
+
+
 
 #ifdef NCPP_ENABLE_NATIVE_MEMORY_COUNTING
 		decrease_native_allocated_memory(actual_size);
 #endif
 
+
+
 		delete[] raw_ptr;
 
-		return;
 	}
 #pragma endregion
 

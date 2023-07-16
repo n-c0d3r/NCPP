@@ -134,7 +134,8 @@ namespace ncpp {
 
 		virtual void abstract_deallocate(void* p, sz size = 1) {
 
-			current_native_allocator().abstract_deallocate(p, size);
+			native_allocator_i* allocator_p = *(reinterpret_cast<native_allocator_i**>(p) - 1);
+			allocator_p->abstract_deallocate(p, size);
 		}
 
 

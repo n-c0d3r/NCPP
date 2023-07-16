@@ -1,10 +1,10 @@
 
 # ncpp.samples.first_sample target source files
 file(GLOB source_files
-    "source/first_sample/*.cpp"
-    "source/first_sample/*.hpp"
+    "source/*.cpp"
+    "source/*.hpp"
 )
-source_group("source\\first_sample" FILES ${source_files})
+source_group("source" FILES ${source_files})
 
 
 
@@ -19,6 +19,7 @@ add_executable(ncpp.samples.first_sample
 set_target_properties(ncpp.samples.first_sample
     PROPERTIES 
         FOLDER "ncpp/samples"
+        PROJECT_LABEL "first_sample"
 )
 target_link_libraries(ncpp.samples.first_sample
     PRIVATE ncpp
@@ -32,4 +33,6 @@ target_include_directories(ncpp.samples.first_sample
 
 
 # ncpp.samples.first_sample target dependencies
-add_dependencies(ncpp.samples.first_sample ncpp)
+add_dependencies(ncpp.samples.first_sample 
+    ncpp
+)

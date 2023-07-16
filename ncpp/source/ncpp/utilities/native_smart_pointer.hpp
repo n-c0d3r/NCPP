@@ -113,7 +113,7 @@ namespace ncpp {
 
 
 
-
+        /*
         template<typename item_type__>
         inline std::ostream& operator << (
             std::ostream& os,
@@ -158,7 +158,7 @@ namespace ncpp {
             }
 
             return os;
-        }
+        }*/
 
     }
 

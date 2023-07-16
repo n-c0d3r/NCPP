@@ -214,7 +214,7 @@ namespace ncpp {
                 fixed_vector_stack_t(other.capacity_)
             {
 
-                item_vector_ = other.item_vector_;enqueue
+                item_vector_ = other.item_vector_;
                 other.clear();
 
             }

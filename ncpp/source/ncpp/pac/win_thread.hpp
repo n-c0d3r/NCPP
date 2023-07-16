@@ -252,7 +252,7 @@ namespace ncpp {
 			/**
 			 *  The constructor to create main thread instance.
 			 */
-			inline win_thread::win_thread(main_thread_creation_placeholder) :
+			inline win_thread(main_thread_creation_placeholder) :
 				__platform__thread_(GetCurrentThread()),
 				__platform__id_(GetCurrentThreadId()),
 				stack_size_(0),
@@ -284,7 +284,7 @@ namespace ncpp {
 			 *	Default constructor.
 			 *	This constructor will construct an empty thread object
 			 */
-			inline win_thread::win_thread() :
+			inline win_thread() :
 				__platform__thread_(0),
 				__platform__id_(0),
 				stack_size_(NCPP_DEFAULT_THREAD_STACK_SIZE),
@@ -302,7 +302,7 @@ namespace ncpp {
 			/**
 			 *	Initialization constructor.
 			 */
-			inline win_thread::win_thread(functor_type&& functor, sz stack_size = NCPP_DEFAULT_THREAD_STACK_SIZE) :
+			inline win_thread(functor_type&& functor, sz stack_size = NCPP_DEFAULT_THREAD_STACK_SIZE) :
 				__platform__thread_(0),
 				__platform__id_(0),
 				is_ready_(0),
@@ -333,7 +333,7 @@ namespace ncpp {
 			/**
 			 *	Destructor
 			 */
-			win_thread::~win_thread() {
+			~win_thread() {
 
 				if (__platform__thread_ == 0) return;
 

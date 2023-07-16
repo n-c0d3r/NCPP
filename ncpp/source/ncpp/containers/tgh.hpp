@@ -91,56 +91,56 @@ namespace ncpp {
 
 #pragma region C++ STL Containers
         template<typename char_type__ = char, typename char_traits__ = std::char_traits<char>, class tagged_heap_type__ = tagged_heap_t<>>
-        using tgh_string_t = typename std::basic_string<
+        using tgh_string_t = std::basic_string<
             char_type__, 
             char_traits__, 
-            typename tgh_allocator_t<char_type__, tagged_heap_type__>
+            tgh_allocator_t<char_type__, tagged_heap_type__>
         >;
 
-        using tgh_string = typename tgh_string_t<>;
+        using tgh_string = tgh_string_t<>;
 
-        using tgh_wstring = typename tgh_string_t<wchar_t>;
+        using tgh_wstring = tgh_string_t<wchar_t>;
 
 
 
         template<typename item_type__, typename tagged_heap_type__ = tagged_heap_t<>>
         using tgh_vector_t = typename std::vector<
             item_type__,
-            typename tgh_allocator_t<item_type__, tagged_heap_type__>
+            tgh_allocator_t<item_type__, tagged_heap_type__>
         >;
 
 
 
         template<typename key_type__, typename value_type__, typename pr__ = std::less<key_type__>, class tagged_heap_type__ = tagged_heap_t<>>
-        using tgh_map_t = typename std::map<
+        using tgh_map_t = std::map<
             key_type__,
             value_type__,
             pr__,
-            typename tgh_allocator_t<std::pair<const key_type__, value_type__>, tagged_heap_type__>
+            tgh_allocator_t<std::pair<const key_type__, value_type__>, tagged_heap_type__>
         >;
 
         template<typename key_type__, typename value_type__, typename pr__ = std::less<key_type__>, class tagged_heap_type__ = tagged_heap_t<>>
-        using tgh_unordered_map_t = typename std::unordered_map<
+        using tgh_unordered_map_t = std::unordered_map<
             key_type__,
             value_type__,
             pr__,
-            typename tgh_allocator_t<std::pair<const key_type__, value_type__>, tagged_heap_type__>
+            tgh_allocator_t<std::pair<const key_type__, value_type__>, tagged_heap_type__>
         >;
 
 
 
         template<typename key_type__, typename pr__ = std::less<key_type__>, class tagged_heap_type__ = tagged_heap_t<>>
-        using tgh_set_t = typename std::set<
+        using tgh_set_t = std::set<
             key_type__,
             pr__,
-            typename tgh_allocator_t<key_type__, tagged_heap_type__>
+            tgh_allocator_t<key_type__, tagged_heap_type__>
         >;
 
         template<typename key_type__, typename pr__ = std::less<key_type__>, class tagged_heap_type__ = tagged_heap_t<>>
-        using tgh_unordered_set_t = typename std::unordered_set<
+        using tgh_unordered_set_t = std::unordered_set<
             key_type__,
             pr__,
-            typename tgh_allocator_t<key_type__, tagged_heap_type__>
+            tgh_allocator_t<key_type__, tagged_heap_type__>
         >;
 #pragma endregion
 
@@ -165,20 +165,20 @@ namespace ncpp {
             typename item_type__
         >
         template<typename item_type__, class tagged_heap_type__ = tagged_heap_t<>>
-        using tgh_handle_map_t = typename handle_map_t<
+        using tgh_handle_map_t = handle_map_t<
             item_type__,
-            typename tgh_allocator_t<typename handle_map_id_type<item_type__>, tagged_heap_type__>,
-            typename tgh_allocator_t<typename handle_map_cell_type<item_type__>, tagged_heap_type__>
+            tgh_allocator_t<handle_map_id_type<item_type__>, tagged_heap_type__>,
+            tgh_allocator_t<handle_map_cell_type<item_type__>, tagged_heap_type__>
         >;
 
         template<typename item_type__>
-        using tgh_fv_queue_t = typename fixed_vector_queue_t<
+        using tgh_fv_queue_t = fixed_vector_queue_t<
             item_type__,
             tgh_allocator_t<item_type__>
         >;
 
         template<typename item_type__>
-        using tgh_fv_stack_t = typename fixed_vector_stack_t<
+        using tgh_fv_stack_t = fixed_vector_stack_t<
             item_type__,
             tgh_allocator_t<item_type__>
         >;
