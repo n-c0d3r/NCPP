@@ -110,29 +110,29 @@ namespace ncpp {
 
 
 
-				auto get_return_object() { return native_froutine_t<type__>( handle_type::from_promise(*this) ); }
-				initial_suspend_mode__ initial_suspend() { return {}; }
-				final_suspend_mode__ final_suspend() noexcept { return {}; }
-				void unhandled_exception() { std::terminate(); }
-				void return_void() {}
-				auto yield_value(const type__& value) {
+				inline auto get_return_object() { return native_froutine_t<type__>( handle_type::from_promise(*this) ); }
+				inline initial_suspend_mode__ initial_suspend() { return {}; }
+				inline final_suspend_mode__ final_suspend() noexcept { return {}; }
+				void inline unhandled_exception() { std::terminate(); }
+				void inline return_void() {}
+				auto inline yield_value(const type__& value) {
 					current_value = value;
 					return yield_suspend_mode__{};
 				}
-				auto yield_value(type__&& value) {
+				auto inline yield_value(type__&& value) {
 					current_value = std::move(value);
 					return yield_suspend_mode__{};
 				}
 
-				static native_froutine_t get_return_object_on_allocation_failure() {
+				static inline native_froutine_t get_return_object_on_allocation_failure() {
 					return native_froutine_t(nullptr);
 				}
 
-				void* operator new(std::size_t size) {
+				inline void* operator new(std::size_t size) {
 					return native_allocator_t<type__>().allocate(size);
 				}
 
-				void operator delete(void* ptr) noexcept {
+				inline void operator delete(void* ptr) noexcept {
 					return native_allocator_t<type__>().deallocate(ptr);
 				}
 			};
