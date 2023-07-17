@@ -21,9 +21,13 @@ int main() {
 
 		auto froutine = foo(0);
 
+		log_memory_stats();
+
 		for (u32 i = 0; i < 10; ++i) {
 
 			std::cout << froutine() << std::endl;
+
+			log_memory_stats();
 
 		}
 

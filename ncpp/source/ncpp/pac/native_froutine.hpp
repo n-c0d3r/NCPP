@@ -92,7 +92,7 @@ namespace ncpp {
 			using initial_suspend_mode = initial_suspend_mode__;
 			using final_suspend_mode = final_suspend_mode__;
 			using yield_suspend_mode = yield_suspend_mode__;
-			using allocator_type = native_allocator_t<type__>;
+			using allocator_type = native_allocator_t<u8>;
 
 
 
@@ -129,11 +129,11 @@ namespace ncpp {
 				}
 
 				inline void* operator new(std::size_t size) {
-					return native_allocator_t<type__>().allocate(size);
+					return allocator_type().allocate(size);
 				}
 
 				inline void operator delete(void* ptr) noexcept {
-					return native_allocator_t<type__>().deallocate(ptr);
+					return allocator_type().deallocate(ptr);
 				}
 			};
 
