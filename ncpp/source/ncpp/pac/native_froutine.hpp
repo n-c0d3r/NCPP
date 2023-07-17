@@ -1,8 +1,8 @@
 #pragma once
 
 /**
- *  @file ncpp/pac/froutine.hpp
- *  @brief Implementing froutine.
+ *  @file ncpp/pac/native_froutine.hpp
+ *  @brief Implementing native froutine.
  */
 
 
@@ -72,6 +72,113 @@ namespace ncpp {
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+
+		template<
+			typename type__,
+			typename initial_suspend_mode__ = std::suspend_always,
+			typename final_suspend_mode__ = std::suspend_always,
+			typename yield_suspend_mode__ = std::suspend_always
+		>
+		class native_froutine_t {
+
+		public:
+			struct promise_type;
+			
+
+
+		public:
+			using handle_type = std::coroutine_handle<promise_type>;
+
+			using initial_suspend_mode = initial_suspend_mode__;
+			using final_suspend_mode = final_suspend_mode__;
+			using yield_suspend_mode = yield_suspend_mode__;
+			using allocator_type = native_allocator_t<type__>;
+
+
+
+		public:
+			struct promise_type {
+
+
+
+				using value_type = type__;
+				using pointer = typename std::allocator_traits<allocator_type>::pointer;
+
+
+
+				type__ current_value;
+
+
+
+				auto get_return_object() { return native_froutine_t<type__>( handle_type::from_promise(*this) ); }
+				initial_suspend_mode__ initial_suspend() { return {}; }
+				final_suspend_mode__ final_suspend() noexcept { return {}; }
+				void unhandled_exception() { std::terminate(); }
+				void return_void() {}
+				auto yield_value(const type__& value) {
+					current_value = value;
+					return yield_suspend_mode__{};
+				}
+				auto yield_value(type__&& value) {
+					current_value = std::move(value);
+					return yield_suspend_mode__{};
+				}
+
+				static native_froutine_t get_return_object_on_allocation_failure() {
+					return native_froutine_t(nullptr);
+				}
+
+				void* operator new(std::size_t size) {
+					return native_allocator_t<type__>().allocate(size);
+				}
+
+				void operator delete(void* ptr) noexcept {
+					return native_allocator_t<type__>().deallocate(ptr);
+				}
+			};
+
+
+
+		private:
+			handle_type handle_;
+
+
+
+		public:
+			inline const handle_type handle() const { return handle_; }
+
+
+
+		public:
+			inline native_froutine_t(handle_type handle) : handle_(handle) { }
+			inline native_froutine_t(native_froutine_t const&) = delete;
+			inline native_froutine_t(native_froutine_t&& rhs) : handle_(rhs.handle_) { rhs.handle_ = nullptr; }
+			inline ~native_froutine_t() { if (handle_) handle_.destroy(); }
+			inline native_froutine_t& operator=(native_froutine_t const&) = delete;
+			inline native_froutine_t& operator=(native_froutine_t&& rhs) {
+				handle_ = rhs.handle_;
+				rhs.handle_ = nullptr;
+				return *this;
+			}
+
+
+
+		public:
+			inline type__ operator()() {
+				handle_.resume();
+				return handle_.promise().current_value;
+			}
+			inline type__ resume() {
+				handle_.resume();
+				return handle_.promise().current_value;
+			}
+
+		};
+
+
+
+#define NCPP_YIELD(Value) co_yield Value;
+#define NCPP_RETURN(Value) co_return Value;
 
 	}
 

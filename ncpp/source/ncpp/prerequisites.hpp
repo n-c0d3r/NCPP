@@ -76,6 +76,11 @@ namespace ncpp {}
 #include <fstream>
 #include <memory>
 #include <condition_variable>
+
+#if _HAS_CXX20
+#include <coroutine>
+#endif
+
 #pragma endregion
 
 ////////////////////////////////////////////////////////////////////////////////////
