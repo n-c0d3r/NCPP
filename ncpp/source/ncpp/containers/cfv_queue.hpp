@@ -91,7 +91,7 @@ namespace ncpp {
 
 #pragma region Typedefs
         public:
-            using allocator_type = allocator_type__;
+            using allocator_type = rebind_allocator_t<allocator_type__, item_type__>;
             using item_type = item_type__;
             using item_vector_type = std::vector<item_type__, allocator_type>;
             using iterator = item_type__*;
@@ -289,7 +289,9 @@ namespace ncpp {
              */
             inline bool try_pop(utilities::lref_t<item_type>& output) {
 
-                utilities::unique_lock_t<pac::spinlock> lock_guard(reader_lock_);
+                reader_lock_.lock();
+
+
 
                 sz begin_index = begin_index_.load(std::memory_order_acquire);
 
@@ -297,6 +299,12 @@ namespace ncpp {
                 if (end_index <= begin_index) return false;
 
                 begin_index_.fetch_add(1, std::memory_order_release);
+
+
+
+                reader_lock_.unlock();
+
+
 
                 output = item_vector_[begin_index % capacity_];
 
@@ -308,7 +316,9 @@ namespace ncpp {
              */
             inline bool try_pop(item_type& output) {
 
-                utilities::unique_lock_t<pac::spinlock> lock_guard(reader_lock_);
+                reader_lock_.lock();
+
+
 
                 sz begin_index = begin_index_.load(std::memory_order_acquire);
 
@@ -316,6 +326,12 @@ namespace ncpp {
                 if (end_index <= begin_index) return false;
 
                 begin_index_.fetch_add(1, std::memory_order_release);
+
+
+
+                reader_lock_.unlock();
+
+
 
                 output = item_vector_[begin_index % capacity_];
 
@@ -327,7 +343,9 @@ namespace ncpp {
              */
             inline bool try_pop() {
 
-                utilities::unique_lock_t<pac::spinlock> lock_guard(reader_lock_);
+                reader_lock_.lock();
+
+
 
                 sz begin_index = begin_index_.load(std::memory_order_acquire);
 
@@ -336,6 +354,10 @@ namespace ncpp {
 
                 begin_index_.fetch_add(1, std::memory_order_release);
 
+
+
+                reader_lock_.unlock();
+
                 return true;
             }
 
@@ -343,6 +365,10 @@ namespace ncpp {
              *  Tries to pop the front element
              */
             inline void pop() {
+
+                reader_lock_.lock();
+
+
 
                 utilities::unique_lock_t<pac::spinlock> lock_guard(reader_lock_);
 
@@ -353,6 +379,10 @@ namespace ncpp {
                 assert(end_index > begin_index && "the queue is empty.");
 
                 begin_index_.fetch_add(1, std::memory_order_relaxed);
+
+
+
+                reader_lock_.unlock();
 
             }
 #pragma endregion

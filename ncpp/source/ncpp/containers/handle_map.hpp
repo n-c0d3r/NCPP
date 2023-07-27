@@ -182,9 +182,9 @@ namespace ncpp {
 #pragma region Typedefs
         public:
             using id_type = handle_map_id_type<item_type__>;
-            using id_allocator_type = id_allocator_type__;
+            using id_allocator_type = rebind_allocator_t<id_allocator_type__, id_type>;
             using cell_type = handle_map_cell_type<item_type__>;
-            using cell_allocator_type = cell_allocator_type__;
+            using cell_allocator_type = rebind_allocator_t<cell_allocator_type__, cell_type>;
 
             using item_type = item_type__;
             using id_vector_type = fls_vector_t<id_type, id_allocator_type>;

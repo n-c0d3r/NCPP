@@ -103,9 +103,9 @@ namespace ncpp {
 
 #pragma region Typedefs
         public:
-            using allocator_type = allocator_type__;
+            using allocator_type = rebind_allocator_t<allocator_type__, item_type__>;
             using item_type = item_type__;
-            using item_vector_type = std::vector<item_type, allocator_type__>;
+            using item_vector_type = std::vector<item_type, allocator_type>;
             using iterator = item_type*;
             using const_iterator = const item_type*;
 #pragma endregion

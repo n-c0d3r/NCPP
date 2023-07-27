@@ -36,12 +36,6 @@
     + Nonelock
     + Weaklock
   + Semaphore
-+ RTTI:
-  + Object reflection:
-    + Member variable reflection
-    + Member function reflection
-    + Member arguments
-    + Class representation object
 
 ## Getting Started
 ### Requirements:

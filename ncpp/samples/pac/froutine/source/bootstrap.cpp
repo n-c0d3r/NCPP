@@ -4,30 +4,24 @@ using namespace ncpp;
 
 
 
-pac::native_froutine_t<u32> foo(u32 i = 0) {
-
-	while (true) {
-
-		NCPP_YIELD(i++);
-	}
-
-}
-
-
-
 int main() {
 
 	{
 
-		auto froutine = foo(0);
+		auto froutine = (
+			[](u32 i = 0) -> pac::native_froutine_t<u32> {
 
-		log_memory_stats();
+				while (true) {
+
+					NCPP_YIELD(i++);
+				}
+		
+			}
+		)(0);
 
 		for (u32 i = 0; i < 10; ++i) {
 
 			std::cout << froutine() << std::endl;
-
-			log_memory_stats();
 
 		}
 

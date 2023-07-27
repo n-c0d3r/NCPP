@@ -97,11 +97,11 @@ namespace ncpp {
 
 			return 0;
 		}
-#endif
 
 
 
 		win_thread win_thread::main_thread_g = win_thread(win_thread::main_thread_creation_placeholder());
+#endif
 
 	}
 
