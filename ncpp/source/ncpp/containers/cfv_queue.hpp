@@ -108,8 +108,6 @@ namespace ncpp {
             asz begin_index_;
             asz end_index_;
             sz capacity_;
-            pac::spinlock writer_lock_;
-            pac::spinlock reader_lock_;
 #pragma endregion
 
             ////////////////////////////////////////////////////////////////////////////////////
@@ -242,10 +240,6 @@ namespace ncpp {
             template<typename item_param_type>
             inline void push_main_t(item_param_type&& item) {
 
-                utilities::unique_lock_t<pac::spinlock> lock_guard(writer_lock_);
-
-
-
                 item_vector_[end_index_.load(std::memory_order_acquire) % capacity_] = std::forward<item_param_type>(item);
 
                 end_index_.fetch_add(1, std::memory_order_release);
@@ -287,103 +281,20 @@ namespace ncpp {
             /**
              *  Tries to pop the front element
              */
-            inline bool try_pop(utilities::lref_t<item_type>& output) {
-
-                reader_lock_.lock();
-
-
-
-                sz begin_index = begin_index_.load(std::memory_order_acquire);
-
-                sz end_index = end_index_.load(std::memory_order_acquire);
-                if (end_index <= begin_index) return false;
-
-                begin_index_.fetch_add(1, std::memory_order_release);
-
-
-
-                reader_lock_.unlock();
-
-
-
-                output = item_vector_[begin_index % capacity_];
-
-                return true;
-            }
-
-            /**
-             *  Tries to pop the front element
-             */
             inline bool try_pop(item_type& output) {
 
-                reader_lock_.lock();
-
-
-
                 sz begin_index = begin_index_.load(std::memory_order_acquire);
 
                 sz end_index = end_index_.load(std::memory_order_acquire);
                 if (end_index <= begin_index) return false;
 
                 begin_index_.fetch_add(1, std::memory_order_release);
-
-
-
-                reader_lock_.unlock();
 
 
 
                 output = item_vector_[begin_index % capacity_];
 
                 return true;
-            }
-
-            /**
-             *  Tries to pop the front element
-             */
-            inline bool try_pop() {
-
-                reader_lock_.lock();
-
-
-
-                sz begin_index = begin_index_.load(std::memory_order_acquire);
-
-                sz end_index = end_index_.load(std::memory_order_acquire);
-                if (end_index <= begin_index) return false;
-
-                begin_index_.fetch_add(1, std::memory_order_release);
-
-
-
-                reader_lock_.unlock();
-
-                return true;
-            }
-
-            /**
-             *  Tries to pop the front element
-             */
-            inline void pop() {
-
-                reader_lock_.lock();
-
-
-
-                utilities::unique_lock_t<pac::spinlock> lock_guard(reader_lock_);
-
-                sz begin_index = begin_index_.load(std::memory_order_acquire);
-
-                sz end_index = end_index_.load(std::memory_order_acquire);
-
-                assert(end_index > begin_index && "the queue is empty.");
-
-                begin_index_.fetch_add(1, std::memory_order_relaxed);
-
-
-
-                reader_lock_.unlock();
-
             }
 #pragma endregion
 

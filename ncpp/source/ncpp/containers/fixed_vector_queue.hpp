@@ -283,20 +283,6 @@ namespace ncpp {
             /**
              *  Pops the front element
              */
-            inline bool try_pop(utilities::lref_t<item_type__>& output) {
-
-                if (begin_index_ == end_index_)
-                    return false;
-
-                output = item_vector_[begin_index_ % capacity_];
-
-                ++begin_index_;
-
-                return true;
-            }
-            /**
-             *  Pops the front element
-             */
             inline bool try_pop(item_type__& output) {
 
                 if (begin_index_ == end_index_)
