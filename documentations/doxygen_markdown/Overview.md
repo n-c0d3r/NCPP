@@ -42,12 +42,17 @@ Overview {#mainpage}
 
 ## Getting Started
 + **Requirements**
-  + Windows (**only support Windows**):
+  + Windows:
     + Visual Studio 2022 with essential C++, SDK Installation
     + CMake
     + Doxygen
+    + C++ 17 or later
+  + Unix Platforms:
+    + CMake
+    + Doxygen
+    + C++ 17 or later
 + **Building**
-  + Windows (**only support Windows**):
+  + Windows:
     + Step 1: Clone [NCPP git repository](https://github.com/n-c0d3r/ncpp) from GitHub  
 ```batch
 git clone https://github.com/n-c0d3r/ncpp.git --recurse-submodules
