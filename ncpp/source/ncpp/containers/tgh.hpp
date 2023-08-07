@@ -161,9 +161,6 @@ namespace ncpp {
 
 
 #pragma region NCPP Containers
-        template<
-            typename item_type__
-        >
         template<typename item_type__, class tagged_heap_type__ = tagged_heap_t<>>
         using tgh_handle_map_t = handle_map_t<
             item_type__,

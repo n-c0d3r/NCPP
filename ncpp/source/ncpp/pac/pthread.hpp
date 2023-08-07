@@ -1,9 +1,9 @@
 #pragma once
 
 /**
- *  @file ncpp/pac/win_thread.hpp
- *  @brief Implements thread for windows platform.
- * 	@details Must be included with #ifdef NCPP_WINDOWS_PLATFORM.
+ *  @file ncpp/pac/pthread.hpp
+ *  @brief Implements thread for posix platform.
+ * 	@details Must be included with #ifndef NCPP_WINDOWS_PLATFORM.
  */
 
 
@@ -42,31 +42,7 @@
 
 #include <ncpp/pac/thread.hpp>
 
-#ifdef NCPP_ENABLE_FIBER
-#include <ncpp/pac/fiber.hpp>
-#endif
-
 #pragma endregion
-
-
-
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-#ifndef NCPP_WINDOWS_PLATFORM
-static_assert(false, "Must be included with #ifdef NCPP_WINDOWS_PLATFORM");
-#endif
 
 
 
@@ -104,7 +80,7 @@ namespace ncpp {
 
 
 
-		class win_thread;
+		class pthread;
 
 
 
@@ -125,7 +101,7 @@ namespace ncpp {
 		/**
 		 *	Specifies a variable storing in thread local storage. 
 		 */
-#define NCPP_THREAD_LOCAL_DATA __declspec(thread)
+#define NCPP_THREAD_LOCAL_DATA __thread
 
 
 
@@ -140,7 +116,7 @@ namespace ncpp {
 		/**
 		 *	Gets main thread
 		 */
-		extern win_thread& main_thread();
+		extern pthread& main_thread();
 
 		extern void reset_thread_indices();
 
@@ -163,14 +139,14 @@ namespace ncpp {
 		/**
 		 *  The windows platform version of pac::thread
 		 */
-		class NCPP_DEFAULT_ALIGNAS win_thread {
+		class NCPP_DEFAULT_ALIGNAS pthread {
 
 			////////////////////////////////////////////////////////////////////////////////////
 			////////////////////////////////////////////////////////////////////////////////////
 			////////////////////////////////////////////////////////////////////////////////////
 
 		public:
-			friend win_thread& main_thread();
+			friend pthread& main_thread();
 
 			////////////////////////////////////////////////////////////////////////////////////
 			////////////////////////////////////////////////////////////////////////////////////
@@ -197,13 +173,10 @@ namespace ncpp {
 #pragma region Properties
 		private:
 			/**
-			 *  The WinAPI thread.
+			 *  The pthread id.
 			 */
-			HANDLE __platform__thread_;
-			/**
-			 *  The id of __platform__thread_.
-			 */
-			DWORD __platform__id_;
+			pthread_t __platform__id_;
+
 			/**
 			 *  The main function to be run inside the thread.
 			 */
@@ -211,10 +184,7 @@ namespace ncpp {
 			sz stack_size_;
 			std::atomic_bool is_ready_;
 			bool is_main_;
-
-#ifdef NCPP_ENABLE_FIBER
-			fiber owned_fiber_;
-#endif
+            std::atomic_bool is_done_;
 #pragma endregion
 
 			////////////////////////////////////////////////////////////////////////////////////
@@ -223,24 +193,11 @@ namespace ncpp {
 
 #pragma region Getters and Setters
 		public:
-			inline LPVOID __platform__thread() const { return __platform__thread_; }
-			inline DWORD __platform__id() const { return __platform__id_; }
+			inline pthread_t __platform__id() const { return __platform__id_; }
 			inline u32 id() const { return __platform__id_; }
 			inline const functor_type& functor() const { return functor_; }
-			inline bool is_done() const {
-
-				DWORD ex_code;
-
-				bool r = GetExitCodeThread(
-					__platform__thread_,
-					&ex_code
-				);
-
-				return (!r) || (ex_code != STILL_ACTIVE);
-			}
 			inline bool is_main() { return is_main_; }
-
-			inline fiber& owned_fiber() { return owned_fiber_; }
+			inline bool is_done() const { return is_done_.load(std::memory_order_acquire); }
 #pragma endregion
 
 			////////////////////////////////////////////////////////////////////////////////////
@@ -252,28 +209,24 @@ namespace ncpp {
 			/**
 			 *  The constructor to create main thread instance.
 			 */
-			inline win_thread(main_thread_creation_placeholder) :
-				__platform__thread_(GetCurrentThread()),
-				__platform__id_(GetCurrentThreadId()),
+			inline pthread(main_thread_creation_placeholder) :
+				__platform__id_(pthread_self()),
 				stack_size_(0),
 				is_ready_(1),
-				
-#ifdef NCPP_ENABLE_FIBER
-				owned_fiber_(fiber_creation_mode::CONVERT_FROM_THREAD),
-#endif
+				is_done_(0),
 				
 				is_main_(1)
 			{
 
-				sz sl_low = 0;
-				sz sl_high = 0;
-				GetCurrentThreadStackLimits(&sl_low, &sl_high);
+				size_t stksize;
+                pthread_attr_t atr;
+                pthread_attr_getstacksize(&atr, &stksize);
 
-				stack_size_ = sl_high - sl_low;
+				stack_size_ = stksize;
 
 			}
 
-			static win_thread main_thread_g;
+			static pthread main_thread_g;
 
 			////////////////////////////////////////////////////////////////////////////////////
 			////////////////////////////////////////////////////////////////////////////////////
@@ -284,14 +237,10 @@ namespace ncpp {
 			 *	Default constructor.
 			 *	This constructor will construct an empty thread object
 			 */
-			inline win_thread() :
-				__platform__thread_(0),
+			inline pthread() :
 				__platform__id_(0),
 				stack_size_(NCPP_DEFAULT_THREAD_STACK_SIZE),
-
-#ifdef NCPP_ENABLE_FIBER
-				owned_fiber_(),
-#endif
+				is_done_(0),
 
 				is_main_(0)
 			{
@@ -302,30 +251,26 @@ namespace ncpp {
 			/**
 			 *	Initialization constructor.
 			 */
-			inline win_thread(const functor_type& functor, sz stack_size = NCPP_DEFAULT_THREAD_STACK_SIZE) :
-				__platform__thread_(0),
+			inline pthread(const functor_type& functor, sz stack_size = NCPP_DEFAULT_THREAD_STACK_SIZE) :
 				__platform__id_(0),
 				is_ready_(0),
 				stack_size_(stack_size),
+				is_done_(0),
 				functor_(functor),
-
-#ifdef NCPP_ENABLE_FIBER
-				owned_fiber_(fiber_creation_mode::CONVERT_FROM_THREAD_DI),
-#endif
 
 				is_main_(0)
 			{
 
-				__platform__thread_ = CreateThread(
-					0,
-					stack_size,
-					proc,
-					this,
-					STACK_SIZE_PARAM_IS_A_RESERVATION,
-					&__platform__id_
-				);
+                pthread_attr_t attr;
 
-				assert(__platform__thread_ != 0 && "thread creating failed");
+                assert(!pthread_attr_init(&attr));
+
+                void* stack = 0;
+                pthread_attr_setstack(&attr, &stack, stack_size_);
+
+				pthread_create(&__platform__id_, &attr, proc, this);
+
+				assert(__platform__id_ != 0 && "thread creating failed");
 
 				while (!is_ready_.load(std::memory_order_acquire));
 
@@ -333,30 +278,26 @@ namespace ncpp {
 			/**
 			 *	Initialization constructor.
 			 */
-			inline win_thread(functor_type&& functor, sz stack_size = NCPP_DEFAULT_THREAD_STACK_SIZE) :
-				__platform__thread_(0),
+			inline pthread(functor_type&& functor, sz stack_size = NCPP_DEFAULT_THREAD_STACK_SIZE) :
 				__platform__id_(0),
 				is_ready_(0),
+				is_done_(0),
 				stack_size_(stack_size),
 				functor_(std::move(functor)),
-
-#ifdef NCPP_ENABLE_FIBER
-				owned_fiber_(fiber_creation_mode::CONVERT_FROM_THREAD_DI),
-#endif
 
 				is_main_(0)
 			{
 
-				__platform__thread_ = CreateThread(
-					0,
-					stack_size,
-					proc,
-					this,
-					STACK_SIZE_PARAM_IS_A_RESERVATION,
-					&__platform__id_
-				);
+                pthread_attr_t attr;
 
-				assert(__platform__thread_ != 0 && "thread creating failed");
+                assert(!pthread_attr_init(&attr));
+
+                void* stack = 0;
+                pthread_attr_setstack(&attr, &stack, stack_size_);
+
+				pthread_create(&__platform__id_, &attr, proc, this);
+
+				assert(__platform__id_ != 0 && "thread creating failed");
 
 				while (!is_ready_.load(std::memory_order_acquire));
 
@@ -364,72 +305,56 @@ namespace ncpp {
 			/**
 			 *	Destructor
 			 */
-			~win_thread() {
+			~pthread() {
 
-				if (__platform__thread_ == 0) return;
+				if (__platform__id_ == 0) return;
 
 				if (!is_main_) {
 
 					assert(is_done() && "Cant release currently running thread");
 
-					CloseHandle(__platform__thread_);
-
 				}
 
 			}
 
-			inline win_thread(const win_thread&) = delete;
-			inline win_thread& operator = (const win_thread&) = delete;
+			inline pthread(const pthread&) = delete;
+			inline pthread& operator = (const pthread&) = delete;
 
 			/**
 			 *	Move constructor
 			 */
-			inline win_thread(win_thread&& other) noexcept  :
-				win_thread()
+			inline pthread(pthread&& other) noexcept  :
+				pthread()
 			{
 
 				while (!other.is_ready_.load(std::memory_order_relaxed));
 				std::atomic_thread_fence(std::memory_order_acquire);
 
-				__platform__thread_ = other.__platform__thread_;
 				__platform__id_ = other.__platform__id_;
 				stack_size_ = other.stack_size_;
+				is_done_.store(other.is_done_.load(std::memory_order_acquire), std::memory_order_release);
 				is_main_ = other.is_main_;
 				functor_ = std::move(other.functor_);
 
-#ifdef NCPP_ENABLE_FIBER
-				owned_fiber_ = std::move(other.owned_fiber_);
-#endif
-
-				other.__platform__thread_ = 0;
-				other.__platform__id_ = 0;
-				other.stack_size_ = 0;
-				other.is_main_ = 0;
+				other.reset();
 
 			}
 
 			/**
 			 *	Move operator
 			 */
-			inline win_thread& operator = (win_thread&& other) noexcept {
+			inline pthread& operator = (pthread&& other) noexcept {
 
 				while (!other.is_ready_.load(std::memory_order_relaxed));
 				std::atomic_thread_fence(std::memory_order_acquire);
 
-				__platform__thread_ = other.__platform__thread_;
 				__platform__id_ = other.__platform__id_;
 				stack_size_ = other.stack_size_;
+				is_done_.store(other.is_done_.load(std::memory_order_acquire), std::memory_order_release);
 				is_main_ = other.is_main_;
 				functor_ = std::move(other.functor_);
 
-#ifdef NCPP_ENABLE_FIBER
-				owned_fiber_ = std::move(other.owned_fiber_);
-#endif
-
-				other.__platform__thread_ = 0;
-				other.__platform__id_ = 0;
-				other.stack_size_ = 0;
-				other.is_main_ = 0;
+				other.reset();
 
 				return *this;
 			}
@@ -440,29 +365,29 @@ namespace ncpp {
 			////////////////////////////////////////////////////////////////////////////////////
 
 #pragma region Methods
+        private:
+            inline void reset() {
+
+				__platform__id_ = 0;
+				stack_size_ = 0;
+				is_ready_ = 0;
+				is_done_ = 0;
+				is_main_ = 0;
+
+            }
+
 		public:
 			/**
 			 *  The main procedure of the thread.
 			 */
-			static DWORD WINAPI proc(LPVOID lpParam);
+			static void* proc(void* lpParam);
 
-			/**
-			 *  Sleeps and waits until the thread proc done.
-			 *	Notes: calling this method in main thread can cause std::cout not working.
-			 */
-			inline void sleep_and_wait() {
-
-				assert(__platform__thread_ != 0 && "thread is null");
-
-				WaitForSingleObject(__platform__thread_, 0);
-
-			}
 			/**
 			 *  Waits the thread proc done
 			 */
 			inline void wait() {
 
-				assert(__platform__thread_ != 0 && "thread is null");
+				assert(__platform__id_ != 0 && "thread is null");
 
 				while (!is_done());
 
@@ -473,17 +398,17 @@ namespace ncpp {
 			 */
 			inline u64 set_affinity_mask(u64 mask) {
 
-				assert(__platform__thread_ != 0 && "thread is null");
+				assert(__platform__id_ != 0 && "thread is null");
 
-				return SetThreadAffinityMask(__platform__thread_, mask);
+				return 0;
 			}
 #pragma endregion
 
 		};
 
 
-
-		using thread = win_thread;
+		
+		using thread = pthread;
 
 	}
 

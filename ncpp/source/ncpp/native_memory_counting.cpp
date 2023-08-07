@@ -43,28 +43,28 @@ namespace ncpp {
 	////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////
 
-	inline sz native_allocated_memory() {
+	sz native_allocated_memory() {
 
 		return native_allocated_memory_g.load(std::memory_order_acquire);
 	}
-	inline void increase_native_allocated_memory(sz bytes) {
+	void increase_native_allocated_memory(sz bytes) {
 
 		native_allocated_memory_g.fetch_add(bytes, std::memory_order_release);
 	}
-	inline void decrease_native_allocated_memory(sz bytes) {
+	void decrease_native_allocated_memory(sz bytes) {
 
 		native_allocated_memory_g.fetch_sub(bytes, std::memory_order_release);
 	}
 
-	inline sz native_used_heap_memory() {
+	sz native_used_heap_memory() {
 
 		return native_used_heap_memory_g.load(std::memory_order_acquire);
 	}
-	inline void increase_native_used_heap_memory(sz bytes) {
+	void increase_native_used_heap_memory(sz bytes) {
 
 		native_used_heap_memory_g.fetch_add(bytes, std::memory_order_release);
 	}
-	inline void decrease_native_used_heap_memory(sz bytes) {
+	void decrease_native_used_heap_memory(sz bytes) {
 
 		native_used_heap_memory_g.fetch_sub(bytes, std::memory_order_release);
 	}
@@ -74,31 +74,31 @@ namespace ncpp {
 	////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////
 
-	inline sz native_allocated_memory() {
+	sz native_allocated_memory() {
 
 		warning(false, "native memory counting disabled");
 
 		return 0;
 	}
-	inline void increase_native_allocated_memory(sz bytes) {
+	void increase_native_allocated_memory(sz bytes) {
 
 		warning(false, "native memory counting disabled");
 	}
-	inline void decrease_native_allocated_memory(sz bytes) {
+	void decrease_native_allocated_memory(sz bytes) {
 
 		warning(false, "native memory counting disabled");
 	}
 
-	inline sz native_used_heap_memory() {
+	sz native_used_heap_memory() {
 
 		warning(false, "native memory counting disabled");
 	}
-	inline void increase_native_used_heap_memory(sz bytes) {
+	void increase_native_used_heap_memory(sz bytes) {
 
 		warning(false, "native memory counting disabled");
 
 	}
-	inline void decrease_native_used_heap_memory(sz bytes) {
+	void decrease_native_used_heap_memory(sz bytes) {
 
 		warning(false, "native memory counting disabled");
 	}
