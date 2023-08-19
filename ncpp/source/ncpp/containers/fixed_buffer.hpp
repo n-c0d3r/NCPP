@@ -87,6 +87,9 @@ namespace ncpp {
         public:
             using iterator = u8*;
             using const_iterator = const u8*;
+
+            template<sz new_capacity__>
+            using rebind_capacity_t = fixed_buffer_t<new_capacity__>;
 #pragma endregion
 
             ////////////////////////////////////////////////////////////////////////////////////

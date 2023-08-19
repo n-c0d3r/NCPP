@@ -95,6 +95,9 @@ namespace ncpp {
             using item_array_type = std::array<item_type__, capacity__>;
             using iterator = item_type__*;
             using const_iterator = const item_type__*;
+
+            template<sz new_capacity__>
+            using rebind_capacity_t = ca_queue_t<item_type__, new_capacity__>;
 #pragma endregion
 
             ////////////////////////////////////////////////////////////////////////////////////
