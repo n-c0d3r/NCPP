@@ -1,8 +1,8 @@
 #pragma once
 
 /**
- *  @file ncpp/containers/fixed_vector_stack.hpp
- *  @brief Implements fixed vector stack.
+ *  @file ncpp/containers/buffer.hpp
+ *  @brief Implements buffer.
  */
 
 
@@ -74,10 +74,10 @@ namespace ncpp {
 
 
         /**
-         *  A fixed_vector_stack_t is a stack storing elements inside a fixed vector 
+         *  A buffer containing raw memory block allocated by an allocator 
          */
-        template<typename item_type__, class allocator_type__ = NCPP_DEFAULT_ALLOCATOR_TEMPLATE<item_type__>>
-        class NCPP_DEFAULT_ALIGNAS fixed_vector_stack_t {
+        template<class allocator_type__ = NCPP_DEFAULT_ALLOCATOR_TEMPLATE<u8>>
+        class NCPP_DEFAULT_ALIGNAS buffer_t {
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -85,11 +85,10 @@ namespace ncpp {
 
 #pragma region Typedefs
         public:
-            using allocator_type = rebind_allocator_t<allocator_type__, item_type__>;
-            using item_type = item_type__;
-            using item_vector_type = std::vector<item_type__, allocator_type>;
-            using iterator = item_type__*;
-            using const_iterator = const item_type__*;
+            using allocator_type = rebind_allocator_t<allocator_type__, u8>;
+            using item_vector_type = std::vector<u8, allocator_type>;
+            using iterator = u8*;
+            using const_iterator = const u8*;
 #pragma endregion
 
             ////////////////////////////////////////////////////////////////////////////////////
@@ -98,9 +97,9 @@ namespace ncpp {
 
 #pragma region Properties
         private:
-            item_vector_type item_vector_;
-            sz end_index_;
-            sz capacity_;
+            allocator_type allocator_;
+            iterator data_p_;
+            sz size_;
 #pragma endregion
 
             ////////////////////////////////////////////////////////////////////////////////////
@@ -109,19 +108,18 @@ namespace ncpp {
 
 #pragma region Getters and Setters
         public:
-            inline iterator begin() { return item_vector_.data(); }
-            inline const_iterator begin() const { return item_vector_.data(); }
-            inline const_iterator cbegin() const { return item_vector_.data(); }
-            inline iterator end() { return item_vector_.data() + end_index_; }
-            inline const_iterator end() const { return item_vector_.data() + end_index_; }
-            inline const_iterator cend() const { return item_vector_.data() + end_index_; }
+            inline allocator_type& allocator() { return allocator_; }
+            inline const allocator_type& allocator() const { return allocator_; }
 
-            inline item_type__& front() { return *begin(); }
-            inline const item_type__& front() const { return *begin(); }
-            inline item_type__& back() { return *(item_vector_.data() + (end_index_ - 1)); }
-            inline const item_type__& back() const { return *(item_vector_.data() + (end_index_ - 1)); }
+            inline iterator begin() { return data_p_; }
+            inline const_iterator begin() const { return data_p_; }
+            inline const_iterator cbegin() const { return data_p_; }
+            inline iterator end() { return data_p_ + size_; }
+            inline const_iterator end() const { return data_p_ + size_; }
+            inline const_iterator cend() const { return data_p_ + size_; }
 
-            inline sz size() const { return end_index_; }
+            inline iterator data_p() const { return data_p_; }
+            inline sz size() const { return size_; }
 #pragma endregion
 
             ////////////////////////////////////////////////////////////////////////////////////
@@ -131,80 +129,98 @@ namespace ncpp {
 #pragma region Constructors, Destructor and Operators
         public:
             /**
-             *  Initialization constructor
-             */
-            inline explicit fixed_vector_stack_t(sz capacity) :
-                end_index_(0),
-                capacity_(capacity)
-            {
-
-                item_vector_.reserve(capacity_);
-                item_vector_.resize(capacity_);
-
-            }
-            /**
-             *  Initialization constructor with allocator
-             */
-            inline explicit fixed_vector_stack_t(sz capacity, const allocator_type& allocator) :
-                end_index_(0),
-                item_vector_(allocator),
-                capacity_(capacity)
-            {
-
-                item_vector_.reserve(capacity_);
-                item_vector_.resize(capacity_);
-
-            }
-            /**
-             *  Initialization constructor with allocator
-             */
-            inline explicit fixed_vector_stack_t(const allocator_type& allocator) :
-                end_index_(0),
-                item_vector_(allocator),
-                capacity_(1024)
-            {
-
-                item_vector_.reserve(capacity_);
-                item_vector_.resize(capacity_);
-
-            }
-            /**
              *  Default constructor
              */
-            inline explicit fixed_vector_stack_t() : /** Automatically calls to the initialization constructor with the default capacity of 1024. */
-                fixed_vector_stack_t(1024)
+            inline explicit buffer_t() :
+                allocator_(),
+                data_p_(0),
+                size_(0)
             {
 
 
+
+            }
+            /**
+             *  Initialization constructor
+             */
+            inline explicit buffer_t(sz size) :
+                buffer_t()
+            {
+
+                resize(size);
+
+            }
+            /**
+             *  Initialization constructor with allocator
+             */
+            inline explicit buffer_t(const allocator_type& allocator) :
+                allocator_(allocator),
+                data_p_(0),
+                size_(0)
+            {
+
+
+
+            }
+            /**
+             *  Initialization constructor with allocator and size
+             */
+            inline explicit buffer_t(sz size, const allocator_type& allocator) :
+                buffer_t(allocator)
+            {
+
+                resize(size);
 
             }
             /**
              *  Destructor
              */
-            ~fixed_vector_stack_t() {
+            ~buffer_t() {
 
-
+                clear();
 
             }
 
             /**
              *  Copy constructor
              */
-            inline fixed_vector_stack_t(const fixed_vector_stack_t& other) :
-                fixed_vector_stack_t(other.capacity_)
+            inline buffer_t(const buffer_t& other) :
+                buffer_t()
             {
 
-                item_vector_ = other.item_vector_;
-                end_index_ = other.end_index_;
+                clear();
+
+                allocator_ = other.allocator_;
+
+                size_ = other.size_;
+
+                if (size_ != 0) {
+
+                    data_p_ = allocator_.allocate(size_);
+
+                    memcpy(data_p_, other.data_p_, size_);
+
+                }
 
             }
             /**
              *  Copy operator
              */
-            inline fixed_vector_stack_t& operator = (const fixed_vector_stack_t& other) {
+            inline buffer_t& operator = (const buffer_t& other) {
 
-                item_vector_ = other.item_vector_;
-                end_index_ = other.end_index_;
+                clear();
+
+                allocator_ = other.allocator_;
+
+                size_ = other.size_;
+
+                if (size_ != 0) {
+
+                    data_p_ = allocator_.allocate(size_);
+
+                    memcpy(data_p_, other.data_p_, size_);
+
+                }
 
                 return *this;
             }
@@ -212,26 +228,37 @@ namespace ncpp {
             /**
              *  Move constructor
              */
-            inline fixed_vector_stack_t(fixed_vector_stack_t&& other) :
-                fixed_vector_stack_t(other.capacity_)
+            inline buffer_t(buffer_t&& other) :
+                buffer_t()
             {
 
-                item_vector_ = other.item_vector_;
-                end_index_ = other.end_index_;
-                other.clear();
+                clear();
+
+                allocator_ = other.allocator_;
+                data_p_ = other.data_p_;
+                size_ = other.size_;
+
+                other.data_p_ = 0;
+                other.size_ = 0;
 
             }
             /**
              *  Move operator
              */
-            inline fixed_vector_stack_t& operator = (fixed_vector_stack_t&& other) {
+            inline buffer_t& operator = (buffer_t&& other) {
 
-                item_vector_ = other.item_vector_;
-                end_index_ = other.end_index_;
-                other.clear();
+                clear();
+
+                allocator_ = other.allocator_;
+                data_p_ = other.data_p_;
+                size_ = other.size_;
+
+                other.data_p_ = 0;
+                other.size_ = 0;
 
                 return *this;
             }
+
 #pragma endregion
 
             ////////////////////////////////////////////////////////////////////////////////////
@@ -241,91 +268,98 @@ namespace ncpp {
 #pragma region Methods
         private:
             template<typename item_param_type>
-            inline void push_main_t(item_param_type&& item) {
+            inline void set_main_t(sz offset, item_param_type&& item) {
 
-                assert(size() < capacity_);
+                using no_ref_type = std::remove_reference_t<item_param_type>;
 
-                item_vector_[end_index_] = std::forward<item_param_type>(item);
+                assert(
+                    ((offset + sizeof(no_ref_type)) <= size_)
+                    && "buffer out of range"
+                );
 
-                ++end_index_;
+                *reinterpret_cast<no_ref_type*>(data_p_ + offset) = std::forward<item_param_type>(item);
+
             }
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////        
-        
+            ////////////////////////////////////////////////////////////////////////////////////
+
         public:
-            /**
-             *  Clears the stack by resetting the end index
-             */
+            template<typename item_type>
+            inline void set_t(sz offset, const item_type& item) {
+
+                set_main_t(offset, std::forward<const item_type&>(item));
+            }
+            template<typename item_type>
+            inline void set_t(sz offset, item_type&& item) {
+
+                set_main_t(offset, std::forward<item_type>(item));
+            }
+
+            template<typename item_type>
+            inline item_type& get_t(sz offset) {
+
+                assert(
+                    ((offset + sizeof(item_type)) <= size_)
+                    && "buffer out of range"
+                );
+
+                return *reinterpret_cast<item_type*>(data_p_ + offset);
+            }
+            template<typename item_type>
+            inline const item_type& get_t(sz offset) const {
+
+                assert(
+                    ((offset + sizeof(item_type)) <= size_)
+                    && "buffer out of range"
+                );
+
+                return *reinterpret_cast<item_type*>(data_p_ + offset);
+            }
+
             inline void clear() {
 
-                end_index_ = 0;
+                if (data_p_ != 0) {
+
+                    allocator_.deallocate(data_p_);
+
+                }
+
+                size_ = 0;
 
             }
-
-            /**
-             *  Pushes an item into the stack by move operation
-             */
-            inline void push(item_type__&& item) {
-
-                push_main_t(std::forward<const item_type__>(item));
-            }
-            /**
-             *  Pushes an item into the stack by copy operation
-             */
-            inline void push(const item_type__& item) {
-
-                push_main_t(item);
-            }
-            /**
-             *  Pops the front element
-             */
-            inline bool try_pop(item_type__& out_item) {
-
-                if (size() == 0)
-                    return false;
-
-                --end_index_;
-
-                out_item = item_vector_[end_index_];
-
-                return true;
-            }
-            /**
-             *  Pops the front element
-             */
-            inline bool try_pop() {
-
-                if(size() == 0)
-                    return false;
-
-                --end_index_;
-
-                return true;
-            }
-            /**
-             *  Pops the front element
-             */
-            inline void pop() {
-
-                assert(size() > 0);
-
-                --end_index_;
-                                                
-            }
-
-            /**
-             *  Resizes the stack.
-             */
             inline void resize(sz size) {
 
-                end_index_ = size;
+                if (size == 0) {
+
+                    clear();
+
+                    return;
+                }
+
+                iterator new_data_p = allocator_.allocate(size);
+
+                if (data_p_ != 0) {
+
+                    memcpy(new_data_p, data_p_, (size_ > size) ? size : size_);
+
+                    allocator_.deallocate(data_p_);
+
+                }
+
+                data_p_ = new_data_p;
+
+                size_ = size;
 
             }
 #pragma endregion
 
         };
+
+
+
+        using buffer = buffer_t<>;
 
     }
 

@@ -1,6 +1,6 @@
 
-message(STATUS "Check dependencies")
+message(STATUS "NCPP Check dependencies")
 
 find_package(Doxygen REQUIRED)
 
-message(STATUS "Check dependencies done")
+message(STATUS "NCPP Check dependencies done")

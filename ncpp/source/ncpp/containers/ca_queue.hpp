@@ -1,8 +1,8 @@
 #pragma once
 
 /**
- *  @file ncpp/containers/fixed_vector_stack.hpp
- *  @brief Implements fixed vector stack.
+ *  @file ncpp/containers/ca_queue.hpp
+ *  @brief Implements concurrent array queue.
  */
 
 
@@ -34,6 +34,12 @@
 ////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/utilities/.hpp>
+
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
+#include <ncpp/pac/spinlock.hpp>
 
 #pragma endregion
 
@@ -74,10 +80,10 @@ namespace ncpp {
 
 
         /**
-         *  A fixed_vector_stack_t is a stack storing elements inside a fixed vector 
+         *  A ca_queue_t is a concurrent queue storing elements inside an array
          */
-        template<typename item_type__, class allocator_type__ = NCPP_DEFAULT_ALLOCATOR_TEMPLATE<item_type__>>
-        class NCPP_DEFAULT_ALIGNAS fixed_vector_stack_t {
+        template<typename item_type__, sz capacity__>
+        class NCPP_DEFAULT_ALIGNAS ca_queue_t {
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -85,9 +91,8 @@ namespace ncpp {
 
 #pragma region Typedefs
         public:
-            using allocator_type = rebind_allocator_t<allocator_type__, item_type__>;
             using item_type = item_type__;
-            using item_vector_type = std::vector<item_type__, allocator_type>;
+            using item_array_type = std::array<item_type__, capacity__>;
             using iterator = item_type__*;
             using const_iterator = const item_type__*;
 #pragma endregion
@@ -97,10 +102,19 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
 #pragma region Properties
+        public:
+            static constexpr i32 capacity = capacity__;
+
+
+
         private:
-            item_vector_type item_vector_;
-            sz end_index_;
+            item_array_type item_array_;
+            asz begin_index_;
+            asz end_index_;
             sz capacity_;
+
+            pac::spinlock writer_lock_;
+            pac::spinlock reader_lock_;
 #pragma endregion
 
             ////////////////////////////////////////////////////////////////////////////////////
@@ -109,19 +123,26 @@ namespace ncpp {
 
 #pragma region Getters and Setters
         public:
-            inline iterator begin() { return item_vector_.data(); }
-            inline const_iterator begin() const { return item_vector_.data(); }
-            inline const_iterator cbegin() const { return item_vector_.data(); }
-            inline iterator end() { return item_vector_.data() + end_index_; }
-            inline const_iterator end() const { return item_vector_.data() + end_index_; }
-            inline const_iterator cend() const { return item_vector_.data() + end_index_; }
+            inline iterator begin() { return item_array_.data() + begin_index_.load(std::memory_order_acquire) % capacity; }
+            inline const_iterator begin() const { return item_array_.data() + begin_index_.load(std::memory_order_acquire) % capacity; }
+            inline const_iterator cbegin() const { return item_array_.data() + begin_index_.load(std::memory_order_acquire) % capacity; }
+            inline iterator end() { return item_array_.data() + end_index_.load(std::memory_order_acquire) % capacity; }
+            inline const_iterator end() const { return item_array_.data() + end_index_.load(std::memory_order_acquire) % capacity; }
+            inline const_iterator cend() const { return item_array_.data() + end_index_.load(std::memory_order_acquire) % capacity; }
 
             inline item_type__& front() { return *begin(); }
             inline const item_type__& front() const { return *begin(); }
-            inline item_type__& back() { return *(item_vector_.data() + (end_index_ - 1)); }
-            inline const item_type__& back() const { return *(item_vector_.data() + (end_index_ - 1)); }
+            inline item_type__& back() { return *(item_array_.data() + (end_index_.load(std::memory_order_acquire) + capacity - 1) % capacity); }
+            inline const item_type__& back() const { return *(item_array_.data() + (end_index_.load(std::memory_order_acquire) + capacity - 1) % capacity); }
 
-            inline sz size() const { return end_index_; }
+            inline sz size() const { 
+                sz end_index = end_index_.load(std::memory_order_acquire);
+                sz begin_index = begin_index_.load(std::memory_order_acquire);
+                return end_index - begin_index;
+            }
+
+            inline pac::spinlock& writer_lock() { return writer_lock_; }
+            inline pac::spinlock& reader_lock() { return reader_lock_; }
 #pragma endregion
 
             ////////////////////////////////////////////////////////////////////////////////////
@@ -133,46 +154,9 @@ namespace ncpp {
             /**
              *  Initialization constructor
              */
-            inline explicit fixed_vector_stack_t(sz capacity) :
-                end_index_(0),
-                capacity_(capacity)
-            {
-
-                item_vector_.reserve(capacity_);
-                item_vector_.resize(capacity_);
-
-            }
-            /**
-             *  Initialization constructor with allocator
-             */
-            inline explicit fixed_vector_stack_t(sz capacity, const allocator_type& allocator) :
-                end_index_(0),
-                item_vector_(allocator),
-                capacity_(capacity)
-            {
-
-                item_vector_.reserve(capacity_);
-                item_vector_.resize(capacity_);
-
-            }
-            /**
-             *  Initialization constructor with allocator
-             */
-            inline explicit fixed_vector_stack_t(const allocator_type& allocator) :
-                end_index_(0),
-                item_vector_(allocator),
-                capacity_(1024)
-            {
-
-                item_vector_.reserve(capacity_);
-                item_vector_.resize(capacity_);
-
-            }
-            /**
-             *  Default constructor
-             */
-            inline explicit fixed_vector_stack_t() : /** Automatically calls to the initialization constructor with the default capacity of 1024. */
-                fixed_vector_stack_t(1024)
+            inline explicit ca_queue_t() :
+                begin_index_(0),
+                end_index_(0)
             {
 
 
@@ -181,7 +165,7 @@ namespace ncpp {
             /**
              *  Destructor
              */
-            ~fixed_vector_stack_t() {
+            ~ca_queue_t() {
 
 
 
@@ -190,20 +174,22 @@ namespace ncpp {
             /**
              *  Copy constructor
              */
-            inline fixed_vector_stack_t(const fixed_vector_stack_t& other) :
-                fixed_vector_stack_t(other.capacity_)
+            inline ca_queue_t(const ca_queue_t& other) :
+                ca_queue_t(other.capacity_)
             {
 
-                item_vector_ = other.item_vector_;
+                item_array_ = other.item_array_;
+                begin_index_ = other.begin_index_;
                 end_index_ = other.end_index_;
 
             }
             /**
              *  Copy operator
              */
-            inline fixed_vector_stack_t& operator = (const fixed_vector_stack_t& other) {
+            inline ca_queue_t& operator = (const ca_queue_t& other) {
 
-                item_vector_ = other.item_vector_;
+                item_array_ = other.item_array_;
+                begin_index_ = other.begin_index_;
                 end_index_ = other.end_index_;
 
                 return *this;
@@ -212,11 +198,12 @@ namespace ncpp {
             /**
              *  Move constructor
              */
-            inline fixed_vector_stack_t(fixed_vector_stack_t&& other) :
-                fixed_vector_stack_t(other.capacity_)
+            inline ca_queue_t(ca_queue_t&& other) :
+                ca_queue_t(other.capacity_)
             {
 
-                item_vector_ = other.item_vector_;
+                item_array_ = other.item_array_;
+                begin_index_ = other.begin_index_;
                 end_index_ = other.end_index_;
                 other.clear();
 
@@ -224,14 +211,16 @@ namespace ncpp {
             /**
              *  Move operator
              */
-            inline fixed_vector_stack_t& operator = (fixed_vector_stack_t&& other) {
+            inline ca_queue_t& operator = (ca_queue_t&& other) {
 
-                item_vector_ = other.item_vector_;
+                item_array_ = other.item_array_;
+                begin_index_ = other.begin_index_;
                 end_index_ = other.end_index_;
                 other.clear();
 
                 return *this;
             }
+
 #pragma endregion
 
             ////////////////////////////////////////////////////////////////////////////////////
@@ -243,24 +232,31 @@ namespace ncpp {
             template<typename item_param_type>
             inline void push_main_t(item_param_type&& item) {
 
-                assert(size() < capacity_);
+                utilities::unique_lock_t lock_guard(writer_lock_);
 
-                item_vector_[end_index_] = std::forward<item_param_type>(item);
+                item_array_[end_index_.load(std::memory_order_acquire) % capacity] = std::forward<item_param_type>(item);
 
-                ++end_index_;
+                end_index_.fetch_add(1, std::memory_order_release);
+
             }
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////        
+            ////////////////////////////////////////////////////////////////////////////////////
         
         public:
             /**
-             *  Clears the stack by resetting the end index
+             *  Clears the queue by resetting the end index and the begin index.
              */
             inline void clear() {
 
-                end_index_ = 0;
+                utilities::unique_lock_t lock_guard(writer_lock_);
+                utilities::unique_lock_t lock_guard(reader_lock_);
+
+                std::atomic_thread_fence(std::memory_order_release);
+
+                begin_index_.store(0, std::memory_order_relaxed);
+                end_index_.store(0, std::memory_order_relaxed);
 
             }
 
@@ -269,7 +265,7 @@ namespace ncpp {
              */
             inline void push(item_type__&& item) {
 
-                push_main_t(std::forward<const item_type__>(item));
+                push_main_t(std::forward<item_type__>(item));
             }
             /**
              *  Pushes an item into the stack by copy operation
@@ -278,50 +274,43 @@ namespace ncpp {
 
                 push_main_t(item);
             }
+
             /**
-             *  Pops the front element
+             *  Tries to pop the front element
              */
-            inline bool try_pop(item_type__& out_item) {
+            inline bool try_pop(item_type& output) {
 
-                if (size() == 0)
-                    return false;
+                utilities::unique_lock_t lock_guard(reader_lock_);
 
-                --end_index_;
+                sz begin_index = begin_index_.load(std::memory_order_acquire);
 
-                out_item = item_vector_[end_index_];
+                sz end_index = end_index_.load(std::memory_order_acquire);
+                if (end_index <= begin_index) return false;
+
+                begin_index_.fetch_add(1, std::memory_order_release);
+
+
+
+                output = item_array_[begin_index % capacity];
 
                 return true;
             }
+
             /**
-             *  Pops the front element
+             *  Tries to pop the front element
              */
             inline bool try_pop() {
 
-                if(size() == 0)
-                    return false;
+                utilities::unique_lock_t lock_guard(reader_lock_);
 
-                --end_index_;
+                sz begin_index = begin_index_.load(std::memory_order_acquire);
+
+                sz end_index = end_index_.load(std::memory_order_acquire);
+                if (end_index <= begin_index) return false;
+
+                begin_index_.fetch_add(1, std::memory_order_release);
 
                 return true;
-            }
-            /**
-             *  Pops the front element
-             */
-            inline void pop() {
-
-                assert(size() > 0);
-
-                --end_index_;
-                                                
-            }
-
-            /**
-             *  Resizes the stack.
-             */
-            inline void resize(sz size) {
-
-                end_index_ = size;
-
             }
 #pragma endregion
 

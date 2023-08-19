@@ -199,6 +199,8 @@ namespace ncpp {
             {
 
                 item_vector_ = other.item_vector_;
+                begin_index_ = other.begin_index_;
+                end_index_ = other.end_index_;
 
             }
             /**
@@ -207,6 +209,8 @@ namespace ncpp {
             inline fixed_vector_queue_t& operator = (const fixed_vector_queue_t& other) {
 
                 item_vector_ = other.item_vector_;
+                begin_index_ = other.begin_index_;
+                end_index_ = other.end_index_;
 
                 return *this;
             }
@@ -219,6 +223,8 @@ namespace ncpp {
             {
 
                 item_vector_ = other.item_vector_;
+                begin_index_ = other.begin_index_;
+                end_index_ = other.end_index_;
                 other.clear();
 
             }
@@ -228,6 +234,8 @@ namespace ncpp {
             inline fixed_vector_queue_t& operator = (fixed_vector_queue_t&& other) {
 
                 item_vector_ = other.item_vector_;
+                begin_index_ = other.begin_index_;
+                end_index_ = other.end_index_;
                 other.clear();
 
                 return *this;
@@ -312,7 +320,6 @@ namespace ncpp {
             inline void pop() {
 
                 assert(size() > 0);
-                assert(begin_index_ != end_index_);
 
                 ++begin_index_;
             }

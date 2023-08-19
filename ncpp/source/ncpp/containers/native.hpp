@@ -45,7 +45,11 @@
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
+#include <ncpp/containers/buffer.hpp>
+#include <ncpp/containers/array_queue.hpp>
+#include <ncpp/containers/array_stack.hpp>
 #include <ncpp/containers/cfv_queue.hpp>
+#include <ncpp/containers/ca_queue.hpp>
 #include <ncpp/containers/fixed_vector_queue.hpp>
 #include <ncpp/containers/fixed_vector_stack.hpp>
 #include <ncpp/containers/fls_vector.hpp>
@@ -111,6 +115,14 @@ namespace ncpp {
 
 
 
+        template<typename item_type__>
+        using native_deque_t = std::deque<
+            item_type__,
+            native_allocator_t<item_type__>
+        >;
+
+
+
         template<typename key_type__, typename value_type__, typename pr__ = std::less<key_type__>>
         using native_map_t = std::map<
             key_type__,
@@ -148,6 +160,21 @@ namespace ncpp {
 
 
 
+#pragma region C++ STL Adaptors
+        template<typename item_type__>
+        using native_queue_t = std::queue<
+            item_type__,
+            native_deque_t<item_type__>
+        >;
+        template<typename item_type__>
+        using native_stack_t = std::stack<
+            item_type__,
+            native_deque_t<item_type__>
+        >;
+#pragma endregion
+
+
+
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -177,10 +204,24 @@ namespace ncpp {
         >;
 
         template<typename item_type__>
+        using native_cfv_queue_t = cfv_queue_t<
+            item_type__,
+            native_allocator_t<item_type__>
+        >;
+
+        template<typename item_type__>
         using native_fv_stack_t = fixed_vector_stack_t<
             item_type__,
             native_allocator_t<item_type__>
         >;
+
+        template<typename item_type__>
+        using native_fls_vector_t = fls_vector_t<
+            item_type__,
+            native_allocator_t<item_type__>
+        >;
+
+        using native_buffer = buffer_t<native_allocator_t<u8>>;
 #pragma endregion
 
     }

@@ -1,8 +1,8 @@
 #pragma once
 
 /**
- *  @file ncpp/containers/fixed_vector_stack.hpp
- *  @brief Implements fixed vector stack.
+ *  @file ncpp/containers/array_stack.hpp
+ *  @brief Implements array stack.
  */
 
 
@@ -74,10 +74,10 @@ namespace ncpp {
 
 
         /**
-         *  A fixed_vector_stack_t is a stack storing elements inside a fixed vector 
+         *  A array_stack_t is a stack storing elements inside an array
          */
-        template<typename item_type__, class allocator_type__ = NCPP_DEFAULT_ALLOCATOR_TEMPLATE<item_type__>>
-        class NCPP_DEFAULT_ALIGNAS fixed_vector_stack_t {
+        template<typename item_type__, sz capacity__>
+        class NCPP_DEFAULT_ALIGNAS array_stack_t {
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -85,9 +85,8 @@ namespace ncpp {
 
 #pragma region Typedefs
         public:
-            using allocator_type = rebind_allocator_t<allocator_type__, item_type__>;
             using item_type = item_type__;
-            using item_vector_type = std::vector<item_type__, allocator_type>;
+            using item_array_type = std::array<item_type__, capacity__>;
             using iterator = item_type__*;
             using const_iterator = const item_type__*;
 #pragma endregion
@@ -97,8 +96,13 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
 #pragma region Properties
+        public:
+            static constexpr i32 capacity = capacity__;
+
+
+
         private:
-            item_vector_type item_vector_;
+            item_array_type item_array_;
             sz end_index_;
             sz capacity_;
 #pragma endregion
@@ -109,17 +113,17 @@ namespace ncpp {
 
 #pragma region Getters and Setters
         public:
-            inline iterator begin() { return item_vector_.data(); }
-            inline const_iterator begin() const { return item_vector_.data(); }
-            inline const_iterator cbegin() const { return item_vector_.data(); }
-            inline iterator end() { return item_vector_.data() + end_index_; }
-            inline const_iterator end() const { return item_vector_.data() + end_index_; }
-            inline const_iterator cend() const { return item_vector_.data() + end_index_; }
+            inline iterator begin() { return item_array_.data(); }
+            inline const_iterator begin() const { return item_array_.data(); }
+            inline const_iterator cbegin() const { return item_array_.data(); }
+            inline iterator end() { return item_array_.data() + end_index_; }
+            inline const_iterator end() const { return item_array_.data() + end_index_; }
+            inline const_iterator cend() const { return item_array_.data() + end_index_; }
 
             inline item_type__& front() { return *begin(); }
             inline const item_type__& front() const { return *begin(); }
-            inline item_type__& back() { return *(item_vector_.data() + (end_index_ - 1)); }
-            inline const item_type__& back() const { return *(item_vector_.data() + (end_index_ - 1)); }
+            inline item_type__& back() { return *(item_array_.data() + (end_index_ - 1)); }
+            inline const item_type__& back() const { return *(item_array_.data() + (end_index_ - 1)); }
 
             inline sz size() const { return end_index_; }
 #pragma endregion
@@ -131,48 +135,10 @@ namespace ncpp {
 #pragma region Constructors, Destructor and Operators
         public:
             /**
-             *  Initialization constructor
-             */
-            inline explicit fixed_vector_stack_t(sz capacity) :
-                end_index_(0),
-                capacity_(capacity)
-            {
-
-                item_vector_.reserve(capacity_);
-                item_vector_.resize(capacity_);
-
-            }
-            /**
-             *  Initialization constructor with allocator
-             */
-            inline explicit fixed_vector_stack_t(sz capacity, const allocator_type& allocator) :
-                end_index_(0),
-                item_vector_(allocator),
-                capacity_(capacity)
-            {
-
-                item_vector_.reserve(capacity_);
-                item_vector_.resize(capacity_);
-
-            }
-            /**
-             *  Initialization constructor with allocator
-             */
-            inline explicit fixed_vector_stack_t(const allocator_type& allocator) :
-                end_index_(0),
-                item_vector_(allocator),
-                capacity_(1024)
-            {
-
-                item_vector_.reserve(capacity_);
-                item_vector_.resize(capacity_);
-
-            }
-            /**
              *  Default constructor
              */
-            inline explicit fixed_vector_stack_t() : /** Automatically calls to the initialization constructor with the default capacity of 1024. */
-                fixed_vector_stack_t(1024)
+            inline explicit array_stack_t() :
+                end_index_(0)
             {
 
 
@@ -181,7 +147,7 @@ namespace ncpp {
             /**
              *  Destructor
              */
-            ~fixed_vector_stack_t() {
+            ~array_stack_t() {
 
 
 
@@ -190,20 +156,20 @@ namespace ncpp {
             /**
              *  Copy constructor
              */
-            inline fixed_vector_stack_t(const fixed_vector_stack_t& other) :
-                fixed_vector_stack_t(other.capacity_)
+            inline array_stack_t(const array_stack_t& other) :
+                array_stack_t(other.capacity_)
             {
 
-                item_vector_ = other.item_vector_;
+                item_array_ = other.item_array_;
                 end_index_ = other.end_index_;
 
             }
             /**
              *  Copy operator
              */
-            inline fixed_vector_stack_t& operator = (const fixed_vector_stack_t& other) {
+            inline array_stack_t& operator = (const array_stack_t& other) {
 
-                item_vector_ = other.item_vector_;
+                item_array_ = other.item_array_;
                 end_index_ = other.end_index_;
 
                 return *this;
@@ -212,11 +178,11 @@ namespace ncpp {
             /**
              *  Move constructor
              */
-            inline fixed_vector_stack_t(fixed_vector_stack_t&& other) :
-                fixed_vector_stack_t(other.capacity_)
+            inline array_stack_t(array_stack_t&& other) :
+                array_stack_t(other.capacity_)
             {
 
-                item_vector_ = other.item_vector_;
+                item_array_ = other.item_array_;
                 end_index_ = other.end_index_;
                 other.clear();
 
@@ -224,9 +190,9 @@ namespace ncpp {
             /**
              *  Move operator
              */
-            inline fixed_vector_stack_t& operator = (fixed_vector_stack_t&& other) {
+            inline array_stack_t& operator = (array_stack_t&& other) {
 
-                item_vector_ = other.item_vector_;
+                item_array_ = other.item_array_;
                 end_index_ = other.end_index_;
                 other.clear();
 
@@ -243,9 +209,9 @@ namespace ncpp {
             template<typename item_param_type>
             inline void push_main_t(item_param_type&& item) {
 
-                assert(size() < capacity_);
+                assert(size() < capacity);
 
-                item_vector_[end_index_] = std::forward<item_param_type>(item);
+                item_array_[end_index_] = std::forward<item_param_type>(item);
 
                 ++end_index_;
             }
@@ -253,7 +219,7 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////        
-        
+
         public:
             /**
              *  Clears the stack by resetting the end index
@@ -288,7 +254,7 @@ namespace ncpp {
 
                 --end_index_;
 
-                out_item = item_vector_[end_index_];
+                out_item = item_array_[end_index_];
 
                 return true;
             }
@@ -297,7 +263,7 @@ namespace ncpp {
              */
             inline bool try_pop() {
 
-                if(size() == 0)
+                if (size() == 0)
                     return false;
 
                 --end_index_;
@@ -312,7 +278,7 @@ namespace ncpp {
                 assert(size() > 0);
 
                 --end_index_;
-                                                
+
             }
 
             /**
