@@ -103,7 +103,7 @@ namespace ncpp {
 
 #pragma region Properties
         public:
-            static constexpr i32 capacity = capacity__;
+            static constexpr i32 capacity() { return capacity__; };
 
 
 
@@ -123,17 +123,17 @@ namespace ncpp {
 
 #pragma region Getters and Setters
         public:
-            inline iterator begin() { return item_array_.data() + begin_index_.load(std::memory_order_acquire) % capacity; }
-            inline const_iterator begin() const { return item_array_.data() + begin_index_.load(std::memory_order_acquire) % capacity; }
-            inline const_iterator cbegin() const { return item_array_.data() + begin_index_.load(std::memory_order_acquire) % capacity; }
-            inline iterator end() { return item_array_.data() + end_index_.load(std::memory_order_acquire) % capacity; }
-            inline const_iterator end() const { return item_array_.data() + end_index_.load(std::memory_order_acquire) % capacity; }
-            inline const_iterator cend() const { return item_array_.data() + end_index_.load(std::memory_order_acquire) % capacity; }
+            inline iterator begin() { return item_array_.data() + begin_index_.load(std::memory_order_acquire) % capacity(); }
+            inline const_iterator begin() const { return item_array_.data() + begin_index_.load(std::memory_order_acquire) % capacity(); }
+            inline const_iterator cbegin() const { return item_array_.data() + begin_index_.load(std::memory_order_acquire) % capacity(); }
+            inline iterator end() { return item_array_.data() + end_index_.load(std::memory_order_acquire) % capacity(); }
+            inline const_iterator end() const { return item_array_.data() + end_index_.load(std::memory_order_acquire) % capacity(); }
+            inline const_iterator cend() const { return item_array_.data() + end_index_.load(std::memory_order_acquire) % capacity(); }
 
             inline item_type__& front() { return *begin(); }
             inline const item_type__& front() const { return *begin(); }
-            inline item_type__& back() { return *(item_array_.data() + (end_index_.load(std::memory_order_acquire) + capacity - 1) % capacity); }
-            inline const item_type__& back() const { return *(item_array_.data() + (end_index_.load(std::memory_order_acquire) + capacity - 1) % capacity); }
+            inline item_type__& back() { return *(item_array_.data() + (end_index_.load(std::memory_order_acquire) + capacity() - 1) % capacity()); }
+            inline const item_type__& back() const { return *(item_array_.data() + (end_index_.load(std::memory_order_acquire) + capacity() - 1) % capacity()); }
 
             inline sz size() const { 
                 sz end_index = end_index_.load(std::memory_order_acquire);
@@ -291,7 +291,7 @@ namespace ncpp {
 
 
 
-                output = item_array_[begin_index % capacity];
+                output = item_array_[begin_index % capacity()];
 
                 return true;
             }

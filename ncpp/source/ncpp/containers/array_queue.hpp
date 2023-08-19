@@ -97,7 +97,7 @@ namespace ncpp {
 
 #pragma region Properties
         public:
-            static constexpr i32 capacity = capacity__;
+            static constexpr i32 capacity() { return capacity__; };
 
 
 
@@ -213,7 +213,7 @@ namespace ncpp {
             template<typename item_param_type>
             inline void push_main_t(item_param_type&& item) {
 
-                assert(size() < capacity);
+                assert(size() < capacity());
 
                 item_array_[end_index_ % capacity] = std::forward<item_param_type>(item);
 

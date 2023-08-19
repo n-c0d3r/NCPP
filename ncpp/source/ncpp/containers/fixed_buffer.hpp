@@ -76,7 +76,7 @@ namespace ncpp {
         /**
          *  A fixed buffer containing raw static memory block allocated by on the program stack 
          */
-        template<sz size__>
+        template<sz capacity__>
         class NCPP_DEFAULT_ALIGNAS fixed_buffer_t {
 
             ////////////////////////////////////////////////////////////////////////////////////
@@ -95,12 +95,12 @@ namespace ncpp {
 
 #pragma region Properties
         public:
-            static constexpr sz size = size__;
+            static constexpr i32 capacity() { return capacity__; };
 
 
 
         private:
-            u8 data_p_[size];
+            u8 data_p_[capacity()];
 #pragma endregion
 
             ////////////////////////////////////////////////////////////////////////////////////
@@ -112,9 +112,9 @@ namespace ncpp {
             inline iterator begin() { return data_p_; }
             inline const_iterator begin() const { return data_p_; }
             inline const_iterator cbegin() const { return data_p_; }
-            inline iterator end() { return data_p_ + size; }
-            inline const_iterator end() const { return data_p_ + size; }
-            inline const_iterator cend() const { return data_p_ + size; }
+            inline iterator end() { return data_p_ + capacity(); }
+            inline const_iterator end() const { return data_p_ + capacity(); }
+            inline const_iterator cend() const { return data_p_ + capacity(); }
 
             inline iterator data_p() const { return data_p_; }
 #pragma endregion
@@ -150,7 +150,7 @@ namespace ncpp {
                 fixed_buffer_t()
             {
 
-                memcpy(data_p_, other.data_p_, size);
+                memcpy(data_p_, other.data_p_, capacity());
 
             }
             /**
@@ -158,7 +158,7 @@ namespace ncpp {
              */
             inline fixed_buffer_t& operator = (const fixed_buffer_t& other) {
 
-                memcpy(data_p_, other.data_p_, size);
+                memcpy(data_p_, other.data_p_, capacity());
 
                 return *this;
             }
@@ -170,7 +170,7 @@ namespace ncpp {
                 fixed_buffer_t()
             {
 
-                memcpy(data_p_, other.data_p_, size);
+                memcpy(data_p_, other.data_p_, capacity());
 
             }
             /**
@@ -178,7 +178,7 @@ namespace ncpp {
              */
             inline fixed_buffer_t& operator = (fixed_buffer_t&& other) {
 
-                memcpy(data_p_, other.data_p_, size);
+                memcpy(data_p_, other.data_p_, capacity());
 
                 return *this;
             }
@@ -197,7 +197,7 @@ namespace ncpp {
                 using no_ref_type = std::remove_reference_t<item_param_type>;
 
                 assert(
-                    ((offset + sizeof(no_ref_type)) <= size)
+                    ((offset + sizeof(no_ref_type)) <= capacity())
                     && "fixed_buffer_t out of range"
                 );
 
@@ -225,7 +225,7 @@ namespace ncpp {
             inline item_type& get_t(sz offset) {
 
                 assert(
-                    ((offset + sizeof(item_type)) <= size)
+                    ((offset + sizeof(item_type)) <= capacity())
                     && "fixed_buffer_t out of range"
                 );
 
@@ -235,7 +235,7 @@ namespace ncpp {
             inline const item_type& get_t(sz offset) const {
 
                 assert(
-                    ((offset + sizeof(item_type)) <= size)
+                    ((offset + sizeof(item_type)) <= capacity())
                     && "fixed_buffer_t out of range"
                 );
 
