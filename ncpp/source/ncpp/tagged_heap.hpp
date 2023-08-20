@@ -819,7 +819,7 @@ namespace ncpp {
 
 #pragma region Methods
 	private:
-		inline pointer internal_allocate(size_type n, sz align = 1) {
+		inline pointer internal_allocate(size_type n, sz align = 1) const {
 
 			assert(!tagged_heap_ref_.is_null() && "tagged heap is null");
 
@@ -829,11 +829,11 @@ namespace ncpp {
 
 
 	protected:
-		void* abstract_allocate(size_type size, sz align = 1) {
+		void* abstract_allocate(size_type size, sz align = 1) const {
 
 			return (void*)internal_allocate(size / sizeof(value_type__), align);
 		}
-		void abstract_deallocate(void* ptr, sz size = sizeof(value_type__)) {
+		void abstract_deallocate(void* ptr, sz size = sizeof(value_type__)) const {
 
 
 		}
@@ -841,12 +841,12 @@ namespace ncpp {
 
 
 	public:
-		inline pointer   allocate(size_type n, sz align = 1) {
+		inline pointer   allocate(size_type n, sz align = 1) const {
 
 			return internal_allocate(n, align);
 		}
 
-		inline void      deallocate(void* p, sz n = 1) {
+		inline void      deallocate(void* p, sz n = 1) const {
 
 
 		}

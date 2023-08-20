@@ -59,7 +59,7 @@ namespace ncpp {
 	class native_allocator_i;
 
 	template <class value_type__>
-	class NCPP_DEFAULT_ALIGNAS native_allocator_t;
+	class native_allocator_t;
 
 
 
@@ -101,7 +101,7 @@ namespace ncpp {
 
 
 
-	class NCPP_DEFAULT_ALIGNAS native_allocator_i {
+	class native_allocator_i {
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
@@ -127,12 +127,12 @@ namespace ncpp {
 
 #pragma region Methods
 	protected:
-		virtual void* abstract_allocate(sz size, sz align = 1) {
+		virtual void* abstract_allocate(sz size, sz align = 1) const {
 
 			return current_native_allocator().abstract_allocate(size, align);
 		}
 
-		virtual void abstract_deallocate(void* p, sz size = 1) {
+		virtual void abstract_deallocate(void* p, sz size = 1) const {
 
 			native_allocator_i* allocator_p = *(reinterpret_cast<native_allocator_i**>(p) - 1);
 			allocator_p->abstract_deallocate(p, size);
@@ -169,7 +169,7 @@ namespace ncpp {
 
 
 	template <class value_type__>
-	class NCPP_DEFAULT_ALIGNAS native_allocator_t :
+	class native_allocator_t :
 		public native_allocator_i
 	{
 
@@ -249,12 +249,12 @@ namespace ncpp {
 
 #pragma region Methods
 	public:
-		inline pointer   allocate(size_type n, sz align = 1) {
+		inline pointer   allocate(size_type n, sz align = 1) const {
 
 			return (pointer)abstract_allocate(sizeof(value_type__) * n, align);
 		}
 
-		inline void      deallocate(void* p, sz n = 1) {
+		inline void      deallocate(void* p, sz n = 1) const {
 
 			abstract_deallocate(p, sizeof(value_type__) * n);
 		}

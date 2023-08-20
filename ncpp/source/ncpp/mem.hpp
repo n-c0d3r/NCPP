@@ -205,7 +205,7 @@ namespace ncpp {
 
 #pragma region Allocators
 	template <class value_type__>
-	class NCPP_DEFAULT_ALIGNAS aligned_allocator_t :
+	class aligned_allocator_t :
 		public native_allocator_t<value_type__>
 	{
 
@@ -261,11 +261,11 @@ namespace ncpp {
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private:
-		inline pointer internal_allocate(size_type n, sz align = 1) {
+		inline pointer internal_allocate(size_type n, sz align = 1) const {
 
 			return (pointer)aligned_alloc(n * sizeof(value_type), align);
 		}
-		inline void internal_deallocate(pointer ptr, sz n = 1) {
+		inline void internal_deallocate(pointer ptr, sz n = 1) const {
 
 			aligned_free(ptr);
 		}
@@ -281,12 +281,12 @@ namespace ncpp {
 		}
 
 	public:
-		inline pointer   allocate(size_type n, sz align = 1) {
+		inline pointer   allocate(size_type n, sz align = 1) const {
 
 			return internal_allocate(n, align);
 		}
 
-		inline void      deallocate(pointer ptr, sz n = 1) {
+		inline void      deallocate(pointer ptr, sz n = 1) const {
 
 			internal_deallocate(ptr, n);
 		}
@@ -324,7 +324,7 @@ namespace ncpp {
 
 #pragma region Allocators
 	template <class value_type__>
-	class NCPP_DEFAULT_ALIGNAS crt_allocator_t :
+	class crt_allocator_t :
 		public native_allocator_t<value_type__>
 	{
 
@@ -380,34 +380,34 @@ namespace ncpp {
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private:
-		inline pointer internal_allocate(size_type n, sz align = 1) {
+		inline pointer internal_allocate(size_type n, sz align = 1) const {
 
 			size_type actual_size = n * sizeof(value_type);
 
 			return (pointer)malloc(actual_size);
 		}
-		inline void internal_deallocate(pointer ptr, sz n = 1) {
+		inline void internal_deallocate(pointer ptr, sz n = 1) const {
 
 			free(ptr);
 		}
 
 	protected:
-		void* abstract_allocate(size_type size, sz align = 1) {
+		void* abstract_allocate(size_type size, sz align = 1) const {
 
 			return (void*)internal_allocate(size / sizeof(value_type__), align);
 		}
-		void abstract_deallocate(void* ptr, sz size = sizeof(value_type__)) {
+		void abstract_deallocate(void* ptr, sz size = sizeof(value_type__)) const {
 
 			internal_deallocate((pointer)ptr, size / sizeof(value_type__));
 		}
 
 	public:
-		inline pointer   allocate(size_type n, sz align = 1) {
+		inline pointer   allocate(size_type n, sz align = 1) const {
 
 			return internal_allocate(n, align);
 		}
 
-		inline void      deallocate(pointer ptr, sz n = 1) {
+		inline void      deallocate(pointer ptr, sz n = 1) const {
 
 			internal_deallocate(ptr, n);
 		}
