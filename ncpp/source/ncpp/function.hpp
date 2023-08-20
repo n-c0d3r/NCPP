@@ -80,7 +80,7 @@ namespace ncpp {
     namespace lambda_helper {
 
         template<typename lambda_passed_type__, typename allocator_type__>
-        inline std::remove_const_t<std::remove_reference_t<lambda_passed_type__>>* clone_lambda_t(lambda_passed_type__&& other, const allocator_type__& allocator) {
+        inline std::remove_const_t<std::remove_reference_t<lambda_passed_type__>>* clone_lambda_t(lambda_passed_type__&& other, allocator_type__& allocator) {
         
             using lambda_type = std::remove_const_t<std::remove_reference_t<lambda_passed_type__>>;
 
@@ -153,11 +153,8 @@ namespace ncpp {
 
 
 
-        template<typename lambda_type__, typename allocator_type__, b8 is_return_void__, typename return_type__, typename... arg_types__>
-        inline sz table_t[];
-
         template<typename lambda_type__, typename allocator_type__, typename return_type__, typename... arg_types__>
-        inline sz table_t<lambda_type__, allocator_type__, true, return_type__, arg_types__...>[] = {
+        inline sz table_t[] = {
 
             //Run
             reinterpret_cast<sz>(
@@ -190,7 +187,7 @@ namespace ncpp {
         template<typename lambda_type__, typename allocator_type__, typename return_type__, typename... arg_types__>
         inline sz* get_table_t() {
 
-            return table_t<lambda_type__, allocator_type__, std::is_same_v<return_type__, void>, return_type__, arg_types__...>;
+            return table_t<lambda_type__, allocator_type__, return_type__, arg_types__...>;
         };
 
         template<typename return_type__, typename... arg_types__>
@@ -202,11 +199,13 @@ namespace ncpp {
             return reinterpret_cast<run_function_ptr_type_t<return_type__, arg_types__...>>(table[0]);
         };
 
-        using release_function_ptr_type = void(*)(void* lambda);
+        template<typename allocator_type__>
+        using release_function_ptr_type_t = void(*)(void* lambda, allocator_type__& allocator);
 
-        inline release_function_ptr_type get_release_function(sz* table) {
+        template<typename allocator_type__>
+        inline release_function_ptr_type_t<allocator_type__> get_release_function_t(sz* table) {
 
-            return reinterpret_cast<release_function_ptr_type>(table[1]);
+            return reinterpret_cast<release_function_ptr_type_t<allocator_type__>>(table[1]);
         };
 
         using clone_function_ptr_type = void*(*)(void* lambda);
@@ -266,10 +265,10 @@ namespace ncpp {
     public:
         inline return_type__ operator() (arg_types__... args) {
 
-            if (reinterpret_cast<sz*>(reinterpret_cast<base*>(this)->table_p_) != 0) {
+            if (reinterpret_cast<base*>(this)->table_p_) {
 
                 lambda_helper::get_run_function_t<return_type__, arg_types__...>(
-                    reinterpret_cast<sz*>(reinterpret_cast<base*>(this)->table_p_)
+                    reinterpret_cast<base*>(this)->table_p_
                 )(
                     reinterpret_cast<base*>(this)->data_p_,
                     std::forward<arg_types__>(args)...
@@ -302,7 +301,20 @@ namespace ncpp {
     public:
         inline return_type__ operator() (arg_types__... args) {
 
-            reinterpret_cast<typename base::raw_type*>(reinterpret_cast<base*>(this)->data_p_)(std::forward<arg_types__>(args)...);
+            if (reinterpret_cast<base*>(this)->table_p_) {
+
+                return (
+                    lambda_helper::get_run_function_t<return_type__, arg_types__...>(
+                        reinterpret_cast<base*>(this)->table_p_
+                    )(
+                        reinterpret_cast<base*>(this)->data_p_,
+                        std::forward<arg_types__>(args)...
+                    )
+                );
+
+            }
+            
+            return reinterpret_cast<typename base::raw_type*>(reinterpret_cast<base*>(this)->data_p_)(std::forward<arg_types__>(args)...);
         }
 
     };
@@ -347,6 +359,11 @@ namespace ncpp {
             *reinterpret_cast<typename base::raw_type**>(&(reinterpret_cast<base*>(this)->data_p_)) = raw_function_p;
 
         }
+        inline function_t(typename base::raw_type* raw_function_p, const allocator_type__& allocator) {
+
+            *reinterpret_cast<typename base::raw_type**>(&(reinterpret_cast<base*>(this)->data_p_)) = raw_function_p;
+
+        }
         template<
             typename lambda_passed_type__, 
             std::enable_if_t<
@@ -356,6 +373,19 @@ namespace ncpp {
             > = 0
         >
         inline function_t(lambda_passed_type__&& lambda) {
+
+            *reinterpret_cast<typename base::raw_type**>(&(reinterpret_cast<base*>(this)->data_p_)) = std::forward<lambda_passed_type__>(lambda);
+
+        }
+        template<
+            typename lambda_passed_type__,
+            std::enable_if_t<
+            std::is_convertible_v<lambda_passed_type__, typename base::raw_type*>
+            && !std::is_same_v<function_t, std::remove_const_t<std::remove_reference_t<lambda_passed_type__>>>,
+            int
+            > = 0
+        >
+        inline function_t(lambda_passed_type__&& lambda, const allocator_type__& allocator) {
 
             *reinterpret_cast<typename base::raw_type**>(&(reinterpret_cast<base*>(this)->data_p_)) = std::forward<lambda_passed_type__>(lambda);
 
@@ -485,10 +515,11 @@ namespace ncpp {
 
             if (reinterpret_cast<base*>(this)->table_p_ != 0) {
 
-                lambda_helper::get_release_function(
+                lambda_helper::get_release_function_t<allocator_type__>(
                     reinterpret_cast<base*>(this)->table_p_
                 )(
-                    reinterpret_cast<base*>(this)->data_p_
+                    reinterpret_cast<base*>(this)->data_p_,
+                    reinterpret_cast<base*>(this)->allocator_
                 );
 
             }

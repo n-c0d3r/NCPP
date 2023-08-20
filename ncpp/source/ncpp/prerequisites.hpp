@@ -79,6 +79,7 @@ namespace ncpp {}
 #include <fstream>
 #include <memory>
 #include <condition_variable>
+#include <chrono>
 
 #include <string.h>
 

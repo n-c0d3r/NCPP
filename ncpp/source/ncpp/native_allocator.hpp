@@ -127,12 +127,12 @@ namespace ncpp {
 
 #pragma region Methods
 	protected:
-		virtual void* abstract_allocate(sz size, sz align = 1) const {
+		virtual void* abstract_allocate(sz size, sz align = 1) {
 
 			return current_native_allocator().abstract_allocate(size, align);
 		}
 
-		virtual void abstract_deallocate(void* p, sz size = 1) const {
+		virtual void abstract_deallocate(void* p, sz size = 1) {
 
 			native_allocator_i* allocator_p = *(reinterpret_cast<native_allocator_i**>(p) - 1);
 			allocator_p->abstract_deallocate(p, size);
@@ -249,12 +249,12 @@ namespace ncpp {
 
 #pragma region Methods
 	public:
-		inline pointer   allocate(size_type n, sz align = 1) const {
+		inline pointer   allocate(size_type n, sz align = 1) {
 
 			return (pointer)abstract_allocate(sizeof(value_type__) * n, align);
 		}
 
-		inline void      deallocate(void* p, sz n = 1) const {
+		inline void      deallocate(void* p, sz n = 1) {
 
 			abstract_deallocate(p, sizeof(value_type__) * n);
 		}
