@@ -268,16 +268,16 @@ namespace ncpp {
 #pragma region Methods
         private:
             template<typename item_param_type>
-            inline void set_main_t(sz offset, item_param_type&& item) {
+            inline void unsafe_set_main_t(sz offset, item_param_type&& item) {
 
-                using no_ref_type = std::remove_reference_t<item_param_type>;
+                using parsed_type = std::remove_const_t<std::remove_reference_t<item_param_type>>;
 
                 assert(
-                    ((offset + sizeof(no_ref_type)) <= size_)
+                    ((offset + sizeof(parsed_type)) <= size_)
                     && "buffer out of range"
                 );
 
-                *reinterpret_cast<no_ref_type*>(data_p_ + offset) = std::forward<item_param_type>(item);
+                *reinterpret_cast<parsed_type*>(data_p_ + offset) = std::forward<item_param_type>(item);
 
             }
 
@@ -286,15 +286,36 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
+            template<typename item_type, typename... arg_types__>
+            inline void construct_t(sz offset, arg_types__&&... args) {
+
+                new (reinterpret_cast<item_type*>(data_p_ + offset)) item_type(std::forward<arg_types__>(args)...);
+            }
+
+            template<typename item_type>
+            inline void unsafe_set_t(sz offset, const item_type& item) {
+
+                unsafe_set_main_t(offset, std::forward<const item_type&>(item));
+            }
+            template<typename item_type>
+            inline void unsafe_set_t(sz offset, item_type&& item) {
+
+                unsafe_set_main_t(offset, std::forward<item_type>(item));
+            }
+
             template<typename item_type>
             inline void set_t(sz offset, const item_type& item) {
 
-                set_main_t(offset, std::forward<const item_type&>(item));
+                construct_t<item_type>(offset);
+
+                unsafe_set_main_t(offset, std::forward<const item_type&>(item));
             }
             template<typename item_type>
             inline void set_t(sz offset, item_type&& item) {
 
-                set_main_t(offset, std::forward<item_type>(item));
+                construct_t<item_type>(offset);
+
+                unsafe_set_main_t(offset, std::forward<item_type>(item));
             }
 
             template<typename item_type>

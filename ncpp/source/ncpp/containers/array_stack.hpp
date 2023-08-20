@@ -283,15 +283,6 @@ namespace ncpp {
                 --end_index_;
 
             }
-
-            /**
-             *  Resizes the stack.
-             */
-            inline void resize(sz size) {
-
-                end_index_ = size;
-
-            }
 #pragma endregion
 
         };

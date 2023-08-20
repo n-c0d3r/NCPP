@@ -238,16 +238,10 @@ namespace ncpp {
 
             }
 
-            /**
-             *  Pushes an item into the stack by move operation
-             */
             inline void push(item_type__&& item) {
 
                 push_main_t(std::forward<item_type__>(item));
             }
-            /**
-             *  Pushes an item into the stack by copy operation
-             */
             inline void push(const item_type__& item) {
 
                 push_main_t(item);
@@ -286,15 +280,6 @@ namespace ncpp {
                 assert(size() > 0);
 
                 ++begin_index_;
-            }
-
-            /**
-             *  Resizes the queue.
-             */
-            inline void resize(sz size) {
-
-                end_index_ = begin_index_ + size;
-
             }
 #pragma endregion
 

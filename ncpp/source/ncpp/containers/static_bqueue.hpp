@@ -1,8 +1,8 @@
 #pragma once
 
 /**
- *  @file ncpp/containers/fixed_vector_queue.hpp
- *  @brief Implements fixed vector queue.
+ *  @file ncpp/containers/static_bqueue.hpp
+ *  @brief Implements static buffer queue.
  */
 
 
@@ -34,6 +34,12 @@
 ////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/utilities/.hpp>
+
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
+#include <ncpp/containers/fixed_buffer.hpp>
 
 #pragma endregion
 
@@ -74,10 +80,10 @@ namespace ncpp {
 
 
         /**
-         *  A fixed_vector_queue_t is a queue storing elements inside a fixed vector
+         *  A static_bqueue_t is a queue storing elements inside a fixed buffer
          */
-        template<typename item_type__, class allocator_type__ = NCPP_DEFAULT_ALLOCATOR_TEMPLATE<item_type__>>
-        class NCPP_DEFAULT_ALIGNAS fixed_vector_queue_t {
+        template<sz capacity__>
+        class NCPP_DEFAULT_ALIGNAS static_bqueue_t {
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -85,11 +91,12 @@ namespace ncpp {
 
 #pragma region Typedefs
         public:
-            using allocator_type = rebind_allocator_t<allocator_type__, item_type__>;
-            using item_type = item_type__;
-            using item_vector_type = std::vector<item_type__, allocator_type>;
-            using iterator = item_type__*;
-            using const_iterator = const item_type__*;
+            using buffer_type = containers::fixed_buffer_t<capacity__>;
+            using iterator = u8*;
+            using const_iterator = const u8*;
+
+            template<sz new_capacity__>
+            using rebind_capacity_t = static_bqueue_t<new_capacity__>;
 #pragma endregion
 
             ////////////////////////////////////////////////////////////////////////////////////
@@ -97,11 +104,16 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
 #pragma region Properties
+        public:
+            static constexpr i32 capacity() { return capacity__; };
+
+
+
         private:
-            item_vector_type item_vector_;
+            buffer_type buffer_;
             sz begin_index_;
             sz end_index_;
-            sz capacity_;
+            sz last_index_;
 #pragma endregion
 
             ////////////////////////////////////////////////////////////////////////////////////
@@ -110,17 +122,14 @@ namespace ncpp {
 
 #pragma region Getters and Setters
         public:
-            inline iterator begin() { return item_vector_.data() + begin_index_ % capacity_; }
-            inline const_iterator begin() const { return item_vector_.data() + begin_index_ % capacity_; }
-            inline const_iterator cbegin() const { return item_vector_.data() + begin_index_ % capacity_; }
-            inline iterator end() { return item_vector_.data() + end_index_ % capacity_; }
-            inline const_iterator end() const { return item_vector_.data() + end_index_ % capacity_; }
-            inline const_iterator cend() const { return item_vector_.data() + end_index_ % capacity_; }
-
-            inline item_type__& front() { return *begin(); }
-            inline const item_type__& front() const { return *begin(); }
-            inline item_type__& back() { return *(item_vector_.data() + (end_index_ - 1) % capacity_); }
-            inline const item_type__& back() const { return *(item_vector_.data() + (end_index_ - 1) % capacity_); }
+            inline iterator begin() { return buffer_.data_p() + begin_index_ % capacity(); }
+            inline const_iterator begin() const { return buffer_.data_p() + begin_index_ % capacity(); }
+            inline const_iterator cbegin() const { return buffer_.data_p() + begin_index_ % capacity(); }
+            inline iterator end() { return buffer_.data_p() + end_index_ % capacity(); }
+            inline const_iterator end() const { return buffer_.data_p() + end_index_ % capacity(); }
+            inline const_iterator cend() const { return buffer_.data_p() + end_index_ % capacity(); }
+            inline iterator last() { return buffer_.data_p() + last_index_ % capacity(); }
+            inline const_iterator last() const { return buffer_.data_p() + last_index_ % capacity(); }
 
             inline sz size() const { return end_index_ - begin_index_; }
 #pragma endregion
@@ -132,60 +141,21 @@ namespace ncpp {
 #pragma region Constructors, Destructor and Operators
         public:
             /**
-             *  Initialization constructor
-             */
-            inline explicit fixed_vector_queue_t(sz capacity) :
-                begin_index_(0),
-                end_index_(0),
-                capacity_(capacity)
-            {
-
-                item_vector_.reserve(capacity_);
-                item_vector_.resize(capacity_);
-
-            }
-            /**
-             *  Initialization constructor with allocator
-             */
-            inline explicit fixed_vector_queue_t(sz capacity, const allocator_type& allocator) :
-                begin_index_(0),
-                end_index_(0),
-                item_vector_(allocator),
-                capacity_(capacity)
-            {
-
-                item_vector_.reserve(capacity_);
-                item_vector_.resize(capacity_);
-
-            }
-            /**
-             *  Initialization constructor with allocator
-             */
-            inline explicit fixed_vector_queue_t(const allocator_type& allocator) :
-                begin_index_(0),
-                end_index_(0),
-                item_vector_(allocator),
-                capacity_(1024)
-            {
-
-                item_vector_.reserve(capacity_);
-                item_vector_.resize(capacity_);
-
-            }
-            /**
              *  Default constructor
              */
-            inline explicit fixed_vector_queue_t() :  /** Automatically calls to the initialization constructor with the default capacity of 1024. */
-                fixed_vector_queue_t(1024)
+            inline explicit static_bqueue_t() :
+                begin_index_(capacity()),
+                end_index_(capacity()),
+                last_index_(capacity() - sizeof(sz))
             {
 
-
+                buffer_.set_t<sz>(0, 0);
 
             }
             /**
              *  Destructor
              */
-            ~fixed_vector_queue_t() {
+            ~static_bqueue_t() {
 
 
 
@@ -194,23 +164,24 @@ namespace ncpp {
             /**
              *  Copy constructor
              */
-            inline fixed_vector_queue_t(const fixed_vector_queue_t& other) :
-                fixed_vector_queue_t(other.capacity_)
+            inline static_bqueue_t(const static_bqueue_t& other)
             {
 
-                item_vector_ = other.item_vector_;
+                buffer_ = other.buffer_;
                 begin_index_ = other.begin_index_;
                 end_index_ = other.end_index_;
+                last_index_ = other.last_index_;
 
             }
             /**
              *  Copy operator
              */
-            inline fixed_vector_queue_t& operator = (const fixed_vector_queue_t& other) {
+            inline static_bqueue_t& operator = (const static_bqueue_t& other) {
 
-                item_vector_ = other.item_vector_;
+                buffer_ = other.buffer_;
                 begin_index_ = other.begin_index_;
                 end_index_ = other.end_index_;
+                last_index_ = other.last_index_;
 
                 return *this;
             }
@@ -218,24 +189,25 @@ namespace ncpp {
             /**
              *  Move constructor
              */
-            inline fixed_vector_queue_t(fixed_vector_queue_t&& other) :
-                fixed_vector_queue_t(other.capacity_)
+            inline static_bqueue_t(static_bqueue_t&& other)
             {
 
-                item_vector_ = std::move(other.item_vector_);
+                buffer_ = other.buffer_;
                 begin_index_ = other.begin_index_;
                 end_index_ = other.end_index_;
+                last_index_ = other.last_index_;
                 other.clear();
 
             }
             /**
              *  Move operator
              */
-            inline fixed_vector_queue_t& operator = (fixed_vector_queue_t&& other) {
+            inline static_bqueue_t& operator = (static_bqueue_t&& other) {
 
-                item_vector_ = std::move(other.item_vector_);
+                buffer_ = other.buffer_;
                 begin_index_ = other.begin_index_;
                 end_index_ = other.end_index_;
+                last_index_ = other.last_index_;
                 other.clear();
 
                 return *this;
@@ -249,79 +221,123 @@ namespace ncpp {
 
 #pragma region Methods
         private:
-            template<typename item_param_type>
-            inline void push_main_t(item_param_type&& item) {
+            template<typename item_param_type__>
+            inline void push_main_t(item_param_type__&& item) {
 
-                assert(size() < capacity_);
+                using parsed_type = std::remove_const_t<std::remove_reference_t<item_param_type__>>;
 
-                item_vector_[end_index_ % capacity_] = std::forward<item_param_type>(item);
+                constexpr sz block_size = sizeof(parsed_type) + sizeof(sz);
 
-                ++end_index_;
+                assert((size() + block_size) <= capacity() && "bqueue out of range");
+
+
+
+                sz last_offset = last_index_ % capacity();
+                sz new_end_index = end_index_;
+                sz current_offset = new_end_index % capacity();
+
+
+
+                if (current_offset + block_size > capacity()) {
+
+                    new_end_index += (current_offset + block_size) - capacity();
+
+                    current_offset = 0;
+
+                }
+
+
+
+                if(end_index_ != begin_index_)
+                    buffer_.unsafe_set_t<sz>(last_offset, current_offset);
+
+                buffer_.unsafe_set_t<sz>(current_offset, current_offset + block_size);
+                buffer_.set_t<parsed_type>(current_offset + sizeof(sz), std::forward<item_param_type__>(item));
+
+
+
+                last_index_ = new_end_index;
+                end_index_ = new_end_index + block_size;
+                
             }
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
-        
+
         public:
+            template<typename item_type__>
+            inline void push_t(item_type__&& item) {
+
+                push_main_t(std::forward<item_type__>(item));
+            }
+            template<typename item_type__>
+            inline void push(const item_type__& item) {
+
+                push_main_t(item);
+            }
+
+            template<typename item_type__>
+            inline b8 try_pop(item_type__& item_output) {
+
+                if (size() == 0)
+                    return false;
+
+                sz begin_offset = begin_index_ % capacity();
+
+                item_output = std::move(buffer_.get_t<item_type__>(begin_offset + sizeof(sz)));
+
+                sz next_offset = buffer_.get_t<sz>(begin_offset);
+
+                if (next_offset >= begin_offset)
+                    begin_index_ += next_offset - begin_offset;
+                else
+                    begin_index_ += next_offset + capacity() - begin_offset;
+
+                return true;
+            }
+
+            inline b8 try_pop() {
+
+                if (size() == 0)
+                    return false;
+
+                sz begin_offset = begin_index_ % capacity();
+
+                sz next_offset = buffer_.get_t<sz>(begin_offset);
+
+                if (next_offset >= begin_offset)
+                    begin_index_ += next_offset - begin_offset;
+                else
+                    begin_index_ += next_offset + capacity() - begin_offset;
+
+                return true;
+            }
+
+            inline void pop() {
+
+                assert(size() > 0);
+
+                sz begin_offset = begin_index_ % capacity();
+
+                sz next_offset = buffer_.get_t<sz>(begin_offset);
+
+                if(next_offset >= begin_offset)
+                    begin_index_ += next_offset - begin_offset;
+                else
+                    begin_index_ += next_offset + capacity() - begin_offset;
+
+            }
+
             /**
              *  Clears the queue by resetting the end index and the begin index.
              */
             inline void clear() {
 
-                begin_index_ = 0;
-                end_index_ = 0;
+                begin_index_ = capacity();
+                end_index_ = capacity();
+                last_index_ = capacity() - sizeof(sz);
 
-            }
-
-            /**
-             *  Pushes an item into the stack by move operation
-             */
-            inline void push(item_type__&& item) {
-
-                push_main_t(std::forward<item_type__>(item));
-            }
-            /**
-             *  Pushes an item into the stack by copy operation
-             */
-            inline void push(const item_type__& item) {
-
-                push_main_t(item);
-            }
-            /**
-             *  Pops the front element
-             */
-            inline bool try_pop(item_type__& output) {
-
-                if (begin_index_ == end_index_)
-                    return false;
-
-                output = item_vector_[begin_index_ % capacity_];
-
-                ++begin_index_;
-                     
-                return true;
-            }
-            /**
-             *  Pops the front element
-             */
-            inline bool try_pop() {
-
-                if (begin_index_ == end_index_)
-                    return false;
-
-                ++begin_index_;
-
-                return true;
-            }
-            /**
-             *  Pops the front element
-             */
-            inline void pop() {
-
-                assert(size() > 0);
-
-                ++begin_index_;
             }
 #pragma endregion
 

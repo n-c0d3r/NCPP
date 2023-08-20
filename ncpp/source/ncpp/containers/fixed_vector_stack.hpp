@@ -216,7 +216,7 @@ namespace ncpp {
                 fixed_vector_stack_t(other.capacity_)
             {
 
-                item_vector_ = other.item_vector_;
+                item_vector_ = std::move(other.item_vector_);
                 end_index_ = other.end_index_;
                 other.clear();
 
@@ -226,7 +226,7 @@ namespace ncpp {
              */
             inline fixed_vector_stack_t& operator = (fixed_vector_stack_t&& other) {
 
-                item_vector_ = other.item_vector_;
+                item_vector_ = std::move(other.item_vector_);
                 end_index_ = other.end_index_;
                 other.clear();
 
@@ -313,15 +313,6 @@ namespace ncpp {
 
                 --end_index_;
                                                 
-            }
-
-            /**
-             *  Resizes the stack.
-             */
-            inline void resize(sz size) {
-
-                end_index_ = size;
-
             }
 #pragma endregion
 

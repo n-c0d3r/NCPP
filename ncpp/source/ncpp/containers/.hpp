@@ -61,6 +61,8 @@ namespace ncpp {
 #include <ncpp/containers/buffer.hpp>
 #include <ncpp/containers/fixed_buffer.hpp>
 
+#include <ncpp/containers/static_bqueue.hpp>
+
 #include <ncpp/containers/cfv_queue.hpp>
 #include <ncpp/containers/ca_queue.hpp>
 #include <ncpp/containers/fixed_vector_queue.hpp>
