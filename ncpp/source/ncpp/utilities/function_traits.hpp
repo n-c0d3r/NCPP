@@ -95,7 +95,7 @@ namespace ncpp {
             using return_type = return_type__;
 
             template <sz i>
-            using arg_t = std::tuple_element<i, std::tuple<arg_types__...>>::type;
+            using arg_t = typename std::tuple_element<i, std::tuple<arg_types__...>>::type;
 
         };
 
