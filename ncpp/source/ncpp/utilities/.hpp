@@ -68,7 +68,6 @@ namespace ncpp {
 #include <ncpp/utilities/unique_lock.hpp>
 
 #include <ncpp/utilities/smart_pointer.hpp>
-#include <ncpp/utilities/native_smart_pointer.hpp>
 
 #include <ncpp/utilities/lref.hpp>
 

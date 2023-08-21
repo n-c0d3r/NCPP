@@ -34,39 +34,39 @@ namespace ncpp {
 
 
 
-#ifdef NCPP_ENABLE_NATIVE_MEMORY_COUNTING
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
 
-	asz native_allocated_memory_g = 0;
-	asz native_used_heap_memory_g = 0;
+	asz total_allocated_memory_g = 0;
+	asz usable_allocated_memory_g = 0;
 
 	////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////
 
-	sz native_allocated_memory() {
+	sz total_allocated_memory() {
 
-		return native_allocated_memory_g.load(std::memory_order_acquire);
+		return total_allocated_memory_g.load(std::memory_order_acquire);
 	}
-	void increase_native_allocated_memory(sz bytes) {
+	void increase_total_allocated_memory(sz bytes) {
 
-		native_allocated_memory_g.fetch_add(bytes, std::memory_order_release);
+		total_allocated_memory_g.fetch_add(bytes, std::memory_order_release);
 	}
-	void decrease_native_allocated_memory(sz bytes) {
+	void decrease_total_allocated_memory(sz bytes) {
 
-		native_allocated_memory_g.fetch_sub(bytes, std::memory_order_release);
+		total_allocated_memory_g.fetch_sub(bytes, std::memory_order_release);
 	}
 
-	sz native_used_heap_memory() {
+	sz usable_allocated_memory() {
 
-		return native_used_heap_memory_g.load(std::memory_order_acquire);
+		return usable_allocated_memory_g.load(std::memory_order_acquire);
 	}
-	void increase_native_used_heap_memory(sz bytes) {
+	void increase_usable_allocated_memory(sz bytes) {
 
-		native_used_heap_memory_g.fetch_add(bytes, std::memory_order_release);
+		usable_allocated_memory_g.fetch_add(bytes, std::memory_order_release);
 	}
-	void decrease_native_used_heap_memory(sz bytes) {
+	void decrease_usable_allocated_memory(sz bytes) {
 
-		native_used_heap_memory_g.fetch_sub(bytes, std::memory_order_release);
+		usable_allocated_memory_g.fetch_sub(bytes, std::memory_order_release);
 	}
 #else
 
@@ -74,31 +74,31 @@ namespace ncpp {
 	////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////
 
-	sz native_allocated_memory() {
+	sz total_allocated_memory() {
 
 		warning(false, "native memory counting disabled");
 
 		return 0;
 	}
-	void increase_native_allocated_memory(sz bytes) {
+	void increase_total_allocated_memory(sz bytes) {
 
 		warning(false, "native memory counting disabled");
 	}
-	void decrease_native_allocated_memory(sz bytes) {
+	void decrease_total_allocated_memory(sz bytes) {
 
 		warning(false, "native memory counting disabled");
 	}
 
-	sz native_used_heap_memory() {
+	sz usable_allocated_memory() {
 
 		warning(false, "native memory counting disabled");
 	}
-	void increase_native_used_heap_memory(sz bytes) {
+	void increase_usable_allocated_memory(sz bytes) {
 
 		warning(false, "native memory counting disabled");
 
 	}
-	void decrease_native_used_heap_memory(sz bytes) {
+	void decrease_usable_allocated_memory(sz bytes) {
 
 		warning(false, "native memory counting disabled");
 	}

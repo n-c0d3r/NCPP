@@ -81,7 +81,7 @@ namespace ncpp {
 			class string_type__ = typename std::basic_string<
 				char,
 				std::char_traits<char>,
-				native_allocator_t<char>
+				std::allocator<char>
 			>
 		>
 		class NCPP_DEFAULT_ALIGNAS weaklock_t {
