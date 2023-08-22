@@ -8,25 +8,11 @@ endif()
 
 
 
-# ncpp utility options
-set(NCPP_DEFAULT_ALIGN 16 CACHE STRING "Default Data Align")
-
 # ncpp mem options
 option(NCPP_ENABLE_MEMORY_COUNTING "Enable Memory Counting" ON)
-set(NCPP_DEFAULT_TAGGED_HEAP_CAPACITY 64 CACHE STRING "Default Max Category Count In A Tagged Heap")
-set(NCPP_DEFAULT_TAGGED_HEAP_BLOCK_CAPACITY 2097152 CACHE STRING "Default Tagged Heap Block Capacity")
-set(NCPP_DEFAULT_TAGGED_HEAP_MIN_BLOCK_COUNT_PER_CATEGORY 4 CACHE STRING "Default Min Block Count Per Tagged Heap Category")
-set(NCPP_DEFAULT_ALLOCATOR_TEMPLATE "std::allocator" CACHE STRING "Default Allocator Template")
-set(NCPP_DEFAULT_STACK_CAPACITY 65536 CACHE STRING "Default Stack Capacity")
-set(NCPP_DEFAULT_STACK_COUNT_PER_CHUNK 32 CACHE STRING "Default Stack Count Per Chunk")
-set(NCPP_DEFAULT_STACK_HEAP_MIN_CHUNK_COUNT 4 CACHE STRING "Default Min Chunk Count Per Stack Heap")
-set(NCPP_DEFAULT_MAX_OBJECT_COUNT_PER_POOL 512 CACHE STRING "Default Max Object Count Per Pool")
-set(NCPP_DEFAULT_POOL_COUNT_PER_CHUNK 16 CACHE STRING "Default Pool Count Per Chunk")
-set(NCPP_DEFAULT_POOL_HEAP_MIN_CHUNK_COUNT 4 CACHE STRING "Default Min Chunk Count Per Pool Heap")
+set(NCPP_DEFAULT_ALLOCATOR "eastl::allocator" CACHE STRING "Default Allocator")
 
-# ncpp containers options
-set(NCPP_DEFAULT_HANDLE_MAP_RESERVE_COUNT 4096 CACHE STRING "Default Handle Map Reserve Count")
-set(NCPP_DEFAULT_HANDLE_MAP_VECTOR_RESERVE_COUNT 4 CACHE STRING "Default Handle Map Vector Reserve Count")
+
 
 # ncpp pac options
 if(MSVC)
@@ -57,21 +43,26 @@ set(NCPP_DEFAULT_THREAD_STACK_SIZE 1048576 CACHE STRING "Default Stack Size Of T
 set(NCPP_DEFAULT_FIBER_STACK_SIZE 262144 CACHE STRING "Default Stack Size Of Fiber")
 option(NCPP_ENABLE_WEAKLOCK_WARNING "Enable Weaklock Warning" ON)
 
-# ncpp other options
+# ncpp log options
 set(NCPP_TAB_SIZE 4 CACHE STRING "Tab Size")
 set(NCPP_MAX_TAB_COUNT 8 CACHE STRING "Max Tab Count")
-
-# ncpp dop options
-if(CMAKE_CXX_STANDARD GREATER_EQUAL 20)
-    option(NCPP_ENABLE_TASK_SYSTEM "Enable Task System" ON)
-else()
-    set(NCPP_ENABLE_TASK_SYSTEM OFF)
-endif()
 
 
 
 # ncpp target configure file
-configure_file(source/ncpp/.config ${CMAKE_CURRENT_BINARY_DIR}/built_source/ncpp/config.hpp)
+set(NCPP_CONFIG_HPP_PATH ${CMAKE_CURRENT_BINARY_DIR}/generated_files/ncpp/config.hpp)
+configure_file(source/ncpp/.config ${NCPP_CONFIG_HPP_PATH})
+
+# eastl combined header
+get_target_property(EASTL_INCLUDE_DIR EASTL INTERFACE_INCLUDE_DIRECTORIES)
+set(EASTL_COMBINED_HEADER_PATH ${CMAKE_CURRENT_BINARY_DIR}/generated_files/ncpp/eastl_headers.hpp)
+file(GLOB_RECURSE EASTL_HEADERS "${EASTL_INCLUDE_DIR}/*.h")
+list(FILTER EASTL_HEADERS EXCLUDE REGEX "${EASTL_INCLUDE_DIR}/EASTL/internal/.*")
+file(WRITE "${EASTL_COMBINED_HEADER_PATH}" "")
+foreach(header ${EASTL_HEADERS})
+    file(RELATIVE_PATH relpath "${EASTL_INCLUDE_DIR}" "${header}")
+    file(APPEND "${EASTL_COMBINED_HEADER_PATH}" "#include <${relpath}>\n")
+endforeach()
 
 
 
@@ -80,52 +71,17 @@ set(NCPP_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source" PARENT_SCOPE)
 
 
 # ncpp target source files
-file(GLOB source_files
-    "source/ncpp/*.cpp"
-    "source/ncpp/*.hpp"
+file(GLOB_RECURSE source_files
+    "source/*.cpp"
+    "source/*.hpp"
 )
-source_group("source\\ncpp" FILES ${source_files})
-
-file(GLOB utilities_source_files
-    "source/ncpp/utilities/*.cpp"
-    "source/ncpp/utilities/*.hpp"
-)
-source_group("source\\ncpp\\utilities" FILES ${utilities_source_files})
-
-file(GLOB containers_source_files
-    "source/ncpp/containers/*.cpp"
-    "source/ncpp/containers/*.hpp"
-)
-source_group("source\\ncpp\\containers" FILES ${containers_source_files})
-
-file(GLOB pac_source_files
-    "source/ncpp/pac/*.cpp"
-    "source/ncpp/pac/*.hpp"
-)
-source_group("source\\ncpp\\pac" FILES ${pac_source_files})
-
-file(GLOB dop_source_files
-    "source/ncpp/dop/*.cpp"
-    "source/ncpp/dop/*.hpp"
-)
-source_group("source\\ncpp\\dop" FILES ${dop_source_files})
-
-file(GLOB rtti_source_files
-    "source/ncpp/rtti/*.cpp"
-    "source/ncpp/rtti/*.hpp"
-)
-source_group("source\\ncpp\\rtti" FILES ${rtti_source_files})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/source PREFIX source FILES ${source_files})
 
 
 
 # Create ncpp target
 add_library(ncpp STATIC
     ${source_files}
-    ${utilities_source_files}
-    ${containers_source_files}
-    ${pac_source_files}
-    ${dop_source_files}
-    ${rtti_source_files}
 )
 
 
@@ -135,10 +91,20 @@ set_target_properties(ncpp
     PROPERTIES 
         FOLDER "ncpp"
 )
+
 target_include_directories(ncpp
     PUBLIC 
         ${CMAKE_CURRENT_SOURCE_DIR}/source
-        ${CMAKE_CURRENT_BINARY_DIR}/built_source
+        ${CMAKE_CURRENT_BINARY_DIR}/generated_files
+)
+
+target_link_libraries(ncpp
+    PUBLIC
+        EABase
+        EASTL
+        EAStdC
+        EAThread
+        EAAssert
 )
 
 if(MSVC)
@@ -149,6 +115,16 @@ if(MSVC)
         )
     endif()
 endif()
+
+
+
+add_dependencies(ncpp
+    EABase
+    EASTL
+    EAStdC
+    EAThread
+    EAAssert
+)
 
 
 

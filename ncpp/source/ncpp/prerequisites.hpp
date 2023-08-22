@@ -52,7 +52,7 @@ namespace ncpp {}
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
-#pragma region STL Headers
+#pragma region C++ STL Headers
 #include <iostream>
 #include <algorithm>
 #include <array>
@@ -86,6 +86,16 @@ namespace ncpp {}
 #if _HAS_CXX20
 #include <coroutine>
 #endif
+
+#pragma endregion
+
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
+#pragma region EASTL Headers
+
+#include <ncpp/eastl_headers.hpp>
 
 #pragma endregion
 
@@ -180,8 +190,6 @@ namespace ncpp {}
 #elif defined( __GNUC__ ) || defined(__MINGW64__)
 #define NCPP_ALIGNAS(N) alignas(N)
 #endif
-
-#define NCPP_DEFAULT_ALIGNAS NCPP_ALIGNAS(NCPP_DEFAULT_ALIGN)
 #pragma endregion
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -332,31 +340,31 @@ namespace ncpp {
 
 
     /** 8bit atomic unsigned integer. */
-    using au8 = std::atomic_uint8_t;
+    using au8 = eastl::atomic<u8>;
     /** 16bit atomic unsigned integer. */
-    using au16 = std::atomic_uint16_t;
+    using au16 = eastl::atomic<u16>;
     /** 32bit atomic unsigned integer. */
-    using au32 = std::atomic_uint32_t;
+    using au32 = eastl::atomic<u32>;
     /** 64bit atomic unsigned integer. */
-    using au64 = std::atomic_uint64_t;
+    using au64 = eastl::atomic<u64>;
 
     /** 8bit atomic signed integer. */
-    using ai8 = std::atomic_int8_t;
+    using ai8 = eastl::atomic<i8>;
     /** 16bit atomic signed integer. */
-    using ai16 = std::atomic_int16_t;
+    using ai16 = eastl::atomic<i16>;
     /** 32bit atomic signed integer. */
-    using ai32 = std::atomic_int32_t;
+    using ai32 = eastl::atomic<i32>;
     /** 64bit atomic signed integer. */
-    using ai64 = std::atomic_int64_t;
+    using ai64 = eastl::atomic<i64>;
 
     /** 8bit atomic boolean. */
-    using ab8 = std::atomic_bool;
+    using ab8 = eastl::atomic<b8>;
 
     /** 8bit atomic flag. */
-    using aflag = std::atomic_flag;
+    using aflag = eastl::atomic_flag;
 
     /** the same as size_t but is atomic. */
-    using asz = std::atomic_size_t;
+    using asz = eastl::atomic<sz>;
 #pragma endregion
 
     ////////////////////////////////////////////////////////////////////////////////////
@@ -365,13 +373,6 @@ namespace ncpp {
 
     template<typename type__>
     inline type__& null_reference_t() { return *((type__*)0); }
-
-    ////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////
-
-    template<typename allocator_type__, typename target_data_type__>
-    using rebind_allocator_t = typename allocator_type__::template rebind<target_data_type__>::other;
 
 }
 

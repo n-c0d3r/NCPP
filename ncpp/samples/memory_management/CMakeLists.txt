@@ -1,5 +1,1 @@
 
-add_subdirectory(aligned_allocator)
-add_subdirectory(native)
-add_subdirectory(stack_heap)
-add_subdirectory(tagged_heap)

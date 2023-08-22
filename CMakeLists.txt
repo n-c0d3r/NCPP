@@ -18,7 +18,8 @@ set(NCPP_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 
 
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CheckDependencies.cmake)
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+include(CheckDependencies)
 
 
 
@@ -28,7 +29,7 @@ add_subdirectory(ncpp)
 
 option(NCPP_GENERATE_DOCS "Generate External And Internal Docs" ON)
 if(${NCPP_GENERATE_DOCS})
-    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/GenerateDocs.cmake)
+    include(GenerateDocs)
 endif()
 
 

@@ -58,6 +58,7 @@ namespace ncpp {
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
+/*
 #include <ncpp/containers/buffer.hpp>
 #include <ncpp/containers/fixed_buffer.hpp>
 
@@ -70,6 +71,6 @@ namespace ncpp {
 #include <ncpp/containers/fixed_vector_stack.hpp>
 #include <ncpp/containers/array_stack.hpp>
 #include <ncpp/containers/fls_vector.hpp>
-#include <ncpp/containers/handle_map.hpp>
+#include <ncpp/containers/handle_map.hpp>*/
 
 #pragma endregion

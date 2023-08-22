@@ -94,7 +94,7 @@ namespace ncpp {
             inline type__& get() { return *raw_pointer_; }/**< uses to get the object. */
             inline const type__& get() const { return *raw_pointer_; }/**< uses to get the object. */
             inline void set(const type__& value) { *raw_pointer_ = value; }
-            inline void set(type__&& value) { *raw_pointer_ = std::move(value); }
+            inline void set(type__&& value) { *raw_pointer_ = eastl::move(value); }
             inline b8 is_null() const { return raw_pointer_ == 0; }/**< checks if the raw pointer is null. */
             inline type__* pointer() { return raw_pointer_; }
             inline const type__* pointer() const { return raw_pointer_; }
@@ -122,7 +122,7 @@ namespace ncpp {
                 raw_pointer_(&raw_ref)
             {
 
-                static_assert(!std::is_same_v<type__&&, std::remove_reference<type__>&&> && "cant reference to rvalue.");
+                static_assert(!eastl::is_same_v<type__&&, eastl::remove_reference<type__>&&> && "cant reference to rvalue.");
 
             }
             ~na_lref_t() {
@@ -228,20 +228,20 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         private:
-            std::atomic<type__*> aptr_;/**< unsigned int pointer. */
+            eastl::atomic<type__*> aptr_;/**< unsigned int pointer. */
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
-            inline type__& get() { return *aptr_.load(std::memory_order_acquire); }/**< uses to get the object. */
-            inline const type__& get() const { return *aptr_.load(std::memory_order_acquire); }/**< uses to get the object. */
-            inline void set(const type__& value) { *(aptr_.load(std::memory_order_acquire)) = value; }
-            inline void set(type__&& value) { *(aptr_.load(std::memory_order_acquire)) = std::move(value); }
-            inline type__* pointer() { return aptr_.load(std::memory_order_acquire); }
-            inline const type__* pointer() const { return aptr_.load(std::memory_order_acquire); }
-            inline b8 is_null() const { return aptr_.load(std::memory_order_acquire) == 0; }/**< checks if the pointer is null. */
+            inline type__& get() { return *aptr_.load(eastl::memory_order_acquire); }/**< uses to get the object. */
+            inline const type__& get() const { return *aptr_.load(eastl::memory_order_acquire); }/**< uses to get the object. */
+            inline void set(const type__& value) { *(aptr_.load(eastl::memory_order_acquire)) = value; }
+            inline void set(type__&& value) { *(aptr_.load(eastl::memory_order_acquire)) = eastl::move(value); }
+            inline type__* pointer() { return aptr_.load(eastl::memory_order_acquire); }
+            inline const type__* pointer() const { return aptr_.load(eastl::memory_order_acquire); }
+            inline b8 is_null() const { return aptr_.load(eastl::memory_order_acquire) == 0; }/**< checks if the pointer is null. */
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -266,7 +266,7 @@ namespace ncpp {
                 aptr_(&raw_ref)
             {
 
-                static_assert(!std::is_same_v<type__&&, std::remove_reference<type__>&&> && "cant reference to rvalue.");
+                static_assert(!eastl::is_same_v<type__&&, eastl::remove_reference<type__>&&> && "cant reference to rvalue.");
 
             }
             ~a_lref_t() {
@@ -274,78 +274,78 @@ namespace ncpp {
             }
 
             inline a_lref_t(const a_lref_t& other) noexcept :
-                aptr_(other.aptr_.load(std::memory_order_acquire))
+                aptr_(other.aptr_.load(eastl::memory_order_acquire))
             {
             }
             inline a_lref_t& operator = (const a_lref_t& other) noexcept {
 
-                std::atomic_thread_fence(std::memory_order_release);
+                eastl::atomic_thread_fence(eastl::memory_order_release);
 
-                aptr_.store(other.aptr_.load(std::memory_order_acquire), std::memory_order_relaxed);
+                aptr_.store(other.aptr_.load(eastl::memory_order_acquire), eastl::memory_order_relaxed);
 
                 return *this;
             }
             inline a_lref_t& operator = (const type__& other) noexcept {
 
-                std::atomic_thread_fence(std::memory_order_release);
+                eastl::atomic_thread_fence(eastl::memory_order_release);
 
-                aptr_.store((type__*)&other, std::memory_order_relaxed);
+                aptr_.store((type__*)&other, eastl::memory_order_relaxed);
 
                 return *this;
             }
             inline a_lref_t(a_lref_t&& other) noexcept :
-                aptr_(other.aptr_.load(std::memory_order_acquire))
+                aptr_(other.aptr_.load(eastl::memory_order_acquire))
             {
 
-                other.aptr_.store(0, std::memory_order_release);
+                other.aptr_.store(0, eastl::memory_order_release);
 
             }
             inline a_lref_t& operator = (a_lref_t&& other) noexcept {
 
-                std::atomic_thread_fence(std::memory_order_release);
+                eastl::atomic_thread_fence(eastl::memory_order_release);
 
-                aptr_.store(other.aptr_.load(std::memory_order_acquire), std::memory_order_relaxed);
-                other.aptr_.store(0, std::memory_order_relaxed);
+                aptr_.store(other.aptr_.load(eastl::memory_order_acquire), eastl::memory_order_relaxed);
+                other.aptr_.store(0, eastl::memory_order_relaxed);
 
                 return *this;
             }
             inline b8 operator == (const a_lref_t& other) const noexcept {
 
-                return other.aptr_.load(std::memory_order_acquire) == (aptr_.load(std::memory_order_acquire));
+                return other.aptr_.load(eastl::memory_order_acquire) == (aptr_.load(eastl::memory_order_acquire));
             }
             inline b8 operator == (const type__& other) const noexcept {
 
-                return &other != aptr_.load(std::memory_order_acquire);
+                return &other != aptr_.load(eastl::memory_order_acquire);
             }
             inline b8 operator != (const a_lref_t& other) const noexcept {
 
-                return other.aptr_.load(std::memory_order_acquire) != aptr_.load(std::memory_order_acquire);
+                return other.aptr_.load(eastl::memory_order_acquire) != aptr_.load(eastl::memory_order_acquire);
             }
             inline b8 operator != (const type__& other) const noexcept {
 
-                return &other != aptr_.load(std::memory_order_acquire);
+                return &other != aptr_.load(eastl::memory_order_acquire);
             }
 
             inline type__* operator -> () {
 
-                return (aptr_.load(std::memory_order_acquire));
+                return (aptr_.load(eastl::memory_order_acquire));
             }
             inline const type__* operator -> () const {
 
-                return (aptr_.load(std::memory_order_acquire));
+                return (aptr_.load(eastl::memory_order_acquire));
             }
             inline type__& operator * () {
 
-                return *(aptr_.load(std::memory_order_acquire));
+                return *(aptr_.load(eastl::memory_order_acquire));
             }
             inline const type__& operator * () const {
 
-                return *(aptr_.load(std::memory_order_acquire));
+                return *(aptr_.load(eastl::memory_order_acquire));
             }
 
             inline void clear() {
 
-                aptr_.store((type__*)0, std::memory_order_release);
+                aptr_.store((type__*)0, eastl::memory_order_release);
             }
 
         };

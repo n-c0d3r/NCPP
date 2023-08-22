@@ -75,7 +75,7 @@ namespace ncpp {
 	std::ostream& operator << (
 		std::ostream& os, 
 		const ostream_input_t<
-			std::vector<item_type__, allocator_type__>
+			eastl::vector<item_type__, allocator_type__>
 		>& input
 	)
 	{
@@ -97,7 +97,15 @@ namespace ncpp {
 
 			}
 
-			os << i << ": ";
+			if (&os == &std::cout) {
+
+				eastl::string index_str = "\x1B[36m" + eastl::to_string(i) + "\033[0m";
+
+				os << index_str.c_str() << ": ";
+
+			}
+			else
+				os << i << ": ";
 
 			safe_ostream_with_tab_t<std::ostream, item_type__>(os, { input.first[i], input.second + 1 });
 
@@ -117,18 +125,38 @@ namespace ncpp {
 
 		return os;
 	}
-
+			
 	template<typename item_type__, class allocator_type__>
-	std::ostream& operator << (std::ostream& os, const std::vector<item_type__, allocator_type__>& v)
+	std::ostream& operator << (std::ostream& os, const eastl::vector<item_type__, allocator_type__>& v)
 	{
 
-		os << ostream_input_t<std::vector<item_type__, allocator_type__>> { v, 0 };
+		os << ostream_input_t<eastl::vector<item_type__, allocator_type__>> { v, 0 };
+
+		return os;
+	}
+
+
+	
+	template<typename item_type__, class allocator_type__>
+	std::ostream& operator << (std::ostream& os, const eastl::basic_string<item_type__, allocator_type__>& str)
+	{
+
+		if (&os == &std::cout) {
+
+			eastl::string colored_str = "\x1B[32m" + str + "\033[0m";
+
+			os << colored_str.c_str();
+
+		}
+		else
+			os << str.c_str();
 
 		return os;
 	}
 
 
 
+	/*
 	template<
 		typename item_type__,
 		class id_allocator_type__,
@@ -191,7 +219,7 @@ namespace ncpp {
 		os << ostream_input_t<containers::handle_map_t<item_type__, id_allocator_type__, cell_allocator_type__>> { handle_map, 0 };
 
 		return os;
-	}
+	}*/
 
 }
 

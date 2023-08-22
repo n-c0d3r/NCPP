@@ -64,12 +64,32 @@ namespace ncpp {
 
 
 
-	extern sz total_allocated_memory();
-	extern void increase_total_allocated_memory(sz bytes);
-	extern void decrease_total_allocated_memory(sz bytes);
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+	extern asz total_allocated_memory_g;
+	extern asz usable_allocated_memory_g;
 
-	extern sz usable_allocated_memory();
-	extern void increase_usable_allocated_memory(sz bytes);
-	extern void decrease_usable_allocated_memory(sz bytes);
+#define NCPP_TOTAL_ALLOCATED_MEMORY() total_allocated_memory_g.load(eastl::memory_order_acquire)
+#define NCPP_INCREASE_TOTAL_ALLOCATED_MEMORY(bytes) total_allocated_memory_g.fetch_add(bytes, eastl::memory_order_release)
+#define NCPP_DECREASE_TOTAL_ALLOCATED_MEMORY(bytes) total_allocated_memory_g.fetch_sub(bytes, eastl::memory_order_release)
+
+#define NCPP_USABLE_ALLOCATED_MEMORY() usable_allocated_memory_g.load(eastl::memory_order_acquire)
+#define NCPP_INCREASE_USABLE_ALLOCATED_MEMORY(bytes) usable_allocated_memory_g.fetch_add(bytes, eastl::memory_order_release)
+#define NCPP_DECREASE_USABLE_ALLOCATED_MEMORY(bytes) usable_allocated_memory_g.fetch_sub(bytes, eastl::memory_order_release)
+
+
+
+#else
+
+
+
+#define NCPP_TOTAL_ALLOCATED_MEMORY() 0
+#define NCPP_INCREASE_TOTAL_ALLOCATED_MEMORY(bytes)
+#define NCPP_DECREASE_TOTAL_ALLOCATED_MEMORY(bytes)
+
+#define NCPP_USABLE_ALLOCATED_MEMORY() 0
+#define NCPP_INCREASE_USABLE_ALLOCATED_MEMORY(bytes)
+#define NCPP_DECREASE_USABLE_ALLOCATED_MEMORY(bytes)
+
+#endif
 
 }
