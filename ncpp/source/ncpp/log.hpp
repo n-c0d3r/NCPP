@@ -71,6 +71,45 @@ namespace ncpp {
 
 
 
+	/*
+	inline std::ostream& ostream_push_field_name (
+		std::ostream& os,
+		eastl::string name
+	) {
+
+		return (os << ("\x1B[36m" + name + "\033[0m").c_str());
+	}*/
+
+	struct cout_lowlight {
+		eastl::string content;
+	};
+	struct cout_field_name {
+		eastl::string content;
+	};
+
+	inline std::ostream& operator << (
+		std::ostream& os,
+		const cout_lowlight& input
+	) {
+
+		if(&os != &std::cout)
+			return os << input.content.c_str();
+
+		return (os << ("\x1B[90m" + input.content + "\033[0m").c_str());
+	}
+	inline std::ostream& operator << (
+		std::ostream& os,
+		const cout_field_name& input
+	) {
+
+		if (&os != &std::cout)
+			return os << input.content.c_str();
+
+		return (os << ("\x1B[36m" + input.content + "\033[0m").c_str());
+	}
+
+
+
 	template<typename item_type__, class allocator_type__>
 	std::ostream& operator << (
 		std::ostream& os, 
@@ -82,12 +121,12 @@ namespace ncpp {
 
 		if (input.second > NCPP_MAX_TAB_COUNT) {
 
-			os << "...";
+			os << cout_lowlight("...");
 
 			return os;
 		}
 
-		os << "{" << std::endl;
+		os << cout_lowlight("{") << std::endl;
 
 		for (sz i = 0; i < input.first.size(); ++i) {
 
@@ -97,20 +136,12 @@ namespace ncpp {
 
 			}
 
-			if (&os == &std::cout) {
-
-				eastl::string index_str = "\x1B[36m" + eastl::to_string(i) + "\033[0m";
-
-				os << index_str.c_str() << ": ";
-
-			}
-			else
-				os << i << ": ";
+			os << cout_field_name(eastl::to_string(i)) << cout_lowlight(": ");
 
 			safe_ostream_with_tab_t<std::ostream, item_type__>(os, { input.first[i], input.second + 1 });
 
 			if (i != input.first.size() - 1)
-				os << ",";
+				os << cout_lowlight(",");
 
 			os << std::endl;
 
@@ -121,7 +152,7 @@ namespace ncpp {
 			os << " ";
 
 		}
-		os << "}";
+		os << cout_lowlight("}");
 
 		return os;
 	}
@@ -143,7 +174,12 @@ namespace ncpp {
 
 		if (&os == &std::cout) {
 
-			eastl::string colored_str = "\x1B[32m" + str + "\033[0m";
+			eastl::string colored_str = "";
+			colored_str += "\x1B[32m";
+			colored_str += '"';
+			colored_str += str;
+			colored_str += '"';
+			colored_str += "\033[0m";
 
 			os << colored_str.c_str();
 

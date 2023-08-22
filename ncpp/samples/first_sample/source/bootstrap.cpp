@@ -9,7 +9,10 @@ int main() {
 
 	{
 
-		eastl::vector<i32> v = { 1, 2, 3 };
+		eastl::vector<eastl::string> v = { 
+			"Hello World",
+			"ABCDEF"
+		};
 
 		std::cout << v << std::endl;
 
