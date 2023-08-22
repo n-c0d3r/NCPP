@@ -71,15 +71,7 @@ namespace ncpp {
 
 
 
-	/*
-	inline std::ostream& ostream_push_field_name (
-		std::ostream& os,
-		eastl::string name
-	) {
-
-		return (os << ("\x1B[36m" + name + "\033[0m").c_str());
-	}*/
-
+#pragma region Colorized Contents
 	struct cout_lowlight {
 		eastl::string content;
 	};
@@ -107,9 +99,37 @@ namespace ncpp {
 
 		return (os << ("\x1B[36m" + input.content + "\033[0m").c_str());
 	}
+#pragma endregion
 
 
 
+#pragma region String
+	template<typename item_type__, class allocator_type__>
+	std::ostream& operator << (std::ostream& os, const eastl::basic_string<item_type__, allocator_type__>& str)
+	{
+
+		if (&os == &std::cout) {
+
+			eastl::string colored_str = "";
+			colored_str += "\x1B[32m";
+			colored_str += '"';
+			colored_str += str;
+			colored_str += '"';
+			colored_str += "\033[0m";
+
+			os << colored_str.c_str();
+
+		}
+		else
+			os << str.c_str();
+
+		return os;
+	}
+#pragma endregion
+
+
+
+#pragma region Vector
 	template<typename item_type__, class allocator_type__>
 	std::ostream& operator << (
 		std::ostream& os, 
@@ -125,6 +145,11 @@ namespace ncpp {
 
 			return os;
 		}
+
+		os << "\x1B[33mvector\033[0m" 
+			<< cout_lowlight("<") << ("\x1B[34m" + eastl::string(typeid(item_type__).name()) + "\033[0m").c_str() << cout_lowlight(">")
+			<< cout_lowlight("(") << ("\x1B[35m" + eastl::to_string(input.first.size()) + "\033[0m").c_str() << cout_lowlight(")") 
+			<< " ";
 
 		os << cout_lowlight("{") << std::endl;
 
@@ -165,30 +190,143 @@ namespace ncpp {
 
 		return os;
 	}
+#pragma endregion
 
 
-	
-	template<typename item_type__, class allocator_type__>
-	std::ostream& operator << (std::ostream& os, const eastl::basic_string<item_type__, allocator_type__>& str)
+
+#pragma region Initialier List
+	template<typename item_type__>
+	std::ostream& operator << (
+		std::ostream& os, 
+		const ostream_input_t<
+			std::initializer_list<item_type__>
+		>& input
+	)
 	{
 
-		if (&os == &std::cout) {
+		if (input.second > NCPP_MAX_TAB_COUNT) {
 
-			eastl::string colored_str = "";
-			colored_str += "\x1B[32m";
-			colored_str += '"';
-			colored_str += str;
-			colored_str += '"';
-			colored_str += "\033[0m";
+			os << cout_lowlight("...");
 
-			os << colored_str.c_str();
+			return os;
+		}
+
+		os << "\x1B[33minitializer_list\033[0m"
+			<< cout_lowlight("<") << ("\x1B[34m" + eastl::string(typeid(item_type__).name()) + "\033[0m").c_str() << cout_lowlight(",")
+			<< ("\x1B[35m" + eastl::to_string(input.first.size()) + "\033[0m").c_str() << cout_lowlight(">")
+			<< " ";
+
+		os << cout_lowlight("{") << std::endl;
+
+		auto j = input.first.begin();
+
+		for (sz i = 0; i < input.first.size(); ++i) {
+
+			for (u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+				os << " ";
+
+			}
+
+			os << cout_field_name(eastl::to_string(i)) << cout_lowlight(": ");
+
+			safe_ostream_with_tab_t<std::ostream, item_type__>(os, { *j, input.second + 1 });
+
+			if (i != input.first.size() - 1)
+				os << cout_lowlight(",");
+
+			os << std::endl;
+
+			++j;
 
 		}
-		else
-			os << str.c_str();
+
+		for (u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+			os << " ";
+
+		}
+		os << cout_lowlight("}");
 
 		return os;
 	}
+
+	template<typename item_type__>
+	std::ostream& operator << (std::ostream& os, const std::initializer_list<item_type__>& v)
+	{
+
+		os << ostream_input_t<std::initializer_list<item_type__>> { v, 0 };
+
+		return os;
+	}
+#pragma endregion
+
+
+
+#pragma region Array
+	template<typename item_type__, sz size__>
+	std::ostream& operator << (
+		std::ostream& os,
+		const ostream_input_t<
+			eastl::array<item_type__, size__>
+		>& input
+		)
+	{
+
+		if (input.second > NCPP_MAX_TAB_COUNT) {
+
+			os << cout_lowlight("...");
+
+			return os;
+		}
+
+		os << "\x1B[33marray\033[0m"
+			<< cout_lowlight("<") << ("\x1B[34m" + eastl::string(typeid(item_type__).name()) + "\033[0m").c_str() << cout_lowlight(",")
+			<< ("\x1B[35m" + eastl::to_string(input.first.size()) + "\033[0m").c_str() << cout_lowlight(">")
+			<< " ";
+
+		os << cout_lowlight("{") << std::endl;
+
+
+
+		for (sz i = 0; i < size__; ++i) {
+
+			for (u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+				os << " ";
+
+			}
+
+			os << cout_field_name(eastl::to_string(i)) << cout_lowlight(": ");
+
+			safe_ostream_with_tab_t<std::ostream, item_type__>(os, { input.first[i], input.second + 1});
+
+			if (i != size__ - 1)
+				os << cout_lowlight(",");
+
+			os << std::endl;
+
+		}
+
+		for (u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+			os << " ";
+
+		}
+		os << cout_lowlight("}");
+
+		return os;
+	}
+
+	template<typename item_type__, sz size__>
+	std::ostream& operator << (std::ostream& os, const eastl::array<item_type__, size__>& v)
+	{
+
+		os << ostream_input_t<eastl::array<item_type__, size__>> { v, 0 };
+
+		return os;
+	}
+#pragma endregion
 
 
 

@@ -9,10 +9,7 @@ int main() {
 
 	{
 
-		eastl::vector<eastl::string> v = { 
-			"Hello World",
-			"ABCDEF"
-		};
+		auto v = { 1, 2, 3 };
 
 		std::cout << v << std::endl;
 
