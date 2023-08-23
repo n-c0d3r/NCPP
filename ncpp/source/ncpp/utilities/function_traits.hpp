@@ -67,9 +67,7 @@ namespace ncpp {
 
 
 
-        /**
-         *  Get the offset of indicated class member.
-         */
+        // \cond INTERNAL
         template<typename function_type__> 
         struct function_traits_t {
 
@@ -83,6 +81,7 @@ namespace ncpp {
             using arg_t = void;
 
         };
+        // \endcond
 
         template<typename return_type__, typename... arg_types__> 
         struct function_traits_t<return_type__(arg_types__...)>
@@ -100,13 +99,15 @@ namespace ncpp {
         };
 
        
-        
+
+        // \cond INTERNAL
         template<typename function_type__, typename new_return_type__>
         struct replace_function_return_type_t {
 
 
 
         };
+        // \endcond
 
         template<typename new_return_type__, typename org_return_type__, typename... arg_types__>
         struct replace_function_return_type_t<org_return_type__(arg_types__...), new_return_type__> {

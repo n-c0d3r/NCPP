@@ -19,18 +19,41 @@ set(NCPP_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 
 
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-include(CheckDependencies)
+
+#Dependencies
+option(NCPP_CHECK_DEPENDENCIES "If enabled, it will automatically check the dependencies each time generating project" ON)
+if(${NCPP_CHECK_DEPENDENCIES})
+    include(CheckDependencies)
+endif()
+
+include(ConfigureDependencies)
+
+#Documentations
+option(NCPP_ENABLE_DOCUMENTATIONS "If enabled, creating a target being capable of generating documentations" OFF)
+if(NCPP_ENABLE_DOCUMENTATIONS)
+    option(NCPP_INTERNAL_DOCS "Generate docs for anything" OFF)
+
+    include(DocsUtils)
+
+    DocsUtils_CreateTarget(
+        NAME NCPP
+        BRIEF "Ncoder's Game Engine Learning Aimed C++ Library."
+
+        TARGET_NAME ncpp.documentations
+        TARGET_FOLDER ncpp
+        TARGET_LABEL documentations
+
+        INPUT_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/ncpp/source"
+        OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/documentations"
+        CWD "${CMAKE_CURRENT_SOURCE_DIR}"
+        INTERNAL_DOCS ${NCPP_INTERNAL_DOCS}
+    )
+endif()
+
 
 
 
 add_subdirectory(ncpp)
-
-
-
-option(NCPP_GENERATE_DOCS "Generate External And Internal Docs" ON)
-if(${NCPP_GENERATE_DOCS})
-    include(GenerateDocs)
-endif()
 
 
 

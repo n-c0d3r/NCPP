@@ -365,6 +365,111 @@ namespace ncpp {
 
     /** the same as size_t but is atomic. */
     using asz = eastl::atomic<sz>;
+
+
+
+    // \cond INTERNAL
+    template<sz bits__>
+    struct uint_internal_t {
+        using type = void;
+    };
+    template<>
+    struct uint_internal_t<8> {
+        using type = u8;
+    };
+    template<>
+    struct uint_internal_t<16> {
+        using type = u16;
+    };
+    template<>
+    struct uint_internal_t<32> {
+        using type = u32;
+    };
+    template<>
+    struct uint_internal_t<64> {
+        using type = u64;
+    };
+    // \endcond
+    template<sz bits>
+    using uint_t = typename uint_internal_t<bits>::type;
+
+    // \cond INTERNAL
+    template<sz bits__>
+    struct int_internal_t {
+        using type = void;
+    };
+    template<>
+    struct int_internal_t<8> {
+        using type = i8;
+    };
+    template<>
+    struct int_internal_t<16> {
+        using type = i16;
+    };
+    template<>
+    struct int_internal_t<32> {
+        using type = i32;
+    };
+    template<>
+    struct int_internal_t<64> {
+        using type = i64;
+    };
+    // \endcond
+    template<sz bits>
+    using int_t = typename int_internal_t<bits>::type;
+
+
+
+    // \cond INTERNAL
+    template<sz bits__>
+    struct atomic_uint_internal_t {
+        using type = void;
+    };
+    template<>
+    struct atomic_uint_internal_t<8> {
+        using type = u8;
+    };
+    template<>
+    struct atomic_uint_internal_t<16> {
+        using type = u16;
+    };
+    template<>
+    struct atomic_uint_internal_t<32> {
+        using type = u32;
+    };
+    template<>
+    struct atomic_uint_internal_t<64> {
+        using type = u64;
+    };
+    // \endcond
+    template<sz bits>
+    using atomic_uint_t = typename atomic_uint_internal_t<bits>::type;
+
+    // \cond INTERNAL
+    template<sz bits__>
+    struct atomic_int_internal_t {
+        using type = void;
+    };
+    template<>
+    struct atomic_int_internal_t<8> {
+        using type = i8;
+    };
+    template<>
+    struct atomic_int_internal_t<16> {
+        using type = i16;
+    };
+    template<>
+    struct atomic_int_internal_t<32> {
+        using type = i32;
+    };
+    template<>
+    struct atomic_int_internal_t<64> {
+        using type = i64;
+    };
+    // \endcond
+    template<sz bits>
+    using atomic_int_t = typename atomic_int_internal_t<bits>::type;
+
 #pragma endregion
 
     ////////////////////////////////////////////////////////////////////////////////////

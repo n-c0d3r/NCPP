@@ -91,11 +91,11 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
-            inline type__& get() { return *raw_pointer_; }/**< uses to get the object. */
-            inline const type__& get() const { return *raw_pointer_; }/**< uses to get the object. */
-            inline void set(const type__& value) { *raw_pointer_ = value; }
-            inline void set(type__&& value) { *raw_pointer_ = eastl::move(value); }
-            inline b8 is_null() const { return raw_pointer_ == 0; }/**< checks if the raw pointer is null. */
+            inline type__& get() { return *raw_pointer_; }/**< Get the owned data reference. */
+            inline const type__& get() const { return *raw_pointer_; }/**< Gets the owned data reference. */
+            inline void set(const type__& value) { *raw_pointer_ = value; }/**< Performs copy operation on the owned data. */
+            inline void set(type__&& value) { *raw_pointer_ = eastl::move(value); }/**< Performs move operation on the owned data. */
+            inline b8 is_null() const { return raw_pointer_ == 0; }/**< Checks if the raw pointer is null. */
             inline type__* pointer() { return raw_pointer_; }
             inline const type__* pointer() const { return raw_pointer_; }
 
@@ -194,6 +194,9 @@ namespace ncpp {
                 return *raw_pointer_;
             }
 
+            /**
+             *  Sets the pointer to 0.
+             */
             inline void clear() {
 
                 raw_pointer_ = 0;
@@ -235,13 +238,13 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
-            inline type__& get() { return *aptr_.load(eastl::memory_order_acquire); }/**< uses to get the object. */
-            inline const type__& get() const { return *aptr_.load(eastl::memory_order_acquire); }/**< uses to get the object. */
-            inline void set(const type__& value) { *(aptr_.load(eastl::memory_order_acquire)) = value; }
-            inline void set(type__&& value) { *(aptr_.load(eastl::memory_order_acquire)) = eastl::move(value); }
+            inline type__& get() { return *aptr_.load(eastl::memory_order_acquire); }/**< Gets the owned data reference. */
+            inline const type__& get() const { return *aptr_.load(eastl::memory_order_acquire); }/**< Gets the owned data reference. */
+            inline void set(const type__& value) { *(aptr_.load(eastl::memory_order_acquire)) = value; }/**< Performs copy operation on the owned data. */
+            inline void set(type__&& value) { *(aptr_.load(eastl::memory_order_acquire)) = eastl::move(value); }/**< Performs move operation on the owned data. */
             inline type__* pointer() { return aptr_.load(eastl::memory_order_acquire); }
             inline const type__* pointer() const { return aptr_.load(eastl::memory_order_acquire); }
-            inline b8 is_null() const { return aptr_.load(eastl::memory_order_acquire) == 0; }/**< checks if the pointer is null. */
+            inline b8 is_null() const { return aptr_.load(eastl::memory_order_acquire) == 0; }/**< Checks if the pointer is null. */
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -334,6 +337,7 @@ namespace ncpp {
 
                 return (aptr_.load(eastl::memory_order_acquire));
             }
+
             inline type__& operator * () {
 
                 return *(aptr_.load(eastl::memory_order_acquire));
@@ -343,6 +347,9 @@ namespace ncpp {
                 return *(aptr_.load(eastl::memory_order_acquire));
             }
 
+            /**
+             *  Sets the pointer to 0.
+             */
             inline void clear() {
 
                 aptr_.store((type__*)0, eastl::memory_order_release);

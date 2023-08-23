@@ -68,7 +68,7 @@ namespace ncpp {
 
 
         /**
-         *  .
+         *  Checks if can perform stream_type__ << type__ operation.
          */
         template<typename stream_type__, typename type__> 
         class is_ostreamable_t 
@@ -85,7 +85,7 @@ namespace ncpp {
         };
 
         /**
-         *  .
+         *  Checks if can perform stream_type__ >> type__ operation.
          */
         template<typename stream_type__, typename type__>
         class is_istreamable_t

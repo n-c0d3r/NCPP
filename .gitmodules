@@ -1,3 +1,6 @@
-[submodule "documentations/doxygen_themes/doxygen-awesome-css"]
-	path = documentations/doxygen_themes/doxygen-awesome-css
+[submodule "ncpp_main_branch/submodules/doxygen-awesome-css"]
+	path = ncpp_main_branch/submodules/doxygen-awesome-css
 	url = https://github.com/jothepro/doxygen-awesome-css.git
+[submodule "submodules/doxygen_theme_flat_design"]
+	path = submodules/doxygen_theme_flat_design
+	url = https://github.com/kcwongjoe/doxygen_theme_flat_design.git

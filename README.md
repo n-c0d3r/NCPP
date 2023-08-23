@@ -2,18 +2,12 @@
 
 ## Features
 + Memory management:
-  + Native memory:
-    + Tagged heap, tagged heap allocator
-    + Stack heap, stack heap allocator
-    + Pool heap, pool heap allocator
-    + Aligned allocator (default native allocator)
-    + Current runtime allocator
-    + Memory counting (not supports crt_allocator)
-      + Allocated memory counting
-      + Used heap memory counting
 + Logging:
-  + Vector
-  + Handle map
+  + eastl::basic_string
+  + eastl::vector
+  + eastl::array
+  + std::initialier_list
+  + ...
 + Utilities:
   + First template argument getter
   + Function traits
@@ -22,20 +16,7 @@
   + Templated for loop
   + ...
 + Containers:
-  + Fixed vector queue
-  + Fixed vector stack
-  + Concurrent fixed vector queue
-  + Free list supported vector
-  + Handle map
-  + Native containers (std containers and ncpp containers)
 + PAC (parallelism and concurrency):
-  + Thread (Windows platform only)
-  + Fiber (Windows platform only)
-  + Locks:
-    + Spinlock
-    + Nonelock
-    + Weaklock
-  + Semaphore
 
 ## Getting Started
 ### Requirements:

@@ -68,21 +68,23 @@ namespace ncpp {
 
 
         /**
-         *  .
+         *  
          */
         template<typename type__> 
         struct is_function_t {
 
-            static constexpr b8 value = false;
+            static constexpr b8 value = false;/**< If type__ is function type, value will be true.*/
 
         };
 
+        // \cond INTERNAL
         template<typename return_type__, typename... arg_types__>
         struct is_function_t<return_type__(arg_types__...)> {
 
             static constexpr b8 value = true;
 
         };
+        // \endcond
 
     }
 

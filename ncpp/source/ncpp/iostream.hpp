@@ -78,11 +78,15 @@ namespace ncpp {
 
 
 
+	/**
+	 *	Wraps the input data reference inside and also stores the tab count for with-tabs out streaming operation. 
+	 */
 	template<typename type__>
 	using ostream_input_t = typename std::pair<const type__&, u32>;
 
 
 
+	// \cond INTERNAL
 	template<typename stream_type__, typename type__, b8 is_streamable__>
 	struct safe_ostream_forwarder_t {
 
@@ -109,9 +113,15 @@ namespace ncpp {
 			return stream;
 		}
 	};
+	// \endcond
 
 
 
+	/**
+	 *	Take the out streaming operation safely.
+	 *	If data is out streamable, stream out the data.
+	 *	Otherwise, do nothing and wont cause any error.
+	 */
 	template<typename stream_type__, typename type__>
 	inline stream_type__& safe_ostream_t(stream_type__& stream, type__&& data) {
 
@@ -129,6 +139,7 @@ namespace ncpp {
 
 
 
+	// \cond INTERNAL
 	template<typename stream_type__, typename input_type__, b8 is_streamable__>
 	struct safe_ostream_with_tab_forwarder_t {
 
@@ -155,9 +166,15 @@ namespace ncpp {
 			return stream;
 		}
 	};
+	// \endcond
 
 
 
+	/**
+	 *	Take the out streaming operation safely with tabs.
+	 *	If data is out streamable, stream out the data with tabs.
+	 *	Otherwise, do nothing and wont cause any error.
+	 */
 	template<typename stream_type__, typename type__, typename input_type__ = ostream_input_t<type__>>
 	inline stream_type__& safe_ostream_with_tab_t(stream_type__& stream, input_type__&& input) {
 
@@ -175,6 +192,7 @@ namespace ncpp {
 
 
 
+	// \cond INTERNAL
 	template<typename stream_type__, typename type__, b8 is_streamable__>
 	struct safe_istream_forwarder_t {
 
@@ -201,9 +219,15 @@ namespace ncpp {
 			return stream;
 		}
 	};
+	// \endcond
 
 
 
+	/**
+	 *	Take the in streaming operation safely.
+	 *	If data is in streamable, stream in the data.
+	 *	Otherwise, do nothing and wont cause any error.
+	 */
 	template<typename stream_type__, typename type__>
 	inline stream_type__& safe_istream_t(stream_type__& stream, type__&& data) {
 

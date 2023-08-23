@@ -72,6 +72,7 @@ namespace ncpp {
 
 
 
+        // \cond INTERNAL
         namespace templated_for_helper {
 
             ////////////////////////////////////////////////////////////////////////////////////
@@ -128,6 +129,7 @@ namespace ncpp {
             };
             
         }
+        // \endcond
 
 
 

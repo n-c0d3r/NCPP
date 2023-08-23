@@ -1,8 +1,11 @@
 
-message(STATUS "NCPP Check dependencies")
+message(STATUS "<NCPP::Dependencies> Start checking dependencies")
 
-find_package(Doxygen REQUIRED)
+# setup ncpp cmake modules
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_LIST_FILE}/../")
+
+
 
 include(CheckEADependencies)
 
-message(STATUS "NCPP Check dependencies done")
+message(STATUS "<NCPP::Dependencies> Check dependencies done")

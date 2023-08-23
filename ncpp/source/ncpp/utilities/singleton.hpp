@@ -68,7 +68,9 @@ namespace ncpp {
 
 
         /**
-         *  Singleton template. Only allow 1 instance at a time.
+         *  Implements the singleton pattern.
+         *  To use this functionality, need to inherit singleton_t<class_name>.
+         *  Note: Only allow 1 instance at a time!
          */
         template<class class__>
         class singleton_t {
@@ -85,7 +87,7 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
-            static inline class__& instance() { return *instance_ps; }/**< use to get the instance reference. */
+            static inline class__& instance() { return *instance_ps; }/**< Gets the instance reference. */
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -107,10 +109,12 @@ namespace ncpp {
 
             }
 
+            // \cond INTERNAL
             singleton_t(const singleton_t&) = delete;
             singleton_t& operator = (const singleton_t&) = delete;
             singleton_t(singleton_t&&) = delete;
             singleton_t& operator = (singleton_t&&) = delete;
+            // \endcond
 
         };
 

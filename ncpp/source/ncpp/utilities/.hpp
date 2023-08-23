@@ -67,8 +67,6 @@ namespace ncpp {
 #include <ncpp/utilities/singleton.hpp>
 #include <ncpp/utilities/unique_lock.hpp>
 
-#include <ncpp/utilities/smart_pointer.hpp>
-
 #include <ncpp/utilities/lref.hpp>
 
 #include <ncpp/utilities/member_offset.hpp>

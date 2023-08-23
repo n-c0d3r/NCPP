@@ -72,13 +72,22 @@ namespace ncpp {
 
 
 #pragma region Colorized Contents
+	/**
+	 *	Wraps content string inside to be streamed out with low light color.
+	 */
 	struct cout_lowlight {
 		eastl::string content;
 	};
+	/**
+	 *	Wraps content string inside to be streamed out with field name color.
+	 */
 	struct cout_field_name {
 		eastl::string content;
 	};
 
+	/**
+	 *	Streams out cout_lowlight.
+	 */
 	inline std::ostream& operator << (
 		std::ostream& os,
 		const cout_lowlight& input
@@ -89,6 +98,9 @@ namespace ncpp {
 
 		return (os << ("\x1B[90m" + input.content + "\033[0m").c_str());
 	}
+	/**
+	 *	Streams out cout_field_name.
+	 */
 	inline std::ostream& operator << (
 		std::ostream& os,
 		const cout_field_name& input
@@ -104,6 +116,9 @@ namespace ncpp {
 
 
 #pragma region String
+	/**
+	 *	Streams out eastl::string.
+	 */
 	template<typename item_type__, class allocator_type__>
 	std::ostream& operator << (std::ostream& os, const eastl::basic_string<item_type__, allocator_type__>& str)
 	{
@@ -130,6 +145,9 @@ namespace ncpp {
 
 
 #pragma region Vector
+	/**
+	 *	Streams out eastl::vector with tabs.
+	 */
 	template<typename item_type__, class allocator_type__>
 	std::ostream& operator << (
 		std::ostream& os, 
@@ -181,7 +199,10 @@ namespace ncpp {
 
 		return os;
 	}
-			
+
+	/**
+	 *	Streams out eastl::vector with no tab.
+	 */
 	template<typename item_type__, class allocator_type__>
 	std::ostream& operator << (std::ostream& os, const eastl::vector<item_type__, allocator_type__>& v)
 	{
@@ -195,6 +216,9 @@ namespace ncpp {
 
 
 #pragma region Initialier List
+	/**
+	 *	Streams out std::initialier_list<T> with tabs.
+	 */
 	template<typename item_type__>
 	std::ostream& operator << (
 		std::ostream& os, 
@@ -251,6 +275,9 @@ namespace ncpp {
 		return os;
 	}
 
+	/**
+	 *	Streams out std::initialier_list<T> with no tab.
+	 */
 	template<typename item_type__>
 	std::ostream& operator << (std::ostream& os, const std::initializer_list<item_type__>& v)
 	{
@@ -264,6 +291,9 @@ namespace ncpp {
 
 
 #pragma region Array
+	/**
+	 *	Streams out eastl::array<T, N> with tabs.
+	 */
 	template<typename item_type__, sz size__>
 	std::ostream& operator << (
 		std::ostream& os,
@@ -318,6 +348,9 @@ namespace ncpp {
 		return os;
 	}
 
+	/**
+	 *	Streams out eastl::array<T, N> with no tab.
+	 */
 	template<typename item_type__, sz size__>
 	std::ostream& operator << (std::ostream& os, const eastl::array<item_type__, size__>& v)
 	{
