@@ -55,11 +55,18 @@ file(GLOB_RECURSE source_files
 )
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/source PREFIX source FILES ${source_files})
 
+file(GLOB_RECURSE generated_files
+    "${CMAKE_CURRENT_BINARY_DIR}/generated_files/*.cpp"
+    "${CMAKE_CURRENT_BINARY_DIR}/generated_files/*.hpp"
+)
+source_group(TREE "${CMAKE_CURRENT_BINARY_DIR}/generated_files" PREFIX generated_files FILES ${generated_files})
+
 
 
 # Create ncpp target
 add_library(ncpp STATIC
     ${source_files}
+    ${generated_files}
 )
 
 

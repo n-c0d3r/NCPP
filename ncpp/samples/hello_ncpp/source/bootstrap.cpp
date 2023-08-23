@@ -7,8 +7,7 @@ using namespace ncpp;
 
 int main() {
 	
-	std::cout << eastl::string("Hello NCPP") << std::endl;
-	std::cout << sizeof(atomic_int_t<64>) << std::endl;
+	std::cout << eastl::string("Hello NCPP ") + NCPP_VERSION_STR << std::endl;
 
 	system("pause");
 
