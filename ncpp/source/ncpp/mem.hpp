@@ -88,6 +88,14 @@ namespace ncpp {
     template<class memory_helper, b8 is_all_usable__, typename... additional_arg_types__>
 	class memory_helper_t {
 
+#if !defined(NDEBUG) || defined(NCPP_ENABLE_MEMORY_COUNTING)
+#define HAS_DATA_OFFSET 1
+#else
+#define HAS_DATA_OFFSET 0
+#endif
+
+
+
 	public:
         static inline sz predict_actual_size(size_t size) {
 
@@ -118,62 +126,10 @@ namespace ncpp {
             return actual_size;
         }
 
-        static void* allocate(size_t size, const char* pName, int flags, additional_arg_types__... additional_args)
+        static inline void* allocate(size_t size, const char* pName, int flags, additional_arg_types__... additional_args)
         {
 
-            //  Memory Layout:
-            //  
-            //  1 byte: alignment flag 
-            //  const char* name //debug only
-            //  sz size //if memory counting enabled
-            //  [data]
-            //
-
-            sz actual_size = size;
-
-            // setup offsets
-            sz data_offset = 1;
-
-#ifndef NDEBUG
-            data_offset += sizeof(const char*);
-            sz name_p_offset = data_offset - 1;
-#endif
-#ifdef NCPP_ENABLE_MEMORY_COUNTING
-            if(is_all_usable__)
-                data_offset += sizeof(sz);
-
-            sz size_offset = data_offset - 1;
-#endif
-
-
-
-            // malloc memory
-            u8* result_p = reinterpret_cast<u8*>(memory_helper::new_mem(actual_size + data_offset, std::forward<additional_arg_types__>(additional_args)...));
-
-            // set alignment flag
-            *result_p = 0;
-
-            // goto data pointer
-            result_p += data_offset;
-
-
-
-#ifndef NDEBUG
-            *reinterpret_cast<const char**>(result_p - name_p_offset) = pName;
-#endif
-#ifdef NCPP_ENABLE_MEMORY_COUNTING
-            if(is_all_usable__){
-
-                *reinterpret_cast<sz*>(result_p - size_offset) = actual_size + data_offset;
-
-                NCPP_INCREASE_TOTAL_ALLOCATED_MEMORY(*reinterpret_cast<sz*>(result_p - size_offset));
-
-            }
-#endif
-
-
-
-            return result_p;
+            return allocate(size, EASTL_ALLOCATOR_MIN_ALIGNMENT, 0, pName, flags, std::forward<additional_arg_types__>(additional_args)...);
         }
 
         static void* allocate(size_t size, size_t alignment, size_t alignmentOffset, const char* pName, int flags, additional_arg_types__... additional_args)
@@ -182,58 +138,83 @@ namespace ncpp {
             //  Memory Layout:
             //  
             //  [shifted bytes] 
-            //  1 byte: alignment flag 
             //  const char* name //debug only
             //  sz size //if memory counting enabled
             //  [data]
             //
 
-            sz actual_size = size + alignment;
-
             // setup offsets
-            sz data_offset = 1;
+#if HAS_DATA_OFFSET == 1
+            sz data_offset = 0;
+#endif
+
+
 
 #ifndef NDEBUG
             data_offset += sizeof(const char*);
-            sz name_p_offset = data_offset - 1;
+            sz name_p_offset = data_offset + 1;
 #endif
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
             if(is_all_usable__)
                 data_offset += sizeof(sz);
 
-            sz size_offset = data_offset - 1;
+            sz size_offset = data_offset + 1;
+#endif
+
+
+
+#if HAS_DATA_OFFSET == 1
+            sz actual_size = alignment + alignmentOffset + data_offset + size;
+#else
+            sz actual_size = alignment + alignmentOffset + size;
 #endif
 
 
 
             // malloc memory
-            u8* raw_p = reinterpret_cast<u8*>(memory_helper::new_mem(actual_size + data_offset, std::forward<additional_arg_types__>(additional_args)...));
+            u8* raw_p = reinterpret_cast<u8*>(memory_helper::new_mem(actual_size, std::forward<additional_arg_types__>(additional_args)...));
 
 
 
+#if HAS_DATA_OFFSET == 1
+            // align pointer
+            sz actual_alignment_offset = alignmentOffset + data_offset;
+
+            u8* result_p = reinterpret_cast<u8*>(
+                align_address(
+                    reinterpret_cast<uintptr_t>(reinterpret_cast<u8*>(raw_p) + actual_alignment_offset),
+                    alignment
+                )
+            ) - actual_alignment_offset;
+#else
             // align pointer
             u8* result_p = reinterpret_cast<u8*>(
                 align_address(
                     reinterpret_cast<uintptr_t>(reinterpret_cast<u8*>(raw_p) + alignmentOffset),
                     alignment
                 )
-            ) - alignmentOffset;
+                ) - alignmentOffset;
+#endif
 
             if (result_p == raw_p)
                 result_p += alignment;
 
+
+
             // save shifted bytes info
             u8 shift = (result_p - raw_p - 1) & 0xFF;
 
-            *(result_p - 1) = shift;
 
 
-
-            // set alignment flag
-            *result_p = 1;
-
+#if HAS_DATA_OFFSET == 1
             // goto data pointer
             result_p += data_offset;
+#endif
+
+
+
+            // save the shift value
+            *(result_p - 1) = shift;
 
 
 
@@ -243,9 +224,9 @@ namespace ncpp {
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
             if(is_all_usable__){
 
-                *reinterpret_cast<sz*>(result_p - size_offset) = actual_size + data_offset;
+                *reinterpret_cast<sz*>(result_p - size_offset) = actual_size;
 
-                NCPP_INCREASE_TOTAL_ALLOCATED_MEMORY(*reinterpret_cast<sz*>(result_p - size_offset));
+                NCPP_INCREASE_TOTAL_ALLOCATED_MEMORY(actual_size);
 
             }
 #endif
@@ -260,38 +241,37 @@ namespace ncpp {
         static void deallocate(void* ptr, additional_arg_types__... additional_args)
         {
 
-            sz data_offset = 1;
+#if HAS_DATA_OFFSET == 1
+            sz data_offset = 0;
+#endif
 
 #ifndef NDEBUG
             data_offset += sizeof(const char*);
-            sz name_p_offset = data_offset - 1;
+            sz name_p_offset = data_offset + 1;
 #endif
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
             if(is_all_usable__)
                 data_offset += sizeof(sz);
 
-            sz size_offset = data_offset - 1;
+            sz size_offset = data_offset + 1;
 
             if (is_all_usable__)
                 NCPP_DECREASE_TOTAL_ALLOCATED_MEMORY(*reinterpret_cast<sz*>(reinterpret_cast<u8*>(ptr) - size_offset));
 #endif
 
-            u8* alignment_flag_p = reinterpret_cast<u8*>(ptr) - data_offset;
+            u8 shift = *(reinterpret_cast<u8*>(ptr) - 1);
 
-            if (*alignment_flag_p) {
-
-                u8 shift = *(alignment_flag_p - 1);
-
-                memory_helper::delete_mem(alignment_flag_p - shift - 1, std::forward<additional_arg_types__>(additional_args)...);
-
-            }
-            else {
-
-                memory_helper::delete_mem(alignment_flag_p, std::forward<additional_arg_types__>(additional_args)...);
-
-            }
+#if HAS_DATA_OFFSET == 1
+            memory_helper::delete_mem(reinterpret_cast<u8*>(ptr) - data_offset - shift - 1, std::forward<additional_arg_types__>(additional_args)...);
+#else
+            memory_helper::delete_mem(reinterpret_cast<u8*>(ptr) - shift - 1, std::forward<additional_arg_types__>(additional_args)...);
+#endif
 
         }
+
+
+
+#undef HAS_DATA_OFFSET
 
 	};
 
