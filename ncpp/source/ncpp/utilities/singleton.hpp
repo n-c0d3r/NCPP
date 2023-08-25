@@ -71,6 +71,7 @@ namespace ncpp {
          *  Implements the singleton pattern.
          *  To use this functionality, need to inherit singleton_t<class_name>.
          *  Note: Only allow 1 instance at a time!
+         *  @param class__ the class implementing singleton_t.
          */
         template<class class__>
         class singleton_t {

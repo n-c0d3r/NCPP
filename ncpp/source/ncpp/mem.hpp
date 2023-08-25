@@ -77,6 +77,14 @@ namespace ncpp {
 
 
 
+    /**
+     *  A class template providing functionalities for memory management with the capabilities of choosing the size for both non-aligned, aligned allocation, and the pointer for deallocation.
+     *  To use this feature, look at the implement of default_memory_helper.
+     * 
+     *  @param memory_helper the class that implements memory_helper_t.
+     *  @param is_all_usable__ if enabled, all the allocated memory size will be added into total allocated memory count when memory counting enabled.
+     *  @param additional_arg_types__ types of additional arguments need to pass into when allocating or deallocating.
+     */
     template<class memory_helper, b8 is_all_usable__, typename... additional_arg_types__>
 	class memory_helper_t {
 
@@ -303,6 +311,9 @@ namespace ncpp {
 
 
 
+    /**
+     *  A memory helper that implements new_mem(sz) with malloc(sz) and delete_mem(void*) with free(void*); 
+     */
     class default_memory_helper :
         public memory_helper_t<default_memory_helper, true>
     {

@@ -1,7 +1,7 @@
 #pragma once
 
-/** @file ncpp/mem.hpp
-*	@brief Contains the memory management utilities.
+/** @file ncpp/link_allocator.hpp
+*	@brief Implements link allocator.
 */
 
 
@@ -55,6 +55,10 @@
 
 namespace ncpp {
 
+	/**
+	 *	An allocator using another allocator to allocate and deallocate memory by linking into the target allocator reference.
+	 *	@param target_allocator_type__ the target allocator to use.
+	 */
 	template<typename target_allocator_type__>
 	class link_allocator_t : public allocator_base_t<link_allocator_t<target_allocator_type__>> {
 

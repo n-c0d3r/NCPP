@@ -11,3 +11,42 @@
     color: rgb(55, 161, 202);
 
 }
+
+* {
+
+    --side-nav-background: rgb(27, 27, 27);
+
+    --page-background-color: rgb(21, 21, 21);
+    --fragment-background: rgb(24, 24, 24);
+    --searchbar-background: rgb(19, 19, 19);
+
+    --header-separator-color: rgb(22, 22, 22);
+
+    --primary-color: rgb(14, 200, 224);
+    --primary-dark-color: rgb(84, 121, 128);
+
+}
+
+#top {
+
+    background-color: rgb(27, 27, 27);
+
+}
+
+#projectname {
+
+    color: rgb(74, 219, 255);
+
+}
+
+#projectbrief {
+
+    color: rgb(119, 119, 119);
+
+}
+
+#nav-sync {
+
+    display: none;
+
+}

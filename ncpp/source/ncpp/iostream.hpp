@@ -118,7 +118,7 @@ namespace ncpp {
 
 
 	/**
-	 *	Take the out streaming operation safely.
+	 *	Performs the out streaming operation safely.
 	 *	If data is out streamable, stream out the data.
 	 *	Otherwise, do nothing and wont cause any error.
 	 */
@@ -171,7 +171,7 @@ namespace ncpp {
 
 
 	/**
-	 *	Take the out streaming operation safely with tabs.
+	 *	Performs the out streaming operation safely with tabs.
 	 *	If data is out streamable, stream out the data with tabs.
 	 *	Otherwise, do nothing and wont cause any error.
 	 */
@@ -224,7 +224,7 @@ namespace ncpp {
 
 
 	/**
-	 *	Take the in streaming operation safely.
+	 *	Performs the in streaming operation safely.
 	 *	If data is in streamable, stream in the data.
 	 *	Otherwise, do nothing and wont cause any error.
 	 */

@@ -1,7 +1,7 @@
 #pragma once
 
-/** @file ncpp/mem.hpp
-*	@brief Contains the memory management utilities.
+/** @file ncpp/chunk_allocator.hpp
+*	@brief Implements chunk allocator.
 */
 
 

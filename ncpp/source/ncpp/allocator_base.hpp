@@ -1,7 +1,7 @@
 #pragma once
 
-/** @file ncpp/mem.hpp
-*	@brief Contains the memory management utilities.
+/** @file ncpp/allocator_base.hpp
+*	@brief Implements allocator base class template.
 */
 
 
@@ -58,8 +58,9 @@ namespace ncpp {
 	 *	Base allocator class implementing base functionalities for simply allocating both non-aligned and aligned memory.
 	 *	allocator_base_t is capable of choosing the actual memory allocation size to pass into allocator_type__::new_mem(sz size) function, and the memory pointer to pass into allocator_type__::delete_mem(void* pointer) function.
 	 *	\n
-	 *	By this way, allocator_type__ wont need to care about alignment, it's automatically did by allocator_base_t.
+	 *	By this way, allocator_type__ won't need to care about alignment, it's automatically did by allocator_base_t.
 	 *	\n
+	 *	@param allocator_type__ allocator type that implements allocator_base_t.
 	 *	\n
 	 *	allocator_type__ must provide:
 	 *		+ new_mem(sz size): to allocate memory.
@@ -198,7 +199,13 @@ namespace ncpp {
 			memory_helper::deallocate(p, *reinterpret_cast<allocator_type__*>(this));
 		}
 
+		/**
+		 *	Clears everything and to be the same as the default instance.
+		 */
 		inline void reset() {}
+		/**
+		 *	Not clears everything but clear some essential datas.
+		 */
 		inline void clear() {}
 
 	};
