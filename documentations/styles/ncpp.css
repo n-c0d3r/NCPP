@@ -1,0 +1,13 @@
+
+/* hides footer */
+.footer {
+
+    display: none;
+
+}
+
+.directory .levels span {
+
+    color: rgb(55, 161, 202);
+
+}

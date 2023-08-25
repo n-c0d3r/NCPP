@@ -8,8 +8,8 @@ function(DocsUtils_CreateTarget)
     cmake_parse_arguments(
         PARGS
         ""
-        "NAME;BRIEF;TARGET_NAME;TARGET_FOLDER;TARGET_LABEL;INPUT_DIRS;OUTPUT_DIR;CWD;INTERNAL_DOCS"
-        ""
+        "NAME;BRIEF;TARGET_NAME;TARGET_FOLDER;TARGET_LABEL;OUTPUT_DIR;CWD;INTERNAL_DOCS;MAIN_PAGE"
+        "INPUT_DIRS;STYLE_DIRS"
         ${ARGN}
     )
 
@@ -18,6 +18,17 @@ function(DocsUtils_CreateTarget)
         SET(DOXYGEN_OUTPUT_DIRECTORY ${PARGS_OUTPUT_DIR})
 
         FILE(RELATIVE_PATH CWD_DIR_TO_DOXYGEN_THEME_DIR ${PARGS_CWD} ${DOXYGEN_THEME_AWESOME_CSS_DIR})
+
+
+
+        set(STYLE_FILES "")
+        if(PARGS_STYLE_DIRS)
+            foreach(style_dir ${PARGS_STYLE_DIRS})
+                file(GLOB_RECURSE style_files "${style_dir}/*.css")
+                set(STYLE_FILES "${STYLE_FILES};${style_files}")
+            endforeach()
+        endif()        
+
 
 
         SET(DOXYGEN_PROJECT_NAME ${PARGS_NAME})
@@ -47,11 +58,23 @@ function(DocsUtils_CreateTarget)
 
         SET(DOXYGEN_MACRO_EXPANSION YES)
 
+        if(PARGS_MAIN_PAGE)
+            SET(DOXYGEN_USE_MDFILE_AS_MAINPAGE ${PARGS_MAIN_PAGE})
+        endif()
+        
+
+
         SET(DOXYGEN_HTML_EXTRA_STYLESHEET "${DOXYGEN_HTML_EXTRA_STYLESHEET};${CWD_DIR_TO_DOXYGEN_THEME_DIR}/doxygen-awesome.css;${CWD_DIR_TO_DOXYGEN_THEME_DIR}/doxygen-awesome-sidebar-only.css")
         # SET(DOXYGEN_HTML_EXTRA_STYLESHEET "${DOXYGEN_HTML_EXTRA_STYLESHEET};${CWD_DIR_TO_DOXYGEN_THEME_DIR}/src/doxygen-style.css")
 
+
+
+        SET(DOXYGEN_HTML_EXTRA_STYLESHEET "${DOXYGEN_HTML_EXTRA_STYLESHEET};${STYLE_FILES}")
+
+
+
         doxygen_add_docs(${PARGS_TARGET_NAME}
-            ${PARGS_INPUT_DIRS}
+            "${PARGS_INPUT_DIRS}"
             WORKING_DIRECTORY ${PARGS_CWD}
             COMMENT "Generate NCPP documentations"
         )
@@ -71,7 +94,7 @@ function(DocsUtils_CreateTarget)
 
     else()
 
-        message(SEND_ERROR "<NCPP::Documentations> Not found doxygen")
+        message(SEND_ERROR "<NCPP::Documentations> Not found doxygen")        
 
     endif()
 

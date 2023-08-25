@@ -50,7 +50,13 @@ namespace ncpp { }
 ////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/mem.hpp>
+
+#include <ncpp/allocator_base.hpp>
+#include <ncpp/chunk_allocator.hpp>
+#include <ncpp/link_allocator.hpp>
+
 #include <ncpp/log.hpp>
+
 #include <ncpp/utilities/.hpp>
 #include <ncpp/iostream.hpp>
 #include <ncpp/containers/.hpp>

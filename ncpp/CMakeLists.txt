@@ -116,6 +116,3 @@ add_dependencies(ncpp
 # sub directories
 add_subdirectory(samples)
 add_subdirectory(dev_test)
-
-
-

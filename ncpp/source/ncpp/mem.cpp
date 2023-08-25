@@ -1,16 +1,37 @@
 #include <ncpp/.hpp>
 
+using namespace ncpp;
+
 
 
 namespace ncpp {
 
-	void log_memory_stats() {
-
-#ifdef NCPP_ENABLE_MEMORY_COUNTING
-		std::cout << "total allocated memory: " << NCPP_TOTAL_ALLOCATED_MEMORY() << " (bytes)" << std::endl;
-		std::cout << "usable allocated memory: " << NCPP_USABLE_ALLOCATED_MEMORY() << " (bytes)" << std::endl;
-#endif
-
-	}
-
 }
+
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
+#pragma region New, Delete Operators
+
+void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line)
+{
+
+	return default_memory_helper::allocate(size, pName, flags);
+}
+
+void* operator new[](size_t size, size_t alignment, size_t alignmentOffset, const char* pName, int flags, unsigned debugFlags, const char* file, int line)
+{
+
+	return default_memory_helper::allocate(size, alignment, alignmentOffset, pName, flags);
+}
+
+
+
+void operator delete[](void* ptr)
+{
+
+	default_memory_helper::deallocate(ptr);
+}
+
+#pragma endregion

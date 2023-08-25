@@ -54,11 +54,14 @@
 
 namespace ncpp {
 
+	inline uintptr_t align_address(uintptr_t addr, size_t align)
+	{
+		const size_t mask = align - 1;
+		assert((align & mask) == 0); // pwr of 2
+		return (addr + mask) & ~mask;
+	}
 
 
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,7 +71,254 @@ namespace ncpp {
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	void log_memory_stats();
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+    template<class memory_helper, b8 is_all_usable__, typename... additional_arg_types__>
+	class memory_helper_t {
+
+	public:
+        static inline sz predict_actual_size(size_t size) {
+
+            sz actual_size = size + 1;
+
+#ifndef NDEBUG
+            actual_size += sizeof(const char*);
+#endif
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+            if(is_all_usable__)
+                actual_size += sizeof(sz);
+#endif
+
+            return actual_size;
+        }
+        static inline sz predict_actual_size(size_t size, sz alignment) {
+
+            sz actual_size = size + 1 + alignment;
+
+#ifndef NDEBUG
+            actual_size += sizeof(const char*);
+#endif
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+            if(is_all_usable__)
+                actual_size += sizeof(sz);
+#endif
+
+            return actual_size;
+        }
+
+        static void* allocate(size_t size, const char* pName, int flags, additional_arg_types__... additional_args)
+        {
+
+            //  Memory Layout:
+            //  
+            //  1 byte: alignment flag 
+            //  const char* name //debug only
+            //  sz size //if memory counting enabled
+            //  [data]
+            //
+
+            sz actual_size = size;
+
+            // setup offsets
+            sz data_offset = 1;
+
+#ifndef NDEBUG
+            data_offset += sizeof(const char*);
+            sz name_p_offset = data_offset - 1;
+#endif
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+            if(is_all_usable__)
+                data_offset += sizeof(sz);
+
+            sz size_offset = data_offset - 1;
+#endif
+
+
+
+            // malloc memory
+            u8* result_p = reinterpret_cast<u8*>(memory_helper::new_mem(actual_size + data_offset, std::forward<additional_arg_types__>(additional_args)...));
+
+            // set alignment flag
+            *result_p = 0;
+
+            // goto data pointer
+            result_p += data_offset;
+
+
+
+#ifndef NDEBUG
+            *reinterpret_cast<const char**>(result_p - name_p_offset) = pName;
+#endif
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+            if(is_all_usable__){
+
+                *reinterpret_cast<sz*>(result_p - size_offset) = actual_size + data_offset;
+
+                NCPP_INCREASE_TOTAL_ALLOCATED_MEMORY(*reinterpret_cast<sz*>(result_p - size_offset));
+
+            }
+#endif
+
+
+
+            return result_p;
+        }
+
+        static void* allocate(size_t size, size_t alignment, size_t alignmentOffset, const char* pName, int flags, additional_arg_types__... additional_args)
+        {
+
+            //  Memory Layout:
+            //  
+            //  [shifted bytes] 
+            //  1 byte: alignment flag 
+            //  const char* name //debug only
+            //  sz size //if memory counting enabled
+            //  [data]
+            //
+
+            sz actual_size = size + alignment;
+
+            // setup offsets
+            sz data_offset = 1;
+
+#ifndef NDEBUG
+            data_offset += sizeof(const char*);
+            sz name_p_offset = data_offset - 1;
+#endif
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+            if(is_all_usable__)
+                data_offset += sizeof(sz);
+
+            sz size_offset = data_offset - 1;
+#endif
+
+
+
+            // malloc memory
+            u8* raw_p = reinterpret_cast<u8*>(memory_helper::new_mem(actual_size + data_offset, std::forward<additional_arg_types__>(additional_args)...));
+
+
+
+            // align pointer
+            u8* result_p = reinterpret_cast<u8*>(
+                align_address(
+                    reinterpret_cast<uintptr_t>(reinterpret_cast<u8*>(raw_p) + alignmentOffset),
+                    alignment
+                )
+            ) - alignmentOffset;
+
+            if (result_p == raw_p)
+                result_p += alignment;
+
+            // save shifted bytes info
+            u8 shift = (result_p - raw_p - 1) & 0xFF;
+
+            *(result_p - 1) = shift;
+
+
+
+            // set alignment flag
+            *result_p = 1;
+
+            // goto data pointer
+            result_p += data_offset;
+
+
+
+#ifndef NDEBUG
+            *reinterpret_cast<const char**>(result_p - name_p_offset) = pName;
+#endif
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+            if(is_all_usable__){
+
+                *reinterpret_cast<sz*>(result_p - size_offset) = actual_size + data_offset;
+
+                NCPP_INCREASE_TOTAL_ALLOCATED_MEMORY(*reinterpret_cast<sz*>(result_p - size_offset));
+
+            }
+#endif
+
+
+
+            return result_p;
+        }
+
+
+
+        static void deallocate(void* ptr, additional_arg_types__... additional_args)
+        {
+
+            sz data_offset = 1;
+
+#ifndef NDEBUG
+            data_offset += sizeof(const char*);
+            sz name_p_offset = data_offset - 1;
+#endif
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+            if(is_all_usable__)
+                data_offset += sizeof(sz);
+
+            sz size_offset = data_offset - 1;
+
+            if (is_all_usable__)
+                NCPP_DECREASE_TOTAL_ALLOCATED_MEMORY(*reinterpret_cast<sz*>(reinterpret_cast<u8*>(ptr) - size_offset));
+#endif
+
+            u8* alignment_flag_p = reinterpret_cast<u8*>(ptr) - data_offset;
+
+            if (*alignment_flag_p) {
+
+                u8 shift = *(alignment_flag_p - 1);
+
+                memory_helper::delete_mem(alignment_flag_p - shift - 1, std::forward<additional_arg_types__>(additional_args)...);
+
+            }
+            else {
+
+                memory_helper::delete_mem(alignment_flag_p, std::forward<additional_arg_types__>(additional_args)...);
+
+            }
+
+        }
+
+	};
+
+
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+    class default_memory_helper :
+        public memory_helper_t<default_memory_helper, true>
+    {
+
+    public:
+        static inline void* new_mem(sz size) {
+
+            return malloc(size);
+        }
+
+        static inline void delete_mem(void* ptr) {
+
+            free(ptr);
+        }
+
+    };
 
 }
 
