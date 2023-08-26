@@ -1,7 +1,7 @@
 #pragma once
 
-/** @file ncpp/allocator_base.hpp
-*	@brief Implements allocator base class template.
+/** @file ncpp/mem.hpp
+*	@brief Contains the memory management utilities.
 */
 
 
@@ -32,7 +32,9 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <ncpp/mem.hpp>
+#include <ncpp/utilities/unique_lock.hpp>
+#include <ncpp/log.hpp>
+#include <ncpp/iostream.hpp>
 
 #pragma endregion
 
@@ -54,159 +56,62 @@
 
 namespace ncpp {
 
-	/**
-	 *	Base allocator class implementing base functionalities for simply allocating both non-aligned and aligned memory.
-	 *	allocator_base_t is capable of choosing the actual memory allocation size to pass into allocator_type__::new_mem(sz size) function, and the memory pointer to pass into allocator_type__::delete_mem(void* pointer) function.
-	 *	\n
-	 *	By this way, allocator_type__ won't need to care about alignment, it's automatically did by allocator_base_t.
-	 *	\n
-	 *	@param <allocator_type__> allocator type that implements allocator_base_t and has to provide these functions:
-	 *		+ new_mem(sz size): to allocate memory.
-	 *		+ delete_mem(void* pointer): to deallocate memory.
-	 */
-	template<class allocator_type__>
-	class allocator_base_t {
+	class profile {
+
+	public:
+		using output_function_type = void(const eastl::string& name, u64 nanoseconds);
+
+
 
 	private:
-		class memory_helper : public memory_helper_t<memory_helper, false, allocator_type__&> {
-
-		public:
-			static inline void* new_mem(sz size, allocator_type__& allocator) {
-
-				return allocator.new_mem(size);
-			}
-
-			static inline void delete_mem(void* ptr, allocator_type__& allocator) {
-
-				return allocator.delete_mem(ptr);
-			}
-
-		};
-
-
-
-	protected:
-		// \cond INTERNAL
-		const char* name_;
-		// \endcond
-
-	public:
-		inline const char* name() const { return name_; }
-		inline void set_name(const char* new_name) { name_ = new_name; }
-
-
-
-	protected:
-		inline allocator_base_t(const char* name = 0)
-		{
-
-#if EASTL_NAME_ENABLED
-			name_ = name;
-#endif
-
-		}
-		inline allocator_base_t(const allocator_base_t& x)
-		{
-
-#if EASTL_NAME_ENABLED
-			name_ = x.name_;
-#endif
-
-		}
-		inline allocator_base_t(const allocator_base_t& x, const char* name)
-		{
-
-#if EASTL_NAME_ENABLED
-			name_ = name;
-#endif
-
-		}
-
-		allocator_base_t& operator=(const allocator_base_t& x) {
-
-#if EASTL_NAME_ENABLED
-			name_ = x.name_;
-#endif
-
-			return *this;
-		}
-
-
-
-	protected:
-		/**
-		 *	Allocates non-aligned memory with default_memory_helper
-		 */
-		inline void* default_allocate(size_t n, int flags = 0) {
-
-#ifndef NDEBUG
-			return default_memory_helper::allocate(n, name_, flags);
-#else
-			return default_memory_helper::allocate(n, 0, flags);
-#endif
-		}
-		/**
-		 *	Allocates aligned memory with default_memory_helper
-		 */
-		inline void* default_allocate(size_t n, sz alignment, sz alignment_offset, int flags = 0) {
-
-#ifndef NDEBUG
-			return default_memory_helper::allocate(n, alignment, alignment_offset, name_, flags);
-#else
-			return default_memory_helper::allocate(n, alignment, alignment_offset, 0, flags);
-#endif
-		}
-		/**
-		 *	Deallocates memory with default_memory_helper
-		 */
-		inline void default_deallocate(void* p) {
-
-			default_memory_helper::deallocate(p);
-		}
+		eastl::string content_;
+		output_function_type* output_function_p_ = 0;
+		eastl::chrono::system_clock::time_point start_;
 
 
 
 	public:
-		/**
-		 *	Allocates non-aligned memory with memory_helper of allocator_type__::new_mem(sz) function
-		 */
-		inline void* allocate(size_t n, int flags = 0) {
+		inline const eastl::string& content() const { return content_; }
+		inline output_function_type* output_function_p() const { return output_function_p_; }
 
-#ifndef NDEBUG
-			return memory_helper::allocate(n, name_, flags, *reinterpret_cast<allocator_type__*>(this));
-#else
-			return memory_helper::allocate(n, 0, flags, *reinterpret_cast<allocator_type__*>(this));
-#endif
+
+
+	public:
+		profile(
+			const eastl::string& content = "",
+			output_function_type* output_function_p = [](const eastl::string& content, u64 nanoseconds) {
+
+				std::cout << content.c_str() << cout_nanoseconds(nanoseconds) << cout_lowlight(" (nanoseconds)") << std::endl;
+
+			}
+		) :
+			content_(content),
+			output_function_p_(output_function_p)
+		{
+
+			start_ = eastl::chrono::high_resolution_clock::now();
+
 		}
-		/**
-		 *	Allocates aligned memory with memory_helper of allocator_type__::new_mem(sz) function
-		 */
-		inline void* allocate(size_t n, size_t alignment, size_t offset, int flags = 0) {
+		~profile() {
 
-#ifndef NDEBUG
-			return memory_helper::allocate(n, alignment, offset, name_, flags, *reinterpret_cast<allocator_type__*>(this));
-#else
-			return memory_helper::allocate(n, alignment, offset, 0, flags, *reinterpret_cast<allocator_type__*>(this));
-#endif
+			output_function_p_(
+				content_, 
+				eastl::chrono::duration_cast<eastl::chrono::nanoseconds>(
+					eastl::chrono::high_resolution_clock::now() - start_
+				).count()
+			);
+
 		}
-		/**
-		 *	Deallocates memory with memory_helper of allocator_type__::delete_mem(sz) function
-		 */
-		inline void  deallocate(void* p, size_t n = 1) {
-
-			memory_helper::deallocate(p, *reinterpret_cast<allocator_type__*>(this));
-		}
-
-		/**
-		 *	Clears everything and to be the same as the default instance.
-		 */
-		inline void reset() {}
-		/**
-		 *	Not clears everything but clear some essential datas.
-		 */
-		inline void clear() {}
 
 	};
+
+
+
+#ifdef NCPP_ENABLE_SCOPED_PROFILE
+#define NCPP_SCOPED_PROFILE(Name, Content) ncpp::profile Name##_profile = ncpp::profile(Content)
+#else
+#define NCPP_SCOPED_PROFILE(Name) ;
+#endif
 
 }
 

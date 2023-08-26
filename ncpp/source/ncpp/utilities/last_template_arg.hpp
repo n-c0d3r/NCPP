@@ -75,6 +75,7 @@ namespace ncpp {
 
         /**
          *  Finds out the last template argument.
+         *  @param <arg_types__...> template argument list.
          */
         template<typename... arg_types__>
         using last_template_arg_t = nth_template_arg_t<sizeof...(arg_types__) - 1, arg_types__...>;

@@ -69,6 +69,9 @@ namespace ncpp {
 
         /**
          *  Get the offset of indicated class member.
+         *  @param <class_type__>
+         *  @param <member_type__>
+         *  @param member member pointer
          */
         template<typename class_type__, typename member_type__> constexpr sz member_offset(member_type__ class_type__::* member)
         {

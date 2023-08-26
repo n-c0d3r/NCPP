@@ -33,7 +33,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/allocator_base.hpp>
-#include <ncpp/utilities/lref.hpp>
 
 #pragma endregion
 
@@ -57,7 +56,7 @@ namespace ncpp {
 
 	/**
 	 *	An allocator using another allocator to allocate and deallocate memory by linking into the target allocator reference.
-	 *	@param target_allocator_type__ the target allocator to use.
+	 *	@param <target_allocator_type__> the target allocator to use.
 	 */
 	template<typename target_allocator_type__>
 	class link_allocator_t : public allocator_base_t<link_allocator_t<target_allocator_type__>> {
@@ -68,13 +67,13 @@ namespace ncpp {
 
 
 	private:
-		utilities::lref_t<target_allocator_type> target_allocator_ref_;
+		target_allocator_type* target_allocator_p_;
 
 
 
 	public:
-		inline target_allocator_type& target_allocator() { return *target_allocator_ref_; }
-		inline const target_allocator_type& target_allocator() const { return *target_allocator_ref_; }
+		inline target_allocator_type& target_allocator() { return *target_allocator_p_; }
+		inline const target_allocator_type& target_allocator() const { return *target_allocator_p_; }
 
 
 
@@ -88,7 +87,7 @@ namespace ncpp {
 		}
 		inline link_allocator_t(target_allocator_type& target_allocator, const char* name = 0) :
 			allocator_base_t<link_allocator_t<target_allocator_type__>>(name),
-			target_allocator_ref_(target_allocator)
+			target_allocator_p_(&target_allocator)
 		{
 
 
@@ -112,33 +111,33 @@ namespace ncpp {
 	public:
 		inline void* new_mem(sz size) {
 
-			assert(!target_allocator_ref_.is_null());
+			assert(target_allocator_p_);
 
-			return target_allocator_ref_->new_mem(size);
+			return target_allocator_p_->new_mem(size);
 		}
 		inline void delete_mem(void* p) {
 
-			assert(!target_allocator_ref_.is_null());
+			assert(target_allocator_p_);
 
-			target_allocator_ref_->delete_mem(p);
+			target_allocator_p_->delete_mem(p);
 		}
 
 		inline void reset() {
 
-			if (target_allocator_ref_.is_null())
+			if (!target_allocator_p_)
 				return;
 
-			target_allocator_ref_->reset();
+			target_allocator_p_->reset();
 
-			target_allocator_ref_.clear();
+			target_allocator_p_ = 0;
 
 		}
 		inline void clear() {
 
-			if (target_allocator_ref_.is_null())
+			if (!target_allocator_p_)
 				return;
 
-			target_allocator_ref_->clear();
+			target_allocator_p_->clear();
 
 		}
 

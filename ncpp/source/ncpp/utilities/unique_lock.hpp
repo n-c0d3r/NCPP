@@ -69,6 +69,7 @@ namespace ncpp {
 
         /**
          *  An object that manages a mutex object by keeping it always locked.
+         *  @param <locker_class__>
          */
         template<class locker_class__>
         class unique_lock_t {

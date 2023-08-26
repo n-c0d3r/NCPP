@@ -83,6 +83,12 @@ namespace ncpp {
 	 */
 	struct cout_field_name {
 		eastl::string content;
+	}; 
+	/**
+	 *	Wraps nanoseconds number inside to be streamed out with nanoseconds color.
+	 */
+	struct cout_nanoseconds {
+		u64 nanoseconds;
 	};
 
 	/**
@@ -110,6 +116,19 @@ namespace ncpp {
 			return os << input.content.c_str();
 
 		return (os << ("\x1B[36m" + input.content + "\033[0m").c_str());
+	}
+	/**
+	 *	Streams out cout_nanoseconds.
+	 */
+	inline std::ostream& operator << (
+		std::ostream& os,
+		const cout_nanoseconds& input
+		) {
+
+		if (&os != &std::cout)
+			return os << input.nanoseconds;
+
+		return (os << ("\x1B[31m" + eastl::to_string(input.nanoseconds) + "\033[0m").c_str());
 	}
 #pragma endregion
 

@@ -67,6 +67,7 @@ namespace ncpp {
 
 
 
+        // \cond INTERNAL
         namespace nth___template_arg_helper {
 
             ////////////////////////////////////////////////////////////////////////////////////
@@ -125,6 +126,7 @@ namespace ncpp {
             };
 
         }
+        // \endcond
 
 
 
@@ -144,6 +146,8 @@ namespace ncpp {
 
         /**
          *  Finds out the nth__ template argument.
+         *  @param <nth__> the index of template argument need to get.
+         *  @param <arg_types__...> the template argument list.
          */
         template<sz nth__, typename... arg_types__>
         struct nth_template_arg_t {

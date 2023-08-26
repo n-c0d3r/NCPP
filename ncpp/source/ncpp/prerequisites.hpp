@@ -479,6 +479,32 @@ namespace ncpp {
     template<typename type__>
     inline type__& null_reference_t() { return *((type__*)0); }
 
+    ////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    template<typename type__>
+    inline b8 is_valid_t(const type__* ptr) {
+        
+        return ptr != 0;
+    }
+    template<typename type__>
+    inline b8 is_valid_t(type__&& ptr) {
+
+        return &ptr != 0;
+    }
+
+    template<typename type__>
+    inline b8 is_null_t(const type__* ptr) {
+
+        return ptr == 0;
+    }
+    template<typename type__>
+    inline b8 is_null_t(type__&& ptr) {
+
+        return &ptr == 0;
+    }
+
 }
 
 #pragma endregion

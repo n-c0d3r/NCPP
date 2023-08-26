@@ -16,6 +16,7 @@ set(NCPP_DEFAULT_ALLOCATOR "eastl::allocator" CACHE STRING "The allocator used f
 
 # ncpp pac options
 option(NCPP_ENABLE_WEAKLOCK_WARNING "If enabled, weaklock will automatically warn when race condition occurs" ON)
+option(NCPP_ENABLE_SCOPED_PROFILE "If not enabled, scoped profiles will be ignored when compiling" ON)
 
 # ncpp log options
 set(NCPP_TAB_SIZE 4 CACHE STRING "Tab Size")
@@ -114,5 +115,4 @@ add_dependencies(ncpp
 
 
 # sub directories
-add_subdirectory(samples)
-add_subdirectory(dev_test)
+add_subdirectory(tests)
