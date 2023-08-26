@@ -1,2 +1,2 @@
 
-add_subdirectory(rclass)
+add_subdirectory(robject)

@@ -22,6 +22,9 @@ option(NCPP_ENABLE_SCOPED_PROFILE "If not enabled, scoped profiles will be ignor
 set(NCPP_TAB_SIZE 4 CACHE STRING "Tab Size")
 set(NCPP_MAX_TAB_COUNT 8 CACHE STRING "Max Tab Count")
 
+# ncpp rtti options
+option(NCPP_ENABLE_RTTI "If enabled, rtti will be generated" ON)
+
 
 
 # ncpp target configure file
