@@ -16,12 +16,12 @@
 
 
 
-namespace ncpp { 
-	
-	/**
-	 *	Implements utilities.
-	 */
-	namespace utilities {} 
+namespace ncpp {
+
+    /**
+     *  Implements runtime-type information.
+     */
+    namespace rtti {}
 }
 
 
@@ -52,28 +52,13 @@ namespace ncpp {
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
-#include <ncpp/mem.hpp>
+#include <ncpp/utilities/.hpp>
+#include <ncpp/containers/.hpp>
 
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
-#include <ncpp/utilities/nth_template_arg.hpp>
-#include <ncpp/utilities/first_template_arg.hpp>
-#include <ncpp/utilities/last_template_arg.hpp>
-#include <ncpp/utilities/template_arg_count.hpp>
-#include <ncpp/utilities/template_arg_list.hpp>
-
-#include <ncpp/utilities/singleton.hpp>
-#include <ncpp/utilities/unique_lock.hpp>
-
-#include <ncpp/utilities/member_offset.hpp>
-
-#include <ncpp/utilities/function_traits.hpp>
-#include <ncpp/utilities/is_function.hpp>
-
-#include <ncpp/utilities/is_derived_from.hpp>
-
-#include <ncpp/utilities/is_streamable.hpp>
+#include <ncpp/rtti/rdata.hpp>
 
 #pragma endregion
