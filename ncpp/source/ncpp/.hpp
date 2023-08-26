@@ -54,6 +54,7 @@ namespace ncpp { }
 #include <ncpp/mem.hpp>
 
 #include <ncpp/allocator_base.hpp>
+#include <ncpp/dummy_allocator.hpp>
 #include <ncpp/chunk_allocator.hpp>
 #include <ncpp/link_allocator.hpp>
 

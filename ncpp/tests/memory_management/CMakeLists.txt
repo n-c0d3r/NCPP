@@ -1,5 +1,6 @@
 
 add_subdirectory(basic_allocation)
 
+add_subdirectory(dummy_allocator)
 add_subdirectory(chunk_allocator)
 add_subdirectory(link_allocator)

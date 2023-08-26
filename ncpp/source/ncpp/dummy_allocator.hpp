@@ -1,7 +1,7 @@
 #pragma once
 
-/** @file ncpp/allocator_base.hpp
-*	@brief Implements allocator base class template.
+/** @file ncpp/dummy_allocator.hpp
+*	@brief Implements chunk allocator.
 */
 
 
@@ -32,7 +32,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <ncpp/mem.hpp>
+#include <ncpp/allocator_base.hpp>
 
 #pragma endregion
 
@@ -55,165 +55,40 @@
 namespace ncpp {
 
 	/**
-	 *	Base allocator class implementing base functionalities for simply allocating both non-aligned and aligned memory.
-	 *	allocator_base_t is capable of choosing the actual memory allocation size to pass into allocator_type__::new_mem(sz size) function, and the memory pointer to pass into allocator_type__::delete_mem(void* pointer) function.
-	 *	\n
-	 *	By this way, allocator_type__ won't need to care about alignment, it's automatically did by allocator_base_t.
-	 *	\n
-	 *	@param <allocator_type__> allocator type that implements allocator_base_t and has to provide these functions:
-	 *		+ new_mem(sz size): to allocate memory.
-	 *		+ delete_mem(void* pointer): to deallocate memory.
+	 *	An allocator that never allocates any data.
 	 */
-	template<class allocator_type__>
-	class allocator_base_t {
+	class dummy_allocator : public allocator_base_t<dummy_allocator> {
 
 	private:
-		class memory_helper : public memory_helper_t<memory_helper, false, allocator_type__&> {
-
-		public:
-			static inline void* new_mem(sz size, allocator_type__& allocator) {
-
-				return allocator.new_mem(size);
-			}
-
-			static inline void delete_mem(void* ptr, allocator_type__& allocator) {
-
-				return allocator.delete_mem(ptr);
-			}
-
-		};
+		static u8 memory_block_s[1024];
 
 
-
-	protected:
-		// \cond INTERNAL
-		const char* name_;
-		// \endcond
 
 	public:
-		inline const char* name() const { return name_; }
-		inline void set_name(const char* new_name) { name_ = new_name; }
-
-
-
-	protected:
-		inline allocator_base_t(const char* name = 0)
+		inline dummy_allocator(const char* name = 0) :
+			allocator_base_t(name)
 		{
 
-#if EASTL_NAME_ENABLED
-			name_ = name;
-#endif
+
 
 		}
-		inline allocator_base_t(const allocator_base_t& x)
+		inline dummy_allocator(const dummy_allocator& x) :
+			dummy_allocator()
 		{
 
-#if EASTL_NAME_ENABLED
-			name_ = x.name_;
-#endif
 
-		}
-		inline allocator_base_t(const allocator_base_t& x, const char* name)
-		{
-
-#if EASTL_NAME_ENABLED
-			name_ = name;
-#endif
 
 		}
 
-		allocator_base_t& operator=(const allocator_base_t& x) {
+		~dummy_allocator() {
 
-#if EASTL_NAME_ENABLED
-			name_ = x.name_;
-#endif
-
-			return *this;
-		}
-
-
-
-	protected:
-		/**
-		 *	Allocates non-aligned memory with default_memory_helper
-		 */
-		inline void* default_allocate(size_t n, int flags = 0) {
-
-#ifndef NDEBUG
-			return default_memory_helper::allocate(n, name_, flags);
-#else
-			return default_memory_helper::allocate(n, 0, flags);
-#endif
-		}
-		/**
-		 *	Allocates aligned memory with default_memory_helper
-		 */
-		inline void* default_allocate(size_t n, sz alignment, sz alignment_offset, int flags = 0) {
-
-#ifndef NDEBUG
-			return default_memory_helper::allocate(n, alignment, alignment_offset, name_, flags);
-#else
-			return default_memory_helper::allocate(n, alignment, alignment_offset, 0, flags);
-#endif
-		}
-		/**
-		 *	Deallocates memory with default_memory_helper
-		 */
-		inline void default_deallocate(void* p) {
-
-			default_memory_helper::deallocate(p);
+			reset();
 		}
 
 
 
 	public:
-		/**
-		 *	Allocates non-aligned memory with memory_helper of allocator_type__::new_mem(sz) function
-		 */
-		inline void* allocate(size_t n, int flags = 0) {
-
-#ifndef NDEBUG
-			return memory_helper::allocate(n, name_, flags, *reinterpret_cast<allocator_type__*>(this));
-#else
-			return memory_helper::allocate(n, 0, flags, *reinterpret_cast<allocator_type__*>(this));
-#endif
-		}
-		/**
-		 *	Allocates aligned memory with memory_helper of allocator_type__::new_mem(sz) function
-		 */
-		inline void* allocate(size_t n, size_t alignment, size_t offset, int flags = 0) {
-
-#ifndef NDEBUG
-			return memory_helper::allocate(n, alignment, offset, name_, flags, *reinterpret_cast<allocator_type__*>(this));
-#else
-			return memory_helper::allocate(n, alignment, offset, 0, flags, *reinterpret_cast<allocator_type__*>(this));
-#endif
-		}
-		/**
-		 *	Deallocates memory with memory_helper of allocator_type__::delete_mem(sz) function
-		 */
-		inline void  deallocate(void* p, size_t n = 1) {
-
-			memory_helper::deallocate(p, *reinterpret_cast<allocator_type__*>(this));
-		}
-
-		/**
-		 *	Clears everything and to be the same as the default instance.
-		 */
-		inline void reset() {}
-		/**
-		 *	Not clears everything but clear some essential datas.
-		 */
-		inline void clear() {}
-
-		/**
-		 *	
-		 */
-		inline void* new_mem(sz) { return 0; }
-		/**
-		 *	
-		 */
-		inline void delete_mem(void* p) {} 
+		inline void* new_mem(sz) { return memory_block_s; }
 
 	};
 
