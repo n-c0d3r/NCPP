@@ -101,21 +101,28 @@ namespace ncpp {
 
 		};
 
+		template<typename type__>
+		static inline constexpr b8 is_robject_t = utilities::is_ostreamable_t<type__, robject_flag>::value;
+
+
+
 		struct robject_support_virtual_flag {
 
 
 
 		};
 
+		template<typename object_type__>
+		static inline constexpr b8 is_support_virtual_t = utilities::is_ostreamable_t<object_type__, robject_support_virtual_flag>::value;
+
+
+
+#ifdef NCPP_ENABLE_RTTI
 		using name_getter_type = eastl::string(*)();
 
 		template<typename object_type__, typename member_type__>
 		using member_getter_type_t = utilities::nth_template_arg_t<utilities::is_function_t<member_type__>::value, const member_type__&, void>::type (*)(const object_type__& obj);
-
-		template<typename object_type__>
-		static inline constexpr b8 is_support_virtual_t = utilities::is_ostreamable_t<object_type__, robject_support_virtual_flag>::value;
-		template<typename type__>
-		static inline constexpr b8 is_robject_t = utilities::is_ostreamable_t<type__, robject_flag>::value;
+#endif
 
 
 
@@ -133,6 +140,7 @@ namespace ncpp {
 
 
 
+#ifdef NCPP_ENABLE_RTTI
 		struct rmember {
 
 			using ostream_function_type = std::ostream& (std::ostream& os, void* object_p, u32 tabs);
@@ -151,6 +159,7 @@ namespace ncpp {
 			}
 
 		};
+#endif
 
 
 
@@ -168,6 +177,7 @@ namespace ncpp {
 
 
 
+#ifdef NCPP_ENABLE_RTTI
 		class reflect_base {
 
 		protected:
@@ -178,6 +188,7 @@ namespace ncpp {
 		rcontext& current_context();
 		sz current_object_offset();
 		void set_current_object_offset(sz new_offset);
+#endif
 
 
 
@@ -195,6 +206,7 @@ namespace ncpp {
 
 
 
+#ifdef NCPP_ENABLE_RTTI
 		class rcontext {
 
 		private:
@@ -346,6 +358,7 @@ namespace ncpp {
 			}
 
 		};
+#endif
 
 
 
@@ -363,6 +376,7 @@ namespace ncpp {
 
 
 
+#ifdef NCPP_ENABLE_RTTI
 		template<b8 define_items__, typename type__>
 		struct variable_wrapper_t {
 
@@ -383,6 +397,7 @@ namespace ncpp {
 			using type = type__;
 
 		};
+#endif
 
 
 
@@ -400,6 +415,7 @@ namespace ncpp {
 
 
 
+#ifdef NCPP_ENABLE_RTTI
 		template<b8 define_items__, typename object_type__, typename member_type__, member_getter_type_t<object_type__, member_type__> member_getter__, ncpp::rtti::name_getter_type name_getter__>
 		struct reflector_wrapper_t {
 
@@ -428,6 +444,7 @@ namespace ncpp {
 			using type = void();
 
 		};
+#endif
 
 
 
@@ -445,6 +462,7 @@ namespace ncpp {
 
 
 
+#ifdef NCPP_ENABLE_RTTI
 		template<b8 define_items__, typename object_type__, typename base_type__>
 		struct base_wrapper_t {
 
@@ -485,6 +503,7 @@ namespace ncpp {
 			using type = void();
 
 		};
+#endif
 
 
 
@@ -545,7 +564,12 @@ namespace ncpp {
 				\
 			};
 #else
-#define NCPP_ROBJECT(ClassName, Items) NCPP_PUBLIC_KEYWORD Items;
+#define NCPP_ROBJECT(ClassName, Items) \
+			NCPP_PUBLIC_KEYWORD\
+				using current_class = ClassName;\
+				static inline eastl::string static_name() { return #ClassName; }\
+			NCPP_PUBLIC_KEYWORD friend current_class& operator << (current_class&, const ncpp::rtti::robject_flag& flag) { return *reinterpret_cast<current_class*>(0); }\
+			NCPP_PUBLIC_KEYWORD Items;
 #endif
 
 		////////////////////////////////////////////////////////////////////////////////////
@@ -575,7 +599,8 @@ namespace ncpp {
 			NCPP_PRIVATE_KEYWORD static inline void Name##_getter(const current_class& obj) { };\
 			NCPP_PRIVATE_KEYWORD reflector_wrapper_t<Type, &current_class::Name##_getter, &current_class::Name##_name_cstr> Name##_reflector;
 #else
-#define NCPP_PRIVATE_F(Type, Name) NCPP_PUBLIC_KEYWORD Type Name;
+#define NCPP_PRIVATE_F(Type, Name) NCPP_PRIVATE_KEYWORD using Name##_type = Type;\
+			NCPP_PRIVATE_KEYWORD Name##_type Name;
 #endif
 
 		////////////////////////////////////////////////////////////////////////////////////
@@ -605,7 +630,8 @@ namespace ncpp {
 			NCPP_PRIVATE_KEYWORD static inline void Name##_getter(const current_class& obj) { };\
 			NCPP_PRIVATE_KEYWORD reflector_wrapper_t<Type, &current_class::Name##_getter, &current_class::Name##_name_cstr> Name##_reflector;
 #else
-#define NCPP_PROTECTED_F(Type, Name) NCPP_PUBLIC_KEYWORD Type Name;
+#define NCPP_PROTECTED_F(Type, Name) NCPP_PRIVATE_KEYWORD using Name##_type = Type;\
+			NCPP_PROTECTED_KEYWORD Name##_type Name;
 #endif
 
 		////////////////////////////////////////////////////////////////////////////////////
@@ -635,22 +661,33 @@ namespace ncpp {
 			NCPP_PRIVATE_KEYWORD static inline void Name##_getter(const current_class& obj) { };\
 			NCPP_PRIVATE_KEYWORD reflector_wrapper_t<Type, &current_class::Name##_getter, &current_class::Name##_name_cstr> Name##_reflector;
 #else
-#define NCPP_PUBLIC_F(Type, Name) NCPP_PUBLIC_KEYWORD Type Name;
+#define NCPP_PUBLIC_F(Type, Name) NCPP_PRIVATE_KEYWORD using Name##_type = Type;\
+			NCPP_PUBLIC_KEYWORD Name##_type Name;
 #endif
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_BASE(Name) NCPP_PRIVATE_KEYWORD base_wrapper_t<Name> base##_reflector;
+#ifdef NCPP_ENABLE_RTTI
+#define NCPP_BASE(Name) NCPP_PRIVATE_KEYWORD base_wrapper_t<Name> base##_reflector;\
+			NCPP_PUBLIC_KEYWORD using base = Name;
+#else
+#define NCPP_BASE(Name) NCPP_PUBLIC_KEYWORD using base = Name;
+#endif
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
+#ifdef NCPP_ENABLE_RTTI
 #define NCPP_ENABLE_VIRTUAL() \
 			NCPP_PUBLIC_KEYWORD friend current_class& operator << (current_class&, const support_virtual_flag_type& flag) { return *reinterpret_cast<current_class*>(0); }\
 			NCPP_PRIVATE_KEYWORD virtual void virtual_reflect(ncpp::rtti::rcontext& context) const { context.reflect_type_t<current_class>(); }
+#else
+#define NCPP_ENABLE_VIRTUAL() \
+			NCPP_PUBLIC_KEYWORD friend current_class& operator << (current_class&, const ncpp::rtti::robject_support_virtual_flag& flag) { return *reinterpret_cast<current_class*>(0); }
+#endif
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
@@ -696,6 +733,8 @@ std::ostream& operator << (
 	}
 
 
+
+#ifdef NCPP_ENABLE_RTTI
 
 	ncpp::rtti::rcontext ctx;
 	ctx.reflect(input.first);
@@ -748,6 +787,11 @@ std::ostream& operator << (
 
 	}
 	os << ncpp::cout_lowlight("}");
+
+#else
+	os << ("\x1B[33m" + eastl::string(typeid(item_type__).name()) + "\033[0m").c_str();
+	os << ncpp::cout_lowlight(" { }");
+#endif
 
 	return os;
 }

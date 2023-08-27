@@ -80,30 +80,22 @@ i32 A::e(i32 d) {
 
 
 int main() {
-	
-	{
 
-		A a;
-		B b;
+	A a;
+	B b;
 
-		std::cout << a << std::endl;
-		std::cout << b << std::endl;
+	std::cout << a << std::endl;
+	std::cout << b << std::endl;
 
 
 
-		B* a_p = &a;
-		B* b_p = &b;
+	B* a_p = &a;
+	B* b_p = &b;
 
-		std::cout << *a_p << std::endl;
-		std::cout << *b_p << std::endl;
+	std::cout << *a_p << std::endl;
+	std::cout << *b_p << std::endl;
 
 
-
-		log_memory_stats();
-
-	}
-
-	log_memory_stats();
 
 	system("pause");
 

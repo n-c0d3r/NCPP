@@ -8,6 +8,7 @@ namespace ncpp {
 
 	namespace rtti {
 
+#ifdef NCPP_ENABLE_RTTI
 		thread_local rcontext* current_context_p_g = 0;
 		thread_local sz current_object_offset_g = 0;
 
@@ -37,6 +38,7 @@ namespace ncpp {
 
 			current_object_offset_g = new_offset;
 		}
+#endif
 
 	}
 
