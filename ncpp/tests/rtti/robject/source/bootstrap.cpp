@@ -1,5 +1,6 @@
 
 #include <ncpp/.hpp>
+#include <ncpp/rtti/robject.hpp>
 
 using namespace ncpp;
 
@@ -8,11 +9,10 @@ using namespace ncpp;
 class B {
 
 	NCPP_RCLASS(
-
+		rtti::default_traits,
 		B,
 
-		NCPP_PUBLIC_V(i32, a);
-		NCPP_PUBLIC_V(i32, b);
+		NCPP_PUBLIC(i32, i2);
 
 	);
 
@@ -21,8 +21,7 @@ class B {
 public:
 	B() {
 
-		a = 3;
-		b = 4;
+		i2 = 9;
 
 	}
 	~B() {
@@ -36,30 +35,27 @@ public:
 
 
 class A : public B {
-	
-	NCPP_RCLASS(
 
+	NCPP_RCLASS(
+		rtti::default_traits,
 		A,
 
 		NCPP_BASE(B);
-		
-		NCPP_PUBLIC_V(i32, c);
-		NCPP_PUBLIC_V(i32, d);
-		NCPP_PUBLIC_V(eastl::string, f);
-		NCPP_PUBLIC_V(B, b);
 
-		NCPP_PUBLIC_F(i32(i32), e);
+		NCPP_PUBLIC(i32, i);
+		NCPP_PUBLIC(eastl::string, str);
+
+		NCPP_PUBLIC(i32(b8), foo);
 
 	);
 
 
 
 public:
-	A() : B() {
+	A() {
 
-		c = 1;
-		d = 2;
-		f = "Hello World";
+		i = 3;
+		str = "Hello World";
 
 	}
 	~A() {
@@ -70,32 +66,15 @@ public:
 
 };
 
-
-
-i32 A::e(i32 d) {
-	
-	return d + c;
-}
+i32 A::foo(b8) { return 0; }
 
 
 
 int main() {
 
 	A a;
-	B b;
 
 	std::cout << a << std::endl;
-	std::cout << b << std::endl;
-
-
-
-	B* a_p = &a;
-	B* b_p = &b;
-
-	std::cout << *a_p << std::endl;
-	std::cout << *b_p << std::endl;
-
-
 
 	system("pause");
 

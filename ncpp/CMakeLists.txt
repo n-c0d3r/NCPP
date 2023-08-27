@@ -24,6 +24,11 @@ set(NCPP_MAX_TAB_COUNT 8 CACHE STRING "Max Tab Count")
 
 # ncpp rtti options
 option(NCPP_ENABLE_RTTI "If enabled, rtti will be generated" ON)
+if(NCPP_ENABLE_RTTI)
+    option(NCPP_ENABLE_METADATA "If enabled, metadata will be generated" ON)
+else()
+    set(NCPP_ENABLE_METADATA OFF)
+endif()
 
 
 

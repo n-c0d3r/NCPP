@@ -57,7 +57,12 @@ namespace ncpp {
 
 	namespace rtti {
 
-		class rcontext;
+#ifdef NCPP_ENABLE_RTTI
+		class rcontext_base;
+
+		template<class rtti_traits__>
+		class rcontext_t;
+#endif
 
 
 
@@ -119,9 +124,7 @@ namespace ncpp {
 
 #ifdef NCPP_ENABLE_RTTI
 		using name_getter_type = eastl::string(*)();
-
-		template<typename object_type__, typename member_type__>
-		using member_getter_type_t = utilities::nth_template_arg_t<utilities::is_function_t<member_type__>::value, const member_type__&, void>::type (*)(const object_type__& obj);
+		using member_offset_getter_type = sz(*)();
 #endif
 
 
@@ -141,21 +144,103 @@ namespace ncpp {
 
 
 #ifdef NCPP_ENABLE_RTTI
-		struct rmember {
+		class default_traits {
 
-			using ostream_function_type = std::ostream& (std::ostream& os, void* object_p, u32 tabs);
+#ifdef NCPP_ENABLE_METADATA
+		public:
+			struct metadata {
+
+
+
+			};
+#endif
+
+		};
+#endif
+
+
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifdef NCPP_ENABLE_RTTI
+		struct reflector_container_base {
+
+			reflector_container_base(rcontext_base& context);
+
+			void apply_name(rcontext_base& context, const eastl::string& name);
+			void apply_hash_code(rcontext_base& context, sz hash_code);
+
+		};
+
+
+
+		u32 current_object_offset();
+		void set_current_object_offset(u32 new_offset);
+
+
+
+		rcontext_base& current_context();
+
+		template<class rtti_traits__>
+		static inline rcontext_t<rtti_traits__>& current_context_t() {
+
+			return reinterpret_cast<rcontext_t<rtti_traits__>&>(
+				current_context()
+			);
+		}
+#endif
+
+
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifdef NCPP_ENABLE_RTTI
+		template<class rtti_traits__ = default_traits>
+		struct rmember_t {
+
+#ifdef NCPP_ENABLE_METADATA
+			using metadata_type = typename rtti_traits__::metadata;
+#endif
+
+			using ostream_function_type = std::ostream&(void* object_p, u32 tabs, std::ostream& os);
 
 
 
 			ostream_function_type* ostream_function_p = 0;
-			sz object_type_hash_code = 0;
-			sz object_offset = 0;
+
+#ifdef NCPP_ENABLE_METADATA
+			metadata_type metadata;
+#endif
 
 
 
 			inline std::ostream& ostream(void* object_p, u32 tabs = 0, std::ostream& os = std::cout) const {
 
-				return ostream_function_p(os, reinterpret_cast<u8*>(object_p) + object_offset, tabs);
+				return ostream_function_p(object_p, tabs, os);
 			}
 
 		};
@@ -178,83 +263,83 @@ namespace ncpp {
 
 
 #ifdef NCPP_ENABLE_RTTI
-		class reflect_base {
+		class rcontext_base {
 
-		protected:
-			reflect_base(rcontext& context);
-
-		};
-
-		rcontext& current_context();
-		sz current_object_offset();
-		void set_current_object_offset(sz new_offset);
-#endif
+		public:
+			friend struct reflector_container_base;
 
 
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-#ifdef NCPP_ENABLE_RTTI
-		class rcontext {
 
 		private:
-			eastl::unordered_map<eastl::string, rmember> name_to_member_map_;
 			eastl::string name_;
 			sz hash_code_ = 0;
+
+		protected:
 			eastl::string base_name_;
 			sz base_hash_code_ = 0;
 
-
-
 		public:
-			inline b8 is_has_member(const eastl::string& name) const { return name_to_member_map_.find(name) != name_to_member_map_.end(); }
-
-			inline const rmember& member(const eastl::string& name) const { 
-
-				assert(is_has_member(name));
-				
-				return name_to_member_map_.find(name)->second; 
-			}
-			inline rmember& member(const eastl::string& name) {
-
-				assert(is_has_member(name));
-				
-				return name_to_member_map_.find(name)->second; 
-			}
-
 			inline const eastl::string& name() const { return name_; }
-			inline void set_name(const eastl::string& new_name) { name_ = new_name; }
-
 			inline sz hash_code() const { return hash_code_; }
-			inline void set_hash_code(sz new_hash_code) { hash_code_ = new_hash_code; }
 
 			inline const eastl::string& base_name() const { return base_name_; }
 			inline sz base_hash_code() const { return base_hash_code_; }
+			inline b8 is_has_base() const { return base_hash_code_ != 0; }
 
-			const eastl::unordered_map<eastl::string, rmember>& name_to_member_map() const { return name_to_member_map_; };
+
+
+		protected:
+			rcontext_base() {
+			
+			
+			}
+			~rcontext_base() {
+
+
+			}
+
+		};
+
+		template<class rtti_traits__ = default_traits>
+		class rcontext_t : public rcontext_base {
+
+		public:
+			using rmember_type = rmember_t<rtti_traits__>;
+
+#ifdef NCPP_ENABLE_METADATA
+			using metadata_type = typename rtti_traits__::metadata;
+#endif
+
+
+
+		private:
+			eastl::unordered_map<eastl::string, rmember_type> name_to_member_map_;
+
+#ifdef NCPP_ENABLE_METADATA
+		public:
+			metadata_type metadata;
+#endif
 
 
 
 		public:
-			inline rcontext() {
+			inline const eastl::unordered_map<eastl::string, rmember_type>& name_to_member_map() const { return name_to_member_map_; }
+			inline b8 is_has_member(const eastl::string& member_name) const { return name_to_member_map_.find(member_name) != name_to_member_map_.end(); }
+			inline const rmember_type& member(const eastl::string& member_name) const {
 
+				assert(is_has_member(member_name));
+
+				return name_to_member_map_.find(member_name)->second;
+			}
+
+
+
+		public:
+			rcontext_t() {
 
 
 			}
-			~rcontext() {
-
+			~rcontext_t() {
 
 
 			}
@@ -265,66 +350,82 @@ namespace ncpp {
 			template<typename type__>
 			void reflect_type_t() {
 
-				auto _ = type__::reflect(*this);
+				auto _ = type__::reflector_container(*this);
 
 			}
+			template<typename base_type__>
+			void reflect_base_t(const eastl::string& name) {
+
+				if (!is_has_base()) {
+
+					base_name_ = name;
+					base_hash_code_ = typeid(base_type__).hash_code();
+
+				}
+
+				reflect_type_t<base_type__>();
+
+			}
+
+
+
+		public:
 			template<typename type__, std::enable_if_t<is_support_virtual_t<type__>, i32> = 0>
-			void reflect(const type__& object) {
+			void reflect_t(const type__& object) {
 
 				object.virtual_reflect(*this);
 
 			}
 			template<typename type__, std::enable_if_t<!is_support_virtual_t<type__>, i32> = 0>
-			void reflect(const type__& object) {
+			void reflect_t(const type__& object) {
 
 				reflect_type_t<type__>();
 
 			}
 
+
+
+		public:
 			template<
-				typename object_type__, 
-				typename member_type__,
-				member_getter_type_t<object_type__, member_type__> member_getter__,
+				typename object_type__, typename member_type__, member_offset_getter_type member_offset_getter__,
 				std::enable_if_t<!utilities::is_function_t<member_type__>::value, i32> = 0
 			>
 			void add_member_t(const eastl::string& member_name) {
 
+				assert(!is_has_member(member_name));
+
 				name_to_member_map_[member_name] = {
 				
-					// ostream function
-					[](std::ostream& os, void* object_p, u32 tabs) -> std::ostream& {
-
+					[](void* object_p, u32 tabs, std::ostream& os) -> std::ostream& {
+						
 						return safe_ostream_with_tab_t<std::ostream, ostream_input_t<member_type__>>(
-							os, 
-							ostream_input_t<member_type__> { 
-								member_getter__(*((const object_type__*)object_p)),
+							os,
+							ostream_input_t<member_type__>{ 
+								*reinterpret_cast<member_type__*>(
+									reinterpret_cast<u8*>(object_p) + member_offset_getter__()
+								),
 								tabs 
 							}
 						);
-					},
 
-					typeid(object_type__).hash_code(),
-
-					current_object_offset()
+						return os;
+					}
 				
 				};
 
 			}
 			template<
-				typename object_type__,
-				typename member_type__,
-				member_getter_type_t<object_type__, member_type__> member_getter__,
+				typename object_type__, typename member_type__, member_offset_getter_type member_offset_getter__,
 				std::enable_if_t<utilities::is_function_t<member_type__>::value, i32> = 0
 			>
 			void add_member_t(const eastl::string& member_name) {
 
-				assert(!is_has_member(member_name) && "member is already added");
+				assert(!is_has_member(member_name));
 
 				name_to_member_map_[member_name] = {
 
-					// ostream function
-					[](std::ostream& os, void* object_p, u32 tabs) -> std::ostream& {
-						
+					[](void* object_p, u32 tabs, std::ostream& os) -> std::ostream& {
+
 						return safe_ostream_with_tab_t<std::ostream, const char*>(
 							os,
 							ostream_input_t<const char*> {
@@ -332,28 +433,60 @@ namespace ncpp {
 								tabs
 							}
 						);
-					},
-
-					typeid(object_type__).hash_code(),
-
-					current_object_offset()
+					}
 
 				};
 
 			}
-			void remove_member_t(const eastl::string& member_name) {
+			void remove_member(const eastl::string& member_name) {
 
-				assert(is_has_member(member_name) && "member is not exist");
+				assert(is_has_member(member_name));
 
 				name_to_member_map_.erase(member_name);
 
 			}
 
-			template<typename base_type__>
-			void set_base_t() {
-				
-				base_name_ = base_type__::static_name();
-				base_hash_code_ = typeid(base_type__).hash_code();
+		};
+#endif
+
+
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifdef NCPP_ENABLE_RTTI
+		template<class rtti_traits__, typename object_type__, typename member_type__, member_offset_getter_type member_offset_getter__, name_getter_type name_getter__>
+		struct member_reflector_t {
+
+		public:
+			member_reflector_t() {
+
+				current_context_t<rtti_traits__>().add_member_t<object_type__, member_type__, member_offset_getter__>(name_getter__());
+
+			}
+
+		};
+
+
+
+		template<class rtti_traits__, typename base_type__, name_getter_type name_getter__>
+		struct base_reflector_t {
+
+		public:
+			base_reflector_t() {
+
+				current_context_t<rtti_traits__>().reflect_base_t<base_type__>(name_getter__());
 
 			}
 
@@ -377,199 +510,56 @@ namespace ncpp {
 
 
 #ifdef NCPP_ENABLE_RTTI
-		template<b8 define_items__, typename type__>
-		struct variable_wrapper_t {
-
-			
-
-		};
-
-		template<typename type__>
-		struct variable_wrapper_t<false, type__> {
-
-			using type = void();
-
-		};
-
-		template<typename type__>
-		struct variable_wrapper_t<true, type__> {
-
-			using type = type__;
-
-		};
-#endif
-
-
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-#ifdef NCPP_ENABLE_RTTI
-		template<b8 define_items__, typename object_type__, typename member_type__, member_getter_type_t<object_type__, member_type__> member_getter__, ncpp::rtti::name_getter_type name_getter__>
-		struct reflector_wrapper_t {
-
-
-
-		};
-
-		template<typename object_type__, typename member_type__, member_getter_type_t<object_type__, member_type__> member_getter__, ncpp::rtti::name_getter_type name_getter__>
-		struct reflector_wrapper_t<false, object_type__, member_type__, member_getter__, name_getter__> {
-
-			struct type {
-
-				inline type() {
-
-					current_context().add_member_t<object_type__, member_type__, member_getter__>(name_getter__());
-
-				}
-
-			};
-
-		};
-
-		template<typename object_type__, typename member_type__, member_getter_type_t<object_type__, member_type__> member_getter__, ncpp::rtti::name_getter_type name_getter__>
-		struct reflector_wrapper_t<true, object_type__, member_type__, member_getter__, name_getter__> {
-
-			using type = void();
-
-		};
-#endif
-
-
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-#ifdef NCPP_ENABLE_RTTI
-		template<b8 define_items__, typename object_type__, typename base_type__>
-		struct base_wrapper_t {
-
-
-
-		};
-
-		template<typename object_type__, typename base_type__>
-		struct base_wrapper_t<false, object_type__, base_type__> {
-
-			struct type {
-
-				inline type() {
-
-					sz obj_offset = current_object_offset();
-
-					set_current_object_offset(
-						reinterpret_cast<sz>(
-							&((base_type__&)(*reinterpret_cast<object_type__*>(0)))
-						)
-					);
-
-					current_context().reflect_type_t<base_type__>();
-
-					current_context().set_base_t<base_type__>();
-
-					set_current_object_offset(obj_offset);
-
-				}
-
-			};
-
-		};
-
-		template<typename object_type__, typename base_type__>
-		struct base_wrapper_t<true, object_type__, base_type__> {
-
-			using type = void();
-
-		};
-#endif
-
-
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-#ifdef NCPP_ENABLE_RTTI
-#define NCPP_ROBJECT(ClassName, Items) NCPP_PUBLIC_KEYWORD\
-			using current_class = ClassName;\
-			static inline eastl::string static_name() { return #ClassName; }\
-			friend class ncpp::rtti::rcontext;\
-		NCPP_PRIVATE_KEYWORD\
-			template<typename type__>\
-			using variable_wrapper_t = typename ncpp::rtti::variable_wrapper_t<true, type__>::type;\
-			template<typename type__, ncpp::rtti::member_getter_type_t<current_class, type__> member_getter__, ncpp::rtti::name_getter_type name_getter__>\
-			using reflector_wrapper_t = typename ncpp::rtti::reflector_wrapper_t<true, current_class, type__, member_getter__, name_getter__>::type;\
-			template<typename base_type__>\
-			using base_wrapper_t = typename ncpp::rtti::base_wrapper_t<true, current_class, base_type__>::type;\
-			using support_virtual_flag_type = ncpp::rtti::robject_support_virtual_flag;\
-		NCPP_PUBLIC_KEYWORD friend current_class& operator << (current_class&, const ncpp::rtti::robject_flag& flag) { return *reinterpret_cast<current_class*>(0); }\
-		NCPP_PUBLIC_KEYWORD\
-			Items;\
-		\
-		NCPP_PRIVATE_KEYWORD\
-			class reflect;\
-			friend class reflect;\
-			class reflect : public ncpp::rtti::reflect_base {\
+#define NCPP_ROBJECT(RTTITraits, ClassName,...) \
+			NCPP_PUBLIC_KEYWORD\
+				using rtti_traits = RTTITraits;\
 				\
-				NCPP_PRIVATE_KEYWORD\
-					template<typename type__>\
-					using variable_wrapper_t = typename ncpp::rtti::variable_wrapper_t<false, type__>::type; \
-					template<typename type__, ncpp::rtti::member_getter_type_t<current_class, type__> member_getter__, ncpp::rtti::name_getter_type name_getter__>\
-					using reflector_wrapper_t = typename ncpp::rtti::reflector_wrapper_t<false, current_class, type__, member_getter__, name_getter__>::type;\
-					template<typename base_type__>\
-					using base_wrapper_t = typename ncpp::rtti::base_wrapper_t<false, current_class, base_type__>::type;\
-					using support_virtual_flag_type = void(*)();\
+			NCPP_PRIVATE_KEYWORD\
+				friend class ncpp::rtti::rcontext_base;\
 				\
-				NCPP_PUBLIC_KEYWORD\
-					Items;\
-				\
-				NCPP_PUBLIC_KEYWORD\
-					inline reflect(ncpp::rtti::rcontext& context) : ncpp::rtti::reflect_base(context) {\
-						context.set_name(#ClassName);\
-						context.set_hash_code(typeid(#ClassName).hash_code());\
-					}\
-				\
-			};
-#else
-#define NCPP_ROBJECT(ClassName, Items) \
+				friend class ncpp::rtti::rcontext_t<rtti_traits>;\
+				friend struct ncpp::rtti::rmember_t<rtti_traits>;\
+			\
 			NCPP_PUBLIC_KEYWORD\
 				using current_class = ClassName;\
 				static inline eastl::string static_name() { return #ClassName; }\
-			NCPP_PUBLIC_KEYWORD friend current_class& operator << (current_class&, const ncpp::rtti::robject_flag& flag) { return *reinterpret_cast<current_class*>(0); }\
-			NCPP_PUBLIC_KEYWORD Items;
+				using rcontext_type = ncpp::rtti::rcontext_t<rtti_traits>;\
+				using rmember_type = ncpp::rtti::rmember_t<rtti_traits>;\
+			\
+			NCPP_PUBLIC_KEYWORD friend void operator << (current_class&, const ncpp::rtti::robject_flag& flag) { }\
+			\
+			NCPP_PRIVATE_KEYWORD\
+				template<typename in_data__, typename in_reflector__>\
+				using dr_pair_t = typename ncpp::utilities::nth_template_arg_t<0, in_data__, in_reflector__>::type;\
+			\
+				__VA_ARGS__\
+			\
+			NCPP_PRIVATE_KEYWORD\
+				struct reflector_container;\
+				friend struct reflector_container;\
+				struct reflector_container : public ncpp::rtti::reflector_container_base {\
+					\
+					NCPP_PRIVATE_KEYWORD\
+						template<typename in_data__, typename in_reflector__>\
+						using dr_pair_t = typename ncpp::utilities::nth_template_arg_t<1, in_data__, in_reflector__>::type;\
+					\
+					__VA_ARGS__\
+					\
+					NCPP_PUBLIC_KEYWORD reflector_container(rcontext_type& context) : ncpp::rtti::reflector_container_base(context) {\
+						apply_name(context, #ClassName);\
+						apply_hash_code(context, typeid(current_class).hash_code());\
+					}\
+				};
+#else
+#define NCPP_ROBJECT(RTTITraits, ClassName,...) \
+			\
+			NCPP_PUBLIC_KEYWORD\
+				using current_class = ClassName;\
+				static inline eastl::string static_name() { return #ClassName; }\
+			\
+			NCPP_PUBLIC_KEYWORD friend void operator << (current_class&, const ncpp::rtti::robject_flag& flag) { }\
+			\
+				__VA_ARGS__
 #endif
 
 		////////////////////////////////////////////////////////////////////////////////////
@@ -577,14 +567,33 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 #ifdef NCPP_ENABLE_RTTI
-#define NCPP_PRIVATE_V(Type, Name) \
-			NCPP_PRIVATE_KEYWORD variable_wrapper_t<Type> Name;\
-			NCPP_PUBLIC_KEYWORD using Name##_type = Type;\
-			NCPP_PRIVATE_KEYWORD static inline eastl::string Name##_name_cstr() { return #Name; };\
-			NCPP_PRIVATE_KEYWORD static inline const Name##_type& Name##_getter(const current_class& obj) { return obj.##Name; };\
-			NCPP_PRIVATE_KEYWORD reflector_wrapper_t<Type, &current_class::Name##_getter, &current_class::Name##_name_cstr> Name##_reflector;
+#define NCPP_MEMBER(Type, Name,...) dr_pair_t<Type, void()> Name;\
+			NCPP_PRIVATE_KEYWORD static inline eastl::string Name##_name_cstr() { return #Name; }\
+			NCPP_PRIVATE_KEYWORD static inline sz Name##_member_offset() { return ncpp::utilities::member_offset_t(&current_class::Name); }\
+			NCPP_PRIVATE_KEYWORD dr_pair_t<void(), ncpp::rtti::member_reflector_t<rtti_traits, current_class, Type, &current_class::Name##_member_offset, &current_class::Name##_name_cstr>> Name##_reflector;
 #else
-#define NCPP_PRIVATE_V(Type, Name) NCPP_PUBLIC_KEYWORD Type Name;
+#define NCPP_MEMBER(Type, Name,...) using Name##_type = Type;\
+			Name##_type Name;
+#endif
+
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+
+#define NCPP_PRIVATE(Type, Name,...) NCPP_PRIVATE_KEYWORD NCPP_MEMBER(Type, Name, __VA_ARGS__)
+#define NCPP_PROTECTED(Type, Name,...) NCPP_PROTECTED_KEYWORD NCPP_MEMBER(Type, Name, __VA_ARGS__)
+#define NCPP_PUBLIC(Type, Name,...) NCPP_PUBLIC_KEYWORD NCPP_MEMBER(Type, Name, __VA_ARGS__)
+
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+
+#ifdef NCPP_ENABLE_RTTI
+#define NCPP_BASE(Name) \
+			NCPP_PUBLIC_KEYWORD static inline eastl::string base_name_cstr() { return #Name; }\
+			NCPP_PRIVATE_KEYWORD dr_pair_t<void(), ncpp::rtti::base_reflector_t<rtti_traits, Name, &current_class::base_name_cstr>> base##_reflector;
+#else
+#define NCPP_BASE(Name)
 #endif
 
 		////////////////////////////////////////////////////////////////////////////////////
@@ -592,110 +601,19 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 #ifdef NCPP_ENABLE_RTTI
-#define NCPP_PRIVATE_F(Type, Name) \
-			NCPP_PRIVATE_KEYWORD variable_wrapper_t<Type> Name;\
-			NCPP_PUBLIC_KEYWORD using Name##_type = Type;\
-			NCPP_PRIVATE_KEYWORD static inline eastl::string Name##_name_cstr() { return #Name; };\
-			NCPP_PRIVATE_KEYWORD static inline void Name##_getter(const current_class& obj) { };\
-			NCPP_PRIVATE_KEYWORD reflector_wrapper_t<Type, &current_class::Name##_getter, &current_class::Name##_name_cstr> Name##_reflector;
+#define NCPP_SUPPORT_VIRTUAL()\
+			NCPP_PUBLIC_KEYWORD friend current_class& operator << (current_class&, const dr_pair_t<ncpp::rtti::robject_support_virtual_flag, b8***>& flag) { return *reinterpret_cast<current_class*>(0); }\
+			NCPP_PRIVATE_KEYWORD virtual void virtual_reflect(rcontext_type& context) const { context.reflect_type_t<current_class>(); }
 #else
-#define NCPP_PRIVATE_F(Type, Name) NCPP_PRIVATE_KEYWORD using Name##_type = Type;\
-			NCPP_PRIVATE_KEYWORD Name##_type Name;
+#define NCPP_SUPPORT_VIRTUAL()
 #endif
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
-#ifdef NCPP_ENABLE_RTTI
-#define NCPP_PROTECTED_V(Type, Name) \
-			NCPP_PROTECTED_KEYWORD variable_wrapper_t<Type> Name;\
-			NCPP_PUBLIC_KEYWORD using Name##_type = Type;\
-			NCPP_PRIVATE_KEYWORD static inline eastl::string Name##_name_cstr() { return #Name; };\
-			NCPP_PRIVATE_KEYWORD static inline const Name##_type& Name##_getter(const current_class& obj) { return obj.##Name; };\
-			NCPP_PRIVATE_KEYWORD reflector_wrapper_t<Type, &current_class::Name##_getter, &current_class::Name##_name_cstr> Name##_reflector;
-#else
-#define NCPP_PROTECTED_V(Type, Name) NCPP_PUBLIC_KEYWORD Type Name;
-#endif
-
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-
-#ifdef NCPP_ENABLE_RTTI
-#define NCPP_PROTECTED_F(Type, Name) \
-			NCPP_PROTECTED_KEYWORD variable_wrapper_t<Type> Name;\
-			NCPP_PUBLIC_KEYWORD using Name##_type = Type;\
-			NCPP_PRIVATE_KEYWORD static inline eastl::string Name##_name_cstr() { return #Name; };\
-			NCPP_PRIVATE_KEYWORD static inline void Name##_getter(const current_class& obj) { };\
-			NCPP_PRIVATE_KEYWORD reflector_wrapper_t<Type, &current_class::Name##_getter, &current_class::Name##_name_cstr> Name##_reflector;
-#else
-#define NCPP_PROTECTED_F(Type, Name) NCPP_PRIVATE_KEYWORD using Name##_type = Type;\
-			NCPP_PROTECTED_KEYWORD Name##_type Name;
-#endif
-
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-
-#ifdef NCPP_ENABLE_RTTI
-#define NCPP_PUBLIC_V(Type, Name) \
-			NCPP_PUBLIC_KEYWORD variable_wrapper_t<Type> Name;\
-			NCPP_PUBLIC_KEYWORD using Name##_type = Type;\
-			NCPP_PRIVATE_KEYWORD static inline eastl::string Name##_name_cstr() { return #Name; };\
-			NCPP_PRIVATE_KEYWORD static inline const Name##_type& Name##_getter(const current_class& obj) { return obj.##Name; };\
-			NCPP_PRIVATE_KEYWORD reflector_wrapper_t<Type, &current_class::Name##_getter, &current_class::Name##_name_cstr> Name##_reflector;
-#else
-#define NCPP_PUBLIC_V(Type, Name) NCPP_PUBLIC_KEYWORD Type Name;
-#endif
-
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-
-#ifdef NCPP_ENABLE_RTTI
-#define NCPP_PUBLIC_F(Type, Name) \
-			NCPP_PUBLIC_KEYWORD variable_wrapper_t<Type> Name;\
-			NCPP_PUBLIC_KEYWORD using Name##_type = Type;\
-			NCPP_PRIVATE_KEYWORD static inline eastl::string Name##_name_cstr() { return #Name; };\
-			NCPP_PRIVATE_KEYWORD static inline void Name##_getter(const current_class& obj) { };\
-			NCPP_PRIVATE_KEYWORD reflector_wrapper_t<Type, &current_class::Name##_getter, &current_class::Name##_name_cstr> Name##_reflector;
-#else
-#define NCPP_PUBLIC_F(Type, Name) NCPP_PRIVATE_KEYWORD using Name##_type = Type;\
-			NCPP_PUBLIC_KEYWORD Name##_type Name;
-#endif
-
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-
-#ifdef NCPP_ENABLE_RTTI
-#define NCPP_BASE(Name) NCPP_PRIVATE_KEYWORD base_wrapper_t<Name> base##_reflector;\
-			NCPP_PUBLIC_KEYWORD using base = Name;
-#else
-#define NCPP_BASE(Name) NCPP_PUBLIC_KEYWORD using base = Name;
-#endif
-
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-
-#ifdef NCPP_ENABLE_RTTI
-#define NCPP_ENABLE_VIRTUAL() \
-			NCPP_PUBLIC_KEYWORD friend current_class& operator << (current_class&, const support_virtual_flag_type& flag) { return *reinterpret_cast<current_class*>(0); }\
-			NCPP_PRIVATE_KEYWORD virtual void virtual_reflect(ncpp::rtti::rcontext& context) const { context.reflect_type_t<current_class>(); }
-#else
-#define NCPP_ENABLE_VIRTUAL() \
-			NCPP_PUBLIC_KEYWORD friend current_class& operator << (current_class&, const ncpp::rtti::robject_support_virtual_flag& flag) { return *reinterpret_cast<current_class*>(0); }
-#endif
-
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-
-#define NCPP_RCLASS(ClassName, Items) NCPP_ROBJECT(ClassName, NCPP_ENABLE_VIRTUAL(); Items; );
-#define NCPP_RSTRUCT(ClassName, Items) NCPP_ROBJECT(ClassName, Items; );
-
+#define NCPP_RCLASS(RTTITraits, ClassName,...) NCPP_ROBJECT(RTTITraits, ClassName, NCPP_SUPPORT_VIRTUAL(); __VA_ARGS__)
+#define NCPP_RSTRUCT(RTTITraits, ClassName,...) NCPP_ROBJECT(RTTITraits, ClassName, __VA_ARGS__)
 	}
 
 }
@@ -736,8 +654,8 @@ std::ostream& operator << (
 
 #ifdef NCPP_ENABLE_RTTI
 
-	ncpp::rtti::rcontext ctx;
-	ctx.reflect(input.first);
+	typename item_type__::rcontext_type ctx;
+	ctx.reflect_t(input.first);
 
 
 
@@ -747,7 +665,7 @@ std::ostream& operator << (
 		os << ncpp::cout_lowlight(" extends ") << ("\x1B[34m" + ctx.base_name() + "\033[0m").c_str();
 
 	os << " ";
-	
+
 	os << ncpp::cout_lowlight("{") << std::endl;
 
 
@@ -757,7 +675,7 @@ std::ostream& operator << (
 
 
 	auto member_it = ctx.name_to_member_map().begin();
-	
+
 	for (ncpp::sz i = 0; i < member_count; ++i) {
 
 		for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
@@ -765,7 +683,7 @@ std::ostream& operator << (
 			os << " ";
 
 		}
-		
+
 		os << ncpp::cout_field_name(member_it->first) << ncpp::cout_lowlight(": ");
 
 		member_it->second.ostream((void*)(&(input.first)), input.second + 1, os);
