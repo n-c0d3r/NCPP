@@ -1,6 +1,5 @@
 
 #include <ncpp/.hpp>
-#include <ncpp/rtti/robject.hpp>
 
 using namespace ncpp;
 
@@ -12,7 +11,8 @@ class B {
 
 		B,
 
-	public:
+		NCPP_ENABLE_VIRTUAL();
+
 		NCPP_PUBLIC_V(i32, a);
 		NCPP_PUBLIC_V(i32, b);
 
@@ -88,8 +88,20 @@ int main() {
 	{
 
 		A a;
+		B b;
 
 		std::cout << a << std::endl;
+		std::cout << b << std::endl;
+
+
+
+		B* a_p = &a;
+		B* b_p = &b;
+
+		std::cout << *a_p << std::endl;
+		std::cout << *b_p << std::endl;
+
+
 
 		log_memory_stats();
 

@@ -672,16 +672,18 @@ std::ostream& operator << (
 		return os;
 	}
 
-	os << "\x1B[33mrobject\033[0m"
-		<< ncpp::cout_lowlight("<") << ("\x1B[34m" + eastl::string(typeid(item_type__).name()) + "\033[0m").c_str() << ncpp::cout_lowlight(">")
-		<< " ";
-	
-	os << ncpp::cout_lowlight("{") << std::endl;
-
 
 
 	ncpp::rtti::rcontext ctx;
 	ctx.reflect(input.first);
+
+
+
+	os << "\x1B[33mrobject\033[0m"
+		<< ncpp::cout_lowlight("<") << ("\x1B[34m" + ctx.name() + "\033[0m").c_str() << ncpp::cout_lowlight(">")
+		<< " ";
+	
+	os << ncpp::cout_lowlight("{") << std::endl;
 
 
 
