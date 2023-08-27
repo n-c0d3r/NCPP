@@ -7,11 +7,9 @@ using namespace ncpp;
 
 class B {
 
-	NCPP_ROBJECT(
+	NCPP_RCLASS(
 
 		B,
-
-		NCPP_ENABLE_VIRTUAL();
 
 		NCPP_PUBLIC_V(i32, a);
 		NCPP_PUBLIC_V(i32, b);
@@ -39,11 +37,9 @@ public:
 
 class A : public B {
 	
-	NCPP_ROBJECT(
+	NCPP_RCLASS(
 
 		A,
-
-		NCPP_ENABLE_VIRTUAL();
 
 		NCPP_BASE(B);
 		

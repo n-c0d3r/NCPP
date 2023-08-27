@@ -201,6 +201,8 @@ namespace ncpp {
 			eastl::unordered_map<eastl::string, rmember> name_to_member_map_;
 			eastl::string name_;
 			sz hash_code_ = 0;
+			eastl::string base_name_;
+			sz base_hash_code_ = 0;
 
 
 
@@ -225,6 +227,9 @@ namespace ncpp {
 
 			inline sz hash_code() const { return hash_code_; }
 			inline void set_hash_code(sz new_hash_code) { hash_code_ = new_hash_code; }
+
+			inline const eastl::string& base_name() const { return base_name_; }
+			inline sz base_hash_code() const { return base_hash_code_; }
 
 			const eastl::unordered_map<eastl::string, rmember>& name_to_member_map() const { return name_to_member_map_; };
 
@@ -329,6 +334,14 @@ namespace ncpp {
 				assert(is_has_member(member_name) && "member is not exist");
 
 				name_to_member_map_.erase(member_name);
+
+			}
+
+			template<typename base_type__>
+			void set_base_t() {
+				
+				base_name_ = base_type__::static_name();
+				base_hash_code_ = typeid(base_type__).hash_code();
 
 			}
 
@@ -456,6 +469,8 @@ namespace ncpp {
 
 					current_context().reflect_type_t<base_type__>();
 
+					current_context().set_base_t<base_type__>();
+
 					set_current_object_offset(obj_offset);
 
 				}
@@ -491,6 +506,7 @@ namespace ncpp {
 #ifdef NCPP_ENABLE_RTTI
 #define NCPP_ROBJECT(ClassName, Items) NCPP_PUBLIC_KEYWORD\
 			using current_class = ClassName;\
+			static inline eastl::string static_name() { return #ClassName; }\
 			friend class ncpp::rtti::rcontext;\
 		NCPP_PRIVATE_KEYWORD\
 			template<typename type__>\
@@ -636,6 +652,13 @@ namespace ncpp {
 			NCPP_PUBLIC_KEYWORD friend current_class& operator << (current_class&, const support_virtual_flag_type& flag) { return *reinterpret_cast<current_class*>(0); }\
 			NCPP_PRIVATE_KEYWORD virtual void virtual_reflect(ncpp::rtti::rcontext& context) const { context.reflect_type_t<current_class>(); }
 
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+
+#define NCPP_RCLASS(ClassName, Items) NCPP_ROBJECT(ClassName, NCPP_ENABLE_VIRTUAL(); Items; );
+#define NCPP_RSTRUCT(ClassName, Items) NCPP_ROBJECT(ClassName, Items; );
+
 	}
 
 }
@@ -679,9 +702,12 @@ std::ostream& operator << (
 
 
 
-	os << "\x1B[33mrobject\033[0m"
-		<< ncpp::cout_lowlight("<") << ("\x1B[34m" + ctx.name() + "\033[0m").c_str() << ncpp::cout_lowlight(">")
-		<< " ";
+	os << ("\x1B[33m" + ctx.name() + "\033[0m").c_str();
+
+	if (ctx.base_hash_code())
+		os << ncpp::cout_lowlight(" extends ") << ("\x1B[34m" + ctx.base_name() + "\033[0m").c_str();
+
+	os << " ";
 	
 	os << ncpp::cout_lowlight("{") << std::endl;
 
