@@ -9,6 +9,7 @@ namespace ncpp {
 	namespace rtti {
 
 		thread_local rcontext* current_context_p_g = 0;
+		thread_local sz current_object_offset_g = 0;
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
@@ -27,6 +28,14 @@ namespace ncpp {
 		rcontext& current_context() {
 
 			return *current_context_p_g;
+		}
+		sz current_object_offset() {
+
+			return current_object_offset_g;
+		}
+		void set_current_object_offset(sz new_offset) {
+
+			current_object_offset_g = new_offset;
 		}
 
 	}
