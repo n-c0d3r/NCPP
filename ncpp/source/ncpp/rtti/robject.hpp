@@ -151,7 +151,6 @@ namespace ncpp {
 #ifdef NCPP_ENABLE_RTTI
 		class default_traits {
 
-#ifdef NCPP_ENABLE_METADATA
 		public:
 			struct metadata {
 
@@ -161,7 +160,6 @@ namespace ncpp {
 
 			using context_metadata = metadata;
 			using member_metadata = metadata;
-#endif
 
 		};
 #endif
@@ -480,14 +478,17 @@ namespace ncpp {
 		public:
 			member_reflector_t() {
 
-
-				//metadata_applier__(current_context_t<rtti_traits__>().metadata);
-
+#ifdef NCPP_ENABLE_METADATA
 				metadata_applier__(
 					current_context_t<rtti_traits__>().add_member_t<object_type__, member_type__, member_offset_getter__>(
 						name_getter__()
 					).metadata
 				);
+#else
+				current_context_t<rtti_traits__>().add_member_t<object_type__, member_type__, member_offset_getter__>(
+					name_getter__()
+				);
+#endif
 
 			}
 
@@ -515,7 +516,9 @@ namespace ncpp {
 		public:
 			metadata_reflector_t() {
 
+#ifdef NCPP_ENABLE_METADATA
 				metadata_applier__(current_context_t<rtti_traits__>().metadata);
+#endif
 
 			}
 

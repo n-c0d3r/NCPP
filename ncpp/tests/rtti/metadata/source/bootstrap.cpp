@@ -1,6 +1,5 @@
 
 #include <ncpp/.hpp>
-#include <ncpp/rtti/robject.hpp>
 
 using namespace ncpp;
 
@@ -83,12 +82,7 @@ public:
 int main() {
 
 	A a;
-
-	A::rcontext_type ctx;
-	ctx.reflect_t(a);
-
-	std::cout << ctx.metadata << std::endl;
-	std::cout << ctx.member("i").metadata << std::endl;
+	std::cout << a << std::endl;
 
 	system("pause");
 
