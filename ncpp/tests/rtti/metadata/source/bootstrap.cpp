@@ -21,8 +21,8 @@ class metadata {
 public:
 	metadata() {
 
-		a = 3;
-		b = 9;
+		a = 0;
+		b = 0;
 
 	}
 	~metadata() {
@@ -32,6 +32,13 @@ public:
 	}
 
 };
+
+
+
+#define METADATA_ENABLE_A metadata.a=1;
+#define METADATA_DISABLE_A metadata.a=0;
+#define METADATA_ENABLE_B metadata.b=1;
+#define METADATA_DISABLE_B metadata.b=0;
 
 
 
@@ -53,9 +60,13 @@ class A {
 		rtti_traits,
 		A,
 
-		NCPP_META(metadata.a = 4; metadata.b = 16;);
+		NCPP_META(
+			METADATA_ENABLE_A;
+		);
 
-		NCPP_PUBLIC(i32, i, metadata.a = 2; metadata.b = 8;);
+		NCPP_PUBLIC(i32, i,
+			METADATA_ENABLE_B;
+		);
 		NCPP_PUBLIC(eastl::string, str);
 
 	);
@@ -83,6 +94,18 @@ int main() {
 
 	A a;
 	std::cout << a << std::endl;
+
+
+
+#ifdef NCPP_ENABLE_METADATA
+	A::rcontext_type ctx;
+	ctx.reflect_t(a);
+
+	std::cout << ctx.metadata << std::endl;
+	std::cout << ctx.member("i").metadata << std::endl;
+#endif
+
+
 
 	system("pause");
 

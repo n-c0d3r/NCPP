@@ -52,6 +52,12 @@ if(NCPP_ENABLE_DOCUMENTATIONS)
         CWD "${CMAKE_CURRENT_SOURCE_DIR}"
         INTERNAL_DOCS ${NCPP_INTERNAL_DOCS}
 
+        PREDEFINED
+            NCPP_WINDOWS_PLATFORM
+            NCPP_UNIX_PLATFORM
+            NCPP_ENABLE_RTTI
+            NCPP_ENABLE_METADATA
+
         MAIN_PAGE "${CMAKE_CURRENT_SOURCE_DIR}/documentations/Overview.md"
     )
 endif()

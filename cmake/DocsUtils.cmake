@@ -9,7 +9,7 @@ function(DocsUtils_CreateTarget)
         PARGS
         ""
         "NAME;BRIEF;TARGET_NAME;TARGET_FOLDER;TARGET_LABEL;OUTPUT_DIR;CWD;INTERNAL_DOCS;MAIN_PAGE"
-        "INPUT_DIRS;STYLE_DIRS"
+        "INPUT_DIRS;STYLE_DIRS;PREDEFINED"
         ${ARGN}
     )
 
@@ -62,7 +62,10 @@ function(DocsUtils_CreateTarget)
             SET(DOXYGEN_USE_MDFILE_AS_MAINPAGE ${PARGS_MAIN_PAGE})
         endif()
 
-        SET(DOXYGEN_ENABLE_PREPROCESSING  NO)
+        SET(DOXYGEN_ENABLE_PREPROCESSING YES)
+        if(PARGS_PREDEFINED)
+            SET(DOXYGEN_PREDEFINED "${PARGS_PREDEFINED}")
+        endif()
         
 
 
