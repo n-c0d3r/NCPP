@@ -480,6 +480,7 @@ namespace ncpp {
 		public:
 			member_reflector_t() {
 
+
 				//metadata_applier__(current_context_t<rtti_traits__>().metadata);
 
 				metadata_applier__(
