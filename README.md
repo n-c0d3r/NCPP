@@ -1,7 +1,11 @@
-<img src="https://i.ibb.co/VxJhd4b/BG4-wide-0-25x.png" border="0" width="100%"/>
+
+# NCPP
+A Game Engine Learning Aimed C++ Library
 
 ## Features
 + Memory management:
+  + Chunk allocator
+  + Link allocator
 + Logging:
   + eastl::basic_string
   + eastl::vector
@@ -15,8 +19,15 @@
   + Left value reference wrapper
   + Templated for loop
   + ...
-+ Containers:
-+ PAC (parallelism and concurrency):
++ RTTI:
+  + Easy to use
+  + No object memory cost
+  + Metadata supports 
+  + Flexible
+
+## Core Dependencies
++ EASTL
++ Doxygen
 
 ## Getting Started
 ### Requirements:
@@ -32,21 +43,16 @@
 ### Building:
   + Windows:
     + Step 1: Clone [NCPP git repository](https://github.com/n-c0d3r/ncpp) from GitHub  
-      ```batch
-      git clone https://github.com/n-c0d3r/ncpp.git --recurse-submodules
-      cd ncpp
-      ```
-      or
-      ```batch
-      git clone https://github.com/n-c0d3r/ncpp.git
-      cd ncpp
-      git submodule update --init --recursive
-      ```
-    + Step 2: Generate Visual Studio 2022 solution by running **generate_vs2022.bat**
-    + Step 3: Navigate to **path/to/your/ncpp/build/vs2022**
-    + Step 4: Open **npp.sln**
-    + Step 5: Set **ncpp.samples.firt_sample** as startup project
-    + Step 6: Run and enjoy!
+```batch
+git clone https://github.com/n-c0d3r/ncpp.git
+cd ncpp
+```
+    + Step 2: Check for submodules by running **scripts/check_submodules.bat**
+    + Step 3: Generate Visual Studio 2022 solution by running **scripts/generate_vs2022.bat**
+    + Step 4: Navigate to **build/vs2022**
+    + Step 5: Open **npp.sln**
+    + Step 6: Set **ncpp.samples.firt_sample** as startup project
+    + Step 7: Run and enjoy!
 
 ## Documentations
 + NCPP has 2 documentations pages:

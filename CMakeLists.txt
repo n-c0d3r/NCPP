@@ -46,6 +46,7 @@ if(NCPP_ENABLE_DOCUMENTATIONS)
         INPUT_DIRS 
             "${CMAKE_CURRENT_SOURCE_DIR}/ncpp/source"
             "${CMAKE_CURRENT_SOURCE_DIR}/documentations"
+            "${CMAKE_CURRENT_SOURCE_DIR}/README.md"
         STYLE_DIRS
             "${CMAKE_CURRENT_SOURCE_DIR}/documentations/styles"
         OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/documentations"
@@ -58,7 +59,7 @@ if(NCPP_ENABLE_DOCUMENTATIONS)
             NCPP_ENABLE_RTTI
             NCPP_ENABLE_METADATA
 
-        MAIN_PAGE "${CMAKE_CURRENT_SOURCE_DIR}/documentations/Overview.md"
+        MAIN_PAGE "${CMAKE_CURRENT_SOURCE_DIR}/README.md"
     )
 endif()
 
