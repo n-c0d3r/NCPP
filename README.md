@@ -49,15 +49,13 @@ A Game Engine Learning Aimed C++ Library
     + Step 5: Open **npp.sln**
     + Step 6: Set **ncpp.samples.firt_sample** as startup project
     + Step 7: Run and enjoy!
-
-## Documentations
-+ NCPP has 2 documentations pages:
-  + [External Documentations](https://n-c0d3r.github.io/project_docs/ncpp/external/ncpp/html) :
-    + Hide private members.
-    + For who just want to use ncpp.
-  + [Internal Documentations](https://n-c0d3r.github.io/project_docs/ncpp/internal/ncpp/html) :
-    + Show private members.
-    + For who want to use ncpp or contribute to ncpp project.
+  + Unix:
+    + Step 1: Clone [NCPP git repository](https://github.com/n-c0d3r/ncpp) from GitHub
+    + Step 2: Check for submodules by running **scripts/check_submodules.sh**
+    + Step 3: Generate makefiles by running **scripts/generate_unix_makefiles.sh**
+    + Step 4: execute **scripts/build_unix_makefiles.sh** to build project
+    + Step 5: Navigate to **build/unix_makefiles/ncpp/tests/hello_ncpp**
+    + Step 6: Run "ncpp.tests.hello_ncpp" and enjoy!
 
 ## License
 + NCPP is licensed under the [MIT license](https://github.com/n-c0d3r/NCPP/blob/main/LICENSE)
