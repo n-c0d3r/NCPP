@@ -42,11 +42,7 @@ A Game Engine Learning Aimed C++ Library
     + C++ 17 or later
 ### Building:
   + Windows:
-    + Step 1: Clone [NCPP git repository](https://github.com/n-c0d3r/ncpp) from GitHub  
-```batch
-git clone https://github.com/n-c0d3r/ncpp.git
-cd ncpp
-```
+    + Step 1: Clone [NCPP git repository](https://github.com/n-c0d3r/ncpp) from GitHub
     + Step 2: Check for submodules by running **scripts/check_submodules.bat**
     + Step 3: Generate Visual Studio 2022 solution by running **scripts/generate_vs2022.bat**
     + Step 4: Navigate to **build/vs2022**
