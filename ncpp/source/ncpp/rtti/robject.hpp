@@ -192,11 +192,6 @@ namespace ncpp {
 
 
 
-		u32 current_object_offset();
-		void set_current_object_offset(u32 new_offset);
-
-
-
 		rcontext_base& current_context();
 
 		template<class rtti_traits__>

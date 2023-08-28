@@ -12,7 +12,6 @@ namespace ncpp {
 
 #ifdef NCPP_ENABLE_RTTI
 		thread_local rcontext_base* current_context_p_g = 0;
-		thread_local u32 current_object_offset_g = 0;
 
 
 
@@ -31,17 +30,6 @@ namespace ncpp {
 
 			context.hash_code_ = hash_code;
 
-		}
-
-
-
-		u32 current_object_offset() {
-
-			return current_object_offset_g;
-		}
-		void set_current_object_offset(u32 new_offset) {
-
-			current_object_offset_g = new_offset;
 		}
 
 

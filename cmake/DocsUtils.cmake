@@ -61,6 +61,8 @@ function(DocsUtils_CreateTarget)
         if(PARGS_MAIN_PAGE)
             SET(DOXYGEN_USE_MDFILE_AS_MAINPAGE ${PARGS_MAIN_PAGE})
         endif()
+
+        SET(DOXYGEN_ENABLE_PREPROCESSING  NO)
         
 
 
