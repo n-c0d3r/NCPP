@@ -2,7 +2,7 @@
 message(STATUS "<NCPP::Dependencies> Start checking dependencies")
 
 # setup ncpp cmake modules
-set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_LIST_FILE}/../")
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_LIST_DIR}")
 
 
 

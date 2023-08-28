@@ -332,6 +332,12 @@ namespace ncpp {
 
 				return name_to_member_map_.find(member_name)->second;
 			}
+			inline rmember_type& member(const eastl::string& member_name) {
+
+				assert(is_has_member(member_name));
+
+				return name_to_member_map_.find(member_name)->second;
+			}
 
 
 
@@ -351,7 +357,7 @@ namespace ncpp {
 			template<typename type__>
 			void reflect_type_t() {
 
-				auto _ = type__::reflector_container(*this);
+				auto _ = typename type__::reflector_container(*this);
 
 			}
 			template<typename base_type__>
@@ -391,11 +397,11 @@ namespace ncpp {
 				typename object_type__, typename member_type__, member_offset_getter_type member_offset_getter__,
 				std::enable_if_t<!utilities::is_function_t<member_type__>::value, i32> = 0
 			>
-			auto& add_member_t(const eastl::string& member_name) {
+			void add_member_t(const eastl::string& member_name) {
 
 				assert(!is_has_member(member_name));
 
-				return (name_to_member_map_[member_name] = {
+				name_to_member_map_[member_name] = {
 				
 					[](void* object_p, u32 tabs, std::ostream& os) -> std::ostream& {
 						
@@ -412,18 +418,18 @@ namespace ncpp {
 						return os;
 					}
 				
-				});
+				};
 
 			}
 			template<
 				typename object_type__, typename member_type__, member_offset_getter_type member_offset_getter__,
 				std::enable_if_t<utilities::is_function_t<member_type__>::value, i32> = 0
 			>
-			auto& add_member_t(const eastl::string& member_name) {
+			void add_member_t(const eastl::string& member_name) {
 
 				assert(!is_has_member(member_name));
 
-				return (name_to_member_map_[member_name] = {
+				name_to_member_map_[member_name] = {
 
 					[](void* object_p, u32 tabs, std::ostream& os) -> std::ostream& {
 
@@ -436,7 +442,7 @@ namespace ncpp {
 						);
 					}
 
-				});
+				};
 
 			}
 			void remove_member(const eastl::string& member_name) {
@@ -473,16 +479,13 @@ namespace ncpp {
 		public:
 			member_reflector_t() {
 
+				auto& context = current_context_t<rtti_traits__>();
+				eastl::string name = name_getter__();
+
+				context.template add_member_t<object_type__, member_type__, member_offset_getter__>(name);
+
 #ifdef NCPP_ENABLE_METADATA
-				metadata_applier__(
-					current_context_t<rtti_traits__>().add_member_t<object_type__, member_type__, member_offset_getter__>(
-						name_getter__()
-					).metadata
-				);
-#else
-				current_context_t<rtti_traits__>().add_member_t<object_type__, member_type__, member_offset_getter__>(
-					name_getter__()
-				);
+				metadata_applier__(context.member(name).metadata);
 #endif
 
 			}
@@ -497,7 +500,10 @@ namespace ncpp {
 		public:
 			base_reflector_t() {
 
-				current_context_t<rtti_traits__>().reflect_base_t<base_type__>(name_getter__());
+				auto& context = current_context_t<rtti_traits__>();
+				eastl::string name = name_getter__();
+
+				context.template reflect_base_t<base_type__>(name);
 
 			}
 
@@ -511,8 +517,10 @@ namespace ncpp {
 		public:
 			metadata_reflector_t() {
 
+				auto& context = current_context_t<rtti_traits__>();
+
 #ifdef NCPP_ENABLE_METADATA
-				metadata_applier__(current_context_t<rtti_traits__>().metadata);
+				metadata_applier__(context.metadata);
 #endif
 
 			}
