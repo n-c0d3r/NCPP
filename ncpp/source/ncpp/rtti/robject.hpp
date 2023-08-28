@@ -125,6 +125,11 @@ namespace ncpp {
 #ifdef NCPP_ENABLE_RTTI
 		using name_getter_type = eastl::string(*)();
 		using member_offset_getter_type = sz(*)();
+
+		template<class rtti_traits__>
+		using context_metadata_applier_type_t = void(*)(typename rtti_traits__::context_metadata& metadata);
+		template<class rtti_traits__>
+		using member_metadata_applier_type_t = void(*)(typename rtti_traits__::member_metadata& metadata);
 #endif
 
 
@@ -153,6 +158,9 @@ namespace ncpp {
 
 
 			};
+
+			using context_metadata = metadata;
+			using member_metadata = metadata;
 #endif
 
 		};
@@ -390,11 +398,11 @@ namespace ncpp {
 				typename object_type__, typename member_type__, member_offset_getter_type member_offset_getter__,
 				std::enable_if_t<!utilities::is_function_t<member_type__>::value, i32> = 0
 			>
-			void add_member_t(const eastl::string& member_name) {
+			auto& add_member_t(const eastl::string& member_name) {
 
 				assert(!is_has_member(member_name));
 
-				name_to_member_map_[member_name] = {
+				return (name_to_member_map_[member_name] = {
 				
 					[](void* object_p, u32 tabs, std::ostream& os) -> std::ostream& {
 						
@@ -411,18 +419,18 @@ namespace ncpp {
 						return os;
 					}
 				
-				};
+				});
 
 			}
 			template<
 				typename object_type__, typename member_type__, member_offset_getter_type member_offset_getter__,
 				std::enable_if_t<utilities::is_function_t<member_type__>::value, i32> = 0
 			>
-			void add_member_t(const eastl::string& member_name) {
+			auto& add_member_t(const eastl::string& member_name) {
 
 				assert(!is_has_member(member_name));
 
-				name_to_member_map_[member_name] = {
+				return (name_to_member_map_[member_name] = {
 
 					[](void* object_p, u32 tabs, std::ostream& os) -> std::ostream& {
 
@@ -435,7 +443,7 @@ namespace ncpp {
 						);
 					}
 
-				};
+				});
 
 			}
 			void remove_member(const eastl::string& member_name) {
@@ -466,13 +474,19 @@ namespace ncpp {
 
 
 #ifdef NCPP_ENABLE_RTTI
-		template<class rtti_traits__, typename object_type__, typename member_type__, member_offset_getter_type member_offset_getter__, name_getter_type name_getter__>
+		template<class rtti_traits__, typename object_type__, typename member_type__, member_offset_getter_type member_offset_getter__, member_metadata_applier_type_t<rtti_traits__> metadata_applier__, name_getter_type name_getter__>
 		struct member_reflector_t {
 
 		public:
 			member_reflector_t() {
 
-				current_context_t<rtti_traits__>().add_member_t<object_type__, member_type__, member_offset_getter__>(name_getter__());
+				//metadata_applier__(current_context_t<rtti_traits__>().metadata);
+
+				metadata_applier__(
+					current_context_t<rtti_traits__>().add_member_t<object_type__, member_type__, member_offset_getter__>(
+						name_getter__()
+					).metadata
+				);
 
 			}
 
@@ -487,6 +501,20 @@ namespace ncpp {
 			base_reflector_t() {
 
 				current_context_t<rtti_traits__>().reflect_base_t<base_type__>(name_getter__());
+
+			}
+
+		};
+
+
+
+		template<class rtti_traits__, context_metadata_applier_type_t<rtti_traits__> metadata_applier__>
+		struct metadata_reflector_t {
+
+		public:
+			metadata_reflector_t() {
+
+				metadata_applier__(current_context_t<rtti_traits__>().metadata);
 
 			}
 
@@ -525,6 +553,8 @@ namespace ncpp {
 				static inline eastl::string static_name() { return #ClassName; }\
 				using rcontext_type = ncpp::rtti::rcontext_t<rtti_traits>;\
 				using rmember_type = ncpp::rtti::rmember_t<rtti_traits>;\
+				using context_metadata_type = typename rtti_traits::context_metadata;\
+				using member_metadata_type = typename rtti_traits::member_metadata;\
 			\
 			NCPP_PUBLIC_KEYWORD friend void operator << (current_class&, const ncpp::rtti::robject_flag& flag) { }\
 			\
@@ -570,7 +600,8 @@ namespace ncpp {
 #define NCPP_MEMBER(Type, Name,...) dr_pair_t<Type, void()> Name;\
 			NCPP_PRIVATE_KEYWORD static inline eastl::string Name##_name_cstr() { return #Name; }\
 			NCPP_PRIVATE_KEYWORD static inline sz Name##_member_offset() { return ncpp::utilities::member_offset_t(&current_class::Name); }\
-			NCPP_PRIVATE_KEYWORD dr_pair_t<void(), ncpp::rtti::member_reflector_t<rtti_traits, current_class, Type, &current_class::Name##_member_offset, &current_class::Name##_name_cstr>> Name##_reflector;
+			NCPP_PRIVATE_KEYWORD static inline void Name##_apply_metadata(member_metadata_type& metadata) { __VA_ARGS__; }\
+			NCPP_PRIVATE_KEYWORD dr_pair_t<void(), ncpp::rtti::member_reflector_t<rtti_traits, current_class, Type, &current_class::Name##_member_offset, &current_class::Name##_apply_metadata, &current_class::Name##_name_cstr>> Name##_reflector;
 #else
 #define NCPP_MEMBER(Type, Name,...) using Name##_type = Type;\
 			Name##_type Name;
@@ -594,6 +625,18 @@ namespace ncpp {
 			NCPP_PRIVATE_KEYWORD dr_pair_t<void(), ncpp::rtti::base_reflector_t<rtti_traits, Name, &current_class::base_name_cstr>> base##_reflector;
 #else
 #define NCPP_BASE(Name)
+#endif
+
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+
+#ifdef NCPP_ENABLE_RTTI
+#define NCPP_META(...) \
+			NCPP_PRIVATE_KEYWORD static inline void apply_metadata(context_metadata_type& metadata) { __VA_ARGS__; }\
+			NCPP_PRIVATE_KEYWORD dr_pair_t<void(), ncpp::rtti::metadata_reflector_t<rtti_traits, &current_class::apply_metadata>> metadata##_reflector;
+#else
+#define NCPP_META(...)
 #endif
 
 		////////////////////////////////////////////////////////////////////////////////////
