@@ -11,7 +11,7 @@ A Game Engine Learning Aimed C++ Library
   + eastl::vector
   + eastl::array
   + std::initialier_list
-  + ...
+  + reflected object
 + Utilities:
   + First template argument getter
   + Function traits
