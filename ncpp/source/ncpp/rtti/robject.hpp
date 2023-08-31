@@ -233,6 +233,9 @@ namespace ncpp {
 
 			ostream_function_type* ostream_function_p = 0;
 
+			u16 offset = 0;
+			u16 size = 0;
+
 #ifdef NCPP_ENABLE_METADATA
 			metadata_type metadata;
 #endif
@@ -416,7 +419,9 @@ namespace ncpp {
 						);
 
 						return os;
-					}
+					},
+					static_cast<u16>(member_offset_getter__()),
+					static_cast<u16>(sizeof(member_type__))
 				
 				};
 
@@ -440,7 +445,9 @@ namespace ncpp {
 								tabs
 							}
 						);
-					}
+					},
+					0,
+					0
 
 				};
 
