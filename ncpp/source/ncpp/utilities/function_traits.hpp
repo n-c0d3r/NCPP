@@ -96,6 +96,11 @@ namespace ncpp {
             template <sz i>
             using arg_t = typename std::tuple_element<i, std::tuple<arg_types__...>>::type;
 
+            template<typename... additional_args__>
+            using push_args_front_t = return_type__(additional_args__..., arg_types__...);
+            template<typename... additional_args__>
+            using push_args_back_t = return_type__(arg_types__..., additional_args__...);
+
         };
 
        

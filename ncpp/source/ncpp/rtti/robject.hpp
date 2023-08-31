@@ -125,6 +125,7 @@ namespace ncpp {
 #ifdef NCPP_ENABLE_RTTI
 		using name_getter_type = eastl::string(*)();
 		using member_offset_getter_type = sz(*)();
+		using invoke_address_getter_type = sz(*)();
 
 		template<class rtti_traits__>
 		using context_metadata_applier_type_t = void(*)(typename rtti_traits__::context_metadata& metadata);
@@ -232,6 +233,7 @@ namespace ncpp {
 
 
 			ostream_function_type* ostream_function_p = 0;
+			sz invoke_function_p = 0;
 
 			u16 offset = 0;
 			u16 size = 0;
@@ -245,6 +247,20 @@ namespace ncpp {
 			inline std::ostream& ostream(void* object_p, u32 tabs = 0, std::ostream& os = std::cout) const {
 
 				return ostream_function_p(object_p, tabs, os);
+			}
+			template<typename function_type__, typename... arg_types__>
+			inline auto invoke_t(void* object_p, arg_types__... args) {
+
+				return reinterpret_cast<
+					typename utilities::function_traits_t<function_type__>::template push_args_front_t<void*>*
+				>(invoke_function_p)(
+					object_p, std::forward<arg_types__>(args)...
+				);
+			}
+
+			inline bool is_function() const {
+
+				return invoke_function_p;
 			}
 
 		};
@@ -397,7 +413,10 @@ namespace ncpp {
 
 		public:
 			template<
-				typename object_type__, typename member_type__, member_offset_getter_type member_offset_getter__,
+				typename object_type__, 
+				typename member_type__, 
+				member_offset_getter_type member_offset_getter__,
+				invoke_address_getter_type invoke_address_getter__,
 				std::enable_if_t<!utilities::is_function_t<member_type__>::value, i32> = 0
 			>
 			void add_member_t(const eastl::string& member_name) {
@@ -420,6 +439,7 @@ namespace ncpp {
 
 						return os;
 					},
+					0,
 					static_cast<u16>(member_offset_getter__()),
 					static_cast<u16>(sizeof(member_type__))
 				
@@ -427,7 +447,10 @@ namespace ncpp {
 
 			}
 			template<
-				typename object_type__, typename member_type__, member_offset_getter_type member_offset_getter__,
+				typename object_type__, 
+				typename member_type__, 
+				member_offset_getter_type member_offset_getter__,
+				invoke_address_getter_type invoke_address_getter__,
 				std::enable_if_t<utilities::is_function_t<member_type__>::value, i32> = 0
 			>
 			void add_member_t(const eastl::string& member_name) {
@@ -446,6 +469,7 @@ namespace ncpp {
 							}
 						);
 					},
+					invoke_address_getter__(),
 					0,
 					0
 
@@ -480,7 +504,16 @@ namespace ncpp {
 
 
 #ifdef NCPP_ENABLE_RTTI
-		template<class rtti_traits__, typename object_type__, typename member_type__, member_offset_getter_type member_offset_getter__, member_metadata_applier_type_t<rtti_traits__> metadata_applier__, name_getter_type name_getter__>
+		template<
+			class rtti_traits__, 
+			typename object_type__, 
+			typename member_type__, 
+			member_offset_getter_type member_offset_getter__, 
+			member_metadata_applier_type_t<rtti_traits__> 
+			metadata_applier__, 
+			name_getter_type name_getter__,
+			invoke_address_getter_type invoke_address_getter__
+		>
 		struct member_reflector_t {
 
 		public:
@@ -489,7 +522,12 @@ namespace ncpp {
 				auto& context = current_context_t<rtti_traits__>();
 				eastl::string name = name_getter__();
 
-				context.template add_member_t<object_type__, member_type__, member_offset_getter__>(name);
+				context.template add_member_t<
+					object_type__, 
+					member_type__, 
+					member_offset_getter__,
+					invoke_address_getter__
+				>(name);
 
 #ifdef NCPP_ENABLE_METADATA
 				metadata_applier__(context.member(name).metadata);
@@ -612,10 +650,47 @@ namespace ncpp {
 
 #ifdef NCPP_ENABLE_RTTI
 #define NCPP_MEMBER(Type, Name,...) dr_pair_t<Type, void()> Name;\
-			NCPP_PRIVATE_KEYWORD static inline eastl::string Name##_name_cstr() { return #Name; }\
-			NCPP_PRIVATE_KEYWORD static inline sz Name##_member_offset() { return ncpp::utilities::member_offset_t(&current_class::Name); }\
-			NCPP_PRIVATE_KEYWORD static inline void Name##_apply_metadata(member_metadata_type& metadata) { __VA_ARGS__; }\
-			NCPP_PRIVATE_KEYWORD dr_pair_t<void(), ncpp::rtti::member_reflector_t<rtti_traits, current_class, Type, &current_class::Name##_member_offset, &current_class::Name##_apply_metadata, &current_class::Name##_name_cstr>> Name##_reflector;
+			NCPP_PRIVATE_KEYWORD static inline eastl::string Name##___ncpp_name_cstr___() { return #Name; }\
+			NCPP_PRIVATE_KEYWORD static inline sz Name##___ncpp_member_offset___() { return ncpp::utilities::member_offset_t(&current_class::Name); }\
+			NCPP_PRIVATE_KEYWORD static inline void Name##___ncpp_apply_metadata___(member_metadata_type& metadata) { __VA_ARGS__; }\
+			NCPP_PRIVATE_KEYWORD\
+				template<typename class_type__, typename member_type__>\
+				struct Name##___ncpp_function_tester___;\
+				\
+				friend struct Name##___ncpp_function_tester___<current_class, Type>;\
+				\
+				template<typename class_type__, typename member_type__>\
+				struct Name##___ncpp_function_tester___{\
+					\
+					static inline void invoke(){}\
+					static inline sz get_address(){ return 0; }\
+					\
+				};\
+				\
+				template<typename class_type__, typename return_type__, typename... arg_types__>\
+				struct Name##___ncpp_function_tester___<class_type__, return_type__(arg_types__...)>{\
+					\
+					static inline auto invoke(void* object_p, arg_types__... args) {\
+						\
+						return reinterpret_cast<current_class*>(object_p)->Name(std::forward<arg_types__>(args)...);\
+						\
+					}\
+					static inline sz get_address(){ return reinterpret_cast<sz>(&invoke); }\
+					\
+				};\
+				\
+			NCPP_PRIVATE_KEYWORD dr_pair_t<\
+				void(), \
+				ncpp::rtti::member_reflector_t<\
+					rtti_traits, \
+					current_class, \
+					Type, \
+					&current_class::Name##___ncpp_member_offset___, \
+					&current_class::Name##___ncpp_apply_metadata___, \
+					&current_class::Name##___ncpp_name_cstr___,\
+					&current_class::Name##___ncpp_function_tester___<current_class, Type>::get_address\
+				>\
+			> Name##___ncpp_reflector___;
 #else
 #define NCPP_MEMBER(Type, Name,...) using Name##_type = Type;\
 			Name##_type Name;
@@ -635,8 +710,8 @@ namespace ncpp {
 
 #ifdef NCPP_ENABLE_RTTI
 #define NCPP_BASE(Name) \
-			NCPP_PUBLIC_KEYWORD static inline eastl::string base_name_cstr() { return #Name; }\
-			NCPP_PRIVATE_KEYWORD dr_pair_t<void(), ncpp::rtti::base_reflector_t<rtti_traits, Name, &current_class::base_name_cstr>> base##_reflector;
+			NCPP_PRIVATE_KEYWORD static inline eastl::string base___ncpp_name_cstr___() { return #Name; }\
+			NCPP_PRIVATE_KEYWORD dr_pair_t<void(), ncpp::rtti::base_reflector_t<rtti_traits, Name, &current_class::base___ncpp_name_cstr___>> base##___ncpp_reflector___;
 #else
 #define NCPP_BASE(Name)
 #endif
@@ -647,8 +722,8 @@ namespace ncpp {
 
 #ifdef NCPP_ENABLE_RTTI
 #define NCPP_META(...) \
-			NCPP_PRIVATE_KEYWORD static inline void apply_metadata(context_metadata_type& metadata) { __VA_ARGS__; }\
-			NCPP_PRIVATE_KEYWORD dr_pair_t<void(), ncpp::rtti::metadata_reflector_t<rtti_traits, &current_class::apply_metadata>> metadata##_reflector;
+			NCPP_PRIVATE_KEYWORD static inline void ___ncpp_apply_metadata___(context_metadata_type& metadata) { __VA_ARGS__; }\
+			NCPP_PRIVATE_KEYWORD dr_pair_t<void(), ncpp::rtti::metadata_reflector_t<rtti_traits, &current_class::___ncpp_apply_metadata___>> metadata##_reflector;
 #else
 #define NCPP_META(...)
 #endif
