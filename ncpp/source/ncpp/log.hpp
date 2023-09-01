@@ -185,7 +185,7 @@ std::ostream& operator << (
 )
 {
 
-	if (input.second > NCPP_MAX_TAB_COUNT) {
+	if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
 
 		os << ncpp::cout_lowlight("...");
 
@@ -256,7 +256,7 @@ std::ostream& operator << (
 )
 {
 
-	if (input.second > NCPP_MAX_TAB_COUNT) {
+	if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
 
 		os << ncpp::cout_lowlight("...");
 
@@ -331,7 +331,7 @@ std::ostream& operator << (
 )
 {
 
-	if (input.second > NCPP_MAX_TAB_COUNT) {
+	if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
 
 		os << ncpp::cout_lowlight("...");
 

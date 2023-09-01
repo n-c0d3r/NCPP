@@ -232,6 +232,8 @@ namespace ncpp {
 
 
 
+			sz type_hash_code = 0;
+
 			ostream_function_type* ostream_function_p = 0;
 			sz invoke_function_p = 0;
 
@@ -251,11 +253,25 @@ namespace ncpp {
 			template<typename function_type__, typename... arg_types__>
 			inline auto invoke_t(void* object_p, arg_types__... args) {
 
+				assert(typeid(function_type__).hash_code() == type_hash_code && "invalid function type");
+
 				return reinterpret_cast<
 					typename utilities::function_traits_t<function_type__>::template push_args_front_t<void*>*
 				>(invoke_function_p)(
 					object_p, std::forward<arg_types__>(args)...
 				);
+			}
+			template<typename data_type__>
+			inline auto cast_to_t(void* object_p) {
+
+				assert(typeid(data_type__).hash_code() == type_hash_code && "invalid data type");
+
+				return *reinterpret_cast<data_type__*>(reinterpret_cast<u8*>(object_p) + offset);
+			}
+			template<typename type__>
+			inline bool is_type_t() const {
+
+				return typeid(type__).hash_code() == type_hash_code;
 			}
 
 			inline bool is_function() const {
@@ -425,6 +441,7 @@ namespace ncpp {
 
 				name_to_member_map_[member_name] = {
 				
+					typeid(member_type__).hash_code(),
 					[](void* object_p, u32 tabs, std::ostream& os) -> std::ostream& {
 						
 						return safe_ostream_with_tab_t<std::ostream, ostream_input_t<member_type__>>(
@@ -459,6 +476,7 @@ namespace ncpp {
 
 				name_to_member_map_[member_name] = {
 
+					typeid(member_type__).hash_code(),
 					[](void* object_p, u32 tabs, std::ostream& os) -> std::ostream& {
 
 						return safe_ostream_with_tab_t<std::ostream, const char*>(
@@ -692,8 +710,68 @@ namespace ncpp {
 				>\
 			> Name##___ncpp_reflector___;
 #else
-#define NCPP_MEMBER(Type, Name,...) using Name##_type = Type;\
-			Name##_type Name;
+#define NCPP_MEMBER(Type, Name,...) typename ncpp::utilities::first_template_arg_t<Type>::type Name;
+#endif
+
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+
+#ifdef NCPP_ENABLE_RTTI
+#define NCPP_MEMBER_CONST(Type, Name,...) dr_pair_t<Type, void()> Name;\
+				inline auto Name(auto&&... args) const {\
+					\
+					return ((current_class*)this)->Name(std::forward<decltype(args)>(args)...);\
+					\
+				}\
+				\
+			NCPP_PRIVATE_KEYWORD static inline eastl::string Name##___ncpp_name_cstr___() { return #Name; }\
+			NCPP_PRIVATE_KEYWORD static inline sz Name##___ncpp_member_offset___() { return 0; }\
+			NCPP_PRIVATE_KEYWORD static inline void Name##___ncpp_apply_metadata___(member_metadata_type& metadata) { __VA_ARGS__; }\
+			NCPP_PRIVATE_KEYWORD\
+				template<typename class_type__, typename member_type__>\
+				struct Name##___ncpp_function_tester___;\
+				\
+				friend struct Name##___ncpp_function_tester___<current_class, Type>;\
+				\
+				template<typename class_type__, typename member_type__>\
+				struct Name##___ncpp_function_tester___{\
+					\
+					static inline void invoke(){}\
+					static inline sz get_address(){ return 0; }\
+					\
+				};\
+				\
+				template<typename class_type__, typename return_type__, typename... arg_types__>\
+				struct Name##___ncpp_function_tester___<class_type__, return_type__(arg_types__...)>{\
+					\
+					static inline auto invoke(void* object_p, arg_types__... args) {\
+						\
+						return reinterpret_cast<current_class*>(object_p)->Name(std::forward<arg_types__>(args)...);\
+						\
+					}\
+					static inline sz get_address(){ return reinterpret_cast<sz>(&invoke); }\
+					\
+				};\
+				\
+			NCPP_PRIVATE_KEYWORD dr_pair_t<\
+				void(), \
+				ncpp::rtti::member_reflector_t<\
+					rtti_traits, \
+					current_class, \
+					Type, \
+					&current_class::Name##___ncpp_member_offset___, \
+					&current_class::Name##___ncpp_apply_metadata___, \
+					&current_class::Name##___ncpp_name_cstr___,\
+					&current_class::Name##___ncpp_function_tester___<current_class, Type>::get_address\
+				>\
+			> Name##___ncpp_reflector___;
+#else
+#define NCPP_MEMBER_CONST(Type, Name,...) typename ncpp::utilities::first_template_arg_t<Type>::type Name;\
+			inline auto Name(auto&&... args) const {\
+				\
+				return ((current_class*)this)->Name(std::forward<decltype(args)>(args)...); \
+			}
 #endif
 
 		////////////////////////////////////////////////////////////////////////////////////
@@ -703,6 +781,14 @@ namespace ncpp {
 #define NCPP_PRIVATE(Type, Name,...) NCPP_PRIVATE_KEYWORD NCPP_MEMBER(Type, Name, __VA_ARGS__)
 #define NCPP_PROTECTED(Type, Name,...) NCPP_PROTECTED_KEYWORD NCPP_MEMBER(Type, Name, __VA_ARGS__)
 #define NCPP_PUBLIC(Type, Name,...) NCPP_PUBLIC_KEYWORD NCPP_MEMBER(Type, Name, __VA_ARGS__)
+
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+
+#define NCPP_PRIVATE_CONST(Type, Name,...) NCPP_PRIVATE_KEYWORD NCPP_MEMBER_CONST(Type, Name, __VA_ARGS__)
+#define NCPP_PROTECTED_CONST(Type, Name,...) NCPP_PROTECTED_KEYWORD NCPP_MEMBER_CONST(Type, Name, __VA_ARGS__)
+#define NCPP_PUBLIC_CONST(Type, Name,...) NCPP_PUBLIC_KEYWORD NCPP_MEMBER_CONST(Type, Name, __VA_ARGS__)
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
@@ -775,7 +861,7 @@ std::ostream& operator << (
 )
 {
 
-	if (input.second > NCPP_MAX_TAB_COUNT) {
+	if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
 
 		os << ncpp::cout_lowlight("...");
 

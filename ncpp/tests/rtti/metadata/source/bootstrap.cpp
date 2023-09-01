@@ -95,8 +95,6 @@ int main() {
 	A a;
 	std::cout << a << std::endl;
 
-
-
 #ifdef NCPP_ENABLE_METADATA
 	A::rcontext_type ctx;
 	ctx.reflect_t(a);
