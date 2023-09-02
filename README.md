@@ -1,4 +1,3 @@
-
 # NCPP
 A Game Engine Learning Aimed C++ Library
 
@@ -26,7 +25,7 @@ A Game Engine Learning Aimed C++ Library
   + Flexible
 
 ## Core Dependencies
-+ EASTL
++ EASTL (Not required)
 + Doxygen
 
 ## Getting Started
