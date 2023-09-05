@@ -63,6 +63,15 @@ namespace ncpp {
 		public:
 			using allocator_type = allocator_type__;
 
+			template<typename type__>
+			using T_type_t = utilities::nth_template_arg_t<
+				static_cast<u8>(!std::is_same_v<std::remove_pointer_t<type__>, type__>)
+				+ static_cast<u8>(!std::is_same_v<std::remove_reference_t<type__>, type__>) * 2,
+				std::remove_const_t<type__>,
+				std::remove_pointer_t<std::remove_const_t<type__>>,
+				std::remove_reference_t<std::remove_const_t<type__>>
+			>::type;
+
 
 
 		public:
@@ -75,6 +84,27 @@ namespace ncpp {
 			mutable bool is_constant = false;
 
 			mutable allocator_type allocator;
+
+
+
+		public:
+			sz T_hash_code() const {
+
+				if (T_info_p)
+					return T_info_p->hash_code;
+
+				return hash_code;
+			}
+			template<typename type__>
+			static inline sz T_hash_code_t() {
+
+				if (std::is_const_v<type__>)
+					return typeid(std::remove_const_t<type__>).hash_code();
+				if (std::is_reference_v<type__>)
+					return typeid(std::remove_reference_t<type__>).hash_code();
+
+				return typeid(type__).hash_code();
+			}
 
 
 
@@ -129,24 +159,11 @@ namespace ncpp {
 			template<typename type__>
 			static rtype_info_t* create_internal_t(allocator_type__& alloc) {
 
-				constexpr b8 is_pointer = !std::is_same_v<std::remove_pointer_t<type__>, type__>;
-				constexpr b8 is_reference = !std::is_same_v<std::remove_reference_t<type__>, type__>;
-				constexpr b8 is_constant = !std::is_same_v<std::remove_const_t<type__>, type__>;
-
-				using no_const_type = std::remove_const_t<type__>;
-				using T_type = utilities::nth_template_arg_t<
-					static_cast<u8>(is_pointer)
-					+ static_cast<u8>(is_reference) * 2,
-					no_const_type,
-					std::remove_pointer_t<no_const_type>,
-					std::remove_reference_t<no_const_type>
-				>::type;
-
 				rtype_info_t* T_info_p = 0;
 				
-				if (!std::is_same_v<type__, T_type>) {
+				if (!std::is_same_v<type__, T_type_t<type__>>) {
 
-					T_info_p = create_internal_t<T_type>(alloc);
+					T_info_p = create_internal_t<T_type_t<type__>>(alloc);
 
 				}
 
@@ -158,10 +175,10 @@ namespace ncpp {
 					T_info_p,
 					typeid(type__).hash_code(),
 					typeid(type__).name(),
-					is_pointer,
-					is_reference && std::is_lvalue_reference_v<type__>,
-					is_reference && std::is_rvalue_reference_v<type__>,
-					is_constant,
+					std::is_pointer_v<type__>,
+					std::is_lvalue_reference_v<type__>,
+					std::is_rvalue_reference_v<type__>,
+					std::is_const_v<type__>,
 					alloc
 				);
 			}
