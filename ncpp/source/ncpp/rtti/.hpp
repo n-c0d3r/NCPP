@@ -60,5 +60,6 @@ namespace ncpp {
 ////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/rtti/robject.hpp>
+#include <ncpp/rtti/rtype_info.hpp>
 
 #pragma endregion
