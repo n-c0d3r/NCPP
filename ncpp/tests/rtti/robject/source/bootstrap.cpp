@@ -45,7 +45,7 @@ class A : public B {
 		NCPP_PUBLIC(i32, i);
 		NCPP_PUBLIC(eastl::string, str);
 
-		NCPP_PUBLIC(i32(b8), foo);
+		NCPP_PUBLIC_VIRTUAL(i32(b8), foo);
 		NCPP_PUBLIC_CONST(i32(b8), foo2);
 
 	);
@@ -67,7 +67,7 @@ public:
 
 };
 
-i32 A::foo(b8) { 
+NCPP_DEFINE_VIRTUAL(A, foo, i32, b8) { 
 
 	std::cout << "Hello A" << std::endl;
 	
