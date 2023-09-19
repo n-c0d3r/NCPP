@@ -71,8 +71,9 @@ namespace ncpp {
 			class rcontainer_type__ = typename rtti_traits__::rcontainer_type,\
 			class robject_type_info_type__ = typename rtti_traits__::robject_type_info_type,\
 			class robject_member_info_type__ = typename rtti_traits__::robject_member_info_type,\
-			class robject_type_info_metadata_type__ = typename rtti_traits__::robject_type_info_metadata_type,\
-			class robject_member_info_metadata_type__ = typename rtti_traits__::robject_member_info_metadata_type
+			class rcontainer_additional_data_type__ = typename rtti_traits__::rcontainer_additional_data_type,\
+			class robject_type_info_additional_data_type__ = typename rtti_traits__::robject_type_info_additional_data_type,\
+			class robject_member_info_additional_data_type__ = typename rtti_traits__::robject_member_info_additional_data_type
 
 #define NCPP_RTTI_PASS_SEPECIFIC_TARGS() \
 			rtti_options__, \
@@ -80,8 +81,9 @@ namespace ncpp {
 			rcontainer_type__, \
 			robject_type_info_type__, \
 			robject_member_info_type__,\
-			robject_type_info_metadata_type__,\
-			robject_member_info_metadata_type__
+			rcontainer_additional_data_type__,\
+			robject_type_info_additional_data_type__,\
+			robject_member_info_additional_data_type__
 
 #define NCPP_RTTI_SEPECIFIC_USING(RTTIOptions) \
 			using rtti_options = RTTIOptions;\
@@ -89,8 +91,9 @@ namespace ncpp {
 			using rcontainer_type = typename rtti_traits::rcontainer_type;\
 			using robject_type_info_type = typename rtti_traits::robject_type_info_type;\
 			using robject_member_info_type = typename rtti_traits::robject_member_info_type;\
-			using robject_type_info_metadata_type = typename rtti_traits::robject_type_info_metadata_type;\
-			using robject_member_info_metadata_type = typename rtti_traits::robject_member_info_metadata_type;
+			using rcontainer_additional_data_type = typename rtti_traits::rcontainer_additional_data_type;\
+			using robject_type_info_additional_data_type = typename rtti_traits::robject_type_info_additional_data_type;\
+			using robject_member_info_additional_data_type = typename rtti_traits::robject_member_info_additional_data_type;
 
 #define NCPP_RTTI_PASS_SEPECIFIC_USING() \
 			rtti_options, \
@@ -98,8 +101,9 @@ namespace ncpp {
 			rcontainer_type, \
 			robject_type_info_type, \
 			robject_member_info_type,\
-			robject_type_info_metadata_type,\
-			robject_member_info_metadata_type
+			rcontainer_additional_data_type,\
+			robject_type_info_additional_data_type,\
+			robject_member_info_additional_data_type
 
 #define NCPP_RTTI_CREATE_FLAG(Name) struct Name {};
 
@@ -169,13 +173,19 @@ namespace ncpp {
 
 		struct default_options {
 
-			struct robject_type_info_metadata {
+			struct rcontainer_additional_data {
 
 
 
 			};
 
-			struct robject_member_info_metadata {
+			struct robject_type_info_additional_data {
+
+
+
+			};
+
+			struct robject_member_info_additional_data {
 
 
 
@@ -204,17 +214,12 @@ namespace ncpp {
 
 			using options = options__;
 
-
-
-			using robject_type_info_metadata_type = typename options::robject_type_info_metadata;
-			using robject_member_info_metadata_type = typename options::robject_member_info_metadata;
-
-
+			using rcontainer_additional_data_type = typename options::rcontainer_additional_data;
+			using robject_type_info_additional_data_type = typename options::robject_type_info_additional_data;
+			using robject_member_info_additional_data_type = typename options::robject_member_info_additional_data;
 
 			using rcontainer_type = rcontainer_t<options>;
-
 			using robject_type_info_type = robject_type_info_t<options>;
-
 			using robject_member_info_type = robject_member_info_t<options>;
 
 		};
@@ -244,6 +249,9 @@ namespace ncpp {
 
 
 		private:
+
+		public:
+			rcontainer_additional_data_type additional_data;
 
 		public:
 
@@ -280,6 +288,9 @@ namespace ncpp {
 		private:
 
 		public:
+			robject_type_info_additional_data_type additional_data;
+
+		public:
 
 
 
@@ -314,6 +325,9 @@ namespace ncpp {
 		private:
 
 		public:
+			robject_member_info_additional_data_type additional_data;
+
+		public:
 
 
 
@@ -342,10 +356,9 @@ namespace ncpp {
 
 			NCPP_RTTI_SEPECIFIC_TARGS()
 		>
-		void reflect_object_type_t(rcontainer_type__& rcontainer) {
+		robject_type_info_type__& reflect_object_type_t(rcontainer_type__& rcontainer) {
 
-
-
+			return *reinterpret_cast<robject_type_info_type__*>(0);
 		}
 
 		template<
@@ -354,7 +367,7 @@ namespace ncpp {
 
 			NCPP_RTTI_SEPECIFIC_TARGS()
 		>
-		void reflect_member_t(rcontainer_type__& rcontainer, member_type__ object_type__::* member_p, const eastl::string& member_name) {
+		void reflect_member_t(robject_type_info_type__& robject_type_info, member_type__ object_type__::* member_p, const eastl::string& member_name) {
 
 
 
@@ -521,7 +534,7 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 #define NCPP_ROBJECT_REFLECT_MEMBER_PREREQUISITES(MemberType, MemberName,...) \
-			;
+			ncpp::rtti::reflect_member_t<this_type, MemberType, NCPP_RTTI_PASS_SEPECIFIC_USING()>(robject_type_info, &this_type::MemberName, #MemberName);
 
 #define NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName,...) \
 			;
@@ -640,7 +653,7 @@ namespace ncpp {
 			NCPP_PUBLIC_KEYWORD\
 				static inline void static_reflect(rcontainer_type& rcontainer){\
 					\
-					ncpp::rtti::reflect_object_type_t<this_type, NCPP_RTTI_PASS_SEPECIFIC_USING()>(rcontainer);\
+					robject_type_info_type& robject_type_info = ncpp::rtti::reflect_object_type_t<this_type, NCPP_RTTI_PASS_SEPECIFIC_USING()>(rcontainer);\
 					\
 					NCPP_EXPAND(NCPP_FOR_EACH(NCPP_ROBJECT_REFLECT_STEP __VA_OPT__(,) __VA_ARGS__))\
 					\
