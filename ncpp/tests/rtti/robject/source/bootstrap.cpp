@@ -13,7 +13,7 @@ class A {
 		A,
 
 		PUBLIC(i32, i),
-		PUBLIC(void(), foo)
+		PUBLIC_CONST(void(), foo)
 	);
 
 };
