@@ -11,14 +11,9 @@ class A {
 	NCPP_RCLASS(
 		rtti::default_options,
 		A,
-		PUBLIC(
-			i32,
-			i
-		),
-		PUBLIC(
-			void(),
-			foo
-		)
+
+		PUBLIC(i32, i),
+		PUBLIC(void(), foo)
 	);
 
 };
