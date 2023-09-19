@@ -2,9 +2,14 @@
 set(NCPP_CXX_STANDARD 20 CACHE STRING "CXX Standard")
 set(CMAKE_CXX_STANDARD ${NCPP_CXX_STANDARD})
 
-if(CMAKE_COMPILER_IS_GNUCXX)
+if(CMAKE_COMPILER_IS_GNUCXX) 
     add_definitions(-fpermissive)
 endif()
+
+
+
+#ncpp generated files dir
+set(NCPP_GENERATED_FILES_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated_files/ncpp")
 
 
 
@@ -33,7 +38,7 @@ endif()
 
 
 # ncpp target configure file
-set(NCPP_CONFIG_HPP_PATH ${CMAKE_CURRENT_BINARY_DIR}/generated_files/ncpp/config.hpp)
+set(NCPP_CONFIG_HPP_PATH "${NCPP_GENERATED_FILES_DIR}/config.hpp")
 configure_file(source/ncpp/.config ${NCPP_CONFIG_HPP_PATH})
 
 # eastl combined header
@@ -50,6 +55,12 @@ foreach(header ${EASTL_HEADERS})
     file(RELATIVE_PATH relpath "${EASTL_INCLUDE_DIR}" "${header}")
     file(APPEND "${EASTL_COMBINED_HEADER_PATH}" "#include <${relpath}>\n")
 endforeach()
+
+# ncpp prerequisite macros
+include(NCPP/PrerequisiteMacros)
+
+# ncpp rtti macros
+include(NCPP/RTTIMacros)
 
 
 
@@ -108,6 +119,10 @@ if(MSVC)
             PUBLIC /GT
         )
     endif()
+    
+    target_compile_options(ncpp 
+        PUBLIC /Zc:preprocessor
+    )
 endif()
 
 
