@@ -14,10 +14,20 @@ class A {
 		PUBLIC(
 			i32,
 			i
+		),
+		PUBLIC(
+			void(),
+			foo
 		)
 	);
 
 };
+
+void A::foo() {
+
+
+
+}
 
 
 
