@@ -32,7 +32,10 @@ int main() {
 
 	A::rcontainer_type rcontainer;
 
-	A::static_reflect(rcontainer);
+	A::static_reflect(
+		&rcontainer,
+		NCPP_RFLAG_DEFAULT
+	);
 
 
 
