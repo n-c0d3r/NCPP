@@ -103,7 +103,16 @@ namespace ncpp {
 
 				return it->second;
 			}
-			inline robject_type_info_type* robject_type_info(const eastl::string& name) const {
+			inline robject_type_info_type* robject_type_info(const eastl::string& name) {
+
+				auto it = name_to_robject_type_info_p_map_.find(name);
+
+				if (it == name_to_robject_type_info_p_map_.end())
+					return 0;
+
+				return it->second;
+			}
+			inline const robject_type_info_type* robject_type_info(const eastl::string& name) const {
 
 				auto it = name_to_robject_type_info_p_map_.find(name);
 

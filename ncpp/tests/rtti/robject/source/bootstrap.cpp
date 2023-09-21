@@ -8,7 +8,12 @@ using namespace ncpp;
 
 class B {
 
+	NCPP_RCLASS(
+		rtti::default_options,
+		B,
 
+		PUBLIC(i32, i)
+	);
 
 };
 
@@ -42,11 +47,7 @@ int main() {
 
 	A::rcontainer_type rcontainer;
 
-	A::rtti_traits::safe_reflect_t<A>(
-		&rcontainer,
-		&a,
-		NCPP_RFLAG_DEFAULT
-	);
+	A::rtti_traits::safe_reflect_t<A>(&rcontainer);
 
 	system("pause");
 

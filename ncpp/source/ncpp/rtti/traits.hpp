@@ -228,7 +228,7 @@ namespace ncpp {
 					i32
 				> = 0
 			>
-			static void safe_reflect_t(rcontainer_type* rcontainer_p, robject_type__* object_p, rtti::rflag rflag = NCPP_RFLAG_DEFAULT) {
+			static void safe_reflect_t(rcontainer_type* rcontainer_p, robject_type__* object_p = 0, rtti::rflag rflag = NCPP_RFLAG_DEFAULT) {
 
 				if(object_p)
 					object_p->virtual_reflect(rcontainer_p, rflag);
@@ -243,7 +243,7 @@ namespace ncpp {
 					i32
 				> = 0
 			>
-			static void safe_reflect_t(rcontainer_type* rcontainer_p, robject_type__* object_p, rtti::rflag rflag = NCPP_RFLAG_DEFAULT) {
+			static void safe_reflect_t(rcontainer_type* rcontainer_p, robject_type__* object_p = 0, rtti::rflag rflag = NCPP_RFLAG_DEFAULT) {
 
 				robject_type__::static_reflect(rcontainer_p, rflag);
 
@@ -255,7 +255,7 @@ namespace ncpp {
 					i32
 				> = 0
 			>
-			static void safe_reflect_t(rcontainer_type* rcontainer_p, robject_type__* object_p, rtti::rflag rflag = NCPP_RFLAG_DEFAULT) {
+			static void safe_reflect_t(rcontainer_type* rcontainer_p, robject_type__* object_p = 0, rtti::rflag rflag = NCPP_RFLAG_DEFAULT) {
 
 
 

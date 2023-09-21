@@ -76,7 +76,7 @@ namespace ncpp {
 			rcontainer_type* rcontainer_p_ = 0;
 			sz hash_code_ = 0;
 			eastl::string name_;
-			robject_type_info_t* base_p_ = 0;
+			robject_type_info_t* base_type_info_p_ = 0;
 
 		public:
 			robject_type_info_additional_data_type additional_data;
@@ -88,7 +88,8 @@ namespace ncpp {
 			inline const rcontainer_type* rcontainer_p() const { return rcontainer_p_; }
 			inline sz hash_code() const { return hash_code_; }
 			inline eastl::string name() const { return name_; }
-			inline robject_type_info_t* get_base_p() { return base_p_; }
+			inline robject_type_info_t* get_base_type_info_p() { return base_type_info_p_; }
+			inline const robject_type_info_t* get_base_type_info_p() const { return base_type_info_p_; }
 
 			inline robject_member_info_type* member_info(const eastl::string& name) {
 
@@ -133,10 +134,11 @@ namespace ncpp {
 
 
 		public:
-			inline robject_type_info_t(rcontainer_type* rcontainer_p, sz hash_code, const eastl::string& name) :
+			inline robject_type_info_t(rcontainer_type* rcontainer_p, sz hash_code, const eastl::string& name, robject_type_info_t* base_type_info_p) :
 				rcontainer_p_(rcontainer_p),
 				hash_code_(hash_code),
-				name_(name)
+				name_(name),
+				base_type_info_p_(base_type_info_p)
 			{
 
 
@@ -186,7 +188,8 @@ namespace ncpp {
 				rcontainer_p->allocator(),
 				rcontainer_p,
 				object_type__::static_type_hash_code(),
-				object_type__::static_type_name()
+				object_type__::static_type_name(),
+				rcontainer_p->robject_type_info(typeid(typename rtti_traits__::safe_base_type_t<object_type__>::type).hash_code())
 			);
 
 			rcontainer_p->add_robject_type_info(robject_type_info_p);
