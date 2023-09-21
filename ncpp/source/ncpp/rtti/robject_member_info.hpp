@@ -102,7 +102,7 @@ namespace ncpp {
 			if (member_info_p)
 				return member_info_p;
 
-			member_info_p = rtti_traits__::new_t<robject_member_info_type__>(
+			member_info_p = rtti_traits__::template new_t<robject_member_info_type__>(
 				robject_type_info_p->rcontainer_p()->allocator(),
 				robject_member_info_type__ {
 

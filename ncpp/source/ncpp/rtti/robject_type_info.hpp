@@ -124,7 +124,7 @@ namespace ncpp {
 
 				if (it != name_to_member_info_p_map_.end()) {
 
-					rtti_traits::delete_t<robject_member_info_type>(rcontainer_p_->allocator(), it->second);
+					rtti_traits::template delete_t<robject_member_info_type>(rcontainer_p_->allocator(), it->second);
 
 					name_to_member_info_p_map_.erase(it);
 
@@ -184,7 +184,7 @@ namespace ncpp {
 			if (robject_type_info_p)
 				return robject_type_info_p;
 
-			robject_type_info_p = rtti_traits__::new_t<robject_type_info_type__>(
+			robject_type_info_p = rtti_traits__::template new_t<robject_type_info_type__>(
 				rcontainer_p->allocator(),
 				rcontainer_p,
 				object_type__::static_type_hash_code(),
