@@ -42,6 +42,7 @@
 #include <ncpp/rtti/traits.hpp>
 #include <ncpp/rtti/rflag.hpp>
 #include <ncpp/rtti/rtti_flag.hpp>
+#include <ncpp/rtti/robject_flag.hpp>
 
 #pragma endregion
 
@@ -64,25 +65,6 @@
 namespace ncpp {
 
 	namespace rtti {
-
-		NCPP_RTTI_CREATE_FLAG(robject_flag);
-		NCPP_RTTI_CREATE_FLAG(robject_virtual_flag);
-
-
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 #define NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_ROBJECT_MEMBER_BODY_OVERRIDER_##Overrider)(MemberType, MemberName);
 #define NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_ROBJECT_MEMBER_BODY_OVERRIDER_##Overrider)(MemberType, MemberName);
@@ -128,6 +110,15 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
+#define NCPP_ROBJECT_BODY_BASE(BaseName) \
+				NCPP_PUBLIC_KEYWORD using base_type = BaseName;\
+				NCPP_RTTI_IMPLEMENT_FLAG(this_type, ncpp::rtti::robject_has_base_flag);\
+				
+
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+
 #define NCPP_ROBJECT_BODY_VIRTUAL \
 			NCPP_PRIVATE_KEYWORD NCPP_RTTI_IMPLEMENT_FLAG(this_type, ncpp::rtti::robject_virtual_flag);\
 			NCPP_PUBLIC_KEYWORD virtual void virtual_reflect(\
@@ -141,8 +132,47 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
+#define NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName) \
+			template<typename object_type__, typename member_type__>\
+			struct MemberName##___ncpp_static_info_t___;\
+			friend struct MemberName##___ncpp_static_info_t___<this_type, MemberType>;\
+			template<typename object_type__, typename member_type__>\
+			struct MemberName##___ncpp_static_info_t___{\
+				\
+				static void invoke(){}\
+				static inline ncpp::sz get_invoke_address(){ return 0; }\
+				\
+				static eastl::string get_name() { return #MemberName; }\
+				\
+				static ncpp::u16 get_offset() { return (ncpp::u16)reinterpret_cast<ncpp::sz>(&(reinterpret_cast<object_type__*>(0)->MemberName)); }\
+				static ncpp::u16 get_size() { return (ncpp::u16)sizeof(MemberType); }\
+				\
+			};\
+			\
+			template<typename object_type__, typename return_type__, typename... arg_types__>\
+			struct MemberName##___ncpp_static_info_t___<object_type__, return_type__(arg_types__...)>{\
+				\
+				static auto invoke(void* object_p, arg_types__... args) {\
+					\
+					return reinterpret_cast<this_type*>(object_p)->MemberName(std::forward<arg_types__>(args)...);\
+					\
+				}\
+				static inline ncpp::sz get_invoke_address(){ return reinterpret_cast<ncpp::sz>(&invoke); }\
+				\
+				static eastl::string get_name() { return #MemberName; }\
+				\
+				static ncpp::u16 get_offset() { return 0; }\
+				static ncpp::u16 get_size() { return 0; }\
+				\
+			};
+
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+
 #define NCPP_ROBJECT_BODY_MEMBER(Overrider, MemberType, MemberName,...) \
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);\
+			NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName);\
 			NCPP_ROBJECT_WRAP_TYPE(MemberType) MemberName
 
 #define NCPP_ROBJECT_BODY_BASE_PRIVATE(Overrider, MemberType, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER(Overrider, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
@@ -155,6 +185,7 @@ namespace ncpp {
 
 #define NCPP_ROBJECT_BODY_MEMBER_CONST(Overrider, MemberType, MemberName,...)\
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);\
+			NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName);\
 			inline auto MemberName(auto&&... args) const {\
 				\
 				return ((this_type*)this)->MemberName(std::forward<decltype(args)>(args)...);\
@@ -172,6 +203,7 @@ namespace ncpp {
 
 #define NCPP_ROBJECT_BODY_MEMBER_VIRTUAL(Overrider, MemberType, MemberName,...) \
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);\
+			NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName);\
 			virtual NCPP_ROBJECT_WRAP_TYPE(MemberType) MemberName
 
 #define NCPP_ROBJECT_BODY_BASE_PRIVATE_VIRTUAL(Overrider, MemberType, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL(Overrider, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
@@ -184,6 +216,7 @@ namespace ncpp {
 
 #define NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_CONST(Overrider, MemberType, MemberName,...)\
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);\
+			NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName);\
 			inline auto MemberName(auto&&... args) const {\
 				\
 				return ((this_type*)this)->MemberName(std::forward<decltype(args)>(args)...);\
@@ -226,6 +259,12 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
+#define NCPP_ROBJECT_REFLECT_BASE(BaseName) ;
+
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+
 #define NCPP_ROBJECT_REFLECT_VIRTUAL ;
 
 		////////////////////////////////////////////////////////////////////////////////////
@@ -233,7 +272,15 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 #define NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName,...) \
-			robject_member_info_p = ncpp::rtti::reflect_object_member_t<this_type, MemberType, NCPP_RTTI_PASS_SEPECIFIC_USING()>(robject_type_info_p, rflag, &this_type::MemberName, #MemberName);
+			robject_member_info_p = ncpp::rtti::reflect_object_member_t<\
+				this_type, \
+				MemberType, \
+				MemberName##___ncpp_static_info_t___<this_type, MemberType>, \
+				NCPP_RTTI_PASS_SEPECIFIC_USING()\
+			>(\
+				robject_type_info_p, \
+				rflag\
+			);
 
 #define NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName,...) \
 			__VA_ARGS__;
@@ -382,12 +429,23 @@ namespace ncpp {
 					robject_type_info_type* robject_type_info_p = reinterpret_cast<robject_type_info_type*>(0);\
 					robject_member_info_type* robject_member_info_p = reinterpret_cast<robject_member_info_type*>(0);\
 					\
+					if constexpr (NCPP_RTTI_IS_HAS_FLAG(this_type, ncpp::rtti::robject_has_base_flag))\
+						rtti_traits::template safe_reflect_t<typename rtti_traits::safe_base_type_t<this_type>::type>(\
+							rcontainer_p,\
+							0,\
+							rflag\
+						);\
+					\
 					if(rflag & NCPP_RFLAG_ROBJECT_TYPE_INFO)\
 						robject_type_info_p = ncpp::rtti::reflect_object_type_t<this_type, NCPP_RTTI_PASS_SEPECIFIC_USING()>(rcontainer_p, rflag);\
 					\
 					NCPP_EXPAND(NCPP_FOR_EACH(NCPP_ROBJECT_REFLECT_STEP __VA_OPT__(,) __VA_ARGS__));\
 					\
-				};
+				};\
+				\
+			NCPP_PUBLIC_KEYWORD\
+				static constexpr ncpp::b8 is_virtual = NCPP_RTTI_IS_HAS_FLAG(this_type, ncpp::rtti::robject_virtual_flag);\
+				static constexpr ncpp::b8 is_has_base = NCPP_RTTI_IS_HAS_FLAG(this_type, ncpp::rtti::robject_has_base_flag);
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////

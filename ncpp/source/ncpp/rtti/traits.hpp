@@ -33,7 +33,15 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/iostream.hpp>
-#include <ncpp/utilities/is_function.hpp>
+#include <ncpp/utilities/.hpp>
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#include <ncpp/rtti/rflag.hpp>
+#include <ncpp/rtti/rtti_flag.hpp>
+#include <ncpp/rtti/robject_flag.hpp>
 
 #pragma endregion
 
@@ -190,6 +198,90 @@ namespace ncpp {
 			using rcontainer_type = rcontainer_t<options>;
 			using robject_type_info_type = robject_type_info_t<options>;
 			using robject_member_info_type = robject_member_info_t<options>;
+
+
+
+			template<class type__>
+			static inline type__* allocate_t(allocator_type& allocator) {
+
+				return reinterpret_cast<type__*>(allocator.allocate(sizeof(type__), 0));
+			}
+			template<class type__, typename... arg_types__>
+			static inline type__* new_t(allocator_type& allocator, arg_types__&&... args) {
+
+				return new(allocate_t<type__>(allocator)) type__(std::forward<arg_types__>(args)...);
+			}
+			template<class type__>
+			static inline void delete_t(allocator_type& allocator, type__* pointer) {
+
+				pointer->~type__();
+
+				allocator.deallocate(pointer, sizeof(type__));
+			}
+
+
+
+			template<
+				class robject_type__,
+				std::enable_if_t<
+					NCPP_RTTI_IS_HAS_FLAG(robject_type__, robject_flag) && NCPP_RTTI_IS_HAS_FLAG(robject_type__, robject_virtual_flag),
+					i32
+				> = 0
+			>
+			static void safe_reflect_t(rcontainer_type* rcontainer_p, robject_type__* object_p, rtti::rflag rflag = NCPP_RFLAG_DEFAULT) {
+
+				if(object_p)
+					object_p->virtual_reflect(rcontainer_p, rflag);
+				else
+					robject_type__::static_reflect(rcontainer_p, rflag);
+
+			}
+			template<
+				class robject_type__,
+				std::enable_if_t<
+					NCPP_RTTI_IS_HAS_FLAG(robject_type__, robject_flag) && !NCPP_RTTI_IS_HAS_FLAG(robject_type__, robject_virtual_flag),
+					i32
+				> = 0
+			>
+			static void safe_reflect_t(rcontainer_type* rcontainer_p, robject_type__* object_p, rtti::rflag rflag = NCPP_RFLAG_DEFAULT) {
+
+				robject_type__::static_reflect(rcontainer_p, rflag);
+
+			}
+			template<
+				class robject_type__,
+				std::enable_if_t<
+					!NCPP_RTTI_IS_HAS_FLAG(robject_type__, robject_flag),
+					i32
+				> = 0
+			>
+			static void safe_reflect_t(rcontainer_type* rcontainer_p, robject_type__* object_p, rtti::rflag rflag = NCPP_RFLAG_DEFAULT) {
+
+
+
+			}
+
+
+
+
+			template<typename robject_type__, class = void>
+			struct safe_base_type_t {
+
+				using type = void;
+
+			};
+
+			template<typename robject_type__>
+			struct safe_base_type_t<
+				robject_type__,
+				std::void_t<
+					decltype(std::declval<robject_type__::base_type>())
+				>
+			> {
+
+				using type = typename robject_type__::base_type;
+
+			};
 
 		};
 

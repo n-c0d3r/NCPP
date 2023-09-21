@@ -1,7 +1,7 @@
 #pragma once
 
-/** @file ncpp/rtti/robject_member_info.hpp
-*	@brief Implements robject member info.
+/** @file ncpp/rtti/robject_flag.hpp
+*	@brief Implements reflectable object flag.
 */
 
 
@@ -39,8 +39,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <ncpp/rtti/traits.hpp>
-#include <ncpp/rtti/rflag.hpp>
+#include <ncpp/rtti/rtti_flag.hpp>
 
 #pragma endregion
 
@@ -64,63 +63,10 @@ namespace ncpp {
 
 	namespace rtti {
 
-		template<typename options__>
-		struct robject_member_info_t {
-
-		public:
-			NCPP_RTTI_SEPECIFIC_USING(options__);
-
-
-
-		public:
-			sz type_hash_code = 0;
-
-			sz invoke_function_address_or_variable_offset = 0;
-
-			eastl::string name;
-
-			u16 size = 0;
-
-			robject_member_info_additional_data_type additional_data;
-
-		};
-
-		template<
-			class object_type__,
-			typename member_type__,
-			class member_static_info__,
-
-			NCPP_RTTI_SEPECIFIC_TARGS()
-		>
-		robject_member_info_type__* reflect_object_member_t(
-			robject_type_info_type__* robject_type_info_p,
-			rflag flag = NCPP_RFLAG_DEFAULT
-		) {
-
-			robject_member_info_type__* member_info_p = robject_type_info_p->member_info(member_static_info__::get_name());
-
-			if (member_info_p)
-				return member_info_p;
-
-			member_info_p = rtti_traits__::new_t<robject_member_info_type__>(
-				robject_type_info_p->rcontainer_p()->allocator(),
-				robject_member_info_type__ {
-
-					typeid(member_type__).hash_code(),
-					member_static_info__::get_invoke_address() | member_static_info__::get_offset(),
-
-					member_static_info__::get_name(),
-
-					member_static_info__::get_size()
-
-				}
-			);
-
-			robject_type_info_p->add_member_info(member_info_p);
-
-			return member_info_p;
-		}
-
+		NCPP_RTTI_CREATE_FLAG(robject_flag);
+		NCPP_RTTI_CREATE_FLAG(robject_virtual_flag);
+		NCPP_RTTI_CREATE_FLAG(robject_has_base_flag);
+        
 	}
 
 }

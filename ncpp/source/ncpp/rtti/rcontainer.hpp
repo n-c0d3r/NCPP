@@ -73,23 +73,112 @@ namespace ncpp {
 
 
 		private:
+			allocator_type allocator_;
+
+			eastl::unordered_map<sz, robject_type_info_type*> hash_code_to_robject_type_info_p_map_;
+			eastl::unordered_map<eastl::string, robject_type_info_type*> name_to_robject_type_info_p_map_;
 
 		public:
 			rcontainer_additional_data_type additional_data;
 
 		public:
+			inline allocator_type& allocator() { return allocator_; }
+			inline const allocator_type& allocator() const { return allocator_; }
+
+			inline robject_type_info_type* robject_type_info(sz hash_code) {
+
+				auto it = hash_code_to_robject_type_info_p_map_.find(hash_code);
+
+				if (it == hash_code_to_robject_type_info_p_map_.end())
+					return 0;
+
+				return it->second;
+			}
+			inline const robject_type_info_type* robject_type_info(sz hash_code) const {
+
+				auto it = hash_code_to_robject_type_info_p_map_.find(hash_code);
+
+				if (it == hash_code_to_robject_type_info_p_map_.end())
+					return 0;
+
+				return it->second;
+			}
+			inline robject_type_info_type* robject_type_info(const eastl::string& name) const {
+
+				auto it = name_to_robject_type_info_p_map_.find(name);
+
+				if (it == name_to_robject_type_info_p_map_.end())
+					return 0;
+
+				return it->second;
+			}
+			inline void add_robject_type_info(robject_type_info_type* info) {
+
+				auto it = hash_code_to_robject_type_info_p_map_.find(info->hash_code());
+
+				if (it != hash_code_to_robject_type_info_p_map_.end())
+					return;
+
+				hash_code_to_robject_type_info_p_map_[info->hash_code()] = info;
+				name_to_robject_type_info_p_map_[info->name()] = info;
+			}
+			inline void remove_robject_type_info(sz hash_code) {
+
+				auto it = hash_code_to_robject_type_info_p_map_.find(hash_code);
+
+				if (it != hash_code_to_robject_type_info_p_map_.end()) {
+
+					name_to_robject_type_info_p_map_.erase(name_to_robject_type_info_p_map_.find(it->second->name()));
+
+					rtti_traits::delete_t<robject_type_info_type>(allocator_, it->second);
+
+					hash_code_to_robject_type_info_p_map_.erase(it);
+
+				}
+			}
+			inline void remove_robject_type_info(const eastl::string& name) {
+
+				auto it = name_to_robject_type_info_p_map_.find(name);
+
+				if (it != name_to_robject_type_info_p_map_.end()) {
+
+					hash_code_to_robject_type_info_p_map_.erase(hash_code_to_robject_type_info_p_map_.find(it->second->hash_code()));
+
+					rtti_traits::delete_t<robject_type_info_type>(allocator_, it->second);
+
+					name_to_robject_type_info_p_map_.erase(it);
+
+				}
+			}
 
 
 
 		public:
-			inline rcontainer_t() {
+			inline rcontainer_t(const allocator_type& allocator = allocator_type()) :
+				allocator_(allocator)
+			{
 
 
 
 			}
 			~rcontainer_t() {
 
+				clear();
 
+			}
+
+
+
+		public:
+			void clear() {
+
+				for (auto it = hash_code_to_robject_type_info_p_map_.begin(); it != hash_code_to_robject_type_info_p_map_.end();) {
+
+					auto current_it = it++;
+
+					remove_robject_type_info(current_it->first);
+
+				}
 
 			}
 
