@@ -60,6 +60,7 @@ namespace ncpp {
 #define NCPP_RTTI_SEPECIFIC_TARGS() \
 			class rtti_options__,\
 			class rtti_traits__ = ncpp::rtti::traits_t<rtti_options__>,\
+			class allocator_type__ = typename rtti_traits__::allocator_type,\
 			class rcontainer_type__ = typename rtti_traits__::rcontainer_type,\
 			class robject_type_info_type__ = typename rtti_traits__::robject_type_info_type,\
 			class robject_member_info_type__ = typename rtti_traits__::robject_member_info_type,\
@@ -70,6 +71,7 @@ namespace ncpp {
 #define NCPP_RTTI_PASS_SEPECIFIC_TARGS() \
 			rtti_options__, \
 			rtti_traits__, \
+			allocator_type__, \
 			rcontainer_type__, \
 			robject_type_info_type__, \
 			robject_member_info_type__,\
@@ -80,6 +82,7 @@ namespace ncpp {
 #define NCPP_RTTI_SEPECIFIC_USING(RTTIOptions) \
 			using rtti_options = RTTIOptions;\
 			using rtti_traits = ncpp::rtti::traits_t<rtti_options>;\
+			using allocator_type = typename rtti_traits::allocator_type;\
 			using rcontainer_type = typename rtti_traits::rcontainer_type;\
 			using robject_type_info_type = typename rtti_traits::robject_type_info_type;\
 			using robject_member_info_type = typename rtti_traits::robject_member_info_type;\
@@ -90,6 +93,7 @@ namespace ncpp {
 #define NCPP_RTTI_PASS_SEPECIFIC_USING() \
 			rtti_options, \
 			rtti_traits, \
+			allocator_type, \
 			rcontainer_type, \
 			robject_type_info_type, \
 			robject_member_info_type,\
@@ -152,6 +156,8 @@ namespace ncpp {
 
 			};
 
+			using allocator = NCPP_DEFAULT_ALLOCATOR;
+
 		};
 
 
@@ -174,6 +180,8 @@ namespace ncpp {
 		struct traits_t {
 
 			using options = options__;
+
+			using allocator_type = typename options::allocator;
 
 			using rcontainer_additional_data_type = typename options::rcontainer_additional_data;
 			using robject_type_info_additional_data_type = typename options::robject_type_info_additional_data;

@@ -82,6 +82,16 @@ namespace ncpp {
 
 
 		public:
+			inline robject_member_info_t() {
+
+
+
+			}
+			~robject_member_info_t() {
+
+
+
+			}
 
 		};
 

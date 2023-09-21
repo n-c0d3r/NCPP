@@ -235,7 +235,7 @@ namespace ncpp {
 			ncpp::rtti::reflect_object_member_t<this_type, MemberType, NCPP_RTTI_PASS_SEPECIFIC_USING()>(robject_type_info_p, rflag, &this_type::MemberName, #MemberName);
 
 #define NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName,...) \
-			;
+			__VA_ARGS__;
 			
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
@@ -248,7 +248,7 @@ namespace ncpp {
 				NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 			\
 			if(rflag & NCPP_RFLAG_ROBJECT_METADATA)\
-				NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))\
+				NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 			\
 			static int MemberName##_tail
 
@@ -267,7 +267,7 @@ namespace ncpp {
 				NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 			\
 			if(rflag & NCPP_RFLAG_ROBJECT_METADATA)\
-				NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))\
+				NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 			\
 			static int MemberName##_tail
 
@@ -286,7 +286,7 @@ namespace ncpp {
 				NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 			\
 			if(rflag & NCPP_RFLAG_ROBJECT_METADATA)\
-				NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))\
+				NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 			\
 			static int MemberName##_tail
 
@@ -305,7 +305,7 @@ namespace ncpp {
 				NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 			\
 			if(rflag & NCPP_RFLAG_ROBJECT_METADATA)\
-				NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))\
+				NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 			\
 			static int MemberName##_tail
 

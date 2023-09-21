@@ -82,6 +82,16 @@ namespace ncpp {
 
 
 		public:
+			inline rcontainer_t() {
+
+
+
+			}
+			~rcontainer_t() {
+
+
+
+			}
 
 		};
 

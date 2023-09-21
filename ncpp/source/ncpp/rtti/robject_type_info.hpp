@@ -73,15 +73,27 @@ namespace ncpp {
 
 
 		private:
+			robject_type_info_t* base_p_ = 0;
 
 		public:
 			robject_type_info_additional_data_type additional_data;
 
 		public:
+			inline robject_type_info_t* get_base_p() { return base_p_; }
 
 
 
 		public:
+			inline robject_type_info_t() {
+
+
+
+			}
+			~robject_type_info_t() {
+
+
+
+			}
 
 		};
 
