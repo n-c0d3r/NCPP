@@ -104,6 +104,7 @@ namespace ncpp {
 
 
 #define NCPP_ROBJECT_WRAP_TYPE(Type) typename ncpp::utilities::first_template_arg_t<Type>::type
+#define NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(Type) typename ncpp::utilities::nth_template_arg_t<ncpp::utilities::is_function_t<Type>::value, Type, int>::type
 
 
 
@@ -250,7 +251,8 @@ namespace ncpp {
 			if(rflag & NCPP_RFLAG_ROBJECT_METADATA)\
 				NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 			\
-			static int MemberName##_tail
+			if constexpr (false)\
+				NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(MemberType) MemberName##_tail
 
 #define NCPP_ROBJECT_REFLECT_BASE_PRIVATE(Overrider, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER(Overrider, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
 #define NCPP_ROBJECT_REFLECT_BASE_PROTECTED(Overrider, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER(Overrider, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
@@ -269,7 +271,8 @@ namespace ncpp {
 			if(rflag & NCPP_RFLAG_ROBJECT_METADATA)\
 				NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 			\
-			static int MemberName##_tail
+			if constexpr (false)\
+				NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(MemberType) MemberName##_tail
 
 #define NCPP_ROBJECT_REFLECT_BASE_PRIVATE_CONST(Overrider, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_CONST(Overrider, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
 #define NCPP_ROBJECT_REFLECT_BASE_PROTECTED_CONST(Overrider, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_CONST(Overrider, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
@@ -288,7 +291,8 @@ namespace ncpp {
 			if(rflag & NCPP_RFLAG_ROBJECT_METADATA)\
 				NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 			\
-			static int MemberName##_tail
+			if constexpr (false)\
+				NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(MemberType) MemberName##_tail
 
 #define NCPP_ROBJECT_REFLECT_BASE_PRIVATE_VIRTUAL(Overrider, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(Overrider, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
 #define NCPP_ROBJECT_REFLECT_BASE_PROTECTED_VIRTUAL(Overrider, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(Overrider, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
@@ -307,7 +311,8 @@ namespace ncpp {
 			if(rflag & NCPP_RFLAG_ROBJECT_METADATA)\
 				NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 			\
-			static int MemberName##_tail
+			if constexpr (false)\
+				NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(MemberType) MemberName##_tail
 
 #define NCPP_ROBJECT_REFLECT_BASE_PRIVATE_VIRTUAL_CONST(Overrider, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(Overrider, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
 #define NCPP_ROBJECT_REFLECT_BASE_PROTECTED_VIRTUAL_CONST(Overrider, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(Overrider, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
