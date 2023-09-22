@@ -65,49 +65,49 @@ namespace ncpp {
 
 	namespace rtti {
 
-#define NCPP_RTTI_SEPECIFIC_TARGS() \
-			class rtti_options__,\
-			class rtti_traits__ = ncpp::rtti::traits_t<rtti_options__>,\
-			class allocator_type__ = typename rtti_traits__::allocator_type,\
-			class rcontainer_type__ = typename rtti_traits__::rcontainer_type,\
-			class robject_type_info_type__ = typename rtti_traits__::robject_type_info_type,\
-			class robject_member_info_type__ = typename rtti_traits__::robject_member_info_type,\
-			class rcontainer_additional_data_type__ = typename rtti_traits__::rcontainer_additional_data_type,\
-			class robject_type_info_additional_data_type__ = typename rtti_traits__::robject_type_info_additional_data_type,\
-			class robject_member_info_additional_data_type__ = typename rtti_traits__::robject_member_info_additional_data_type
+#define NCPP_RTTI_SEPECIFIC_TARGS(...) \
+			class __VA_OPT__(__VA_ARGS__##_)##rtti_options__,\
+			class __VA_OPT__(__VA_ARGS__##_)##rtti_traits__ = ncpp::rtti::traits_t<__VA_OPT__(__VA_ARGS__##_)##rtti_options__>,\
+			class __VA_OPT__(__VA_ARGS__##_)##allocator_type__ = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits__::allocator_type,\
+			class __VA_OPT__(__VA_ARGS__##_)##rcontainer_type__ = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits__::rcontainer_type,\
+			class __VA_OPT__(__VA_ARGS__##_)##robject_type_info_type__ = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits__::robject_type_info_type,\
+			class __VA_OPT__(__VA_ARGS__##_)##robject_member_info_type__ = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits__::robject_member_info_type,\
+			class __VA_OPT__(__VA_ARGS__##_)##rcontainer_additional_data_type__ = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits__::rcontainer_additional_data_type,\
+			class __VA_OPT__(__VA_ARGS__##_)##robject_type_info_additional_data_type__ = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits__::robject_type_info_additional_data_type,\
+			class __VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data_type__ = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits__::robject_member_info_additional_data_type
 
-#define NCPP_RTTI_PASS_SEPECIFIC_TARGS() \
-			rtti_options__, \
-			rtti_traits__, \
-			allocator_type__, \
-			rcontainer_type__, \
-			robject_type_info_type__, \
-			robject_member_info_type__,\
-			rcontainer_additional_data_type__,\
-			robject_type_info_additional_data_type__,\
-			robject_member_info_additional_data_type__
+#define NCPP_RTTI_PASS_SEPECIFIC_TARGS(...) \
+			__VA_OPT__(__VA_ARGS__##_)##rtti_options__, \
+			__VA_OPT__(__VA_ARGS__##_)##rtti_traits__, \
+			__VA_OPT__(__VA_ARGS__##_)##allocator_type__, \
+			__VA_OPT__(__VA_ARGS__##_)##rcontainer_type__, \
+			__VA_OPT__(__VA_ARGS__##_)##robject_type_info_type__, \
+			__VA_OPT__(__VA_ARGS__##_)##robject_member_info_type__,\
+			__VA_OPT__(__VA_ARGS__##_)##rcontainer_additional_data_type__,\
+			__VA_OPT__(__VA_ARGS__##_)##robject_type_info_additional_data_type__,\
+			__VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data_type__
 
-#define NCPP_RTTI_SEPECIFIC_USING(RTTIOptions) \
-			using rtti_options = RTTIOptions;\
-			using rtti_traits = ncpp::rtti::traits_t<rtti_options>;\
-			using allocator_type = typename rtti_traits::allocator_type;\
-			using rcontainer_type = typename rtti_traits::rcontainer_type;\
-			using robject_type_info_type = typename rtti_traits::robject_type_info_type;\
-			using robject_member_info_type = typename rtti_traits::robject_member_info_type;\
-			using rcontainer_additional_data_type = typename rtti_traits::rcontainer_additional_data_type;\
-			using robject_type_info_additional_data_type = typename rtti_traits::robject_type_info_additional_data_type;\
-			using robject_member_info_additional_data_type = typename rtti_traits::robject_member_info_additional_data_type;
+#define NCPP_RTTI_SEPECIFIC_USING(RTTIOptions, ...) \
+			using __VA_OPT__(__VA_ARGS__##_)##rtti_options = RTTIOptions;\
+			using __VA_OPT__(__VA_ARGS__##_)##rtti_traits = ncpp::rtti::traits_t<__VA_OPT__(__VA_ARGS__##_)##rtti_options>;\
+			using __VA_OPT__(__VA_ARGS__##_)##allocator_type = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits::allocator_type;\
+			using __VA_OPT__(__VA_ARGS__##_)##rcontainer_type = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits::rcontainer_type;\
+			using __VA_OPT__(__VA_ARGS__##_)##robject_type_info_type = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits::robject_type_info_type;\
+			using __VA_OPT__(__VA_ARGS__##_)##robject_member_info_type = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits::robject_member_info_type;\
+			using __VA_OPT__(__VA_ARGS__##_)##rcontainer_additional_data_type = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits::rcontainer_additional_data_type;\
+			using __VA_OPT__(__VA_ARGS__##_)##robject_type_info_additional_data_type = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits::robject_type_info_additional_data_type;\
+			using __VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data_type = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits::robject_member_info_additional_data_type;
 
-#define NCPP_RTTI_PASS_SEPECIFIC_USING() \
-			rtti_options, \
-			rtti_traits, \
-			allocator_type, \
-			rcontainer_type, \
-			robject_type_info_type, \
-			robject_member_info_type,\
-			rcontainer_additional_data_type,\
-			robject_type_info_additional_data_type,\
-			robject_member_info_additional_data_type
+#define NCPP_RTTI_PASS_SEPECIFIC_USING(...) \
+			__VA_OPT__(__VA_ARGS__##_)##rtti_options, \
+			__VA_OPT__(__VA_ARGS__##_)##rtti_traits, \
+			__VA_OPT__(__VA_ARGS__##_)##allocator_type, \
+			__VA_OPT__(__VA_ARGS__##_)##rcontainer_type, \
+			__VA_OPT__(__VA_ARGS__##_)##robject_type_info_type, \
+			__VA_OPT__(__VA_ARGS__##_)##robject_member_info_type,\
+			__VA_OPT__(__VA_ARGS__##_)##rcontainer_additional_data_type,\
+			__VA_OPT__(__VA_ARGS__##_)##robject_type_info_additional_data_type,\
+			__VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data_type
 
 
 
@@ -284,6 +284,12 @@ namespace ncpp {
 			};
 
 		};
+
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+
+		NCPP_RTTI_SEPECIFIC_USING(default_options, default);
 
 	}
 

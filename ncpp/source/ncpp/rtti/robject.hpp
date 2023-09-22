@@ -482,6 +482,13 @@ namespace ncpp {
 #define NCPP_RCLASS(RTTIOptions, ObjectTypeName,...) NCPP_EXPAND(NCPP_ROBJECT(RTTIOptions, ObjectTypeName, VIRTUAL __VA_OPT__(,) __VA_ARGS__))
 #define NCPP_RSTRUCT(RTTIOptions, ObjectTypeName,...) NCPP_EXPAND(NCPP_ROBJECT(RTTIOptions, ObjectTypeName __VA_OPT__(,) __VA_ARGS__))
 
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+
+#define NCPP_BASIC_RCLASS(ObjectTypeName,...) NCPP_EXPAND(NCPP_ROBJECT(ncpp::rtti::default_options, ObjectTypeName, VIRTUAL __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_BASIC_RSTRUCT(ObjectTypeName,...) NCPP_EXPAND(NCPP_ROBJECT(ncpp::rtti::default_options, ObjectTypeName __VA_OPT__(,) __VA_ARGS__))
+
 	}
 
 }
