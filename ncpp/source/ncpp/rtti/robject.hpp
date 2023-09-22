@@ -86,7 +86,7 @@ namespace ncpp {
 
 
 #define NCPP_ROBJECT_WRAP_TYPE(Type) typename ncpp::utilities::first_template_arg_t<Type>::type
-#define NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(Type) typename ncpp::utilities::nth_template_arg_t<ncpp::utilities::is_function_t<Type>::value, Type, int>::type
+#define NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(Type) typename ncpp::utilities::nth_template_arg_t<ncpp::utilities::is_function_t<Type>::value, Type, NCPP_ROBJECT_WRAP_TYPE(Type)*>::type
 
 
 
@@ -290,13 +290,20 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 #define NCPP_ROBJECT_REFLECT_MEMBER(Overrider, MemberType, MemberName,...) \
-			NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberType, MemberName);\
-			\
-			if(rflag & NCPP_RFLAG_ROBJECT_MEMBER_INFO)\
-				NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
-			\
-			if(rflag & NCPP_RFLAG_ROBJECT_METADATA)\
-				NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+			{\
+				\
+				using member_type = MemberType;\
+				eastl::string member_name = #MemberName;\
+				NCPP_ROBJECT_WRAP_TYPE(MemberType) this_type::*member_p = &this_type::MemberName;\
+				\
+				NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberType, MemberName);\
+				\
+				if(rflag & NCPP_RFLAG_ROBJECT_MEMBER_INFO)\
+					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+				\
+				if(rflag & NCPP_RFLAG_ROBJECT_METADATA)\
+					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+			}\
 			\
 			if constexpr (false)\
 				NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(MemberType) MemberName##_tail
@@ -310,13 +317,20 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 #define NCPP_ROBJECT_REFLECT_MEMBER_CONST(Overrider, MemberType, MemberName,...) \
-			NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberType, MemberName);\
-			\
-			if(rflag & NCPP_RFLAG_ROBJECT_MEMBER_INFO)\
-				NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
-			\
-			if(rflag & NCPP_RFLAG_ROBJECT_METADATA)\
-				NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+			{\
+				\
+				using member_type = MemberType;\
+				eastl::string member_name = #MemberName;\
+				NCPP_ROBJECT_WRAP_TYPE(MemberType) this_type::*member_p = &this_type::MemberName;\
+				\
+				NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberType, MemberName);\
+				\
+				if(rflag & NCPP_RFLAG_ROBJECT_MEMBER_INFO)\
+					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+				\
+				if(rflag & NCPP_RFLAG_ROBJECT_METADATA)\
+					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+			}\
 			\
 			if constexpr (false)\
 				NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(MemberType) MemberName##_tail
@@ -330,13 +344,20 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 #define NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(Overrider, MemberType, MemberName,...) \
-			NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberType, MemberName);\
-			\
-			if(rflag & NCPP_RFLAG_ROBJECT_MEMBER_INFO)\
-				NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
-			\
-			if(rflag & NCPP_RFLAG_ROBJECT_METADATA)\
-				NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+			{\
+				\
+				using member_type = MemberType;\
+				eastl::string member_name = #MemberName;\
+				NCPP_ROBJECT_WRAP_TYPE(MemberType) this_type::*member_p = &this_type::MemberName;\
+				\
+				NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberType, MemberName);\
+				\
+				if(rflag & NCPP_RFLAG_ROBJECT_MEMBER_INFO)\
+					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+				\
+				if(rflag & NCPP_RFLAG_ROBJECT_METADATA)\
+					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+			}\
 			\
 			if constexpr (false)\
 				NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(MemberType) MemberName##_tail
@@ -350,13 +371,20 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 #define NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(Overrider, MemberType, MemberName,...) \
-			NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberType, MemberName);\
-			\
-			if(rflag & NCPP_RFLAG_ROBJECT_MEMBER_INFO)\
-				NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
-			\
-			if(rflag & NCPP_RFLAG_ROBJECT_METADATA)\
-				NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+			{\
+				\
+				using member_type = MemberType;\
+				eastl::string member_name = #MemberName;\
+				NCPP_ROBJECT_WRAP_TYPE(MemberType) this_type::*member_p = &this_type::MemberName;\
+				\
+				NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberType, MemberName);\
+				\
+				if(rflag & NCPP_RFLAG_ROBJECT_MEMBER_INFO)\
+					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+				\
+				if(rflag & NCPP_RFLAG_ROBJECT_METADATA)\
+					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+			}\
 			\
 			if constexpr (false)\
 				NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(MemberType) MemberName##_tail
