@@ -136,13 +136,6 @@ NCPP_RTTIMacros_CreateMemberOverrider(
     REFLECT ";"
     BODY ";"
 )
-NCPP_RTTIMacros_CreateMemberOverrider(
-    NAME A
-    PREFIX B
-    REFLECT ";"
-    BODY ";"
-)
-
 
 
 message(STATUS "<NCPP::RTTIMacros> Build rtti macros done")
