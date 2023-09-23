@@ -3,7 +3,7 @@ message(STATUS "<NCPP::Dependencies> Start configuring EA dependencies")
 
 
 
-include(GitUtils)
+include(NCPP/GitUtils)
 
 
 

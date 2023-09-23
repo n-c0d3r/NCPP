@@ -5,6 +5,6 @@ find_package(Doxygen)
 
 
 
-include(ConfigureEADependencies)
+include(NCPP/ConfigureEADependencies)
 
 message(STATUS "<NCPP::Dependencies> Configure dependencies done")
