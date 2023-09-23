@@ -2,10 +2,6 @@ cmake_minimum_required(VERSION 3.12)
 
 
 
-include(cmake/Version.cmake)
-
-
-
 project(ncpp)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -20,20 +16,22 @@ set(NCPP_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
+include(NCPP/Version)
+
 #Dependencies
 option(NCPP_CHECK_DEPENDENCIES "If enabled, it will automatically check the dependencies each time generating project" ON)
 if(${NCPP_CHECK_DEPENDENCIES})
-    include(CheckDependencies)
+    include(NCPP/CheckDependencies)
 endif()
 
-include(ConfigureDependencies)
+include(NCPP/ConfigureDependencies)
 
 #Documentations
 option(NCPP_ENABLE_DOCUMENTATIONS "If enabled, creating a target being capable of generating documentations" OFF)
 if(NCPP_ENABLE_DOCUMENTATIONS)
     option(NCPP_INTERNAL_DOCS "Generate docs for anything" OFF)
 
-    include(DocsUtils)
+    include(NCPP/DocsUtils)
 
     DocsUtils_CreateTarget(
         NAME NCPP
