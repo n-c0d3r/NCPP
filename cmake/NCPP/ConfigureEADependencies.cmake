@@ -41,7 +41,7 @@ function(EARepository_Add)
     )     
 
     if(NOT TARGET ${PARGS_NAME})
-        add_subdirectory("${CMAKE_CURRENT_BINARY_DIR}/dependencies/${PARGS_NAME}")
+        add_subdirectory("${CMAKE_CURRENT_BINARY_DIR}/dependencies/${PARGS_NAME}" "${CMAKE_CURRENT_BINARY_DIR}/dependencies/${PARGS_NAME}")
     endif()
 endfunction()
 
