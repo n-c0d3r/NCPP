@@ -1,6 +1,5 @@
 
-#include <ncpp/.hpp>
-#include <ncpp/rtti/robject.hpp>
+#include <ncpp/rtti/.hpp>
 
 using namespace ncpp;
 
