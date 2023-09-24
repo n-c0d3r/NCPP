@@ -1,5 +1,5 @@
 
-message(STATUS "<NCPP::Dependencies> Start checking EA dependencies")
+message(STATUS "<NCPP::CheckEADependencies> Start checking EA dependencies")
 
 
 
@@ -7,17 +7,6 @@ message(STATUS "<NCPP::Dependencies> Start checking EA dependencies")
 #   Includes
 #####################################################################################
 include(NCPP/GitUtils)
-
-
-
-#####################################################################################
-#   Setup directory for EA dependencies to be downloaded into
-#####################################################################################
-set(BUILD_DEPENDENCIES_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/dependencies")
-
-if(NOT EXISTS ${BUILD_DEPENDENCIES_DIRECTORY})
-    file(MAKE_DIRECTORY ${BUILD_DEPENDENCIES_DIRECTORY})
-endif()
 
 
 
@@ -85,4 +74,4 @@ NCPP_EARepository_Checkout(
 
 
 
-message(STATUS "<NCPP::Dependencies> Check EA dependencies done")
+message(STATUS "<NCPP::CheckEADependencies> Check EA dependencies done")

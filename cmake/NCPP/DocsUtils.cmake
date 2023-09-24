@@ -1,6 +1,6 @@
 
-set(DOXYGEN_THEME_AWESOME_CSS_DIR "${CMAKE_CURRENT_LIST_DIR}/../submodules/doxygen-awesome-css")
-set(DOXYGEN_THEME_FLAT_DESIGN_DIR "${CMAKE_CURRENT_LIST_DIR}/../submodules/doxygen_theme_flat_design")
+set(DOXYGEN_THEME_AWESOME_CSS_DIR "${NCPP_DEPENDENCIES_DIR}/doxygen-awesome-css")
+set(DOXYGEN_THEME_FLAT_DESIGN_DIR "${NCPP_DEPENDENCIES_DIR}/doxygen_theme_flat_design")
 
 
 

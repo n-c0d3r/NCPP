@@ -32,6 +32,7 @@ NCPP_SetGlobal(NCPP_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
 NCPP_SetGlobal(NCPP_SCRIPTS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/scripts")
 NCPP_SetGlobal(NCPP_SUBMODULES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/submodules")
 NCPP_SetGlobal(NCPP_CMAKE_MODULE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+NCPP_SetGlobal(NCPP_DEPENDENCIES_DIR "${CMAKE_CURRENT_BINARY_DIR}/dependencies")
 
 
 
@@ -45,8 +46,7 @@ include(NCPP/Version)
 #####################################################################################
 #   Check and configure dependencies
 #####################################################################################
-option(NCPP_CHECK_DEPENDENCIES "If enabled, it will automatically check the dependencies each time generating project" ON)
-if(${NCPP_CHECK_DEPENDENCIES})
+if(NOT EXISTS ${NCPP_DEPENDENCIES_DIR})
     include(NCPP/CheckDependencies)
 endif()
 

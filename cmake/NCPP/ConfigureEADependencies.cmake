@@ -1,5 +1,5 @@
 
-message(STATUS "<NCPP::Dependencies> Start configuring EA dependencies")
+message(STATUS "<NCPP::ConfigureEADependencies> Start configuring EA dependencies")
 
 
 
@@ -120,4 +120,4 @@ set_target_properties(EAAssert
 
 
 
-message(STATUS "<NCPP::Dependencies> Configure EA dependencies done")
+message(STATUS "<NCPP::ConfigureEADependencies> Configure EA dependencies done")
