@@ -44,8 +44,6 @@ set(NCPP_MAX_TAB_COUNT 8 CACHE STRING "Max Tab Count")
 #####################################################################################
 #   Generated files
 #####################################################################################
-NCPP_SetGlobal(NCPP_GENERATED_FILES_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated_files/ncpp")
-
 # ncpp target configure file
 set(NCPP_CONFIG_HPP_PATH "${NCPP_GENERATED_FILES_DIR}/config.hpp")
 configure_file(source/ncpp/.config ${NCPP_CONFIG_HPP_PATH})

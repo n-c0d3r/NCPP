@@ -33,13 +33,21 @@ NCPP_SetGlobal(NCPP_SCRIPTS_DIR "${CMAKE_CURRENT_LIST_DIR}/scripts")
 NCPP_SetGlobal(NCPP_SUBMODULES_DIR "${CMAKE_CURRENT_LIST_DIR}/submodules")
 NCPP_SetGlobal(NCPP_CMAKE_MODULE_DIR "${CMAKE_CURRENT_LIST_DIR}/cmake")
 NCPP_SetGlobal(NCPP_DEPENDENCIES_DIR "${CMAKE_CURRENT_BINARY_DIR}/dependencies")
+NCPP_SetGlobal(NCPP_GENERATED_FILES_DIR "${CMAKE_CURRENT_BINARY_DIR}/ncpp/generated_files/ncpp")
 
 
 
 #####################################################################################
 #   Version
 #####################################################################################
-include(NCPP/Version)
+include(NCPP/VersionUtils)
+NCPP_VersionUtils_CreateVersionMacros(
+    PROJECT_NAME NCPP
+    OUTPUT_FILE "${NCPP_GENERATED_FILES_DIR}/version.hpp"
+    MAJOR 0
+    MINOR 3
+    PATCH 0
+)
 
 
 
