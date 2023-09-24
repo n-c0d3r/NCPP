@@ -4,7 +4,7 @@ set(DOXYGEN_THEME_FLAT_DESIGN_DIR "${CMAKE_CURRENT_LIST_DIR}/../submodules/doxyg
 
 
 
-function(DocsUtils_CreateTarget)
+function(NCPP_DocsUtils_CreateTarget)
     cmake_parse_arguments(
         PARGS
         ""

@@ -15,7 +15,7 @@ endif()
 
 
 
-function(EARepository_Decl)   
+function(NCPP_EARepository_Decl)   
     cmake_parse_arguments(
         PARGS                                                                                                         # prefix of output variables
         "QUIET"                                                                                                       # list of names of the boolean arguments (only defined ones will be true)
@@ -31,7 +31,7 @@ function(EARepository_Decl)
     endif()
 endfunction()
 
-function(EARepository_Add)    
+function(NCPP_EARepository_Add)    
     cmake_parse_arguments(
         PARGS                                                                                                         # prefix of output variables
         "QUIET"                                                                                                       # list of names of the boolean arguments (only defined ones will be true)
@@ -48,20 +48,20 @@ endfunction()
 
 
 # Declare EA repositories
-EARepository_Decl(
+NCPP_EARepository_Decl(
     NAME EASTL
 )
-EARepository_Decl(
+NCPP_EARepository_Decl(
     NAME EAStdC
 )
-EARepository_Decl(
+NCPP_EARepository_Decl(
     NAME EAAssert
 )
-EARepository_Decl(
+NCPP_EARepository_Decl(
     NAME EAThread
 )
 
-EARepository_Decl(
+NCPP_EARepository_Decl(
     NAME EABase
     CUSTOM_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/dependencies/EAThread/test/packages"
 )
@@ -69,16 +69,16 @@ EARepository_Decl(
 
 
 # Add EA repositories as sub directories
-EARepository_Add(
+NCPP_EARepository_Add(
     NAME EAThread
 )
-EARepository_Add(
+NCPP_EARepository_Add(
     NAME EASTL
 )
-EARepository_Add(
+NCPP_EARepository_Add(
     NAME EAStdC
 )
-EARepository_Add(
+NCPP_EARepository_Add(
     NAME EAAssert
 )
 

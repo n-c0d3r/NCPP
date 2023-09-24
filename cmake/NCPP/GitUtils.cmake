@@ -42,7 +42,7 @@ endif()
 
 
 
-function(git_clone)
+function(NCPP_GitClone)
 
     cmake_parse_arguments(
             PARGS                                                                                                         # prefix of output variables
