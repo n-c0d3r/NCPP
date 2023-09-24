@@ -10,26 +10,20 @@ set(CMAKE_C_STANDARD 17)
 
 
 
-unset(NCPP_ROOT_DIR CACHE)
-unset(NCPP_BINARY_DIR CACHE)
-unset(NCPP_SCRIPTS_DIR CACHE)
-unset(NCPP_SUBMODULES_DIR CACHE)
-unset(NCPP_CMAKE_MODULE_DIR CACHE)
-set(NCPP_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "")
-set(NCPP_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}" CACHE INTERNAL "")
-set(NCPP_SCRIPTS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/scripts" CACHE INTERNAL "")
-set(NCPP_SUBMODULES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/submodules" CACHE INTERNAL "")
-set(NCPP_CMAKE_MODULE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cmake" CACHE INTERNAL "")
-
-
-
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
+# Global variables
+include(NCPP/SetGlobal)
+NCPP_SetGlobal(NCPP_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+NCPP_SetGlobal(NCPP_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
+NCPP_SetGlobal(NCPP_SCRIPTS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/scripts")
+NCPP_SetGlobal(NCPP_SUBMODULES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/submodules")
+NCPP_SetGlobal(NCPP_CMAKE_MODULE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-
+# Version
 include(NCPP/Version)
 
-#Dependencies
+# Dependencies
 option(NCPP_CHECK_DEPENDENCIES "If enabled, it will automatically check the dependencies each time generating project" ON)
 if(${NCPP_CHECK_DEPENDENCIES})
     include(NCPP/CheckDependencies)
@@ -37,7 +31,7 @@ endif()
 
 include(NCPP/ConfigureDependencies)
 
-#Documentations
+# Documentations
 option(NCPP_ENABLE_DOCUMENTATIONS "If enabled, creating a target being capable of generating documentations" OFF)
 if(NCPP_ENABLE_DOCUMENTATIONS)
     option(NCPP_INTERNAL_DOCS "Generate docs for anything" OFF)

@@ -8,7 +8,7 @@ endif()
 
 
 
-#ncpp generated files dir
+# ncpp generated files dir
 unset(NCPP_GENERATED_FILES_DIR CACHE)
 set(NCPP_GENERATED_FILES_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated_files/ncpp" CACHE INTERNAL "")
 
