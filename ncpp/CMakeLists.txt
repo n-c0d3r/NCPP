@@ -9,7 +9,8 @@ endif()
 
 
 #ncpp generated files dir
-set(NCPP_GENERATED_FILES_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated_files/ncpp")
+unset(NCPP_GENERATED_FILES_DIR CACHE)
+set(NCPP_GENERATED_FILES_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated_files/ncpp" CACHE INTERNAL "")
 
 
 
@@ -56,7 +57,8 @@ include(NCPP/RTTIMacros)
 
 
 
-set(NCPP_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source" PARENT_SCOPE)
+unset(NCPP_SOURCE_DIR CACHE)
+set(NCPP_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source" CACHE INTERNAL "")
 
 
 
