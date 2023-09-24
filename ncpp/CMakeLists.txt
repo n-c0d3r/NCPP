@@ -1,4 +1,8 @@
 
+include(NCPP/SetGlobal)
+
+
+
 set(NCPP_CXX_STANDARD 20 CACHE STRING "CXX Standard")
 set(CMAKE_CXX_STANDARD ${NCPP_CXX_STANDARD})
 
@@ -9,8 +13,7 @@ endif()
 
 
 # ncpp generated files dir
-unset(NCPP_GENERATED_FILES_DIR CACHE)
-set(NCPP_GENERATED_FILES_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated_files/ncpp" CACHE INTERNAL "")
+NCPP_SetGlobal(NCPP_GENERATED_FILES_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated_files/ncpp")
 
 
 
@@ -57,8 +60,7 @@ include(NCPP/RTTIMacros)
 
 
 
-unset(NCPP_SOURCE_DIR CACHE)
-set(NCPP_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source" CACHE INTERNAL "")
+NCPP_SetGlobal(NCPP_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
 
 
 
