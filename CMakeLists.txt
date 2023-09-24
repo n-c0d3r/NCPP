@@ -58,6 +58,10 @@ include(NCPP/ConfigureDependencies)
 #   Create documentations target
 #####################################################################################
 option(NCPP_ENABLE_DOCUMENTATIONS "If enabled, creating a target being capable of generating documentations" OFF)
+NCPP_SetGlobal(
+    NCPP_DOCUMENTATIONS_PREDEFINED
+    "NCPP_WINDOWS_PLATFORM NCPP_UNIX_PLATFORM NCPP_ENABLE_RTTI NCPP_ENABLE_METADATA"
+)
 if(NCPP_ENABLE_DOCUMENTATIONS)
     option(NCPP_INTERNAL_DOCS "Generate docs for anything" OFF)
 
@@ -81,11 +85,7 @@ if(NCPP_ENABLE_DOCUMENTATIONS)
         CWD "${CMAKE_CURRENT_SOURCE_DIR}"
         INTERNAL_DOCS ${NCPP_INTERNAL_DOCS}
 
-        PREDEFINED
-            NCPP_WINDOWS_PLATFORM
-            NCPP_UNIX_PLATFORM
-            NCPP_ENABLE_RTTI
-            NCPP_ENABLE_METADATA
+        PREDEFINED ${NCPP_DOCUMENTATIONS_PREDEFINED}
 
         MAIN_PAGE "${CMAKE_CURRENT_SOURCE_DIR}/README.md"
     )
