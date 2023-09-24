@@ -3,17 +3,28 @@ message(STATUS "<NCPP::Dependencies> Start checking EA dependencies")
 
 
 
+#####################################################################################
+#   Includes
+#####################################################################################
 include(NCPP/GitUtils)
 
 
 
+#####################################################################################
+#   Setup directory for EA dependencies to be downloaded into
+#####################################################################################
 set(BUILD_DEPENDENCIES_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/dependencies")
 
 if(NOT EXISTS ${BUILD_DEPENDENCIES_DIRECTORY})
     file(MAKE_DIRECTORY ${BUILD_DEPENDENCIES_DIRECTORY})
 endif()
 
-function(NCPP_EARepository_Download)   
+
+
+#####################################################################################
+#   Implement EA repo checking with git clone
+#####################################################################################
+function(NCPP_EARepository_Checkout)   
     cmake_parse_arguments(
         PARGS                                                                                                         # prefix of output variables
         "QUIET"                                                                                                       # list of names of the boolean arguments (only defined ones will be true)
@@ -41,29 +52,32 @@ endfunction()
 
 
 
-# Download EA repositories
-NCPP_EARepository_Download(
+#####################################################################################
+#   Download EA repos
+#####################################################################################
+NCPP_EARepository_Checkout(
     NAME EASTL
     GIT_URL "https://github.com/electronicarts/EASTL.git"
 )
-NCPP_EARepository_Download(
+NCPP_EARepository_Checkout(
     NAME EAStdC
     GIT_URL "https://github.com/electronicarts/EAStdC.git"
 )
-NCPP_EARepository_Download(
+NCPP_EARepository_Checkout(
     NAME EAAssert
     GIT_URL "https://github.com/electronicarts/EAAssert.git"
 )
-NCPP_EARepository_Download(
+NCPP_EARepository_Checkout(
     NAME EAThread
     GIT_URL "https://github.com/electronicarts/EAThread.git"
 )
 
+# If EABase is not cloned, delete the empty EABase subdirectory to be cloned next time
 if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/dependencies/EAThread/test/packages/EABase/CMakeLists.txt")
     file(REMOVE_RECURSE "${CMAKE_CURRENT_BINARY_DIR}/dependencies/EAThread/test/packages/EABase")
 endif()
 
-NCPP_EARepository_Download(
+NCPP_EARepository_Checkout(
     NAME EABase
     GIT_URL "https://github.com/electronicarts/EABase.git"
     CUSTOM_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/dependencies/EAThread/test/packages"

@@ -1,8 +1,20 @@
 
+#####################################################################################
+#   Includes
+#####################################################################################
 include(NCPP/SetGlobal)
 
+# ncpp prerequisite macros
+include(NCPP/PrerequisiteMacros)
+
+# ncpp rtti macros
+include(NCPP/RTTIMacros)
 
 
+
+#####################################################################################
+#   Compiler configs
+#####################################################################################
 set(NCPP_CXX_STANDARD 20 CACHE STRING "CXX Standard")
 set(CMAKE_CXX_STANDARD ${NCPP_CXX_STANDARD})
 
@@ -17,11 +29,12 @@ NCPP_SetGlobal(NCPP_GENERATED_FILES_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated_f
 
 
 
+#####################################################################################
+#   Options
+#####################################################################################
 # ncpp mem options
 option(NCPP_ENABLE_MEMORY_COUNTING "Enable memory counting" ON)
 set(NCPP_DEFAULT_ALLOCATOR "eastl::allocator" CACHE STRING "The allocator used for ncpp's containers,...")
-
-
 
 # ncpp pac options
 option(NCPP_ENABLE_WEAKLOCK_WARNING "If enabled, weaklock will automatically warn when race condition occurs" ON)
@@ -33,6 +46,9 @@ set(NCPP_MAX_TAB_COUNT 8 CACHE STRING "Max Tab Count")
 
 
 
+#####################################################################################
+#   Generated files
+#####################################################################################
 # ncpp target configure file
 set(NCPP_CONFIG_HPP_PATH "${NCPP_GENERATED_FILES_DIR}/config.hpp")
 configure_file(source/ncpp/.config ${NCPP_CONFIG_HPP_PATH})
@@ -52,17 +68,12 @@ foreach(header ${EASTL_HEADERS})
     file(APPEND "${EASTL_COMBINED_HEADER_PATH}" "#include <${relpath}>\n")
 endforeach()
 
-# ncpp prerequisite macros
-include(NCPP/PrerequisiteMacros)
-
-# ncpp rtti macros
-include(NCPP/RTTIMacros)
 
 
-
+#####################################################################################
+#   Source files
+#####################################################################################
 NCPP_SetGlobal(NCPP_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
-
-
 
 # ncpp target source files
 file(GLOB_RECURSE source_files
@@ -79,7 +90,9 @@ source_group(TREE "${CMAKE_CURRENT_BINARY_DIR}/generated_files" PREFIX generated
 
 
 
-# Create ncpp target
+#####################################################################################
+#   Create ncpp target
+#####################################################################################
 add_library(ncpp STATIC
     ${source_files}
     ${generated_files}
@@ -87,7 +100,9 @@ add_library(ncpp STATIC
 
 
 
-# ncpp target settings
+#####################################################################################
+#   ncpp target settings
+#####################################################################################
 set_target_properties(ncpp
     PROPERTIES 
         FOLDER "ncpp"
@@ -123,6 +138,9 @@ endif()
 
 
 
+#####################################################################################
+#   ncpp dependencies
+#####################################################################################
 add_dependencies(ncpp
     EABase
     EASTL
@@ -133,5 +151,7 @@ add_dependencies(ncpp
 
 
 
-# sub directories
+#####################################################################################
+#   Add subdirectories
+#####################################################################################
 add_subdirectory(tests)

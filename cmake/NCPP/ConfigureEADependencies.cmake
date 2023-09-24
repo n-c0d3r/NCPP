@@ -15,6 +15,9 @@ endif()
 
 
 
+#####################################################################################
+#   Setup EA cmake modules
+#####################################################################################
 function(NCPP_EARepository_Decl)   
     cmake_parse_arguments(
         PARGS                                                                                                         # prefix of output variables
@@ -31,6 +34,9 @@ function(NCPP_EARepository_Decl)
     endif()
 endfunction()
 
+#####################################################################################
+#   Implement EA repo subdirectory adding
+#####################################################################################
 function(NCPP_EARepository_Add)    
     cmake_parse_arguments(
         PARGS                                                                                                         # prefix of output variables
@@ -47,7 +53,9 @@ endfunction()
 
 
 
-# Declare EA repositories
+#####################################################################################
+#   Declare EA repos
+#####################################################################################
 NCPP_EARepository_Decl(
     NAME EASTL
 )
@@ -68,7 +76,9 @@ NCPP_EARepository_Decl(
 
 
 
-# Add EA repositories as sub directories
+#####################################################################################
+#   Add EA repos
+#####################################################################################
 NCPP_EARepository_Add(
     NAME EAThread
 )
@@ -84,7 +94,9 @@ NCPP_EARepository_Add(
 
 
 
-# Setup folder
+#####################################################################################
+#   Add all EA targets into EA folder
+#####################################################################################
 set_target_properties(EABase
     PROPERTIES 
         FOLDER "EA"
