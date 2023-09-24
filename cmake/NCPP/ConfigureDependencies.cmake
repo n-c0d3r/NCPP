@@ -1,5 +1,5 @@
 
-message(STATUS "<NCPP::Dependencies> Start configuring dependencies")
+message(STATUS "<NCPP::ConfigureDependencies> Start configuring dependencies")
 
 
 
@@ -12,4 +12,4 @@ include(NCPP/ConfigureEADependencies)
 
 
 
-message(STATUS "<NCPP::Dependencies> Configure dependencies done")
+message(STATUS "<NCPP::ConfigureDependencies> Configure dependencies done")

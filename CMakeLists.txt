@@ -19,7 +19,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 #####################################################################################
 #   CMake module
 #####################################################################################
-set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_LIST_DIR}/cmake")
 
 
 
@@ -27,11 +27,11 @@ set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 #   Global variables
 #####################################################################################
 include(NCPP/SetGlobal)
-NCPP_SetGlobal(NCPP_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+NCPP_SetGlobal(NCPP_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}")
 NCPP_SetGlobal(NCPP_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
-NCPP_SetGlobal(NCPP_SCRIPTS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/scripts")
-NCPP_SetGlobal(NCPP_SUBMODULES_DIR "${CMAKE_CURRENT_SOURCE_DIR}/submodules")
-NCPP_SetGlobal(NCPP_CMAKE_MODULE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+NCPP_SetGlobal(NCPP_SCRIPTS_DIR "${CMAKE_CURRENT_LIST_DIR}/scripts")
+NCPP_SetGlobal(NCPP_SUBMODULES_DIR "${CMAKE_CURRENT_LIST_DIR}/submodules")
+NCPP_SetGlobal(NCPP_CMAKE_MODULE_DIR "${CMAKE_CURRENT_LIST_DIR}/cmake")
 NCPP_SetGlobal(NCPP_DEPENDENCIES_DIR "${CMAKE_CURRENT_BINARY_DIR}/dependencies")
 
 
