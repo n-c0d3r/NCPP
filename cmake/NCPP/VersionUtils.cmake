@@ -35,27 +35,39 @@ function(NCPP_VersionUtils_CreateVersionMacros)
             file(WRITE "${PARGS_OUTPUT_FILE}" "")
 
             # Apply variables
-            NCPP_SetGlobal(${PARGS_PROJECT_NAME}_MAJOR ${PARGS_MAJOR})
-            NCPP_SetGlobal(${PARGS_PROJECT_NAME}_MAINOR ${PARGS_MINOR})
-            NCPP_SetGlobal(${PARGS_PROJECT_NAME}_PATCH ${PARGS_PATCH})
-            NCPP_SetGlobal(${PARGS_PROJECT_NAME}_MAX_COMPONENT_VALUE ${PARGS_MAX_COMPONENT_VALUE})
+            NCPP_SetGlobal(${PARGS_PROJECT_NAME}_VERSION_MAJOR ${PARGS_MAJOR})
+            NCPP_SetGlobal(${PARGS_PROJECT_NAME}_VERSION_MAINOR ${PARGS_MINOR})
+            NCPP_SetGlobal(${PARGS_PROJECT_NAME}_VERSION_PATCH ${PARGS_PATCH})
+            NCPP_SetGlobal(${PARGS_PROJECT_NAME}_VERSION ${PARGS_MAJOR}.${PARGS_MINOR}.${PARGS_PATCH})
+            NCPP_SetGlobal(${PARGS_PROJECT_NAME}_VERSION_STR "\"${PARGS_MAJOR}.${PARGS_MINOR}.${PARGS_PATCH}\"")
             NCPP_SetGlobal(${PARGS_PROJECT_NAME}_VERSION_NUMBER ${version_number})
+            NCPP_SetGlobal(${PARGS_PROJECT_NAME}_VERSION_MAX_COMPONENT_VALUE ${PARGS_MAX_COMPONENT_VALUE})
 
             # Create macros
             NCPP_MacroHelper_CreateObjectMacro(
-                NAME ${PARGS_PROJECT_NAME}_MAJOR
+                NAME ${PARGS_PROJECT_NAME}_VERSION_MAJOR
                 OUTPUT_FILE "${PARGS_OUTPUT_FILE}"
                 BODY ${PARGS_MAJOR}
             )
             NCPP_MacroHelper_CreateObjectMacro(
-                NAME ${PARGS_PROJECT_NAME}_MAINOR
+                NAME ${PARGS_PROJECT_NAME}_VERSION_MAINOR
                 OUTPUT_FILE "${PARGS_OUTPUT_FILE}"
                 BODY ${PARGS_MINOR}
             )
             NCPP_MacroHelper_CreateObjectMacro(
-                NAME ${PARGS_PROJECT_NAME}_PATCH
+                NAME ${PARGS_PROJECT_NAME}_VERSION_PATCH
                 OUTPUT_FILE "${PARGS_OUTPUT_FILE}"
                 BODY ${PARGS_PATCH}
+            )
+            NCPP_MacroHelper_CreateObjectMacro(
+                NAME ${PARGS_PROJECT_NAME}_VERSION
+                OUTPUT_FILE "${PARGS_OUTPUT_FILE}"
+                BODY ${${PARGS_PROJECT_NAME}_VERSION}
+            )
+            NCPP_MacroHelper_CreateObjectMacro(
+                NAME ${PARGS_PROJECT_NAME}_VERSION_STR
+                OUTPUT_FILE "${PARGS_OUTPUT_FILE}"
+                BODY ${${PARGS_PROJECT_NAME}_VERSION_STR}
             )
             NCPP_MacroHelper_CreateObjectMacro(
                 NAME ${PARGS_PROJECT_NAME}_VERSION_NUMBER
