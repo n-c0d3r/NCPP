@@ -1,5 +1,5 @@
 
-include("./SetGlobal.cmake")
+include(NCPP/SetGlobal)
 
 
 
