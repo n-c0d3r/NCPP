@@ -33,7 +33,7 @@ if(NCPP_ENABLE_DOCUMENTATIONS)
 
     include(NCPP/DocsUtils)
 
-    DocsUtils_CreateTarget(
+    NCPP_DocsUtils_CreateTarget(
         NAME NCPP
         BRIEF "Ncoder's Game Engine Learning Aimed C++ Library."
 
