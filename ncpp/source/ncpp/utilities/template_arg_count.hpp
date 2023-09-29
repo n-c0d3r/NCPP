@@ -69,10 +69,10 @@ namespace ncpp {
 
         /**
          *  Returns the template argument count.
-         *  @param <arg_types__...> template argument list.
+         *  @param <F_args__...> template argument list.
          */
-        template<typename... arg_types__>
-        static inline constexpr u16 T_template_arg_count_v = sizeof...(arg_types__);
+        template<typename... F_args__>
+        static inline constexpr u16 T_template_arg_count_v = sizeof...(F_args__);
 
     }
 

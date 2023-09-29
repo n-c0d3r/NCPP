@@ -83,9 +83,9 @@ namespace ncpp {
      * 
      *  @param <memory_helper> the class that implements memory_helper_t.
      *  @param <is_all_usable__> if enabled, all the allocated memory size will be added into total allocated memory count when memory counting enabled.
-     *  @param <additional_arg_types__...> types of additional arguments need to pass into when allocating or deallocating.
+     *  @param <F_additional_args__...> types of additional arguments need to pass into when allocating or deallocating.
      */
-    template<class memory_helper__, b8 is_all_usable__, typename... additional_arg_types__>
+    template<class F_memory_helper__, b8 is_all_usable__, typename... F_additional_args__>
 	class TF_memory_helper {
 
 #if !defined(NDEBUG) || defined(NCPP_ENABLE_MEMORY_COUNTING)
@@ -126,13 +126,13 @@ namespace ncpp {
             return actual_size;
         }
 
-        static inline void* allocate(size_t size, const char* pName, int flags, additional_arg_types__... additional_args)
+        static inline void* allocate(size_t size, const char* pName, int flags, F_additional_args__... additional_args)
         {
 
-            return allocate(size, EASTL_ALLOCATOR_MIN_ALIGNMENT, 0, pName, flags, std::forward<additional_arg_types__>(additional_args)...);
+            return allocate(size, EASTL_ALLOCATOR_MIN_ALIGNMENT, 0, pName, flags, std::forward<F_additional_args__>(additional_args)...);
         }
 
-        static void* allocate(size_t size, size_t alignment, size_t alignmentOffset, const char* pName, int flags, additional_arg_types__... additional_args)
+        static void* allocate(size_t size, size_t alignment, size_t alignmentOffset, const char* pName, int flags, F_additional_args__... additional_args)
         {
 
             //  Memory Layout:
@@ -172,7 +172,7 @@ namespace ncpp {
 
 
             // malloc memory
-            u8* raw_p = reinterpret_cast<u8*>(memory_helper__::new_mem(actual_size, std::forward<additional_arg_types__>(additional_args)...));
+            u8* raw_p = reinterpret_cast<u8*>(F_memory_helper__::new_mem(actual_size, std::forward<F_additional_args__>(additional_args)...));
 
 
 
@@ -238,7 +238,7 @@ namespace ncpp {
 
 
 
-        static void deallocate(void* ptr, additional_arg_types__... additional_args)
+        static void deallocate(void* ptr, F_additional_args__... additional_args)
         {
 
 #if HAS_DATA_OFFSET == 1
@@ -262,9 +262,9 @@ namespace ncpp {
             u8 shift = *(reinterpret_cast<u8*>(ptr) - 1);
 
 #if HAS_DATA_OFFSET == 1
-            memory_helper__::delete_mem(reinterpret_cast<u8*>(ptr) - data_offset - shift - 1, std::forward<additional_arg_types__>(additional_args)...);
+            F_memory_helper__::delete_mem(reinterpret_cast<u8*>(ptr) - data_offset - shift - 1, std::forward<F_additional_args__>(additional_args)...);
 #else
-            memory_helper__::delete_mem(reinterpret_cast<u8*>(ptr) - shift - 1, std::forward<additional_arg_types__>(additional_args)...);
+            F_memory_helper__::delete_mem(reinterpret_cast<u8*>(ptr) - shift - 1, std::forward<F_additional_args__>(additional_args)...);
 #endif
 
         }

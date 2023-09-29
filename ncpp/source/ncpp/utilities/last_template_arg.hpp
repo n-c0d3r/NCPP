@@ -75,17 +75,17 @@ namespace ncpp {
 
         /**
          *  Finds out the last template argument.
-         *  @param <arg_types__...> template argument list.
+         *  @param <F_args__...> template argument list.
          */
-        template<typename... arg_types__>
-        using TF_last_template_arg = TF_nth_template_arg<sizeof...(arg_types__) - 1, arg_types__...>;
+        template<typename... F_args__>
+        using TF_last_template_arg = TF_nth_template_arg<sizeof...(F_args__) - 1, F_args__...>;
 
         /**
          *  Finds out the last template argument.
-         *  @param <arg_types__...> template argument list.
+         *  @param <F_args__...> template argument list.
          */
-        template<typename... arg_types__>
-        using TF_last_template_arg_t = TF_nth_template_arg_t<sizeof...(arg_types__) - 1, arg_types__...>;
+        template<typename... F_args__>
+        using TF_last_template_arg_t = TF_nth_template_arg_t<sizeof...(F_args__) - 1, F_args__...>;
 
     }
 

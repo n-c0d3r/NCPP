@@ -76,15 +76,15 @@ namespace ncpp {
         // \cond INTERNAL
         namespace internal {
 
-            template<b8 is_empty__, typename... arg_types__>
+            template<b8 is_empty__, typename... F_args__>
             struct TF_template_arg_list {
 
 
 
             };
 
-            template<typename... arg_types__>
-            struct TF_template_arg_list<true, arg_types__...> {
+            template<typename... F_args__>
+            struct TF_template_arg_list<true, F_args__...> {
 
                 static constexpr u16 count = 0;
 
@@ -93,13 +93,13 @@ namespace ncpp {
 
             };
 
-            template<typename... arg_types__>
-            struct TF_template_arg_list<false, arg_types__...> {
+            template<typename... F_args__>
+            struct TF_template_arg_list<false, F_args__...> {
 
-                static constexpr u16 count = sizeof...(arg_types__);
+                static constexpr u16 count = sizeof...(F_args__);
 
                 template<sz index__>
-                using get_t = typename TF_nth_template_arg<index__, arg_types__...>::type;
+                using get_t = typename TF_nth_template_arg<index__, F_args__...>::type;
 
             };
 
@@ -110,10 +110,10 @@ namespace ncpp {
 
         /**
          *  Wraps the template args inside.
-         *  @param <arg_types__...> template argument list.
+         *  @param <F_args__...> template argument list.
          */
-        template<typename... arg_types__>
-        using TF_template_arg_list = internal::TF_template_arg_list<(sizeof...(arg_types__)) == 0, arg_types__...>;
+        template<typename... F_args__>
+        using TF_template_arg_list = internal::TF_template_arg_list<(sizeof...(F_args__)) == 0, F_args__...>;
 
     }
 

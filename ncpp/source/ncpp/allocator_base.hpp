@@ -56,27 +56,27 @@ namespace ncpp {
 
 	/**
 	 *	Base allocator class implementing base functionalities for simply allocating both non-aligned and aligned memory.
-	 *	TI_allocator is capable of choosing the actual memory allocation size to pass into allocator_type__::new_mem(sz size) function, and the memory pointer to pass into allocator_type__::delete_mem(void* pointer) function.
+	 *	TI_allocator is capable of choosing the actual memory allocation size to pass into F_allocator__::new_mem(sz size) function, and the memory pointer to pass into F_allocator__::delete_mem(void* pointer) function.
 	 *	\n
-	 *	By this way, allocator_type__ won't need to care about alignment, it's automatically did by TI_allocator.
+	 *	By this way, F_allocator__ won't need to care about alignment, it's automatically did by TI_allocator.
 	 *	\n
-	 *	@param <allocator_type__> allocator type that implements TI_allocator and has to provide these functions:
+	 *	@param <F_allocator__> allocator type that implements TI_allocator and has to provide these functions:
 	 *		+ new_mem(sz size): to allocate memory.
 	 *		+ delete_mem(void* pointer): to deallocate memory.
 	 */
-	template<class allocator_type__>
+	template<class F_allocator__>
 	class TI_allocator {
 
 	private:
-		class F_memory_helper : public TF_memory_helper<F_memory_helper, false, allocator_type__&> {
+		class F_memory_helper : public TF_memory_helper<F_memory_helper, false, F_allocator__&> {
 
 		public:
-			static inline void* new_mem(sz size, allocator_type__& allocator) {
+			static inline void* new_mem(sz size, F_allocator__& allocator) {
 
 				return allocator.new_mem(size);
 			}
 
-			static inline void delete_mem(void* ptr, allocator_type__& allocator) {
+			static inline void delete_mem(void* ptr, F_allocator__& allocator) {
 
 				return allocator.delete_mem(ptr);
 			}
@@ -137,7 +137,7 @@ namespace ncpp {
 		/**
 		 *	Allocates non-aligned memory with default_memory_helper
 		 */
-		inline void* default_allocate(size_t n, int flags = 0) {
+		inline void* default_allocate(sz n, int flags = 0) {
 
 #ifndef NDEBUG
 			return F_default_memory_helper::allocate(n, name_, flags);
@@ -148,7 +148,7 @@ namespace ncpp {
 		/**
 		 *	Allocates aligned memory with default_memory_helper
 		 */
-		inline void* default_allocate(size_t n, sz alignment, sz alignment_offset, int flags = 0) {
+		inline void* default_allocate(sz n, sz alignment, sz alignment_offset, int flags = 0) {
 
 #ifndef NDEBUG
 			return F_default_memory_helper::allocate(n, alignment, alignment_offset, name_, flags);
@@ -168,33 +168,33 @@ namespace ncpp {
 
 	public:
 		/**
-		 *	Allocates non-aligned memory with memory_helper of allocator_type__::new_mem(sz) function
+		 *	Allocates non-aligned memory with memory_helper of F_allocator__::new_mem(sz) function
 		 */
-		void* allocate(size_t n, int flags = 0) {
+		void* allocate(sz n, int flags = 0) {
 
 #ifndef NDEBUG
-			return F_memory_helper::allocate(n, name_, flags, *reinterpret_cast<allocator_type__*>(this));
+			return F_memory_helper::allocate(n, name_, flags, *reinterpret_cast<F_allocator__*>(this));
 #else
-			return F_memory_helper::allocate(n, 0, flags, *reinterpret_cast<allocator_type__*>(this));
+			return F_memory_helper::allocate(n, 0, flags, *reinterpret_cast<F_allocator__*>(this));
 #endif
 		}
 		/**
-		 *	Allocates aligned memory with memory_helper of allocator_type__::new_mem(sz) function
+		 *	Allocates aligned memory with memory_helper of F_allocator__::new_mem(sz) function
 		 */
-		void* allocate(size_t n, size_t alignment, size_t offset, int flags = 0) {
+		void* allocate(sz n, sz alignment, sz offset, int flags = 0) {
 
 #ifndef NDEBUG
-			return F_memory_helper::allocate(n, alignment, offset, name_, flags, *reinterpret_cast<allocator_type__*>(this));
+			return F_memory_helper::allocate(n, alignment, offset, name_, flags, *reinterpret_cast<F_allocator__*>(this));
 #else
-			return F_memory_helper::allocate(n, alignment, offset, 0, flags, *reinterpret_cast<allocator_type__*>(this));
+			return F_memory_helper::allocate(n, alignment, offset, 0, flags, *reinterpret_cast<F_allocator__*>(this));
 #endif
 		}
 		/**
-		 *	Deallocates memory with memory_helper of allocator_type__::delete_mem(sz) function
+		 *	Deallocates memory with memory_helper of F_allocator__::delete_mem(sz) function
 		 */
-		void  deallocate(void* p, size_t n = 1) {
+		void  deallocate(void* p, sz n = 1) {
 
-			F_memory_helper::deallocate(p, *reinterpret_cast<allocator_type__*>(this));
+			F_memory_helper::deallocate(p, *reinterpret_cast<F_allocator__*>(this));
 		}
 
 		/**

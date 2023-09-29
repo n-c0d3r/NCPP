@@ -147,8 +147,8 @@ inline std::ostream& operator << (
 /**
  *	Streams out eastl::string.
  */
-template<typename item_type__, class allocator_type__>
-std::ostream& operator << (std::ostream& os, const eastl::basic_string<item_type__, allocator_type__>& str)
+template<typename F_item__, class F_allocator__>
+std::ostream& operator << (std::ostream& os, const eastl::basic_string<F_item__, F_allocator__>& str)
 {
 
 	if (&os == &std::cout) {
@@ -176,11 +176,11 @@ std::ostream& operator << (std::ostream& os, const eastl::basic_string<item_type
 /**
  *	Streams out eastl::vector with tabs.
  */
-template<typename item_type__, class allocator_type__>
+template<typename F_item__, class F_allocator__>
 std::ostream& operator << (
 	std::ostream& os,
 	const ncpp::TF_ostream_input<
-		eastl::vector<item_type__, allocator_type__>
+		eastl::vector<F_item__, F_allocator__>
 	>& input
 )
 {
@@ -193,7 +193,7 @@ std::ostream& operator << (
 	}
 
 	os << "\x1B[33mvector\033[0m"
-		<< ncpp::F_cout_lowlight("<") << ("\x1B[34m" + eastl::string(typeid(item_type__).name()) + "\033[0m").c_str() << ncpp::F_cout_lowlight(">")
+		<< ncpp::F_cout_lowlight("<") << ("\x1B[34m" + eastl::string(typeid(F_item__).name()) + "\033[0m").c_str() << ncpp::F_cout_lowlight(">")
 		<< ncpp::F_cout_lowlight("(") << ("\x1B[35m" + eastl::to_string(input.first.size()) + "\033[0m").c_str() << ncpp::F_cout_lowlight(")")
 		<< " ";
 
@@ -209,7 +209,7 @@ std::ostream& operator << (
 
 		os << ncpp::F_cout_field_name(eastl::to_string(i)) << ncpp::F_cout_lowlight(": ");
 
-		ncpp::T_safe_ostream_with_tab<std::ostream, item_type__>(os, { input.first[i], input.second + 1 });
+		ncpp::T_safe_ostream_with_tab<std::ostream, F_item__>(os, { input.first[i], input.second + 1 });
 
 		if (i != input.first.size() - 1)
 			os << ncpp::F_cout_lowlight(",");
@@ -231,11 +231,11 @@ std::ostream& operator << (
 /**
  *	Streams out eastl::vector with no tab.
  */
-template<typename item_type__, class allocator_type__>
-std::ostream& operator << (std::ostream& os, const eastl::vector<item_type__, allocator_type__>& v)
+template<typename F_item__, class F_allocator__>
+std::ostream& operator << (std::ostream& os, const eastl::vector<F_item__, F_allocator__>& v)
 {
 
-	os << ncpp::TF_ostream_input<eastl::vector<item_type__, allocator_type__>> { v, 0 };
+	os << ncpp::TF_ostream_input<eastl::vector<F_item__, F_allocator__>> { v, 0 };
 
 	return os;
 }
@@ -247,11 +247,11 @@ std::ostream& operator << (std::ostream& os, const eastl::vector<item_type__, al
 /**
  *	Streams out std::initialier_list<T> with tabs.
  */
-template<typename item_type__>
+template<typename F_item__>
 std::ostream& operator << (
 	std::ostream& os,
 	const ncpp::TF_ostream_input<
-		std::initializer_list<item_type__>
+		std::initializer_list<F_item__>
 	>& input
 )
 {
@@ -264,7 +264,7 @@ std::ostream& operator << (
 	}
 
 	os << "\x1B[33minitializer_list\033[0m"
-		<< ncpp::F_cout_lowlight("<") << ("\x1B[34m" + eastl::string(typeid(item_type__).name()) + "\033[0m").c_str() << ncpp::F_cout_lowlight(",")
+		<< ncpp::F_cout_lowlight("<") << ("\x1B[34m" + eastl::string(typeid(F_item__).name()) + "\033[0m").c_str() << ncpp::F_cout_lowlight(",")
 		<< ("\x1B[35m" + eastl::to_string(input.first.size()) + "\033[0m").c_str() << ncpp::F_cout_lowlight(">")
 		<< " ";
 
@@ -282,7 +282,7 @@ std::ostream& operator << (
 
 		os << ncpp::F_cout_field_name(eastl::to_string(i)) << ncpp::F_cout_lowlight(": ");
 
-		ncpp::T_safe_ostream_with_tab<std::ostream, item_type__>(os, { *j, input.second + 1 });
+		ncpp::T_safe_ostream_with_tab<std::ostream, F_item__>(os, { *j, input.second + 1 });
 
 		if (i != input.first.size() - 1)
 			os << ncpp::F_cout_lowlight(",");
@@ -306,11 +306,11 @@ std::ostream& operator << (
 /**
  *	Streams out std::initialier_list<T> with no tab.
  */
-template<typename item_type__>
-std::ostream& operator << (std::ostream& os, const std::initializer_list<item_type__>& v)
+template<typename F_item__>
+std::ostream& operator << (std::ostream& os, const std::initializer_list<F_item__>& v)
 {
 
-	os << ncpp::TF_ostream_input<std::initializer_list<item_type__>> { v, 0 };
+	os << ncpp::TF_ostream_input<std::initializer_list<F_item__>> { v, 0 };
 
 	return os;
 }
@@ -322,11 +322,11 @@ std::ostream& operator << (std::ostream& os, const std::initializer_list<item_ty
 /**
  *	Streams out eastl::array<T, N> with tabs.
  */
-template<typename item_type__, ncpp::sz size__>
+template<typename F_item__, ncpp::sz size__>
 std::ostream& operator << (
 	std::ostream& os,
 	const ncpp::TF_ostream_input<
-		eastl::array<item_type__, size__>
+		eastl::array<F_item__, size__>
 	>& input
 )
 {
@@ -339,7 +339,7 @@ std::ostream& operator << (
 	}
 
 	os << "\x1B[33marray\033[0m"
-		<< ncpp::F_cout_lowlight("<") << ("\x1B[34m" + eastl::string(typeid(item_type__).name()) + "\033[0m").c_str() << ncpp::F_cout_lowlight(",")
+		<< ncpp::F_cout_lowlight("<") << ("\x1B[34m" + eastl::string(typeid(F_item__).name()) + "\033[0m").c_str() << ncpp::F_cout_lowlight(",")
 		<< ("\x1B[35m" + eastl::to_string(input.first.size()) + "\033[0m").c_str() << ncpp::F_cout_lowlight(">")
 		<< " ";
 
@@ -357,7 +357,7 @@ std::ostream& operator << (
 
 		os << ncpp::F_cout_field_name(eastl::to_string(i)) << ncpp::F_cout_lowlight(": ");
 
-		ncpp::T_safe_ostream_with_tab<std::ostream, item_type__>(os, { input.first[i], input.second + 1 });
+		ncpp::T_safe_ostream_with_tab<std::ostream, F_item__>(os, { input.first[i], input.second + 1 });
 
 		if (i != size__ - 1)
 			os << ncpp::F_cout_lowlight(",");
@@ -379,11 +379,11 @@ std::ostream& operator << (
 /**
  *	Streams out eastl::array<T, N> with no tab.
  */
-template<typename item_type__, ncpp::sz size__>
-std::ostream& operator << (std::ostream& os, const eastl::array<item_type__, size__>& v)
+template<typename F_item__, ncpp::sz size__>
+std::ostream& operator << (std::ostream& os, const eastl::array<F_item__, size__>& v)
 {
 
-	os << ncpp::TF_ostream_input<eastl::array<item_type__, size__>> { v, 0 };
+	os << ncpp::TF_ostream_input<eastl::array<F_item__, size__>> { v, 0 };
 
 	return os;
 }

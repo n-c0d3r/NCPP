@@ -74,7 +74,7 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
 
-            template<b8 is_single__, b8 is_nth__, sz nth_remain__, typename... arg_types__>
+            template<b8 is_single__, b8 is_nth__, sz nth_remain__, typename... F_args__>
             struct TF_nth_template_arg {
 
                 using type = void;
@@ -147,26 +147,26 @@ namespace ncpp {
         /**
          *  Finds out the nth__ template argument.
          *  @param <nth__> the index of template argument need to get.
-         *  @param <arg_types__...> the template argument list.
+         *  @param <F_args__...> the template argument list.
          */
-        template<sz nth__, typename... arg_types__>
+        template<sz nth__, typename... F_args__>
         struct TF_nth_template_arg {
 
-            static_assert(nth__ < sizeof...(arg_types__), "invalid 'nth__' value!");
+            static_assert(nth__ < sizeof...(F_args__), "invalid 'nth__' value!");
 
 
 
-            using type = typename nth___template_arg_helper::TF_nth_template_arg<sizeof...(arg_types__) == 1, nth__ == 0, nth__, arg_types__...>::type;
+            using type = typename nth___template_arg_helper::TF_nth_template_arg<sizeof...(F_args__) == 1, nth__ == 0, nth__, F_args__...>::type;
 
         };
 
         /**
          *  Finds out the nth__ template argument.
          *  @param <nth__> the index of template argument need to get.
-         *  @param <arg_types__...> the template argument list.
+         *  @param <F_args__...> the template argument list.
          */
-        template<sz nth__, typename... arg_types__>
-        using TF_nth_template_arg_t = typename TF_nth_template_arg<nth__, arg_types__...>::type;
+        template<sz nth__, typename... F_args__>
+        using TF_nth_template_arg_t = typename TF_nth_template_arg<nth__, F_args__...>::type;
 
     }
 

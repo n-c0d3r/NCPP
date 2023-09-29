@@ -74,7 +74,7 @@ namespace ncpp {
 
 
         // \cond INTERNAL
-        template<typename function_type__> 
+        template<typename F_function__> 
         struct TF_function_traits {
 
             static const sz nargs = 0;
@@ -89,46 +89,46 @@ namespace ncpp {
         };
         // \endcond
 
-        template<typename return_type__, typename... arg_types__> 
-        struct TF_function_traits<return_type__(arg_types__...)>
+        template<typename F_return__, typename... F_args__> 
+        struct TF_function_traits<F_return__(F_args__...)>
         {
 
-            static const sz nargs = sizeof...(arg_types__);
+            static const sz nargs = sizeof...(F_args__);
 
             static const b8 is_function = true;
 
-            using F_return = return_type__;
+            using F_return = F_return__;
 
             template <sz i>
-            using TF_arg = typename std::tuple_element<i, std::tuple<arg_types__...>>::type;
+            using TF_arg = typename std::tuple_element<i, std::tuple<F_args__...>>::type;
 
-            template<typename... additional_args__>
-            using TF_push_args_front = return_type__(additional_args__..., arg_types__...);
-            template<typename... additional_args__>
-            using TF_push_args_back = return_type__(arg_types__..., additional_args__...);
+            template<typename... F_additional_args__>
+            using TF_push_args_front = F_return__(F_additional_args__..., F_args__...);
+            template<typename... F_additional_args__>
+            using TF_push_args_back = F_return__(F_args__..., F_additional_args__...);
 
         };
 
        
 
         // \cond INTERNAL
-        template<typename function_type__, typename new_return_type__>
+        template<typename F_function__, typename F_new_return__>
         struct TF_replace_function_return {
 
-            static_assert(is_function_t<function_type__>::value && "function_type__ is not function type");
+            static_assert(is_function_t<F_function__>::value && "F_function__ is not function type");
 
         };
         // \endcond
 
-        template<typename new_return_type__, typename org_return_type__, typename... arg_types__>
-        struct TF_replace_function_return<org_return_type__(arg_types__...), new_return_type__> {
+        template<typename F_new_return__, typename F_org_return__, typename... F_args__>
+        struct TF_replace_function_return<F_org_return__(F_args__...), F_new_return__> {
 
-            using type = org_return_type__(arg_types__...);
+            using type = F_org_return__(F_args__...);
 
         };
 
-        template<typename function_type__, typename new_return_type__>
-        using TF_replace_function_return_t = typename TF_replace_function_return<function_type__, new_return_type__>::type;
+        template<typename F_function__, typename F_new_return__>
+        using TF_replace_function_return_t = typename TF_replace_function_return<F_function__, F_new_return__>::type;
 
     }
 

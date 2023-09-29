@@ -87,15 +87,15 @@ namespace ncpp {
 
 
 	// \cond INTERNAL
-	template<typename stream_type__, typename F__, b8 is_streamable__>
+	template<typename F_stream__, typename F__, b8 is_streamable__>
 	struct TF_safe_ostream_forwarder {
 
 	};
 
-	template<typename stream_type__, typename F__>
-	struct TF_safe_ostream_forwarder<stream_type__, F__, true> {
+	template<typename F_stream__, typename F__>
+	struct TF_safe_ostream_forwarder<F_stream__, F__, true> {
 
-		static inline stream_type__& forward(stream_type__& stream, F__&& data) {
+		static inline F_stream__& forward(F_stream__& stream, F__&& data) {
 
 			stream << data;
 
@@ -103,10 +103,10 @@ namespace ncpp {
 		}
 	};
 
-	template<typename stream_type__, typename F__>
-	struct TF_safe_ostream_forwarder<stream_type__, F__, false> {
+	template<typename F_stream__, typename F__>
+	struct TF_safe_ostream_forwarder<F_stream__, F__, false> {
 
-		static inline stream_type__& forward(stream_type__& stream, F__&& data) {
+		static inline F_stream__& forward(F_stream__& stream, F__&& data) {
 
 
 
@@ -122,14 +122,14 @@ namespace ncpp {
 	 *	If data is out streamable, stream out the data.
 	 *	Otherwise, do nothing and wont cause any error.
 	 */
-	template<typename stream_type__, typename F__>
-	inline stream_type__& T_safe_ostream(stream_type__& stream, F__&& data) {
+	template<typename F_stream__, typename F__>
+	inline F_stream__& T_safe_ostream(F_stream__& stream, F__&& data) {
 
 		using safe_ostream_forward_type = TF_safe_ostream_forwarder<
-			stream_type__,
+			F_stream__,
 			F__,
 			utilities::TF_is_ostreamable<
-				stream_type__,
+				F_stream__,
 				F__
 			>::value
 		>;
@@ -140,15 +140,15 @@ namespace ncpp {
 
 
 	// \cond INTERNAL
-	template<typename stream_type__, typename input_type__, b8 is_streamable__>
+	template<typename F_stream__, typename input_type__, b8 is_streamable__>
 	struct TF_safe_ostream_with_tab_forwarder {
 
 	};
 
-	template<typename stream_type__, typename input_type__>
-	struct TF_safe_ostream_with_tab_forwarder<stream_type__, input_type__, true> {
+	template<typename F_stream__, typename input_type__>
+	struct TF_safe_ostream_with_tab_forwarder<F_stream__, input_type__, true> {
 
-		static inline stream_type__& forward(stream_type__& stream, input_type__&& input) {
+		static inline F_stream__& forward(F_stream__& stream, input_type__&& input) {
 
 			stream << input;
 
@@ -156,10 +156,10 @@ namespace ncpp {
 		}
 	};
 
-	template<typename stream_type__, typename input_type__>
-	struct TF_safe_ostream_with_tab_forwarder<stream_type__, input_type__, false> {
+	template<typename F_stream__, typename input_type__>
+	struct TF_safe_ostream_with_tab_forwarder<F_stream__, input_type__, false> {
 
-		static inline stream_type__& forward(stream_type__& stream, input_type__&& input) {
+		static inline F_stream__& forward(F_stream__& stream, input_type__&& input) {
 
 			T_safe_ostream(stream, input.first);
 
@@ -175,14 +175,14 @@ namespace ncpp {
 	 *	If data is out streamable, stream out the data with tabs.
 	 *	Otherwise, do nothing and wont cause any error.
 	 */
-	template<typename stream_type__, typename F__, typename input_type__ = TF_ostream_input<F__>>
-	inline stream_type__& T_safe_ostream_with_tab(stream_type__& stream, input_type__&& input) {
+	template<typename F_stream__, typename F__, typename input_type__ = TF_ostream_input<F__>>
+	inline F_stream__& T_safe_ostream_with_tab(F_stream__& stream, input_type__&& input) {
 
 		using safe_ostream_with_tab_forward_type = TF_safe_ostream_with_tab_forwarder<
-			stream_type__,
+			F_stream__,
 			input_type__,
 			utilities::TF_is_ostreamable<
-				stream_type__,
+				F_stream__,
 				input_type__
 			>::value
 		>;
@@ -193,15 +193,15 @@ namespace ncpp {
 
 
 	// \cond INTERNAL
-	template<typename stream_type__, typename F__, b8 is_streamable__>
+	template<typename F_stream__, typename F__, b8 is_streamable__>
 	struct TF_safe_istream_forwarder {
 
 	};
 
-	template<typename stream_type__, typename F__>
-	struct TF_safe_istream_forwarder<stream_type__, F__, true> {
+	template<typename F_stream__, typename F__>
+	struct TF_safe_istream_forwarder<F_stream__, F__, true> {
 
-		static inline stream_type__& forward(stream_type__& stream, F__&& data) {
+		static inline F_stream__& forward(F_stream__& stream, F__&& data) {
 
 			stream >> data;
 
@@ -209,10 +209,10 @@ namespace ncpp {
 		}
 	};
 
-	template<typename stream_type__, typename F__>
-	struct TF_safe_istream_forwarder<stream_type__, F__, false> {
+	template<typename F_stream__, typename F__>
+	struct TF_safe_istream_forwarder<F_stream__, F__, false> {
 
-		static inline stream_type__& forward(stream_type__& stream, F__&& data) {
+		static inline F_stream__& forward(F_stream__& stream, F__&& data) {
 
 
 
@@ -228,14 +228,14 @@ namespace ncpp {
 	 *	If data is in streamable, stream in the data.
 	 *	Otherwise, do nothing and wont cause any error.
 	 */
-	template<typename stream_type__, typename F__>
-	inline stream_type__& T_safe_istream(stream_type__& stream, F__&& data) {
+	template<typename F_stream__, typename F__>
+	inline F_stream__& T_safe_istream(F_stream__& stream, F__&& data) {
 
 		using safe_istream_forward_type = TF_safe_istream_forwarder<
-			stream_type__,
+			F_stream__,
 			F__,
 			utilities::TF_is_istreamable<
-				stream_type__,
+				F_stream__,
 				F__
 			>::value
 		>;

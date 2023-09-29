@@ -78,8 +78,8 @@ namespace ncpp {
         };
 
         // \cond INTERNAL
-        template<typename return_type__, typename... arg_types__>
-        struct TF_is_function<return_type__(arg_types__...)> {
+        template<typename F_return__, typename... F_args__>
+        struct TF_is_function<F_return__(F_args__...)> {
 
             static constexpr b8 value = true;
 

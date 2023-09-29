@@ -56,37 +56,37 @@ namespace ncpp {
 
 	/**
 	 *	An allocator using another allocator to allocate and deallocate memory by linking into the target allocator reference.
-	 *	@param <target_allocator_type__> the target allocator to use.
+	 *	@param <F_target_allocator__> the target allocator to use.
 	 */
-	template<typename target_allocator_type__>
-	class TF_link_allocator : public TI_allocator<TF_link_allocator<target_allocator_type__>> {
+	template<typename F_target_allocator__>
+	class TF_link_allocator : public TI_allocator<TF_link_allocator<F_target_allocator__>> {
 
 	public:
-		using target_allocator_type = target_allocator_type__;
+		using F_target_allocator = F_target_allocator__;
 
 
 
 	private:
-		target_allocator_type* target_allocator_p_;
+		F_target_allocator* target_allocator_p_;
 
 
 
 	public:
-		inline target_allocator_type& target_allocator() { return *target_allocator_p_; }
-		inline const target_allocator_type& target_allocator() const { return *target_allocator_p_; }
+		inline F_target_allocator& target_allocator() { return *target_allocator_p_; }
+		inline const F_target_allocator& target_allocator() const { return *target_allocator_p_; }
 
 
 
 	public:
 		inline TF_link_allocator(const char* name = 0) :
-			TI_allocator<TF_link_allocator<target_allocator_type__>>(name)
+			TI_allocator<TF_link_allocator<F_target_allocator__>>(name)
 		{
 
 
 
 		}
-		inline TF_link_allocator(target_allocator_type& target_allocator, const char* name = 0) :
-			TI_allocator<TF_link_allocator<target_allocator_type__>>(name),
+		inline TF_link_allocator(F_target_allocator& target_allocator, const char* name = 0) :
+			TI_allocator<TF_link_allocator<F_target_allocator__>>(name),
 			target_allocator_p_(&target_allocator)
 		{
 

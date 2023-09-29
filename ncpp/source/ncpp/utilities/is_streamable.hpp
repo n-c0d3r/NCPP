@@ -68,9 +68,9 @@ namespace ncpp {
 
 
         /**
-         *  Checks if can perform stream_type__ << type__ operation.
+         *  Checks if can perform F_stream__ << type__ operation.
          */
-        template<typename stream_type__, typename F__> 
+        template<typename F_stream__, typename F__> 
         class TF_is_ostreamable 
         {
             template<typename SS, typename TT>
@@ -81,19 +81,19 @@ namespace ncpp {
             static auto test(...) -> std::false_type;
 
         public:
-            static const bool value = decltype(test<stream_type__, F__>(0))::value;
+            static const bool value = decltype(test<F_stream__, F__>(0))::value;
         };
 
         /**
-         *  Checks if can perform stream_type__ << type__ operation.
+         *  Checks if can perform F_stream__ << type__ operation.
          */
-        template<typename stream_type__, typename F__>
-        static constexpr b8 T_is_ostreamable_v = TF_is_ostreamable<stream_type__, F__>::value;
+        template<typename F_stream__, typename F__>
+        static constexpr b8 T_is_ostreamable_v = TF_is_ostreamable<F_stream__, F__>::value;
 
         /**
-         *  Checks if can perform stream_type__ >> type__ operation.
+         *  Checks if can perform F_stream__ >> type__ operation.
          */
-        template<typename stream_type__, typename F__>
+        template<typename F_stream__, typename F__>
         class TF_is_istreamable
         {
             template<typename SS, typename TT>
@@ -104,14 +104,14 @@ namespace ncpp {
             static auto test(...) -> std::false_type;
 
         public:
-            static const bool value = decltype(test<stream_type__, F__>(0))::value;
+            static const bool value = decltype(test<F_stream__, F__>(0))::value;
         };
 
         /**
-         *  Checks if can perform stream_type__ << type__ operation.
+         *  Checks if can perform F_stream__ << type__ operation.
          */
-        template<typename stream_type__, typename F__>
-        static constexpr b8 T_is_istreamable_v = TF_is_istreamable<stream_type__, F__>::value;
+        template<typename F_stream__, typename F__>
+        static constexpr b8 T_is_istreamable_v = TF_is_istreamable<F_stream__, F__>::value;
 
     }
 
