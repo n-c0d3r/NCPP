@@ -67,7 +67,7 @@ namespace ncpp {
 	template<class F_allocator__>
 	class TI_allocator {
 
-	private:
+	public:
 		class F_memory_helper : public TF_memory_helper<F_memory_helper, false, F_allocator__&> {
 
 		public:
