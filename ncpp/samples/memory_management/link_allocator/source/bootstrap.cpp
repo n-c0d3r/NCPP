@@ -8,7 +8,7 @@ using namespace ncpp;
 int main() {
 	
 	chunk_allocator chunk_allocator;
-	link_allocator_t<ncpp::chunk_allocator> link_allocator(chunk_allocator);
+	TF_link_allocator<ncpp::chunk_allocator> link_allocator(chunk_allocator);
 
 	eastl::allocator default_eastl_allocator;
 

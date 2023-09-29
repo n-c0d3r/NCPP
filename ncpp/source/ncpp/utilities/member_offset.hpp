@@ -76,23 +76,23 @@ namespace ncpp {
         // \cond INTERNAL
         namespace internal {
 
-            template<b8 is_function__, typename class_type__, typename member_type__>
-            struct member_offset_t;
+            template<b8 is_function__, typename class_type__, typename F_member__>
+            struct TF_member_offset;
 
-            template<typename class_type__, typename member_type__>
-            struct member_offset_t<false, class_type__, member_type__> {
+            template<typename class_type__, typename F_member__>
+            struct TF_member_offset<false, class_type__, F_member__> {
 
-                static constexpr sz value(member_type__ class_type__::* member)
+                static constexpr sz value(F_member__ class_type__::* member)
                 {
                     return (u8*)&((class_type__*)nullptr->*member) - (u8*)nullptr;
                 }
 
             };
 
-            template<typename class_type__, typename member_type__>
-            struct member_offset_t<true, class_type__, member_type__> {
+            template<typename class_type__, typename F_member__>
+            struct TF_member_offset<true, class_type__, F_member__> {
 
-                static constexpr sz value(member_type__ class_type__::* member)
+                static constexpr sz value(F_member__ class_type__::* member)
                 {
                     return 0;
                 }
@@ -110,10 +110,10 @@ namespace ncpp {
          *  @param <member_type__>
          *  @param member member pointer
          */
-        template<typename class_type__, typename member_type__>
-        static constexpr sz member_offset_t(member_type__ class_type__::* member)
+        template<typename class_type__, typename F_member__>
+        static constexpr sz T_member_offset(F_member__ class_type__::* member)
         {
-            return internal::member_offset_t<is_function_t<member_type__>::value, class_type__, member_type__>::value(member);
+            return internal::TF_member_offset<TF_is_function<F_member__>::value, class_type__, F_member__>::value(member);
         }
 
     }

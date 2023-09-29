@@ -64,43 +64,34 @@ namespace ncpp {
 
 	namespace rtti {
 
-		template<typename options__>
-		class robject_type_info_t {
+		template<typename F_options__>
+		class TF_robject_type_info {
 
 		public:
-			NCPP_RTTI_SEPECIFIC_USING(options__);
+			NCPP_RTTI_SEPECIFIC_USING(F_options__);
 
 
 
 		private:
-			rcontainer_type* rcontainer_p_ = 0;
+			F_rcontainer* rcontainer_p_ = 0;
 			sz hash_code_ = 0;
 			eastl::string name_;
-			robject_type_info_t* base_type_info_p_ = 0;
+			TF_robject_type_info* base_type_info_p_ = 0;
 
 		public:
-			robject_type_info_additional_data_type additional_data;
+			F_robject_type_info_additional_data additional_data;
 
-			eastl::unordered_map<eastl::string, robject_member_info_type*> name_to_member_info_p_map_;
+			eastl::unordered_map<eastl::string, F_robject_member_info*> name_to_member_info_p_map_;
 
 		public:
-			inline rcontainer_type* rcontainer_p() { return rcontainer_p_; }
-			inline const rcontainer_type* rcontainer_p() const { return rcontainer_p_; }
+			inline F_rcontainer* rcontainer_p() { return rcontainer_p_; }
+			inline const F_rcontainer* rcontainer_p() const { return rcontainer_p_; }
 			inline sz hash_code() const { return hash_code_; }
 			inline eastl::string name() const { return name_; }
-			inline robject_type_info_t* get_base_type_info_p() { return base_type_info_p_; }
-			inline const robject_type_info_t* get_base_type_info_p() const { return base_type_info_p_; }
+			inline TF_robject_type_info* get_base_type_info_p() { return base_type_info_p_; }
+			inline const TF_robject_type_info* get_base_type_info_p() const { return base_type_info_p_; }
 
-			inline robject_member_info_type* member_info(const eastl::string& name) {
-
-				auto it = name_to_member_info_p_map_.find(name);
-
-				if (it == name_to_member_info_p_map_.end())
-					return 0;
-
-				return it->second;
-			}
-			inline const robject_member_info_type* member_info(const eastl::string& name) const {
+			inline F_robject_member_info* member_info(const eastl::string& name) {
 
 				auto it = name_to_member_info_p_map_.find(name);
 
@@ -109,7 +100,16 @@ namespace ncpp {
 
 				return it->second;
 			}
-			inline void add_member_info(robject_member_info_type* info) {
+			inline const F_robject_member_info* member_info(const eastl::string& name) const {
+
+				auto it = name_to_member_info_p_map_.find(name);
+
+				if (it == name_to_member_info_p_map_.end())
+					return 0;
+
+				return it->second;
+			}
+			inline void add_member_info(F_robject_member_info* info) {
 
 				auto it = name_to_member_info_p_map_.find(info->name);
 
@@ -124,7 +124,7 @@ namespace ncpp {
 
 				if (it != name_to_member_info_p_map_.end()) {
 
-					rtti_traits::template delete_t<robject_member_info_type>(rcontainer_p_->allocator(), it->second);
+					F_rtti_traits::template T_delete<F_robject_member_info>(rcontainer_p_->allocator(), it->second);
 
 					name_to_member_info_p_map_.erase(it);
 
@@ -134,7 +134,7 @@ namespace ncpp {
 
 
 		public:
-			inline robject_type_info_t(rcontainer_type* rcontainer_p, sz hash_code, const eastl::string& name, robject_type_info_t* base_type_info_p) :
+			inline TF_robject_type_info(F_rcontainer* rcontainer_p, sz hash_code, const eastl::string& name, TF_robject_type_info* base_type_info_p) :
 				rcontainer_p_(rcontainer_p),
 				hash_code_(hash_code),
 				name_(name),
@@ -144,7 +144,7 @@ namespace ncpp {
 
 
 			}
-			~robject_type_info_t() {
+			~TF_robject_type_info() {
 
 				clear();
 
@@ -170,26 +170,26 @@ namespace ncpp {
 
 
 		template<
-			class object_type__,
+			class F_robject__,
 
 			NCPP_RTTI_SEPECIFIC_TARGS()
 		>
-		robject_type_info_type__* reflect_object_type_t(
-			rcontainer_type__* rcontainer_p, 
+		F_robject_type_info__* T_reflect_object_type(
+			F_rcontainer__* rcontainer_p, 
 			rflag flag = NCPP_RFLAG_DEFAULT
 		) {
 
-			robject_type_info_type__* robject_type_info_p = rcontainer_p->robject_type_info(object_type__::static_type_hash_code());
+			F_robject_type_info__* robject_type_info_p = rcontainer_p->robject_type_info(F_robject__::static_type_hash_code());
 
 			if (robject_type_info_p)
 				return robject_type_info_p;
 
-			robject_type_info_p = rtti_traits__::template new_t<robject_type_info_type__>(
+			robject_type_info_p = F_rtti_traits__::template T_new<F_robject_type_info__>(
 				rcontainer_p->allocator(),
 				rcontainer_p,
-				object_type__::static_type_hash_code(),
-				object_type__::static_type_name(),
-				rcontainer_p->robject_type_info(typeid(typename rtti_traits__::safe_base_type_t<object_type__>::type).hash_code())
+				F_robject__::static_type_hash_code(),
+				F_robject__::static_type_name(),
+				rcontainer_p->robject_type_info(typeid(F_rtti_traits__::template TF_safe_base_t<F_robject__>).hash_code())
 			);
 
 			rcontainer_p->add_robject_type_info(robject_type_info_p);

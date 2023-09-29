@@ -59,7 +59,7 @@ namespace ncpp {
 	 *	@param <target_allocator_type__> the target allocator to use.
 	 */
 	template<typename target_allocator_type__>
-	class link_allocator_t : public allocator_base_t<link_allocator_t<target_allocator_type__>> {
+	class TF_link_allocator : public TI_allocator<TF_link_allocator<target_allocator_type__>> {
 
 	public:
 		using target_allocator_type = target_allocator_type__;
@@ -78,30 +78,30 @@ namespace ncpp {
 
 
 	public:
-		inline link_allocator_t(const char* name = 0) :
-			allocator_base_t<link_allocator_t<target_allocator_type__>>(name)
+		inline TF_link_allocator(const char* name = 0) :
+			TI_allocator<TF_link_allocator<target_allocator_type__>>(name)
 		{
 
 
 
 		}
-		inline link_allocator_t(target_allocator_type& target_allocator, const char* name = 0) :
-			allocator_base_t<link_allocator_t<target_allocator_type__>>(name),
+		inline TF_link_allocator(target_allocator_type& target_allocator, const char* name = 0) :
+			TI_allocator<TF_link_allocator<target_allocator_type__>>(name),
 			target_allocator_p_(&target_allocator)
 		{
 
 
 
 		}
-		inline link_allocator_t(const link_allocator_t& x) :
-			link_allocator_t(x.target_allocator(), x.name_)
+		inline TF_link_allocator(const TF_link_allocator& x) :
+			TF_link_allocator(x.target_allocator(), x.name_)
 		{
 
 
 
 		}
 
-		~link_allocator_t() {
+		~TF_link_allocator() {
 
 			reset();
 		}

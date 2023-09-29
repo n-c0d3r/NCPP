@@ -66,48 +66,48 @@ namespace ncpp {
 	namespace rtti {
 
 #define NCPP_RTTI_SEPECIFIC_TARGS(...) \
-			class __VA_OPT__(__VA_ARGS__##_)##rtti_options__,\
-			class __VA_OPT__(__VA_ARGS__##_)##rtti_traits__ = ncpp::rtti::traits_t<__VA_OPT__(__VA_ARGS__##_)##rtti_options__>,\
-			class __VA_OPT__(__VA_ARGS__##_)##allocator_type__ = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits__::allocator_type,\
-			class __VA_OPT__(__VA_ARGS__##_)##rcontainer_type__ = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits__::rcontainer_type,\
-			class __VA_OPT__(__VA_ARGS__##_)##robject_type_info_type__ = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits__::robject_type_info_type,\
-			class __VA_OPT__(__VA_ARGS__##_)##robject_member_info_type__ = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits__::robject_member_info_type,\
-			class __VA_OPT__(__VA_ARGS__##_)##rcontainer_additional_data_type__ = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits__::rcontainer_additional_data_type,\
-			class __VA_OPT__(__VA_ARGS__##_)##robject_type_info_additional_data_type__ = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits__::robject_type_info_additional_data_type,\
-			class __VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data_type__ = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits__::robject_member_info_additional_data_type
+			class F_##__VA_OPT__(__VA_ARGS__##_)##rtti_options__,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__ = ncpp::rtti::TF_traits<F_##__VA_OPT__(__VA_ARGS__##_)##rtti_options__>,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##allocator__ = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__::F_allocator,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##rcontainer__ = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__::F_rcontainer,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##robject_type_info__ = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__::F_robject_type_info,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info__ = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__::F_robject_member_info,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##rcontainer_additional_data__ = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__::F_rcontainer_additional_data,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##robject_type_info_additional_data__ = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__::F_robject_type_info_additional_data,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data__ = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__::F_robject_member_info_additional_data
 
 #define NCPP_RTTI_PASS_SEPECIFIC_TARGS(...) \
-			__VA_OPT__(__VA_ARGS__##_)##rtti_options__, \
-			__VA_OPT__(__VA_ARGS__##_)##rtti_traits__, \
-			__VA_OPT__(__VA_ARGS__##_)##allocator_type__, \
-			__VA_OPT__(__VA_ARGS__##_)##rcontainer_type__, \
-			__VA_OPT__(__VA_ARGS__##_)##robject_type_info_type__, \
-			__VA_OPT__(__VA_ARGS__##_)##robject_member_info_type__,\
-			__VA_OPT__(__VA_ARGS__##_)##rcontainer_additional_data_type__,\
-			__VA_OPT__(__VA_ARGS__##_)##robject_type_info_additional_data_type__,\
-			__VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data_type__
+			F_##__VA_OPT__(__VA_ARGS__##_)##rtti_options__, \
+			F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__, \
+			F_##__VA_OPT__(__VA_ARGS__##_)##allocator__, \
+			F_##__VA_OPT__(__VA_ARGS__##_)##rcontainer__, \
+			F_##__VA_OPT__(__VA_ARGS__##_)##robject_type_info__, \
+			F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info__,\
+			F_##__VA_OPT__(__VA_ARGS__##_)##rcontainer_additional_data__,\
+			F_##__VA_OPT__(__VA_ARGS__##_)##robject_type_info_additional_data__,\
+			F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data__
 
 #define NCPP_RTTI_SEPECIFIC_USING(RTTIOptions, ...) \
-			using __VA_OPT__(__VA_ARGS__##_)##rtti_options = RTTIOptions;\
-			using __VA_OPT__(__VA_ARGS__##_)##rtti_traits = ncpp::rtti::traits_t<__VA_OPT__(__VA_ARGS__##_)##rtti_options>;\
-			using __VA_OPT__(__VA_ARGS__##_)##allocator_type = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits::allocator_type;\
-			using __VA_OPT__(__VA_ARGS__##_)##rcontainer_type = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits::rcontainer_type;\
-			using __VA_OPT__(__VA_ARGS__##_)##robject_type_info_type = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits::robject_type_info_type;\
-			using __VA_OPT__(__VA_ARGS__##_)##robject_member_info_type = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits::robject_member_info_type;\
-			using __VA_OPT__(__VA_ARGS__##_)##rcontainer_additional_data_type = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits::rcontainer_additional_data_type;\
-			using __VA_OPT__(__VA_ARGS__##_)##robject_type_info_additional_data_type = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits::robject_type_info_additional_data_type;\
-			using __VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data_type = typename __VA_OPT__(__VA_ARGS__##_)##rtti_traits::robject_member_info_additional_data_type;
+			using F_##__VA_OPT__(__VA_ARGS__##_)##rtti_options = RTTIOptions;\
+			using F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits = ncpp::rtti::TF_traits<F_##__VA_OPT__(__VA_ARGS__##_)##rtti_options>;\
+			using F_##__VA_OPT__(__VA_ARGS__##_)##allocator = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_allocator;\
+			using F_##__VA_OPT__(__VA_ARGS__##_)##rcontainer = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_rcontainer;\
+			using F_##__VA_OPT__(__VA_ARGS__##_)##robject_type_info = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_robject_type_info;\
+			using F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_robject_member_info;\
+			using F_##__VA_OPT__(__VA_ARGS__##_)##rcontainer_additional_data = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_rcontainer_additional_data;\
+			using F_##__VA_OPT__(__VA_ARGS__##_)##robject_type_info_additional_data = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_robject_type_info_additional_data;\
+			using F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_robject_member_info_additional_data
 
 #define NCPP_RTTI_PASS_SEPECIFIC_USING(...) \
-			__VA_OPT__(__VA_ARGS__##_)##rtti_options, \
-			__VA_OPT__(__VA_ARGS__##_)##rtti_traits, \
-			__VA_OPT__(__VA_ARGS__##_)##allocator_type, \
-			__VA_OPT__(__VA_ARGS__##_)##rcontainer_type, \
-			__VA_OPT__(__VA_ARGS__##_)##robject_type_info_type, \
-			__VA_OPT__(__VA_ARGS__##_)##robject_member_info_type,\
-			__VA_OPT__(__VA_ARGS__##_)##rcontainer_additional_data_type,\
-			__VA_OPT__(__VA_ARGS__##_)##robject_type_info_additional_data_type,\
-			__VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data_type
+			F_##__VA_OPT__(__VA_ARGS__##_)##rtti_options, \
+			F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits, \
+			F_##__VA_OPT__(__VA_ARGS__##_)##allocator, \
+			F_##__VA_OPT__(__VA_ARGS__##_)##rcontainer, \
+			F_##__VA_OPT__(__VA_ARGS__##_)##robject_type_info, \
+			F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info,\
+			F_##__VA_OPT__(__VA_ARGS__##_)##rcontainer_additional_data,\
+			F_##__VA_OPT__(__VA_ARGS__##_)##robject_type_info_additional_data,\
+			F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data
 
 
 
@@ -125,14 +125,14 @@ namespace ncpp {
 
 
 
-		template<typename options__>
-		class rcontainer_t;
+		template<typename F_options__>
+		class TF_rcontainer;
 
-		template<typename options__>
-		class robject_type_info_t;
+		template<typename F_options__>
+		class TF_robject_type_info;
 
-		template<typename options__>
-		struct robject_member_info_t;
+		template<typename F_options__>
+		struct TF_robject_member_info;
 
 
 
@@ -150,21 +150,21 @@ namespace ncpp {
 
 
 
-		struct default_options {
+		struct F_default_options {
 
-			struct rcontainer_additional_data {
+			struct F_rcontainer_additional_data {
 
 			};
 
-			struct robject_type_info_additional_data {
+			struct F_robject_type_info_additional_data {
 
 			};
 
-			struct robject_member_info_additional_data {
+			struct F_robject_member_info_additional_data {
 
 			};
 
-			using allocator = NCPP_DEFAULT_ALLOCATOR;
+			using F_allocator = NCPP_DEFAULT_ALLOCATOR;
 
 		};
 
@@ -184,78 +184,78 @@ namespace ncpp {
 
 
 
-		template<class options__>
-		struct traits_t {
+		template<class F_options__>
+		struct TF_traits {
 
-			using options = options__;
+			using F_options = F_options__;
 
-			using allocator_type = typename options::allocator;
+			using F_allocator = typename F_options::F_allocator;
 
-			using rcontainer_additional_data_type = typename options::rcontainer_additional_data;
-			using robject_type_info_additional_data_type = typename options::robject_type_info_additional_data;
-			using robject_member_info_additional_data_type = typename options::robject_member_info_additional_data;
+			using F_rcontainer_additional_data = typename F_options::F_rcontainer_additional_data;
+			using F_robject_type_info_additional_data = typename F_options::F_robject_type_info_additional_data;
+			using F_robject_member_info_additional_data = typename F_options::F_robject_member_info_additional_data;
 
-			using rcontainer_type = rcontainer_t<options>;
-			using robject_type_info_type = robject_type_info_t<options>;
-			using robject_member_info_type = robject_member_info_t<options>;
+			using F_rcontainer = TF_rcontainer<F_options>;
+			using F_robject_type_info = TF_robject_type_info<F_options>;
+			using F_robject_member_info = TF_robject_member_info<F_options>;
 
 
 
-			template<class type__>
-			static inline type__* allocate_t(allocator_type& allocator) {
+			template<class F__>
+			static inline F__* T_allocate(F_allocator& allocator) {
 
-				return reinterpret_cast<type__*>(allocator.allocate(sizeof(type__), 0));
+				return reinterpret_cast<F__*>(allocator.allocate(sizeof(F__), 0));
 			}
-			template<class type__, typename... arg_types__>
-			static inline type__* new_t(allocator_type& allocator, arg_types__&&... args) {
+			template<class F__, typename... arg_types__>
+			static inline F__* T_new(F_allocator& allocator, arg_types__&&... args) {
 
-				return new(allocate_t<type__>(allocator)) type__(std::forward<arg_types__>(args)...);
+				return new(T_allocate<F__>(allocator)) F__(std::forward<arg_types__>(args)...);
 			}
-			template<class type__>
-			static inline void delete_t(allocator_type& allocator, type__* pointer) {
+			template<class F__>
+			static inline void T_delete(F_allocator& allocator, F__* pointer) {
 
-				pointer->~type__();
+				pointer->~F__();
 
-				allocator.deallocate(pointer, sizeof(type__));
+				allocator.deallocate(pointer, sizeof(F__));
 			}
 
 
 
 			template<
-				class robject_type__,
+				class F_robject__,
 				std::enable_if_t<
-					NCPP_RTTI_IS_HAS_FLAG(robject_type__, robject_flag) && NCPP_RTTI_IS_HAS_FLAG(robject_type__, robject_virtual_flag),
+					NCPP_RTTI_IS_HAS_FLAG(F_robject__, F_robject_flag) && NCPP_RTTI_IS_HAS_FLAG(F_robject__, F_robject_virtual_flag),
 					i32
 				> = 0
 			>
-			static void safe_reflect_t(rcontainer_type* rcontainer_p, robject_type__* object_p = 0, rtti::rflag rflag = NCPP_RFLAG_DEFAULT) {
+			static void T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, rtti::rflag rflag = NCPP_RFLAG_DEFAULT) {
 
 				if(object_p)
 					object_p->virtual_reflect(rcontainer_p, rflag);
 				else
-					robject_type__::static_reflect(rcontainer_p, rflag);
+					F_robject__::static_reflect(rcontainer_p, rflag);
 
 			}
 			template<
-				class robject_type__,
+				class F_robject__,
 				std::enable_if_t<
-					NCPP_RTTI_IS_HAS_FLAG(robject_type__, robject_flag) && !NCPP_RTTI_IS_HAS_FLAG(robject_type__, robject_virtual_flag),
+					NCPP_RTTI_IS_HAS_FLAG(F_robject__, F_robject_flag) && !NCPP_RTTI_IS_HAS_FLAG(F_robject__, F_robject_virtual_flag),
 					i32
 				> = 0
 			>
-			static void safe_reflect_t(rcontainer_type* rcontainer_p, robject_type__* object_p = 0, rtti::rflag rflag = NCPP_RFLAG_DEFAULT) {
+			static void T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, rtti::rflag rflag = NCPP_RFLAG_DEFAULT) {
 
-				robject_type__::static_reflect(rcontainer_p, rflag);
+				F_robject__::static_reflect(rcontainer_p, rflag);
 
 			}
 			template<
-				class robject_type__,
+				class F_robject__,
 				std::enable_if_t<
-					!NCPP_RTTI_IS_HAS_FLAG(robject_type__, robject_flag),
+					!NCPP_RTTI_IS_HAS_FLAG(F_robject__, F_robject_flag),
 					i32
 				> = 0
 			>
-			static void safe_reflect_t(rcontainer_type* rcontainer_p, robject_type__* object_p = 0, rtti::rflag rflag = NCPP_RFLAG_DEFAULT) {
+			static void T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, rtti::rflag rflag = NCPP_RFLAG_DEFAULT) {
 
 
 
@@ -264,24 +264,27 @@ namespace ncpp {
 
 
 
-			template<typename robject_type__, class = void>
-			struct safe_base_type_t {
+			template<typename F_robject__, class = void>
+			struct TF_safe_base {
 
 				using type = void;
 
 			};
 
-			template<typename robject_type__>
-			struct safe_base_type_t<
-				robject_type__,
+			template<typename F_robject__>
+			struct TF_safe_base<
+				F_robject__,
 				std::void_t<
-					decltype(std::declval<robject_type__::base_type>())
+					decltype(std::declval<F_robject__::F_base>())
 				>
 			> {
 
-				using type = typename robject_type__::base_type;
+				using type = typename F_robject__::F_base;
 
 			};
+
+			template<typename F_robject__>
+			using TF_safe_base_t = typename TF_safe_base<F_robject__>::type;
 
 		};
 
@@ -289,7 +292,7 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
-		NCPP_RTTI_SEPECIFIC_USING(default_options, default);
+		NCPP_RTTI_SEPECIFIC_USING(F_default_options, default);
 
 	}
 

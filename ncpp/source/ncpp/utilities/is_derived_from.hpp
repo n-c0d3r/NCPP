@@ -71,7 +71,7 @@ namespace ncpp {
          *  .
          */
         template<class derived__, class base__>
-        inline constexpr b8 is_derived_from_t() {
+        inline constexpr b8 T_is_derived_from() {
 
             return std::is_convertible<derived__* , base__*>::value;
         };

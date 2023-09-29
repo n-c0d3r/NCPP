@@ -64,11 +64,11 @@ namespace ncpp {
 
 	namespace rtti {
 
-		template<typename options__>
-		struct robject_member_info_t {
+		template<typename F_options__>
+		struct TF_robject_member_info {
 
 		public:
-			NCPP_RTTI_SEPECIFIC_USING(options__);
+			NCPP_RTTI_SEPECIFIC_USING(F_options__);
 
 
 
@@ -81,37 +81,37 @@ namespace ncpp {
 
 			u16 size = 0;
 
-			robject_member_info_additional_data_type additional_data;
+			F_robject_member_info_additional_data additional_data;
 
 		};
 
 		template<
-			class object_type__,
-			typename member_type__,
-			class member_static_info__,
+			class F_robject__,
+			typename F_member__,
+			class F_member_static_info__,
 
 			NCPP_RTTI_SEPECIFIC_TARGS()
 		>
-		robject_member_info_type__* reflect_object_member_t(
-			robject_type_info_type__* robject_type_info_p,
+		F_robject_member_info__* T_reflect_object_member(
+			F_robject_type_info__* robject_type_info_p,
 			rflag flag = NCPP_RFLAG_DEFAULT
 		) {
 
-			robject_member_info_type__* member_info_p = robject_type_info_p->member_info(member_static_info__::get_name());
+			F_robject_member_info__* member_info_p = robject_type_info_p->member_info(F_member_static_info__::get_name());
 
 			if (member_info_p)
 				return member_info_p;
 
-			member_info_p = rtti_traits__::template new_t<robject_member_info_type__>(
+			member_info_p = F_rtti_traits__::template T_new<F_robject_member_info__>(
 				robject_type_info_p->rcontainer_p()->allocator(),
-				robject_member_info_type__ {
+				F_robject_member_info__ {
 
-					typeid(member_type__).hash_code(),
-					member_static_info__::get_invoke_address() | member_static_info__::get_offset(),
+					typeid(F_member__).hash_code(),
+					F_member_static_info__::get_invoke_address() | F_member_static_info__::get_offset(),
 
-					member_static_info__::get_name(),
+					F_member_static_info__::get_name(),
 
-					member_static_info__::get_size()
+					F_member_static_info__::get_size()
 
 				}
 			);

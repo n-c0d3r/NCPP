@@ -78,7 +78,14 @@ namespace ncpp {
          *  @param <arg_types__...> template argument list.
          */
         template<typename... arg_types__>
-        using first_template_arg_t = nth_template_arg_t<0, arg_types__...>;
+        using TF_first_template_arg = TF_nth_template_arg<0, arg_types__...>;
+
+        /**
+         *  Finds out the first template argument.
+         *  @param <arg_types__...> template argument list.
+         */
+        template<typename... arg_types__>
+        using TF_first_template_arg_t = TF_nth_template_arg_t<0, arg_types__...>;
 
     }
 

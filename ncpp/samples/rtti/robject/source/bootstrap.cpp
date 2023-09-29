@@ -28,9 +28,9 @@ int main() {
 
 	A a;
 
-	A::rcontainer_type rcontainer;
+	A::F_rcontainer rcontainer;
 
-	A::rtti_traits::template safe_reflect_t<A>(&rcontainer);
+	A::F_rtti_traits::template T_safe_reflect<A>(&rcontainer);
 
 	system("pause");
 

@@ -63,7 +63,7 @@ namespace ncpp {
 	 *		+ next chunk pointer: sizeof(sz) (bytes)
 	 *		+ data: chunk_capacity_ (bytes)
 	 */
-	class chunk_allocator : public allocator_base_t<chunk_allocator> {
+	class chunk_allocator : public TI_allocator<chunk_allocator> {
 
 	private:
 		u8* current_chunk_p_ = 0;
@@ -89,7 +89,7 @@ namespace ncpp {
 	public:
 		// Default chunk capacity is 2MiB
 		inline chunk_allocator(sz chunk_capacity = 2097152, u16 min_chunk_count = 0, const char* name = 0) :
-			allocator_base_t(name),
+			TI_allocator(name),
 			chunk_capacity_(chunk_capacity),
 			min_chunk_count_(min_chunk_count)
 		{
@@ -161,7 +161,7 @@ namespace ncpp {
 		}
 
 	public:
-		void* new_mem(sz size) {
+		inline void* new_mem(sz size) {
 
 			assert(size <= chunk_capacity_ && "allocation size too large");
 
@@ -192,7 +192,7 @@ namespace ncpp {
 
 			return current_chunk_p_ + sizeof(sz) * 2 + current_usage_ - size;
 		}
-		void delete_mem(void* p) {
+		inline void delete_mem(void* p) {
 
 
 		}

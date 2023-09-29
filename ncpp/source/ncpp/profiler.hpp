@@ -56,32 +56,32 @@
 
 namespace ncpp {
 
-	class profile {
+	class F_profile {
 
 	public:
-		using output_function_type = void(const eastl::string& name, u64 nanoseconds);
+		using F_output_function = void(const eastl::string& name, u64 nanoseconds);
 
 
 
 	private:
 		eastl::string content_;
-		output_function_type* output_function_p_ = 0;
+		F_output_function* output_function_p_ = 0;
 		eastl::chrono::system_clock::time_point start_;
 
 
 
 	public:
 		inline const eastl::string& content() const { return content_; }
-		inline output_function_type* output_function_p() const { return output_function_p_; }
+		inline F_output_function* output_function_p() const { return output_function_p_; }
 
 
 
 	public:
-		profile(
+		F_profile(
 			const eastl::string& content = "",
-			output_function_type* output_function_p = [](const eastl::string& content, u64 nanoseconds) {
+			F_output_function* output_function_p = [](const eastl::string& content, u64 nanoseconds) {
 
-				std::cout << content.c_str() << cout_nanoseconds(nanoseconds) << cout_lowlight(" (nanoseconds)") << std::endl;
+				std::cout << content.c_str() << F_cout_nanoseconds(nanoseconds) << F_cout_lowlight(" (nanoseconds)") << std::endl;
 
 			}
 		) :
@@ -92,7 +92,7 @@ namespace ncpp {
 			start_ = eastl::chrono::high_resolution_clock::now();
 
 		}
-		~profile() {
+		~F_profile() {
 
 			output_function_p_(
 				content_, 
@@ -108,7 +108,7 @@ namespace ncpp {
 
 
 #ifdef NCPP_ENABLE_SCOPED_PROFILE
-#define NCPP_SCOPED_PROFILE(Name, Content) ncpp::profile Name##_profile = ncpp::profile(Content)
+#define NCPP_SCOPED_PROFILE(Name, Content) ncpp::F_profile Name##_profile = ncpp::F_profile(Content)
 #else
 #define NCPP_SCOPED_PROFILE(Name) ;
 #endif

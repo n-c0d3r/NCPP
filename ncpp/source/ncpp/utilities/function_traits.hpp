@@ -29,6 +29,12 @@
 
 #include <ncpp/prerequisites.hpp>
 
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
+#include <ncpp/utilities/is_function.hpp>
+
 #pragma endregion 
 
 
@@ -69,37 +75,37 @@ namespace ncpp {
 
         // \cond INTERNAL
         template<typename function_type__> 
-        struct function_traits_t {
+        struct TF_function_traits {
 
             static const sz nargs = 0;
 
             static const b8 is_function = false;
 
-            using return_type = void;
+            using F_return = void;
 
             template <sz i>
-            using arg_t = void;
+            using TF_arg = void;
 
         };
         // \endcond
 
         template<typename return_type__, typename... arg_types__> 
-        struct function_traits_t<return_type__(arg_types__...)>
+        struct TF_function_traits<return_type__(arg_types__...)>
         {
 
             static const sz nargs = sizeof...(arg_types__);
 
             static const b8 is_function = true;
 
-            using return_type = return_type__;
+            using F_return = return_type__;
 
             template <sz i>
-            using arg_t = typename std::tuple_element<i, std::tuple<arg_types__...>>::type;
+            using TF_arg = typename std::tuple_element<i, std::tuple<arg_types__...>>::type;
 
             template<typename... additional_args__>
-            using push_args_front_t = return_type__(additional_args__..., arg_types__...);
+            using TF_push_args_front = return_type__(additional_args__..., arg_types__...);
             template<typename... additional_args__>
-            using push_args_back_t = return_type__(arg_types__..., additional_args__...);
+            using TF_push_args_back = return_type__(arg_types__..., additional_args__...);
 
         };
 
@@ -107,19 +113,22 @@ namespace ncpp {
 
         // \cond INTERNAL
         template<typename function_type__, typename new_return_type__>
-        struct replace_function_return_type_t {
+        struct TF_replace_function_return {
 
-
+            static_assert(is_function_t<function_type__>::value && "function_type__ is not function type");
 
         };
         // \endcond
 
         template<typename new_return_type__, typename org_return_type__, typename... arg_types__>
-        struct replace_function_return_type_t<org_return_type__(arg_types__...), new_return_type__> {
+        struct TF_replace_function_return<org_return_type__(arg_types__...), new_return_type__> {
 
             using type = org_return_type__(arg_types__...);
 
         };
+
+        template<typename function_type__, typename new_return_type__>
+        using TF_replace_function_return_t = typename TF_replace_function_return<function_type__, new_return_type__>::type;
 
     }
 

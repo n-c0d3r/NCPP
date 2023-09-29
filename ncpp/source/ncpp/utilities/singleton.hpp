@@ -74,7 +74,14 @@ namespace ncpp {
          *  @param class__ the class implementing singleton_t.
          */
         template<class class__>
-        class singleton_t {
+        class TF_singleton {
+
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+
+        public:
+            using F_class = class__;
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -95,7 +102,7 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         protected:
-            singleton_t() {
+            TF_singleton() {
 
                 assert(instance_ps == 0 && "only accept 1 instance at a time!");
 
@@ -104,17 +111,17 @@ namespace ncpp {
             }
 
         public:
-            ~singleton_t() {
+            ~TF_singleton() {
 
                 instance_ps = 0;
 
             }
 
             // \cond INTERNAL
-            singleton_t(const singleton_t&) = delete;
-            singleton_t& operator = (const singleton_t&) = delete;
-            singleton_t(singleton_t&&) = delete;
-            singleton_t& operator = (singleton_t&&) = delete;
+            TF_singleton(const TF_singleton&) = delete;
+            TF_singleton& operator = (const TF_singleton&) = delete;
+            TF_singleton(TF_singleton&&) = delete;
+            TF_singleton& operator = (TF_singleton&&) = delete;
             // \endcond
 
         };
@@ -124,7 +131,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
         template<class class__>
-        class__* singleton_t<class__>::instance_ps = 0;
+        class__* TF_singleton<class__>::instance_ps = 0;
 
     }
 

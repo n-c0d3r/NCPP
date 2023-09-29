@@ -7,7 +7,7 @@ using namespace ncpp;
 
 int main() {
 	
-	dummy_allocator dummy_allocator;
+	F_dummy_allocator dummy_allocator;
 	eastl::allocator default_eastl_allocator;
 
 	const u32 allocation_count = 5000;

@@ -5,6 +5,6 @@
 
 namespace ncpp{
 
-	u8 dummy_allocator::memory_block_s[1024];
+	u8 F_dummy_allocator::memory_block_s[1024];
 
 }

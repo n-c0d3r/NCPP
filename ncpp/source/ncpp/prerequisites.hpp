@@ -420,105 +420,105 @@ namespace ncpp {
 
     // \cond INTERNAL
     template<sz bits__>
-    struct uint_internal_t {
+    struct TF_uint_internal {
         using type = void;
     };
     template<>
-    struct uint_internal_t<8> {
+    struct TF_uint_internal<8> {
         using type = u8;
     };
     template<>
-    struct uint_internal_t<16> {
+    struct TF_uint_internal<16> {
         using type = u16;
     };
     template<>
-    struct uint_internal_t<32> {
+    struct TF_uint_internal<32> {
         using type = u32;
     };
     template<>
-    struct uint_internal_t<64> {
+    struct TF_uint_internal<64> {
         using type = u64;
     };
     // \endcond
     template<sz bits>
-    using uint_t = typename uint_internal_t<bits>::type;
+    using TF_uint = typename TF_uint_internal<bits>::type;
 
     // \cond INTERNAL
     template<sz bits__>
-    struct int_internal_t {
+    struct TF_int_internal {
         using type = void;
     };
     template<>
-    struct int_internal_t<8> {
+    struct TF_int_internal<8> {
         using type = i8;
     };
     template<>
-    struct int_internal_t<16> {
+    struct TF_int_internal<16> {
         using type = i16;
     };
     template<>
-    struct int_internal_t<32> {
+    struct TF_int_internal<32> {
         using type = i32;
     };
     template<>
-    struct int_internal_t<64> {
+    struct TF_int_internal<64> {
         using type = i64;
     };
     // \endcond
     template<sz bits>
-    using int_t = typename int_internal_t<bits>::type;
+    using TF_int = typename TF_int_internal<bits>::type;
 
 
 
     // \cond INTERNAL
     template<sz bits__>
-    struct atomic_uint_internal_t {
+    struct TF_atomic_uint_internal {
         using type = void;
     };
     template<>
-    struct atomic_uint_internal_t<8> {
+    struct TF_atomic_uint_internal<8> {
         using type = u8;
     };
     template<>
-    struct atomic_uint_internal_t<16> {
+    struct TF_atomic_uint_internal<16> {
         using type = u16;
     };
     template<>
-    struct atomic_uint_internal_t<32> {
+    struct TF_atomic_uint_internal<32> {
         using type = u32;
     };
     template<>
-    struct atomic_uint_internal_t<64> {
+    struct TF_atomic_uint_internal<64> {
         using type = u64;
     };
     // \endcond
     template<sz bits>
-    using atomic_uint_t = typename atomic_uint_internal_t<bits>::type;
+    using TF_atomic_uint = typename TF_atomic_uint_internal<bits>::type;
 
     // \cond INTERNAL
     template<sz bits__>
-    struct atomic_int_internal_t {
+    struct TF_atomic_int_internal {
         using type = void;
     };
     template<>
-    struct atomic_int_internal_t<8> {
+    struct TF_atomic_int_internal<8> {
         using type = i8;
     };
     template<>
-    struct atomic_int_internal_t<16> {
+    struct TF_atomic_int_internal<16> {
         using type = i16;
     };
     template<>
-    struct atomic_int_internal_t<32> {
+    struct TF_atomic_int_internal<32> {
         using type = i32;
     };
     template<>
-    struct atomic_int_internal_t<64> {
+    struct TF_atomic_int_internal<64> {
         using type = i64;
     };
     // \endcond
     template<sz bits>
-    using atomic_int_t = typename atomic_int_internal_t<bits>::type;
+    using TF_atomic_int = typename TF_atomic_int_internal<bits>::type;
 
 #pragma endregion
 
@@ -526,31 +526,31 @@ namespace ncpp {
     ////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////
 
-    template<typename type__>
-    inline type__& null_reference_t() { return *reinterpret_cast<type__*>(0); }
+    template<typename F__>
+    inline F__& T_null_reference() { return *reinterpret_cast<F__*>(0); }
 
     ////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////
 
-    template<typename type__>
-    inline b8 is_valid_t(const type__* ptr) {
+    template<typename F__>
+    inline b8 T_is_valid(F__ const* ptr) {
         
         return ptr != 0;
     }
-    template<typename type__>
-    inline b8 is_valid_t(type__&& ptr) {
+    template<typename F__>
+    inline b8 T_is_valid(F__&& ptr) {
 
         return &ptr != 0;
     }
 
-    template<typename type__>
-    inline b8 is_null_t(const type__* ptr) {
+    template<typename F__>
+    inline b8 T_is_null(F__ const* ptr) {
 
         return ptr == 0;
     }
-    template<typename type__>
-    inline b8 is_null_t(type__&& ptr) {
+    template<typename F__>
+    inline b8 T_is_null(F__&& ptr) {
 
         return &ptr == 0;
     }

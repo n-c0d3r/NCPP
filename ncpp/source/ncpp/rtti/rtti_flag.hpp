@@ -61,7 +61,7 @@ namespace ncpp {
 
 #define NCPP_RTTI_IMPLEMENT_FLAG(TypeName, Name) friend void operator << (TypeName&, const Name& flag) { }
 
-#define NCPP_RTTI_IS_HAS_FLAG(TypeName, Name) utilities::is_ostreamable_t<TypeName, Name>::value
+#define NCPP_RTTI_IS_HAS_FLAG(TypeName, Name) utilities::TF_is_ostreamable<TypeName, Name>::value
 
 	}
 
