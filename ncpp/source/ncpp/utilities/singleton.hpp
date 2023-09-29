@@ -74,7 +74,7 @@ namespace ncpp {
          *  @param class__ the class implementing singleton_t.
          */
         template<class F_instance__>
-        class TF_singleton {
+        class TI_singleton {
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -102,7 +102,7 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         protected:
-            TF_singleton() {
+            TI_singleton() {
 
                 assert(instance_ps == 0 && "only accept 1 instance at a time!");
 
@@ -111,17 +111,17 @@ namespace ncpp {
             }
 
         public:
-            ~TF_singleton() {
+            ~TI_singleton() {
 
                 instance_ps = 0;
 
             }
 
             // \cond INTERNAL
-            TF_singleton(const TF_singleton&) = delete;
-            TF_singleton& operator = (const TF_singleton&) = delete;
-            TF_singleton(TF_singleton&&) = delete;
-            TF_singleton& operator = (TF_singleton&&) = delete;
+            TI_singleton(const TI_singleton&) = delete;
+            TI_singleton& operator = (const TI_singleton&) = delete;
+            TI_singleton(TI_singleton&&) = delete;
+            TI_singleton& operator = (TI_singleton&&) = delete;
             // \endcond
 
         };
@@ -131,7 +131,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
         template<class F_instance__>
-        F_instance__* TF_singleton<F_instance__>::instance_ps = 0;
+        F_instance__* TI_singleton<F_instance__>::instance_ps = 0;
 
     }
 
