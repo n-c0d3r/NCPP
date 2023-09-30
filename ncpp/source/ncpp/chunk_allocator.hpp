@@ -66,6 +66,11 @@ namespace ncpp {
 	class F_chunk_allocator : public TI_allocator<F_chunk_allocator> {
 
 	private:
+		static constexpr sz chunk_header_size_s_ = sizeof(sz) * 2;
+
+
+
+	private:
 		u8* current_chunk_p_ = 0;
 		sz current_usage_ = 0;
 		u16 chunk_count_ = 0;
@@ -127,7 +132,7 @@ namespace ncpp {
 
 			}
 
-			u8* new_chunk = reinterpret_cast<u8*>(default_allocate(chunk_capacity_ + sizeof(sz) * 2));
+			u8* new_chunk = reinterpret_cast<u8*>(default_allocate(chunk_capacity_ + chunk_header_size_s_));
 
 			*reinterpret_cast<sz*>(new_chunk) = reinterpret_cast<sz>(chunk);
 			*reinterpret_cast<sz*>(new_chunk + sizeof(sz)) = 0;
@@ -188,7 +193,7 @@ namespace ncpp {
 
 
 
-			return current_chunk_p_ + sizeof(sz) * 2 + current_usage_ - size;
+			return current_chunk_p_ + chunk_header_size_s_ + current_usage_ - size;
 		}
 		inline void delete_mem(void* p) {
 
