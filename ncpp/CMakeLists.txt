@@ -23,7 +23,6 @@ include(NCPP/ConfigureCompiler)
 #####################################################################################
 # ncpp mem options
 option(NCPP_ENABLE_MEMORY_COUNTING "Enable memory counting" ON)
-set(NCPP_DEFAULT_ALLOCATOR "::ncpp::F_default_allocator" CACHE STRING "The allocator used for ncpp's containers,...")
 
 # ncpp pac options
 option(NCPP_ENABLE_WEAKLOCK_WARNING "If enabled, weaklock will automatically warn when race condition occurs" ON)

@@ -7,9 +7,10 @@ using namespace ncpp;
 
 int main() {
 	
-	chunk_allocator chunk_allocator;
-	eastl::allocator default_eastl_allocator;
-	NCPP_DEFAULT_ALLOCATOR default_allocator;
+	F_chunk_allocator chunk_allocator;
+	F_default_allocator default_allocator;
+
+	eastl::allocator eastl_allocator;
 
 	const u32 allocation_count = 5000;
 	const u32 allocation_size = 1024;
@@ -28,11 +29,11 @@ int main() {
 
 	{
 
-		NCPP_SCOPED_PROFILE(default_eastl_allocator, "Default eastl allocator: ");
+		NCPP_SCOPED_PROFILE(default_allocator, "Default allocator: ");
 
 		for (u32 i = 0; i < allocation_count; ++i) {
 
-			default_eastl_allocator.allocate(allocation_size, 0);
+			default_allocator.allocate(allocation_size, 0);
 
 		}
 
@@ -40,11 +41,11 @@ int main() {
 
 	{
 
-		NCPP_SCOPED_PROFILE(default_allocator, "Default allocator: ");
+		NCPP_SCOPED_PROFILE(eastl_allocator, "EASTL allocator: ");
 
 		for (u32 i = 0; i < allocation_count; ++i) {
 
-			default_allocator.allocate(allocation_size, 0);
+			eastl_allocator.allocate(allocation_size, 0);
 
 		}
 

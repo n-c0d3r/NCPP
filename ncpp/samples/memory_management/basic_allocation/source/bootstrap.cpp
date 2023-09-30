@@ -7,7 +7,7 @@ using namespace ncpp;
 
 int main() {
 	
-	eastl::allocator allocator;
+	F_default_allocator allocator;
 
 
 

@@ -63,7 +63,7 @@ namespace ncpp {
 	 *		+ next chunk pointer: sizeof(sz) (bytes)
 	 *		+ data: chunk_capacity_ (bytes)
 	 */
-	class chunk_allocator : public TI_allocator<chunk_allocator> {
+	class F_chunk_allocator : public TI_allocator<F_chunk_allocator> {
 
 	private:
 		u8* current_chunk_p_ = 0;
@@ -88,24 +88,25 @@ namespace ncpp {
 
 	public:
 		// Default chunk capacity is 2MiB
-		inline chunk_allocator(sz chunk_capacity = 2097152, u16 min_chunk_count = 0, const char* name = 0) :
+		inline F_chunk_allocator(sz chunk_capacity = 2097152, u16 min_chunk_count = 0, const char* name = 0) :
 			TI_allocator(name),
 			chunk_capacity_(chunk_capacity),
-			min_chunk_count_(min_chunk_count)
+			min_chunk_count_(min_chunk_count),
+			current_usage_(chunk_capacity_)
 		{
 
 			validate_chunk_count();
 
 		}
-		inline chunk_allocator(const chunk_allocator& x) :
-			chunk_allocator(x.chunk_capacity_, x.min_chunk_count_, x.name_)
+		inline F_chunk_allocator(const F_chunk_allocator& x) :
+			F_chunk_allocator(x.chunk_capacity_, x.min_chunk_count_, x.name_)
 		{
 
 
 
 		}
 
-		~chunk_allocator() {
+		~F_chunk_allocator() {
 
 			reset();
 		}
@@ -172,21 +173,18 @@ namespace ncpp {
 
 
 
-			if (
-				current_chunk_p_ == 0
-				|| ((current_usage_ + size) > chunk_capacity_)
-			)
+			current_usage_ += size;
+
+
+
+			if (current_usage_ > chunk_capacity_)
 			{
 
 				current_chunk_p_ = push_new_chunk(current_chunk_p_);
 
-				current_usage_ = 0;
+				current_usage_ = size;
 
 			}
-
-
-
-			current_usage_ += size;
 
 
 
@@ -212,7 +210,7 @@ namespace ncpp {
 
 			}
 
-			current_usage_ = 0;
+			current_usage_ = chunk_capacity_;
 
 		}
 		/**
@@ -238,7 +236,7 @@ namespace ncpp {
 
 			}
 
-			current_usage_ = 0;
+			current_usage_ = chunk_capacity_;
 
 		}
 

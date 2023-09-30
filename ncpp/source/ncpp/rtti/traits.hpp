@@ -164,7 +164,7 @@ namespace ncpp {
 
 			};
 
-			using F_allocator = NCPP_DEFAULT_ALLOCATOR;
+			using F_allocator = F_default_allocator;
 
 		};
 
