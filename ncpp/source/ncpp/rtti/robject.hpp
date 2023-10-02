@@ -133,11 +133,11 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 #define NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName) \
+			template<typename object_type__ = F_this, typename member_type__ = MemberType>\
+			struct TF_##MemberName##___ncpp_static_info___;\
+			friend struct TF_##MemberName##___ncpp_static_info___<F_this, MemberType>;\
 			template<typename object_type__, typename member_type__>\
-			struct F_##MemberName##___ncpp_static_info_t___;\
-			friend struct F_##MemberName##___ncpp_static_info_t___<F_this, MemberType>;\
-			template<typename object_type__, typename member_type__>\
-			struct F_##MemberName##___ncpp_static_info_t___{\
+			struct TF_##MemberName##___ncpp_static_info___{\
 				\
 				static void invoke(){}\
 				static inline ncpp::sz get_invoke_address(){ return 0; }\
@@ -150,7 +150,7 @@ namespace ncpp {
 			};\
 			\
 			template<typename object_type__, typename return_type__, typename... arg_types__>\
-			struct F_##MemberName##___ncpp_static_info_t___<object_type__, return_type__(arg_types__...)>{\
+			struct TF_##MemberName##___ncpp_static_info___<object_type__, return_type__(arg_types__...)>{\
 				\
 				static auto invoke(void* object_p, arg_types__... args) {\
 					\
@@ -275,7 +275,7 @@ namespace ncpp {
 			robject_member_info_p = ncpp::rtti::T_reflect_object_member<\
 				F_this, \
 				MemberType, \
-				F_##MemberName##___ncpp_static_info_t___<F_this, MemberType>, \
+				TF_##MemberName##___ncpp_static_info___<F_this, MemberType>, \
 				NCPP_RTTI_PASS_SEPECIFIC_USING()\
 			>(\
 				robject_type_info_p, \
