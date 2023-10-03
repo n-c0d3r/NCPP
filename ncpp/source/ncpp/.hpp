@@ -62,9 +62,7 @@ namespace ncpp { }
 #include <ncpp/utilities/.hpp>
 #include <ncpp/iostream.hpp>
 #include <ncpp/containers/.hpp>
-#include <ncpp/pac/.hpp>
 #include <ncpp/rtti/.hpp>
-#include <ncpp/dop/.hpp>
 
 #pragma endregion
 

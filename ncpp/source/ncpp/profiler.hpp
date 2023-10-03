@@ -108,9 +108,9 @@ namespace ncpp {
 
 
 #ifdef NCPP_ENABLE_SCOPED_PROFILE
-#define NCPP_SCOPED_PROFILE(Name, Content) ncpp::F_profile Name##_profile = ncpp::F_profile(Content)
+#define NCPP_SCOPED_PROFILE(Content) ncpp::F_profile ___ncpp_profile___(Content);
 #else
-#define NCPP_SCOPED_PROFILE(Name) ;
+#define NCPP_SCOPED_PROFILE(Content) ;
 #endif
 
 }

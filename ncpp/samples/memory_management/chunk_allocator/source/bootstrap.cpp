@@ -17,7 +17,7 @@ int main() {
 
 	{
 
-		NCPP_SCOPED_PROFILE(chunk_allocator, "Chunk allocator: ");
+		NCPP_SCOPED_PROFILE("Chunk allocator: ");
 
 		for (u32 i = 0; i < allocation_count; ++i) {
 
@@ -29,7 +29,7 @@ int main() {
 
 	{
 
-		NCPP_SCOPED_PROFILE(default_allocator, "Default allocator: ");
+		NCPP_SCOPED_PROFILE("Default allocator: ");
 
 		for (u32 i = 0; i < allocation_count; ++i) {
 
@@ -41,7 +41,7 @@ int main() {
 
 	{
 
-		NCPP_SCOPED_PROFILE(eastl_allocator, "EASTL allocator: ");
+		NCPP_SCOPED_PROFILE("EASTL allocator: ");
 
 		for (u32 i = 0; i < allocation_count; ++i) {
 
@@ -53,7 +53,7 @@ int main() {
 
 	{
 
-		NCPP_SCOPED_PROFILE(malloc, "Malloc: ");
+		NCPP_SCOPED_PROFILE("Malloc: ");
 
 		for (u32 i = 0; i < allocation_count; ++i) {
 
