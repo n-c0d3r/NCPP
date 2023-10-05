@@ -9,7 +9,7 @@ int main() {
 	
 	{
 
-		NCPP_SCOPED_PROFILE(test, "Test result: ");
+		NCPP_SCOPED_PROFILE("Test result: ");
 
 	}
 

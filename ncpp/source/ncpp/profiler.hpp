@@ -77,7 +77,7 @@ namespace ncpp {
 
 
 	public:
-		F_profile(
+		inline F_profile(
 			const eastl::string& content = "",
 			F_output_function* output_function_p = [](const eastl::string& content, u64 nanoseconds) {
 
@@ -86,6 +86,21 @@ namespace ncpp {
 			}
 		) :
 			content_(content),
+			output_function_p_(output_function_p)
+		{
+
+			start_ = eastl::chrono::high_resolution_clock::now();
+
+		}
+		inline F_profile(
+			eastl::string&& content = "",
+			F_output_function* output_function_p = [](const eastl::string& content, u64 nanoseconds) {
+
+				std::cout << content.c_str() << F_cout_nanoseconds(nanoseconds) << F_cout_lowlight(" (nanoseconds)") << std::endl;
+
+			}
+		) :
+			content_(std::move(content)),
 			output_function_p_(output_function_p)
 		{
 
