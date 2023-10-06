@@ -187,17 +187,19 @@ std::ostream& operator << (
 
 	if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
 
-		os << ncpp::F_cout_lowlight("...");
+        os << ncpp::F_cout_lowlight{"..."};
 
 		return os;
 	}
 
 	os << "\x1B[33mvector\033[0m"
-		<< ncpp::F_cout_lowlight("<") << ("\x1B[34m" + eastl::string(typeid(F_item__).name()) + "\033[0m").c_str() << ncpp::F_cout_lowlight(">")
-		<< ncpp::F_cout_lowlight("(") << ("\x1B[35m" + eastl::to_string(input.first.size()) + "\033[0m").c_str() << ncpp::F_cout_lowlight(")")
-		<< " ";
+    << ncpp::F_cout_lowlight{"<"} << ("\x1B[34m" + eastl::string(typeid(F_item__).name()) + "\033[0m").c_str()
+    << ncpp::F_cout_lowlight{">"}
+    << ncpp::F_cout_lowlight{"("} << ("\x1B[35m" + eastl::to_string(input.first.size()) + "\033[0m").c_str()
+    << ncpp::F_cout_lowlight{")"}
+    << " ";
 
-	os << ncpp::F_cout_lowlight("{") << std::endl;
+    os << ncpp::F_cout_lowlight{"{"} << std::endl;
 
 	for (ncpp::sz i = 0; i < input.first.size(); ++i) {
 
@@ -207,12 +209,12 @@ std::ostream& operator << (
 
 		}
 
-		os << ncpp::F_cout_field_name(eastl::to_string(i)) << ncpp::F_cout_lowlight(": ");
+        os << ncpp::F_cout_field_name{eastl::to_string(i)} << ncpp::F_cout_lowlight{": "};
 
 		ncpp::T_safe_ostream_with_tab<std::ostream, F_item__>(os, { input.first[i], input.second + 1 });
 
 		if (i != input.first.size() - 1)
-			os << ncpp::F_cout_lowlight(",");
+            os << ncpp::F_cout_lowlight{","};
 
 		os << std::endl;
 
@@ -223,7 +225,7 @@ std::ostream& operator << (
 		os << " ";
 
 	}
-	os << ncpp::F_cout_lowlight("}");
+    os << ncpp::F_cout_lowlight{"}"};
 
 	return os;
 }
@@ -258,17 +260,19 @@ std::ostream& operator << (
 
 	if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
 
-		os << ncpp::F_cout_lowlight("...");
+        os << ncpp::F_cout_lowlight{"..."};
 
 		return os;
 	}
 
 	os << "\x1B[33minitializer_list\033[0m"
-		<< ncpp::F_cout_lowlight("<") << ("\x1B[34m" + eastl::string(typeid(F_item__).name()) + "\033[0m").c_str() << ncpp::F_cout_lowlight(",")
-		<< ("\x1B[35m" + eastl::to_string(input.first.size()) + "\033[0m").c_str() << ncpp::F_cout_lowlight(">")
-		<< " ";
+    << ncpp::F_cout_lowlight{"<"} << ("\x1B[34m" + eastl::string(typeid(F_item__).name()) + "\033[0m").c_str()
+    << ncpp::F_cout_lowlight{","}
+    << ("\x1B[35m" + eastl::to_string(input.first.size()) + "\033[0m").c_str()
+    << ncpp::F_cout_lowlight{">"}
+    << " ";
 
-	os << ncpp::F_cout_lowlight("{") << std::endl;
+    os << ncpp::F_cout_lowlight{"{"} << std::endl;
 
 	auto j = input.first.begin();
 
@@ -280,12 +284,12 @@ std::ostream& operator << (
 
 		}
 
-		os << ncpp::F_cout_field_name(eastl::to_string(i)) << ncpp::F_cout_lowlight(": ");
+        os << ncpp::F_cout_field_name{eastl::to_string(i)} << ncpp::F_cout_lowlight{": "};
 
 		ncpp::T_safe_ostream_with_tab<std::ostream, F_item__>(os, { *j, input.second + 1 });
 
 		if (i != input.first.size() - 1)
-			os << ncpp::F_cout_lowlight(",");
+            os << ncpp::F_cout_lowlight{","};
 
 		os << std::endl;
 
@@ -298,7 +302,7 @@ std::ostream& operator << (
 		os << " ";
 
 	}
-	os << ncpp::F_cout_lowlight("}");
+    os << ncpp::F_cout_lowlight{"}"};
 
 	return os;
 }
@@ -333,17 +337,19 @@ std::ostream& operator << (
 
 	if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
 
-		os << ncpp::F_cout_lowlight("...");
+        os << ncpp::F_cout_lowlight{"..."};
 
 		return os;
 	}
 
 	os << "\x1B[33marray\033[0m"
-		<< ncpp::F_cout_lowlight("<") << ("\x1B[34m" + eastl::string(typeid(F_item__).name()) + "\033[0m").c_str() << ncpp::F_cout_lowlight(",")
-		<< ("\x1B[35m" + eastl::to_string(input.first.size()) + "\033[0m").c_str() << ncpp::F_cout_lowlight(">")
-		<< " ";
+    << ncpp::F_cout_lowlight{"<"} << ("\x1B[34m" + eastl::string(typeid(F_item__).name()) + "\033[0m").c_str()
+    << ncpp::F_cout_lowlight{","}
+    << ("\x1B[35m" + eastl::to_string(input.first.size()) + "\033[0m").c_str()
+    << ncpp::F_cout_lowlight{">"}
+    << " ";
 
-	os << ncpp::F_cout_lowlight("{") << std::endl;
+    os << ncpp::F_cout_lowlight{"{"} << std::endl;
 
 
 
@@ -355,12 +361,12 @@ std::ostream& operator << (
 
 		}
 
-		os << ncpp::F_cout_field_name(eastl::to_string(i)) << ncpp::F_cout_lowlight(": ");
+        os << ncpp::F_cout_field_name{eastl::to_string(i)} << ncpp::F_cout_lowlight{": "};
 
 		ncpp::T_safe_ostream_with_tab<std::ostream, F_item__>(os, { input.first[i], input.second + 1 });
 
 		if (i != size__ - 1)
-			os << ncpp::F_cout_lowlight(",");
+            os << ncpp::F_cout_lowlight{","};
 
 		os << std::endl;
 
@@ -371,7 +377,8 @@ std::ostream& operator << (
 		os << " ";
 
 	}
-	os << ncpp::F_cout_lowlight("}");
+        
+    os << ncpp::F_cout_lowlight{"}"};
 
 	return os;
 }
