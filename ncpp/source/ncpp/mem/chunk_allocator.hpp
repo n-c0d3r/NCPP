@@ -32,7 +32,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <ncpp/allocator_base.hpp>
+#include <ncpp/mem/allocator_base.hpp>
 
 #pragma endregion
 
@@ -54,210 +54,214 @@
 
 namespace ncpp {
 
-	/**
-	 *	An allocator allocating data on chunks.
-	 *	Instead of deallocating memory per allocation, it deallocates memory per chunk.
-	 *	\n
-	 *	Chunk memory layout:
-	 *		+ prev chunk pointer: sizeof(sz) (bytes)
-	 *		+ next chunk pointer: sizeof(sz) (bytes)
-	 *		+ data: chunk_capacity_ (bytes)
-	 */
-	class F_chunk_allocator : public TI_allocator<F_chunk_allocator> {
+	namespace mem {
 
-	private:
-		static constexpr sz chunk_header_size_s_ = sizeof(sz) * 2;
+		/**
+		 *	An allocator allocating data on chunks.
+		 *	Instead of deallocating memory per allocation, it deallocates memory per chunk.
+		 *	\n
+		 *	Chunk memory layout:
+		 *		+ prev chunk pointer: sizeof(sz) (bytes)
+		 *		+ next chunk pointer: sizeof(sz) (bytes)
+		 *		+ data: chunk_capacity_ (bytes)
+		 */
+		class F_chunk_allocator : public TI_allocator<F_chunk_allocator> {
+
+		private:
+			static constexpr sz chunk_header_size_s_ = sizeof(sz) * 2;
 
 
 
-	private:
-		u8* current_chunk_p_ = 0;
-		sz current_usage_ = 0;
-		u16 chunk_count_ = 0;
+		private:
+			u8* current_chunk_p_ = 0;
+			sz current_usage_ = 0;
+			u16 chunk_count_ = 0;
 
-		sz chunk_capacity_;
-		u16 min_chunk_count_;
+			sz chunk_capacity_;
+			u16 min_chunk_count_;
 
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
-		sz usable_allocated_memory_ = 0;
+			sz usable_allocated_memory_ = 0;
 #endif
 
 
 
-	public:
-		inline sz chunk_capacity() const { return chunk_capacity_; }
-		inline u16 min_chunk_count() const { return min_chunk_count_; }
-		inline u16 chunk_count() const { return chunk_count_; }
+		public:
+			inline sz chunk_capacity() const { return chunk_capacity_; }
+			inline u16 min_chunk_count() const { return min_chunk_count_; }
+			inline u16 chunk_count() const { return chunk_count_; }
 
 
 
-	public:
-		// Default chunk capacity is 2MiB
-		inline F_chunk_allocator(sz chunk_capacity = 2097152, u16 min_chunk_count = 0, const char* name = 0) :
-			TI_allocator(name),
-			chunk_capacity_(chunk_capacity),
-			min_chunk_count_(min_chunk_count),
-			current_usage_(chunk_capacity_)
-		{
-
-			validate_chunk_count();
-
-		}
-		inline F_chunk_allocator(const F_chunk_allocator& x) :
-			F_chunk_allocator(x.chunk_capacity_, x.min_chunk_count_, x.name_)
-		{
-
-
-
-		}
-
-		~F_chunk_allocator() {
-
-			reset();
-		}
-
-
-
-	private:
-		inline u8* push_new_chunk(u8* chunk) {
-
-			if (chunk != 0) {
-
-				sz next_chunk_as_sz = *reinterpret_cast<sz*>(chunk + sizeof(sz));
-
-				if (next_chunk_as_sz) {
-
-					return reinterpret_cast<u8*>(next_chunk_as_sz);
-				}
-
-			}
-
-			u8* new_chunk = reinterpret_cast<u8*>(default_allocate(chunk_capacity_ + chunk_header_size_s_));
-
-			*reinterpret_cast<sz*>(new_chunk) = reinterpret_cast<sz>(chunk);
-			*reinterpret_cast<sz*>(new_chunk + sizeof(sz)) = 0;
-
-			if(chunk != 0)
-				*reinterpret_cast<sz*>(chunk + sizeof(sz)) = reinterpret_cast<sz>(new_chunk);
-
-			++chunk_count_;
-
-			return new_chunk;
-		}
-		inline void erase_chunk(u8* chunk) {
-
-			u8* prev_chunk = reinterpret_cast<u8*>(
-				*reinterpret_cast<sz*>(chunk)
-			);
-			u8* next_chunk = reinterpret_cast<u8*>(
-				*reinterpret_cast<sz*>(chunk + sizeof(sz))
-			);
-
-			if (prev_chunk) {
-
-				*reinterpret_cast<sz*>(prev_chunk + sizeof(sz)) = reinterpret_cast<sz>(next_chunk);
-			}
-			if (next_chunk) {
-
-				*reinterpret_cast<sz*>(next_chunk) = reinterpret_cast<sz>(prev_chunk);
-			}
-
-			--chunk_count_;
-
-		}
-
-	public:
-		inline void* new_mem(sz size) {
-
-			assert(size <= chunk_capacity_ && "allocation size too large");
-
-#ifdef NCPP_ENABLE_MEMORY_COUNTING
-			NCPP_INCREASE_USABLE_ALLOCATED_MEMORY(size);
-			usable_allocated_memory_ += size;
-#endif
-
-
-
-			current_usage_ += size;
-
-
-
-			if (current_usage_ > chunk_capacity_)
+		public:
+			// Default chunk capacity is 2MiB
+			inline F_chunk_allocator(sz chunk_capacity = 2097152, u16 min_chunk_count = 0, const char* name = 0) :
+				TI_allocator(name),
+				chunk_capacity_(chunk_capacity),
+				min_chunk_count_(min_chunk_count),
+				current_usage_(chunk_capacity_)
 			{
 
-				current_chunk_p_ = push_new_chunk(current_chunk_p_);
+				validate_chunk_count();
 
-				current_usage_ = size;
+			}
+			inline F_chunk_allocator(const F_chunk_allocator& x) :
+				F_chunk_allocator(x.chunk_capacity_, x.min_chunk_count_, x.name_)
+			{
 
+
+
+			}
+
+			~F_chunk_allocator() {
+
+				reset();
 			}
 
 
 
-			return current_chunk_p_ + chunk_header_size_s_ + current_usage_ - size;
-		}
-		inline void delete_mem(void* p) {
+		private:
+			inline u8* push_new_chunk(u8* chunk) {
 
+				if (chunk != 0) {
 
-		}
+					sz next_chunk_as_sz = *reinterpret_cast<sz*>(chunk + sizeof(sz));
 
-		/**
-		 *	Deallocates all chunks.
-		 */
-		void reset() {
+					if (next_chunk_as_sz) {
+
+						return reinterpret_cast<u8*>(next_chunk_as_sz);
+					}
+
+				}
+
+				u8* new_chunk = reinterpret_cast<u8*>(default_allocate(chunk_capacity_ + chunk_header_size_s_));
+
+				*reinterpret_cast<sz*>(new_chunk) = reinterpret_cast<sz>(chunk);
+				*reinterpret_cast<sz*>(new_chunk + sizeof(sz)) = 0;
+
+				if (chunk != 0)
+					*reinterpret_cast<sz*>(chunk + sizeof(sz)) = reinterpret_cast<sz>(new_chunk);
+
+				++chunk_count_;
+
+				return new_chunk;
+			}
+			inline void erase_chunk(u8* chunk) {
+
+				u8* prev_chunk = reinterpret_cast<u8*>(
+					*reinterpret_cast<sz*>(chunk)
+					);
+				u8* next_chunk = reinterpret_cast<u8*>(
+					*reinterpret_cast<sz*>(chunk + sizeof(sz))
+					);
+
+				if (prev_chunk) {
+
+					*reinterpret_cast<sz*>(prev_chunk + sizeof(sz)) = reinterpret_cast<sz>(next_chunk);
+				}
+				if (next_chunk) {
+
+					*reinterpret_cast<sz*>(next_chunk) = reinterpret_cast<sz>(prev_chunk);
+				}
+
+				--chunk_count_;
+
+			}
+
+		public:
+			inline void* new_mem(sz size) {
+
+				assert(size <= chunk_capacity_ && "allocation size too large");
 
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
-			NCPP_DECREASE_USABLE_ALLOCATED_MEMORY(usable_allocated_memory_);
+				NCPP_INCREASE_USABLE_ALLOCATED_MEMORY(size);
+				usable_allocated_memory_ += size;
 #endif
 
-			while (chunk_count_) {
 
-				erase_chunk(current_chunk_p_);
+
+				current_usage_ += size;
+
+
+
+				if (current_usage_ > chunk_capacity_)
+				{
+
+					current_chunk_p_ = push_new_chunk(current_chunk_p_);
+
+					current_usage_ = size;
+
+				}
+
+
+
+				return current_chunk_p_ + chunk_header_size_s_ + current_usage_ - size;
+			}
+			inline void delete_mem(void* p) {
+
 
 			}
 
-			current_usage_ = chunk_capacity_;
-
-		}
-		/**
-		 *	Resets memory usage, sets the first chunk as current chunk and also deallocates chunks until there is only min_chunk_count_ chunks.
-		 */
-		void clear() {
+			/**
+			 *	Deallocates all chunks.
+			 */
+			void reset() {
 
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
-			NCPP_DECREASE_USABLE_ALLOCATED_MEMORY(usable_allocated_memory_);
+				NCPP_DECREASE_USABLE_ALLOCATED_MEMORY(usable_allocated_memory_);
 #endif
 
-			while (chunk_count_ > min_chunk_count_) {
+				while (chunk_count_) {
 
-				erase_chunk(current_chunk_p_);
+					erase_chunk(current_chunk_p_);
+
+				}
+
+				current_usage_ = chunk_capacity_;
+
+			}
+			/**
+			 *	Resets memory usage, sets the first chunk as current chunk and also deallocates chunks until there is only min_chunk_count_ chunks.
+			 */
+			void clear() {
+
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+				NCPP_DECREASE_USABLE_ALLOCATED_MEMORY(usable_allocated_memory_);
+#endif
+
+				while (chunk_count_ > min_chunk_count_) {
+
+					erase_chunk(current_chunk_p_);
+
+				}
+
+				for (u16 i = 1; i < min_chunk_count_; ++i) {
+
+					current_chunk_p_ = reinterpret_cast<u8*>(
+						*reinterpret_cast<sz*>(current_chunk_p_)
+						);
+
+				}
+
+				current_usage_ = chunk_capacity_;
 
 			}
 
-			for (u16 i = 1; i < min_chunk_count_; ++i) {
+			void validate_chunk_count() {
 
-				current_chunk_p_ = reinterpret_cast<u8*>(
-					*reinterpret_cast<sz*>(current_chunk_p_)
-				);
+				while (chunk_count_ < min_chunk_count_) {
 
-			}
+					current_chunk_p_ = push_new_chunk(current_chunk_p_);
 
-			current_usage_ = chunk_capacity_;
+				}
 
-		}
-
-		void validate_chunk_count() {
-
-			while (chunk_count_ < min_chunk_count_) {
-
-				current_chunk_p_ = push_new_chunk(current_chunk_p_);
+				clear();
 
 			}
 
-			clear();
+		};
 
-		}
-
-	};
+	}
 
 }
 

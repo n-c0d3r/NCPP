@@ -7,8 +7,8 @@ using namespace ncpp;
 
 int main() {
 	
-	F_chunk_allocator chunk_allocator;
-	F_default_allocator default_allocator;
+	mem::F_chunk_allocator chunk_allocator;
+	mem::F_default_allocator default_allocator;
 
 	eastl::allocator eastl_allocator;
 

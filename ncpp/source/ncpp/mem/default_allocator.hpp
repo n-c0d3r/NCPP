@@ -1,7 +1,7 @@
 #pragma once
 
-/** @file ncpp/dummy_allocator.hpp
-*	@brief Implements chunk allocator.
+/** @file ncpp/default_allocator.hpp
+*	@brief Implements default allocator.
 */
 
 
@@ -32,7 +32,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <ncpp/allocator_base.hpp>
+#include <ncpp/mem/allocator_base.hpp>
 
 #pragma endregion
 
@@ -54,43 +54,42 @@
 
 namespace ncpp {
 
-	/**
-	 *	An allocator that never allocates any data.
-	 */
-	class F_dummy_allocator : public TI_allocator<F_dummy_allocator> {
+	namespace mem {
 
-	private:
-		static u8 memory_block_s[1024];
+		/**
+		 *	An allocator using default memory helper.
+		 */
+		class F_default_allocator : public TI_allocator<F_default_allocator> {
 
-
-
-	public:
-		inline F_dummy_allocator(const char* name = 0) :
-			TI_allocator(name)
-		{
+		public:
+			inline F_default_allocator(const char* name = 0) :
+				TI_allocator(name)
+			{
 
 
 
-		}
-		inline F_dummy_allocator(const F_dummy_allocator& x) :
-			F_dummy_allocator()
-		{
+			}
+			inline F_default_allocator(const F_default_allocator& x) :
+				TI_allocator()
+			{
 
 
 
-		}
+			}
 
-		~F_dummy_allocator() {
+			~F_default_allocator() {
 
-			reset();
-		}
-
+			}
 
 
-	public:
-		inline void* new_mem(sz) { return memory_block_s; }
 
-	};
+		public:
+			inline void* new_mem(sz size) { return default_allocate(size); }
+			inline void delete_mem(void* p) { default_deallocate(p); }
+
+		};
+
+	}
 
 }
 
