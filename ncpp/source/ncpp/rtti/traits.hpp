@@ -97,7 +97,7 @@ namespace ncpp {
 			using F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_robject_member_info;\
 			using F_##__VA_OPT__(__VA_ARGS__##_)##rcontainer_additional_data = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_rcontainer_additional_data;\
 			using F_##__VA_OPT__(__VA_ARGS__##_)##robject_type_info_additional_data = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_robject_type_info_additional_data;\
-			using F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_robject_member_info_additional_data
+            using F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_robject_member_info_additional_data;
 
 #define NCPP_RTTI_PASS_SEPECIFIC_USING(...) \
 			F_##__VA_OPT__(__VA_ARGS__##_)##rtti_options, \
@@ -266,14 +266,14 @@ namespace ncpp {
 
 
 			template<typename F_robject__, class = void>
-			struct TF_safe_base {
+			struct T_safe_base {
 
 				using type = void;
 
 			};
 
 			template<typename F_robject__>
-			struct TF_safe_base<
+			struct T_safe_base<
 				F_robject__,
 				std::void_t<
 					decltype(std::declval<F_robject__::F_base>())
@@ -285,7 +285,7 @@ namespace ncpp {
 			};
 
 			template<typename F_robject__>
-			using TF_safe_base_t = typename TF_safe_base<F_robject__>::type;
+			using T_safe_base_t = typename T_safe_base<F_robject__>::type;
 
 		};
 

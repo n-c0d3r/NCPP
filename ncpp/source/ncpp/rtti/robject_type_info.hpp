@@ -175,7 +175,7 @@ namespace ncpp {
 			NCPP_RTTI_SEPECIFIC_TARGS()
 		>
 		F_robject_type_info__* T_reflect_object_type(
-			F_rcontainer__* rcontainer_p, 
+			F_rcontainer__* rcontainer_p,
 			rflag flag = NCPP_RFLAG_DEFAULT
 		) {
 
@@ -189,7 +189,7 @@ namespace ncpp {
 				rcontainer_p,
 				F_robject__::static_type_hash_code(),
 				F_robject__::static_type_name(),
-				rcontainer_p->robject_type_info(typeid(F_rtti_traits__::template TF_safe_base_t<F_robject__>).hash_code())
+				rcontainer_p->robject_type_info(typeid(typename F_rtti_traits__::template T_safe_base_t<F_robject__>).hash_code())
 			);
 
 			rcontainer_p->add_robject_type_info(robject_type_info_p);

@@ -145,7 +145,7 @@ namespace ncpp {
 				static eastl::string get_name() { return #MemberName; }\
 				\
 				static ncpp::u16 get_offset() { return (ncpp::u16)reinterpret_cast<ncpp::sz>(&(reinterpret_cast<object_type__*>(0)->MemberName)); }\
-				static ncpp::u16 get_size() { return (ncpp::u16)sizeof(MemberType); }\
+				static ncpp::u16 get_size() { return (ncpp::u16)sizeof(NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(MemberType)); }\
 				\
 			};\
 			\
@@ -458,7 +458,7 @@ namespace ncpp {
 					F_robject_member_info* robject_member_info_p = reinterpret_cast<F_robject_member_info*>(0);\
 					\
 					if constexpr (NCPP_RTTI_IS_HAS_FLAG(F_this, ncpp::rtti::F_robject_has_base_flag))\
-						F_rtti_traits::template T_safe_reflect<typename F_rtti_traits::TF_safe_base<F_this>::type>(\
+						F_rtti_traits::template T_safe_reflect<typename F_rtti_traits::T_safe_base<F_this>::type>(\
 							rcontainer_p,\
 							0,\
 							rflag\
