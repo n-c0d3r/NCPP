@@ -420,7 +420,7 @@ namespace ncpp {
 			 */
 			void* allocate(sz n, int flags = 0) {
 
-				return T_allocate_internal<F_allocator__, false>(n, flags);
+				return T_allocate_internal<F_allocator__, false>(aligned_size(n), flags);
 			}
 			/**
 			 *	Allocates aligned memory with default new_mem(sz) function

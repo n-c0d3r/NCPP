@@ -279,7 +279,7 @@ namespace ncpp {}
 
 namespace ncpp {
 
-    namespace static_warning_helper
+    namespace NCPP_STATIC_WARNING_helper
     {
         struct true_type {};
         struct false_type {};
@@ -289,20 +289,20 @@ namespace ncpp {
 
 }
 
-#define static_warning(cond, msg) \
-struct NCPP_PP_CAT(static_warning,__LINE__) { \
-  DEPRECATE(void _(::ncpp::static_warning_helper::false_type const& ),msg) {}; \
-  void _(::ncpp::static_warning_helper::true_type const& ) {}; \
-  NCPP_PP_CAT(static_warning,__LINE__)() {_(ncpp::static_warning_helper::converter<(cond)>());} \
+#define NCPP_STATIC_WARNING(cond, msg) \
+struct NCPP_PP_CAT(NCPP_STATIC_WARNING,__LINE__) { \
+  DEPRECATE(void _(::ncpp::NCPP_STATIC_WARNING_helper::false_type const& ),msg) {}; \
+  void _(::ncpp::NCPP_STATIC_WARNING_helper::true_type const& ) {}; \
+  NCPP_PP_CAT(NCPP_STATIC_WARNING,__LINE__)() {_(ncpp::NCPP_STATIC_WARNING_helper::converter<(cond)>());} \
 }
 
-// Note: using static_warning_template changes the meaning of a program in a small way.
+// Note: using NCPP_STATIC_WARNING_template changes the meaning of a program in a small way.
 // It introduces a member/variable declaration.  This means at least one byte of space
-// in each structure/class instantiation.  static_warning should be preferred in any 
+// in each structure/class instantiation.  NCPP_STATIC_WARNING should be preferred in any 
 // non-template situation.
 //  'token' must be a program-wide unique identifier.
-#define static_warning_template(token, cond, msg) \
-    static_warning(cond, msg) NCPP_PP_CAT(NCPP_PP_CAT(_localvar_, token),__LINE__)
+#define NCPP_STATIC_WARNING_template(token, cond, msg) \
+    NCPP_STATIC_WARNING(cond, msg) NCPP_PP_CAT(NCPP_PP_CAT(_localvar_, token),__LINE__)
 
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
@@ -310,10 +310,25 @@ struct NCPP_PP_CAT(static_warning,__LINE__) { \
 
 #ifndef NDEBUG 
 #define NCPP_DEBUG
-#define warning(cond, msg) if(!(cond)) std::cout << "Warning: " << msg << std::endl;
+#define NCPP_WARNING(cond,...) if(!(cond)) {\
+        std::cout << "Warning (" << __FILE__ << " at line " << __LINE__ << "):" << std::endl;\
+        std::cout << "    " << __VA_ARGS__ << std::endl;\
+    }
 #else
-#define warning(cond, msg) ;
+#define NCPP_WARNING(cond,...) ;
 #endif
+
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
+#define NCPP_STATIC_ASSERT(cond,...) static_assert(cond, __VA_ARGS__);
+
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
+#define NCPP_ASSERT(cond,...) assert(cond && __VA_ARGS__);
 
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////

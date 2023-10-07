@@ -16,7 +16,7 @@ int main() {
 		eastl::allocator eastl_allocator;
 
 		const u32 allocation_count = 4096;
-		const u32 allocation_size = 1024;
+		const u32 allocation_size = 15;
 
 		eastl::vector<void*> pointers(allocation_count);
 
@@ -60,7 +60,7 @@ int main() {
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
-					pointers[i] = smart_chunk_allocator.new_mem(allocation_size);
+					pointers[i] = smart_chunk_allocator.allocate(allocation_size, 0);
 
 				}
 
@@ -74,7 +74,7 @@ int main() {
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
-					smart_chunk_allocator.delete_mem(pointers[i]);
+					smart_chunk_allocator.deallocate(pointers[i]);
 
 				}
 
