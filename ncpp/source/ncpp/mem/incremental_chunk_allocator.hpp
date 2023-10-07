@@ -201,6 +201,8 @@ namespace ncpp {
 		public:
 			inline void* new_mem(sz size) {
 
+				assert((size <= chunk_capacity_) && "allocation size too big");
+
 				current_usage_ += size;
 
 

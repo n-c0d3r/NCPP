@@ -217,6 +217,8 @@ namespace ncpp {
 
 				sz actual_size = sizeof(F_allocation_header) + size;
 
+				assert((actual_size <= chunk_capacity_) && "allocation size too big");
+
 				current_usage_ += actual_size;
 
 

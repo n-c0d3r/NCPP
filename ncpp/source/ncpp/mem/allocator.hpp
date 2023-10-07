@@ -225,7 +225,7 @@ namespace ncpp {
 				return result_p;
 			}
 			template<class F_overloaded_allocator__, b8 auto_count_memory__>
-			inline void T_deallocate_internal(void* p, int n = 1) {
+			inline void T_deallocate_internal(void* p, sz n = 1) {
 
 				// Setup data offset
 #ifdef HAS_DATA_OFFSET
@@ -278,23 +278,23 @@ namespace ncpp {
 
 		protected:
 			/**
-			 *	Allocates non-aligned memory with default_memory_helper
+			 *	Allocates non-aligned memory with default new_mem(sz) function
 			 */
 			inline void* default_allocate(sz n, int flags = 0) {
 
 				return default_allocate(n, EASTL_ALLOCATOR_MIN_ALIGNMENT, 0, flags);
 			}
 			/**
-			 *	Allocates aligned memory with default_memory_helper
+			 *	Allocates aligned memory with default new_mem(sz) function
 			 */
 			void* default_allocate(sz n, sz alignment, sz alignment_offset, int flags = 0) {
 
 				return T_allocate_internal<TI_allocator, true>(n, alignment, alignment_offset, flags);
 			}
 			/**
-			 *	Deallocates memory with default_memory_helper
+			 *	Deallocates memory with default delete_mem(void*) function
 			 */
-			void default_deallocate(void* p, int n = 1) {
+			void default_deallocate(void* p, sz n = 1) {
 
 				T_deallocate_internal<TI_allocator, true>(p, n);
 			}
@@ -303,21 +303,21 @@ namespace ncpp {
 
 		public:
 			/**
-			 *	Allocates non-aligned memory with memory_helper of F_allocator__::new_mem(sz) function
+			 *	Allocates non-aligned memory with default new_mem(sz) function
 			 */
 			inline void* allocate(sz n, int flags = 0) {
 				
 				return allocate(n, EASTL_ALLOCATOR_MIN_ALIGNMENT, 0, flags);
 			}
 			/**
-			 *	Allocates aligned memory with memory_helper of F_allocator__::new_mem(sz) function
+			 *	Allocates aligned memory with default new_mem(sz) function
 			 */
 			void* allocate(sz n, sz alignment, sz alignment_offset, int flags = 0) {
 
 				return T_allocate_internal<F_allocator__, false>(n, alignment, alignment_offset, flags);
 			}
 			/**
-			 *	Deallocates memory with memory_helper of F_allocator__::delete_mem(sz) function
+			 *	Deallocates memory with default delete_mem(void*) function
 			 */
 			void  deallocate(void* p, sz n = 1) {
 
