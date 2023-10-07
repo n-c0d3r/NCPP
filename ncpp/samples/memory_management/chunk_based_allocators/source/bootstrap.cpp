@@ -32,6 +32,8 @@ int main() {
 
 		}
 
+		mem::log_memory_stats();
+
 		{
 
 			NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_incremental_chunk_allocator::deallocate ");
@@ -43,6 +45,8 @@ int main() {
 			}
 
 		}
+
+		mem::log_memory_stats();
 
 	}
 
@@ -60,6 +64,8 @@ int main() {
 
 		}
 
+		mem::log_memory_stats();
+
 		{
 
 			NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_smart_chunk_allocator::deallocate ");
@@ -71,6 +77,8 @@ int main() {
 			}
 
 		}
+
+		mem::log_memory_stats();
 
 	}
 
@@ -88,6 +96,8 @@ int main() {
 
 		}
 
+		mem::log_memory_stats();
+
 		{
 
 			NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_default_allocator::deallocate ");
@@ -99,6 +109,8 @@ int main() {
 			}
 
 		}
+
+		mem::log_memory_stats();
 
 	}
 
