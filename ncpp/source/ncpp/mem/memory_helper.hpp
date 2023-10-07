@@ -56,7 +56,14 @@ namespace ncpp {
 
     namespace mem {
 
-        inline uintptr_t align_address(uintptr_t addr, size_t align)
+        inline constexpr sz aligned_size(sz size, size_t align = EASTL_ALLOCATOR_MIN_ALIGNMENT)
+        {
+            const size_t mask = align - 1;
+
+            return (size + mask) & ~mask;
+        }
+
+        inline uintptr_t align_address(uintptr_t addr, size_t align = EASTL_ALLOCATOR_MIN_ALIGNMENT)
         {
             const size_t mask = align - 1;
             assert((align & mask) == 0); // pwr of 2

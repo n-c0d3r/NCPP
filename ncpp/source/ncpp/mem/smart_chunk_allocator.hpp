@@ -72,7 +72,7 @@ namespace ncpp {
 
 
 		private:
-			struct F_chunk_header {
+			struct NCPP_ALIGN(EASTL_ALLOCATOR_MIN_ALIGNMENT) F_chunk_header {
 
 				sz usage = 0;
 				F_chunk_header* pev_p = 0;
@@ -89,7 +89,7 @@ namespace ncpp {
 				}
 
 			};
-			struct F_allocation_header {
+			struct NCPP_ALIGN(EASTL_ALLOCATOR_MIN_ALIGNMENT) F_allocation_header {
 
 				sz actual_size = 0;
 				F_chunk_header* chunk_p = 0;

@@ -69,7 +69,7 @@ namespace ncpp {
 
 
 		private:
-			struct F_chunk_header {
+			struct NCPP_ALIGN(EASTL_ALLOCATOR_MIN_ALIGNMENT) F_chunk_header {
 
 				sz usage = 0;
 				F_chunk_header* pev_p = 0;
@@ -225,15 +225,11 @@ namespace ncpp {
 
 
 
-				u8* memory = current_chunk_p_->current_data();
-
-
-
 				current_chunk_p_->usage = current_usage_;
 
 
 
-				return memory;
+				return current_chunk_p_->current_data();
 
 			}
 			inline void delete_mem(void* p) {

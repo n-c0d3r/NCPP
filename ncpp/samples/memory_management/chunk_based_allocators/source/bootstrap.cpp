@@ -24,6 +24,38 @@ int main() {
 
 			{
 
+				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_incremental_chunk_allocator::new_mem ");
+
+				for (u32 i = 0; i < allocation_count; ++i) {
+
+					pointers[i] = incremental_chunk_allocator.new_mem(allocation_size);
+
+				}
+
+			}
+
+			mem::log_memory_stats();
+
+			{
+
+				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_incremental_chunk_allocator::delete_mem ");
+
+				for (u32 i = 0; i < allocation_count; ++i) {
+
+					incremental_chunk_allocator.delete_mem(pointers[i]);
+
+				}
+
+			}
+
+			mem::log_memory_stats();
+
+		}
+
+		{
+
+			{
+
 				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_incremental_chunk_allocator::allocate ");
 
 				for (u32 i = 0; i < allocation_count; ++i) {

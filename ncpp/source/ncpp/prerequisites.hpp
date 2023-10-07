@@ -235,11 +235,29 @@ namespace ncpp {}
 
 #pragma region Alignment utility macros
 // alignment macros
+/*
 #if defined(_MSC_VER)
 #define NCPP_ALIGNAS(N) __declspec(align(N))
 #elif defined( __GNUC__ ) || defined(__MINGW64__)
 #define NCPP_ALIGNAS(N) alignas(N)
 #endif
+*/
+#if defined(__GNUC__) || defined(__clang__)
+#  define NCPP_ALIGN(x) __attribute__ ((aligned(x)))
+#elif defined(_MSC_VER)
+#  define NCPP_ALIGN(x) __declspec(align(x))
+#else
+#  error "Unknown compiler; can't define NCPP_ALIGN"
+#endif
+
+#if defined(__GNUC__) || defined(__clang__)
+#    define NCPP_ALIGNOF(X) __alignof__(X)
+#elif defined(_MSC_VER)
+#    define NCPP_ALIGNOF(X) __alignof(X)
+#else
+#  error "Unknown compiler; can't define NCPP_ALIGNOF"
+#endif
+
 #pragma endregion
 
 ////////////////////////////////////////////////////////////////////////////////////

@@ -123,7 +123,7 @@ namespace ncpp {
 
 		private:
 			template<class F_overloaded_allocator__, b8 auto_count_memory__>
-			inline void* T_allocate_internal(sz n, sz alignment, sz alignment_offset, int flags = 0) {
+			inline void* T_aligned_allocate_internal(sz n, sz alignment, sz alignment_offset, int flags = 0) {
 
 				// Setup data offset
 #ifdef HAS_DATA_OFFSET
@@ -225,7 +225,7 @@ namespace ncpp {
 				return result_p;
 			}
 			template<class F_overloaded_allocator__, b8 auto_count_memory__>
-			inline void T_deallocate_internal(void* p, sz n = 1) {
+			inline void T_aligned_deallocate_internal(void* p, sz n = 1) {
 
 				// Setup data offset
 #ifdef HAS_DATA_OFFSET
@@ -276,20 +276,126 @@ namespace ncpp {
 
 
 
+		private:
+			template<class F_overloaded_allocator__, b8 auto_count_memory__>
+			inline void* T_allocate_internal(sz n, int flags = 0) {
+
+				// Setup data offset
+#ifdef HAS_DATA_OFFSET
+				sz data_offset = 0;
+#ifndef NDEBUG
+				data_offset += sizeof(const char*);
+				sz name_p_offset = data_offset;
+#endif
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+				sz size_offset = 0;
+
+				if constexpr (auto_count_memory__) {
+
+					data_offset += sizeof(sz);
+
+					size_offset = data_offset;
+
+				}
+#endif
+				data_offset = aligned_size(data_offset);
+#endif
+
+
+
+				// Actual size
+#ifdef HAS_DATA_OFFSET
+				sz actual_size = data_offset + n;
+#else
+#endif
+
+
+
+				// Allocate raw memory
+#ifdef HAS_DATA_OFFSET
+				u8* raw_p = reinterpret_cast<u8*>(reinterpret_cast<F_overloaded_allocator__*>(this)->new_mem(actual_size));
+
+#ifndef NDEBUG
+				*reinterpret_cast<const char**>(raw_p + data_offset - name_p_offset) = name_;
+#endif
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+				if constexpr (auto_count_memory__) {
+
+					*reinterpret_cast<sz*>(raw_p + data_offset - size_offset) = actual_size;
+
+					NCPP_INCREASE_TOTAL_ALLOCATED_MEMORY(actual_size);
+
+				}
+#endif
+
+				return raw_p + data_offset;
+#else
+				return reinterpret_cast<F_overloaded_allocator__*>(this)->new_mem(n);
+#endif
+			}
+			template<class F_overloaded_allocator__, b8 auto_count_memory__>
+			inline void T_deallocate_internal(void* p, sz n = 1) {
+
+				// Setup data offset
+#ifdef HAS_DATA_OFFSET
+				sz data_offset = 0;
+#ifndef NDEBUG
+				data_offset += sizeof(const char*);
+				sz name_p_offset = data_offset;
+#endif
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+				sz size_offset = 0;
+
+				if constexpr (auto_count_memory__) {
+
+					data_offset += sizeof(sz);
+
+					size_offset = data_offset;
+
+				}
+
+				if constexpr (auto_count_memory__) {
+
+					NCPP_DECREASE_TOTAL_ALLOCATED_MEMORY(*reinterpret_cast<sz*>(reinterpret_cast<u8*>(p) - size_offset));
+
+				}
+#endif
+				data_offset = aligned_size(data_offset);
+#endif
+
+
+
+#ifdef HAS_DATA_OFFSET
+				reinterpret_cast<F_overloaded_allocator__*>(this)->delete_mem(reinterpret_cast<u8*>(p) - data_offset);
+#else
+				reinterpret_cast<F_overloaded_allocator__*>(this)->delete_mem(p);
+#endif
+
+			}
+
+
+
 		protected:
 			/**
 			 *	Allocates non-aligned memory with default new_mem(sz) function
 			 */
 			inline void* default_allocate(sz n, int flags = 0) {
 
-				return default_allocate(n, EASTL_ALLOCATOR_MIN_ALIGNMENT, 0, flags);
+				return T_allocate_internal<TI_allocator, true>(n, flags);
 			}
 			/**
 			 *	Allocates aligned memory with default new_mem(sz) function
 			 */
 			void* default_allocate(sz n, sz alignment, sz alignment_offset, int flags = 0) {
 
-				return T_allocate_internal<TI_allocator, true>(n, alignment, alignment_offset, flags);
+				return T_aligned_allocate_internal<TI_allocator, true>(n, alignment, alignment_offset, flags);
+			}
+			/**
+			 *	Allocates aligned memory with default new_mem(sz) function
+			 */
+			void* aligned_default_allocate(sz n, sz alignment, sz alignment_offset, int flags = 0) {
+
+				return T_aligned_allocate_internal<TI_allocator, true>(n, alignment, alignment_offset, flags);
 			}
 			/**
 			 *	Deallocates memory with default delete_mem(void*) function
@@ -298,6 +404,13 @@ namespace ncpp {
 
 				T_deallocate_internal<TI_allocator, true>(p, n);
 			}
+			/**
+			 *	Deallocates memory with default delete_mem(void*) function
+			 */
+			void aligned_default_deallocate(void* p, sz n = 1) {
+
+				T_aligned_deallocate_internal<TI_allocator, true>(p, n);
+			}
 
 
 
@@ -305,16 +418,23 @@ namespace ncpp {
 			/**
 			 *	Allocates non-aligned memory with default new_mem(sz) function
 			 */
-			inline void* allocate(sz n, int flags = 0) {
-				
-				return allocate(n, EASTL_ALLOCATOR_MIN_ALIGNMENT, 0, flags);
+			void* allocate(sz n, int flags = 0) {
+
+				return T_allocate_internal<F_allocator__, false>(n, flags);
 			}
 			/**
 			 *	Allocates aligned memory with default new_mem(sz) function
 			 */
 			void* allocate(sz n, sz alignment, sz alignment_offset, int flags = 0) {
 
-				return T_allocate_internal<F_allocator__, false>(n, alignment, alignment_offset, flags);
+				return T_aligned_allocate_internal<F_allocator__, false>(n, alignment, alignment_offset, flags);
+			}
+			/**
+			 *	Allocates aligned memory with default new_mem(sz) function
+			 */
+			void* aligned_allocate(sz n, sz alignment, sz alignment_offset, int flags = 0) {
+
+				return T_aligned_allocate_internal<F_allocator__, false>(n, alignment, alignment_offset, flags);
 			}
 			/**
 			 *	Deallocates memory with default delete_mem(void*) function
@@ -322,6 +442,13 @@ namespace ncpp {
 			void  deallocate(void* p, sz n = 1) {
 
 				T_deallocate_internal<F_allocator__, false>(p, n);
+			}
+			/**
+			 *	Deallocates memory with default delete_mem(void*) function
+			 */
+			void  aligned_deallocate(void* p, sz n = 1) {
+
+				T_aligned_deallocate_internal<F_allocator__, false>(p, n);
 			}
 
 			/**
@@ -336,11 +463,17 @@ namespace ncpp {
 			/**
 			 *
 			 */
-			inline void* new_mem(sz size) { return malloc(size); }
+			inline void* new_mem(sz size) { 
+
+				return malloc(size); 
+			}
 			/**
 			 *
 			 */
-			inline void delete_mem(void* p) { free(p); }
+			inline void delete_mem(void* p) { 
+				
+				free(p); 
+			}
 
 		};
 
