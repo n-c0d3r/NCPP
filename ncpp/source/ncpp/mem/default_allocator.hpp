@@ -81,12 +81,6 @@ namespace ncpp {
 
 			}
 
-
-
-		public:
-			inline void* new_mem(sz size) { return default_allocate(size); }
-			inline void delete_mem(void* p) { default_deallocate(p); }
-
 		};
 
 	}

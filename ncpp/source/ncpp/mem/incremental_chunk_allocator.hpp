@@ -225,11 +225,15 @@ namespace ncpp {
 
 
 
+				u8* memory = current_chunk_p_->current_data();
+
+
+
 				current_chunk_p_->usage = current_usage_;
 
 
 
-				return current_chunk_p_->current_data();
+				return memory;
 
 			}
 			inline void delete_mem(void* p) {
