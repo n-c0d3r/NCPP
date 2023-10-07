@@ -13,7 +13,7 @@ int main() {
 
 	}
 
-	pause();
+	pause_console();
 
 	return 0;
 }
