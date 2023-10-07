@@ -56,7 +56,7 @@
 
 namespace ncpp {
 
-	class F_profile {
+	class F_profiler_sample {
 
 	public:
 		using F_output_function = void(const eastl::string& name, u64 nanoseconds);
@@ -77,7 +77,7 @@ namespace ncpp {
 
 
 	public:
-		inline F_profile(
+		inline F_profiler_sample(
 			const eastl::string& content = "",
 			F_output_function* output_function_p = [](const eastl::string& content, u64 nanoseconds) {
 
@@ -92,7 +92,7 @@ namespace ncpp {
 			start_ = eastl::chrono::high_resolution_clock::now();
 
 		}
-		inline F_profile(
+		inline F_profiler_sample(
 			eastl::string&& content = "",
 			F_output_function* output_function_p = [](const eastl::string& content, u64 nanoseconds) {
 
@@ -107,7 +107,7 @@ namespace ncpp {
 			start_ = eastl::chrono::high_resolution_clock::now();
 
 		}
-		~F_profile() {
+		~F_profiler_sample() {
 
 			output_function_p_(
 				content_, 
@@ -122,10 +122,10 @@ namespace ncpp {
 
 
 
-#ifdef NCPP_ENABLE_SCOPED_PROFILE
-#define NCPP_SCOPED_PROFILE(Content) ncpp::F_profile ___ncpp_profile___(Content);
+#ifdef NCPP_ENABLE_SCOPED_PROFILER_SAMPLE
+#define NCPP_SCOPED_PROFILER_SAMPLE(Content) ncpp::F_profiler_sample ___ncpp_profiler_sample___(Content);
 #else
-#define NCPP_SCOPED_PROFILE(Content) ;
+#define NCPP_SCOPED_PROFILER_SAMPLE(Content) ;
 #endif
 
 }

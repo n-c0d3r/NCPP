@@ -1,7 +1,7 @@
 #pragma once
 
-/** @file ncpp/link_allocator.hpp
-*	@brief Implements link allocator.
+/** @file ncpp/chunk_allocator.hpp
+*	@brief Implements chunk allocator.
 */
 
 
@@ -57,89 +57,214 @@ namespace ncpp {
 	namespace mem {
 
 		/**
-		 *	An allocator using another allocator to allocate and deallocate memory by linking into the target allocator reference.
-		 *	@param <F_target_allocator__> the target allocator to use.
+		 *	An allocator allocating memory on chunks and not deallocating memory invidually.
+		 *	\n
+		 *	Chunk memory layout:
+		 *		+ prev chunk pointer: sizeof(sz) (bytes)
+		 *		+ next chunk pointer: sizeof(sz) (bytes)
+		 *		+ data: chunk_capacity_ (bytes)
 		 */
-		template<typename F_target_allocator__>
-		class TF_link_allocator : public TI_allocator<TF_link_allocator<F_target_allocator__>> {
+		class F_incremental_chunk_allocator : public TI_allocator<F_incremental_chunk_allocator> {
 
-		public:
-			using F_target_allocator = F_target_allocator__;
+		private:
+			static constexpr sz chunk_header_size_s_ = sizeof(sz) * 2;
 
 
 
 		private:
-			F_target_allocator* target_allocator_p_;
+			u8* current_chunk_p_ = 0;
+			sz current_usage_ = 0;
+			u16 chunk_count_ = 0;
+
+			sz chunk_capacity_;
+			u16 min_chunk_count_;
+
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+			sz usable_allocated_memory_ = 0;
+#endif
 
 
 
 		public:
-			inline F_target_allocator& target_allocator() { return *target_allocator_p_; }
-			inline const F_target_allocator& target_allocator() const { return *target_allocator_p_; }
+			inline sz chunk_capacity() const { return chunk_capacity_; }
+			inline u16 min_chunk_count() const { return min_chunk_count_; }
+			inline u16 chunk_count() const { return chunk_count_; }
 
 
 
 		public:
-			inline TF_link_allocator(const char* name = 0) :
-				TI_allocator<TF_link_allocator<F_target_allocator__>>(name)
+			// Default chunk capacity is 2MiB
+			inline F_incremental_chunk_allocator(sz chunk_capacity = 2097152, u16 min_chunk_count = 0, const char* name = 0) :
+				TI_allocator(name),
+				chunk_capacity_(chunk_capacity),
+				min_chunk_count_(min_chunk_count),
+				current_usage_(chunk_capacity_)
+			{
+
+				validate_chunk_count();
+
+			}
+			inline F_incremental_chunk_allocator(const F_incremental_chunk_allocator& x) :
+				F_incremental_chunk_allocator(x.chunk_capacity_, x.min_chunk_count_, x.name_)
 			{
 
 
 
 			}
-			inline TF_link_allocator(F_target_allocator& target_allocator, const char* name = 0) :
-				TI_allocator<TF_link_allocator<F_target_allocator__>>(name),
-				target_allocator_p_(&target_allocator)
-			{
 
-
-
-			}
-			inline TF_link_allocator(const TF_link_allocator& x) :
-				TF_link_allocator(x.target_allocator(), x.name_)
-			{
-
-
-
-			}
-
-			~TF_link_allocator() {
+			~F_incremental_chunk_allocator() {
 
 				reset();
 			}
 
 
 
+		private:
+			inline u8* push_new_chunk(u8* chunk) {
+
+				if (chunk != 0) {
+
+					sz next_chunk_as_sz = *reinterpret_cast<sz*>(chunk + sizeof(sz));
+
+					if (next_chunk_as_sz) {
+
+						return reinterpret_cast<u8*>(next_chunk_as_sz);
+					}
+
+				}
+
+				u8* new_chunk = reinterpret_cast<u8*>(default_allocate(chunk_capacity_ + chunk_header_size_s_));
+
+				*reinterpret_cast<sz*>(new_chunk) = reinterpret_cast<sz>(chunk);
+				*reinterpret_cast<sz*>(new_chunk + sizeof(sz)) = 0;
+
+				if (chunk != 0)
+					*reinterpret_cast<sz*>(chunk + sizeof(sz)) = reinterpret_cast<sz>(new_chunk);
+
+				++chunk_count_;
+
+				return new_chunk;
+			}
+			inline void erase_chunk(u8* chunk) {
+
+				u8* prev_chunk = reinterpret_cast<u8*>(
+					*reinterpret_cast<sz*>(chunk)
+					);
+				u8* next_chunk = reinterpret_cast<u8*>(
+					*reinterpret_cast<sz*>(chunk + sizeof(sz))
+					);
+
+				if (prev_chunk) {
+
+					*reinterpret_cast<sz*>(prev_chunk + sizeof(sz)) = reinterpret_cast<sz>(next_chunk);
+				}
+				if (next_chunk) {
+
+					*reinterpret_cast<sz*>(next_chunk) = reinterpret_cast<sz>(prev_chunk);
+				}
+				else
+					current_chunk_p_ = prev_chunk;
+
+				default_deallocate(chunk);
+
+				--chunk_count_;
+
+			}
+
 		public:
 			inline void* new_mem(sz size) {
 
-				assert(target_allocator_p_);
+				assert(size <= chunk_capacity_ && "allocation size too large");
 
-				return target_allocator_p_->new_mem(size);
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+				NCPP_INCREASE_USABLE_ALLOCATED_MEMORY(size);
+				usable_allocated_memory_ += size;
+#endif
+
+
+
+				current_usage_ += size;
+
+
+
+				if (current_usage_ > chunk_capacity_)
+				{
+
+					current_chunk_p_ = push_new_chunk(current_chunk_p_);
+
+					current_usage_ = size;
+
+				}
+
+
+
+				return current_chunk_p_ + chunk_header_size_s_ + current_usage_ - size;
 			}
 			inline void delete_mem(void* p) {
 
-				assert(target_allocator_p_);
-
-				target_allocator_p_->delete_mem(p);
-			}
-
-			inline void reset() {
-
-				if (!target_allocator_p_)
-					return;
-
-				target_allocator_p_->reset();
-
-				target_allocator_p_ = 0;
 
 			}
-			inline void clear() {
 
-				if (!target_allocator_p_)
+			/**
+			 *	Deallocates all chunks.
+			 */
+			void reset() {
+
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+				NCPP_DECREASE_USABLE_ALLOCATED_MEMORY(usable_allocated_memory_);
+				usable_allocated_memory_ = 0;
+#endif
+
+				while (chunk_count_) {
+
+					erase_chunk(current_chunk_p_);
+
+				}
+
+				current_usage_ = chunk_capacity_;
+
+			}
+			/**
+			 *	Resets memory usage, sets the first chunk as current chunk and also deallocates chunks until there is only min_chunk_count_ chunks.
+			 */
+			void clear() {
+
+				if (chunk_count_ == 0)
 					return;
 
-				target_allocator_p_->clear();
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+				NCPP_DECREASE_USABLE_ALLOCATED_MEMORY(usable_allocated_memory_);
+				usable_allocated_memory_ = 0;
+#endif
+
+				while (chunk_count_ > min_chunk_count_) {
+
+					erase_chunk(current_chunk_p_);
+
+				}
+
+				for (u16 i = 1; i < min_chunk_count_; ++i) {
+
+					current_chunk_p_ = reinterpret_cast<u8*>(
+						*reinterpret_cast<sz*>(current_chunk_p_)
+						);
+
+				}
+
+				if (!current_chunk_p_)
+					current_usage_ = 0;
+
+			}
+
+			void validate_chunk_count() {
+
+				while (chunk_count_ < min_chunk_count_) {
+
+					current_chunk_p_ = push_new_chunk(current_chunk_p_);
+
+				}
+
+				clear();
 
 			}
 

@@ -7,8 +7,8 @@ using namespace ncpp;
 
 int main() {
 	
-	mem::F_chunk_allocator chunk_allocator;
-	mem::TF_link_allocator<mem::F_chunk_allocator> link_allocator(chunk_allocator);
+	mem::F_incremental_chunk_allocator incremental_chunk_allocator;
+	mem::TF_link_allocator<mem::F_incremental_chunk_allocator> link_allocator(incremental_chunk_allocator);
 	mem::F_default_allocator default_allocator;
 
 	eastl::allocator eastl_allocator;
@@ -18,11 +18,11 @@ int main() {
 
 	{
 
-		NCPP_SCOPED_PROFILE("Chunk allocator: ");
+		NCPP_SCOPED_PROFILER_SAMPLE("Incremental chunk allocator: ");
 
 		for (u32 i = 0; i < allocation_count; ++i) {
 
-			chunk_allocator.allocate(allocation_size, 0);
+			incremental_chunk_allocator.allocate(allocation_size, 0);
 
 		}
 
@@ -30,7 +30,7 @@ int main() {
 
 	{
 
-		NCPP_SCOPED_PROFILE("Link allocator: ");
+		NCPP_SCOPED_PROFILER_SAMPLE("Link allocator: ");
 
 		for (u32 i = 0; i < allocation_count; ++i) {
 
@@ -42,7 +42,7 @@ int main() {
 
 	{
 
-		NCPP_SCOPED_PROFILE("Default allocator: ");
+		NCPP_SCOPED_PROFILER_SAMPLE("Default allocator: ");
 
 		for (u32 i = 0; i < allocation_count; ++i) {
 
@@ -54,7 +54,7 @@ int main() {
 
 	{
 
-		NCPP_SCOPED_PROFILE("EASTL allocator: ");
+		NCPP_SCOPED_PROFILER_SAMPLE("EASTL allocator: ");
 
 		for (u32 i = 0; i < allocation_count; ++i) {
 
@@ -66,7 +66,7 @@ int main() {
 
 	{
 
-		NCPP_SCOPED_PROFILE("Malloc: ");
+		NCPP_SCOPED_PROFILER_SAMPLE("Malloc: ");
 
 		for (u32 i = 0; i < allocation_count; ++i) {
 

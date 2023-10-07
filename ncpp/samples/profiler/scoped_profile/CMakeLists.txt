@@ -1,5 +1,5 @@
 
-# ncpp.tests.profiler.scoped_profile target source files
+# ncpp.samples.profiler.scoped_profile target source files
 file(GLOB source_files
     "source/*.cpp"
     "source/*.hpp"
@@ -8,24 +8,24 @@ source_group("source" FILES ${source_files})
 
 
 
-# Create ncpp.tests.profiler.scoped_profile target
-add_executable(ncpp.tests.profiler.scoped_profile
+# Create ncpp.samples.profiler.scoped_profile target
+add_executable(ncpp.samples.profiler.scoped_profile
     ${source_files}
 )
 
 
 
-# ncpp.tests.profiler.scoped_profile target settings
-set_target_properties(ncpp.tests.profiler.scoped_profile
+# ncpp.samples.profiler.scoped_profile target settings
+set_target_properties(ncpp.samples.profiler.scoped_profile
     PROPERTIES 
-        FOLDER "ncpp/tests/profiler"
+        FOLDER "ncpp/samples/profiler"
         PROJECT_LABEL "scoped_profile"
 )
-target_link_libraries(ncpp.tests.profiler.scoped_profile
+target_link_libraries(ncpp.samples.profiler.scoped_profile
     PUBLIC 
         ncpp
 )
-target_include_directories(ncpp.tests.profiler.scoped_profile
+target_include_directories(ncpp.samples.profiler.scoped_profile
     PUBLIC 
         ncpp
         ${CMAKE_CURRENT_SOURCE_DIR}/source
@@ -33,7 +33,7 @@ target_include_directories(ncpp.tests.profiler.scoped_profile
 
 
 
-# ncpp.tests.profiler.scoped_profile target dependencies
-add_dependencies(ncpp.tests.profiler.scoped_profile 
+# ncpp.samples.profiler.scoped_profile target dependencies
+add_dependencies(ncpp.samples.profiler.scoped_profile 
     ncpp
 )

@@ -26,7 +26,7 @@ option(NCPP_ENABLE_MEMORY_COUNTING "Enable memory counting" ON)
 
 # ncpp pac options
 option(NCPP_ENABLE_WEAKLOCK_WARNING "If enabled, weaklock will automatically warn when race condition occurs" ON)
-option(NCPP_ENABLE_SCOPED_PROFILE "If not enabled, scoped profiles will be ignored when compiling" ON)
+option(NCPP_ENABLE_SCOPED_PROFILER_SAMPLE "If not enabled, scoped profiler samples will be ignored when compiling" ON)
 
 # ncpp log options
 set(NCPP_TAB_SIZE 4 CACHE STRING "Tab Size")
