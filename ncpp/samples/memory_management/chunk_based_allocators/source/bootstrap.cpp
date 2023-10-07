@@ -18,7 +18,14 @@ int main() {
 		const u32 allocation_count = 4096;
 		const u32 allocation_size = 1024;
 
+		eastl::vector<sz> sizes(allocation_count);
 		eastl::vector<void*> pointers(allocation_count);
+
+		for (u32 i = 0; i < allocation_count; ++i) {
+
+			sizes[i] = allocation_size / 2 + rand() / (allocation_size / 2);
+
+		}
 
 		{
 
@@ -28,7 +35,7 @@ int main() {
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
-					pointers[i] = incremental_chunk_allocator.allocate(allocation_size, 0);
+					pointers[i] = incremental_chunk_allocator.allocate(sizes[i], 0);
 
 				}
 
@@ -60,7 +67,7 @@ int main() {
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
-					pointers[i] = smart_chunk_allocator.allocate(allocation_size, 0);
+					pointers[i] = smart_chunk_allocator.allocate(sizes[i], 0);
 
 				}
 
@@ -92,7 +99,7 @@ int main() {
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
-					pointers[i] = default_allocator.allocate(allocation_size, 0);
+					pointers[i] = default_allocator.allocate(sizes[i], 0);
 
 				}
 
@@ -124,7 +131,7 @@ int main() {
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
-					pointers[i] = eastl_allocator.allocate(allocation_size, 0);
+					pointers[i] = eastl_allocator.allocate(sizes[i], 0);
 
 				}
 
@@ -156,7 +163,7 @@ int main() {
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
-					pointers[i] = malloc(allocation_size);
+					pointers[i] = malloc(sizes[i]);
 
 				}
 
