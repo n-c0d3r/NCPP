@@ -60,7 +60,7 @@ int main() {
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
-					pointers[i] = smart_chunk_allocator.allocate(allocation_size, 0);
+					pointers[i] = smart_chunk_allocator.new_mem(allocation_size);
 
 				}
 
@@ -74,7 +74,7 @@ int main() {
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
-					smart_chunk_allocator.deallocate(pointers[i]);
+					smart_chunk_allocator.delete_mem(pointers[i]);
 
 				}
 
