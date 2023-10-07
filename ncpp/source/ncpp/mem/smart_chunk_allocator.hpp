@@ -58,13 +58,14 @@ namespace ncpp {
 	namespace mem {
 
 		/**
-		 *	An allocator allocating data on chunks.
-		 *	Instead of deallocating memory per allocation, it deallocates memory per chunk.
-		 *	\n
-		 *	Chunk memory layout:
-		 *		+ prev chunk pointer: sizeof(sz) (bytes)
-		 *		+ next chunk pointer: sizeof(sz) (bytes)
-		 *		+ data: chunk_capacity_ (bytes)
+		 * An allocator is similar to F_incremental_chunk_allocator but is capable of releasing empty chunks.
+		 * It maintains a count of used memory and returns a pointer to the chunk plus the
+		 * memory count each time memory is allocated.
+		 *
+		 * When deallocating memory, this allocator follows a smart approach:
+		 * - If the chunk of the allocation is not the latest chunk and
+		 * - The memory usage in that chunk after deallocation of this allocation is zero,
+		 * Then it deallocates that chunk.
 		 */
 		class F_smart_chunk_allocator : public TI_allocator<F_smart_chunk_allocator> {
 

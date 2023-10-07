@@ -1,7 +1,7 @@
 #pragma once
 
 /** @file ncpp/mem.hpp
-*	@brief Includes basic memory functionalities.
+*	@brief Includes memory functionalities.
 */
 
 
@@ -68,6 +68,9 @@
 
 namespace ncpp {
     
+	/**
+	 *	Implements memory functionalities.
+	 */
     namespace mem {}
 
 }

@@ -32,7 +32,7 @@ int main() {
 
 	A::F_rtti_traits::template T_safe_reflect<A>(&rcontainer);
 
-	system("pause");
+	pause();
 
 	return 0;
 }

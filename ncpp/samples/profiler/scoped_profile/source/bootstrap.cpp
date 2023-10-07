@@ -13,7 +13,7 @@ int main() {
 
 	}
 
-	system("pause");
+	pause();
 
 	return 0;
 }
