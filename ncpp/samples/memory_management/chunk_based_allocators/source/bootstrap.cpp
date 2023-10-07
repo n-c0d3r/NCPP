@@ -23,7 +23,7 @@ int main() {
 
 		for (u32 i = 0; i < allocation_count; ++i) {
 
-			sizes[i] = allocation_size / 2 + rand() / (allocation_size / 2);
+			sizes[i] = allocation_size / 2 + rand() % (allocation_size / 2);
 
 		}
 
