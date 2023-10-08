@@ -9,12 +9,12 @@ int main() {
 
 	{
 
+		mem::F_incremental_chunk_allocator incremental_chunk_allocator;
+		mem::F_default_allocator default_allocator;
+
 		mem::TF_smart_chunk_storage<> smart_chunk_storage;
 		mem::TF_smart_chunk_adaptor<> smart_chunk_adaptor(&smart_chunk_storage);
 		mem::TF_smart_chunk_allocator<> smart_chunk_allocator(&smart_chunk_adaptor);
-
-		mem::F_incremental_chunk_allocator incremental_chunk_allocator;
-		mem::F_default_allocator default_allocator;
 
 		eastl::allocator eastl_allocator;
 
@@ -56,7 +56,7 @@ int main() {
 		}
 
 		{
-			/*
+			
 			{
 
 				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_smart_chunk_allocator::allocate ");
@@ -84,7 +84,7 @@ int main() {
 			}
 
 			mem::log_memory_stats();
-			*/
+			
 		}
 
 		{

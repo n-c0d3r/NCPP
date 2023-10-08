@@ -68,8 +68,10 @@ namespace ncpp {
 
 
 
-		private:
+		protected:
 			F_item_vector item_vector_;
+			
+		private:
 			sz capacity_ = 0;
 			ptrd begin_ = 0;
 			ptrd end_ = 0;
@@ -141,16 +143,16 @@ namespace ncpp {
 			template<typename F_passed_item__>
 			void T_push(F_passed_item__&& item) {
 
-				item_vector_[end_++] = std::forward<F_passed_item__>(item);
+				item_vector_[(end_++) % capacity_] = std::forward<F_passed_item__>(item);
 
 			}
 
 
 
 		public:
-			inline void push(const F_item& item) {
+			inline void push(F_item const& item) {
 
-				T_push(std::forward<F_item&>(item));
+				T_push(std::forward<F_item const&>(item));
 			}
 			inline void push(F_item&& item) {
 
@@ -161,19 +163,25 @@ namespace ncpp {
 
 				assert(size() > 0 && "ring buffer is empty");
 
-				return std::move(item_vector_[begin_++]);
+				return std::move(item_vector_[(begin_++) % capacity_]);
 			}
 
 			inline b8 try_pop(F_item& item) {
 
 				if (size() > 0) {
 
-					item = std::move(item_vector_[begin_++]);
+					item = std::move(item_vector_[(begin_++) % capacity_]);
 
 					return true;
 				}
 				
 				return false;
+			}
+
+			inline void reset() {
+
+				begin_ = 0;
+				end_ = 0;
 			}
 
 		};

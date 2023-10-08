@@ -456,7 +456,7 @@ namespace ncpp {
 			 */
 			inline void reset() {}
 			/**
-			 *	Not clears everything but clear some essential datas.
+			 *	Clear some essential datas.
 			 */
 			inline void clear() {}
 
