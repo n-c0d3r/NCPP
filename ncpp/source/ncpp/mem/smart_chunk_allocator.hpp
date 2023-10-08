@@ -148,7 +148,7 @@ namespace ncpp {
 #define NCPP_SMART_CHUNK_ADAPTOR_DEFAULT_MAX_CHUNK_COUNT 16
 
 		// Default smart chunk capacity, 256KiB
-#define NCPP_DEFAULT_SMART_CHUNK_CAPACITY 256141
+#define NCPP_DEFAULT_SMART_CHUNK_CAPACITY 256144
 
 
 
@@ -202,7 +202,7 @@ namespace ncpp {
 				chunk_p_ring_buffer_(chunk_count),
 
 				chunk_count_(chunk_count),
-				chunk_capacity_(chunk_capacity),
+				chunk_capacity_(aligned_size(chunk_capacity)),
 				chunk_size_(chunk_capacity_ + sizeof(F_smart_chunk_header))
 			{
 
