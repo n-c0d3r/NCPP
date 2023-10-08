@@ -381,7 +381,7 @@ namespace ncpp {
 			 */
 			inline void* default_allocate(sz n, int flags = 0) {
 
-				return T_allocate_internal<TI_allocator, true>(n, flags);
+				return T_allocate_internal<TI_allocator, true>(aligned_size(n), flags);
 			}
 			/**
 			 *	Allocates aligned memory with default new_mem(sz) function
