@@ -31,6 +31,7 @@ option(NCPP_ENABLE_SCOPED_PROFILER_SAMPLE "If not enabled, scoped profiler sampl
 # ncpp log options
 set(NCPP_TAB_SIZE 4 CACHE STRING "Tab Size")
 set(NCPP_MAX_TAB_COUNT 8 CACHE STRING "Max Tab Count")
+option(NCPP_ENABLE_LOG_COLOR "Enable log color" ON)
 
 
 
@@ -46,14 +47,27 @@ get_target_property(EASTL_INCLUDE_DIR EASTL INTERFACE_INCLUDE_DIRECTORIES)
 
 set(EASTL_COMBINED_HEADER_PATH ${CMAKE_CURRENT_BINARY_DIR}/generated_files/ncpp/eastl_headers.hpp)
 
-file(GLOB_RECURSE EASTL_HEADERS "${EASTL_INCLUDE_DIR}/*.h")
-list(FILTER EASTL_HEADERS EXCLUDE REGEX "${EASTL_INCLUDE_DIR}/EASTL/internal/.*")
+file(GLOB EASTL_HEADERS "${EASTL_INCLUDE_DIR}/eastl/*.h")
 
 file(WRITE "${EASTL_COMBINED_HEADER_PATH}" "")
 
 foreach(header ${EASTL_HEADERS})
     file(RELATIVE_PATH relpath "${EASTL_INCLUDE_DIR}" "${header}")
     file(APPEND "${EASTL_COMBINED_HEADER_PATH}" "#include <${relpath}>\n")
+endforeach()
+
+# eathread combined header
+get_target_property(EATHREAD_INCLUDE_DIR EAThread INTERFACE_INCLUDE_DIRECTORIES)
+
+set(EATHREAD_COMBINED_HEADER_PATH ${CMAKE_CURRENT_BINARY_DIR}/generated_files/ncpp/eathread_headers.hpp)
+
+file(GLOB EATHREAD_HEADERS "${EATHREAD_INCLUDE_DIR}/eathread/*.h")
+
+file(WRITE "${EATHREAD_COMBINED_HEADER_PATH}" "")
+
+foreach(header ${EATHREAD_HEADERS})
+    file(RELATIVE_PATH relpath "${EATHREAD_INCLUDE_DIR}" "${header}")
+    file(APPEND "${EATHREAD_COMBINED_HEADER_PATH}" "#include <${relpath}>\n")
 endforeach()
 
 

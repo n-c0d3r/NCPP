@@ -53,6 +53,100 @@
 
 
 
+#ifdef NCPP_ENABLE_LOG_COLOR
+
+#define NCPP_FOREGROUND_BACK "\x1B[30m"
+#define NCPP_FOREGROUND_RED "\x1B[31m"
+#define NCPP_FOREGROUND_GREEN "\x1B[32m"
+#define NCPP_FOREGROUND_YELLOW "\x1B[33m"
+#define NCPP_FOREGROUND_BLUE "\x1B[34m"
+#define NCPP_FOREGROUND_MAGNETA "\x1B[35m"
+#define NCPP_FOREGROUND_CYAN "\x1B[36m"
+#define NCPP_FOREGROUND_WHITE "\x1B[37m"
+#define NCPP_FOREGROUND_BRIGHT_BACK "\x1B[90m"
+#define NCPP_FOREGROUND_BRIGHT_RED "\x1B[91m"
+#define NCPP_FOREGROUND_BRIGHT_GREEN "\x1B[92m"
+#define NCPP_FOREGROUND_BRIGHT_YELLOW "\x1B[93m"
+#define NCPP_FOREGROUND_BRIGHT_BLUE "\x1B[94m"
+#define NCPP_FOREGROUND_BRIGHT_MAGNETA "\x1B[95m"
+#define NCPP_FOREGROUND_BRIGHT_CYAN "\x1B[96m"
+#define NCPP_FOREGROUND_BRIGHT_WHITE "\x1B[97m"
+
+#define NCPP_BACKGROUND_BACK "\x1B[40m"
+#define NCPP_BACKGROUND_RED "\x1B[41m"
+#define NCPP_BACKGROUND_GREEN "\x1B[42m"
+#define NCPP_BACKGROUND_YELLOW "\x1B[43m"
+#define NCPP_BACKGROUND_BLUE "\x1B[44m"
+#define NCPP_BACKGROUND_MAGNETA "\x1B[45m"
+#define NCPP_BACKGROUND_CYAN "\x1B[46m"
+#define NCPP_BACKGROUND_WHITE "\x1B[47m"
+#define NCPP_BACKGROUND_BRIGHT_BACK "\x1B[100m"
+#define NCPP_BACKGROUND_BRIGHT_RED "\x1B[101m"
+#define NCPP_BACKGROUND_BRIGHT_GREEN "\x1B[102m"
+#define NCPP_BACKGROUND_BRIGHT_YELLOW "\x1B[103m"
+#define NCPP_BACKGROUND_BRIGHT_BLUE "\x1B[104m"
+#define NCPP_BACKGROUND_BRIGHT_MAGNETA "\x1B[105m"
+#define NCPP_BACKGROUND_BRIGHT_CYAN "\x1B[106m"
+#define NCPP_BACKGROUND_BRIGHT_WHITE "\x1B[107m"
+
+#define NCPP_RESET_CONSOLE_COLOR "\033[0m"
+
+#else
+
+#define NCPP_FOREGROUND_BACK ""
+#define NCPP_FOREGROUND_RED ""
+#define NCPP_FOREGROUND_GREEN ""
+#define NCPP_FOREGROUND_YELLOW ""
+#define NCPP_FOREGROUND_BLUE ""
+#define NCPP_FOREGROUND_MAGNETA ""
+#define NCPP_FOREGROUND_CYAN ""
+#define NCPP_FOREGROUND_WHITE ""
+#define NCPP_FOREGROUND_BRIGHT_BACK ""
+#define NCPP_FOREGROUND_BRIGHT_RED ""
+#define NCPP_FOREGROUND_BRIGHT_GREEN ""
+#define NCPP_FOREGROUND_BRIGHT_YELLOW ""
+#define NCPP_FOREGROUND_BRIGHT_BLUE ""
+#define NCPP_FOREGROUND_BRIGHT_MAGNETA ""
+#define NCPP_FOREGROUND_BRIGHT_CYAN ""
+#define NCPP_FOREGROUND_BRIGHT_WHITE ""
+
+#define NCPP_BACKGROUND_BACK ""
+#define NCPP_BACKGROUND_RED ""
+#define NCPP_BACKGROUND_GREEN ""
+#define NCPP_BACKGROUND_YELLOW ""
+#define NCPP_BACKGROUND_BLUE ""
+#define NCPP_BACKGROUND_MAGNETA ""
+#define NCPP_BACKGROUND_CYAN ""
+#define NCPP_BACKGROUND_WHITE ""
+#define NCPP_BACKGROUND_BRIGHT_BACK ""
+#define NCPP_BACKGROUND_BRIGHT_RED ""
+#define NCPP_BACKGROUND_BRIGHT_GREEN ""
+#define NCPP_BACKGROUND_BRIGHT_YELLOW ""
+#define NCPP_BACKGROUND_BRIGHT_BLUE ""
+#define NCPP_BACKGROUND_BRIGHT_MAGNETA ""
+#define NCPP_BACKGROUND_BRIGHT_CYAN ""
+#define NCPP_BACKGROUND_BRIGHT_WHITE ""
+
+#define NCPP_RESET_CONSOLE_COLOR ""
+
+#endif
+
+
+
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 namespace ncpp {
 
 #pragma region Colorized Contents
@@ -101,7 +195,7 @@ namespace ncpp {
 #pragma region Colorized Contents
 
 /**
- *	Streams out cout_lowlight.
+ *	Streams out F_cout_lowlight.
  */
 inline std::ostream& operator << (
 	std::ostream& os,
@@ -111,10 +205,10 @@ inline std::ostream& operator << (
 	if (&os != &std::cout)
 		return os << input.content.c_str();
 
-	return (os << ("\x1B[90m" + input.content + "\033[0m").c_str());
+	return (os << (NCPP_FOREGROUND_BRIGHT_BACK + input.content + NCPP_RESET_CONSOLE_COLOR).c_str());
 }
 /**
- *	Streams out cout_field_name.
+ *	Streams out F_cout_field_name.
  */
 inline std::ostream& operator << (
 	std::ostream& os,
@@ -124,10 +218,10 @@ inline std::ostream& operator << (
 	if (&os != &std::cout)
 		return os << input.content.c_str();
 
-	return (os << ("\x1B[36m" + input.content + "\033[0m").c_str());
+	return (os << (NCPP_FOREGROUND_CYAN + input.content + NCPP_RESET_CONSOLE_COLOR).c_str());
 }
 /**
- *	Streams out cout_nanoseconds.
+ *	Streams out F_cout_nanoseconds.
  */
 inline std::ostream& operator << (
 	std::ostream& os,
@@ -137,7 +231,7 @@ inline std::ostream& operator << (
 	if (&os != &std::cout)
 		return os << input.nanoseconds;
 
-	return (os << ("\x1B[31m" + eastl::to_string(input.nanoseconds) + "\033[0m").c_str());
+	return (os << (NCPP_FOREGROUND_RED + eastl::to_string(input.nanoseconds) + NCPP_RESET_CONSOLE_COLOR).c_str());
 }
 #pragma endregion
 
@@ -154,11 +248,11 @@ std::ostream& operator << (std::ostream& os, const eastl::basic_string<F_item__,
 	if (&os == &std::cout) {
 
 		eastl::string colored_str = "";
-		colored_str += "\x1B[32m";
+		colored_str += NCPP_FOREGROUND_GREEN;
 		colored_str += '"';
 		colored_str += str;
 		colored_str += '"';
-		colored_str += "\033[0m";
+		colored_str += NCPP_RESET_CONSOLE_COLOR;
 
 		os << colored_str.c_str();
 
@@ -192,10 +286,10 @@ std::ostream& operator << (
 		return os;
 	}
 
-	os << "\x1B[33mvector\033[0m"
-    << ncpp::F_cout_lowlight{"<"} << ("\x1B[34m" + eastl::string(typeid(F_item__).name()) + "\033[0m").c_str()
+	os << NCPP_FOREGROUND_YELLOW << "vector" << NCPP_RESET_CONSOLE_COLOR
+    << ncpp::F_cout_lowlight{"<"} << (NCPP_FOREGROUND_BLUE + eastl::string(typeid(F_item__).name()) + NCPP_RESET_CONSOLE_COLOR).c_str()
     << ncpp::F_cout_lowlight{">"}
-    << ncpp::F_cout_lowlight{"("} << ("\x1B[35m" + eastl::to_string(input.first.size()) + "\033[0m").c_str()
+    << ncpp::F_cout_lowlight{"("} << (NCPP_FOREGROUND_MAGNETA + eastl::to_string(input.first.size()) + NCPP_RESET_CONSOLE_COLOR).c_str()
     << ncpp::F_cout_lowlight{")"}
     << " ";
 
@@ -265,10 +359,10 @@ std::ostream& operator << (
 		return os;
 	}
 
-	os << "\x1B[33minitializer_list\033[0m"
-    << ncpp::F_cout_lowlight{"<"} << ("\x1B[34m" + eastl::string(typeid(F_item__).name()) + "\033[0m").c_str()
+	os << NCPP_FOREGROUND_YELLOW << "initializer_list" << NCPP_RESET_CONSOLE_COLOR
+    << ncpp::F_cout_lowlight{"<"} << (NCPP_FOREGROUND_BLUE + eastl::string(typeid(F_item__).name()) + NCPP_RESET_CONSOLE_COLOR).c_str()
     << ncpp::F_cout_lowlight{","}
-    << ("\x1B[35m" + eastl::to_string(input.first.size()) + "\033[0m").c_str()
+    << (NCPP_FOREGROUND_MAGNETA + eastl::to_string(input.first.size()) + NCPP_RESET_CONSOLE_COLOR).c_str()
     << ncpp::F_cout_lowlight{">"}
     << " ";
 
@@ -342,10 +436,10 @@ std::ostream& operator << (
 		return os;
 	}
 
-	os << "\x1B[33marray\033[0m"
-    << ncpp::F_cout_lowlight{"<"} << ("\x1B[34m" + eastl::string(typeid(F_item__).name()) + "\033[0m").c_str()
+	os << NCPP_FOREGROUND_YELLOW << "array" << NCPP_RESET_CONSOLE_COLOR
+    << ncpp::F_cout_lowlight{"<"} << (NCPP_FOREGROUND_BLUE + eastl::string(typeid(F_item__).name()) + NCPP_RESET_CONSOLE_COLOR).c_str()
     << ncpp::F_cout_lowlight{","}
-    << ("\x1B[35m" + eastl::to_string(input.first.size()) + "\033[0m").c_str()
+    << (NCPP_FOREGROUND_MAGNETA + eastl::to_string(input.first.size()) + NCPP_RESET_CONSOLE_COLOR).c_str()
     << ncpp::F_cout_lowlight{">"}
     << " ";
 

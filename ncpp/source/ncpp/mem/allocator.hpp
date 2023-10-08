@@ -375,7 +375,7 @@ namespace ncpp {
 
 
 
-		protected:
+		public:
 			/**
 			 *	Allocates non-aligned memory with default new_mem(sz) function
 			 */

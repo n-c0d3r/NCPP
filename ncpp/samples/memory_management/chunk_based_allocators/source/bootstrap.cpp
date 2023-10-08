@@ -9,8 +9,11 @@ int main() {
 
 	{
 
+		mem::TF_smart_chunk_storage<> smart_chunk_storage;
+		mem::TF_smart_chunk_adaptor<> smart_chunk_adaptor(&smart_chunk_storage);
+		mem::TF_smart_chunk_allocator<> smart_chunk_allocator(&smart_chunk_adaptor);
+
 		mem::F_incremental_chunk_allocator incremental_chunk_allocator;
-		mem::F_smart_chunk_allocator smart_chunk_allocator;
 		mem::F_default_allocator default_allocator;
 
 		eastl::allocator eastl_allocator;
@@ -18,14 +21,7 @@ int main() {
 		const u32 allocation_count = 4096;
 		const u32 allocation_size = 1024;
 
-		eastl::vector<sz> sizes(allocation_count);
 		eastl::vector<void*> pointers(allocation_count);
-
-		for (u32 i = 0; i < allocation_count; ++i) {
-
-			sizes[i] = allocation_size / 2 + rand() % (allocation_size / 2);
-
-		}
 
 		{
 
@@ -35,7 +31,7 @@ int main() {
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
-					pointers[i] = incremental_chunk_allocator.allocate(sizes[i], 0);
+					pointers[i] = incremental_chunk_allocator.allocate(allocation_size, 0);
 
 				}
 
@@ -60,14 +56,14 @@ int main() {
 		}
 
 		{
-
+			/*
 			{
 
 				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_smart_chunk_allocator::allocate ");
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
-					pointers[i] = smart_chunk_allocator.allocate(sizes[i], 0);
+					pointers[i] = smart_chunk_allocator.allocate(allocation_size, 0);
 
 				}
 
@@ -88,7 +84,7 @@ int main() {
 			}
 
 			mem::log_memory_stats();
-
+			*/
 		}
 
 		{
@@ -99,7 +95,7 @@ int main() {
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
-					pointers[i] = default_allocator.allocate(sizes[i], 0);
+					pointers[i] = default_allocator.allocate(allocation_size, 0);
 
 				}
 
@@ -131,7 +127,7 @@ int main() {
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
-					pointers[i] = eastl_allocator.allocate(sizes[i], 0);
+					pointers[i] = eastl_allocator.allocate(allocation_size, 0);
 
 				}
 
@@ -163,7 +159,7 @@ int main() {
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
-					pointers[i] = malloc(sizes[i]);
+					pointers[i] = malloc(allocation_size);
 
 				}
 

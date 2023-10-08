@@ -143,9 +143,10 @@ namespace ncpp {}
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
-#pragma region EASTL Headers
+#pragma region EA Headers
 
 #include <ncpp/eastl_headers.hpp>
+#include <ncpp/eathread_headers.hpp>
 
 #pragma endregion
 
@@ -420,6 +421,9 @@ namespace ncpp {
     /** the same as size_t. */
     using sz = size_t;
 
+    /** the same as ptrdiff_t. */
+    using ptrd = ptrdiff_t;
+
 
 
     /** 8bit atomic unsigned integer. */
@@ -448,6 +452,9 @@ namespace ncpp {
 
     /** the same as size_t but is atomic. */
     using asz = eastl::atomic<sz>;
+
+    /** the same as ptrdiff_t but is atomic. */
+    using aptrd = eastl::atomic<ptrd>;
 
 
 
