@@ -28,7 +28,7 @@ void* operator new[](size_t size, size_t alignment, size_t alignmentOffset, cons
 
 
 
-void operator delete[](void* ptr)
+void operator delete[](void* ptr) noexcept
 {
 
 	mem::F_default_memory_helper::deallocate(ptr);
