@@ -70,8 +70,14 @@ namespace ncpp {
 		 *		+ new_mem(sz size): to allocate memory.
 		 *		+ delete_mem(void* pointer): to deallocate memory.
 		 */
-		template<class F_allocator__>
+		template<class F_allocator__, b8 enalbe_manual_alignment__>
 		class TI_allocator {
+
+		public:
+			static constexpr b8 enalbe_manual_alignment = enalbe_manual_alignment__;
+
+
+
 
 		protected:
 			// \cond INTERNAL
@@ -381,21 +387,23 @@ namespace ncpp {
 			 */
 			inline void* default_allocate(sz n, int flags = 0) {
 
-				return T_allocate_internal<TI_allocator, true>(aligned_size(n), flags);
+				return default_allocate(n, EASTL_ALLOCATOR_MIN_ALIGNMENT, 0, flags);
 			}
 			/**
 			 *	Allocates aligned memory with default new_mem(sz) function
 			 */
 			void* default_allocate(sz n, sz alignment, sz alignment_offset, int flags = 0) {
 
-				return T_aligned_allocate_internal<TI_allocator, true>(n, alignment, alignment_offset, flags);
-			}
-			/**
-			 *	Allocates aligned memory with default new_mem(sz) function
-			 */
-			void* aligned_default_allocate(sz n, sz alignment, sz alignment_offset, int flags = 0) {
+				if(alignment <= EASTL_ALLOCATOR_MIN_ALIGNMENT){
 
-				return T_aligned_allocate_internal<TI_allocator, true>(n, alignment, alignment_offset, flags);
+					return T_allocate_internal<TI_allocator, false>(aligned_size(n), flags);
+				}
+				else{
+
+					return T_aligned_allocate_internal<TI_allocator, true>(n, alignment, alignment_offset, flags);
+				}
+
+				return 0;
 			}
 			/**
 			 *	Deallocates memory with default delete_mem(void*) function
@@ -403,13 +411,6 @@ namespace ncpp {
 			void default_deallocate(void* p, sz n = 1) {
 
 				T_deallocate_internal<TI_allocator, true>(p, n);
-			}
-			/**
-			 *	Deallocates memory with default delete_mem(void*) function
-			 */
-			void aligned_default_deallocate(void* p, sz n = 1) {
-
-				T_aligned_deallocate_internal<TI_allocator, true>(p, n);
 			}
 
 
@@ -420,7 +421,7 @@ namespace ncpp {
 			 */
 			void* allocate(sz n, int flags = 0) {
 
-				return T_allocate_internal<F_allocator__, false>(aligned_size(n), flags);
+				return allocate(n, EASTL_ALLOCATOR_MIN_ALIGNMENT, 0, flags);
 			}
 			/**
 			 *	Allocates aligned memory with default new_mem(sz) function
@@ -430,25 +431,11 @@ namespace ncpp {
 				return T_aligned_allocate_internal<F_allocator__, false>(n, alignment, alignment_offset, flags);
 			}
 			/**
-			 *	Allocates aligned memory with default new_mem(sz) function
-			 */
-			void* aligned_allocate(sz n, sz alignment, sz alignment_offset, int flags = 0) {
-
-				return T_aligned_allocate_internal<F_allocator__, false>(n, alignment, alignment_offset, flags);
-			}
-			/**
 			 *	Deallocates memory with default delete_mem(void*) function
 			 */
 			void  deallocate(void* p, sz n = 1) {
 
 				T_deallocate_internal<F_allocator__, false>(p, n);
-			}
-			/**
-			 *	Deallocates memory with default delete_mem(void*) function
-			 */
-			void  aligned_deallocate(void* p, sz n = 1) {
-
-				T_aligned_deallocate_internal<F_allocator__, false>(p, n);
 			}
 
 			/**
@@ -463,9 +450,9 @@ namespace ncpp {
 			/**
 			 *
 			 */
-			inline void* new_mem(sz size) { 
+			inline void* new_mem(sz size, sz alignment = EASTL_ALLOCATOR_MIN_ALIGNMENT) {
 
-				return malloc(size); 
+				return malloc(size);
 			}
 			/**
 			 *
