@@ -111,17 +111,23 @@ namespace ncpp {
 
 
 		public:
-			inline void* new_mem(sz size) {
+			inline void* allocate(sz n, int flags = 0) {
 
-				assert(target_allocator_p_);
+				assert(target_allocator_p_ && "allocator reference is null, cant allocate memory");
 
-				return target_allocator_p_->new_mem(size);
+				return target_allocator_p_->allocate(n, flags);
 			}
-			inline void delete_mem(void* p) {
+			inline void* allocate(sz n, sz alignment, sz alignment_offset, int flags = 0) {
 
-				assert(target_allocator_p_);
+				assert(target_allocator_p_ && "allocator reference is null, cant allocate memory");
 
-				target_allocator_p_->delete_mem(p);
+				return target_allocator_p_->allocate(n, alignment, alignment_offset, flags);
+			}
+			inline void  deallocate(void* p, sz n = 1) {
+
+				assert(target_allocator_p_ && "allocator reference is null, cant deallocate memory");
+
+				target_allocator_p_->deallocate(p, n);
 			}
 
 			inline void reset() {

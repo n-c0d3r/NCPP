@@ -57,25 +57,44 @@ namespace ncpp {
 	namespace mem {
 
 #if defined(NCPP_ENABLE_ALLOCATOR_NAME) || defined(NCPP_ENABLE_MEMORY_COUNTING)
-#define HAS_DATA_OFFSET
+#define NCPP_HAS_ALLOC_DEBUG_INFO
 #endif
 
+#ifdef NCPP_HAS_ALLOC_DEBUG_INFO
+		struct NCPP_ALIGN(EASTL_ALLOCATOR_MIN_ALIGNMENT) F_alloc_debug_info {
+
+			const char* allocator_name = 0;
+			sz actual_size = 0;
+			sz payload_size = 0;
+			bool is_default_alloc = 0;
+
+		};
+#endif
+
+
+
+#ifdef NCPP_HAS_ALLOC_DEBUG_INFO
+		static inline F_alloc_debug_info get_alloc_debug_info(void* p) {
+
+			return reinterpret_cast<F_alloc_debug_info*>(p)[-1];
+		}
+#endif
+
+
+
 		/**
-		 *	Base allocator class implementing base functionalities for simply allocating both non-aligned and aligned memory.
-		 *	TI_allocator is capable of choosing the actual memory allocation size to pass into F_allocator__::new_mem(sz size) function, and the memory pointer to pass into F_allocator__::delete_mem(void* pointer) function.
-		 *	\n
-		 *	By this way, F_allocator__ won't need to care about alignment, it's automatically did by TI_allocator.
-		 *	\n
-		 *	@param <F_allocator__> allocator type that implements TI_allocator and has to provide these functions:
-		 *		+ new_mem(sz size): to allocate memory.
-		 *		+ delete_mem(void* pointer): to deallocate memory.
+		 *	Base allocator class.
 		 */
-		template<class F_allocator__, b8 enalbe_manual_alignment__>
+		template<class F_allocator__, b8 enable_manual_alignment__ = false>
 		class TI_allocator {
 
-		public:
-			static constexpr b8 enalbe_manual_alignment = enalbe_manual_alignment__;
+		private:
+			using F_this = TI_allocator<F_allocator__, enable_manual_alignment__>;
 
+
+
+		public:
+			static constexpr b8 enable_manual_alignment = enable_manual_alignment__;
 
 
 
@@ -128,254 +147,198 @@ namespace ncpp {
 
 
 		private:
-			template<class F_overloaded_allocator__, b8 auto_count_memory__>
+			template<class F_overloaded_allocator__, b8 is_default_alloc__>
 			inline void* T_aligned_allocate_internal(sz n, sz alignment, sz alignment_offset, int flags = 0) {
 
-				// Setup data offset
-#ifdef HAS_DATA_OFFSET
-				sz data_offset = 0;
-#ifdef NCPP_ENABLE_ALLOCATOR_NAME
-				data_offset += sizeof(const char*);
-				sz name_p_offset = data_offset;
+				if constexpr (enable_manual_alignment && !is_default_alloc__) {
+
+#ifdef NCPP_HAS_ALLOC_DEBUG_INFO
+					sz actual_size = sizeof(void*) + sizeof(F_alloc_debug_info) + n;
+					sz actual_alignment_offset = sizeof(void*) + sizeof(F_alloc_debug_info) + alignment_offset;
+#else
 #endif
+
+#ifdef NCPP_HAS_ALLOC_DEBUG_INFO
+					F_alloc_debug_info debug_info = {
+
+						name_,
+						actual_size,
+						n,
+						is_default_alloc__
+
+					};
+#endif
+
+#ifdef NCPP_HAS_ALLOC_DEBUG_INFO
+					u8* raw_p = reinterpret_cast<u8*>(reinterpret_cast<F_overloaded_allocator__*>(this)->new_mem(actual_size, alignment, actual_alignment_offset));
+
+					u8* result_p = raw_p - alignment_offset;
+					reinterpret_cast<F_alloc_debug_info*>(result_p)[-1] = debug_info;
+					*reinterpret_cast<void**>(reinterpret_cast<u8*>(result_p) - sizeof(F_alloc_debug_info) - sizeof(void*)) = raw_p;
+
+					return result_p;
+#else
+					return reinterpret_cast<F_overloaded_allocator__*>(this)->new_mem(n, alignment, alignment_offset);
+#endif
+
+				}
+				else {
+
+#ifdef NCPP_HAS_ALLOC_DEBUG_INFO
+					sz actual_size = alignment + sizeof(void*) + sizeof(F_alloc_debug_info) + n;
+#else
+					sz actual_size = alignment + sizeof(void*) + n;
+#endif
+
+#ifdef NCPP_HAS_ALLOC_DEBUG_INFO
+					F_alloc_debug_info debug_info = {
+
+						name_,
+						actual_size,
+						n,
+						is_default_alloc__
+
+					};
+
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
-				sz size_offset = 0;
+					if constexpr (is_default_alloc__) {
 
-				if constexpr (auto_count_memory__) {
+						NCPP_INCREASE_TOTAL_ALLOCATED_MEMORY(actual_size);
 
-					data_offset += sizeof(sz);
+					}
+#endif
+#endif
 
-					size_offset = data_offset;
+#ifdef NCPP_HAS_ALLOC_DEBUG_INFO
+					sz actual_alignment_offset = sizeof(void*) + sizeof(F_alloc_debug_info) + alignment_offset;
+#else
+					sz actual_alignment_offset = sizeof(void*) + alignment_offset;
+#endif
 
+					u8* raw_p = reinterpret_cast<u8*>(reinterpret_cast<F_overloaded_allocator__*>(this)->new_mem(actual_size, alignment, alignment_offset));
+
+					u8* result_p = reinterpret_cast<u8*>(align_address(reinterpret_cast<uintptr_t>(raw_p + actual_alignment_offset), alignment)) - alignment_offset;
+
+#ifdef NCPP_HAS_ALLOC_DEBUG_INFO
+					reinterpret_cast<F_alloc_debug_info*>(result_p)[-1] = debug_info;
+					*reinterpret_cast<void**>(reinterpret_cast<u8*>(result_p) - sizeof(F_alloc_debug_info) - sizeof(void*)) = raw_p;
+#else
+					reinterpret_cast<void**>(result_p)[-1] = raw_p;
+#endif
+
+					return result_p;
 				}
-#endif
-#endif
-
-
-
-				// Actual size
-#ifdef HAS_DATA_OFFSET
-				sz actual_size = alignment + data_offset + n;
-#else
-#endif
-
-
-
-				// Allocate raw memory
-#ifdef HAS_DATA_OFFSET
-				u8* raw_p = reinterpret_cast<u8*>(reinterpret_cast<F_overloaded_allocator__*>(this)->new_mem(actual_size));
-#else
-				u8* raw_p = reinterpret_cast<u8*>(reinterpret_cast<F_overloaded_allocator__*>(this)->new_mem(alignment + n));
-#endif
-
-
-
-				// align pointer
-#ifdef HAS_DATA_OFFSET
-				sz actual_alignment_offset = alignment_offset + data_offset;
-
-				u8* result_p = reinterpret_cast<u8*>(
-					align_address(
-						reinterpret_cast<uintptr_t>(raw_p + actual_alignment_offset),
-						alignment
-					)
-				) - actual_alignment_offset;
-#else
-				// align pointer
-				u8* result_p = reinterpret_cast<u8*>(
-					align_address(
-						reinterpret_cast<uintptr_t>(raw_p + alignment_offset),
-						alignment
-					)
-				) - alignment_offset;
-#endif
-
-
-
-				result_p += alignment * (result_p == raw_p);
-
-
-
-				// Goto data pointer
-#ifdef HAS_DATA_OFFSET
-				result_p += data_offset;
-#endif
-
-
-
-				// Save shift value
-#ifdef HAS_DATA_OFFSET
-				*(result_p - data_offset - 1) = (result_p - raw_p - data_offset - 1) & 0xFF;
-#else
-				*(result_p - 1) = (result_p - raw_p - 1) & 0xFF;
-#endif
-
-
-
-				// Save name and memory actual size
-#ifdef NCPP_ENABLE_ALLOCATOR_NAME
-				*reinterpret_cast<const char**>(result_p - name_p_offset) = name_;
-#endif
-#ifdef NCPP_ENABLE_MEMORY_COUNTING
-				if constexpr (auto_count_memory__) {
-
-					*reinterpret_cast<sz*>(result_p - size_offset) = actual_size;
-
-					NCPP_INCREASE_TOTAL_ALLOCATED_MEMORY(actual_size);
-
-				}
-#endif
-
-
-
-				return result_p;
-			}
-			template<class F_overloaded_allocator__, b8 auto_count_memory__>
-			inline void T_aligned_deallocate_internal(void* p, sz n = 1) {
-
-				// Setup data offset
-#ifdef HAS_DATA_OFFSET
-				sz data_offset = 0;
-#ifdef NCPP_ENABLE_ALLOCATOR_NAME
-				data_offset += sizeof(const char*);
-				sz name_p_offset = data_offset;
-#endif
-#ifdef NCPP_ENABLE_MEMORY_COUNTING
-				sz size_offset = 0;
-
-				if constexpr (auto_count_memory__) {
-
-					data_offset += sizeof(sz);
-
-					size_offset = data_offset;
-
-				}
-
-				if constexpr (auto_count_memory__) {
-
-					NCPP_DECREASE_TOTAL_ALLOCATED_MEMORY(*reinterpret_cast<sz*>(reinterpret_cast<u8*>(p) - size_offset));
-
-				}
-#endif
-#endif
-
-
-
-				// Read shift value
-#ifdef HAS_DATA_OFFSET
-				u8 shift = *(reinterpret_cast<u8*>(p) - data_offset - 1);
-#else
-				u8 shift = *(reinterpret_cast<u8*>(p) - 1);
-#endif
-
-
-
-				// Delete mem
-#ifdef HAS_DATA_OFFSET
-				reinterpret_cast<F_overloaded_allocator__*>(this)->delete_mem(reinterpret_cast<u8*>(p) - data_offset - shift - 1);
-#else
-				reinterpret_cast<F_overloaded_allocator__*>(this)->delete_mem(reinterpret_cast<u8*>(p) - shift - 1);
-#endif
-
 
 			}
-
-
-
-		private:
-			template<class F_overloaded_allocator__, b8 auto_count_memory__>
+			template<class F_overloaded_allocator__, b8 is_default_alloc__>
 			inline void* T_allocate_internal(sz n, int flags = 0) {
 
-				// Setup data offset
-#ifdef HAS_DATA_OFFSET
-				sz data_offset = 0;
-#ifdef NCPP_ENABLE_ALLOCATOR_NAME
-				data_offset += sizeof(const char*);
-				sz name_p_offset = data_offset;
-#endif
-#ifdef NCPP_ENABLE_MEMORY_COUNTING
-				sz size_offset = 0;
+				if constexpr (enable_manual_alignment && !is_default_alloc__) {
 
-				if constexpr (auto_count_memory__) {
-
-					data_offset += sizeof(sz);
-
-					size_offset = data_offset;
-
-				}
-#endif
-				data_offset = aligned_size(data_offset);
-#endif
-
-
-
-				// Actual size
-#ifdef HAS_DATA_OFFSET
-				sz actual_size = data_offset + n;
+#ifdef NCPP_HAS_ALLOC_DEBUG_INFO
+					sz actual_size = sizeof(void*) + sizeof(F_alloc_debug_info) + n;
+					sz actual_alignment_offset = sizeof(void*) + sizeof(F_alloc_debug_info);
 #else
 #endif
 
+#ifdef NCPP_HAS_ALLOC_DEBUG_INFO
+					F_alloc_debug_info debug_info = {
 
+						name_,
+						actual_size,
+						n,
+						is_default_alloc__
 
-				// Allocate raw memory
-#ifdef HAS_DATA_OFFSET
-				u8* raw_p = reinterpret_cast<u8*>(reinterpret_cast<F_overloaded_allocator__*>(this)->new_mem(actual_size));
-
-#ifdef NCPP_ENABLE_ALLOCATOR_NAME
-				*reinterpret_cast<const char**>(raw_p + data_offset - name_p_offset) = name_;
+					};
 #endif
-#ifdef NCPP_ENABLE_MEMORY_COUNTING
-				if constexpr (auto_count_memory__) {
 
-					*reinterpret_cast<sz*>(raw_p + data_offset - size_offset) = actual_size;
+#ifdef NCPP_HAS_ALLOC_DEBUG_INFO
+					u8* raw_p = reinterpret_cast<u8*>(reinterpret_cast<F_overloaded_allocator__*>(this)->new_mem(actual_size, EASTL_ALLOCATOR_MIN_ALIGNMENT, actual_alignment_offset));
 
-					NCPP_INCREASE_TOTAL_ALLOCATED_MEMORY(actual_size);
+					reinterpret_cast<F_alloc_debug_info*>(raw_p)[-1] = debug_info;
+					*reinterpret_cast<void**>(reinterpret_cast<u8*>(raw_p) - sizeof(F_alloc_debug_info) - sizeof(void*)) = raw_p;
+
+					return raw_p;
+#else
+					return reinterpret_cast<F_overloaded_allocator__*>(this)->new_mem(n, EASTL_ALLOCATOR_MIN_ALIGNMENT, 0);
+#endif
 
 				}
+				else {
+
+#ifdef NCPP_HAS_ALLOC_DEBUG_INFO
+					sz actual_size = EASTL_ALLOCATOR_MIN_ALIGNMENT + sizeof(F_alloc_debug_info) + n;
+#else
+					sz actual_size = EASTL_ALLOCATOR_MIN_ALIGNMENT + n;
 #endif
 
-				return raw_p + data_offset;
-#else
-				return reinterpret_cast<F_overloaded_allocator__*>(this)->new_mem(n);
+#ifdef NCPP_HAS_ALLOC_DEBUG_INFO
+					F_alloc_debug_info debug_info = {
+
+						name_,
+						actual_size,
+						n,
+						is_default_alloc__
+
+					};
+
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+					if constexpr (is_default_alloc__) {
+
+						NCPP_INCREASE_TOTAL_ALLOCATED_MEMORY(actual_size);
+
+					}
 #endif
+#endif
+
+					u8* raw_p = reinterpret_cast<u8*>(reinterpret_cast<F_overloaded_allocator__*>(this)->new_mem(actual_size, EASTL_ALLOCATOR_MIN_ALIGNMENT, 0));
+
+#ifdef NCPP_HAS_ALLOC_DEBUG_INFO
+					u8* result_p = raw_p + EASTL_ALLOCATOR_MIN_ALIGNMENT + sizeof(F_alloc_debug_info);
+
+					reinterpret_cast<F_alloc_debug_info*>(result_p)[-1] = debug_info;
+
+					*reinterpret_cast<void**>(reinterpret_cast<u8*>(result_p) - sizeof(F_alloc_debug_info) - sizeof(void*)) = raw_p;
+#else
+					u8* result_p = raw_p + EASTL_ALLOCATOR_MIN_ALIGNMENT;
+
+					reinterpret_cast<void**>(result_p)[-1] = raw_p;
+#endif
+
+					return result_p;
+
+				}
+
 			}
-			template<class F_overloaded_allocator__, b8 auto_count_memory__>
+			template<class F_overloaded_allocator__, b8 is_default_alloc__>
 			inline void T_deallocate_internal(void* p, sz n = 1) {
 
-				// Setup data offset
-#ifdef HAS_DATA_OFFSET
-				sz data_offset = 0;
-#ifdef NCPP_ENABLE_ALLOCATOR_NAME
-				data_offset += sizeof(const char*);
-				sz name_p_offset = data_offset;
-#endif
+#ifdef NCPP_HAS_ALLOC_DEBUG_INFO
+				F_alloc_debug_info debug_info = get_alloc_debug_info(p);
+
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
-				sz size_offset = 0;
+				if (debug_info.is_default_alloc) {
 
-				if constexpr (auto_count_memory__) {
-
-					data_offset += sizeof(sz);
-
-					size_offset = data_offset;
-
-				}
-
-				if constexpr (auto_count_memory__) {
-
-					NCPP_DECREASE_TOTAL_ALLOCATED_MEMORY(*reinterpret_cast<sz*>(reinterpret_cast<u8*>(p) - size_offset));
+					NCPP_INCREASE_TOTAL_ALLOCATED_MEMORY(debug_info.actual_size);
 
 				}
 #endif
-				data_offset = aligned_size(data_offset);
 #endif
 
+				if constexpr (enable_manual_alignment && !is_default_alloc__) {
 
+					reinterpret_cast<F_overloaded_allocator__*>(this)->delete_mem(p);
 
-#ifdef HAS_DATA_OFFSET
-				reinterpret_cast<F_overloaded_allocator__*>(this)->delete_mem(reinterpret_cast<u8*>(p) - data_offset);
+				}
+				else {
+
+#ifdef NCPP_HAS_ALLOC_DEBUG_INFO
+					reinterpret_cast<F_overloaded_allocator__*>(this)->delete_mem(*reinterpret_cast<void**>(reinterpret_cast<u8*>(p) - sizeof(F_alloc_debug_info) - sizeof(void*)));
 #else
-				reinterpret_cast<F_overloaded_allocator__*>(this)->delete_mem(p);
+					reinterpret_cast<F_overloaded_allocator__*>(this)->delete_mem(reinterpret_cast<void**>(p)[-1]);
 #endif
+
+				}
 
 			}
 
@@ -387,7 +350,7 @@ namespace ncpp {
 			 */
 			inline void* default_allocate(sz n, int flags = 0) {
 
-				return default_allocate(n, EASTL_ALLOCATOR_MIN_ALIGNMENT, 0, flags);
+				return T_allocate_internal<TI_allocator, true>(n, flags);
 			}
 			/**
 			 *	Allocates aligned memory with default new_mem(sz) function
@@ -396,7 +359,7 @@ namespace ncpp {
 
 				if(alignment <= EASTL_ALLOCATOR_MIN_ALIGNMENT){
 
-					return T_allocate_internal<TI_allocator, false>(aligned_size(n), flags);
+					return T_allocate_internal<TI_allocator, true>(n, flags);
 				}
 				else{
 
@@ -421,14 +384,39 @@ namespace ncpp {
 			 */
 			void* allocate(sz n, int flags = 0) {
 
-				return allocate(n, EASTL_ALLOCATOR_MIN_ALIGNMENT, 0, flags);
+				if constexpr (enable_manual_alignment) {
+
+					return reinterpret_cast<F_allocator__*>(this)->new_mem(n, EASTL_ALLOCATOR_MIN_ALIGNMENT, 0);
+
+				}
+				else {
+
+					return T_allocate_internal<F_allocator__, false>(n, flags);
+				}
 			}
 			/**
 			 *	Allocates aligned memory with default new_mem(sz) function
 			 */
 			void* allocate(sz n, sz alignment, sz alignment_offset, int flags = 0) {
 
-				return T_aligned_allocate_internal<F_allocator__, false>(n, alignment, alignment_offset, flags);
+				if constexpr (enable_manual_alignment) {
+
+					return reinterpret_cast<F_allocator__*>(this)->new_mem(n, alignment, alignment_offset);
+
+				}
+				else {
+
+					if (alignment <= EASTL_ALLOCATOR_MIN_ALIGNMENT) {
+
+						return T_allocate_internal<F_allocator__, false>(n, flags);
+					}
+					else {
+
+						return T_aligned_allocate_internal<F_allocator__, false>(n, alignment, alignment_offset, flags);
+					}
+
+				}
+				
 			}
 			/**
 			 *	Deallocates memory with default delete_mem(void*) function
@@ -450,7 +438,7 @@ namespace ncpp {
 			/**
 			 *
 			 */
-			inline void* new_mem(sz size, sz alignment = EASTL_ALLOCATOR_MIN_ALIGNMENT) {
+			inline void* new_mem(sz size, sz alignment = EASTL_ALLOCATOR_MIN_ALIGNMENT, sz alignment_offset = 0) {
 
 				return malloc(size);
 			}
@@ -463,12 +451,6 @@ namespace ncpp {
 			}
 
 		};
-
-
-
-#ifdef HAS_DATA_OFFSET
-#undef HAS_DATA_OFFSET
-#endif
 
 	}
 

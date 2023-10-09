@@ -8,13 +8,14 @@ using namespace ncpp;
 int main() {
 
 	{
-
+		
 		mem::F_incremental_chunk_allocator incremental_chunk_allocator;
-		mem::F_default_allocator default_allocator;
 
 		mem::TF_smart_chunk_storage<> smart_chunk_storage;
 		mem::TF_smart_chunk_adaptor<> smart_chunk_adaptor(&smart_chunk_storage);
 		mem::TF_smart_chunk_allocator<> smart_chunk_allocator(&smart_chunk_adaptor);
+
+		mem::F_default_allocator default_allocator;
 
 		eastl::allocator eastl_allocator;
 

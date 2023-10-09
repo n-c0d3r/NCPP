@@ -419,10 +419,10 @@ namespace ncpp {
 		 * Then it deallocates that chunk.
 		 */
 		template<class F_options__>
-		class TF_smart_chunk_allocator : public TI_allocator<TF_smart_chunk_allocator<F_options__>> {
+		class TF_smart_chunk_allocator : public TI_allocator<TF_smart_chunk_allocator<F_options__>, true> {
 
 		private:
-			using F_base = TI_allocator<TF_smart_chunk_allocator<F_options__>>;
+			using F_base = TI_allocator<TF_smart_chunk_allocator<F_options__>, true>;
 
 
 
@@ -568,17 +568,19 @@ namespace ncpp {
 			}
 
 		public:
-			inline void* new_mem(sz size) {
+			inline void* new_mem(sz size, sz alignment, sz alignment_offset) {
 
-				assert((size <= chunk_capacity_) && "allocation size too big");
+				sz actual_size = alignment + alignment_offset + size;
+
+				assert((actual_size <= chunk_capacity_) && "allocation size too big");
 				assert(adaptor_p_ && "adaptor is null, cant allocate memory");
 
-				current_usage_ += size;
+				current_usage_ += actual_size;
 
 
 
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
-				NCPP_INCREASE_USABLE_ALLOCATED_MEMORY(size);
+				NCPP_INCREASE_USABLE_ALLOCATED_MEMORY(actual_size);
 #endif
 
 
@@ -588,13 +590,13 @@ namespace ncpp {
 
 					current_chunk_p_ = optain_next_chunk(current_chunk_p_);
 
-					current_usage_ = size;
+					current_usage_ = actual_size;
 
 				}
 
 
 
-				void* memory_p = current_chunk_p_->current_data();
+				u8* memory_p = current_chunk_p_->current_data();
 
 
 
@@ -603,7 +605,7 @@ namespace ncpp {
 
 
 
-				return memory_p;
+				return reinterpret_cast<u8*>(align_address(reinterpret_cast<uintptr_t>(memory_p + alignment_offset), alignment)) - alignment_offset;
 
 			}
 			inline void delete_mem(void* p) {

@@ -238,6 +238,7 @@ namespace ncpp {}
 
 // Check for Linux platform
 #elif __linux__
+    #define NCPP_LINUX_PLATFORM
     #define NCPP_POSIX_PLATFORM
 
 // Check for Unix platform
@@ -260,20 +261,58 @@ namespace ncpp {}
 
 #pragma region Arch
 
-#if defined(__arm__)
-    #define NCPP_ARCH_ARM
-    #define NCPP_ARCH_32
-#elif defined(__aarch64__)
-    #define NCPP_ARCH_ARM
-    #define NCPP_ARCHH_64
-#elif defined(__i386__)
-    #define NCPP_ARCH_X86
-    #define NCPP_ARCH_32
-#elif defined(__x86_64__)
-    #define NCPP_ARCH_X86
-    #define NCPP_ARCH_64
+#if defined(__x86_64__) || defined(_M_X64)
+#define NCPP_ARCH_TYPE_X86
+#define NCPP_ARCH_64_BITS
+#define NCPP_ARCH_BITS 64
+#define NCPP_ARCH_X86_64
+#elif defined(i386) || defined(__i386__) || defined(__i386) || defined(_M_IX86)
+#define NCPP_ARCH_TYPE_X86
+#define NCPP_ARCH_32_BITS
+#define NCPP_ARCH_BITS 32
+#define NCPP_ARCH_X86_32
+#elif defined(__ARM_ARCH_2__)
+#define NCPP_ARCH_TYPE_ARM
+#define NCPP_ARCH_32_BITS
+#define NCPP_ARCH_BITS 32
+#define NCPP_ARCH_ARM2
+#elif defined(__ARM_ARCH_3__) || defined(__ARM_ARCH_3M__)
+#define NCPP_ARCH_TYPE_ARM
+#define NCPP_ARCH_32_BITS
+#define NCPP_ARCH_BITS 32
+#define NCPP_ARCH_ARM3
+#elif defined(__ARM_ARCH_4T__) || defined(__TARGET_ARM_4T)
+#define NCPP_ARCH_TYPE_ARM
+#define NCPP_ARCH_32_BITS
+#define NCPP_ARCH_BITS 32
+#define NCPP_ARCH_ARM4T
+#elif defined(__ARM_ARCH_5_) || defined(__ARM_ARCH_5E_)
+#define NCPP_ARCH_TYPE_ARM
+#define NCPP_ARCH_32_BITS
+#define NCPP_ARCH_BITS 32
+#define NCPP_ARCH_ARM5
+#elif defined(__ARM_ARCH_6T2_) || defined(__ARM_ARCH_6T2_)
+#define NCPP_ARCH_TYPE_ARM
+#define NCPP_ARCH_32_BITS
+#define NCPP_ARCH_BITS 32
+#define NCPP_ARCH_ARM6T2
+#elif defined(__ARM_ARCH_6__) || defined(__ARM_ARCH_6J__) || defined(__ARM_ARCH_6K__) || defined(__ARM_ARCH_6Z__) || defined(__ARM_ARCH_6ZK__)
+#define NCPP_ARCH_TYPE_ARM
+#define NCPP_ARCH_32_BITS
+#define NCPP_ARCH_BITS 32
+#define NCPP_ARCH_ARM6
+#elif defined(__ARM_ARCH_7__) || defined(__ARM_ARCH_7A__) || defined(__ARM_ARCH_7R__) || defined(__ARM_ARCH_7M__) || defined(__ARM_ARCH_7S__)
+#define NCPP_ARCH_TYPE_ARM
+#define NCPP_ARCH_32_BITS
+#define NCPP_ARCH_BITS 32
+#define NCPP_ARCH_ARM7
+#elif defined(__aarch64__) || defined(_M_ARM64)
+#define NCPP_ARCH_TYPE_ARM
+#define NCPP_ARCH_64_BITS
+#define NCPP_ARCH_BITS 64
+#define NCPP_ARCH_ARM64 
 #else
-    #error "Unknown arch"
+#error "Unknown hardware architecture";
 #endif
 
 #pragma endregion

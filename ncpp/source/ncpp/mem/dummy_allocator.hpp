@@ -90,7 +90,7 @@ namespace ncpp {
 
 
 		public:
-			inline void* new_mem(sz) { return memory_block_s; }
+			inline void* new_mem(sz, sz, sz) { return memory_block_s; }
 			inline void delete_mem(void* p) { }
 
 		};

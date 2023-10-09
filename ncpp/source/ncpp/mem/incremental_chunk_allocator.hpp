@@ -64,7 +64,7 @@ namespace ncpp {
 		 *
 		 * It only deallocates chunks when reset or clear function is called.
 		 */
-		class F_incremental_chunk_allocator : public TI_allocator<F_incremental_chunk_allocator> {
+		class F_incremental_chunk_allocator : public TI_allocator<F_incremental_chunk_allocator, true> {
 
 
 
@@ -199,17 +199,19 @@ namespace ncpp {
 			}
 
 		public:
-			inline void* new_mem(sz size) {
+			inline void* new_mem(sz size, sz alignment, sz alignment_offset) {
 
-				assert((size <= chunk_capacity_) && "allocation size too big");
+				sz actual_size = alignment + alignment_offset + size;
 
-				current_usage_ += size;
+				assert((actual_size <= chunk_capacity_) && "allocation size too big");
+
+				current_usage_ += actual_size;
 
 
 
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
-				NCPP_INCREASE_USABLE_ALLOCATED_MEMORY(size);
-				usable_allocated_memory_ += size;
+				NCPP_INCREASE_USABLE_ALLOCATED_MEMORY(actual_size);
+				usable_allocated_memory_ += actual_size;
 #endif
 
 
@@ -219,13 +221,13 @@ namespace ncpp {
 
 					current_chunk_p_ = optain_next_chunk(current_chunk_p_);
 
-					current_usage_ = size;
+					current_usage_ = actual_size;
 
 				}
 
 
 
-				u8* memory = current_chunk_p_->current_data();
+				u8* memory_p = current_chunk_p_->current_data();
 
 
 
@@ -233,7 +235,7 @@ namespace ncpp {
 
 
 
-				return memory;
+				return reinterpret_cast<u8*>(align_address(reinterpret_cast<uintptr_t>(memory_p + alignment_offset), alignment)) - alignment_offset;
 
 			}
 			inline void delete_mem(void* p) {
