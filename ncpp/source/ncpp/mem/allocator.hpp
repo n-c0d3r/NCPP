@@ -384,12 +384,15 @@ namespace ncpp {
 			 */
 			void* allocate(sz n, int flags = 0) {
 
+#ifndef NCPP_HAS_ALLOC_DEBUG_INFO
 				if constexpr (enable_manual_alignment) {
 
 					return reinterpret_cast<F_allocator__*>(this)->new_mem(n, EASTL_ALLOCATOR_MIN_ALIGNMENT, 0);
 
 				}
-				else {
+				else 
+#endif
+				{
 
 					return T_allocate_internal<F_allocator__, false>(n, flags);
 				}
@@ -399,12 +402,15 @@ namespace ncpp {
 			 */
 			void* allocate(sz n, sz alignment, sz alignment_offset, int flags = 0) {
 
+#ifndef NCPP_HAS_ALLOC_DEBUG_INFO
 				if constexpr (enable_manual_alignment) {
 
 					return reinterpret_cast<F_allocator__*>(this)->new_mem(n, alignment, alignment_offset);
 
 				}
-				else {
+				else
+#endif
+				{
 
 					if (alignment <= EASTL_ALLOCATOR_MIN_ALIGNMENT) {
 
