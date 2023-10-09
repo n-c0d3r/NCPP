@@ -11,10 +11,8 @@ CTestTestfile.cmake
 _deps
 
 build
-scripts/.DS_Store
 
 gitignores
 
-.DS_Store
 
 .vscode
