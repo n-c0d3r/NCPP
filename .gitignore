@@ -15,4 +15,6 @@ scripts/.DS_Store
 
 gitignores
 
+.DS_Store
+
 .vscode

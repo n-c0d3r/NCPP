@@ -210,14 +210,70 @@ namespace ncpp {}
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
-#pragma region Platform 
+#pragma region Platform
 
-#if defined(_WIN64) || defined(_WIN32)
-#define NCPP_WINDOWS_PLATFORM
+// Check for Windows platform
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+    #define NCPP_WINDOWS_PLATFORM
+
+// Check for Apple platform
+#elif __APPLE__
+    #define NCPP_APPLE_PLATFORM
+    #define NCPP_POSIX_PLATFORM
+    //
+    #include <TargetConditionals.h>
+    #if TARGET_IPHONE_SIMULATOR
+    #elif TARGET_OS_MACCATALYST
+    #elif TARGET_OS_IPHONE
+    #elif TARGET_OS_MAC
+        #define NCPP_APPLE_MACOS_PLATFORM
+    #else
+    #   error "Unknown Apple platform"
+    #endif
+
+// Check for Android platform
+#elif __ANDROID__
+    #define NCPP_ANDROID_PLATFORM
+    #define NCPP_POSIX_PLATFORM
+
+// Check for Linux platform
+#elif __linux__
+    #define NCPP_POSIX_PLATFORM
+
+// Check for Unix platform
+#elif __unix__ // all unices not caught above
+    #define NCPP_UNIX_PLATFORM
+    #define NCPP_POSIX_PLATFORM
+
+// Chheck for posix platform
+#elif defined(_POSIX_VERSION)
+    #define NCPP_POSIX_PLATFORM
+#else
+#   error "Unknown compiler"
 #endif
 
-#if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
-#define NCPP_UNIX_PLATFORM
+#pragma endregion
+
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
+#pragma region Arch
+
+#if defined(__arm__)
+    #define NCPP_ARCH_ARM
+    #define NCPP_ARCH_32
+#elif defined(__aarch64__)
+    #define NCPP_ARCH_ARM
+    #define NCPP_ARCHH_64
+#elif defined(__i386__)
+    #define NCPP_ARCH_X86
+    #define NCPP_ARCH_32
+#elif defined(__x86_64__)
+    #define NCPP_ARCH_X86
+    #define NCPP_ARCH_64
+#else
+    #error "Unknown arch"
 #endif
 
 #pragma endregion
@@ -605,7 +661,7 @@ namespace ncpp {
         system("pause");
 #endif
 
-#ifdef NCPP_UNIX_PLATFORM
+#ifdef NCPP_POSIX_PLATFORM
         system("read -s -n 1 -p \"Press any key to continue . . .\"");
 #endif
 

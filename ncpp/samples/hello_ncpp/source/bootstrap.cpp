@@ -9,7 +9,7 @@ int main() {
 	
 	std::cout << eastl::string("Hello NCPP ") + NCPP_VERSION_STR << std::endl;
 
-	system("pause");
+    pause_console();
 
 	return 0;
 }
