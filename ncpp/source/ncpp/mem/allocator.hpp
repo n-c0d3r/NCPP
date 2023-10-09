@@ -56,7 +56,7 @@ namespace ncpp {
 
 	namespace mem {
 
-#if !defined(NDEBUG) || defined(NCPP_ENABLE_MEMORY_COUNTING)
+#if defined(NCPP_ENABLE_ALLOCATOR_NAME) || defined(NCPP_ENABLE_MEMORY_COUNTING)
 #define HAS_DATA_OFFSET
 #endif
 
@@ -88,7 +88,7 @@ namespace ncpp {
 			inline TI_allocator(const char* name = 0)
 			{
 
-#if EASTL_NAME_ENABLED
+#if NCPP_ENABLE_ALLOCATOR_NAME
 				name_ = name;
 #endif
 
@@ -96,7 +96,7 @@ namespace ncpp {
 			inline TI_allocator(const TI_allocator& x)
 			{
 
-#if EASTL_NAME_ENABLED
+#if NCPP_ENABLE_ALLOCATOR_NAME
 				name_ = x.name_;
 #endif
 
@@ -104,7 +104,7 @@ namespace ncpp {
 			inline TI_allocator(const TI_allocator& x, const char* name)
 			{
 
-#if EASTL_NAME_ENABLED
+#if NCPP_ENABLE_ALLOCATOR_NAME
 				name_ = name;
 #endif
 
@@ -112,7 +112,7 @@ namespace ncpp {
 
 			TI_allocator& operator=(const TI_allocator& x) {
 
-#if EASTL_NAME_ENABLED
+#if NCPP_ENABLE_ALLOCATOR_NAME
 				name_ = x.name_;
 #endif
 
@@ -128,7 +128,7 @@ namespace ncpp {
 				// Setup data offset
 #ifdef HAS_DATA_OFFSET
 				sz data_offset = 0;
-#ifndef NDEBUG
+#ifdef NCPP_ENABLE_ALLOCATOR_NAME
 				data_offset += sizeof(const char*);
 				sz name_p_offset = data_offset;
 #endif
@@ -207,7 +207,7 @@ namespace ncpp {
 
 
 				// Save name and memory actual size
-#ifndef NDEBUG
+#ifdef NCPP_ENABLE_ALLOCATOR_NAME
 				*reinterpret_cast<const char**>(result_p - name_p_offset) = name_;
 #endif
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
@@ -230,7 +230,7 @@ namespace ncpp {
 				// Setup data offset
 #ifdef HAS_DATA_OFFSET
 				sz data_offset = 0;
-#ifndef NDEBUG
+#ifdef NCPP_ENABLE_ALLOCATOR_NAME
 				data_offset += sizeof(const char*);
 				sz name_p_offset = data_offset;
 #endif
@@ -283,7 +283,7 @@ namespace ncpp {
 				// Setup data offset
 #ifdef HAS_DATA_OFFSET
 				sz data_offset = 0;
-#ifndef NDEBUG
+#ifdef NCPP_ENABLE_ALLOCATOR_NAME
 				data_offset += sizeof(const char*);
 				sz name_p_offset = data_offset;
 #endif
@@ -315,7 +315,7 @@ namespace ncpp {
 #ifdef HAS_DATA_OFFSET
 				u8* raw_p = reinterpret_cast<u8*>(reinterpret_cast<F_overloaded_allocator__*>(this)->new_mem(actual_size));
 
-#ifndef NDEBUG
+#ifdef NCPP_ENABLE_ALLOCATOR_NAME
 				*reinterpret_cast<const char**>(raw_p + data_offset - name_p_offset) = name_;
 #endif
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
@@ -339,7 +339,7 @@ namespace ncpp {
 				// Setup data offset
 #ifdef HAS_DATA_OFFSET
 				sz data_offset = 0;
-#ifndef NDEBUG
+#ifdef NCPP_ENABLE_ALLOCATOR_NAME
 				data_offset += sizeof(const char*);
 				sz name_p_offset = data_offset;
 #endif

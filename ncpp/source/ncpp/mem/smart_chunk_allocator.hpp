@@ -367,6 +367,8 @@ namespace ncpp {
 			}
 
 			void push_chunk(F_smart_chunk_header* chunk_p) {
+                
+                assert(chunk_p && "cant push nulll chunk");
 
 				*chunk_p = F_smart_chunk_header {};
 
@@ -447,10 +449,6 @@ namespace ncpp {
 
 			sz chunk_capacity_;
 			u16 min_chunk_count_;
-
-#ifdef NCPP_ENABLE_MEMORY_COUNTING
-			sz usable_allocated_memory_ = 0;
-#endif
 
 
 
@@ -558,6 +556,10 @@ namespace ncpp {
 				}
 				else
 					tail_chunk_p_ = prev_chunk_p;
+                
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+                NCPP_DECREASE_USABLE_ALLOCATED_MEMORY(chunk_p->usage);
+#endif
 
 				adaptor_p_->push_chunk(chunk_p);
 
@@ -577,7 +579,6 @@ namespace ncpp {
 
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
 				NCPP_INCREASE_USABLE_ALLOCATED_MEMORY(size);
-				usable_allocated_memory_ += size;
 #endif
 
 
@@ -633,11 +634,6 @@ namespace ncpp {
 				if (!adaptor_p_)
 					return;
 
-#ifdef NCPP_ENABLE_MEMORY_COUNTING
-				NCPP_DECREASE_USABLE_ALLOCATED_MEMORY(usable_allocated_memory_);
-				usable_allocated_memory_ = 0;
-#endif
-
 				while (chunk_count_) {
 
 					erase_chunk(tail_chunk_p_);
@@ -654,11 +650,6 @@ namespace ncpp {
 
 				if (!adaptor_p_)
 					return;
-
-#ifdef NCPP_ENABLE_MEMORY_COUNTING
-				NCPP_DECREASE_USABLE_ALLOCATED_MEMORY(usable_allocated_memory_);
-				usable_allocated_memory_ = 0;
-#endif
 
 				if (chunk_count_ == 0)
 					return;

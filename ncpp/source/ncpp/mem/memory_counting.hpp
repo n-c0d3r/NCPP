@@ -67,16 +67,16 @@ namespace ncpp {
 
 
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
-		extern asz total_allocated_memory_g;
-		extern asz usable_allocated_memory_g;
+		extern aptrd total_allocated_memory_g;
+		extern aptrd usable_allocated_memory_g;
 
 #define NCPP_TOTAL_ALLOCATED_MEMORY() total_allocated_memory_g.load(eastl::memory_order_acquire)
-#define NCPP_INCREASE_TOTAL_ALLOCATED_MEMORY(bytes) total_allocated_memory_g.fetch_add(bytes, eastl::memory_order_release)
-#define NCPP_DECREASE_TOTAL_ALLOCATED_MEMORY(bytes) total_allocated_memory_g.fetch_sub(bytes, eastl::memory_order_release)
+#define NCPP_INCREASE_TOTAL_ALLOCATED_MEMORY(bytes) total_allocated_memory_g.fetch_add((ncpp::ptrd)bytes, eastl::memory_order_release)
+#define NCPP_DECREASE_TOTAL_ALLOCATED_MEMORY(bytes) total_allocated_memory_g.fetch_sub((ncpp::ptrd)bytes, eastl::memory_order_release)
 
 #define NCPP_USABLE_ALLOCATED_MEMORY() usable_allocated_memory_g.load(eastl::memory_order_acquire)
-#define NCPP_INCREASE_USABLE_ALLOCATED_MEMORY(bytes) usable_allocated_memory_g.fetch_add(bytes, eastl::memory_order_release)
-#define NCPP_DECREASE_USABLE_ALLOCATED_MEMORY(bytes) usable_allocated_memory_g.fetch_sub(bytes, eastl::memory_order_release)
+#define NCPP_INCREASE_USABLE_ALLOCATED_MEMORY(bytes) usable_allocated_memory_g.fetch_add((ncpp::ptrd)bytes, eastl::memory_order_release)
+#define NCPP_DECREASE_USABLE_ALLOCATED_MEMORY(bytes) usable_allocated_memory_g.fetch_sub((ncpp::ptrd)bytes, eastl::memory_order_release)
 
 
 

@@ -7,8 +7,8 @@ namespace ncpp {
 	namespace mem {
 
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
-		asz total_allocated_memory_g = 0;
-		asz usable_allocated_memory_g = 0;
+		aptrd total_allocated_memory_g = 0;
+		aptrd usable_allocated_memory_g = 0;
 #endif
 
 		void log_memory_stats() {
