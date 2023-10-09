@@ -41,14 +41,14 @@ NCoder's Game Engine Learning Aimed C++ Library
     + Step 2: Generate Visual Studio 2022 solution by running **scripts/generate_vs2022.bat**
     + Step 3: Navigate to **build/vs2022**
     + Step 4: Open **npp.sln**
-    + Step 5: Set **ncpp.samples.firt_sample** as startup project
+    + Step 5: Set **ncpp.samples.hello_ncpp** as startup project
     + Step 6: Run and enjoy!
   + MacOS + Xcode:
     + Step 1: Clone [NCPP git repository](https://github.com/n-c0d3r/ncpp) from GitHub
     + Step 2: Generate Xcode solution by running **scripts/generate_xcode.sh**
     + Step 3: Navigate to **build/xcode**
     + Step 4: Open **ncpp.xcodeproj**
-    + Step 5: Choose **ncpp.samples.firt_sample** for current scheme
+    + Step 5: Choose **ncpp.samples.hello_ncpp** for current scheme
     + Step 6: Run and enjoy!
   + Unix makefiles:
     + Step 1: Clone [NCPP git repository](https://github.com/n-c0d3r/ncpp) from GitHub
