@@ -172,7 +172,8 @@ namespace ncpp {
 #ifdef NCPP_HAS_ALLOC_DEBUG_INFO
 					u8* raw_p = reinterpret_cast<u8*>(reinterpret_cast<F_overloaded_allocator__*>(this)->new_mem(actual_size, alignment, actual_alignment_offset));
 
-					u8* result_p = raw_p - alignment_offset;
+					u8* result_p = raw_p + sizeof(void*) + sizeof(F_alloc_debug_info);
+                    
 					reinterpret_cast<F_alloc_debug_info*>(result_p)[-1] = debug_info;
 					*reinterpret_cast<void**>(reinterpret_cast<u8*>(result_p) - sizeof(F_alloc_debug_info) - sizeof(void*)) = raw_p;
 
@@ -254,11 +255,13 @@ namespace ncpp {
 
 #ifdef NCPP_HAS_ALLOC_DEBUG_INFO
 					u8* raw_p = reinterpret_cast<u8*>(reinterpret_cast<F_overloaded_allocator__*>(this)->new_mem(actual_size, EASTL_ALLOCATOR_MIN_ALIGNMENT, actual_alignment_offset));
+                    
+                    u8* result_p = raw_p + actual_alignment_offset;
 
-					reinterpret_cast<F_alloc_debug_info*>(raw_p)[-1] = debug_info;
-					*reinterpret_cast<void**>(reinterpret_cast<u8*>(raw_p) - sizeof(F_alloc_debug_info) - sizeof(void*)) = raw_p;
+					reinterpret_cast<F_alloc_debug_info*>(result_p)[-1] = debug_info;
+					*reinterpret_cast<void**>(reinterpret_cast<u8*>(result_p) - sizeof(F_alloc_debug_info) - sizeof(void*)) = raw_p;
 
-					return raw_p;
+					return result_p;
 #else
 					return reinterpret_cast<F_overloaded_allocator__*>(this)->new_mem(n, EASTL_ALLOCATOR_MIN_ALIGNMENT, 0);
 #endif
