@@ -322,7 +322,7 @@ namespace ncpp {
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
 				if (debug_info.is_default_alloc) {
 
-					NCPP_INCREASE_TOTAL_ALLOCATED_MEMORY(debug_info.actual_size);
+					NCPP_DECREASE_TOTAL_ALLOCATED_MEMORY(debug_info.actual_size);
 
 				}
 #endif
