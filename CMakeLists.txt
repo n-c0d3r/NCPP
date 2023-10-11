@@ -54,9 +54,7 @@ NCPP_VersionUtils_CreateVersionMacros(
 #####################################################################################
 #   Check and configure dependencies
 #####################################################################################
-if(NOT EXISTS ${NCPP_DEPENDENCIES_DIR})
-    include(NCPP/CheckDependencies)
-endif()
+include(NCPP/CheckDependencies)
 
 include(NCPP/ConfigureDependencies)
 
