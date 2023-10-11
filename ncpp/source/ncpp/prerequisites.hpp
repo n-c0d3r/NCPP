@@ -160,32 +160,6 @@ namespace ncpp {}
 
 #pragma endregion
 
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-
-#pragma region Windows Platform 
-#if defined(_WIN64) || defined(_WIN32)
-#include <Windows.h>
-#include <DirectXMath.h>
-#endif
-#pragma endregion
-
-#pragma endregion
-
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-
-#pragma region Unix Platform 
-
-#if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
-
-#include <unistd.h>
-#include <pthread.h>
-
-#endif
-
 #pragma endregion
 
 
@@ -205,117 +179,6 @@ namespace ncpp {}
 
 
 #pragma region Macros
-
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-
-#pragma region Platform
-
-// Check for Windows platform
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-    #define NCPP_WINDOWS_PLATFORM
-
-// Check for Apple platform
-#elif __APPLE__
-    #define NCPP_APPLE_PLATFORM
-    #define NCPP_POSIX_PLATFORM
-    //
-    #include <TargetConditionals.h>
-    #if TARGET_IPHONE_SIMULATOR
-    #elif TARGET_OS_MACCATALYST
-    #elif TARGET_OS_IPHONE
-    #elif TARGET_OS_MAC
-        #define NCPP_APPLE_MACOS_PLATFORM
-    #else
-    #   error "Unknown Apple platform"
-    #endif
-
-// Check for Android platform
-#elif __ANDROID__
-    #define NCPP_ANDROID_PLATFORM
-    #define NCPP_POSIX_PLATFORM
-
-// Check for Linux platform
-#elif __linux__
-    #define NCPP_LINUX_PLATFORM
-    #define NCPP_POSIX_PLATFORM
-
-// Check for Unix platform
-#elif __unix__ // all unices not caught above
-    #define NCPP_UNIX_PLATFORM
-    #define NCPP_POSIX_PLATFORM
-
-// Chheck for posix platform
-#elif defined(_POSIX_VERSION)
-    #define NCPP_POSIX_PLATFORM
-#else
-#   error "Unknown compiler"
-#endif
-
-#pragma endregion
-
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-
-#pragma region Arch
-
-#if defined(__x86_64__) || defined(_M_X64)
-#define NCPP_ARCH_TYPE_X86
-#define NCPP_ARCH_64_BITS
-#define NCPP_ARCH_BITS 64
-#define NCPP_ARCH_X86_64
-#elif defined(i386) || defined(__i386__) || defined(__i386) || defined(_M_IX86)
-#define NCPP_ARCH_TYPE_X86
-#define NCPP_ARCH_32_BITS
-#define NCPP_ARCH_BITS 32
-#define NCPP_ARCH_X86_32
-#elif defined(__ARM_ARCH_2__)
-#define NCPP_ARCH_TYPE_ARM
-#define NCPP_ARCH_32_BITS
-#define NCPP_ARCH_BITS 32
-#define NCPP_ARCH_ARM2
-#elif defined(__ARM_ARCH_3__) || defined(__ARM_ARCH_3M__)
-#define NCPP_ARCH_TYPE_ARM
-#define NCPP_ARCH_32_BITS
-#define NCPP_ARCH_BITS 32
-#define NCPP_ARCH_ARM3
-#elif defined(__ARM_ARCH_4T__) || defined(__TARGET_ARM_4T)
-#define NCPP_ARCH_TYPE_ARM
-#define NCPP_ARCH_32_BITS
-#define NCPP_ARCH_BITS 32
-#define NCPP_ARCH_ARM4T
-#elif defined(__ARM_ARCH_5_) || defined(__ARM_ARCH_5E_)
-#define NCPP_ARCH_TYPE_ARM
-#define NCPP_ARCH_32_BITS
-#define NCPP_ARCH_BITS 32
-#define NCPP_ARCH_ARM5
-#elif defined(__ARM_ARCH_6T2_) || defined(__ARM_ARCH_6T2_)
-#define NCPP_ARCH_TYPE_ARM
-#define NCPP_ARCH_32_BITS
-#define NCPP_ARCH_BITS 32
-#define NCPP_ARCH_ARM6T2
-#elif defined(__ARM_ARCH_6__) || defined(__ARM_ARCH_6J__) || defined(__ARM_ARCH_6K__) || defined(__ARM_ARCH_6Z__) || defined(__ARM_ARCH_6ZK__)
-#define NCPP_ARCH_TYPE_ARM
-#define NCPP_ARCH_32_BITS
-#define NCPP_ARCH_BITS 32
-#define NCPP_ARCH_ARM6
-#elif defined(__ARM_ARCH_7__) || defined(__ARM_ARCH_7A__) || defined(__ARM_ARCH_7R__) || defined(__ARM_ARCH_7M__) || defined(__ARM_ARCH_7S__)
-#define NCPP_ARCH_TYPE_ARM
-#define NCPP_ARCH_32_BITS
-#define NCPP_ARCH_BITS 32
-#define NCPP_ARCH_ARM7
-#elif defined(__aarch64__) || defined(_M_ARM64)
-#define NCPP_ARCH_TYPE_ARM
-#define NCPP_ARCH_64_BITS
-#define NCPP_ARCH_BITS 64
-#define NCPP_ARCH_ARM64 
-#else
-#error "Unknown hardware architecture";
-#endif
-
-#pragma endregion
 
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
@@ -360,7 +223,7 @@ namespace ncpp {}
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
-#pragma region Implements warning macros
+#pragma region Implements warning and assert macros
 // Implements static warning
 #if defined(__GNUC__)
 #define DEPRECATE(foo, msg) foo __attribute__((deprecated(msg)))
@@ -696,13 +559,8 @@ namespace ncpp {
 
     inline void pause_console() {
 
-#ifdef NCPP_WINDOWS_PLATFORM
-        system("pause");
-#endif
-
-#ifdef NCPP_POSIX_PLATFORM
-        system("read -s -n 1 -p \"Press any key to continue . . .\"");
-#endif
+        std::cout << "Press any key to continue..." << std::endl;
+        std::cin.get();
 
     }
 
