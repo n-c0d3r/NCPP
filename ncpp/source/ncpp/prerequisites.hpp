@@ -193,14 +193,7 @@ namespace ncpp {}
 ////////////////////////////////////////////////////////////////////////////////////
 
 #pragma region Alignment utility macros
-// alignment macros
-/*
-#if defined(_MSC_VER)
-#define NCPP_ALIGNAS(N) __declspec(align(N))
-#elif defined( __GNUC__ ) || defined(__MINGW64__)
-#define NCPP_ALIGNAS(N) alignas(N)
-#endif
-*/
+
 #if defined(__GNUC__) || defined(__clang__)
 #  define NCPP_ALIGN(x) __attribute__ ((aligned(x)))
 #elif defined(_MSC_VER)
@@ -271,7 +264,7 @@ struct NCPP_PP_CAT(NCPP_STATIC_WARNING,__LINE__) { \
 #define NCPP_DEBUG
 #define NCPP_WARNING(cond,...) if(!(cond)) {\
         std::cout << "Warning (" << __FILE__ << " at line " << __LINE__ << "):" << std::endl;\
-        std::cout << "    " << __VA_ARGS__ << std::endl;\
+        std::cout << __VA_ARGS__ << std::endl;\
     }
 #else
 #define NCPP_WARNING(cond,...) ;
