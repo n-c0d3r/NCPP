@@ -130,6 +130,7 @@ namespace ncpp {}
 #include <memory>
 #include <condition_variable>
 #include <chrono>
+#include <limits>
 
 #include <string.h>
 
@@ -300,6 +301,11 @@ struct NCPP_PP_CAT(NCPP_STATIC_WARNING,__LINE__) { \
 #define NCPP_I8_MAX 0x7F
 #define NCPP_I8_MIN -0x80
 
+#define NCPP_F32_MAX eastl::numeric_limits<float>::max();
+#define NCPP_F32_MIN eastl::numeric_limits<float>::min();
+#define NCPP_F64_MAX eastl::numeric_limits<double>::max();
+#define NCPP_F64_MIN eastl::numeric_limits<float>::max();
+
 #pragma endregion
 
 #pragma endregion
@@ -348,9 +354,9 @@ namespace ncpp {
     using i64 = int64_t; 
 
     /** 32bit floating-point type. */
-    using f32 = float; 
+    using f32 = float_t; 
     /** 64bit floating-point type. */
-    using f64 = double; 
+    using f64 = double_t; 
     
     /** 8bit boolean. */
     using b8 = bool; 
@@ -380,6 +386,11 @@ namespace ncpp {
     using ai32 = eastl::atomic<i32>;
     /** 64bit atomic signed integer. */
     using ai64 = eastl::atomic<i64>;
+
+    /** 32bit atomic floating-point type. */
+    using af32 = eastl::atomic<float_t>;
+    /** 64bit atomic floating-point type. */
+    using af64 = eastl::atomic<double_t>;
 
     /** 8bit atomic boolean. */
     using ab8 = eastl::atomic<b8>;

@@ -121,11 +121,11 @@ namespace ncpp {
 
 #define NCPP_ROBJECT_BODY_VIRTUAL \
 			NCPP_PRIVATE_KEYWORD NCPP_RTTI_IMPLEMENT_FLAG(F_this, ncpp::rtti::F_robject_virtual_flag);\
-			NCPP_PUBLIC_KEYWORD virtual void virtual_reflect(\
+			NCPP_PUBLIC_KEYWORD virtual F_robject_type_info* virtual_reflect(\
 					F_rcontainer* rcontainer_p, \
 					ncpp::rtti::rflag rflag = NCPP_RFLAG_DEFAULT\
 				) {\
-					F_this::static_reflect(rcontainer_p, rflag);\
+					return F_this::static_reflect(rcontainer_p, rflag);\
 				}
 
 		////////////////////////////////////////////////////////////////////////////////////
@@ -449,7 +449,7 @@ namespace ncpp {
 				NCPP_EXPAND(NCPP_FOR_EACH(NCPP_ROBJECT_BODY_STEP __VA_OPT__(,) __VA_ARGS__));\
 				\
 			NCPP_PUBLIC_KEYWORD\
-				static inline void static_reflect(\
+				static inline F_robject_type_info* static_reflect(\
 					F_rcontainer* rcontainer_p, \
 					ncpp::rtti::rflag rflag = NCPP_RFLAG_DEFAULT\
 				){\
@@ -468,6 +468,8 @@ namespace ncpp {
 						robject_type_info_p = ncpp::rtti::T_reflect_object_type<F_this, NCPP_RTTI_PASS_SEPECIFIC_USING()>(rcontainer_p, rflag);\
 					\
 					NCPP_EXPAND(NCPP_FOR_EACH(NCPP_ROBJECT_REFLECT_STEP __VA_OPT__(,) __VA_ARGS__));\
+					\
+					return robject_type_info_p;\
 					\
 				};\
 				\

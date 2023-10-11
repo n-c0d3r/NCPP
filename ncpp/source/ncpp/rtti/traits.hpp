@@ -229,13 +229,14 @@ namespace ncpp {
 					i32
 				> = 0
 			>
-			static void T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, rtti::rflag rflag = NCPP_RFLAG_DEFAULT) {
+			static F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, rtti::rflag rflag = NCPP_RFLAG_DEFAULT) {
 
 				if(object_p)
-					object_p->virtual_reflect(rcontainer_p, rflag);
+					return object_p->virtual_reflect(rcontainer_p, rflag);
 				else
-					F_robject__::static_reflect(rcontainer_p, rflag);
+					return F_robject__::static_reflect(rcontainer_p, rflag);
 
+				return 0;
 			}
 			template<
 				class F_robject__,
@@ -244,10 +245,9 @@ namespace ncpp {
 					i32
 				> = 0
 			>
-			static void T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, rtti::rflag rflag = NCPP_RFLAG_DEFAULT) {
+			static F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, rtti::rflag rflag = NCPP_RFLAG_DEFAULT) {
 
-				F_robject__::static_reflect(rcontainer_p, rflag);
-
+				return F_robject__::static_reflect(rcontainer_p, rflag);
 			}
 			template<
 				class F_robject__,
@@ -256,10 +256,9 @@ namespace ncpp {
 					i32
 				> = 0
 			>
-			static void T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, rtti::rflag rflag = NCPP_RFLAG_DEFAULT) {
+			static F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, rtti::rflag rflag = NCPP_RFLAG_DEFAULT) {
 
-
-
+				return 0;
 			}
 
 
