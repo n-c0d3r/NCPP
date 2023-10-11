@@ -458,6 +458,20 @@ namespace ncpp {
 				
 				free(p); 
 			}
+            
+            template<typename F__, typename... F_args__>
+            inline F__* T_new(F_args__&&... args) {
+                
+                return new(allocate(sizeof(F__), NCPP_ALIGNOF(F__), 0)) F__{ std::forward<F_args__>(args)... };
+            }
+            
+            template<typename F__>
+            inline void T_delete(F__* p) {
+                
+                p->~F__();
+                
+                deallocate(p);
+            }
 
 		};
 

@@ -10,7 +10,7 @@ int main() {
 	{
 		
 		mem::F_incremental_chunk_allocator incremental_chunk_allocator;
-
+        
 		mem::F_smart_chunk_storage smart_chunk_storage;
 		mem::F_smart_chunk_adaptor smart_chunk_adaptor(&smart_chunk_storage);
 		mem::F_smart_chunk_allocator smart_chunk_allocator(&smart_chunk_adaptor);
