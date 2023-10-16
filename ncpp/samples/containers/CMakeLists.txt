@@ -1,2 +1,2 @@
 
-add_subdirectory(ring_buffer)
+add_subdirectory(concurrent_ring_buffer)
