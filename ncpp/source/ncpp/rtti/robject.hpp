@@ -123,9 +123,10 @@ namespace ncpp {
 			NCPP_PRIVATE_KEYWORD NCPP_RTTI_IMPLEMENT_FLAG(F_this, ncpp::rtti::F_robject_virtual_flag);\
 			NCPP_PUBLIC_KEYWORD virtual F_robject_type_info* virtual_reflect(\
 					F_rcontainer* rcontainer_p, \
-					ncpp::rtti::rflag rflag = NCPP_RFLAG_DEFAULT\
+					ncpp::rtti::rflag rflag = NCPP_RFLAG_DEFAULT,\
+                    void* custom_data_p = 0\
 				) {\
-					return F_this::static_reflect(rcontainer_p, rflag);\
+					return F_this::static_reflect(rcontainer_p, rflag, custom_data_p);\
 				}
 
 		////////////////////////////////////////////////////////////////////////////////////
@@ -293,8 +294,7 @@ namespace ncpp {
 			{\
 				\
 				using F_member = MemberType;\
-				eastl::string member_name = #MemberName;\
-				NCPP_ROBJECT_WRAP_TYPE(MemberType) F_this::*member_p = &F_this::MemberName;\
+                using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, MemberType>;\
 				\
 				NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberType, MemberName);\
 				\
@@ -320,8 +320,7 @@ namespace ncpp {
 			{\
 				\
 				using F_member = MemberType;\
-				eastl::string member_name = #MemberName;\
-				NCPP_ROBJECT_WRAP_TYPE(MemberType) F_this::*member_p = &F_this::MemberName;\
+                using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, MemberType>;\
 				\
 				NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberType, MemberName);\
 				\
@@ -347,8 +346,7 @@ namespace ncpp {
 			{\
 				\
 				using F_member = MemberType;\
-				eastl::string member_name = #MemberName;\
-				NCPP_ROBJECT_WRAP_TYPE(MemberType) F_this::*member_p = &F_this::MemberName;\
+                using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, MemberType>;\
 				\
 				NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberType, MemberName);\
 				\
@@ -374,8 +372,7 @@ namespace ncpp {
 			{\
 				\
 				using F_member = MemberType;\
-				eastl::string member_name = #MemberName;\
-				NCPP_ROBJECT_WRAP_TYPE(MemberType) F_this::*member_p = &F_this::MemberName;\
+                using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, MemberType>;\
 				\
 				NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberType, MemberName);\
 				\
@@ -449,19 +446,22 @@ namespace ncpp {
 				NCPP_EXPAND(NCPP_FOR_EACH(NCPP_ROBJECT_BODY_STEP __VA_OPT__(,) __VA_ARGS__));\
 				\
 			NCPP_PUBLIC_KEYWORD\
-				static inline F_robject_type_info* static_reflect(\
+				template<typename F_compiletime_reflect_flag__>\
+				static inline F_robject_type_info* T_static_reflect(\
 					F_rcontainer* rcontainer_p, \
-					ncpp::rtti::rflag rflag = NCPP_RFLAG_DEFAULT\
+					ncpp::rtti::rflag rflag = NCPP_RFLAG_DEFAULT,\
+					void* custom_data_p = 0\
 				){\
 					\
 					F_robject_type_info* robject_type_info_p = reinterpret_cast<F_robject_type_info*>(0);\
 					F_robject_member_info* robject_member_info_p = reinterpret_cast<F_robject_member_info*>(0);\
 					\
 					if constexpr (NCPP_RTTI_IS_HAS_FLAG(F_this, ncpp::rtti::F_robject_has_base_flag))\
-						F_rtti_traits::template T_safe_reflect<typename F_rtti_traits::T_safe_base<F_this>::type>(\
+						F_rtti_traits::template T_safe_reflect<typename F_rtti_traits::T_safe_base<F_this>::type, false, F_this>(\
 							rcontainer_p,\
 							0,\
-							rflag\
+							rflag,\
+                            custom_data_p\
 						);\
 					\
 					if(rflag & NCPP_RFLAG_ROBJECT_TYPE_INFO)\
@@ -472,6 +472,14 @@ namespace ncpp {
 					return robject_type_info_p;\
 					\
 				};\
+				\
+				static inline F_robject_type_info* static_reflect(\
+					F_rcontainer* rcontainer_p, \
+					ncpp::rtti::rflag rflag = NCPP_RFLAG_DEFAULT,\
+					void* custom_data_p = 0\
+				){\
+					return T_static_reflect<void>(rcontainer_p, rflag, custom_data_p);\
+				}\
 				\
 			NCPP_PUBLIC_KEYWORD\
 				static constexpr ncpp::b8 is_virtual = NCPP_RTTI_IS_HAS_FLAG(F_this, ncpp::rtti::F_robject_virtual_flag);\
