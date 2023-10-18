@@ -4,3 +4,5 @@ add_subdirectory(basic_allocation)
 add_subdirectory(dummy_allocator)
 add_subdirectory(chunk_based_allocators)
 add_subdirectory(link_allocator)
+
+add_subdirectory(garbage_collection)

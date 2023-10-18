@@ -1,6 +1,6 @@
 #pragma once
 
-/** @file ncpp/default_allocator.hpp
+/** @file ncpp/mem/default_allocator.hpp
 *	@brief Implements default allocator.
 */
 

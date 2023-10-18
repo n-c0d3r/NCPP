@@ -1,6 +1,6 @@
 #pragma once
 
-/** @file ncpp/chunk_allocator.hpp
+/** @file ncpp/mem/chunk_allocator.hpp
 *	@brief Implements chunk allocator.
 */
 

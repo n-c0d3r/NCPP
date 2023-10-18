@@ -18,7 +18,7 @@ class A {
 
 void A::foo() {
 
-
+    
 
 }
 

@@ -1,6 +1,6 @@
 #pragma once
 
-/** @file ncpp/link_allocator.hpp
+/** @file ncpp/mem/link_allocator.hpp
 *	@brief Implements link allocator.
 */
 
