@@ -84,6 +84,9 @@ namespace ncpp {
 		public:
 			inline F_allocator& allocator() { return allocator_; }
 			inline const F_allocator& allocator() const { return allocator_; }
+            
+            inline const eastl::unordered_map<sz, F_robject_type_info*>& hash_code_to_robject_type_info_p_map() const { return hash_code_to_robject_type_info_p_map_; }
+            inline const eastl::unordered_map<eastl::string, F_robject_type_info*>& name_to_robject_type_info_p_map() const { return name_to_robject_type_info_p_map_; }
 
 			inline F_robject_type_info* robject_type_info(sz hash_code) {
 

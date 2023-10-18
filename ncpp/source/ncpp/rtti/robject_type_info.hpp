@@ -77,11 +77,11 @@ namespace ncpp {
 			sz hash_code_ = 0;
 			eastl::string name_;
 			TF_robject_type_info* base_type_info_p_ = 0;
+            
+            eastl::unordered_map<eastl::string, F_robject_member_info*> name_to_member_info_p_map_;
 
 		public:
 			F_robject_type_info_additional_data additional_data;
-
-			eastl::unordered_map<eastl::string, F_robject_member_info*> name_to_member_info_p_map_;
 
 		public:
 			inline F_rcontainer* rcontainer_p() { return rcontainer_p_; }
@@ -90,6 +90,8 @@ namespace ncpp {
 			inline eastl::string name() const { return name_; }
 			inline TF_robject_type_info* get_base_type_info_p() { return base_type_info_p_; }
 			inline const TF_robject_type_info* get_base_type_info_p() const { return base_type_info_p_; }
+            
+            inline const eastl::unordered_map<eastl::string, F_robject_member_info*>& name_to_member_info_p_map() const { return name_to_member_info_p_map_; }
 
 			inline F_robject_member_info* member_info(const eastl::string& name) {
 
