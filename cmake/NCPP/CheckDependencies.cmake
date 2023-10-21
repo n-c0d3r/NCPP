@@ -16,7 +16,7 @@ endif()
 #   Main checkings
 #####################################################################################
 include(NCPP/CheckEADependencies)
-include(NCPP/CheckDoxygenThemeDependencies)
+include(NCPP/CheckDoxygenThemeDependency)
 
 
 
