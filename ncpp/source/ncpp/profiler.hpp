@@ -123,7 +123,7 @@ namespace ncpp {
 
 
 #ifdef NCPP_ENABLE_SCOPED_PROFILER_SAMPLE
-#define NCPP_SCOPED_PROFILER_SAMPLE(Content) ncpp::F_profiler_sample ___ncpp_profiler_sample___(Content);
+#define NCPP_SCOPED_PROFILER_SAMPLE(Content) ncpp::F_profiler_sample NCPP_GLUE(___ncpp_profiler_sample___, __LINE__)(Content);
 #else
 #define NCPP_SCOPED_PROFILER_SAMPLE(Content) ;
 #endif

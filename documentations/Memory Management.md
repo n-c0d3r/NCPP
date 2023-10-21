@@ -13,4 +13,10 @@ Having designed for game engine learning purposes, we focus on high performance 
 ---
 
 ## Memory Counting and Memory Debugging
-    - One of the key feature in our memory management is the powerful debugging and memory counting capabilities.
+    + **Memory counting**: NCPP has its own functionalities and flexible approach for parallel memory counting.
+    + **Debug info**: stores the info of allocator name, memory size, etc, and is embedded before the allocated memory block if the allocator name or memory counting is enabled.
+
+---
+
+## Chunk Based Allocators
+    
