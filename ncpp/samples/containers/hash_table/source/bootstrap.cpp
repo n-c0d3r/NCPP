@@ -16,8 +16,8 @@ int main() {
         ht.add(1, 3);
         ht.add(1, 4);
         
-        ht.add(2, 1);
-        ht.add(2, 2);
+        ht.add(2, 5);
+        ht.add(2, 6);
         
         for(u32 index = ht.first(1); ht.is_valid(index); index = ht.next(index)){
             
