@@ -1,6 +1,6 @@
 #pragma once
 
-/** @file ncpp/mem.hpp
+/** @file ncpp/profiler.hpp
 *	@brief Contains the memory management utilities.
 */
 

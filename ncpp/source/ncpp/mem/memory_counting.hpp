@@ -1,6 +1,6 @@
 #pragma once
 
-/** @file ncpp/native_memory_counting.hpp
+/** @file ncpp/mem/memory_counting.hpp
 *	@brief Implements native memory counting functionalities.
 */
 

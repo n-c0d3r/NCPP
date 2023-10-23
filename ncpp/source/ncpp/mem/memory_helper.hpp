@@ -1,6 +1,6 @@
 #pragma once
 
-/** @file ncpp/memory_helper.hpp
+/** @file ncpp/mem/memory_helper.hpp
 *	@brief Implements memory helper.
 */
 
