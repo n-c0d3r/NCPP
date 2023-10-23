@@ -8,3 +8,5 @@ add_subdirectory(memory_management)
 add_subdirectory(containers)
 
 add_subdirectory(rtti)
+
+add_subdirectory(event)
