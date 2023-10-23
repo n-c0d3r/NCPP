@@ -1,8 +1,8 @@
 #pragma once
 
 /**
- *  @file ncpp/utilities/basic_math.hpp
- *  @brief Implements basic_math.
+ *  @file ncpp/utilities/event.hpp
+ *  @brief Implements event.
  */
 
 
@@ -29,6 +29,12 @@
 
 #include <ncpp/prerequisites.hpp>
 
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
+#include <ncpp/event/event_option.hpp>
+
 #pragma endregion 
 
 
@@ -49,42 +55,95 @@
 
 namespace ncpp {
 
-    namespace utilities {
+    namespace event {
+
+        template<class F_event_option__>
+        class TF_event {
+
+        private:
+            using F_this = TF_event<F_event_option__>;
 
 
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        public:
+            using F_event_option = F_event_option__;
+            using F_event = TF_event<F_event_option>;
+            using F_event_storage = TF_event_storage<F_event_option>;
+            using F_listener_list_allocator = typename F_event_option::F_event_listener_list_allocator;
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            using F_listener = eastl::function<void(F_this&)>;
+            using F_listener_list = eastl::list<F_listener, F_listener_list_allocator>;
+            using F_listener_handle = typename F_listener_list::iterator;
 
 
 
-        static inline b8 is_power_of_two(f32 value){
-            
-            f32 exponental = std::log(value) / std::log(2.0f);
-            
-            return exponental == i32(exponental);
-        }
-        static inline f32 round_down_to_power_of_two(f32 value){
-            
-            f32 exponental = std::floor(std::log(value) / std::log(2.0f));
-            
-            return std::pow(2.0f, exponental);
-        }
-        static inline f32 round_up_to_power_of_two(f32 value){
-            
-            f32 exponental = std::ceil(std::log(value) / std::log(2.0f));
-            
-            return std::pow(2.0f, exponental);
-        }
+        public:
+            friend class F_event_storage;
+
+
+
+        private:
+            F_listener_list listener_list_;
+            u32 index_ = 0;
+            u64 hash_code_ = 0;
+
+        public:
+            inline u64 hash_code() const { return hash_code_; }
+
+
+
+        public:
+            inline TF_event(u64 hash_code = 0, const F_listener_list_allocator& listener_list_allocator = F_listener_list_allocator()) :
+                listener_list_(listener_list_allocator),
+                hash_code_(hash_code)
+            {
+
+
+
+            }
+            ~TF_event() {
+
+
+
+            }
+
+
+
+        public:
+            template<typename F_func__>
+            inline F_listener_handle T_push_back_listener(F_func__&& func) {
+
+                listener_list_.push_back(std::forward<F_func__>(func));
+
+                return --listener_list_.end();
+            }
+            template<typename F_func__>
+            inline F_listener_handle T_push_front_listener(F_func__&& func) {
+
+                listener_list_.push_front(std::forward<F_func__>(func));
+
+                return listener_list_.begin();
+            }
+            inline void remove_listener(F_listener_handle handle) {
+
+                listener_list_.erase(handle);
+            }
+
+            void invoke() {
+
+                for (auto& listener : listener_list_) {
+
+                    listener(*this);
+
+                }
+
+            }
+
+        };
+
+
+
+        using F_event = TF_event<>;
 
     }
 
