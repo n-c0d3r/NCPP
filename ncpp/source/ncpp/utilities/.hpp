@@ -71,5 +71,6 @@ namespace ncpp {
 #include <ncpp/utilities/is_streamable.hpp>
 
 #include <ncpp/utilities/murmur_hash.hpp>
+#include <ncpp/utilities/basic_math.hpp>
 
 #pragma endregion

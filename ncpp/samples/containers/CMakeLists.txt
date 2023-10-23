@@ -1,2 +1,4 @@
 
 add_subdirectory(concurrent_ring_buffer)
+add_subdirectory(ring_buffer)
+add_subdirectory(hash_table)

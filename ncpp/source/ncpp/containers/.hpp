@@ -58,8 +58,9 @@ namespace ncpp {
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
+#include <ncpp/containers/eastl_containers.hpp>
 #include <ncpp/containers/ring_buffer.hpp>
 #include <ncpp/containers/concurrent_ring_buffer.hpp>
-#include <ncpp/containers/eastl_containers.hpp>
+#include <ncpp/containers/hash_table.hpp>
 
 #pragma endregion
