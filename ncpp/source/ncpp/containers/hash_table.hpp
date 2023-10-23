@@ -86,11 +86,14 @@ namespace ncpp {
             
             
         public:
-            inline TF_hash_table(u32 hash_size = 2, u32 index_size = 0) :
+            inline TF_hash_table(u32 hash_size = 2, u32 index_size = 0, const F_allocator& allocator = F_allocator()) :
                 hash_size_(hash_size),
                 index_size_(index_size),
 
-				hash_mask_(hash_size_ - 1)
+				hash_mask_(hash_size_ - 1),
+
+                hash_vector_(allocator),
+                index_vector_(allocator)
             {
                 
 				assert(hash_size_ > 0 && "hash size must be greater than zero");
