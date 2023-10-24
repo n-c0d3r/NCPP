@@ -106,7 +106,7 @@ namespace ncpp {
 
                 assert(instance_ps == 0 && "only accept 1 instance at a time!");
 
-                instance_ps = dynamic_cast<F_instance*>(this);
+                instance_ps = (F_instance*)this;
 
             }
 
