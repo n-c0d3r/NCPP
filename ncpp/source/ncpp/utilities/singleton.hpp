@@ -88,7 +88,7 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         private:
-            static F_instance__* instance_ps;/**< instance pointer. */
+            static F_instance* instance_ps;/**< instance pointer. */
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -106,7 +106,7 @@ namespace ncpp {
 
                 assert(instance_ps == 0 && "only accept 1 instance at a time!");
 
-                instance_ps = (F_instance__*)this;
+                instance_ps = dynamic_cast<F_instance*>(this);
 
             }
 
