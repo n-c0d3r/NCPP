@@ -1,8 +1,8 @@
 #pragma once
 
 /**
- *  @file ncpp/utilities/event_storage.hpp
- *  @brief Implements event storage.
+ *  @file ncpp/event.hpp
+ *  @brief Implements event.
  */
 
 
@@ -33,13 +33,7 @@
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
-#include <ncpp/event/event_option.hpp>
-
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-
-#include <ncpp/containers/hash_table.hpp>
+#include <ncpp/mem/default_allocator.hpp>
 
 #pragma endregion 
 
@@ -61,114 +55,100 @@
 
 namespace ncpp {
 
-    namespace event {
+    template<class F_listener_list_allocator__ = mem::F_default_allocator>
+    class TF_event {
 
-        template<class F_event_option__>
-        class TF_event_storage {
-
-        public:
-            using F_event_option = F_event_option__;
-            using F_event = TF_event<F_event_option>;
-            using F_event_storage = TF_event_storage<F_event_option>;
-            using F_event_hash_table_allocator = typename F_event_option::F_event_hash_table_allocator;
-            using F_event_p_vector_allocator = typename F_event_option::F_event_p_vector_allocator;
-
-            using F_event_hash_table = containers::TF_hash_table<F_event_hash_table_allocator>;
-            using F_event_p_vector = eastl::vector<F_event*, F_event_p_vector_allocator>;
+    private:
+        using F_this = TF_event<F_listener_list_allocator__>;
 
 
 
-        private:
-            F_event_hash_table event_hash_table_;
-            F_event_p_vector event_p_vector_;
+    public:
+        using F_listener_list_allocator = F_listener_list_allocator__;
 
-        public:
-
-
-
-        public:
-            inline TF_event_storage(u32 event_hash_table_hash_size = 64, u32 event_hash_table_index_size = 64, const F_event_hash_table_allocator& event_hash_table_allocator = F_event_hash_table_allocator(), const F_event_p_vector_allocator& event_p_vector_allocator = F_event_p_vector_allocator()) :
-                event_hash_table_(event_hash_table_hash_size, event_hash_table_index_size, event_hash_table_allocator),
-                event_p_vector_(event_p_vector_allocator)
-            {
-
-                event_p_vector_.reserve(event_hash_table_index_size);
-
-            }
-            ~TF_event_storage() {
+        using F_listener = eastl::function<void(F_this&)>;
+        using F_listener_list = eastl::list<F_listener, F_listener_list_allocator>;
+        using F_listener_handle = typename F_listener_list::iterator;
 
 
 
-            }
+    public:
+        friend class F_event_storage;
 
 
 
-        public:
-            void add_event(F_event& e) {
+    private:
+        F_listener_list listener_list_;
+        u32 index_ = 0;
+        u64 hash_code_ = 0;
 
-                assert((event_hash_table_.first(e.hash_code_) != NCPP_U32_MAX) && "this event is already added");
+    public:
+        inline u64 hash_code() const { return hash_code_; }
 
-                u32 index = event_p_vector_.size();
 
-                event_p_vector_.push_back(&e);
 
-                e.index_ = index;
+    public:
+        inline TF_event(u64 hash_code = 0, const F_listener_list_allocator& listener_list_allocator = F_listener_list_allocator()) :
+            listener_list_(listener_list_allocator),
+            hash_code_(hash_code)
+        {
 
-                event_hash_table_.add(e.hash_code(), index);
-            }
-            F_event& find_event(u64 hash_code) {
 
-                u32 index = event_hash_table_.first(hash_code);
 
-                assert((index != NCPP_U32_MAX) && "there is no event with this hash code");
+        }
+        ~TF_event() {
 
-                return *(event_p_vector_[index]);
-            }
-            void remove_event(F_event& e) {
 
-                assert((event_hash_table_.first(e.hash_code_) == e.index_) && "invalid event to remove");
 
-                u32 index = e.index_;
-                u32 last_index = event_p_vector_.size() - 1;
+        }
 
-                F_event& back_e = *(event_p_vector_[last_index]);
 
-                event_p_vector_[index] = event_p_vector_.back();
-                event_p_vector_.resize(last_index);
 
-                event_hash_table_.remove(e.hash_code(), index);
-                event_hash_table_.remove(back_e.hash_code(), last_index);
+    public:
+        template<typename F_func__>
+        inline F_listener_handle T_push_back_listener(F_func__&& func) {
 
-                event_hash_table_.add(back_e.hash_code(), index);
+            listener_list_.push_back(std::forward<F_func__>(func));
+
+            return --listener_list_.end();
+        }
+        template<typename F_func__>
+        inline F_listener_handle T_push_front_listener(F_func__&& func) {
+
+            listener_list_.push_front(std::forward<F_func__>(func));
+
+            return listener_list_.begin();
+        }
+        inline void remove_listener(F_listener_handle handle) {
+
+            listener_list_.erase(handle);
+        }
+
+        void invoke() {
+
+            for (auto& listener : listener_list_) {
+
+                listener(*this);
 
             }
 
-        };
+        }
+
+    };
 
 
 
-        using F_event_storage = TF_event_storage<>;
+    using F_event = TF_event<>;
 
 
-
-#define NCPP_STATIC_EVENTS_ADD_STEP(I, EventName) add_event(EventName);
 
 #define NCPP_STATIC_EVENTS_GETTER_STEP(I, EventName) \
-            template<> \
-            inline F_event& T_get_event<decltype(EventName)>() { return EventName; };
+        template<> \
+        inline auto& T_get_event<decltype(EventName)>() { return EventName; };
 
 #define NCPP_DECLARE_STATIC_EVENTS(...) \
-            inline void add_static_events() {\
-                \
-                NCPP_EXPAND(NCPP_FOR_EACH(NCPP_STATIC_EVENTS_ADD_STEP __VA_OPT__(,) __VA_ARGS__));\
-                \
-            }\
-            template<class F_event__> \
-            inline F_event& T_get_event(); \
-            NCPP_EXPAND(NCPP_FOR_EACH(NCPP_STATIC_EVENTS_GETTER_STEP __VA_OPT__(,) __VA_ARGS__));
-
-#define NCPP_ADD_STATIC_EVENTS() add_static_events();
-
-    }
+        template<class F_event__> \
+        inline auto& T_get_event(); \
+        NCPP_EXPAND(NCPP_FOR_EACH(NCPP_STATIC_EVENTS_GETTER_STEP __VA_OPT__(,) __VA_ARGS__));
 
 }
