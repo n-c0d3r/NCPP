@@ -59,7 +59,7 @@ namespace ncpp { }
 #include <ncpp/pac/.hpp>
 #include <ncpp/containers/.hpp>
 #include <ncpp/rtti/.hpp>
-#include <ncpp/event/.hpp>
+#include <ncpp/event.hpp>
 
 #pragma endregion
 

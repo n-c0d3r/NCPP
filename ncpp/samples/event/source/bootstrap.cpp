@@ -5,13 +5,13 @@ using namespace ncpp;
 
 
 
-class F_event_1 : public event::F_event {
+class F_event_1 : public F_event {
 
 
 
 };
 
-class F_event_2 : public event::F_event {
+class F_event_2 : public F_event {
 
 
 
@@ -19,12 +19,12 @@ class F_event_2 : public event::F_event {
 
 
 
-class F_sample_event_storage : public event::F_event_storage {
+class F_sample_event_storage {
 
 public:
 	F_sample_event_storage() {
 
-		NCPP_ADD_STATIC_EVENTS();
+
 
 	}
 	~F_sample_event_storage() {
@@ -54,7 +54,7 @@ int main() {
 
 		F_sample_event_storage event_storage;
 
-		event::F_event& e_r = event_storage.T_get_event<F_event_1>();
+		F_event& e_r = event_storage.T_get_event<F_event_1>();
 
 		auto listener_handle1 = e_r.T_push_back_listener([](auto& e) {
 
