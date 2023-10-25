@@ -40,6 +40,21 @@ option(NCPP_ENABLE_AVX "Enable AVX instructions" ON)
 option(NCPP_ENABLE_AVX2 "Enable AVX2 instructions" ON)
 option(NCPP_ENABLE_ARM_NEON "Enable ARM Neon instructions" OFF)
 
+NCPP_SetGlobal(NCPP_BEST_INSTRUCTION_EXTENSION NONE)
+if(NCPP_ENABLE_SSE)
+    NCPP_SetGlobal(NCPP_BEST_INSTRUCTION_EXTENSION SSE)
+endif()
+if(NCPP_ENABLE_AVX)
+    NCPP_SetGlobal(NCPP_BEST_INSTRUCTION_EXTENSION AVX)
+endif()
+if(NCPP_ENABLE_AVX2)
+    NCPP_SetGlobal(NCPP_BEST_INSTRUCTION_EXTENSION AVX2)
+endif()
+if(NCPP_ENABLE_ARM_NEON)
+    NCPP_SetGlobal(NCPP_BEST_INSTRUCTION_EXTENSION ARM_NEON)
+endif()
+
+
 
 
 #####################################################################################
