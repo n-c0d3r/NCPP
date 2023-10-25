@@ -34,6 +34,12 @@ set(NCPP_TAB_SIZE 4 CACHE STRING "Tab Size")
 set(NCPP_MAX_TAB_COUNT 8 CACHE STRING "Max Tab Count")
 option(NCPP_ENABLE_LOG_COLOR "Enable log color" ON)
 
+# ncpp platform specific instruction extension options
+option(NCPP_ENABLE_SSE "Enable SSE instructions" ON)
+option(NCPP_ENABLE_AVX "Enable AVX instructions" ON)
+option(NCPP_ENABLE_AVX2 "Enable AVX2 instructions" ON)
+option(NCPP_ENABLE_ARM_NEON "Enable ARM Neon instructions" OFF)
+
 
 
 #####################################################################################
