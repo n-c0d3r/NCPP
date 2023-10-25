@@ -14,6 +14,8 @@ include(NCPP/SetGlobal)
 include(NCPP/PrerequisiteMacros)
 include(NCPP/RTTIMacros)
 
+include(NCPP/SIMDCompilerFlags)
+
 include(NCPP/ConfigureCompiler)
 
 
@@ -51,10 +53,10 @@ endif()
 
 # Check for SIMD support
 include(CheckCXXCompilerFlag)
-CHECK_CXX_COMPILER_FLAG("-msse" COMPILER_SUPPORTS_SSE)
-CHECK_CXX_COMPILER_FLAG("-mavx" COMPILER_SUPPORTS_AVX)
-CHECK_CXX_COMPILER_FLAG("-mavx2" COMPILER_SUPPORTS_AVX2)
-CHECK_CXX_COMPILER_FLAG("-mfpu=neon" COMPILER_SUPPORTS_ARM_NEON)
+CHECK_CXX_COMPILER_FLAG(${NCPP_COMPILER_FLAG_SSE} COMPILER_SUPPORTS_SSE)
+CHECK_CXX_COMPILER_FLAG(${NCPP_COMPILER_FLAG_AVX} COMPILER_SUPPORTS_AVX)
+CHECK_CXX_COMPILER_FLAG(${NCPP_COMPILER_FLAG_AVX2} COMPILER_SUPPORTS_AVX2)
+CHECK_CXX_COMPILER_FLAG(${NCPP_COMPILER_FLAG_ARM_NEON} COMPILER_SUPPORTS_ARM_NEON)
 
 if(NCPP_ENABLE_SSE AND NOT COMPILER_SUPPORTS_SSE)
     set(NCPP_ENABLE_SSE OFF)
@@ -194,19 +196,19 @@ if(MSVC)
 endif()
 
 if(NCPP_ENABLE_SSE)
-    target_compile_options(ncpp PUBLIC -msse)
+    target_compile_options(ncpp PUBLIC ${NCPP_COMPILER_FLAG_SSE})
 endif()
 
 if(NCPP_ENABLE_AVX)
-    target_compile_options(ncpp PUBLIC -mavx)
+    target_compile_options(ncpp PUBLIC ${NCPP_COMPILER_FLAG_AVX})
 endif()
 
 if(NCPP_ENABLE_AVX2)
-    target_compile_options(ncpp PUBLIC -mavx2)
+    target_compile_options(ncpp PUBLIC ${NCPP_COMPILER_FLAG_AVX2})
 endif()
 
 if(NCPP_ENABLE_ARM_NEON)
-    target_compile_options(ncpp PUBLIC -mfpu=neon)
+    target_compile_options(ncpp PUBLIC ${NCPP_COMPILER_FLAG_ARM_NEON})
 endif()
 
 
