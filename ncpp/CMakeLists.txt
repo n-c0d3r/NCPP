@@ -40,6 +40,30 @@ option(NCPP_ENABLE_AVX "Enable AVX instructions" ON)
 option(NCPP_ENABLE_AVX2 "Enable AVX2 instructions" ON)
 option(NCPP_ENABLE_ARM_NEON "Enable ARM Neon instructions" OFF)
 
+# Check for SIMD support
+include(CheckCXXCompilerFlag)
+CHECK_CXX_COMPILER_FLAG("-msse" COMPILER_SUPPORTS_SSE)
+CHECK_CXX_COMPILER_FLAG("-mavx" COMPILER_SUPPORTS_AVX)
+CHECK_CXX_COMPILER_FLAG("-mavx2" COMPILER_SUPPORTS_AVX2)
+CHECK_CXX_COMPILER_FLAG("-mfpu=neon" COMPILER_SUPPORTS_ARM_NEON)
+
+if(NOT COMPILER_SUPPORTS_SSE)
+    set(NCPP_ENABLE_SSE OFF)
+endif()
+
+if(NOT COMPILER_SUPPORTS_AVX)
+    set(NCPP_ENABLE_AVX OFF)
+endif()
+
+if(NOT COMPILER_SUPPORTS_AVX2)
+    set(NCPP_ENABLE_AVX2 OFF)
+endif()
+
+if(NOT COMPILER_SUPPORTS_ARM_NEON)
+    set(NCPP_ENABLE_ARM_NEON OFF)
+endif()
+
+# Set NCPP_BEST_INSTRUCTION_EXTENSION
 NCPP_SetGlobal(NCPP_BEST_INSTRUCTION_EXTENSION NONE)
 if(NCPP_ENABLE_SSE)
     NCPP_SetGlobal(NCPP_BEST_INSTRUCTION_EXTENSION SSE)
@@ -158,6 +182,22 @@ if(MSVC)
     target_compile_options(ncpp 
         PUBLIC /Zc:preprocessor
     )
+endif()
+
+if(NCPP_ENABLE_SSE)
+    target_compile_options(ncpp PUBLIC -msse)
+endif()
+
+if(NCPP_ENABLE_AVX)
+    target_compile_options(ncpp PUBLIC -mavx)
+endif()
+
+if(NCPP_ENABLE_AVX2)
+    target_compile_options(ncpp PUBLIC -mavx2)
+endif()
+
+if(NCPP_ENABLE_ARM_NEON)
+    target_compile_options(ncpp PUBLIC -mfpu=neon)
 endif()
 
 
