@@ -108,6 +108,14 @@ namespace ncpp {}
 #include <xmmintrin.h>
 #endif
 
+#ifdef NCPP_ENABLE_SSE2
+#include <emmintrin.h>
+#endif
+
+#ifdef NCPP_ENABLE_SSE4
+#include <smmintrin.h>
+#endif
+
 #if defined(NCPP_ENABLE_AVX) || defined(NCPP_ENABLE_AVX2)
 #include <immintrin.h>
 #endif
