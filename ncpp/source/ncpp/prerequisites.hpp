@@ -116,7 +116,7 @@ namespace ncpp {}
 #include <smmintrin.h>
 #endif
 
-#if defined(NCPP_ENABLE_AVX) || defined(NCPP_ENABLE_AVX2)
+#if defined(NCPP_ENABLE_AVX) || defined(NCPP_ENABLE_AVX2) || defined(NCPP_ENABLE_FMA3)
 #include <immintrin.h>
 #endif
 

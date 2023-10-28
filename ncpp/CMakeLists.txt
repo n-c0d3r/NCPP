@@ -42,6 +42,7 @@ option(NCPP_ENABLE_SSE2 "Enable SSE2 instructions" ON)
 option(NCPP_ENABLE_SSE4 "Enable SSE4 instructions" ON)
 option(NCPP_ENABLE_AVX "Enable AVX instructions" ON)
 option(NCPP_ENABLE_AVX2 "Enable AVX2 instructions" ON)
+option(NCPP_ENABLE_FMA3 "Enable FMA3 instructions" ON)
 option(NCPP_ENABLE_ARM_NEON "Enable ARM Neon instructions" OFF)
 
 # Setup dependent instruction extensions
@@ -51,6 +52,11 @@ endif()
 if(NCPP_ENABLE_AVX)
     set(NCPP_ENABLE_SSE4 ON)
 endif()
+
+if(NCPP_ENABLE_FMA3)
+    set(NCPP_ENABLE_SSE4 ON)
+endif()
+
 if(NCPP_ENABLE_SSE4)
     set(NCPP_ENABLE_SSE2 ON)
 endif()
@@ -179,6 +185,10 @@ if(NCPP_ENABLE_AVX)
 endif()
 if(NCPP_ENABLE_AVX2)
     target_compile_options(ncpp PUBLIC ${NCPP_COMPILER_FLAG_AVX2})
+endif()
+
+if(NCPP_ENABLE_FMA3)
+    target_compile_options(ncpp PUBLIC ${NCPP_COMPILER_FLAG_FMA3})
 endif()
 
 if(NCPP_ENABLE_ARM_NEON)
