@@ -112,6 +112,10 @@ namespace ncpp {}
 #include <emmintrin.h>
 #endif
 
+#ifdef NCPP_ENABLE_SSE3
+#include <pmmintrin.h>
+#endif
+
 #ifdef NCPP_ENABLE_SSE4
 #include <smmintrin.h>
 #endif
