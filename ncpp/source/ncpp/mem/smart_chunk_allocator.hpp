@@ -464,7 +464,7 @@ namespace ncpp {
 
 		public:
 			// Default chunk capacity is 2MiB
-			NCPP_FORCE_INLINE TF_smart_chunk_allocator(F_adaptor* adaptor_p = 0, u16 min_chunk_count = 0, const char* name = 0) :
+			inline TF_smart_chunk_allocator(F_adaptor* adaptor_p = 0, u16 min_chunk_count = 0, const char* name = 0) :
 				F_base(name),
 				adaptor_p_(adaptor_p),
 
@@ -485,7 +485,7 @@ namespace ncpp {
 				}
 
 			}
-			NCPP_FORCE_INLINE TF_smart_chunk_allocator(const TF_smart_chunk_allocator& x) :
+			inline TF_smart_chunk_allocator(const TF_smart_chunk_allocator& x) :
 				TF_smart_chunk_allocator(x.adaptor_p_, x.min_chunk_count_, x.name_)
 			{
 
@@ -501,7 +501,7 @@ namespace ncpp {
 
 
 		private:
-			NCPP_FORCE_INLINE F_smart_chunk_header* push_new_chunk() {
+			F_smart_chunk_header* push_new_chunk() {
 
 				assert(adaptor_p_ && "adaptor is null, cant push new chunk");
 
@@ -526,7 +526,7 @@ namespace ncpp {
 
 				return new_chunk_p;
 			}
-			NCPP_FORCE_INLINE F_smart_chunk_header* optain_next_chunk(F_smart_chunk_header* chunk_p) {
+			F_smart_chunk_header* optain_next_chunk(F_smart_chunk_header* chunk_p) {
 
 				if (chunk_p && chunk_p->next_p) {
 
@@ -537,7 +537,7 @@ namespace ncpp {
 
 				return push_new_chunk();
 			}
-			NCPP_FORCE_INLINE void erase_chunk(F_smart_chunk_header* chunk_p) {
+			void erase_chunk(F_smart_chunk_header* chunk_p) {
 
 				assert(adaptor_p_ && "adaptor is null, cant erase chunk");
 

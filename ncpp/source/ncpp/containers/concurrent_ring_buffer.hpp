@@ -95,12 +95,12 @@ namespace ncpp {
 
 
 		public:
-			NCPP_FORCE_INLINE TF_concurrent_ring_buffer() {
+			inline TF_concurrent_ring_buffer() {
 
 
 
 			}
-			NCPP_FORCE_INLINE TF_concurrent_ring_buffer(sz capacity) :
+			inline TF_concurrent_ring_buffer(sz capacity) :
 				capacity_(capacity),
 				item_vector_(capacity)
 			{
@@ -109,7 +109,7 @@ namespace ncpp {
 
 			}
 
-			NCPP_FORCE_INLINE TF_concurrent_ring_buffer(const TF_concurrent_ring_buffer& x) :
+			inline TF_concurrent_ring_buffer(const TF_concurrent_ring_buffer& x) :
 				item_vector_(x.item_vector_),
 				capacity_(x.capacity_),
 				begin_(x.begin_),
@@ -119,7 +119,7 @@ namespace ncpp {
 
 
 			}
-			NCPP_FORCE_INLINE TF_concurrent_ring_buffer& operator = (const TF_concurrent_ring_buffer& x) {
+			inline TF_concurrent_ring_buffer& operator = (const TF_concurrent_ring_buffer& x) {
 
 				item_vector_ = x.item_vector_;
 				capacity_ = x.capacity_;
@@ -128,7 +128,7 @@ namespace ncpp {
 
 			}
 
-			NCPP_FORCE_INLINE TF_concurrent_ring_buffer(TF_concurrent_ring_buffer&& x) :
+			inline TF_concurrent_ring_buffer(TF_concurrent_ring_buffer&& x) :
 				item_vector_(std::move(x.item_vector_)),
 				capacity_(x.capacity_),
 				begin_(x.begin_),
@@ -138,7 +138,7 @@ namespace ncpp {
 
 
 			}
-			NCPP_FORCE_INLINE TF_concurrent_ring_buffer& operator = (TF_concurrent_ring_buffer&& x) {
+			inline TF_concurrent_ring_buffer& operator = (TF_concurrent_ring_buffer&& x) {
 
 				item_vector_ = std::move(x.item_vector_);
 				capacity_ = x.capacity_;
@@ -175,7 +175,7 @@ namespace ncpp {
 				T_push(std::forward<F_item>(item));
 			}
 
-			NCPP_FORCE_INLINE F_item pop() {
+			F_item pop() {
 
 				reader_lock_.lock();
 
@@ -191,7 +191,7 @@ namespace ncpp {
 				return std::move(item_vector_[begin % capacity_]);
 			}
 
-			NCPP_FORCE_INLINE b8 try_pop(F_item& item) {
+			b8 try_pop(F_item& item) {
 
 				reader_lock_.lock();
 

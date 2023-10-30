@@ -80,14 +80,14 @@ namespace ncpp {
 
 
 		public:
-			NCPP_FORCE_INLINE TF_link_allocator(const char* name = 0) :
+			inline TF_link_allocator(const char* name = 0) :
 				TI_allocator<TF_link_allocator<F_target_allocator__>>(name)
 			{
 
 
 
 			}
-			NCPP_FORCE_INLINE TF_link_allocator(F_target_allocator& target_allocator, const char* name = 0) :
+			inline TF_link_allocator(F_target_allocator& target_allocator, const char* name = 0) :
 				TI_allocator<TF_link_allocator<F_target_allocator__>>(name),
 				target_allocator_p_(&target_allocator)
 			{
@@ -95,7 +95,7 @@ namespace ncpp {
 
 
 			}
-			NCPP_FORCE_INLINE TF_link_allocator(const TF_link_allocator& x) :
+			inline TF_link_allocator(const TF_link_allocator& x) :
 				TF_link_allocator(x.target_allocator(), x.name_)
 			{
 

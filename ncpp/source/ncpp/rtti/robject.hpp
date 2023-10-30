@@ -447,7 +447,7 @@ namespace ncpp {
 				\
 			NCPP_PUBLIC_KEYWORD\
 				template<typename F_compiletime_reflect_flag__>\
-				static NCPP_FORCE_INLINE F_robject_type_info* T_static_reflect(\
+				static F_robject_type_info* T_static_reflect(\
 					F_rcontainer* rcontainer_p, \
 					ncpp::rtti::rflag rflag = NCPP_RFLAG_DEFAULT,\
 					void* custom_data_p = 0\

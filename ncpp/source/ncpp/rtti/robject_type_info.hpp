@@ -93,7 +93,7 @@ namespace ncpp {
             
             NCPP_FORCE_INLINE const eastl::unordered_map<eastl::string, F_robject_member_info*>& name_to_member_info_p_map() const { return name_to_member_info_p_map_; }
 
-			NCPP_FORCE_INLINE F_robject_member_info* member_info(const eastl::string& name) {
+			inline F_robject_member_info* member_info(const eastl::string& name) {
 
 				auto it = name_to_member_info_p_map_.find(name);
 
@@ -102,7 +102,7 @@ namespace ncpp {
 
 				return it->second;
 			}
-			NCPP_FORCE_INLINE const F_robject_member_info* member_info(const eastl::string& name) const {
+			inline const F_robject_member_info* member_info(const eastl::string& name) const {
 
 				auto it = name_to_member_info_p_map_.find(name);
 
@@ -111,7 +111,7 @@ namespace ncpp {
 
 				return it->second;
 			}
-			NCPP_FORCE_INLINE void add_member_info(F_robject_member_info* info) {
+			inline void add_member_info(F_robject_member_info* info) {
 
 				auto it = name_to_member_info_p_map_.find(info->name);
 
@@ -120,7 +120,7 @@ namespace ncpp {
 
 				name_to_member_info_p_map_[info->name] = info;
 			}
-			NCPP_FORCE_INLINE void remove_member_info(const eastl::string& name) {
+			inline void remove_member_info(const eastl::string& name) {
 
 				auto it = name_to_member_info_p_map_.find(name);
 

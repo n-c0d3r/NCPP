@@ -86,7 +86,7 @@ namespace ncpp {
             
             
         public:
-            NCPP_FORCE_INLINE TF_hash_table(u32 hash_size = 2, u32 index_size = 0, const F_allocator& allocator = F_allocator()) :
+            inline TF_hash_table(u32 hash_size = 2, u32 index_size = 0, const F_allocator& allocator = F_allocator()) :
                 hash_size_(hash_size),
                 index_size_(index_size),
 
@@ -107,7 +107,7 @@ namespace ncpp {
                 }
                 
             }
-            NCPP_FORCE_INLINE TF_hash_table(const TF_hash_table& x) :
+            inline TF_hash_table(const TF_hash_table& x) :
                 hash_size_(x.hash_size_),
                 index_size_(x.index_size_),
             
@@ -118,7 +118,7 @@ namespace ncpp {
                 
                 
             }
-            NCPP_FORCE_INLINE TF_hash_table& operator = (const TF_hash_table& x)
+            inline TF_hash_table& operator = (const TF_hash_table& x)
             {
                 
                 hash_size_ = x.hash_size_;
@@ -129,7 +129,7 @@ namespace ncpp {
                 
                 return *this;
             }
-            NCPP_FORCE_INLINE TF_hash_table(TF_hash_table&& x) :
+            inline TF_hash_table(TF_hash_table&& x) :
                 hash_size_(x.hash_size_),
                 index_size_(x.index_size_),
             
@@ -140,7 +140,7 @@ namespace ncpp {
                 
                 
             }
-            NCPP_FORCE_INLINE TF_hash_table& operator = (TF_hash_table&& x)
+            inline TF_hash_table& operator = (TF_hash_table&& x)
             {
                 
                 hash_size_ = x.hash_size_;

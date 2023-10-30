@@ -88,7 +88,7 @@ namespace ncpp {
             NCPP_FORCE_INLINE const eastl::unordered_map<sz, F_robject_type_info*>& hash_code_to_robject_type_info_p_map() const { return hash_code_to_robject_type_info_p_map_; }
             NCPP_FORCE_INLINE const eastl::unordered_map<eastl::string, F_robject_type_info*>& name_to_robject_type_info_p_map() const { return name_to_robject_type_info_p_map_; }
 
-			NCPP_FORCE_INLINE F_robject_type_info* robject_type_info(sz hash_code) {
+			inline F_robject_type_info* robject_type_info(sz hash_code) {
 
 				auto it = hash_code_to_robject_type_info_p_map_.find(hash_code);
 
@@ -97,7 +97,7 @@ namespace ncpp {
 
 				return it->second;
 			}
-			NCPP_FORCE_INLINE const F_robject_type_info* robject_type_info(sz hash_code) const {
+			inline const F_robject_type_info* robject_type_info(sz hash_code) const {
 
 				auto it = hash_code_to_robject_type_info_p_map_.find(hash_code);
 
@@ -106,7 +106,7 @@ namespace ncpp {
 
 				return it->second;
 			}
-			NCPP_FORCE_INLINE F_robject_type_info* robject_type_info(const eastl::string& name) {
+			inline F_robject_type_info* robject_type_info(const eastl::string& name) {
 
 				auto it = name_to_robject_type_info_p_map_.find(name);
 
@@ -115,7 +115,7 @@ namespace ncpp {
 
 				return it->second;
 			}
-			NCPP_FORCE_INLINE const F_robject_type_info* robject_type_info(const eastl::string& name) const {
+			inline const F_robject_type_info* robject_type_info(const eastl::string& name) const {
 
 				auto it = name_to_robject_type_info_p_map_.find(name);
 
@@ -124,7 +124,7 @@ namespace ncpp {
 
 				return it->second;
 			}
-			NCPP_FORCE_INLINE void add_robject_type_info(F_robject_type_info* info) {
+			inline void add_robject_type_info(F_robject_type_info* info) {
 
 				auto it = hash_code_to_robject_type_info_p_map_.find(info->hash_code());
 
@@ -134,7 +134,7 @@ namespace ncpp {
 				hash_code_to_robject_type_info_p_map_[info->hash_code()] = info;
 				name_to_robject_type_info_p_map_[info->name()] = info;
 			}
-			NCPP_FORCE_INLINE void remove_robject_type_info(sz hash_code) {
+			inline void remove_robject_type_info(sz hash_code) {
 
 				auto it = hash_code_to_robject_type_info_p_map_.find(hash_code);
 
@@ -148,7 +148,7 @@ namespace ncpp {
 
 				}
 			}
-			NCPP_FORCE_INLINE void remove_robject_type_info(const eastl::string& name) {
+			inline void remove_robject_type_info(const eastl::string& name) {
 
 				auto it = name_to_robject_type_info_p_map_.find(name);
 

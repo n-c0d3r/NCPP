@@ -85,12 +85,12 @@ namespace ncpp {
 
 
 		public:
-			NCPP_FORCE_INLINE TF_ring_buffer() {
+			inline TF_ring_buffer() {
 
 
 
 			}
-			NCPP_FORCE_INLINE TF_ring_buffer(sz capacity) :
+			inline TF_ring_buffer(sz capacity) :
 				capacity_(capacity),
 				item_vector_(capacity)
 			{
@@ -99,7 +99,7 @@ namespace ncpp {
 
 			}
 
-			NCPP_FORCE_INLINE TF_ring_buffer(const TF_ring_buffer& x) :
+			inline TF_ring_buffer(const TF_ring_buffer& x) :
 				item_vector_(x.item_vector_),
 				capacity_(x.capacity_),
 				begin_(x.begin_),
@@ -109,7 +109,7 @@ namespace ncpp {
 
 
 			}
-			NCPP_FORCE_INLINE TF_ring_buffer& operator = (const TF_ring_buffer& x) {
+			inline TF_ring_buffer& operator = (const TF_ring_buffer& x) {
 
 				item_vector_ = x.item_vector_;
 				capacity_ = x.capacity_;
@@ -118,7 +118,7 @@ namespace ncpp {
 
 			}
 
-			NCPP_FORCE_INLINE TF_ring_buffer(TF_ring_buffer&& x) :
+			inline TF_ring_buffer(TF_ring_buffer&& x) :
 				item_vector_(std::move(x.item_vector_)),
 				capacity_(x.capacity_),
 				begin_(x.begin_),
@@ -128,7 +128,7 @@ namespace ncpp {
 
 
 			}
-			NCPP_FORCE_INLINE TF_ring_buffer& operator = (TF_ring_buffer&& x) {
+			inline TF_ring_buffer& operator = (TF_ring_buffer&& x) {
 
 				item_vector_ = std::move(x.item_vector_);
 				capacity_ = x.capacity_;
