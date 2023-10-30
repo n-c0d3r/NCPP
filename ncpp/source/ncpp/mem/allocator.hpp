@@ -110,7 +110,7 @@ namespace ncpp {
 
 
 		protected:
-			NCPP_FORCE_INLINE TI_allocator(const char* name = 0)
+			inline TI_allocator(const char* name = 0)
 			{
 
 #if NCPP_ENABLE_ALLOCATOR_NAME
@@ -118,7 +118,7 @@ namespace ncpp {
 #endif
 
 			}
-			NCPP_FORCE_INLINE TI_allocator(const TI_allocator& x)
+			inline TI_allocator(const TI_allocator& x)
 			{
 
 #if NCPP_ENABLE_ALLOCATOR_NAME
@@ -126,7 +126,7 @@ namespace ncpp {
 #endif
 
 			}
-			NCPP_FORCE_INLINE TI_allocator(const TI_allocator& x, const char* name)
+			inline TI_allocator(const TI_allocator& x, const char* name)
 			{
 
 #if NCPP_ENABLE_ALLOCATOR_NAME
@@ -135,7 +135,7 @@ namespace ncpp {
 
 			}
 
-			TI_allocator& operator=(const TI_allocator& x) {
+			inline TI_allocator& operator=(const TI_allocator& x) {
 
 #if NCPP_ENABLE_ALLOCATOR_NAME
 				name_ = x.name_;

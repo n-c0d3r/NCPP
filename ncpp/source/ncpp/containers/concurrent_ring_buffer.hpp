@@ -175,7 +175,7 @@ namespace ncpp {
 				T_push(std::forward<F_item>(item));
 			}
 
-			F_item pop() {
+			inline F_item pop() {
 
 				reader_lock_.lock();
 
@@ -191,7 +191,7 @@ namespace ncpp {
 				return std::move(item_vector_[begin % capacity_]);
 			}
 
-			b8 try_pop(F_item& item) {
+			inline b8 try_pop(F_item& item) {
 
 				reader_lock_.lock();
 

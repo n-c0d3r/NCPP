@@ -253,12 +253,12 @@ namespace ncpp {
 
 
 		public:
-			void push_chunk(F_smart_chunk_header* chunk_p) {
+			inline void push_chunk(F_smart_chunk_header* chunk_p) {
 
 				chunk_p_ring_buffer_.push(chunk_p);
 
 			}
-			F_smart_chunk_header* pop_chunk() {
+			inline F_smart_chunk_header* pop_chunk() {
 
 				F_smart_chunk_header* chunk_p = 0;
 
@@ -268,7 +268,7 @@ namespace ncpp {
 
 				return chunk_p;
 			}
-			F_smart_chunk_header* chunk_from_data_p(void* p) {
+			inline F_smart_chunk_header* chunk_from_data_p(void* p) {
 
 				sz index = (reinterpret_cast<sz>(p) - reinterpret_cast<sz>(first_chunk_p_)) / chunk_size_;
 
@@ -324,7 +324,7 @@ namespace ncpp {
 
 
 		public:
-			NCPP_FORCE_INLINE TF_smart_chunk_adaptor(F_storage* storage_p, sz max_chunk_count = NCPP_SMART_CHUNK_ADAPTOR_DEFAULT_MAX_CHUNK_COUNT) :
+			inline TF_smart_chunk_adaptor(F_storage* storage_p, sz max_chunk_count = NCPP_SMART_CHUNK_ADAPTOR_DEFAULT_MAX_CHUNK_COUNT) :
 				storage_p_(storage_p),
 
 				chunk_p_ring_buffer_(max_chunk_count),
@@ -366,7 +366,7 @@ namespace ncpp {
 
 			}
 
-			void push_chunk(F_smart_chunk_header* chunk_p) {
+			inline void push_chunk(F_smart_chunk_header* chunk_p) {
                 
                 assert(chunk_p && "cant push nulll chunk");
 
@@ -378,7 +378,7 @@ namespace ncpp {
 					storage_p_->push_chunk(chunk_p);
 
 			}
-			F_smart_chunk_header* pop_chunk() {
+			inline F_smart_chunk_header* pop_chunk() {
 
 				F_smart_chunk_header* chunk_p = 0;
 
@@ -631,7 +631,7 @@ namespace ncpp {
 			/**
 			 *	Deallocates all chunks.
 			 */
-			void reset() {
+			inline void reset() {
 
 				if (!adaptor_p_)
 					return;
@@ -648,7 +648,7 @@ namespace ncpp {
 			/**
 			 *	Resets memory usage, sets the first chunk as current chunk and also deallocates chunks until there is only min_chunk_count_ chunks.
 			 */
-			void clear() {
+			inline void clear() {
 
 				if (!adaptor_p_)
 					return;
@@ -677,7 +677,7 @@ namespace ncpp {
 
 			}
 
-			void validate_chunk_count() {
+			inline void validate_chunk_count() {
 
 				if (!adaptor_p_)
 					return;

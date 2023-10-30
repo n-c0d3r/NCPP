@@ -247,7 +247,7 @@ namespace ncpp {
 			/**
 			 *	Deallocates all chunks.
 			 */
-			void reset() {
+			inline void reset() {
 
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
 				NCPP_DECREASE_USABLE_ALLOCATED_MEMORY(usable_allocated_memory_);
@@ -266,7 +266,7 @@ namespace ncpp {
 			/**
 			 *	Resets memory usage, sets the first chunk as current chunk and also deallocates chunks until there is only min_chunk_count_ chunks.
 			 */
-			void clear() {
+			inline void clear() {
 
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
 				NCPP_DECREASE_USABLE_ALLOCATED_MEMORY(usable_allocated_memory_);
@@ -297,7 +297,7 @@ namespace ncpp {
 
 			}
 
-			void validate_chunk_count() {
+			inline void validate_chunk_count() {
 
 				while (chunk_count_ < min_chunk_count_) {
 

@@ -166,7 +166,7 @@ namespace ncpp {
 				return std::move(item_vector_[(begin_++) % capacity_]);
 			}
 
-			NCPP_FORCE_INLINE b8 try_pop(F_item& item) {
+			inline b8 try_pop(F_item& item) {
 
 				if (size() > 0) {
 

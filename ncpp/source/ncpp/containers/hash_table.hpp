@@ -160,7 +160,7 @@ namespace ncpp {
             
             
         public:
-            void reset(){
+            inline void reset(){
                 
                 if(index_size_) {
                     
@@ -173,7 +173,7 @@ namespace ncpp {
                 }
                 
             }
-            void clear(){
+            inline void clear(){
                 
                 if(index_size_) {
                     
@@ -182,7 +182,7 @@ namespace ncpp {
                 }
                 
             }
-            void clear(u32 hash_size, u32 index_size){
+            inline void clear(u32 hash_size, u32 index_size){
                 
                 reset();
                 
@@ -202,7 +202,7 @@ namespace ncpp {
                 }
                 
             }
-            void resize(u32 index_size) {
+            inline void resize(u32 index_size) {
                 
                 if( index_size_ == index_size )
                 {
@@ -240,7 +240,7 @@ namespace ncpp {
                 
                 return index != ~0u;
             }
-            void add(u32 key, u32 index){
+            inline void add(u32 key, u32 index){
                 
                 if( index >= index_size_ )
                 {
@@ -251,13 +251,13 @@ namespace ncpp {
                 index_vector_[index] = hash_vector_[key];
                 hash_vector_[key] = index;
             }
-            void add_concurrent(u32 key, u32 index){
+            inline void add_concurrent(u32 key, u32 index){
                 assert(index < index_size_);
 
                 key &= hash_mask_;
                 index_vector_[index] = EA::Thread::AtomicFetchSwap((i32*)(hash_vector_.data() + key), index);
             }
-            void remove(u32 key, u32 index){
+            inline void remove(u32 key, u32 index){
                 
                 if(index >= index_size_)
                 {
