@@ -106,26 +106,44 @@ namespace ncpp {}
 
 #ifdef NCPP_ENABLE_SSE
 #include <xmmintrin.h>
+#ifndef NCPP_ENABLE_SIMD
+    #define NCPP_ENABLE_SIMD
+#endif
 #endif
 
 #ifdef NCPP_ENABLE_SSE2
 #include <emmintrin.h>
+#ifndef NCPP_ENABLE_SIMD
+    #define NCPP_ENABLE_SIMD
+#endif
 #endif
 
 #ifdef NCPP_ENABLE_SSE3
 #include <pmmintrin.h>
+#ifndef NCPP_ENABLE_SIMD
+    #define NCPP_ENABLE_SIMD
+#endif
 #endif
 
 #ifdef NCPP_ENABLE_SSE4
 #include <smmintrin.h>
+#ifndef NCPP_ENABLE_SIMD
+    #define NCPP_ENABLE_SIMD
+#endif
 #endif
 
 #if defined(NCPP_ENABLE_AVX) || defined(NCPP_ENABLE_AVX2) || defined(NCPP_ENABLE_FMA3)
 #include <immintrin.h>
+#ifndef NCPP_ENABLE_SIMD
+    #define NCPP_ENABLE_SIMD
+#endif
 #endif
 
 #ifdef NCPP_ENABLE_ARM_NEON
 #include <arm_neon.h>
+#ifndef NCPP_ENABLE_SIMD
+    #define NCPP_ENABLE_SIMD
+#endif
 #endif
 
 #pragma endregion
