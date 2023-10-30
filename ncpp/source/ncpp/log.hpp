@@ -197,7 +197,7 @@ namespace ncpp {
 /**
  *	Streams out F_cout_lowlight.
  */
-inline std::ostream& operator << (
+NCPP_FORCE_INLINE std::ostream& operator << (
 	std::ostream& os,
 	const ncpp::F_cout_lowlight& input
 ) {
@@ -210,7 +210,7 @@ inline std::ostream& operator << (
 /**
  *	Streams out F_cout_field_name.
  */
-inline std::ostream& operator << (
+NCPP_FORCE_INLINE std::ostream& operator << (
 	std::ostream& os,
 	const ncpp::F_cout_field_name& input
 ) {
@@ -223,7 +223,7 @@ inline std::ostream& operator << (
 /**
  *	Streams out F_cout_nanoseconds.
  */
-inline std::ostream& operator << (
+NCPP_FORCE_INLINE std::ostream& operator << (
 	std::ostream& os,
 	const ncpp::F_cout_nanoseconds& input
 ) {

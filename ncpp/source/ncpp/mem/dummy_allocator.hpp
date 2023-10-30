@@ -67,14 +67,14 @@ namespace ncpp {
 
 
 		public:
-			inline F_dummy_allocator(const char* name = 0) :
+			NCPP_FORCE_INLINE F_dummy_allocator(const char* name = 0) :
 				TI_allocator(name)
 			{
 
 
 
 			}
-			inline F_dummy_allocator(const F_dummy_allocator& x) :
+			NCPP_FORCE_INLINE F_dummy_allocator(const F_dummy_allocator& x) :
 				F_dummy_allocator()
 			{
 
@@ -90,8 +90,8 @@ namespace ncpp {
 
 
 		public:
-			inline void* new_mem(sz, sz, sz) { return memory_block_s; }
-			inline void delete_mem(void* p) { }
+			NCPP_FORCE_INLINE void* new_mem(sz, sz, sz) { return memory_block_s; }
+			NCPP_FORCE_INLINE void delete_mem(void* p) { }
 
 		};
 

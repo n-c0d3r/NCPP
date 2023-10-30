@@ -93,8 +93,8 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
-            inline F_locker__& locker() { return locker_; }
-            inline const F_locker__& locker() const { return locker_; }
+            NCPP_FORCE_INLINE F_locker__& locker() { return locker_; }
+            NCPP_FORCE_INLINE const F_locker__& locker() const { return locker_; }
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////

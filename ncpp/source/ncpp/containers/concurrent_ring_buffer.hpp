@@ -87,20 +87,20 @@ namespace ncpp {
 
 
 		public:
-			inline sz size() const { return end_ - begin_; }
-			inline sz capacity() const { return capacity_; }
-			inline bool is_empty() const { return !size(); }
-			inline bool is_null() const { return !capacity_; }
+			NCPP_FORCE_INLINE sz size() const { return end_ - begin_; }
+			NCPP_FORCE_INLINE sz capacity() const { return capacity_; }
+			NCPP_FORCE_INLINE bool is_empty() const { return !size(); }
+			NCPP_FORCE_INLINE bool is_null() const { return !capacity_; }
 
 
 
 		public:
-			inline TF_concurrent_ring_buffer() {
+			NCPP_FORCE_INLINE TF_concurrent_ring_buffer() {
 
 
 
 			}
-			inline TF_concurrent_ring_buffer(sz capacity) :
+			NCPP_FORCE_INLINE TF_concurrent_ring_buffer(sz capacity) :
 				capacity_(capacity),
 				item_vector_(capacity)
 			{
@@ -109,7 +109,7 @@ namespace ncpp {
 
 			}
 
-			inline TF_concurrent_ring_buffer(const TF_concurrent_ring_buffer& x) :
+			NCPP_FORCE_INLINE TF_concurrent_ring_buffer(const TF_concurrent_ring_buffer& x) :
 				item_vector_(x.item_vector_),
 				capacity_(x.capacity_),
 				begin_(x.begin_),
@@ -119,7 +119,7 @@ namespace ncpp {
 
 
 			}
-			inline TF_concurrent_ring_buffer& operator = (const TF_concurrent_ring_buffer& x) {
+			NCPP_FORCE_INLINE TF_concurrent_ring_buffer& operator = (const TF_concurrent_ring_buffer& x) {
 
 				item_vector_ = x.item_vector_;
 				capacity_ = x.capacity_;
@@ -128,7 +128,7 @@ namespace ncpp {
 
 			}
 
-			inline TF_concurrent_ring_buffer(TF_concurrent_ring_buffer&& x) :
+			NCPP_FORCE_INLINE TF_concurrent_ring_buffer(TF_concurrent_ring_buffer&& x) :
 				item_vector_(std::move(x.item_vector_)),
 				capacity_(x.capacity_),
 				begin_(x.begin_),
@@ -138,7 +138,7 @@ namespace ncpp {
 
 
 			}
-			inline TF_concurrent_ring_buffer& operator = (TF_concurrent_ring_buffer&& x) {
+			NCPP_FORCE_INLINE TF_concurrent_ring_buffer& operator = (TF_concurrent_ring_buffer&& x) {
 
 				item_vector_ = std::move(x.item_vector_);
 				capacity_ = x.capacity_;
@@ -166,16 +166,16 @@ namespace ncpp {
 
 
 		public:
-			inline void push(F_item const& item) {
+			NCPP_FORCE_INLINE void push(F_item const& item) {
 
 				T_push(std::forward<F_item const&>(item));
 			}
-			inline void push(F_item&& item) {
+			NCPP_FORCE_INLINE void push(F_item&& item) {
 
 				T_push(std::forward<F_item>(item));
 			}
 
-			inline F_item pop() {
+			NCPP_FORCE_INLINE F_item pop() {
 
 				reader_lock_.lock();
 
@@ -191,7 +191,7 @@ namespace ncpp {
 				return std::move(item_vector_[begin % capacity_]);
 			}
 
-			inline b8 try_pop(F_item& item) {
+			NCPP_FORCE_INLINE b8 try_pop(F_item& item) {
 
 				reader_lock_.lock();
 
@@ -214,7 +214,7 @@ namespace ncpp {
 				return false;
 			}
 
-			inline void reset() {
+			NCPP_FORCE_INLINE void reset() {
 
 				begin_.store(0, eastl::memory_order_release);
 				end_.store(0, eastl::memory_order_release);

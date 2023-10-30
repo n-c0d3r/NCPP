@@ -95,7 +95,7 @@ namespace ncpp {
 	template<typename F_stream__, typename F__>
 	struct TF_safe_ostream_forwarder<F_stream__, F__, true> {
 
-		static inline F_stream__& forward(F_stream__& stream, F__&& data) {
+		static NCPP_FORCE_INLINE F_stream__& forward(F_stream__& stream, F__&& data) {
 
 			stream << data;
 
@@ -106,7 +106,7 @@ namespace ncpp {
 	template<typename F_stream__, typename F__>
 	struct TF_safe_ostream_forwarder<F_stream__, F__, false> {
 
-		static inline F_stream__& forward(F_stream__& stream, F__&& data) {
+		static NCPP_FORCE_INLINE F_stream__& forward(F_stream__& stream, F__&& data) {
 
 
 
@@ -123,7 +123,7 @@ namespace ncpp {
 	 *	Otherwise, do nothing and wont cause any error.
 	 */
 	template<typename F_stream__, typename F__>
-	inline F_stream__& T_safe_ostream(F_stream__& stream, F__&& data) {
+	NCPP_FORCE_INLINE F_stream__& T_safe_ostream(F_stream__& stream, F__&& data) {
 
 		using safe_ostream_forward_type = TF_safe_ostream_forwarder<
 			F_stream__,
@@ -148,7 +148,7 @@ namespace ncpp {
 	template<typename F_stream__, typename input_type__>
 	struct TF_safe_ostream_with_tab_forwarder<F_stream__, input_type__, true> {
 
-		static inline F_stream__& forward(F_stream__& stream, input_type__&& input) {
+		static NCPP_FORCE_INLINE F_stream__& forward(F_stream__& stream, input_type__&& input) {
 
 			stream << input;
 
@@ -159,7 +159,7 @@ namespace ncpp {
 	template<typename F_stream__, typename input_type__>
 	struct TF_safe_ostream_with_tab_forwarder<F_stream__, input_type__, false> {
 
-		static inline F_stream__& forward(F_stream__& stream, input_type__&& input) {
+		static NCPP_FORCE_INLINE F_stream__& forward(F_stream__& stream, input_type__&& input) {
 
 			T_safe_ostream(stream, input.first);
 
@@ -176,7 +176,7 @@ namespace ncpp {
 	 *	Otherwise, do nothing and wont cause any error.
 	 */
 	template<typename F_stream__, typename F__, typename input_type__ = TF_ostream_input<F__>>
-	inline F_stream__& T_safe_ostream_with_tab(F_stream__& stream, input_type__&& input) {
+	NCPP_FORCE_INLINE F_stream__& T_safe_ostream_with_tab(F_stream__& stream, input_type__&& input) {
 
 		using safe_ostream_with_tab_forward_type = TF_safe_ostream_with_tab_forwarder<
 			F_stream__,
@@ -201,7 +201,7 @@ namespace ncpp {
 	template<typename F_stream__, typename F__>
 	struct TF_safe_istream_forwarder<F_stream__, F__, true> {
 
-		static inline F_stream__& forward(F_stream__& stream, F__&& data) {
+		static NCPP_FORCE_INLINE F_stream__& forward(F_stream__& stream, F__&& data) {
 
 			stream >> data;
 
@@ -212,7 +212,7 @@ namespace ncpp {
 	template<typename F_stream__, typename F__>
 	struct TF_safe_istream_forwarder<F_stream__, F__, false> {
 
-		static inline F_stream__& forward(F_stream__& stream, F__&& data) {
+		static NCPP_FORCE_INLINE F_stream__& forward(F_stream__& stream, F__&& data) {
 
 
 
@@ -229,7 +229,7 @@ namespace ncpp {
 	 *	Otherwise, do nothing and wont cause any error.
 	 */
 	template<typename F_stream__, typename F__>
-	inline F_stream__& T_safe_istream(F_stream__& stream, F__&& data) {
+	NCPP_FORCE_INLINE F_stream__& T_safe_istream(F_stream__& stream, F__&& data) {
 
 		using safe_istream_forward_type = TF_safe_istream_forwarder<
 			F_stream__,

@@ -75,12 +75,12 @@ namespace ncpp {
 				F_chunk_header* pev_p = 0;
 				F_chunk_header* next_p = 0;
 
-				inline u8* data_root() {
+				NCPP_FORCE_INLINE u8* data_root() {
 
 					return reinterpret_cast<u8*>(this + 1);
 				}
 
-				inline u8* current_data() {
+				NCPP_FORCE_INLINE u8* current_data() {
 
 					return data_root() + usage;
 				}
@@ -107,15 +107,15 @@ namespace ncpp {
 
 
 		public:
-			inline sz chunk_capacity() const { return chunk_capacity_; }
-			inline u16 min_chunk_count() const { return min_chunk_count_; }
-			inline u16 chunk_count() const { return chunk_count_; }
+			NCPP_FORCE_INLINE sz chunk_capacity() const { return chunk_capacity_; }
+			NCPP_FORCE_INLINE u16 min_chunk_count() const { return min_chunk_count_; }
+			NCPP_FORCE_INLINE u16 chunk_count() const { return chunk_count_; }
 
 
 
 		public:
 			// Default chunk capacity is 2MiB
-			inline F_incremental_chunk_allocator(sz chunk_capacity = 2097152, u16 min_chunk_count = 0, const char* name = 0) :
+			NCPP_FORCE_INLINE F_incremental_chunk_allocator(sz chunk_capacity = 2097152, u16 min_chunk_count = 0, const char* name = 0) :
 				TI_allocator(name),
 				chunk_capacity_(chunk_capacity),
 				min_chunk_count_(min_chunk_count),
@@ -125,7 +125,7 @@ namespace ncpp {
 				validate_chunk_count();
 
 			}
-			inline F_incremental_chunk_allocator(const F_incremental_chunk_allocator& x) :
+			NCPP_FORCE_INLINE F_incremental_chunk_allocator(const F_incremental_chunk_allocator& x) :
 				F_incremental_chunk_allocator(x.chunk_capacity_, x.min_chunk_count_, x.name_)
 			{
 
@@ -141,7 +141,7 @@ namespace ncpp {
 
 
 		private:
-			inline F_chunk_header* push_new_chunk() {
+			NCPP_FORCE_INLINE F_chunk_header* push_new_chunk() {
 
 				F_chunk_header* new_chunk_p = reinterpret_cast<F_chunk_header*>(default_allocate(sizeof(F_chunk_header) + chunk_capacity_));
 
@@ -163,7 +163,7 @@ namespace ncpp {
 
 				return new_chunk_p;
 			}
-			inline F_chunk_header* optain_next_chunk(F_chunk_header* chunk_p) {
+			NCPP_FORCE_INLINE F_chunk_header* optain_next_chunk(F_chunk_header* chunk_p) {
 
 				if (chunk_p && chunk_p->next_p) {
 
@@ -174,7 +174,7 @@ namespace ncpp {
 
 				return push_new_chunk();
 			}
-			inline void erase_chunk(F_chunk_header* chunk_p) {
+			NCPP_FORCE_INLINE void erase_chunk(F_chunk_header* chunk_p) {
 
 				F_chunk_header* prev_chunk_p = chunk_p->pev_p;
 				F_chunk_header* next_chunk_p = chunk_p->next_p;
@@ -199,7 +199,7 @@ namespace ncpp {
 			}
 
 		public:
-			inline void* new_mem(sz size, sz alignment, sz alignment_offset) {
+			NCPP_FORCE_INLINE void* new_mem(sz size, sz alignment, sz alignment_offset) {
 
 				sz actual_size = alignment + alignment_offset + size;
 
@@ -238,7 +238,7 @@ namespace ncpp {
 				return reinterpret_cast<u8*>(align_address(reinterpret_cast<uintptr_t>(memory_p + alignment_offset), alignment)) - alignment_offset;
 
 			}
-			inline void delete_mem(void* p) {
+			NCPP_FORCE_INLINE void delete_mem(void* p) {
 
 
 

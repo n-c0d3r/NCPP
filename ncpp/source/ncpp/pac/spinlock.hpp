@@ -86,7 +86,7 @@ namespace ncpp {
                 while(is_locked_.test_and_set(eastl::memory_order_acquire));
                 
             }
-            inline b8 try_lock(){
+            NCPP_FORCE_INLINE b8 try_lock(){
                 
                 return !is_locked_.test_and_set(eastl::memory_order_acquire);
             }

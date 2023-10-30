@@ -62,14 +62,14 @@ namespace ncpp {
 		class F_default_allocator : public TI_allocator<F_default_allocator> {
 
 		public:
-			inline F_default_allocator(const char* name = 0) :
+			NCPP_FORCE_INLINE F_default_allocator(const char* name = 0) :
 				TI_allocator(name)
 			{
 
 
 
 			}
-			inline F_default_allocator(const F_default_allocator& x) :
+			NCPP_FORCE_INLINE F_default_allocator(const F_default_allocator& x) :
 				TI_allocator()
 			{
 

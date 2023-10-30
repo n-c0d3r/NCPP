@@ -141,7 +141,7 @@ namespace ncpp {
 			struct TF_##MemberName##___ncpp_static_info___{\
 				\
 				static void invoke(){}\
-				static inline ncpp::sz get_invoke_address(){ return 0; }\
+				static NCPP_FORCE_INLINE ncpp::sz get_invoke_address(){ return 0; }\
 				\
 				static eastl::string get_name() { return #MemberName; }\
 				\
@@ -158,7 +158,7 @@ namespace ncpp {
 					return reinterpret_cast<F_this*>(object_p)->MemberName(std::forward<arg_types__>(args)...);\
 					\
 				}\
-				static inline ncpp::sz get_invoke_address(){ return reinterpret_cast<ncpp::sz>(&invoke); }\
+				static NCPP_FORCE_INLINE ncpp::sz get_invoke_address(){ return reinterpret_cast<ncpp::sz>(&invoke); }\
 				\
 				static eastl::string get_name() { return #MemberName; }\
 				\
@@ -187,7 +187,7 @@ namespace ncpp {
 #define NCPP_ROBJECT_BODY_MEMBER_CONST(Overrider, MemberType, MemberName,...)\
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);\
 			NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName);\
-			inline auto MemberName(auto&&... args) const {\
+			NCPP_FORCE_INLINE auto MemberName(auto&&... args) const {\
 				\
 				return ((F_this*)this)->MemberName(std::forward<decltype(args)>(args)...);\
 				\
@@ -218,7 +218,7 @@ namespace ncpp {
 #define NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_CONST(Overrider, MemberType, MemberName,...)\
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);\
 			NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName);\
-			inline auto MemberName(auto&&... args) const {\
+			NCPP_FORCE_INLINE auto MemberName(auto&&... args) const {\
 				\
 				return ((F_this*)this)->MemberName(std::forward<decltype(args)>(args)...);\
 				\
@@ -436,8 +436,8 @@ namespace ncpp {
 				\
 			NCPP_PUBLIC_KEYWORD\
 				using F_this = ObjectTypeName;\
-				static inline eastl::string static_type_name() { return #ObjectTypeName; }\
-				static inline ncpp::sz static_type_hash_code() { return typeid(F_this).hash_code(); }\
+				static NCPP_FORCE_INLINE eastl::string static_type_name() { return #ObjectTypeName; }\
+				static NCPP_FORCE_INLINE ncpp::sz static_type_hash_code() { return typeid(F_this).hash_code(); }\
 				\
 			NCPP_PRIVATE_KEYWORD\
 				NCPP_RTTI_IMPLEMENT_FLAG(F_this, ncpp::rtti::F_robject_flag);\
@@ -447,7 +447,7 @@ namespace ncpp {
 				\
 			NCPP_PUBLIC_KEYWORD\
 				template<typename F_compiletime_reflect_flag__>\
-				static inline F_robject_type_info* T_static_reflect(\
+				static NCPP_FORCE_INLINE F_robject_type_info* T_static_reflect(\
 					F_rcontainer* rcontainer_p, \
 					ncpp::rtti::rflag rflag = NCPP_RFLAG_DEFAULT,\
 					void* custom_data_p = 0\
@@ -473,7 +473,7 @@ namespace ncpp {
 					\
 				};\
 				\
-				static inline F_robject_type_info* static_reflect(\
+				static NCPP_FORCE_INLINE F_robject_type_info* static_reflect(\
 					F_rcontainer* rcontainer_p, \
 					ncpp::rtti::rflag rflag = NCPP_RFLAG_DEFAULT,\
 					void* custom_data_p = 0\

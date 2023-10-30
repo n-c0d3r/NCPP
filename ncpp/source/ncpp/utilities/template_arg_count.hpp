@@ -72,7 +72,7 @@ namespace ncpp {
          *  @param <F_args__...> template argument list.
          */
         template<typename... F_args__>
-        static inline constexpr u16 T_template_arg_count_v = sizeof...(F_args__);
+        static constexpr u16 T_template_arg_count_v = sizeof...(F_args__);
 
     }
 

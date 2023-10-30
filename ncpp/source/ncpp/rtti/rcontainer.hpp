@@ -82,22 +82,13 @@ namespace ncpp {
 			F_rcontainer_additional_data additional_data;
 
 		public:
-			inline F_allocator& allocator() { return allocator_; }
-			inline const F_allocator& allocator() const { return allocator_; }
+			NCPP_FORCE_INLINE F_allocator& allocator() { return allocator_; }
+			NCPP_FORCE_INLINE const F_allocator& allocator() const { return allocator_; }
             
-            inline const eastl::unordered_map<sz, F_robject_type_info*>& hash_code_to_robject_type_info_p_map() const { return hash_code_to_robject_type_info_p_map_; }
-            inline const eastl::unordered_map<eastl::string, F_robject_type_info*>& name_to_robject_type_info_p_map() const { return name_to_robject_type_info_p_map_; }
+            NCPP_FORCE_INLINE const eastl::unordered_map<sz, F_robject_type_info*>& hash_code_to_robject_type_info_p_map() const { return hash_code_to_robject_type_info_p_map_; }
+            NCPP_FORCE_INLINE const eastl::unordered_map<eastl::string, F_robject_type_info*>& name_to_robject_type_info_p_map() const { return name_to_robject_type_info_p_map_; }
 
-			inline F_robject_type_info* robject_type_info(sz hash_code) {
-
-				auto it = hash_code_to_robject_type_info_p_map_.find(hash_code);
-
-				if (it == hash_code_to_robject_type_info_p_map_.end())
-					return 0;
-
-				return it->second;
-			}
-			inline const F_robject_type_info* robject_type_info(sz hash_code) const {
+			NCPP_FORCE_INLINE F_robject_type_info* robject_type_info(sz hash_code) {
 
 				auto it = hash_code_to_robject_type_info_p_map_.find(hash_code);
 
@@ -106,7 +97,16 @@ namespace ncpp {
 
 				return it->second;
 			}
-			inline F_robject_type_info* robject_type_info(const eastl::string& name) {
+			NCPP_FORCE_INLINE const F_robject_type_info* robject_type_info(sz hash_code) const {
+
+				auto it = hash_code_to_robject_type_info_p_map_.find(hash_code);
+
+				if (it == hash_code_to_robject_type_info_p_map_.end())
+					return 0;
+
+				return it->second;
+			}
+			NCPP_FORCE_INLINE F_robject_type_info* robject_type_info(const eastl::string& name) {
 
 				auto it = name_to_robject_type_info_p_map_.find(name);
 
@@ -115,7 +115,7 @@ namespace ncpp {
 
 				return it->second;
 			}
-			inline const F_robject_type_info* robject_type_info(const eastl::string& name) const {
+			NCPP_FORCE_INLINE const F_robject_type_info* robject_type_info(const eastl::string& name) const {
 
 				auto it = name_to_robject_type_info_p_map_.find(name);
 
@@ -124,7 +124,7 @@ namespace ncpp {
 
 				return it->second;
 			}
-			inline void add_robject_type_info(F_robject_type_info* info) {
+			NCPP_FORCE_INLINE void add_robject_type_info(F_robject_type_info* info) {
 
 				auto it = hash_code_to_robject_type_info_p_map_.find(info->hash_code());
 
@@ -134,7 +134,7 @@ namespace ncpp {
 				hash_code_to_robject_type_info_p_map_[info->hash_code()] = info;
 				name_to_robject_type_info_p_map_[info->name()] = info;
 			}
-			inline void remove_robject_type_info(sz hash_code) {
+			NCPP_FORCE_INLINE void remove_robject_type_info(sz hash_code) {
 
 				auto it = hash_code_to_robject_type_info_p_map_.find(hash_code);
 
@@ -148,7 +148,7 @@ namespace ncpp {
 
 				}
 			}
-			inline void remove_robject_type_info(const eastl::string& name) {
+			NCPP_FORCE_INLINE void remove_robject_type_info(const eastl::string& name) {
 
 				auto it = name_to_robject_type_info_p_map_.find(name);
 
@@ -166,7 +166,7 @@ namespace ncpp {
 
 
 		public:
-			inline TF_rcontainer(const F_allocator& allocator = F_allocator()) :
+			NCPP_FORCE_INLINE TF_rcontainer(const F_allocator& allocator = F_allocator()) :
 				allocator_(allocator)
 			{
 

@@ -75,18 +75,18 @@ namespace ncpp {
             eastl::vector<u32, F_allocator> index_vector_;
             
         public:
-            inline u32 hash_size() const { return hash_size_; }
-            inline u32 index_size() const { return index_size_; }
+            NCPP_FORCE_INLINE u32 hash_size() const { return hash_size_; }
+            NCPP_FORCE_INLINE u32 index_size() const { return index_size_; }
             
-            inline u32 hash_mask() const { return hash_mask_; }
+            NCPP_FORCE_INLINE u32 hash_mask() const { return hash_mask_; }
             
-            inline const eastl::vector<u32, F_allocator>& hash_vector() const { return hash_vector_; }
-            inline const eastl::vector<u32, F_allocator>& index_vector() const { return index_vector_; }
+            NCPP_FORCE_INLINE const eastl::vector<u32, F_allocator>& hash_vector() const { return hash_vector_; }
+            NCPP_FORCE_INLINE const eastl::vector<u32, F_allocator>& index_vector() const { return index_vector_; }
             
             
             
         public:
-            inline TF_hash_table(u32 hash_size = 2, u32 index_size = 0, const F_allocator& allocator = F_allocator()) :
+            NCPP_FORCE_INLINE TF_hash_table(u32 hash_size = 2, u32 index_size = 0, const F_allocator& allocator = F_allocator()) :
                 hash_size_(hash_size),
                 index_size_(index_size),
 
@@ -107,7 +107,7 @@ namespace ncpp {
                 }
                 
             }
-            inline TF_hash_table(const TF_hash_table& x) :
+            NCPP_FORCE_INLINE TF_hash_table(const TF_hash_table& x) :
                 hash_size_(x.hash_size_),
                 index_size_(x.index_size_),
             
@@ -118,7 +118,7 @@ namespace ncpp {
                 
                 
             }
-            inline TF_hash_table& operator = (const TF_hash_table& x)
+            NCPP_FORCE_INLINE TF_hash_table& operator = (const TF_hash_table& x)
             {
                 
                 hash_size_ = x.hash_size_;
@@ -129,7 +129,7 @@ namespace ncpp {
                 
                 return *this;
             }
-            inline TF_hash_table(TF_hash_table&& x) :
+            NCPP_FORCE_INLINE TF_hash_table(TF_hash_table&& x) :
                 hash_size_(x.hash_size_),
                 index_size_(x.index_size_),
             
@@ -140,7 +140,7 @@ namespace ncpp {
                 
                 
             }
-            inline TF_hash_table& operator = (TF_hash_table&& x)
+            NCPP_FORCE_INLINE TF_hash_table& operator = (TF_hash_table&& x)
             {
                 
                 hash_size_ = x.hash_size_;
@@ -226,17 +226,17 @@ namespace ncpp {
                 index_size_ = index_size;
                 
             }
-            inline u32 first(u32 key){
+            NCPP_FORCE_INLINE u32 first(u32 key){
                 
                 return hash_vector_[key & hash_mask_];
             }
-            inline u32 next(u32 index){
+            NCPP_FORCE_INLINE u32 next(u32 index){
                 
                 assert(index < index_size_);
                 assert(index_vector_[index] != index);
                 return index_vector_[index];
             }
-            inline b8 is_valid(u32 index) const {
+            NCPP_FORCE_INLINE b8 is_valid(u32 index) const {
                 
                 return index != ~0u;
             }

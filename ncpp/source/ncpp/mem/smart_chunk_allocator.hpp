@@ -70,12 +70,12 @@ namespace ncpp {
 			F_smart_chunk_header* pev_p = 0;
 			F_smart_chunk_header* next_p = 0;
 
-			inline u8* data_root() {
+			NCPP_FORCE_INLINE u8* data_root() {
 
 				return reinterpret_cast<u8*>(this + 1);
 			}
 
-			inline u8* current_data() {
+			NCPP_FORCE_INLINE u8* current_data() {
 
 				return data_root() + usage;
 			}
@@ -191,14 +191,14 @@ namespace ncpp {
 			F_default_allocator chunk_allocator_;
 
 		public:
-			inline sz chunk_count() const { return chunk_count_; }
-			inline sz chunk_capacity() const { return chunk_capacity_; }
-			inline sz chunk_size() const { return chunk_size_; }
+			NCPP_FORCE_INLINE sz chunk_count() const { return chunk_count_; }
+			NCPP_FORCE_INLINE sz chunk_capacity() const { return chunk_capacity_; }
+			NCPP_FORCE_INLINE sz chunk_size() const { return chunk_size_; }
 
 
 
 		public:
-			inline TF_smart_chunk_storage(sz chunk_count = NCPP_SMART_CHUNK_STORAGE_DEFAULT_CHUNK_COUNT, sz chunk_capacity = NCPP_DEFAULT_SMART_CHUNK_CAPACITY) :
+			NCPP_FORCE_INLINE TF_smart_chunk_storage(sz chunk_count = NCPP_SMART_CHUNK_STORAGE_DEFAULT_CHUNK_COUNT, sz chunk_capacity = NCPP_DEFAULT_SMART_CHUNK_CAPACITY) :
 				chunk_p_ring_buffer_(chunk_count),
 
 				chunk_count_(chunk_count),
@@ -316,15 +316,15 @@ namespace ncpp {
 			sz chunk_capacity_ = 0;
 
 		public:
-			inline F_storage* storage_p() { return storage_p_; }
+			NCPP_FORCE_INLINE F_storage* storage_p() { return storage_p_; }
 
-			inline sz max_chunk_count() const { return max_chunk_count_; }
-			inline sz chunk_capacity() const { return chunk_capacity_; }
+			NCPP_FORCE_INLINE sz max_chunk_count() const { return max_chunk_count_; }
+			NCPP_FORCE_INLINE sz chunk_capacity() const { return chunk_capacity_; }
 
 
 
 		public:
-			inline TF_smart_chunk_adaptor(F_storage* storage_p, sz max_chunk_count = NCPP_SMART_CHUNK_ADAPTOR_DEFAULT_MAX_CHUNK_COUNT) :
+			NCPP_FORCE_INLINE TF_smart_chunk_adaptor(F_storage* storage_p, sz max_chunk_count = NCPP_SMART_CHUNK_ADAPTOR_DEFAULT_MAX_CHUNK_COUNT) :
 				storage_p_(storage_p),
 
 				chunk_p_ring_buffer_(max_chunk_count),
@@ -453,18 +453,18 @@ namespace ncpp {
 
 
 		public:
-			inline F_adaptor* adaptor_p() { return adaptor_p_; }
-			inline F_storage* storage_p() { return storage_p_; }
+			NCPP_FORCE_INLINE F_adaptor* adaptor_p() { return adaptor_p_; }
+			NCPP_FORCE_INLINE F_storage* storage_p() { return storage_p_; }
 
-			inline sz chunk_capacity() const { return chunk_capacity_; }
-			inline u16 min_chunk_count() const { return min_chunk_count_; }
-			inline u16 chunk_count() const { return chunk_count_; }
+			NCPP_FORCE_INLINE sz chunk_capacity() const { return chunk_capacity_; }
+			NCPP_FORCE_INLINE u16 min_chunk_count() const { return min_chunk_count_; }
+			NCPP_FORCE_INLINE u16 chunk_count() const { return chunk_count_; }
 
 
 
 		public:
 			// Default chunk capacity is 2MiB
-			inline TF_smart_chunk_allocator(F_adaptor* adaptor_p = 0, u16 min_chunk_count = 0, const char* name = 0) :
+			NCPP_FORCE_INLINE TF_smart_chunk_allocator(F_adaptor* adaptor_p = 0, u16 min_chunk_count = 0, const char* name = 0) :
 				F_base(name),
 				adaptor_p_(adaptor_p),
 
@@ -485,7 +485,7 @@ namespace ncpp {
 				}
 
 			}
-			inline TF_smart_chunk_allocator(const TF_smart_chunk_allocator& x) :
+			NCPP_FORCE_INLINE TF_smart_chunk_allocator(const TF_smart_chunk_allocator& x) :
 				TF_smart_chunk_allocator(x.adaptor_p_, x.min_chunk_count_, x.name_)
 			{
 
@@ -501,7 +501,7 @@ namespace ncpp {
 
 
 		private:
-			inline F_smart_chunk_header* push_new_chunk() {
+			NCPP_FORCE_INLINE F_smart_chunk_header* push_new_chunk() {
 
 				assert(adaptor_p_ && "adaptor is null, cant push new chunk");
 
@@ -526,7 +526,7 @@ namespace ncpp {
 
 				return new_chunk_p;
 			}
-			inline F_smart_chunk_header* optain_next_chunk(F_smart_chunk_header* chunk_p) {
+			NCPP_FORCE_INLINE F_smart_chunk_header* optain_next_chunk(F_smart_chunk_header* chunk_p) {
 
 				if (chunk_p && chunk_p->next_p) {
 
@@ -537,7 +537,7 @@ namespace ncpp {
 
 				return push_new_chunk();
 			}
-			inline void erase_chunk(F_smart_chunk_header* chunk_p) {
+			NCPP_FORCE_INLINE void erase_chunk(F_smart_chunk_header* chunk_p) {
 
 				assert(adaptor_p_ && "adaptor is null, cant erase chunk");
 
@@ -568,7 +568,7 @@ namespace ncpp {
 			}
 
 		public:
-			inline void* new_mem(sz size, sz alignment, sz alignment_offset) {
+			NCPP_FORCE_INLINE void* new_mem(sz size, sz alignment, sz alignment_offset) {
 
 				sz actual_size = alignment + alignment_offset + size;
 
@@ -608,7 +608,7 @@ namespace ncpp {
 				return reinterpret_cast<u8*>(align_address(reinterpret_cast<uintptr_t>(memory_p + alignment_offset), alignment)) - alignment_offset;
 
 			}
-			inline void delete_mem(void* p) {
+			NCPP_FORCE_INLINE void delete_mem(void* p) {
 
 				assert(adaptor_p_ && "adaptor is null, cant deallocate memory");
 

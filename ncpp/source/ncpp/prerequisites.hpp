@@ -218,7 +218,7 @@ namespace ncpp {}
 ////////////////////////////////////////////////////////////////////////////////////
 
 #pragma region C++ Utilities
-#define NCPP_CONSTEXPR inline constexpr
+#define NCPP_CONSTEXPR NCPP_FORCE_INLINE constexpr
 #pragma endregion
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -322,6 +322,16 @@ struct NCPP_PP_CAT(NCPP_STATIC_WARNING,__LINE__) { \
 #define NCPP_VECTOR_CALL __vectorcall
 #elif defined(_MSC_VER)
 #define NCPP_VECTOR_CALL __vectorcall
+#endif
+
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
+#if defined(__GNUC__) || defined(__clang__)
+#define NCPP_FORCE_INLINE __attribute__((always_NCPP_FORCE_INLINE))
+#elif defined(_MSC_VER)
+#define NCPP_FORCE_INLINE __forceinline
 #endif
 
 #pragma endregion
@@ -564,30 +574,30 @@ namespace ncpp {
     ////////////////////////////////////////////////////////////////////////////////////
 
     template<typename F__>
-    inline F__& T_null_reference() { return *reinterpret_cast<F__*>(0); }
+    NCPP_FORCE_INLINE F__& T_null_reference() { return *reinterpret_cast<F__*>(0); }
 
     ////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////
 
     template<typename F__>
-    inline b8 T_is_valid(F__ const* ptr) {
+    NCPP_FORCE_INLINE b8 T_is_valid(F__ const* ptr) {
         
         return ptr != 0;
     }
     template<typename F__>
-    inline b8 T_is_valid(F__&& ptr) {
+    NCPP_FORCE_INLINE b8 T_is_valid(F__&& ptr) {
 
         return &ptr != 0;
     }
 
     template<typename F__>
-    inline b8 T_is_null(F__ const* ptr) {
+    NCPP_FORCE_INLINE b8 T_is_null(F__ const* ptr) {
 
         return ptr == 0;
     }
     template<typename F__>
-    inline b8 T_is_null(F__&& ptr) {
+    NCPP_FORCE_INLINE b8 T_is_null(F__&& ptr) {
 
         return &ptr == 0;
     }
@@ -596,7 +606,7 @@ namespace ncpp {
     ////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////
 
-    inline void pause_console() {
+    NCPP_FORCE_INLINE void pause_console() {
 
         std::cout << "Press any key to continue..." << std::endl;
         std::cin.get();

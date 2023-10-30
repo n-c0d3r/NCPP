@@ -83,12 +83,12 @@ namespace ncpp {
         u64 hash_code_ = 0;
 
     public:
-        inline u64 hash_code() const { return hash_code_; }
+        NCPP_FORCE_INLINE u64 hash_code() const { return hash_code_; }
 
 
 
     public:
-        inline TF_event(u64 hash_code = 0, const F_listener_list_allocator& listener_list_allocator = F_listener_list_allocator()) :
+        NCPP_FORCE_INLINE TF_event(u64 hash_code = 0, const F_listener_list_allocator& listener_list_allocator = F_listener_list_allocator()) :
             listener_list_(listener_list_allocator),
             hash_code_(hash_code)
         {
@@ -106,20 +106,20 @@ namespace ncpp {
 
     public:
         template<typename F_func__>
-        inline F_listener_handle T_push_back_listener(F_func__&& func) {
+        NCPP_FORCE_INLINE F_listener_handle T_push_back_listener(F_func__&& func) {
 
             listener_list_.push_back(std::forward<F_func__>(func));
 
             return --listener_list_.end();
         }
         template<typename F_func__>
-        inline F_listener_handle T_push_front_listener(F_func__&& func) {
+        NCPP_FORCE_INLINE F_listener_handle T_push_front_listener(F_func__&& func) {
 
             listener_list_.push_front(std::forward<F_func__>(func));
 
             return listener_list_.begin();
         }
-        inline void remove_listener(F_listener_handle handle) {
+        NCPP_FORCE_INLINE void remove_listener(F_listener_handle handle) {
 
             listener_list_.erase(handle);
         }
@@ -144,11 +144,11 @@ namespace ncpp {
 
 #define NCPP_STATIC_EVENTS_GETTER_STEP(I, EventName) \
         template<> \
-        inline auto& T_get_event<decltype(EventName)>() { return EventName; };
+        NCPP_FORCE_INLINE auto& T_get_event<decltype(EventName)>() { return EventName; };
 
 #define NCPP_DECLARE_STATIC_EVENTS(...) \
         template<class F_event__> \
-        inline auto& T_get_event(); \
+        NCPP_FORCE_INLINE auto& T_get_event(); \
         NCPP_EXPAND(NCPP_FOR_EACH(NCPP_STATIC_EVENTS_GETTER_STEP __VA_OPT__(,) __VA_ARGS__));
 
 }

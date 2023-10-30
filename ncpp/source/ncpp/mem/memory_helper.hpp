@@ -56,14 +56,14 @@ namespace ncpp {
 
     namespace mem {
 
-        inline constexpr sz aligned_size(sz size, size_t align = EASTL_ALLOCATOR_MIN_ALIGNMENT)
+        NCPP_FORCE_INLINE constexpr sz aligned_size(sz size, size_t align = EASTL_ALLOCATOR_MIN_ALIGNMENT)
         {
             const size_t mask = align - 1;
 
             return (size + mask) & ~mask;
         }
 
-        inline uintptr_t align_address(uintptr_t addr, size_t align = EASTL_ALLOCATOR_MIN_ALIGNMENT)
+        NCPP_FORCE_INLINE uintptr_t align_address(uintptr_t addr, size_t align = EASTL_ALLOCATOR_MIN_ALIGNMENT)
         {
             const size_t mask = align - 1;
             assert((align & mask) == 0); // pwr of 2
@@ -106,7 +106,7 @@ namespace ncpp {
 
 
         public:
-            static inline sz predict_actual_size(size_t size) {
+            static NCPP_FORCE_INLINE sz predict_actual_size(size_t size) {
 
                 sz actual_size = size + 1;
 
@@ -120,7 +120,7 @@ namespace ncpp {
 
                 return actual_size;
             }
-            static inline sz predict_actual_size(size_t size, sz alignment) {
+            static NCPP_FORCE_INLINE sz predict_actual_size(size_t size, sz alignment) {
 
                 sz actual_size = size + 1 + alignment;
 
@@ -135,7 +135,7 @@ namespace ncpp {
                 return actual_size;
             }
 
-            static inline void* allocate(size_t size, const char* pName, int flags, F_additional_args__... additional_args)
+            static NCPP_FORCE_INLINE void* allocate(size_t size, const char* pName, int flags, F_additional_args__... additional_args)
             {
 
                 return allocate(size, EASTL_ALLOCATOR_MIN_ALIGNMENT, 0, pName, flags, std::forward<F_additional_args__>(additional_args)...);
@@ -308,12 +308,12 @@ namespace ncpp {
         {
 
         public:
-            static inline void* new_mem(sz size) {
+            static NCPP_FORCE_INLINE void* new_mem(sz size) {
 
                 return malloc(size);
             }
 
-            static inline void delete_mem(void* ptr) {
+            static NCPP_FORCE_INLINE void delete_mem(void* ptr) {
 
                 free(ptr);
             }

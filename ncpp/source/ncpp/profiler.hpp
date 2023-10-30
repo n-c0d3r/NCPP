@@ -71,13 +71,13 @@ namespace ncpp {
 
 
 	public:
-		inline const eastl::string& content() const { return content_; }
-		inline F_output_function* output_function_p() const { return output_function_p_; }
+		NCPP_FORCE_INLINE const eastl::string& content() const { return content_; }
+		NCPP_FORCE_INLINE F_output_function* output_function_p() const { return output_function_p_; }
 
 
 
 	public:
-		inline F_profiler_sample(
+		NCPP_FORCE_INLINE F_profiler_sample(
 			const eastl::string& content = "",
 			F_output_function* output_function_p = [](const eastl::string& content, u64 nanoseconds) {
 
@@ -92,7 +92,7 @@ namespace ncpp {
 			start_ = eastl::chrono::high_resolution_clock::now();
 
 		}
-		inline F_profiler_sample(
+		NCPP_FORCE_INLINE F_profiler_sample(
 			eastl::string&& content = "",
 			F_output_function* output_function_p = [](const eastl::string& content, u64 nanoseconds) {
 

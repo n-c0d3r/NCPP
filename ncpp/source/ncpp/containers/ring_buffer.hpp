@@ -77,20 +77,20 @@ namespace ncpp {
 			ptrd end_ = 0;
 
 		public:
-			inline sz size() const { return end_ - begin_; }
-			inline sz capacity() const { return capacity_; }
-			inline bool is_empty() const { return !size(); }
-			inline bool is_null() const { return !capacity_; }
+			NCPP_FORCE_INLINE sz size() const { return end_ - begin_; }
+			NCPP_FORCE_INLINE sz capacity() const { return capacity_; }
+			NCPP_FORCE_INLINE bool is_empty() const { return !size(); }
+			NCPP_FORCE_INLINE bool is_null() const { return !capacity_; }
 
 
 
 		public:
-			inline TF_ring_buffer() {
+			NCPP_FORCE_INLINE TF_ring_buffer() {
 
 
 
 			}
-			inline TF_ring_buffer(sz capacity) :
+			NCPP_FORCE_INLINE TF_ring_buffer(sz capacity) :
 				capacity_(capacity),
 				item_vector_(capacity)
 			{
@@ -99,7 +99,7 @@ namespace ncpp {
 
 			}
 
-			inline TF_ring_buffer(const TF_ring_buffer& x) :
+			NCPP_FORCE_INLINE TF_ring_buffer(const TF_ring_buffer& x) :
 				item_vector_(x.item_vector_),
 				capacity_(x.capacity_),
 				begin_(x.begin_),
@@ -109,7 +109,7 @@ namespace ncpp {
 
 
 			}
-			inline TF_ring_buffer& operator = (const TF_ring_buffer& x) {
+			NCPP_FORCE_INLINE TF_ring_buffer& operator = (const TF_ring_buffer& x) {
 
 				item_vector_ = x.item_vector_;
 				capacity_ = x.capacity_;
@@ -118,7 +118,7 @@ namespace ncpp {
 
 			}
 
-			inline TF_ring_buffer(TF_ring_buffer&& x) :
+			NCPP_FORCE_INLINE TF_ring_buffer(TF_ring_buffer&& x) :
 				item_vector_(std::move(x.item_vector_)),
 				capacity_(x.capacity_),
 				begin_(x.begin_),
@@ -128,7 +128,7 @@ namespace ncpp {
 
 
 			}
-			inline TF_ring_buffer& operator = (TF_ring_buffer&& x) {
+			NCPP_FORCE_INLINE TF_ring_buffer& operator = (TF_ring_buffer&& x) {
 
 				item_vector_ = std::move(x.item_vector_);
 				capacity_ = x.capacity_;
@@ -150,23 +150,23 @@ namespace ncpp {
 
 
 		public:
-			inline void push(F_item const& item) {
+			NCPP_FORCE_INLINE void push(F_item const& item) {
 
 				T_push(std::forward<F_item const&>(item));
 			}
-			inline void push(F_item&& item) {
+			NCPP_FORCE_INLINE void push(F_item&& item) {
 
 				T_push(std::forward<F_item>(item));
 			}
 
-			inline F_item pop() {
+			NCPP_FORCE_INLINE F_item pop() {
 
 				assert(size() > 0 && "ring buffer is empty");
 
 				return std::move(item_vector_[(begin_++) % capacity_]);
 			}
 
-			inline b8 try_pop(F_item& item) {
+			NCPP_FORCE_INLINE b8 try_pop(F_item& item) {
 
 				if (size() > 0) {
 
@@ -178,7 +178,7 @@ namespace ncpp {
 				return false;
 			}
 
-			inline void reset() {
+			NCPP_FORCE_INLINE void reset() {
 
 				begin_ = 0;
 				end_ = 0;

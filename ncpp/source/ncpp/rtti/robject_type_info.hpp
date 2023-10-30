@@ -84,25 +84,16 @@ namespace ncpp {
 			F_robject_type_info_additional_data additional_data;
 
 		public:
-			inline F_rcontainer* rcontainer_p() { return rcontainer_p_; }
-			inline const F_rcontainer* rcontainer_p() const { return rcontainer_p_; }
-			inline sz hash_code() const { return hash_code_; }
-			inline eastl::string name() const { return name_; }
-			inline TF_robject_type_info* get_base_type_info_p() { return base_type_info_p_; }
-			inline const TF_robject_type_info* get_base_type_info_p() const { return base_type_info_p_; }
+			NCPP_FORCE_INLINE F_rcontainer* rcontainer_p() { return rcontainer_p_; }
+			NCPP_FORCE_INLINE const F_rcontainer* rcontainer_p() const { return rcontainer_p_; }
+			NCPP_FORCE_INLINE sz hash_code() const { return hash_code_; }
+			NCPP_FORCE_INLINE eastl::string name() const { return name_; }
+			NCPP_FORCE_INLINE TF_robject_type_info* get_base_type_info_p() { return base_type_info_p_; }
+			NCPP_FORCE_INLINE const TF_robject_type_info* get_base_type_info_p() const { return base_type_info_p_; }
             
-            inline const eastl::unordered_map<eastl::string, F_robject_member_info*>& name_to_member_info_p_map() const { return name_to_member_info_p_map_; }
+            NCPP_FORCE_INLINE const eastl::unordered_map<eastl::string, F_robject_member_info*>& name_to_member_info_p_map() const { return name_to_member_info_p_map_; }
 
-			inline F_robject_member_info* member_info(const eastl::string& name) {
-
-				auto it = name_to_member_info_p_map_.find(name);
-
-				if (it == name_to_member_info_p_map_.end())
-					return 0;
-
-				return it->second;
-			}
-			inline const F_robject_member_info* member_info(const eastl::string& name) const {
+			NCPP_FORCE_INLINE F_robject_member_info* member_info(const eastl::string& name) {
 
 				auto it = name_to_member_info_p_map_.find(name);
 
@@ -111,7 +102,16 @@ namespace ncpp {
 
 				return it->second;
 			}
-			inline void add_member_info(F_robject_member_info* info) {
+			NCPP_FORCE_INLINE const F_robject_member_info* member_info(const eastl::string& name) const {
+
+				auto it = name_to_member_info_p_map_.find(name);
+
+				if (it == name_to_member_info_p_map_.end())
+					return 0;
+
+				return it->second;
+			}
+			NCPP_FORCE_INLINE void add_member_info(F_robject_member_info* info) {
 
 				auto it = name_to_member_info_p_map_.find(info->name);
 
@@ -120,7 +120,7 @@ namespace ncpp {
 
 				name_to_member_info_p_map_[info->name] = info;
 			}
-			inline void remove_member_info(const eastl::string& name) {
+			NCPP_FORCE_INLINE void remove_member_info(const eastl::string& name) {
 
 				auto it = name_to_member_info_p_map_.find(name);
 
@@ -136,7 +136,7 @@ namespace ncpp {
 
 
 		public:
-			inline TF_robject_type_info(F_rcontainer* rcontainer_p, sz hash_code, const eastl::string& name, TF_robject_type_info* base_type_info_p) :
+			NCPP_FORCE_INLINE TF_robject_type_info(F_rcontainer* rcontainer_p, sz hash_code, const eastl::string& name, TF_robject_type_info* base_type_info_p) :
 				rcontainer_p_(rcontainer_p),
 				hash_code_(hash_code),
 				name_(name),

@@ -67,7 +67,7 @@ namespace ncpp {
 
 
 
-        static inline u32 murmur_finalize_32(u32 hash)
+        static NCPP_FORCE_INLINE u32 murmur_finalize_32(u32 hash)
         {
             hash ^= hash >> 16;
             hash *= 0x85ebca6b;
@@ -77,7 +77,7 @@ namespace ncpp {
             return hash;
         }
 
-        static inline u64 murmur_finalize_64(u64 hash)
+        static NCPP_FORCE_INLINE u64 murmur_finalize_64(u64 hash)
         {
             hash ^= hash >> 33;
             hash *= 0xff51afd7ed558ccdull;
@@ -87,7 +87,7 @@ namespace ncpp {
             return hash;
         }
 
-        static inline u32 murmur_32( std::initializer_list<u32> init_list )
+        static NCPP_FORCE_INLINE u32 murmur_32( std::initializer_list<u32> init_list )
         {
             u32 hash = 0;
             for( auto element : init_list )

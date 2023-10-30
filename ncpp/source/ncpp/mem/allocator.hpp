@@ -74,7 +74,7 @@ namespace ncpp {
 
 
 #ifdef NCPP_HAS_ALLOC_DEBUG_INFO
-		static inline F_alloc_debug_info get_alloc_debug_info(void* p) {
+		static NCPP_FORCE_INLINE F_alloc_debug_info get_alloc_debug_info(void* p) {
 
 			return reinterpret_cast<F_alloc_debug_info*>(p)[-1];
 		}
@@ -104,13 +104,13 @@ namespace ncpp {
 			// \endcond
 
 		public:
-			inline const char* name() const { return name_; }
-			inline void set_name(const char* new_name) { name_ = new_name; }
+			NCPP_FORCE_INLINE const char* name() const { return name_; }
+			NCPP_FORCE_INLINE void set_name(const char* new_name) { name_ = new_name; }
 
 
 
 		protected:
-			inline TI_allocator(const char* name = 0)
+			NCPP_FORCE_INLINE TI_allocator(const char* name = 0)
 			{
 
 #if NCPP_ENABLE_ALLOCATOR_NAME
@@ -118,7 +118,7 @@ namespace ncpp {
 #endif
 
 			}
-			inline TI_allocator(const TI_allocator& x)
+			NCPP_FORCE_INLINE TI_allocator(const TI_allocator& x)
 			{
 
 #if NCPP_ENABLE_ALLOCATOR_NAME
@@ -126,7 +126,7 @@ namespace ncpp {
 #endif
 
 			}
-			inline TI_allocator(const TI_allocator& x, const char* name)
+			NCPP_FORCE_INLINE TI_allocator(const TI_allocator& x, const char* name)
 			{
 
 #if NCPP_ENABLE_ALLOCATOR_NAME
@@ -148,7 +148,7 @@ namespace ncpp {
 
 		private:
 			template<class F_overloaded_allocator__, b8 is_default_alloc__>
-			inline void* T_aligned_allocate_internal(sz n, sz alignment, sz alignment_offset, int flags = 0) {
+			NCPP_FORCE_INLINE void* T_aligned_allocate_internal(sz n, sz alignment, sz alignment_offset, int flags = 0) {
 
 				if constexpr (enable_manual_alignment && !is_default_alloc__) {
 
@@ -232,7 +232,7 @@ namespace ncpp {
 
 			}
 			template<class F_overloaded_allocator__, b8 is_default_alloc__>
-			inline void* T_allocate_internal(sz n, int flags = 0) {
+			NCPP_FORCE_INLINE void* T_allocate_internal(sz n, int flags = 0) {
 
 				if constexpr (enable_manual_alignment && !is_default_alloc__) {
 
@@ -314,7 +314,7 @@ namespace ncpp {
 
 			}
 			template<class F_overloaded_allocator__, b8 is_default_alloc__>
-			inline void T_deallocate_internal(void* p, sz n = 1) {
+			NCPP_FORCE_INLINE void T_deallocate_internal(void* p, sz n = 1) {
 
 #ifdef NCPP_HAS_ALLOC_DEBUG_INFO
 				F_alloc_debug_info debug_info = get_alloc_debug_info(p);
@@ -351,7 +351,7 @@ namespace ncpp {
 			/**
 			 *	Allocates non-aligned memory with default new_mem(sz) function
 			 */
-			inline void* default_allocate(sz n, int flags = 0) {
+			NCPP_FORCE_INLINE void* default_allocate(sz n, int flags = 0) {
 
 				return T_allocate_internal<TI_allocator, true>(n, flags);
 			}
@@ -438,35 +438,35 @@ namespace ncpp {
 			/**
 			 *	Clears everything and to be the same as the default instance.
 			 */
-			inline void reset() {}
+			NCPP_FORCE_INLINE void reset() {}
 			/**
 			 *	Clear some essential datas.
 			 */
-			inline void clear() {}
+			NCPP_FORCE_INLINE void clear() {}
 
 			/**
 			 *
 			 */
-			inline void* new_mem(sz size, sz alignment = EASTL_ALLOCATOR_MIN_ALIGNMENT, sz alignment_offset = 0) {
+			NCPP_FORCE_INLINE void* new_mem(sz size, sz alignment = EASTL_ALLOCATOR_MIN_ALIGNMENT, sz alignment_offset = 0) {
 
 				return malloc(size);
 			}
 			/**
 			 *
 			 */
-			inline void delete_mem(void* p) { 
+			NCPP_FORCE_INLINE void delete_mem(void* p) { 
 				
 				free(p); 
 			}
             
             template<typename F__, typename... F_args__>
-            inline F__* T_new(F_args__&&... args) {
+            NCPP_FORCE_INLINE F__* T_new(F_args__&&... args) {
                 
                 return new(allocate(sizeof(F__), NCPP_ALIGNOF(F__), 0)) F__{ std::forward<F_args__>(args)... };
             }
             
             template<typename F__>
-            inline void T_delete(F__* p) {
+            NCPP_FORCE_INLINE void T_delete(F__* p) {
                 
                 p->~F__();
                 

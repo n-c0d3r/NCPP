@@ -74,20 +74,20 @@ namespace ncpp {
 
 
 		public:
-			inline F_target_allocator& target_allocator() { return *target_allocator_p_; }
-			inline const F_target_allocator& target_allocator() const { return *target_allocator_p_; }
+			NCPP_FORCE_INLINE F_target_allocator& target_allocator() { return *target_allocator_p_; }
+			NCPP_FORCE_INLINE const F_target_allocator& target_allocator() const { return *target_allocator_p_; }
 
 
 
 		public:
-			inline TF_link_allocator(const char* name = 0) :
+			NCPP_FORCE_INLINE TF_link_allocator(const char* name = 0) :
 				TI_allocator<TF_link_allocator<F_target_allocator__>>(name)
 			{
 
 
 
 			}
-			inline TF_link_allocator(F_target_allocator& target_allocator, const char* name = 0) :
+			NCPP_FORCE_INLINE TF_link_allocator(F_target_allocator& target_allocator, const char* name = 0) :
 				TI_allocator<TF_link_allocator<F_target_allocator__>>(name),
 				target_allocator_p_(&target_allocator)
 			{
@@ -95,7 +95,7 @@ namespace ncpp {
 
 
 			}
-			inline TF_link_allocator(const TF_link_allocator& x) :
+			NCPP_FORCE_INLINE TF_link_allocator(const TF_link_allocator& x) :
 				TF_link_allocator(x.target_allocator(), x.name_)
 			{
 
@@ -111,26 +111,26 @@ namespace ncpp {
 
 
 		public:
-			inline void* allocate(sz n, int flags = 0) {
+			NCPP_FORCE_INLINE void* allocate(sz n, int flags = 0) {
 
 				assert(target_allocator_p_ && "allocator reference is null, cant allocate memory");
 
 				return target_allocator_p_->allocate(n, flags);
 			}
-			inline void* allocate(sz n, sz alignment, sz alignment_offset, int flags = 0) {
+			NCPP_FORCE_INLINE void* allocate(sz n, sz alignment, sz alignment_offset, int flags = 0) {
 
 				assert(target_allocator_p_ && "allocator reference is null, cant allocate memory");
 
 				return target_allocator_p_->allocate(n, alignment, alignment_offset, flags);
 			}
-			inline void  deallocate(void* p, sz n = 1) {
+			NCPP_FORCE_INLINE void  deallocate(void* p, sz n = 1) {
 
 				assert(target_allocator_p_ && "allocator reference is null, cant deallocate memory");
 
 				target_allocator_p_->deallocate(p, n);
 			}
 
-			inline void reset() {
+			NCPP_FORCE_INLINE void reset() {
 
 				if (!target_allocator_p_)
 					return;
@@ -140,7 +140,7 @@ namespace ncpp {
 				target_allocator_p_ = 0;
 
 			}
-			inline void clear() {
+			NCPP_FORCE_INLINE void clear() {
 
 				if (!target_allocator_p_)
 					return;
