@@ -355,7 +355,7 @@ struct NCPP_PP_CAT(NCPP_STATIC_WARNING,__LINE__) { \
 ////////////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUC__) || defined(__clang__)
-#define NCPP_FORCE_INLINE __attribute__((always_NCPP_FORCE_INLINE))
+#define NCPP_FORCE_INLINE __attribute__((always_inline))
 #elif defined(_MSC_VER)
 #define NCPP_FORCE_INLINE __forceinline
 #endif
