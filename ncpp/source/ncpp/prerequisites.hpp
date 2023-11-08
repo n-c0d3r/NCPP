@@ -336,10 +336,10 @@ struct NCPP_PP_CAT(NCPP_STATIC_WARNING,__LINE__) { \
 
 #ifdef NCPP_ENABLE_SIMD
 
-#if defined(__GNUC__) 
-#define NCPP_VECTOR_CALL 
-#elif defined(__clang__)
+#if defined(__clang__)
 #define NCPP_VECTOR_CALL __vectorcall
+#elif defined(__GNUC__) 
+#define NCPP_VECTOR_CALL 
 #elif defined(_MSC_VER)
 #define NCPP_VECTOR_CALL __vectorcall
 #endif
@@ -354,10 +354,10 @@ struct NCPP_PP_CAT(NCPP_STATIC_WARNING,__LINE__) { \
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
-#if defined(__GNUC__) 
-#define NCPP_FAST_CALL __attribute__((fastcall))
-#elif defined(__clang__)
+#if defined(__clang__)
 #define NCPP_FAST_CALL
+#elif defined(__GNUC__) 
+#define NCPP_FAST_CALL __attribute__((fastcall))
 #elif defined(_MSC_VER)
 #define NCPP_FAST_CALL __fastcall
 #endif
