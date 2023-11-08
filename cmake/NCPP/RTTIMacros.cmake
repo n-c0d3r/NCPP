@@ -17,7 +17,7 @@ function(NCPP_RTTIMacros_CreateMemberOverrider)
     
     cmake_parse_arguments(
         PARGS
-        "QUIET;HIDE_NAME_IN_MEMBER_MACROS"
+        "HIDE_NAME_IN_MEMBER_MACROS"
         "NAME;PREFIX;REFLECT;BODY"
         ""
         ${ARGN}
@@ -130,12 +130,38 @@ endfunction()
 
 
 
+function(NCPP_RTTIMacros_CreateMacro)
+    
+    cmake_parse_arguments(
+        PARGS
+        ""
+        "NAME_AND_PARAMS;REFLECT;BODY"
+        ""
+        ${ARGN}
+    )
+
+
+
+    if(NOT PARGS_NAME_AND_PARAMS)
+        
+    endif()
+    
+
+    
+    file(APPEND "${NCPP_RTTI_MACROS_FILE}" "NCPP_ROBJECT_BODY_${PARGS_NAME_AND_PARAMS} ${BODY} \n")
+    file(APPEND "${NCPP_RTTI_MACROS_FILE}" "NCPP_ROBJECT_REFLECT_${PARGS_NAME_AND_PARAMS} ${REFLECT} \n")
+
+endfunction()
+
+
+
 NCPP_RTTIMacros_CreateMemberOverrider(
     NAME DEFAULT
     HIDE_NAME_IN_MEMBER_MACROS
     REFLECT ";"
     BODY ";"
 )
+
 
 
 message(STATUS "<NCPP::RTTIMacros> Build rtti macros done")
