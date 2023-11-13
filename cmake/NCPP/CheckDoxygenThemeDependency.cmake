@@ -10,12 +10,14 @@ include(NCPP/GitUtils)
 
 
 
-NCPP_GitClone(
-    PROJECT_NAME "doxygen-awesome-css"
-    GIT_URL "https://github.com/jothepro/doxygen-awesome-css.git"
-    GIT_BRANCH "main"
-    DIRECTORY "${NCPP_DEPENDENCIES_DIR}"
-)
+if(NOT EXISTS "${NCPP_DEPENDENCIES_DIR}/doxygen-awesome-css")
+    NCPP_GitClone(
+        PROJECT_NAME "doxygen-awesome-css"
+        GIT_URL "https://github.com/jothepro/doxygen-awesome-css.git"
+        GIT_COMMIT "8cea9a073ecd50a5b2c0958a3df100292d6c7374"
+        DIRECTORY "${NCPP_DEPENDENCIES_DIR}"
+    )
+endif()
 
 
 
