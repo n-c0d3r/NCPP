@@ -65,23 +65,57 @@ namespace ncpp {
 	namespace rtti {
 
 		template<typename F_options__>
-		struct TF_robject_member_info {
+		class TF_robject_member_info {
 
 		public:
 			NCPP_RTTI_SEPECIFIC_USING(F_options__);
 
 
 
+		private:
+			sz type_hash_code_ = 0;
+			sz invoke_function_address_or_variable_offset_ = 0;
+			eastl::string name_;
+			u16 size_ = 0;
+            
+            F_robject_type_info* robject_type_info_p_ = 0;
+
+
+
 		public:
-			sz type_hash_code = 0;
-
-			sz invoke_function_address_or_variable_offset = 0;
-
-			eastl::string name;
-
-			u16 size = 0;
-
 			F_robject_member_info_additional_data additional_data;
+
+
+
+		public:
+			NCPP_FORCE_INLINE sz type_hash_code() const { return type_hash_code_; }
+			NCPP_FORCE_INLINE sz invoke_function_address_or_variable_offset() const { return invoke_function_address_or_variable_offset_; }
+			NCPP_FORCE_INLINE const eastl::string name() const { return name_; }
+			NCPP_FORCE_INLINE u16 size() const { return size_; }
+            
+            NCPP_FORCE_INLINE F_robject_type_info* robject_type_info_p() { return robject_type_info_p_; }
+            NCPP_FORCE_INLINE const F_robject_type_info* robject_type_info_p() const { return robject_type_info_p_; }
+
+
+
+		public:
+			TF_robject_member_info(
+				sz type_hash_code,
+				sz invoke_function_address_or_variable_offset,
+				const eastl::string& name,
+				u16 size,
+                F_robject_type_info* robject_type_info_p
+			) :
+				type_hash_code_(type_hash_code),
+				invoke_function_address_or_variable_offset_(invoke_function_address_or_variable_offset),
+				name_(name),
+				size_(size),
+                robject_type_info_p_(robject_type_info_p)
+			{
+
+
+
+			}
 
 		};
 
@@ -104,16 +138,16 @@ namespace ncpp {
 
 			member_info_p = F_rtti_traits__::template T_new<F_robject_member_info__>(
 				robject_type_info_p->rcontainer_p()->allocator(),
-				F_robject_member_info__ {
+				F_robject_member_info__(
 
 					typeid(F_member__).hash_code(),
 					F_member_static_info__::get_invoke_address() | F_member_static_info__::get_offset(),
-
 					F_member_static_info__::get_name(),
+					F_member_static_info__::get_size(),
+                                        
+                    robject_type_info_p
 
-					F_member_static_info__::get_size()
-
-				}
+				)
 			);
 
 			robject_type_info_p->add_member_info(member_info_p);

@@ -129,12 +129,12 @@ namespace ncpp {
 			}
 			inline void add_member_info(F_robject_member_info* info) {
 
-				auto it = name_to_member_info_p_map_.find(info->name);
+				auto it = name_to_member_info_p_map_.find(info->name());
 
 				if (it != name_to_member_info_p_map_.end())
 					return;
 
-				name_to_member_info_p_map_[info->name] = info;
+				name_to_member_info_p_map_[info->name()] = info;
 			}
 			inline void remove_member_info(const eastl::string& name) {
 
