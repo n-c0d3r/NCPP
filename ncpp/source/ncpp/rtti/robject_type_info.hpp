@@ -40,7 +40,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/rtti/traits.hpp>
-#include <ncpp/rtti/rflag.hpp>
 #include <ncpp/rtti/security_helper.hpp>
 
 #pragma endregion
@@ -193,8 +192,7 @@ namespace ncpp {
 			NCPP_RTTI_SEPECIFIC_TARGS()
 		>
 		F_robject_type_info__* T_reflect_object_type(
-			F_rcontainer__* rcontainer_p,
-			F_rflag flag = NCPP_RFLAG_DEFAULT
+			F_rcontainer__* rcontainer_p
 		) {
 
 			F_robject_type_info__* robject_type_info_p = rcontainer_p->robject_type_info(F_robject__::static_type_hash_code());

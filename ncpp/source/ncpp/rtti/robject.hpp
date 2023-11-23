@@ -40,7 +40,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/rtti/traits.hpp>
-#include <ncpp/rtti/rflag.hpp>
 #include <ncpp/rtti/rtti_flag.hpp>
 #include <ncpp/rtti/robject_flag.hpp>
 #include <ncpp/rtti/security_helper.hpp>
@@ -75,12 +74,11 @@ namespace ncpp {
 			F_rcontainer__* rcontainer_p, \
 			F_robject_type_info__* robject_type_info_p,\
 			F_robject_member_info__* robject_member_info_p,\
-			ncpp::rtti::F_rflag rflag = NCPP_RFLAG_DEFAULT,\
 			F_user_reflect_member_custom_data* custom_data_p = 0\
 		)
 
 #define NCPP_ROBJECT_CALL_USER_REFLECT_MEMBER() F_rtti_traits::template T_safe_user_reflect_member<\
-			F_compile_time_rflag__,\
+			F_reflect_flag__,\
 			F_this,\
 			F_member,\
 			F_member_static_info\
@@ -88,7 +86,6 @@ namespace ncpp {
 			rcontainer_p,\
 			robject_type_info_p,\
 			robject_member_info_p,\
-			rflag,\
 			custom_data_p\
 		);
 
@@ -107,6 +104,46 @@ namespace ncpp {
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		
+
+
+
+#define NCPP_ROBJECT_USER_REFLECT_BASE(CompileTimeRFlagType, CustomDataType) \
+		NCPP_RTTI_IMPLEMENT_FLAG(CompileTimeRFlagType, ncpp::rtti::F_user_reflect_base_flag);\
+		using F_user_reflect_base_custom_data = CustomDataType;\
+		template<class F_robject__, class F_base, NCPP_RTTI_SEPECIFIC_TARGS()>\
+		static NCPP_FORCE_INLINE void T_user_reflect_base(\
+			F_rcontainer__* rcontainer_p, \
+			F_robject_type_info__* robject_type_info_p,\
+			F_robject_type_info__* base_info_p,\
+			F_user_reflect_base_custom_data* custom_data_p = 0\
+		)
+
+#define NCPP_ROBJECT_CALL_USER_REFLECT_BASE() F_rtti_traits::template T_safe_user_reflect_base<\
+			F_reflect_flag__,\
+			F_this,\
+			F_base\
+		>(\
+			rcontainer_p,\
+			robject_type_info_p,\
+			base_info_p,\
+			custom_data_p\
+		);
+
+
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 #define NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_ROBJECT_MEMBER_BODY_OVERRIDER_##Overrider)(MemberType, MemberName);
 #define NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_ROBJECT_MEMBER_BODY_OVERRIDER_##Overrider)(MemberType, MemberName);
@@ -165,10 +202,9 @@ namespace ncpp {
 			NCPP_PRIVATE_KEYWORD NCPP_RTTI_IMPLEMENT_FLAG(F_this, ncpp::rtti::F_robject_virtual_flag);\
 			NCPP_PUBLIC_KEYWORD virtual F_robject_type_info* virtual_reflect(\
 					F_rcontainer* rcontainer_p, \
-					ncpp::rtti::F_rflag rflag = NCPP_RFLAG_DEFAULT,\
                     void* custom_data_p = 0\
 				) {\
-					return F_this::static_reflect(rcontainer_p, rflag, custom_data_p);\
+					return F_this::static_reflect(rcontainer_p, custom_data_p);\
 				}
 
 		////////////////////////////////////////////////////////////////////////////////////
@@ -308,16 +344,19 @@ namespace ncpp {
 
 #define NCPP_ROBJECT_REFLECT_BASE(BaseName) \
 			{\
+				\
+				using F_base = BaseName;\
                 \
-                F_robject_type_info* base_info_p = F_rtti_traits::template T_safe_reflect<BaseName, false, F_compile_time_rflag__>(\
+                F_robject_type_info* base_info_p = F_rtti_traits::template T_safe_reflect<BaseName, false, F_reflect_flag__>(\
                     rcontainer_p,\
                     0,\
-                    rflag,\
                     custom_data_p\
                 );\
                 \
 				if (!robject_type_info_p->is_has_base(base_info_p))\
                     robject_type_info_p->add_base(base_info_p);\
+				\
+				NCPP_ROBJECT_CALL_USER_REFLECT_BASE();\
 				\
 			}
     
@@ -340,8 +379,7 @@ namespace ncpp {
 				TF_##MemberName##___ncpp_static_info___<F_this, MemberType>, \
 				NCPP_RTTI_PASS_SEPECIFIC_USING()\
 			>(\
-				robject_type_info_p, \
-				rflag\
+				robject_type_info_p \
 			);
 
 #define NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName,...) \
@@ -359,10 +397,10 @@ namespace ncpp {
 				\
 				NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberType, MemberName);\
 				\
-				if(rflag & NCPP_RFLAG_ROBJECT_MEMBER_INFO)\
+				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
 					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 				\
-				if(rflag & NCPP_RFLAG_ROBJECT_METADATA)\
+				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata))\
 					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 				\
 				NCPP_ROBJECT_CALL_USER_REFLECT_MEMBER();\
@@ -388,10 +426,10 @@ namespace ncpp {
 				\
 				NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberType, MemberName);\
 				\
-				if(rflag & NCPP_RFLAG_ROBJECT_MEMBER_INFO)\
+				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
 					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 				\
-				if(rflag & NCPP_RFLAG_ROBJECT_METADATA)\
+				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata))\
 					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 				\
 				NCPP_ROBJECT_CALL_USER_REFLECT_MEMBER();\
@@ -417,10 +455,10 @@ namespace ncpp {
 				\
 				NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberType, MemberName);\
 				\
-				if(rflag & NCPP_RFLAG_ROBJECT_MEMBER_INFO)\
+				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
 					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 				\
-				if(rflag & NCPP_RFLAG_ROBJECT_METADATA)\
+				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata))\
 					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 				\
 				NCPP_ROBJECT_CALL_USER_REFLECT_MEMBER();\
@@ -446,10 +484,10 @@ namespace ncpp {
 				\
 				NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberType, MemberName);\
 				\
-				if(rflag & NCPP_RFLAG_ROBJECT_MEMBER_INFO)\
+				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
 					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 				\
-				if(rflag & NCPP_RFLAG_ROBJECT_METADATA)\
+				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata))\
 					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 				\
 				NCPP_ROBJECT_CALL_USER_REFLECT_MEMBER();\
@@ -519,18 +557,17 @@ namespace ncpp {
 				NCPP_EXPAND(NCPP_FOR_EACH(NCPP_ROBJECT_BODY_STEP __VA_OPT__(,) __VA_ARGS__));\
 				\
 			NCPP_PUBLIC_KEYWORD\
-				template<typename F_compile_time_rflag__>\
+				template<typename F_reflect_flag__>\
 				static F_robject_type_info* T_static_reflect(\
 					F_rcontainer* rcontainer_p, \
-					ncpp::rtti::F_rflag rflag = NCPP_RFLAG_DEFAULT,\
 					void* custom_data_p = 0\
 				){\
 					\
-					F_robject_type_info* robject_type_info_p = reinterpret_cast<F_robject_type_info*>(0);\
-					F_robject_member_info* robject_member_info_p = reinterpret_cast<F_robject_member_info*>(0);\
+					F_robject_type_info* robject_type_info_p = 0;\
+					F_robject_member_info* robject_member_info_p = 0;\
 					\
-					if(rflag & NCPP_RFLAG_ROBJECT_TYPE_INFO)\
-						robject_type_info_p = ncpp::rtti::T_reflect_object_type<F_this, NCPP_RTTI_PASS_SEPECIFIC_USING()>(rcontainer_p, rflag);\
+					if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_type_info))\
+						robject_type_info_p = ncpp::rtti::T_reflect_object_type<F_this, NCPP_RTTI_PASS_SEPECIFIC_USING()>(rcontainer_p);\
 					\
 					NCPP_EXPAND(NCPP_FOR_EACH(NCPP_ROBJECT_REFLECT_STEP __VA_OPT__(,) __VA_ARGS__));\
 					\
@@ -540,10 +577,9 @@ namespace ncpp {
 				\
 				static NCPP_FORCE_INLINE F_robject_type_info* static_reflect(\
 					F_rcontainer* rcontainer_p, \
-					ncpp::rtti::F_rflag rflag = NCPP_RFLAG_DEFAULT,\
 					void* custom_data_p = 0\
 				){\
-					return T_static_reflect<void>(rcontainer_p, rflag, custom_data_p);\
+					return T_static_reflect<void>(rcontainer_p, custom_data_p);\
 				}\
 				\
 			NCPP_PUBLIC_KEYWORD\

@@ -53,7 +53,12 @@ struct F_demo_compiletime_rflag {
 public:
     NCPP_ROBJECT_USER_REFLECT_MEMBER(F_demo_compiletime_rflag, void){
         
-        std::cout << robject_member_info_p->name() << std::endl;
+        std::cout << "user reflect member: " << robject_member_info_p->name() << std::endl;
+        
+    }
+    NCPP_ROBJECT_USER_REFLECT_BASE(F_demo_compiletime_rflag, void){
+        
+        std::cout << "user reflect base: " << base_info_p->name() << std::endl;
         
     }
     
