@@ -35,7 +35,9 @@ class A : public B, public C {
         EXTENDS(C),
 
 		PUBLIC(i32, i),
-		PUBLIC_CONST(void(), foo)
+		PUBLIC_CONST(void(), foo),
+                      
+        STATIC_PUBLIC(i32, si)
 	);
 
 };
@@ -45,6 +47,8 @@ void A::foo() {
     
 
 }
+
+i32 A::si = 4;
 
 
 

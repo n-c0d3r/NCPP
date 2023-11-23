@@ -7,7 +7,7 @@ include(NCPP/MacroHelper)
 
 
 
-set(NCPP_PREREQUISITE_MACROS_FILE_PATH "${NCPP_GENERATED_FILES_DIR}/prerequisite_macros.h")
+set(NCPP_PREREQUISITE_MACROS_FILE_PATH "${NCPP_GENERATED_FILES_DIR}/prerequisite_macros.hpp")
 
 file(WRITE ${NCPP_PREREQUISITE_MACROS_FILE_PATH} "\n")
 
