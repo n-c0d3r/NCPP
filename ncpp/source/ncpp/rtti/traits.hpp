@@ -277,8 +277,9 @@ namespace ncpp {
 
 			template<
                 class F_compile_time_rflag__,
+                class F_robject__,
                 typename F_member__,
-                typename F_member_static_info__,
+                class F_member_static_info__,
 				std::enable_if_t<
 					NCPP_RTTI_IS_HAS_FLAG(F_compile_time_rflag__, F_user_reflect_member_flag),
 					i32
@@ -293,6 +294,7 @@ namespace ncpp {
 			) {
 
 				F_compile_time_rflag__::template T_user_reflect_member<
+                    F_robject__,
                     F_member__,
                     F_member_static_info__,
                     NCPP_RTTI_PASS_SEPECIFIC_USING()
@@ -306,8 +308,9 @@ namespace ncpp {
 			}
 			template<
                 class F_compile_time_rflag__,
+                class F_robject__,
                 typename F_member__,
-                typename F_member_static_info__,
+                class F_member_static_info__,
 				std::enable_if_t<
 					!NCPP_RTTI_IS_HAS_FLAG(F_compile_time_rflag__, F_user_reflect_member_flag),
 					i32

@@ -69,7 +69,7 @@ namespace ncpp {
 
 #define NCPP_ROBJECT_USER_REFLECT_MEMBER(CompileTimeRFlagType) \
 		NCPP_RTTI_IMPLEMENT_FLAG(CompileTimeRFlagType, ncpp::rtti::F_user_reflect_member_flag);\
-		template<typename F_member__, typename F_member_static_info__, NCPP_RTTI_SEPECIFIC_TARGS()>\
+		template<class F_robject__, typename F_member__, class F_member_static_info__, NCPP_RTTI_SEPECIFIC_TARGS()>\
 		static NCPP_FORCE_INLINE void T_user_reflect_member(\
 			F_rcontainer__* rcontainer_p, \
 			F_robject_type_info__* robject_type_info_p,\
@@ -80,6 +80,7 @@ namespace ncpp {
 
 #define NCPP_ROBJECT_CALL_USER_REFLECT_MEMBER() F_rtti_traits::template T_safe_user_reflect_member<\
 			F_compile_time_rflag__,\
+			F_this,\
 			F_member,\
 			F_member_static_info\
 		>(\
