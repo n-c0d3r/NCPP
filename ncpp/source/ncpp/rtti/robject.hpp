@@ -457,7 +457,7 @@ namespace ncpp {
 				\
 			NCPP_PUBLIC_KEYWORD\
 				using F_this = ObjectTypeName;\
-				static NCPP_FORCE_INLINE eastl::string static_type_name() { return #ObjectTypeName; }\
+				static NCPP_FORCE_INLINE eastl::string static_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#ObjectTypeName, "_" + eastl::to_string(static_type_hash_code())); }\
 				static NCPP_FORCE_INLINE ncpp::sz static_type_hash_code() { return typeid(F_this).hash_code(); }\
 				\
 			NCPP_PRIVATE_KEYWORD\
