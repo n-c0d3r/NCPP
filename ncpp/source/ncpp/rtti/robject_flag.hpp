@@ -66,6 +66,8 @@ namespace ncpp {
 		NCPP_RTTI_CREATE_FLAG(F_robject_flag);
 		NCPP_RTTI_CREATE_FLAG(F_robject_virtual_flag);
 		NCPP_RTTI_CREATE_FLAG(F_robject_has_base_flag);
+
+		NCPP_RTTI_CREATE_FLAG(F_user_reflect_member_flag);
         
 	}
 

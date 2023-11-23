@@ -189,7 +189,10 @@ namespace ncpp {
 		template<class F_options__>
 		struct TF_traits {
 
-			using F_options = F_options__;
+            using F_options = F_options__;
+            
+            using F_rtti_options = F_options__;
+            using F_rtti_traits = TF_traits<F_options__>;
 
 			using F_allocator = typename F_options::F_allocator;
 
@@ -268,6 +271,57 @@ namespace ncpp {
 			static NCPP_FORCE_INLINE F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, rtti::F_rflag rflag = NCPP_RFLAG_DEFAULT, void* custom_data_p = 0) {
 
 				return 0;
+			}
+
+
+
+			template<
+                class F_compile_time_rflag__,
+                typename F_member__,
+                typename F_member_static_info__,
+				std::enable_if_t<
+					NCPP_RTTI_IS_HAS_FLAG(F_compile_time_rflag__, F_user_reflect_member_flag),
+					i32
+				> = 0
+			>
+			static NCPP_FORCE_INLINE void T_safe_user_reflect_member(
+				F_rcontainer* rcontainer_p, 
+				F_robject_type_info* robject_type_info_p,
+				F_robject_member_info* robject_member_info_p,
+				rtti::F_rflag rflag = NCPP_RFLAG_DEFAULT, 
+				void* custom_data_p = 0
+			) {
+
+				F_compile_time_rflag__::template T_user_reflect_member<
+                    F_member__,
+                    F_member_static_info__,
+                    NCPP_RTTI_PASS_SEPECIFIC_USING()
+                >(
+                    rcontainer_p,
+                    robject_type_info_p,
+					robject_member_info_p,
+					rflag,
+					custom_data_p
+                );
+			}
+			template<
+                class F_compile_time_rflag__,
+                typename F_member__,
+                typename F_member_static_info__,
+				std::enable_if_t<
+					!NCPP_RTTI_IS_HAS_FLAG(F_compile_time_rflag__, F_user_reflect_member_flag),
+					i32
+				> = 0
+			>
+			static NCPP_FORCE_INLINE void T_safe_user_reflect_member(
+				F_rcontainer* rcontainer_p, 
+				F_robject_type_info* robject_type_info_p,
+				F_robject_member_info* robject_member_info_p,
+				rtti::F_rflag rflag = NCPP_RFLAG_DEFAULT, 
+				void* custom_data_p = 0
+			) {
+
+				
 			}
 
 		};

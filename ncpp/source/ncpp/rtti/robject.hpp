@@ -67,15 +67,28 @@ namespace ncpp {
 
 	namespace rtti {
 
-		NCPP_RTTI_CREATE_FLAG(F_user_reflect_member_flag);
-
 #define NCPP_ROBJECT_USER_REFLECT_MEMBER(CompileTimeRFlagType) \
 		NCPP_RTTI_IMPLEMENT_FLAG(CompileTimeRFlagType, ncpp::rtti::F_user_reflect_member_flag);\
-		static NCPP_FORCE_INLINE void user_reflect_member(\
-			F_rcontainer* rcontainer_p, \
+		template<typename F_member__, typename F_member_static_info__, NCPP_RTTI_SEPECIFIC_TARGS()>\
+		static NCPP_FORCE_INLINE void T_user_reflect_member(\
+			F_rcontainer__* rcontainer_p, \
+			F_robject_type_info__* robject_type_info_p,\
+			F_robject_member_info__* robject_member_info_p,\
 			ncpp::rtti::F_rflag rflag = NCPP_RFLAG_DEFAULT,\
 			void* custom_data_p = 0\
 		)
+
+#define NCPP_ROBJECT_CALL_USER_REFLECT_MEMBER() F_rtti_traits::template T_safe_user_reflect_member<\
+			F_compile_time_rflag__,\
+			F_member,\
+			F_member_static_info\
+		>(\
+			rcontainer_p,\
+			robject_type_info_p,\
+			robject_member_info_p,\
+			rflag,\
+			custom_data_p\
+		);
 
 
 
@@ -350,6 +363,9 @@ namespace ncpp {
 				\
 				if(rflag & NCPP_RFLAG_ROBJECT_METADATA)\
 					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+				\
+				NCPP_ROBJECT_CALL_USER_REFLECT_MEMBER();\
+				\
 			}\
 			\
 			if constexpr (false)\
@@ -376,6 +392,9 @@ namespace ncpp {
 				\
 				if(rflag & NCPP_RFLAG_ROBJECT_METADATA)\
 					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+				\
+				NCPP_ROBJECT_CALL_USER_REFLECT_MEMBER();\
+				\
 			}\
 			\
 			if constexpr (false)\
@@ -402,6 +421,9 @@ namespace ncpp {
 				\
 				if(rflag & NCPP_RFLAG_ROBJECT_METADATA)\
 					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+				\
+				NCPP_ROBJECT_CALL_USER_REFLECT_MEMBER();\
+				\
 			}\
 			\
 			if constexpr (false)\
@@ -428,6 +450,9 @@ namespace ncpp {
 				\
 				if(rflag & NCPP_RFLAG_ROBJECT_METADATA)\
 					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+				\
+				NCPP_ROBJECT_CALL_USER_REFLECT_MEMBER();\
+				\
 			}\
 			\
 			if constexpr (false)\
