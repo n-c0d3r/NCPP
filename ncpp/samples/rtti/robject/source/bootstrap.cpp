@@ -73,9 +73,7 @@ public:
     }
     
 public:
-    NCPP_RTTI_IMPLEMENT_FLAG(F_demo_compiletime_rflag, rtti::F_disable_reflect_robject_member_info);
-    NCPP_RTTI_IMPLEMENT_FLAG(F_demo_compiletime_rflag, rtti::F_disable_reflect_robject_type_info);
-    NCPP_RTTI_IMPLEMENT_FLAG(F_demo_compiletime_rflag, rtti::F_disable_reflect_robject_metadata);
+    NCPP_ROBJECT_DISABLE_DEFAULT_REFLECT(F_demo_compiletime_rflag);
     
 };
 
