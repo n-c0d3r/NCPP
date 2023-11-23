@@ -31,8 +31,8 @@ class A : public B, public C {
 	NCPP_BASIC_RCLASS(
 		A,
                       
-        BASE(B),
-        BASE(C),
+        EXTENDS(B),
+        EXTENDS(C),
 
 		PUBLIC(i32, i),
 		PUBLIC_CONST(void(), foo)
