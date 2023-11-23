@@ -51,12 +51,12 @@ void A::foo() {
 struct F_demo_compiletime_rflag {
     
 public:
-    NCPP_ROBJECT_USER_REFLECT_MEMBER(F_demo_compiletime_rflag, void){
+    NCPP_ROBJECT_USER_REFLECT_MEMBER(F_demo_compiletime_rflag, void) {
         
         std::cout << "user reflect member: " << F_member_static_info__::name() << std::endl;
         
     }
-    NCPP_ROBJECT_USER_REFLECT_BASE(F_demo_compiletime_rflag, void){
+    NCPP_ROBJECT_USER_REFLECT_BASE(F_demo_compiletime_rflag, void) {
         
         std::cout << "user reflect base: " << F_base__::static_type_name() << std::endl;
         
