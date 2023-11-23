@@ -110,9 +110,7 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_BODY_BASE(BaseName) \
-				NCPP_PUBLIC_KEYWORD using F_base = BaseName;\
-				NCPP_RTTI_IMPLEMENT_FLAG(F_this, ncpp::rtti::F_robject_has_base_flag);\
+#define NCPP_ROBJECT_BODY_BASE(BaseName) 
 				
 
 		////////////////////////////////////////////////////////////////////////////////////
@@ -144,6 +142,7 @@ namespace ncpp {
 				static NCPP_FORCE_INLINE ncpp::sz get_invoke_address(){ return 0; }\
 				\
 				static eastl::string get_name() { return #MemberName; }\
+                static eastl::string get_raw_type_name() { return #MemberType; }\
 				\
 				static ncpp::u16 get_offset() { return (ncpp::u16)reinterpret_cast<ncpp::sz>(&(reinterpret_cast<object_type__*>(0)->MemberName)); }\
 				static ncpp::u16 get_size() { return (ncpp::u16)sizeof(NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(MemberType)); }\
@@ -161,6 +160,7 @@ namespace ncpp {
 				static NCPP_FORCE_INLINE ncpp::sz get_invoke_address(){ return reinterpret_cast<ncpp::sz>(&invoke); }\
 				\
 				static eastl::string get_name() { return #MemberName; }\
+                static eastl::string get_raw_type_name() { return #MemberType; }\
 				\
 				static ncpp::u16 get_offset() { return 0; }\
 				static ncpp::u16 get_size() { return 0; }\
@@ -260,7 +260,21 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_REFLECT_BASE(BaseName) ;
+#define NCPP_ROBJECT_REFLECT_BASE(BaseName) \
+			{\
+				\
+				robject_type_info_p->add_base(\
+					\
+					F_rtti_traits::template T_safe_reflect<BaseName, false, F_compiletime_reflect_flag__>(\
+						rcontainer_p,\
+						0,\
+						rflag,\
+                        custom_data_p\
+					)\
+					\
+				);\
+				\
+			}
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
@@ -456,14 +470,6 @@ namespace ncpp {
 					F_robject_type_info* robject_type_info_p = reinterpret_cast<F_robject_type_info*>(0);\
 					F_robject_member_info* robject_member_info_p = reinterpret_cast<F_robject_member_info*>(0);\
 					\
-					if constexpr (NCPP_RTTI_IS_HAS_FLAG(F_this, ncpp::rtti::F_robject_has_base_flag))\
-						F_rtti_traits::template T_safe_reflect<typename F_rtti_traits::T_safe_base<F_this>::type, false, F_this>(\
-							rcontainer_p,\
-							0,\
-							rflag,\
-                            custom_data_p\
-						);\
-					\
 					if(rflag & NCPP_RFLAG_ROBJECT_TYPE_INFO)\
 						robject_type_info_p = ncpp::rtti::T_reflect_object_type<F_this, NCPP_RTTI_PASS_SEPECIFIC_USING()>(rcontainer_p, rflag);\
 					\
@@ -483,7 +489,6 @@ namespace ncpp {
 				\
 			NCPP_PUBLIC_KEYWORD\
 				static constexpr ncpp::b8 is_virtual = NCPP_RTTI_IS_HAS_FLAG(F_this, ncpp::rtti::F_robject_virtual_flag);\
-				static constexpr ncpp::b8 is_has_base = NCPP_RTTI_IS_HAS_FLAG(F_this, ncpp::rtti::F_robject_has_base_flag);
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////

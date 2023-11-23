@@ -232,7 +232,7 @@ namespace ncpp {
 					i32
 				> = 0
 			>
-			static F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, rtti::rflag rflag = NCPP_RFLAG_DEFAULT, void* custom_data_p = 0) {
+			static NCPP_FORCE_INLINE F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, rtti::rflag rflag = NCPP_RFLAG_DEFAULT, void* custom_data_p = 0) {
 
 				if(object_p)
 					return object_p->virtual_reflect(rcontainer_p, rflag, custom_data_p);
@@ -251,7 +251,7 @@ namespace ncpp {
 					i32
 				> = 0
 			>
-			static F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, rtti::rflag rflag = NCPP_RFLAG_DEFAULT, void* custom_data_p = 0) {
+			static NCPP_FORCE_INLINE F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, rtti::rflag rflag = NCPP_RFLAG_DEFAULT, void* custom_data_p = 0) {
 
 				return F_robject__::template T_static_reflect<F_compiletime_reflect_flag__>(rcontainer_p, rflag, custom_data_p);
 			}
@@ -264,35 +264,10 @@ namespace ncpp {
 					i32
 				> = 0
 			>
-			static F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, rtti::rflag rflag = NCPP_RFLAG_DEFAULT, void* custom_data_p = 0) {
+			static NCPP_FORCE_INLINE F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, rtti::rflag rflag = NCPP_RFLAG_DEFAULT, void* custom_data_p = 0) {
 
 				return 0;
 			}
-
-
-
-
-			template<typename F_robject__, class = void>
-			struct T_safe_base {
-
-				using type = void;
-
-			};
-
-			template<typename F_robject__>
-			struct T_safe_base<
-				F_robject__,
-				std::void_t<
-					decltype(std::declval<F_robject__::F_base>())
-				>
-			> {
-
-				using type = typename F_robject__::F_base;
-
-			};
-
-			template<typename F_robject__>
-			using T_safe_base_t = typename T_safe_base<F_robject__>::type;
 
 		};
 

@@ -76,7 +76,7 @@ namespace ncpp {
 			F_rcontainer* rcontainer_p_ = 0;
 			sz hash_code_ = 0;
 			eastl::string name_;
-			TF_robject_type_info* base_type_info_p_ = 0;
+			eastl::set<F_robject_type_info*> base_type_info_p_set_;
             
             eastl::unordered_map<eastl::string, F_robject_member_info*> name_to_member_info_p_map_;
 
@@ -88,8 +88,24 @@ namespace ncpp {
 			NCPP_FORCE_INLINE const F_rcontainer* rcontainer_p() const { return rcontainer_p_; }
 			NCPP_FORCE_INLINE sz hash_code() const { return hash_code_; }
 			NCPP_FORCE_INLINE eastl::string name() const { return name_; }
-			NCPP_FORCE_INLINE TF_robject_type_info* get_base_type_info_p() { return base_type_info_p_; }
-			NCPP_FORCE_INLINE const TF_robject_type_info* get_base_type_info_p() const { return base_type_info_p_; }
+
+			NCPP_FORCE_INLINE const eastl::set<F_robject_type_info*>& base_type_info_p_set() const { return base_type_info_p_set_; }
+            NCPP_FORCE_INLINE b8 is_has_base(F_robject_type_info* base_type_info_p) const {
+                
+                return (base_type_info_p_set_.find(base_type_info_p) != base_type_info_p_set_.end());
+            }
+            NCPP_FORCE_INLINE void add_base(F_robject_type_info* base_type_info_p) {
+                
+                assert(!is_has_base(base_type_info_p) && "this base type info is already added");
+                
+                base_type_info_p_set_.insert(base_type_info_p);
+            }
+            NCPP_FORCE_INLINE void remove_base(F_robject_type_info* base_type_info_p) {
+                
+                assert(is_has_base(base_type_info_p) && "this base type info is not added");
+                
+                base_type_info_p_set_.erase(base_type_info_p_set_.find(base_type_info_p));
+            }
             
             NCPP_FORCE_INLINE const eastl::unordered_map<eastl::string, F_robject_member_info*>& name_to_member_info_p_map() const { return name_to_member_info_p_map_; }
 
@@ -136,11 +152,10 @@ namespace ncpp {
 
 
 		public:
-			NCPP_FORCE_INLINE TF_robject_type_info(F_rcontainer* rcontainer_p, sz hash_code, const eastl::string& name, TF_robject_type_info* base_type_info_p) :
+			NCPP_FORCE_INLINE TF_robject_type_info(F_rcontainer* rcontainer_p, sz hash_code, const eastl::string& name) :
 				rcontainer_p_(rcontainer_p),
 				hash_code_(hash_code),
-				name_(name),
-				base_type_info_p_(base_type_info_p)
+				name_(name)
 			{
 
 
@@ -190,8 +205,7 @@ namespace ncpp {
 				rcontainer_p->allocator(),
 				rcontainer_p,
 				F_robject__::static_type_hash_code(),
-				F_robject__::static_type_name(),
-				rcontainer_p->robject_type_info(typeid(typename F_rtti_traits__::template T_safe_base_t<F_robject__>).hash_code())
+				F_robject__::static_type_name()
 			);
 
 			rcontainer_p->add_robject_type_info(robject_type_info_p);
