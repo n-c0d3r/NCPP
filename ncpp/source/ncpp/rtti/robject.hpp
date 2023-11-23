@@ -110,7 +110,7 @@ namespace ncpp {
 #define NCPP_ROBJECT_USER_REFLECT_BASE(CompileTimeRFlagType, CustomDataType) \
 		NCPP_RTTI_IMPLEMENT_FLAG(CompileTimeRFlagType, ncpp::rtti::F_user_reflect_base_flag);\
 		using F_user_reflect_base_custom_data = CustomDataType;\
-		template<class F_robject__, class F_base, NCPP_RTTI_SEPECIFIC_TARGS()>\
+		template<class F_robject__, class F_base__, NCPP_RTTI_SEPECIFIC_TARGS()>\
 		static NCPP_FORCE_INLINE void T_user_reflect_base(\
 			F_rcontainer__* rcontainer_p, \
 			F_robject_type_info__* robject_type_info_p,\
@@ -211,41 +211,47 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName) \
+#define NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, IsVirtualFunction, IsConstFunction) \
 			template<typename object_type__ = F_this, typename member_type__ = MemberType>\
 			struct TF_##MemberName##___ncpp_static_info___;\
 			friend struct TF_##MemberName##___ncpp_static_info___<F_this, MemberType>;\
 			template<typename object_type__, typename member_type__>\
 			struct TF_##MemberName##___ncpp_static_info___{\
 				\
-				static void invoke(){}\
+				static NCPP_FORCE_INLINE void invoke(){}\
 				static NCPP_FORCE_INLINE ncpp::sz invoke_address(){ return 0; }\
 				\
-				static eastl::string name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, "_" + eastl::to_string(id())); }\
-                static eastl::string raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
-				static ncpp::sz id() { return typeid(TF_##MemberName##___ncpp_static_info___).hash_code(); }\
+				static NCPP_FORCE_INLINE eastl::string name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, "_" + eastl::to_string(id())); }\
+                static NCPP_FORCE_INLINE eastl::string raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
+				static NCPP_FORCE_INLINE ncpp::sz id() { return typeid(TF_##MemberName##___ncpp_static_info___).hash_code(); }\
 				\
-				static ncpp::u16 offset() { return (ncpp::u16)reinterpret_cast<ncpp::sz>(&(reinterpret_cast<object_type__*>(0)->MemberName)); }\
-				static ncpp::u16 size() { return (ncpp::u16)sizeof(NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(MemberType)); }\
+				static NCPP_FORCE_INLINE ncpp::u16 offset() { return (ncpp::u16)reinterpret_cast<ncpp::sz>(&(reinterpret_cast<object_type__*>(0)->MemberName)); }\
+                static NCPP_FORCE_INLINE ncpp::u16 size() { return (ncpp::u16)sizeof(NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(MemberType)); }\
+                \
+                static NCPP_FORCE_INLINE ncpp::b8 is_virtual_function() { return false; }\
+				static NCPP_FORCE_INLINE ncpp::b8 is_const_function() { return false; }\
 				\
 			};\
 			\
 			template<typename object_type__, typename return_type__, typename... arg_types__>\
 			struct TF_##MemberName##___ncpp_static_info___<object_type__, return_type__(arg_types__...)>{\
 				\
-				static auto invoke(void* object_p, arg_types__... args) {\
+				static NCPP_FORCE_INLINE auto invoke(void* object_p, arg_types__... args) {\
 					\
 					return reinterpret_cast<F_this*>(object_p)->MemberName(std::forward<arg_types__>(args)...);\
 					\
 				}\
 				static NCPP_FORCE_INLINE ncpp::sz invoke_address(){ return reinterpret_cast<ncpp::sz>(&invoke); }\
 				\
-				static eastl::string name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, "_" + eastl::to_string(id())); }\
-                static eastl::string raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
-				static ncpp::sz id() { return typeid(TF_##MemberName##___ncpp_static_info___).hash_code(); }\
+				static NCPP_FORCE_INLINE eastl::string name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, "_" + eastl::to_string(id())); }\
+                static NCPP_FORCE_INLINE eastl::string raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
+				static NCPP_FORCE_INLINE ncpp::sz id() { return typeid(TF_##MemberName##___ncpp_static_info___).hash_code(); }\
 				\
-				static ncpp::u16 offset() { return 0; }\
-				static ncpp::u16 size() { return 0; }\
+				static NCPP_FORCE_INLINE ncpp::u16 offset() { return 0; }\
+				static NCPP_FORCE_INLINE ncpp::u16 size() { return 0; }\
+                \
+                static NCPP_FORCE_INLINE ncpp::b8 is_virtual_function() { return IsVirtualFunction; }\
+                static NCPP_FORCE_INLINE ncpp::b8 is_const_function() { return IsConstFunction; }\
 				\
 			};
 
@@ -255,7 +261,7 @@ namespace ncpp {
 
 #define NCPP_ROBJECT_BODY_MEMBER(Overrider, MemberType, MemberName,...) \
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);\
-			NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName);\
+			NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, false, false);\
 			NCPP_ROBJECT_WRAP_TYPE(MemberType) MemberName
 
 #define NCPP_ROBJECT_BODY_BASE_PRIVATE(Overrider, MemberType, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER(Overrider, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
@@ -268,7 +274,7 @@ namespace ncpp {
 
 #define NCPP_ROBJECT_BODY_MEMBER_CONST(Overrider, MemberType, MemberName,...)\
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);\
-			NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName);\
+			NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, false, true);\
 			NCPP_FORCE_INLINE auto MemberName(auto&&... args) const {\
 				\
 				return ((F_this*)this)->MemberName(std::forward<decltype(args)>(args)...);\
@@ -286,7 +292,7 @@ namespace ncpp {
 
 #define NCPP_ROBJECT_BODY_MEMBER_VIRTUAL(Overrider, MemberType, MemberName,...) \
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);\
-			NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName);\
+			NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, true, false);\
 			virtual NCPP_ROBJECT_WRAP_TYPE(MemberType) MemberName
 
 #define NCPP_ROBJECT_BODY_BASE_PRIVATE_VIRTUAL(Overrider, MemberType, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL(Overrider, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
@@ -299,7 +305,7 @@ namespace ncpp {
 
 #define NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_CONST(Overrider, MemberType, MemberName,...)\
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);\
-			NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName);\
+			NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, true, true);\
 			NCPP_FORCE_INLINE auto MemberName(auto&&... args) const {\
 				\
 				return ((F_this*)this)->MemberName(std::forward<decltype(args)>(args)...);\
@@ -334,7 +340,12 @@ namespace ncpp {
 
 
 #define NCPP_ROBJECT_REFLECT_METADATA(...) \
-			__VA_ARGS__
+			if constexpr (\
+				!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata)\
+				&& !NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_type_info)\
+			) {\
+				__VA_ARGS__;\
+			}
 
 #define NCPP_ROBJECT_REFLECT_(...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_METADATA( __VA_ARGS__));
 
@@ -353,8 +364,9 @@ namespace ncpp {
                     custom_data_p\
                 );\
                 \
-				if (!robject_type_info_p->is_has_base(base_info_p))\
-                    robject_type_info_p->add_base(base_info_p);\
+                if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_type_info))\
+                    if (!robject_type_info_p->is_has_base(base_info_p))\
+                        robject_type_info_p->add_base(base_info_p);\
 				\
 				NCPP_ROBJECT_CALL_USER_REFLECT_BASE();\
 				\
@@ -400,7 +412,10 @@ namespace ncpp {
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
 					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 				\
-				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata))\
+				if constexpr (\
+					!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata)\
+					&& !NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info)\
+				)\
 					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 				\
 				NCPP_ROBJECT_CALL_USER_REFLECT_MEMBER();\
@@ -429,7 +444,10 @@ namespace ncpp {
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
 					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 				\
-				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata))\
+				if constexpr (\
+					!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata)\
+					&& !NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info)\
+				)\
 					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 				\
 				NCPP_ROBJECT_CALL_USER_REFLECT_MEMBER();\
@@ -458,7 +476,10 @@ namespace ncpp {
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
 					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 				\
-				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata))\
+				if constexpr (\
+					!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata)\
+					&& !NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info)\
+				)\
 					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 				\
 				NCPP_ROBJECT_CALL_USER_REFLECT_MEMBER();\
@@ -487,7 +508,10 @@ namespace ncpp {
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
 					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 				\
-				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata))\
+				if constexpr (\
+					!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata)\
+					&& !NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info)\
+				)\
 					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
 				\
 				NCPP_ROBJECT_CALL_USER_REFLECT_MEMBER();\
@@ -602,20 +626,3 @@ namespace ncpp {
 	}
 
 }
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-

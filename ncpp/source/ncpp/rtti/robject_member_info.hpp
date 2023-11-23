@@ -74,10 +74,15 @@ namespace ncpp {
 
 		private:
 			sz type_hash_code_ = 0;
-			sz invoke_function_address_or_variable_offset_ = 0;
+            union {
+                sz invoke_function_address_ = 0;
+                sz variable_offset_;
+            };
 			eastl::string name_;
 			sz id_ = 0;
 			u16 size_ = 0;
+            b8 is_virtual_function_ = false;
+            b8 is_const_function_ = false;
             
             F_robject_type_info* robject_type_info_p_ = 0;
 
@@ -90,10 +95,14 @@ namespace ncpp {
 
 		public:
 			NCPP_FORCE_INLINE sz type_hash_code() const { return type_hash_code_; }
-			NCPP_FORCE_INLINE sz invoke_function_address_or_variable_offset() const { return invoke_function_address_or_variable_offset_; }
+            NCPP_FORCE_INLINE sz invoke_function_address() const { return invoke_function_address_; }
+			NCPP_FORCE_INLINE sz variable_offset() const { return variable_offset_; }
 			NCPP_FORCE_INLINE const eastl::string name() const { return name_; }
 			NCPP_FORCE_INLINE sz id() const { return id_; }
-			NCPP_FORCE_INLINE u16 size() const { return size_; }
+            NCPP_FORCE_INLINE u16 size() const { return size_; }
+			NCPP_FORCE_INLINE b8 is_function() const { return (size_ == 0); }
+            NCPP_FORCE_INLINE b8 is_virtual_function() const { return is_virtual_function_; }
+            NCPP_FORCE_INLINE b8 is_const_function() const { return is_const_function_; }
             
             NCPP_FORCE_INLINE F_robject_type_info* robject_type_info_p() { return robject_type_info_p_; }
             NCPP_FORCE_INLINE const F_robject_type_info* robject_type_info_p() const { return robject_type_info_p_; }
@@ -107,13 +116,19 @@ namespace ncpp {
 				const eastl::string& name,
 				sz id,
 				u16 size,
+                b8 is_virtual_function,
+                b8 is_const_function,
+                                   
                 F_robject_type_info* robject_type_info_p
 			) :
 				type_hash_code_(type_hash_code),
-				invoke_function_address_or_variable_offset_(invoke_function_address_or_variable_offset),
+				invoke_function_address_(invoke_function_address_or_variable_offset),
 				name_(name),
 				id_(id),
 				size_(size),
+                is_virtual_function_(is_virtual_function),
+                is_const_function_(is_const_function),
+            
                 robject_type_info_p_(robject_type_info_p)
 			{
 
@@ -148,6 +163,8 @@ namespace ncpp {
 					F_member_static_info__::name(),
 					F_member_static_info__::id(),
 					F_member_static_info__::size(),
+                    F_member_static_info__::is_virtual_function(),
+                    F_member_static_info__::is_const_function(),
                                         
                     robject_type_info_p
 
