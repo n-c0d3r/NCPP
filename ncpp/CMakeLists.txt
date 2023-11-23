@@ -68,6 +68,9 @@ if(NCPP_ENABLE_SSE2)
     set(NCPP_ENABLE_SSE ON)
 endif()
 
+# ncpp rtti options
+option(NCPP_RTTI_SECURED_NAME "Secure name for RTTI functionalities" OFF)
+
 
 
 

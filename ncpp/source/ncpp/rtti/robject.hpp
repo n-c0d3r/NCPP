@@ -43,6 +43,7 @@
 #include <ncpp/rtti/rflag.hpp>
 #include <ncpp/rtti/rtti_flag.hpp>
 #include <ncpp/rtti/robject_flag.hpp>
+#include <ncpp/rtti/security_helper.hpp>
 
 #pragma endregion
 
@@ -123,7 +124,7 @@ namespace ncpp {
 			NCPP_PRIVATE_KEYWORD NCPP_RTTI_IMPLEMENT_FLAG(F_this, ncpp::rtti::F_robject_virtual_flag);\
 			NCPP_PUBLIC_KEYWORD virtual F_robject_type_info* virtual_reflect(\
 					F_rcontainer* rcontainer_p, \
-					ncpp::rtti::rflag rflag = NCPP_RFLAG_DEFAULT,\
+					ncpp::rtti::F_rflag rflag = NCPP_RFLAG_DEFAULT,\
                     void* custom_data_p = 0\
 				) {\
 					return F_this::static_reflect(rcontainer_p, rflag, custom_data_p);\
@@ -141,13 +142,14 @@ namespace ncpp {
 			struct TF_##MemberName##___ncpp_static_info___{\
 				\
 				static void invoke(){}\
-				static NCPP_FORCE_INLINE ncpp::sz get_invoke_address(){ return 0; }\
+				static NCPP_FORCE_INLINE ncpp::sz invoke_address(){ return 0; }\
 				\
-				static eastl::string get_name() { return #MemberName; }\
-                static eastl::string get_raw_type_name() { return #MemberType; }\
+				static eastl::string name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, "_" + eastl::to_string(id())); }\
+                static eastl::string raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
+				static ncpp::sz id() { return typeid(TF_##MemberName##___ncpp_static_info___).hash_code(); }\
 				\
-				static ncpp::u16 get_offset() { return (ncpp::u16)reinterpret_cast<ncpp::sz>(&(reinterpret_cast<object_type__*>(0)->MemberName)); }\
-				static ncpp::u16 get_size() { return (ncpp::u16)sizeof(NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(MemberType)); }\
+				static ncpp::u16 offset() { return (ncpp::u16)reinterpret_cast<ncpp::sz>(&(reinterpret_cast<object_type__*>(0)->MemberName)); }\
+				static ncpp::u16 size() { return (ncpp::u16)sizeof(NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(MemberType)); }\
 				\
 			};\
 			\
@@ -159,13 +161,14 @@ namespace ncpp {
 					return reinterpret_cast<F_this*>(object_p)->MemberName(std::forward<arg_types__>(args)...);\
 					\
 				}\
-				static NCPP_FORCE_INLINE ncpp::sz get_invoke_address(){ return reinterpret_cast<ncpp::sz>(&invoke); }\
+				static NCPP_FORCE_INLINE ncpp::sz invoke_address(){ return reinterpret_cast<ncpp::sz>(&invoke); }\
 				\
-				static eastl::string get_name() { return #MemberName; }\
-                static eastl::string get_raw_type_name() { return #MemberType; }\
+				static eastl::string name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, "_" + eastl::to_string(id())); }\
+                static eastl::string raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
+				static ncpp::sz id() { return typeid(TF_##MemberName##___ncpp_static_info___).hash_code(); }\
 				\
-				static ncpp::u16 get_offset() { return 0; }\
-				static ncpp::u16 get_size() { return 0; }\
+				static ncpp::u16 offset() { return 0; }\
+				static ncpp::u16 size() { return 0; }\
 				\
 			};
 
@@ -267,7 +270,7 @@ namespace ncpp {
 				\
 				robject_type_info_p->add_base(\
 					\
-					F_rtti_traits::template T_safe_reflect<BaseName, false, F_compiletime_reflect_flag__>(\
+					F_rtti_traits::template T_safe_reflect<BaseName, false, F_compile_time_rflag__>(\
 						rcontainer_p,\
 						0,\
 						rflag,\
@@ -464,10 +467,10 @@ namespace ncpp {
 				NCPP_EXPAND(NCPP_FOR_EACH(NCPP_ROBJECT_BODY_STEP __VA_OPT__(,) __VA_ARGS__));\
 				\
 			NCPP_PUBLIC_KEYWORD\
-				template<typename F_compiletime_reflect_flag__>\
+				template<typename F_compile_time_rflag__>\
 				static F_robject_type_info* T_static_reflect(\
 					F_rcontainer* rcontainer_p, \
-					ncpp::rtti::rflag rflag = NCPP_RFLAG_DEFAULT,\
+					ncpp::rtti::F_rflag rflag = NCPP_RFLAG_DEFAULT,\
 					void* custom_data_p = 0\
 				){\
 					\
@@ -485,7 +488,7 @@ namespace ncpp {
 				\
 				static NCPP_FORCE_INLINE F_robject_type_info* static_reflect(\
 					F_rcontainer* rcontainer_p, \
-					ncpp::rtti::rflag rflag = NCPP_RFLAG_DEFAULT,\
+					ncpp::rtti::F_rflag rflag = NCPP_RFLAG_DEFAULT,\
 					void* custom_data_p = 0\
 				){\
 					return T_static_reflect<void>(rcontainer_p, rflag, custom_data_p);\

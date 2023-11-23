@@ -43,6 +43,7 @@
 #include <ncpp/rtti/rflag.hpp>
 #include <ncpp/rtti/rtti_flag.hpp>
 #include <ncpp/rtti/robject_flag.hpp>
+#include <ncpp/rtti/security_helper.hpp>
 
 #pragma endregion
 
@@ -225,14 +226,14 @@ namespace ncpp {
 			template<
 				class F_robject__,
                 b8 enable_virtual_reflect__ = true,
-                class F_compiletime_reflect_flag__ = void,
+                class F_compile_time_rflag__ = void,
 				std::enable_if_t<
 					NCPP_RTTI_IS_HAS_FLAG(F_robject__, F_robject_flag) 
                     && (NCPP_RTTI_IS_HAS_FLAG(F_robject__, F_robject_virtual_flag) && enable_virtual_reflect__),
 					i32
 				> = 0
 			>
-			static NCPP_FORCE_INLINE F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, rtti::rflag rflag = NCPP_RFLAG_DEFAULT, void* custom_data_p = 0) {
+			static NCPP_FORCE_INLINE F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, rtti::F_rflag rflag = NCPP_RFLAG_DEFAULT, void* custom_data_p = 0) {
 
 				if(object_p)
 					return object_p->virtual_reflect(rcontainer_p, rflag, custom_data_p);
@@ -244,27 +245,27 @@ namespace ncpp {
 			template<
 				class F_robject__,
                 b8 enable_virtual_reflect__ = true,
-                class F_compiletime_reflect_flag__ = void,
+                class F_compile_time_rflag__ = void,
 				std::enable_if_t<
 					NCPP_RTTI_IS_HAS_FLAG(F_robject__, F_robject_flag)
                     && (!NCPP_RTTI_IS_HAS_FLAG(F_robject__, F_robject_virtual_flag) || (!enable_virtual_reflect__)),
 					i32
 				> = 0
 			>
-			static NCPP_FORCE_INLINE F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, rtti::rflag rflag = NCPP_RFLAG_DEFAULT, void* custom_data_p = 0) {
+			static NCPP_FORCE_INLINE F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, rtti::F_rflag rflag = NCPP_RFLAG_DEFAULT, void* custom_data_p = 0) {
 
-				return F_robject__::template T_static_reflect<F_compiletime_reflect_flag__>(rcontainer_p, rflag, custom_data_p);
+				return F_robject__::template T_static_reflect<F_compile_time_rflag__>(rcontainer_p, rflag, custom_data_p);
 			}
 			template<
 				class F_robject__,
                 b8 enable_virtual_reflect__ = true,
-                class F_compiletime_reflect_flag__ = void,
+                class F_compile_time_rflag__ = void,
 				std::enable_if_t<
 					!NCPP_RTTI_IS_HAS_FLAG(F_robject__, F_robject_flag),
 					i32
 				> = 0
 			>
-			static NCPP_FORCE_INLINE F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, rtti::rflag rflag = NCPP_RFLAG_DEFAULT, void* custom_data_p = 0) {
+			static NCPP_FORCE_INLINE F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, rtti::F_rflag rflag = NCPP_RFLAG_DEFAULT, void* custom_data_p = 0) {
 
 				return 0;
 			}

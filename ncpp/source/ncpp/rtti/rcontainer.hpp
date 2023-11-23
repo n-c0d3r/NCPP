@@ -41,6 +41,7 @@
 
 #include <ncpp/rtti/traits.hpp>
 #include <ncpp/rtti/rflag.hpp>
+#include <ncpp/rtti/security_helper.hpp>
 
 #pragma endregion
 

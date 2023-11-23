@@ -57,7 +57,7 @@ namespace ncpp {
 
 	namespace rtti {
 
-		using rflag = sz;
+		using F_rflag = sz;
 
 #define NCPP_RFLAG_ROBJECT_TYPE_INFO 0x1
 #define NCPP_RFLAG_ROBJECT_MEMBER_INFO 0x2
