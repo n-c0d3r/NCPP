@@ -37,7 +37,8 @@ class A : public B, public C {
 		PUBLIC(i32, i),
 		PUBLIC_CONST(void(), foo),
                       
-        STATIC_PUBLIC(i32, si)
+        STATIC_PUBLIC(i32, si),
+        STATIC_PUBLIC(void(), foo2)
 	);
 
 };
@@ -49,6 +50,11 @@ void A::foo() {
 }
 
 i32 A::si = 4;
+void A::foo2() {
+
+    
+
+}
 
 
 
