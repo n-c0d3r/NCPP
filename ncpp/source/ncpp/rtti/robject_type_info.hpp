@@ -68,7 +68,7 @@ namespace ncpp {
 		class TF_robject_type_info {
 
 		public:
-			NCPP_RTTI_SEPECIFIC_USING(F_options__);
+			NCPP_RTTI_SPECIFIC_USING(F_options__);
 
 
 
@@ -189,7 +189,7 @@ namespace ncpp {
 		template<
 			class F_robject__,
 
-			NCPP_RTTI_SEPECIFIC_TARGS()
+			NCPP_RTTI_SPECIFIC_TARGS()
 		>
 		F_robject_type_info__* T_reflect_object_type(
 			F_rcontainer__* rcontainer_p

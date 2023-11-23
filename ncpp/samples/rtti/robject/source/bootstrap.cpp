@@ -61,14 +61,36 @@ void A::foo2() {
 struct F_demo_compiletime_rflag {
     
 public:
-    NCPP_ROBJECT_USER_REFLECT_MEMBER(F_demo_compiletime_rflag, void) {
+    NCPP_ROBJECT_USER_REFLECT_MEMBER(
+        F_demo_compiletime_rflag,
+        std::enable_if_t<!F_member_static_info__::is_static(), i32> = 0
+    ) {
         
-        std::cout << "user reflect member: " << F_member_static_info__::name() << std::endl;
+        std::cout << "user reflect non-static member: " << F_member_static_info__::name() << std::endl;
         
     }
-    NCPP_ROBJECT_USER_REFLECT_BASE(F_demo_compiletime_rflag, void) {
+    NCPP_ROBJECT_USER_REFLECT_MEMBER(
+        F_demo_compiletime_rflag,
+        std::enable_if_t<F_member_static_info__::is_static(), i32> = 0
+    ) {
         
-        std::cout << "user reflect base: " << F_base__::static_type_name() << std::endl;
+        std::cout << "user reflect static member: " << F_member_static_info__::name() << std::endl;
+        
+    }
+    NCPP_ROBJECT_USER_REFLECT_BASE(
+        F_demo_compiletime_rflag,
+        std::enable_if_t<std::is_same_v<F_base__, B>, i32> = 0
+    ) {
+        
+        std::cout << "user reflect base B: " << F_base__::static_type_name() << std::endl;
+        
+    }
+    NCPP_ROBJECT_USER_REFLECT_BASE(
+        F_demo_compiletime_rflag,
+        std::enable_if_t<std::is_same_v<F_base__, C>, i32> = 0
+    ) {
+        
+        std::cout << "user reflect base C: " << F_base__::static_type_name() << std::endl;
         
     }
     

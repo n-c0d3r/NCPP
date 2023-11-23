@@ -62,6 +62,7 @@ namespace ncpp {
 
 #include <ncpp/rtti/traits.hpp>
 #include <ncpp/rtti/rtti_flag.hpp>
+#include <ncpp/rtti/traits_defs.hpp>
 #include <ncpp/rtti/rcontainer.hpp>
 #include <ncpp/rtti/robject_flag.hpp>
 #include <ncpp/rtti/robject_type_info.hpp>

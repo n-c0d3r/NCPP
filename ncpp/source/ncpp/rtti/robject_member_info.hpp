@@ -68,7 +68,7 @@ namespace ncpp {
 		class TF_robject_member_info {
 
 		public:
-			NCPP_RTTI_SEPECIFIC_USING(F_options__);
+			NCPP_RTTI_SPECIFIC_USING(F_options__);
 
 
 
@@ -147,7 +147,7 @@ namespace ncpp {
 			typename F_member__,
 			class F_member_static_info__,
 
-			NCPP_RTTI_SEPECIFIC_TARGS()
+			NCPP_RTTI_SPECIFIC_TARGS()
 		>
 		F_robject_member_info__* T_reflect_object_member(
 			F_robject_type_info__* robject_type_info_p

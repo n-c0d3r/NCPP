@@ -1,7 +1,7 @@
 #pragma once
 
-/** @file ncpp/rtti/rcontainer.hpp
-*	@brief Implements rcontainer.
+/** @file ncpp/rtti/traits_defs.hpp
+*	@brief Implements rtti traits defs.
 */
 
 
@@ -33,13 +33,15 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/iostream.hpp>
-#include <ncpp/utilities/is_function.hpp>
+#include <ncpp/utilities/.hpp>
+#include <ncpp/mem/.hpp>
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <ncpp/rtti/traits.hpp>
+#include <ncpp/rtti/rtti_flag.hpp>
+#include <ncpp/rtti/robject_flag.hpp>
 #include <ncpp/rtti/security_helper.hpp>
 
 #pragma endregion
@@ -64,137 +66,54 @@ namespace ncpp {
 
 	namespace rtti {
 
-		template<typename F_options__>
-		class TF_rcontainer {
+#define NCPP_RTTI_SPECIFIC_TARGS(...) \
+			class F_##__VA_OPT__(__VA_ARGS__##_)##rtti_options__,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__ = ncpp::rtti::TF_traits<F_##__VA_OPT__(__VA_ARGS__##_)##rtti_options__>,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##allocator__ = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__::F_allocator,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##rcontainer__ = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__::F_rcontainer,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##robject_type_info__ = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__::F_robject_type_info,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info__ = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__::F_robject_member_info,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##rcontainer_additional_data__ = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__::F_rcontainer_additional_data,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##robject_type_info_additional_data__ = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__::F_robject_type_info_additional_data,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data__ = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__::F_robject_member_info_additional_data
 
-		public:
-			NCPP_RTTI_SPECIFIC_USING(F_options__);
+#define NCPP_RTTI_PASS_SPECIFIC_TARGS(...) \
+			F_##__VA_OPT__(__VA_ARGS__##_)##rtti_options__, \
+			F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__, \
+			F_##__VA_OPT__(__VA_ARGS__##_)##allocator__, \
+			F_##__VA_OPT__(__VA_ARGS__##_)##rcontainer__, \
+			F_##__VA_OPT__(__VA_ARGS__##_)##robject_type_info__, \
+			F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info__,\
+			F_##__VA_OPT__(__VA_ARGS__##_)##rcontainer_additional_data__,\
+			F_##__VA_OPT__(__VA_ARGS__##_)##robject_type_info_additional_data__,\
+			F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data__
 
+#define NCPP_RTTI_SPECIFIC_USING(RTTIOptions, ...) \
+			using F_##__VA_OPT__(__VA_ARGS__##_)##rtti_options = RTTIOptions;\
+			using F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits = ncpp::rtti::TF_traits<F_##__VA_OPT__(__VA_ARGS__##_)##rtti_options>;\
+			using F_##__VA_OPT__(__VA_ARGS__##_)##allocator = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_allocator;\
+			using F_##__VA_OPT__(__VA_ARGS__##_)##rcontainer = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_rcontainer;\
+			using F_##__VA_OPT__(__VA_ARGS__##_)##robject_type_info = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_robject_type_info;\
+			using F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_robject_member_info;\
+			using F_##__VA_OPT__(__VA_ARGS__##_)##rcontainer_additional_data = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_rcontainer_additional_data;\
+			using F_##__VA_OPT__(__VA_ARGS__##_)##robject_type_info_additional_data = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_robject_type_info_additional_data;\
+            using F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_robject_member_info_additional_data;
 
-
-		private:
-			F_allocator allocator_;
-
-			eastl::unordered_map<sz, F_robject_type_info*> hash_code_to_robject_type_info_p_map_;
-			eastl::unordered_map<eastl::string, F_robject_type_info*> name_to_robject_type_info_p_map_;
-
-		public:
-			F_rcontainer_additional_data additional_data;
-
-		public:
-			NCPP_FORCE_INLINE F_allocator& allocator() { return allocator_; }
-			NCPP_FORCE_INLINE const F_allocator& allocator() const { return allocator_; }
-            
-            NCPP_FORCE_INLINE const eastl::unordered_map<sz, F_robject_type_info*>& hash_code_to_robject_type_info_p_map() const { return hash_code_to_robject_type_info_p_map_; }
-            NCPP_FORCE_INLINE const eastl::unordered_map<eastl::string, F_robject_type_info*>& name_to_robject_type_info_p_map() const { return name_to_robject_type_info_p_map_; }
-
-			inline F_robject_type_info* robject_type_info(sz hash_code) {
-
-				auto it = hash_code_to_robject_type_info_p_map_.find(hash_code);
-
-				if (it == hash_code_to_robject_type_info_p_map_.end())
-					return 0;
-
-				return it->second;
-			}
-			inline const F_robject_type_info* robject_type_info(sz hash_code) const {
-
-				auto it = hash_code_to_robject_type_info_p_map_.find(hash_code);
-
-				if (it == hash_code_to_robject_type_info_p_map_.end())
-					return 0;
-
-				return it->second;
-			}
-			inline F_robject_type_info* robject_type_info(const eastl::string& name) {
-
-				auto it = name_to_robject_type_info_p_map_.find(name);
-
-				if (it == name_to_robject_type_info_p_map_.end())
-					return 0;
-
-				return it->second;
-			}
-			inline const F_robject_type_info* robject_type_info(const eastl::string& name) const {
-
-				auto it = name_to_robject_type_info_p_map_.find(name);
-
-				if (it == name_to_robject_type_info_p_map_.end())
-					return 0;
-
-				return it->second;
-			}
-			inline void add_robject_type_info(F_robject_type_info* info) {
-
-				auto it = hash_code_to_robject_type_info_p_map_.find(info->hash_code());
-
-				if (it != hash_code_to_robject_type_info_p_map_.end())
-					return;
-
-				hash_code_to_robject_type_info_p_map_[info->hash_code()] = info;
-				name_to_robject_type_info_p_map_[info->name()] = info;
-			}
-			inline void remove_robject_type_info(sz hash_code) {
-
-				auto it = hash_code_to_robject_type_info_p_map_.find(hash_code);
-
-				if (it != hash_code_to_robject_type_info_p_map_.end()) {
-
-					name_to_robject_type_info_p_map_.erase(name_to_robject_type_info_p_map_.find(it->second->name()));
-
-					F_rtti_traits::template T_delete<F_robject_type_info>(allocator_, it->second);
-
-					hash_code_to_robject_type_info_p_map_.erase(it);
-
-				}
-			}
-			inline void remove_robject_type_info(const eastl::string& name) {
-
-				auto it = name_to_robject_type_info_p_map_.find(name);
-
-				if (it != name_to_robject_type_info_p_map_.end()) {
-
-					hash_code_to_robject_type_info_p_map_.erase(hash_code_to_robject_type_info_p_map_.find(it->second->hash_code()));
-
-					F_rtti_traits::template T_delete<F_robject_type_info>(allocator_, it->second);
-
-					name_to_robject_type_info_p_map_.erase(it);
-
-				}
-			}
+#define NCPP_RTTI_PASS_SPECIFIC_USING(...) \
+			F_##__VA_OPT__(__VA_ARGS__##_)##rtti_options, \
+			F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits, \
+			F_##__VA_OPT__(__VA_ARGS__##_)##allocator, \
+			F_##__VA_OPT__(__VA_ARGS__##_)##rcontainer, \
+			F_##__VA_OPT__(__VA_ARGS__##_)##robject_type_info, \
+			F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info,\
+			F_##__VA_OPT__(__VA_ARGS__##_)##rcontainer_additional_data,\
+			F_##__VA_OPT__(__VA_ARGS__##_)##robject_type_info_additional_data,\
+			F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data
 
 
 
-		public:
-			NCPP_FORCE_INLINE TF_rcontainer(const F_allocator& allocator = F_allocator()) :
-				allocator_(allocator)
-			{
-
-
-
-			}
-			~TF_rcontainer() {
-
-				clear();
-
-			}
-
-
-
-		public:
-			void clear() {
-
-				for (auto it = hash_code_to_robject_type_info_p_map_.begin(); it != hash_code_to_robject_type_info_p_map_.end();) {
-
-					auto current_it = it++;
-
-					remove_robject_type_info(current_it->first);
-
-				}
-
-			}
-
-		};
+	template<class F_options__>
+		struct TF_traits;
 
 	}
 
