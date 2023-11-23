@@ -67,15 +67,16 @@ namespace ncpp {
 
 	namespace rtti {
 
-#define NCPP_ROBJECT_USER_REFLECT_MEMBER(CompileTimeRFlagType) \
+#define NCPP_ROBJECT_USER_REFLECT_MEMBER(CompileTimeRFlagType, CustomDataType) \
 		NCPP_RTTI_IMPLEMENT_FLAG(CompileTimeRFlagType, ncpp::rtti::F_user_reflect_member_flag);\
+		using F_user_reflect_member_custom_data = CustomDataType;\
 		template<class F_robject__, typename F_member__, class F_member_static_info__, NCPP_RTTI_SEPECIFIC_TARGS()>\
 		static NCPP_FORCE_INLINE void T_user_reflect_member(\
 			F_rcontainer__* rcontainer_p, \
 			F_robject_type_info__* robject_type_info_p,\
 			F_robject_member_info__* robject_member_info_p,\
 			ncpp::rtti::F_rflag rflag = NCPP_RFLAG_DEFAULT,\
-			void* custom_data_p = 0\
+			F_user_reflect_member_custom_data* custom_data_p = 0\
 		)
 
 #define NCPP_ROBJECT_CALL_USER_REFLECT_MEMBER() F_rtti_traits::template T_safe_user_reflect_member<\
@@ -307,17 +308,16 @@ namespace ncpp {
 
 #define NCPP_ROBJECT_REFLECT_BASE(BaseName) \
 			{\
-				\
-				robject_type_info_p->add_base(\
-					\
-					F_rtti_traits::template T_safe_reflect<BaseName, false, F_compile_time_rflag__>(\
-						rcontainer_p,\
-						0,\
-						rflag,\
-                        custom_data_p\
-					)\
-					\
-				);\
+                \
+                F_robject_type_info* base_info_p = F_rtti_traits::template T_safe_reflect<BaseName, false, F_compile_time_rflag__>(\
+                    rcontainer_p,\
+                    0,\
+                    rflag,\
+                    custom_data_p\
+                );\
+                \
+				if (!robject_type_info_p->is_has_base(base_info_p))\
+                    robject_type_info_p->add_base(base_info_p);\
 				\
 			}
     

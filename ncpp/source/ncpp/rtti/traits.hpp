@@ -303,7 +303,7 @@ namespace ncpp {
                     robject_type_info_p,
 					robject_member_info_p,
 					rflag,
-					custom_data_p
+					(typename F_compile_time_rflag__::F_user_reflect_member_custom_data*)custom_data_p
                 );
 			}
 			template<
