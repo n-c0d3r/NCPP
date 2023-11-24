@@ -93,6 +93,14 @@ public:
         std::cout << "user reflect base C: " << F_base__::static_type_name() << std::endl;
         
     }
+    NCPP_ROBJECT_USER_REFLECT_OBJECT(
+        F_demo_compiletime_rflag,
+        std::enable_if_t<std::is_same_v<F_robject__, C> || std::is_same_v<F_robject__, B>, i32> = 0
+    ) {
+        
+        std::cout << "user reflect object C or B: " << F_robject__::static_type_name() << std::endl;
+        
+    }
     
 public:
     NCPP_ROBJECT_DISABLE_DEFAULT_REFLECT(F_demo_compiletime_rflag);

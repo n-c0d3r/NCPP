@@ -41,7 +41,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/rtti/rtti_flag.hpp>
-#include <ncpp/rtti/robject_flag.hpp>
 #include <ncpp/rtti/security_helper.hpp>
 
 #pragma endregion
@@ -112,7 +111,7 @@ namespace ncpp {
 
 
 
-	template<class F_options__>
+        template<class F_options__>
 		struct TF_traits;
 
 	}
