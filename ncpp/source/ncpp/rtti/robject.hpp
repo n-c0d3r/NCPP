@@ -251,6 +251,8 @@ namespace ncpp {
 			template<typename object_type__, typename member_type__>\
 			struct TF_##MemberName##___ncpp_static_info___{\
 				\
+				using F_member = MemberType;\
+				\
 				static NCPP_FORCE_INLINE void invoke(void* object_p = 0){}\
 				\
 				static NCPP_FORCE_INLINE ncpp::sz address(){ return 0; }\
@@ -272,6 +274,8 @@ namespace ncpp {
 			\
 			template<typename object_type__, typename return_type__, typename... arg_types__>\
 			struct TF_##MemberName##___ncpp_static_info___<object_type__, return_type__(arg_types__...)>{\
+				\
+				using F_member = MemberType;\
 				\
 				static NCPP_FORCE_INLINE auto invoke(arg_types__... args, void* object_p = 0) {\
 					\
@@ -369,6 +373,8 @@ namespace ncpp {
 			template<typename object_type__, typename member_type__>\
 			struct TF_##MemberName##___ncpp_static_info___{\
 				\
+				using F_member = MemberType;\
+				\
 				static NCPP_FORCE_INLINE void invoke(void* object_p = 0){}\
 				\
 				static NCPP_FORCE_INLINE ncpp::sz address(){ return reinterpret_cast<ncpp::sz>(&F_this::MemberName); }\
@@ -391,6 +397,8 @@ namespace ncpp {
 			\
 			template<typename object_type__, typename return_type__, typename... arg_types__>\
 			struct TF_##MemberName##___ncpp_static_info___<object_type__, return_type__(arg_types__...)>{\
+				\
+				using F_member = MemberType;\
 				\
 				static NCPP_FORCE_INLINE auto invoke(arg_types__... args, void* object_p = 0) {\
 					\
