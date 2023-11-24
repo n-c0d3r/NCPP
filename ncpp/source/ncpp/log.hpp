@@ -33,6 +33,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/containers/.hpp>
+#include <ncpp/utilities/type_info.hpp>
 #include <ncpp/iostream.hpp>
 
 #pragma endregion
@@ -287,7 +288,7 @@ std::ostream& operator << (
 	}
 
 	os << NCPP_FOREGROUND_YELLOW << "vector" << NCPP_RESET_CONSOLE_COLOR
-    << ncpp::F_cout_lowlight{"<"} << (NCPP_FOREGROUND_BLUE + eastl::string(typeid(F_item__).name()) + NCPP_RESET_CONSOLE_COLOR).c_str()
+    << ncpp::F_cout_lowlight{"<"} << (NCPP_FOREGROUND_BLUE + ncpp::utilities::T_type_name<F_item__>() + NCPP_RESET_CONSOLE_COLOR).c_str()
     << ncpp::F_cout_lowlight{">"}
     << ncpp::F_cout_lowlight{"("} << (NCPP_FOREGROUND_MAGNETA + eastl::to_string(input.first.size()) + NCPP_RESET_CONSOLE_COLOR).c_str()
     << ncpp::F_cout_lowlight{")"}
@@ -360,7 +361,7 @@ std::ostream& operator << (
 	}
 
 	os << NCPP_FOREGROUND_YELLOW << "initializer_list" << NCPP_RESET_CONSOLE_COLOR
-    << ncpp::F_cout_lowlight{"<"} << (NCPP_FOREGROUND_BLUE + eastl::string(typeid(F_item__).name()) + NCPP_RESET_CONSOLE_COLOR).c_str()
+    << ncpp::F_cout_lowlight{"<"} << (NCPP_FOREGROUND_BLUE + ncpp::utilities::T_type_name<F_item__>() + NCPP_RESET_CONSOLE_COLOR).c_str()
     << ncpp::F_cout_lowlight{","}
     << (NCPP_FOREGROUND_MAGNETA + eastl::to_string(input.first.size()) + NCPP_RESET_CONSOLE_COLOR).c_str()
     << ncpp::F_cout_lowlight{">"}
@@ -437,7 +438,7 @@ std::ostream& operator << (
 	}
 
 	os << NCPP_FOREGROUND_YELLOW << "array" << NCPP_RESET_CONSOLE_COLOR
-    << ncpp::F_cout_lowlight{"<"} << (NCPP_FOREGROUND_BLUE + eastl::string(typeid(F_item__).name()) + NCPP_RESET_CONSOLE_COLOR).c_str()
+    << ncpp::F_cout_lowlight{"<"} << (NCPP_FOREGROUND_BLUE + ncpp::utilities::T_type_name<F_item__>() + NCPP_RESET_CONSOLE_COLOR).c_str()
     << ncpp::F_cout_lowlight{","}
     << (NCPP_FOREGROUND_MAGNETA + eastl::to_string(input.first.size()) + NCPP_RESET_CONSOLE_COLOR).c_str()
     << ncpp::F_cout_lowlight{">"}

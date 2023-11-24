@@ -153,7 +153,7 @@ namespace ncpp {
                 
                 static NCPP_FORCE_INLINE F__& invoke(void* object_p, const TF_robject_member_info& member_info) {
                     
-                    assert((typeid(F__).hash_code() == member_info.type_hash_code_) && "invalid F__");
+                    assert((utilities::T_type_hash_code_v<F__> == member_info.type_hash_code_) && "invalid F__");
                     
                     return *reinterpret_cast<F__*>(reinterpret_cast<sz>(object_p) + member_info.offset_);
                 }
@@ -169,7 +169,7 @@ namespace ncpp {
             public:
                 static NCPP_FORCE_INLINE F_invoke* invoke(void* object_p, const TF_robject_member_info& member_info) {
                     
-                    assert((typeid(F).hash_code() == member_info.type_hash_code_) && "invalid F__");
+                    assert((utilities::T_type_hash_code_v<F> == member_info.type_hash_code_) && "invalid F__");
                     assert(!member_info.is_static_ || (member_info.is_static_ && !object_p) && "object_p must be zero if member is static");
                     
                     return reinterpret_cast<F_invoke*>(member_info.offset_);
@@ -183,7 +183,7 @@ namespace ncpp {
             template<typename F__>
             NCPP_FORCE_INLINE b8 T_is() const {
                 
-                return (typeid(F__).hash_code() == type_hash_code_);
+                return (utilities::T_type_hash_code_v<F__> == type_hash_code_);
             }
             template<typename F__, std::enable_if_t<!utilities::T_is_function_v<F__>, i32> = 0>
             NCPP_FORCE_INLINE F__& T_get(void* object_p = 0) const {
@@ -228,7 +228,7 @@ namespace ncpp {
 				robject_type_info_p->rcontainer_p()->allocator(),
 				F_robject_member_info__(
 
-					typeid(F_member__).hash_code(),
+					utilities::T_type_hash_code_v<F_member__>,
 					F_member_static_info__::address() | F_member_static_info__::offset(),
 					F_member_static_info__::name(),
 					F_member_static_info__::id(),

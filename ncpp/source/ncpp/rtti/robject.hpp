@@ -323,7 +323,7 @@ namespace ncpp {
 				\
 				static NCPP_FORCE_INLINE eastl::string name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, "_" + eastl::to_string(id())); }\
                 static NCPP_FORCE_INLINE eastl::string raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
-				static NCPP_FORCE_INLINE ncpp::sz id() { return typeid(TF_##MemberName##___ncpp_static_info___).hash_code(); }\
+				static constexpr ncpp::sz id() { return utilities::T_type_hash_code_v<TF_##MemberName##___ncpp_static_info___>; }\
 				\
 				static constexpr ncpp::sz offset() { return (ncpp::sz)reinterpret_cast<ncpp::sz>(&(reinterpret_cast<object_type__*>(0)->MemberName)); }\
                 static constexpr ncpp::u16 size() { return (ncpp::u16)sizeof(NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(MemberType)); }\
@@ -354,7 +354,7 @@ namespace ncpp {
 				\
 				static NCPP_FORCE_INLINE eastl::string name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, "_" + eastl::to_string(id())); }\
                 static NCPP_FORCE_INLINE eastl::string raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
-				static NCPP_FORCE_INLINE ncpp::sz id() { return typeid(TF_##MemberName##___ncpp_static_info___).hash_code(); }\
+				static constexpr ncpp::sz id() { return utilities::T_type_hash_code_v<TF_##MemberName##___ncpp_static_info___>; }\
 				\
 				static constexpr ncpp::sz offset() { return 0; }\
 				static constexpr ncpp::u16 size() { return 0; }\
@@ -451,7 +451,7 @@ namespace ncpp {
 				\
 				static NCPP_FORCE_INLINE eastl::string name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, "_" + eastl::to_string(id())); }\
                 static NCPP_FORCE_INLINE eastl::string raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
-				static NCPP_FORCE_INLINE ncpp::sz id() { return typeid(TF_##MemberName##___ncpp_static_info___).hash_code(); }\
+				static constexpr ncpp::sz id() { return utilities::T_type_hash_code_v<TF_##MemberName##___ncpp_static_info___>; }\
 				\
 				static constexpr ncpp::sz offset() { return 0; }\
                 static constexpr ncpp::u16 size() { return (ncpp::u16)sizeof(NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(MemberType)); }\
@@ -482,7 +482,7 @@ namespace ncpp {
 				\
 				static NCPP_FORCE_INLINE eastl::string name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, "_" + eastl::to_string(id())); }\
                 static NCPP_FORCE_INLINE eastl::string raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
-				static NCPP_FORCE_INLINE ncpp::sz id() { return typeid(TF_##MemberName##___ncpp_static_info___).hash_code(); }\
+				static constexpr ncpp::sz id() { return utilities::T_type_hash_code_v<TF_##MemberName##___ncpp_static_info___>; }\
 				\
 				static constexpr ncpp::sz offset() { return 0; }\
 				static constexpr ncpp::u16 size() { return 0; }\
@@ -808,7 +808,7 @@ namespace ncpp {
 			NCPP_PUBLIC_KEYWORD\
 				using F_this = ObjectTypeName;\
 				static NCPP_FORCE_INLINE eastl::string static_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#ObjectTypeName, "_" + eastl::to_string(static_type_hash_code())); }\
-				static NCPP_FORCE_INLINE ncpp::sz static_type_hash_code() { return typeid(F_this).hash_code(); }\
+				static NCPP_FORCE_INLINE ncpp::sz static_type_hash_code() { return utilities::T_type_hash_code_v<F_this>; }\
 				\
 			NCPP_PRIVATE_KEYWORD\
 				NCPP_RTTI_IMPLEMENT_FLAG(F_this, ncpp::rtti::F_robject_flag);\

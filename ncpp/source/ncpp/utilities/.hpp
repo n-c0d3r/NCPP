@@ -73,4 +73,6 @@ namespace ncpp {
 #include <ncpp/utilities/murmur_hash.hpp>
 #include <ncpp/utilities/basic_math.hpp>
 
+#include <ncpp/utilities/type_info.hpp>
+
 #pragma endregion
