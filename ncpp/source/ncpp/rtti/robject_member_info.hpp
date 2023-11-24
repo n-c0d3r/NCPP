@@ -170,6 +170,7 @@ namespace ncpp {
                 static NCPP_FORCE_INLINE F_invoke* invoke(void* object_p, const TF_robject_member_info& member_info) {
                     
                     assert((typeid(F).hash_code() == member_info.type_hash_code_) && "invalid F__");
+                    assert(!member_info.is_static_ || (member_info.is_static_ && !object_p) && "object_p must be zero if member is static");
                     
                     return reinterpret_cast<F_invoke*>(member_info.offset_);
                 }
