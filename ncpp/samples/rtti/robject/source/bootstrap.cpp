@@ -46,7 +46,7 @@ class A : public B, public C {
 void A::foo() {
 
     std::cout << "A::foo" << std::endl;
-
+    
 }
 
 i32 A::si = 4;
