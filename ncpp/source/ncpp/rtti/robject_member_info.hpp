@@ -76,7 +76,7 @@ namespace ncpp {
 			sz type_hash_code_ = 0;
             union {
                 sz address_ = 0;
-                sz variable_offset_;
+                sz offset_;
             };
 			eastl::string name_;
 			sz id_ = 0;
@@ -97,7 +97,7 @@ namespace ncpp {
 		public:
 			NCPP_FORCE_INLINE sz type_hash_code() const { return type_hash_code_; }
             NCPP_FORCE_INLINE sz address() const { return address_; }
-			NCPP_FORCE_INLINE sz variable_offset() const { return variable_offset_; }
+			NCPP_FORCE_INLINE sz offset() const { return offset_; }
 			NCPP_FORCE_INLINE const eastl::string name() const { return name_; }
 			NCPP_FORCE_INLINE sz id() const { return id_; }
             NCPP_FORCE_INLINE u16 size() const { return size_; }
@@ -114,7 +114,7 @@ namespace ncpp {
 		public:
 			TF_robject_member_info(
 				sz type_hash_code,
-				sz address_or_variable_offset,
+				sz address_or_offset,
 				const eastl::string& name,
 				sz id,
 				u16 size,
@@ -125,7 +125,7 @@ namespace ncpp {
                 F_robject_type_info* robject_type_info_p
 			) :
 				type_hash_code_(type_hash_code),
-				address_(address_or_variable_offset),
+				address_(address_or_offset),
 				name_(name),
 				id_(id),
 				size_(size),
@@ -139,6 +139,71 @@ namespace ncpp {
 
 
 			}
+            
+            
+            
+        private:
+            template<typename F__>
+            struct TF_get_internal;
+            template<typename F__>
+            friend struct TF_get_internal;
+            
+            template<typename F__>
+            struct TF_get_internal {
+                
+                static NCPP_FORCE_INLINE F__& invoke(void* object_p, const TF_robject_member_info& member_info) {
+                    
+                    assert((typeid(F__).hash_code() == member_info.type_hash_code_) && "invalid F__");
+                    
+                    return *reinterpret_cast<F__*>(reinterpret_cast<sz>(object_p) + member_info.offset_);
+                }
+                
+            };
+            template<typename F_return__, typename... F_args__>
+            struct TF_get_internal<F_return__(F_args__...)> {
+            
+            private:
+                using F = F_return__(F_args__...);
+                using F_invoke = F_return__(F_args__..., void* object_p);
+                
+            public:
+                static NCPP_FORCE_INLINE F_invoke* invoke(void* object_p, const TF_robject_member_info& member_info) {
+                    
+                    assert((typeid(F).hash_code() == member_info.type_hash_code_) && "invalid F__");
+                    
+                    return reinterpret_cast<F_invoke*>(member_info.offset_);
+                }
+                
+            };
+            
+            
+            
+        public:
+            template<typename F__>
+            NCPP_FORCE_INLINE b8 T_is() const {
+                
+                return (typeid(F__).hash_code() == type_hash_code_);
+            }
+            template<typename F__, std::enable_if_t<!utilities::T_is_function_v<F__>, i32> = 0>
+            NCPP_FORCE_INLINE F__& T_get(void* object_p = 0) const {
+                
+                return TF_get_internal<F__>::invoke(object_p, *this);
+            }
+            template<typename F__, std::enable_if_t<utilities::T_is_function_v<F__>, i32> = 0>
+            NCPP_FORCE_INLINE auto T_get(void* object_p = 0) const {
+                
+                return TF_get_internal<F__>::invoke(object_p, *this);
+            }
+            template<typename F__, std::enable_if_t<!utilities::T_is_function_v<F__>, i32> = 0>
+            NCPP_FORCE_INLINE void T_invoke(void* object_p = 0) const {
+                
+                static_assert(utilities::T_is_function_v<F__> && "cant invoke non function type");
+            }
+            template<typename F__, typename... F_args__, std::enable_if_t<utilities::T_is_function_v<F__>, i32> = 0>
+            NCPP_FORCE_INLINE typename utilities::TF_function_traits<F__>::F_return T_invoke(F_args__... args, void* object_p = 0) const {
+                
+                return T_get<F__>()(std::forward<F_args__>(args)..., object_p);
+            }
 
 		};
 
