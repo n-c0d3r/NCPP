@@ -68,12 +68,6 @@ public:
         
         std::cout << "user reflect non-static member: " << F_member_static_info__::name() << std::endl;
         
-        if (robject_member_info_p->template T_is<void()>()) {
-            
-            robject_member_info_p->template T_invoke<void()>();
-
-        }
-        
     }
     NCPP_ROBJECT_USER_REFLECT_MEMBER(
         F_demo_compiletime_rflag,
