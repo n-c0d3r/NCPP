@@ -74,7 +74,7 @@ public:
         std::enable_if_t<F_member_static_info__::is_static(), i32> = 0
     ) {
         
-        std::cout << "user reflect static member: " << F_member_static_info__::name() << std::endl;
+        std::cout << "user reflect static member: " << F_member_static_info__::name() << " (" << F_member_static_info__::static_get() << ")" << std::endl;
         
     }
     NCPP_ROBJECT_USER_REFLECT_BASE(
