@@ -108,8 +108,8 @@ public:
         
     }
     
-// public:
-    // NCPP_ROBJECT_DISABLE_DEFAULT_REFLECT(F_demo_compiletime_rflag);
+public:
+    NCPP_ROBJECT_DISABLE_DEFAULT_REFLECT(F_demo_compiletime_rflag);
     
 };
 
