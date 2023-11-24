@@ -267,6 +267,7 @@ namespace ncpp {
                 static constexpr ncpp::u16 size() { return (ncpp::u16)sizeof(NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(MemberType)); }\
 				\
 				static constexpr bool is_static() { return false; }\
+				static NCPP_FORCE_INLINE void static_get() {  }\
                 \
                 static constexpr ncpp::b8 is_function() { return false; }\
                 static constexpr ncpp::b8 is_virtual_function() { return false; }\
@@ -297,6 +298,7 @@ namespace ncpp {
 				static constexpr ncpp::u16 size() { return 0; }\
 				\
 				static constexpr bool is_static() { return false; }\
+				static NCPP_FORCE_INLINE void static_get() {  }\
                 \
                 static constexpr ncpp::b8 is_function() { return true; }\
                 static constexpr ncpp::b8 is_virtual_function() { return IsVirtualFunction; }\
@@ -424,7 +426,7 @@ namespace ncpp {
 				static constexpr ncpp::u16 size() { return 0; }\
 				\
 				static constexpr bool is_static() { return true; }\
-				static NCPP_FORCE_INLINE auto& static_get() { return F_this::MemberName; }\
+				static NCPP_FORCE_INLINE auto* static_get() { return &F_this::MemberName; }\
                 \
                 static constexpr ncpp::b8 is_function() { return true; }\
                 static constexpr ncpp::b8 is_virtual_function() { return false; }\
