@@ -61,44 +61,100 @@ void A::foo2() {
 struct F_demo_compiletime_rflag {
     
 public:
-    NCPP_ROBJECT_USER_REFLECT_MEMBER(
+    NCPP_ROBJECT_USER_PRE_REFLECT_MEMBER(
         F_demo_compiletime_rflag,
         std::enable_if_t<!F_member_static_info__::is_static(), i32> = 0
     ) {
         
-        std::cout << "user reflect non-static member: " << F_member_static_info__::name() << std::endl;
+        std::cout << "user pre reflect non-static member: " << F_member_static_info__::name() << std::endl;
         
     }
-    NCPP_ROBJECT_USER_REFLECT_MEMBER(
+    NCPP_ROBJECT_USER_POST_REFLECT_MEMBER(
+        F_demo_compiletime_rflag,
+        std::enable_if_t<!F_member_static_info__::is_static(), i32> = 0
+    ) {
+        
+        std::cout << "user post reflect non-static member: " << F_member_static_info__::name() << std::endl;
+        
+    }
+    NCPP_ROBJECT_USER_PRE_REFLECT_MEMBER(
         F_demo_compiletime_rflag,
         std::enable_if_t<F_member_static_info__::is_static(), i32> = 0
     ) {
         
-        std::cout << "user reflect static member: " << F_member_static_info__::name() << " (" << F_member_static_info__::static_get() << ")" << std::endl;
+        std::cout << "user pre reflect static member: " << F_member_static_info__::name() << " (" << F_member_static_info__::static_get() << ")" << std::endl;
         
     }
-    NCPP_ROBJECT_USER_REFLECT_BASE(
+    NCPP_ROBJECT_USER_POST_REFLECT_MEMBER(
+        F_demo_compiletime_rflag,
+        std::enable_if_t<F_member_static_info__::is_static(), i32> = 0
+    ) {
+        
+        std::cout << "user post reflect static member: " << F_member_static_info__::name() << " (" << F_member_static_info__::static_get() << ")" << std::endl;
+        
+    }
+    NCPP_ROBJECT_USER_PRE_REFLECT_BASE(
         F_demo_compiletime_rflag,
         std::enable_if_t<std::is_same_v<F_base__, B>, i32> = 0
     ) {
         
-        std::cout << "user reflect base B: " << F_base__::static_type_name() << std::endl;
+        std::cout << "user pre reflect base B: " << F_base__::static_type_name() << std::endl;
         
     }
-    NCPP_ROBJECT_USER_REFLECT_BASE(
+    NCPP_ROBJECT_USER_POST_REFLECT_BASE(
+        F_demo_compiletime_rflag,
+        std::enable_if_t<std::is_same_v<F_base__, B>, i32> = 0
+    ) {
+        
+        std::cout << "user post reflect base B: " << F_base__::static_type_name() << std::endl;
+        
+    }
+    NCPP_ROBJECT_USER_PRE_REFLECT_BASE(
         F_demo_compiletime_rflag,
         std::enable_if_t<std::is_same_v<F_base__, C>, i32> = 0
     ) {
         
-        std::cout << "user reflect base C: " << F_base__::static_type_name() << std::endl;
+        std::cout << "user pre reflect base C: " << F_base__::static_type_name() << std::endl;
         
     }
-    NCPP_ROBJECT_USER_REFLECT_OBJECT(
+    NCPP_ROBJECT_USER_POST_REFLECT_BASE(
+        F_demo_compiletime_rflag,
+        std::enable_if_t<std::is_same_v<F_base__, C>, i32> = 0
+    ) {
+        
+        std::cout << "user post reflect base C: " << F_base__::static_type_name() << std::endl;
+        
+    }
+    NCPP_ROBJECT_USER_PRE_REFLECT_OBJECT(
         F_demo_compiletime_rflag,
         std::enable_if_t<std::is_same_v<F_robject__, C> || std::is_same_v<F_robject__, B>, i32> = 0
     ) {
         
-        std::cout << "user reflect object C or B: " << F_robject__::static_type_name() << std::endl;
+        std::cout << "user pre reflect object C or B: " << F_robject__::static_type_name() << std::endl;
+        
+    }
+    NCPP_ROBJECT_USER_POST_REFLECT_OBJECT(
+        F_demo_compiletime_rflag,
+        std::enable_if_t<std::is_same_v<F_robject__, C> || std::is_same_v<F_robject__, B>, i32> = 0
+    ) {
+        
+        std::cout << "user post reflect object C or B: " << F_robject__::static_type_name() << std::endl;
+        
+    }
+    NCPP_ROBJECT_USER_PRE_REFLECT_OBJECT(
+        F_demo_compiletime_rflag,
+        std::enable_if_t<std::is_same_v<F_robject__, A>, i32> = 0
+    ) {
+        
+        std::cout << "user pre reflect object A: " << F_robject__::static_type_name() << std::endl;
+        
+    }
+    NCPP_ROBJECT_USER_POST_REFLECT_OBJECT(
+        F_demo_compiletime_rflag,
+        std::enable_if_t<std::is_same_v<F_robject__, A>, i32> = 0
+    ) {
+        
+        std::cout << "user post reflect object A: " << F_robject__::static_type_name() << std::endl;
         
     }
     
