@@ -197,7 +197,7 @@ int main() {
 
 	A::F_rcontainer rcontainer;
 
-	A::F_robject_type_info* type_info_p = A::F_rtti_traits::template T_safe_reflect<A>(&rcontainer);
+	A::F_robject_type_info* type_info_p = A::F_rtti_traits::template T_safe_reflect<A>(&rcontainer, &a);
     log_type_info(type_info_p);
     
     F_demo_compiletime_rflag::F_user_reflect_custom_params user_reflect_custom_params = {
