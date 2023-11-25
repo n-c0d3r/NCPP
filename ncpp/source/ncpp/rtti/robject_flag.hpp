@@ -72,6 +72,8 @@ namespace ncpp {
         NCPP_RTTI_CREATE_FLAG(F_disable_reflect_robject_member_info);
         NCPP_RTTI_CREATE_FLAG(F_disable_reflect_robject_metadata);
 
+		NCPP_RTTI_CREATE_FLAG(F_user_reflect_custom_data_flag);
+
 		template<class F_robject__, typename F_member__, class F_member_static_info__, NCPP_RTTI_SPECIFIC_TARGS()>
 		NCPP_RTTI_CREATE_FLAG(TF_user_pre_reflect_member_flag);
 		template<class F_robject__, typename F_member__, class F_member_static_info__, NCPP_RTTI_SPECIFIC_TARGS()>
