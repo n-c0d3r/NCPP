@@ -67,7 +67,7 @@ namespace ncpp {
 	namespace rtti {
 
 #define NCPP_ROBJECT_USER_REFLECT_CUSTOM_DATA(CompileTimeRFlagType, CustomDataType) \
-			friend CustomDataType operator << (CompileTimeRFlagType&, ncpp::rtti::F_user_reflect_custom_data_flag flag) { }
+			friend CustomDataType operator << (CompileTimeRFlagType&, ncpp::rtti::F_user_reflect_custom_params_flag flag) { }
 
 
 
@@ -93,7 +93,7 @@ namespace ncpp {
 			F_rcontainer__* rcontainer_p, \
 			F_robject_type_info__* robject_type_info_p,\
 			F_robject_member_info__* robject_member_info_p,\
-			ncpp::rtti::F_default_rtti_traits::template TF_safe_custom_data<CompileTimeRFlagType>* custom_data_p = 0\
+			ncpp::rtti::F_default_rtti_traits::template TF_safe_custom_params<CompileTimeRFlagType>* custom_params_p = 0\
 		)
 
 #define NCPP_ROBJECT_CALL_USER_PRE_REFLECT_MEMBER() F_rtti_traits::template T_safe_user_pre_reflect_member<\
@@ -105,7 +105,7 @@ namespace ncpp {
 			rcontainer_p,\
 			robject_type_info_p,\
 			robject_member_info_p,\
-			custom_data_p\
+			custom_params_p\
 		);
 
 #define NCPP_ROBJECT_USER_POST_REFLECT_MEMBER(CompileTimeRFlagType, ...) \
@@ -116,7 +116,7 @@ namespace ncpp {
 			F_rcontainer__* rcontainer_p, \
 			F_robject_type_info__* robject_type_info_p,\
 			F_robject_member_info__* robject_member_info_p,\
-			ncpp::rtti::F_default_rtti_traits::template TF_safe_custom_data<CompileTimeRFlagType>* custom_data_p = 0\
+			ncpp::rtti::F_default_rtti_traits::template TF_safe_custom_params<CompileTimeRFlagType>* custom_params_p = 0\
 		)
 
 #define NCPP_ROBJECT_CALL_USER_POST_REFLECT_MEMBER() F_rtti_traits::template T_safe_user_post_reflect_member<\
@@ -128,7 +128,7 @@ namespace ncpp {
 			rcontainer_p,\
 			robject_type_info_p,\
 			robject_member_info_p,\
-			custom_data_p\
+			custom_params_p\
 		);
 
 
@@ -154,7 +154,7 @@ namespace ncpp {
 		static NCPP_FORCE_INLINE void T_user_pre_reflect_base(\
 			F_rcontainer__* rcontainer_p, \
 			F_robject_type_info__* robject_type_info_p,\
-			ncpp::rtti::F_default_rtti_traits::template TF_safe_custom_data<CompileTimeRFlagType>* custom_data_p = 0\
+			ncpp::rtti::F_default_rtti_traits::template TF_safe_custom_params<CompileTimeRFlagType>* custom_params_p = 0\
 		)
 
 #define NCPP_ROBJECT_CALL_USER_PRE_REFLECT_BASE() F_rtti_traits::template T_safe_user_pre_reflect_base<\
@@ -164,7 +164,7 @@ namespace ncpp {
 		>(\
 			rcontainer_p,\
 			robject_type_info_p,\
-			custom_data_p\
+			custom_params_p\
 		);
 
 #define NCPP_ROBJECT_USER_POST_REFLECT_BASE(CompileTimeRFlagType, ...) \
@@ -175,7 +175,7 @@ namespace ncpp {
 			F_rcontainer__* rcontainer_p, \
 			F_robject_type_info__* robject_type_info_p,\
 			F_robject_type_info__* base_info_p,\
-			ncpp::rtti::F_default_rtti_traits::template TF_safe_custom_data<CompileTimeRFlagType>* custom_data_p = 0\
+			ncpp::rtti::F_default_rtti_traits::template TF_safe_custom_params<CompileTimeRFlagType>* custom_params_p = 0\
 		)
 
 #define NCPP_ROBJECT_CALL_USER_POST_REFLECT_BASE() F_rtti_traits::template T_safe_user_post_reflect_base<\
@@ -186,7 +186,7 @@ namespace ncpp {
 			rcontainer_p,\
 			robject_type_info_p,\
 			base_info_p,\
-			custom_data_p\
+			custom_params_p\
 		);
 
 
@@ -212,7 +212,7 @@ namespace ncpp {
 		static NCPP_FORCE_INLINE void T_user_pre_reflect_object(\
 			F_rcontainer__* rcontainer_p, \
 			F_robject_type_info__* robject_type_info_p,\
-			ncpp::rtti::F_default_rtti_traits::template TF_safe_custom_data<CompileTimeRFlagType>* custom_data_p = 0\
+			ncpp::rtti::F_default_rtti_traits::template TF_safe_custom_params<CompileTimeRFlagType>* custom_params_p = 0\
 		)
 
 #define NCPP_ROBJECT_CALL_USER_PRE_REFLECT_OBJECT() F_rtti_traits::template T_safe_user_pre_reflect_object<\
@@ -221,7 +221,7 @@ namespace ncpp {
 		>(\
 			rcontainer_p,\
 			robject_type_info_p,\
-			custom_data_p\
+			custom_params_p\
 		);
 
 #define NCPP_ROBJECT_USER_POST_REFLECT_OBJECT(CompileTimeRFlagType, ...) \
@@ -231,7 +231,7 @@ namespace ncpp {
 		static NCPP_FORCE_INLINE void T_user_post_reflect_object(\
 			F_rcontainer__* rcontainer_p, \
 			F_robject_type_info__* robject_type_info_p,\
-			ncpp::rtti::F_default_rtti_traits::template TF_safe_custom_data<CompileTimeRFlagType>* custom_data_p = 0\
+			ncpp::rtti::F_default_rtti_traits::template TF_safe_custom_params<CompileTimeRFlagType>* custom_params_p = 0\
 		)
 
 #define NCPP_ROBJECT_CALL_USER_POST_REFLECT_OBJECT() F_rtti_traits::template T_safe_user_post_reflect_object<\
@@ -240,7 +240,7 @@ namespace ncpp {
 		>(\
 			rcontainer_p,\
 			robject_type_info_p,\
-			custom_data_p\
+			custom_params_p\
 		);
 
 
@@ -316,9 +316,9 @@ namespace ncpp {
 			NCPP_PRIVATE_KEYWORD NCPP_RTTI_IMPLEMENT_FLAG(F_this, ncpp::rtti::F_robject_virtual_flag);\
 			NCPP_PUBLIC_KEYWORD virtual F_robject_type_info* virtual_reflect(\
 					F_rcontainer* rcontainer_p, \
-                    void* custom_data_p = 0\
+                    void* custom_params_p = 0\
 				) {\
-					return F_this::static_reflect(rcontainer_p, custom_data_p);\
+					return F_this::static_reflect(rcontainer_p, custom_params_p);\
 				}
 
 		////////////////////////////////////////////////////////////////////////////////////
@@ -574,7 +574,7 @@ namespace ncpp {
                 F_robject_type_info* base_info_p = F_rtti_traits::template T_safe_reflect<BaseName, false, F_reflect_flag__>(\
                     rcontainer_p,\
                     0,\
-                    custom_data_p\
+                    custom_params_p\
                 );\
                 \
                 if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_type_info))\
@@ -839,7 +839,7 @@ namespace ncpp {
 				template<typename F_reflect_flag__>\
 				static F_robject_type_info* T_static_reflect(\
 					F_rcontainer* rcontainer_p, \
-					F_rtti_traits::template TF_safe_custom_data<F_reflect_flag__>* custom_data_p = 0\
+					F_rtti_traits::template TF_safe_custom_params<F_reflect_flag__>* custom_params_p = 0\
 				){\
 					\
 					F_robject_type_info* robject_type_info_p = 0;\
@@ -860,9 +860,9 @@ namespace ncpp {
 				\
 				static NCPP_FORCE_INLINE F_robject_type_info* static_reflect(\
 					F_rcontainer* rcontainer_p, \
-					void* custom_data_p = 0\
+					void* custom_params_p = 0\
 				){\
-					return T_static_reflect<void>(rcontainer_p, custom_data_p);\
+					return T_static_reflect<void>(rcontainer_p, custom_params_p);\
 				}\
 				\
 			NCPP_PUBLIC_KEYWORD\

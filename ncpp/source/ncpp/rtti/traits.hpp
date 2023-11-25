@@ -183,14 +183,14 @@ namespace ncpp {
             
             
 			template<typename F_reflect_flag__>
-			static auto TF_safe_custom_data_test_internal(int)
-                -> decltype(std::declval<F_reflect_flag__&>() << std::declval<F_user_reflect_custom_data_flag>());
+			static auto TF_safe_custom_params_test_internal(int)
+                -> decltype(std::declval<F_reflect_flag__&>() << std::declval<F_user_reflect_custom_params_flag>());
 			template<typename>
-			static auto TF_safe_custom_data_test_internal(...)
+			static auto TF_safe_custom_params_test_internal(...)
                 -> void;
 
 			template<typename F_reflect_flag__>
-			using TF_safe_custom_data = decltype(TF_safe_custom_data_test_internal<F_reflect_flag__>(0));
+			using TF_safe_custom_params = decltype(TF_safe_custom_params_test_internal<F_reflect_flag__>(0));
 
 
 
@@ -204,12 +204,12 @@ namespace ncpp {
 					i32
 				> = 0
 			>
-			static NCPP_FORCE_INLINE F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, TF_safe_custom_data<F_reflect_flag__>* custom_data_p = 0) {
+			static NCPP_FORCE_INLINE F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, TF_safe_custom_params<F_reflect_flag__>* custom_params_p = 0) {
 
 				if(object_p)
-					return object_p->virtual_reflect(rcontainer_p, custom_data_p);
+					return object_p->virtual_reflect(rcontainer_p, custom_params_p);
 				else
-					return F_robject__::static_reflect(rcontainer_p, custom_data_p);
+					return F_robject__::static_reflect(rcontainer_p, custom_params_p);
 
 				return 0;
 			}
@@ -223,9 +223,9 @@ namespace ncpp {
 					i32
 				> = 0
 			>
-			static NCPP_FORCE_INLINE F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, TF_safe_custom_data<F_reflect_flag__>* custom_data_p = 0) {
+			static NCPP_FORCE_INLINE F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, TF_safe_custom_params<F_reflect_flag__>* custom_params_p = 0) {
 
-				return F_robject__::template T_static_reflect<F_reflect_flag__>(rcontainer_p, custom_data_p);
+				return F_robject__::template T_static_reflect<F_reflect_flag__>(rcontainer_p, custom_params_p);
 			}
 			template<
 				class F_robject__,
@@ -236,7 +236,7 @@ namespace ncpp {
 					i32
 				> = 0
 			>
-			static NCPP_FORCE_INLINE F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, TF_safe_custom_data<F_reflect_flag__>* custom_data_p = 0) {
+			static NCPP_FORCE_INLINE F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, TF_safe_custom_params<F_reflect_flag__>* custom_params_p = 0) {
 
 				return 0;
 			}
@@ -258,7 +258,7 @@ namespace ncpp {
 				F_rcontainer* rcontainer_p, 
 				F_robject_type_info* robject_type_info_p,
 				F_robject_member_info* robject_member_info_p,
-				TF_safe_custom_data<F_reflect_flag__>* custom_data_p = 0
+				TF_safe_custom_params<F_reflect_flag__>* custom_params_p = 0
 			) {
 
 				F_reflect_flag__::template T_user_pre_reflect_member<
@@ -270,7 +270,7 @@ namespace ncpp {
                     rcontainer_p,
                     robject_type_info_p,
 					robject_member_info_p,
-					custom_data_p
+					custom_params_p
                 );
 			}
 			template<
@@ -288,7 +288,7 @@ namespace ncpp {
 				F_rcontainer* rcontainer_p, 
 				F_robject_type_info* robject_type_info_p,
 				F_robject_member_info* robject_member_info_p,
-				TF_safe_custom_data<F_reflect_flag__>* custom_data_p = 0
+				TF_safe_custom_params<F_reflect_flag__>* custom_params_p = 0
 			) {
 
 				
@@ -311,7 +311,7 @@ namespace ncpp {
 				F_rcontainer* rcontainer_p, 
 				F_robject_type_info* robject_type_info_p,
 				F_robject_member_info* robject_member_info_p,
-				TF_safe_custom_data<F_reflect_flag__>* custom_data_p = 0
+				TF_safe_custom_params<F_reflect_flag__>* custom_params_p = 0
 			) {
 
 				F_reflect_flag__::template T_user_post_reflect_member<
@@ -323,7 +323,7 @@ namespace ncpp {
                     rcontainer_p,
                     robject_type_info_p,
 					robject_member_info_p,
-					custom_data_p
+					custom_params_p
                 );
 			}
 			template<
@@ -341,7 +341,7 @@ namespace ncpp {
 				F_rcontainer* rcontainer_p, 
 				F_robject_type_info* robject_type_info_p,
 				F_robject_member_info* robject_member_info_p,
-				TF_safe_custom_data<F_reflect_flag__>* custom_data_p = 0
+				TF_safe_custom_params<F_reflect_flag__>* custom_params_p = 0
 			) {
 
 				
@@ -362,7 +362,7 @@ namespace ncpp {
 			static NCPP_FORCE_INLINE void T_safe_user_pre_reflect_base(
 				F_rcontainer* rcontainer_p, 
 				F_robject_type_info* robject_type_info_p,
-				TF_safe_custom_data<F_reflect_flag__>* custom_data_p = 0
+				TF_safe_custom_params<F_reflect_flag__>* custom_params_p = 0
 			) {
 
 				F_reflect_flag__::template T_user_pre_reflect_base<
@@ -372,7 +372,7 @@ namespace ncpp {
                 >(
                     rcontainer_p,
                     robject_type_info_p,
-					custom_data_p
+					custom_params_p
                 );
 			}
 			template<
@@ -388,7 +388,7 @@ namespace ncpp {
 			static NCPP_FORCE_INLINE void T_safe_user_pre_reflect_base(
 				F_rcontainer* rcontainer_p, 
 				F_robject_type_info* robject_type_info_p,
-				TF_safe_custom_data<F_reflect_flag__>* custom_data_p = 0
+				TF_safe_custom_params<F_reflect_flag__>* custom_params_p = 0
 			) {
 
 				
@@ -410,7 +410,7 @@ namespace ncpp {
 				F_rcontainer* rcontainer_p, 
 				F_robject_type_info* robject_type_info_p,
 				F_robject_type_info* base_info_p,
-				TF_safe_custom_data<F_reflect_flag__>* custom_data_p = 0
+				TF_safe_custom_params<F_reflect_flag__>* custom_params_p = 0
 			) {
 
 				F_reflect_flag__::template T_user_post_reflect_base<
@@ -421,7 +421,7 @@ namespace ncpp {
                     rcontainer_p,
                     robject_type_info_p,
 					base_info_p,
-					custom_data_p
+					custom_params_p
                 );
 			}
 			template<
@@ -438,7 +438,7 @@ namespace ncpp {
 				F_rcontainer* rcontainer_p, 
 				F_robject_type_info* robject_type_info_p,
 				F_robject_type_info* base_info_p,
-				TF_safe_custom_data<F_reflect_flag__>* custom_data_p = 0
+				TF_safe_custom_params<F_reflect_flag__>* custom_params_p = 0
 			) {
 
 				
@@ -458,7 +458,7 @@ namespace ncpp {
             static NCPP_FORCE_INLINE void T_safe_user_pre_reflect_object(
                 F_rcontainer* rcontainer_p,
                 F_robject_type_info* robject_type_info_p,
-                TF_safe_custom_data<F_reflect_flag__>* custom_data_p = 0
+                TF_safe_custom_params<F_reflect_flag__>* custom_params_p = 0
             ) {
 
                 F_reflect_flag__::template T_user_pre_reflect_object<
@@ -467,7 +467,7 @@ namespace ncpp {
                 >(
                     rcontainer_p,
                     robject_type_info_p,
-                    custom_data_p
+                    custom_params_p
                 );
             }
             template<
@@ -482,7 +482,7 @@ namespace ncpp {
             static NCPP_FORCE_INLINE void T_safe_user_pre_reflect_object(
                 F_rcontainer* rcontainer_p,
                 F_robject_type_info* robject_type_info_p,
-                TF_safe_custom_data<F_reflect_flag__>* custom_data_p = 0
+                TF_safe_custom_params<F_reflect_flag__>* custom_params_p = 0
             ) {
 
                 
@@ -502,7 +502,7 @@ namespace ncpp {
             static NCPP_FORCE_INLINE void T_safe_user_post_reflect_object(
                 F_rcontainer* rcontainer_p,
                 F_robject_type_info* robject_type_info_p,
-                TF_safe_custom_data<F_reflect_flag__>* custom_data_p = 0
+                TF_safe_custom_params<F_reflect_flag__>* custom_params_p = 0
             ) {
 
                 F_reflect_flag__::template T_user_post_reflect_object<
@@ -511,7 +511,7 @@ namespace ncpp {
                 >(
                     rcontainer_p,
                     robject_type_info_p,
-                    custom_data_p
+                    custom_params_p
                 );
             }
             template<
@@ -526,7 +526,7 @@ namespace ncpp {
             static NCPP_FORCE_INLINE void T_safe_user_post_reflect_object(
                 F_rcontainer* rcontainer_p,
                 F_robject_type_info* robject_type_info_p,
-                TF_safe_custom_data<F_reflect_flag__>* custom_data_p = 0
+                TF_safe_custom_params<F_reflect_flag__>* custom_params_p = 0
             ) {
 
                 
