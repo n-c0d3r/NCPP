@@ -81,6 +81,8 @@ namespace ncpp { }
 
 namespace ncpp {
 
-    
+    using namespace containers;
+    using namespace mem;
+    using namespace utilities;
 
 }
