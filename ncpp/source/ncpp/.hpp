@@ -81,8 +81,10 @@ namespace ncpp { }
 
 namespace ncpp {
 
-    using namespace containers;
-    using namespace mem;
     using namespace utilities;
+    using namespace mem;
+    using namespace containers;
+    using namespace rtti;
+    using namespace pac;
 
 }
