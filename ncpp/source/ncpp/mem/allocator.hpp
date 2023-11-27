@@ -27,6 +27,11 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/prerequisites.hpp>
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#include <ncpp/mem/memory_counting.hpp>
 
 #pragma endregion
 
@@ -49,6 +54,20 @@
 namespace ncpp {
 
 	namespace mem {
+    
+        NCPP_FORCE_INLINE constexpr sz aligned_size(sz size, size_t align = EASTL_ALLOCATOR_MIN_ALIGNMENT)
+        {
+            const size_t mask = align - 1;
+            return (size + mask) & ~mask;
+        }
+        NCPP_FORCE_INLINE uintptr_t align_address(uintptr_t addr, size_t align = EASTL_ALLOCATOR_MIN_ALIGNMENT)
+        {
+            const size_t mask = align - 1;
+            assert((align & mask) == 0); // pwr of 2
+            return (addr + mask) & ~mask;
+        }
+    
+    
 
 #if defined(NCPP_ENABLE_ALLOCATOR_NAME) || defined(NCPP_ENABLE_MEMORY_COUNTING)
 #define NCPP_HAS_ALLOC_DEBUG_INFO
