@@ -56,11 +56,17 @@ namespace ncpp {
 
 	namespace containers {
         
+        ////////////////////////////////////////////////////////////////////////////////////
+        //  string
+        ////////////////////////////////////////////////////////////////////////////////////
         template<typename F_char__ = char, typename F_allocator__ = mem::F_default_allocator>
         using TF_string = eastl::basic_string<F_char__, F_allocator__>;
         using F_string = TF_string<char>;
         using F_wstring = TF_string<wchar_t>;
-    
+            
+        ////////////////////////////////////////////////////////////////////////////////////
+        //  to string
+        ////////////////////////////////////////////////////////////////////////////////////
         namespace internal {
                 
             template<typename F_char__ = char, typename F_allocator__ = mem::F_default_allocator, typename F_value__ = int>
@@ -464,31 +470,38 @@ namespace ncpp {
         
 
 
+        ////////////////////////////////////////////////////////////////////////////////////
+        //  list, vector, deque
+        ////////////////////////////////////////////////////////////////////////////////////
         template<typename F_item__, typename F_allocator__ = mem::F_default_allocator>
         using TF_vector = eastl::vector<F_item__, F_allocator__>;
 
         template<typename F_item__, typename F_allocator__ = mem::F_default_allocator>
         using TF_list = eastl::list<F_item__, F_allocator__>;
 
-
-
-        template<typename F_item__, typename F_allocator__ = mem::F_default_allocator>
-        using TF_shared_ptr = eastl::shared_ptr<F_item__>;
-
-        
-
         template<typename F_item__, typename F_allocator__ = mem::F_default_allocator>
         using TF_deque = eastl::deque<F_item__, F_allocator__>;
 
 
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        //  smart pointers
+        ////////////////////////////////////////////////////////////////////////////////////
+        template<typename F_item__, typename F_allocator__ = mem::F_default_allocator>
+        using TF_shared_ptr = eastl::shared_ptr<F_item__>;
+
+
     
+        ////////////////////////////////////////////////////////////////////////////////////
+        //  hash
+        ////////////////////////////////////////////////////////////////////////////////////
         template<typename F__>
         struct TF_hash : public eastl::hash<F__> {};
         
         template<typename F_allocator__>
         struct TF_hash<TF_string<char, F_allocator__>> {
 
-            size_t operator()(const TF_string<char, F_allocator__>& x) const
+            inline size_t operator()(const TF_string<char, F_allocator__>& x) const
             {
                 const unsigned char* p = (const unsigned char*)x.c_str(); // To consider: limit p to at most 256 chars.
                 unsigned int c, result = 2166136261U; // We implement an FNV-like string hash.
@@ -502,7 +515,7 @@ namespace ncpp {
         template<typename F_allocator__>
         struct TF_hash<TF_string<wchar_t, F_allocator__>> {
 
-            size_t operator()(const TF_string<wchar_t, F_allocator__>& x) const
+            inline size_t operator()(const TF_string<wchar_t, F_allocator__>& x) const
             {
 				const wchar_t* p = x.c_str();
 				unsigned int c, result = 2166136261U;
@@ -516,6 +529,9 @@ namespace ncpp {
     
 
 
+        ////////////////////////////////////////////////////////////////////////////////////
+        //  set, map, unordered set, unordered map
+        ////////////////////////////////////////////////////////////////////////////////////
         template<typename F_item__, typename F_compare__ = eastl::less<F_item__>, typename F_allocator__ = mem::F_default_allocator>
         using TF_set = eastl::set<F_item__, F_compare__, F_allocator__>;
 
@@ -530,6 +546,9 @@ namespace ncpp {
 
 
 
+        ////////////////////////////////////////////////////////////////////////////////////
+        //  queue, stack
+        ////////////////////////////////////////////////////////////////////////////////////
         template<typename F_item__, typename F_deque__ = TF_deque<F_item__>>
         using TF_queue = eastl::queue<F_item__, F_deque__>;
 
