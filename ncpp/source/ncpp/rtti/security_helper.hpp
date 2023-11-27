@@ -56,6 +56,12 @@ namespace ncpp {
 #define NCPP_PARSE_RTTI_SECURED_NAME_CODE(OriginCode, EncodedCode) OriginCode
 #endif
 
+#ifdef NCPP_RTTI_SECURED_NAME 
+		static constexpr b8 secured_name = true;
+#else
+		static constexpr b8 secured_name = false;
+#endif
+
 	}
 
 }

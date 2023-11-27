@@ -35,6 +35,8 @@
 #include <ncpp/iostream.hpp>
 #include <ncpp/utilities/is_function.hpp>
 
+#include <ncpp/containers/.hpp>
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -332,6 +334,8 @@ namespace ncpp {
 			template<typename object_type__, typename member_type__>\
 			struct TF_##MemberName##___ncpp_static_info___{\
 				\
+			NCPP_PUBLIC_KEYWORD\
+				\
 				using F_member = MemberType;\
 				\
 				static NCPP_FORCE_INLINE auto* member_p(){ return &F_this::MemberName; }\
@@ -340,8 +344,12 @@ namespace ncpp {
 				\
 				static NCPP_FORCE_INLINE ncpp::sz address(){ return 0; }\
 				\
-				static NCPP_FORCE_INLINE eastl::string name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, "_" + eastl::to_string(id())); }\
-                static NCPP_FORCE_INLINE eastl::string raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
+				static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> name() { \
+					\
+					if constexpr (ncpp::rtti::secured_name) return ncpp::containers::T_to_string<char, typename F_rtti_traits::F_allocator>(id());\
+					else return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, ""); \
+				}\
+                static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
 				static constexpr ncpp::sz id() { return utilities::T_type_hash_code_v<TF_##MemberName##___ncpp_static_info___>; }\
 				\
 				static constexpr ncpp::sz offset() { return (ncpp::sz)reinterpret_cast<ncpp::sz>(&(reinterpret_cast<object_type__*>(0)->MemberName)); }\
@@ -359,6 +367,8 @@ namespace ncpp {
 			template<typename object_type__, typename return_type__, typename... arg_types__>\
 			struct TF_##MemberName##___ncpp_static_info___<object_type__, return_type__(arg_types__...)>{\
 				\
+			NCPP_PUBLIC_KEYWORD\
+				\
 				using F_member = MemberType;\
 				\
 				static NCPP_FORCE_INLINE auto* member_p(){ return &F_this::MemberName; }\
@@ -371,8 +381,12 @@ namespace ncpp {
 				\
 				static NCPP_FORCE_INLINE ncpp::sz address(){ return reinterpret_cast<ncpp::sz>(&invoke); }\
 				\
-				static NCPP_FORCE_INLINE eastl::string name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, "_" + eastl::to_string(id())); }\
-                static NCPP_FORCE_INLINE eastl::string raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
+				static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> name() { \
+					\
+					if constexpr (ncpp::rtti::secured_name) return ncpp::containers::T_to_string<char, typename F_rtti_traits::F_allocator>(id());\
+					else return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, ""); \
+				}\
+                static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
 				static constexpr ncpp::sz id() { return utilities::T_type_hash_code_v<TF_##MemberName##___ncpp_static_info___>; }\
 				\
 				static constexpr ncpp::sz offset() { return 0; }\
@@ -460,6 +474,8 @@ namespace ncpp {
 			template<typename object_type__, typename member_type__>\
 			struct TF_##MemberName##___ncpp_static_info___{\
 				\
+			NCPP_PUBLIC_KEYWORD\
+				\
 				using F_member = MemberType;\
 				\
 				static NCPP_FORCE_INLINE auto* member_p(){ return &F_this::MemberName; }\
@@ -468,8 +484,12 @@ namespace ncpp {
 				\
 				static NCPP_FORCE_INLINE ncpp::sz address(){ return reinterpret_cast<ncpp::sz>(&F_this::MemberName); }\
 				\
-				static NCPP_FORCE_INLINE eastl::string name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, "_" + eastl::to_string(id())); }\
-                static NCPP_FORCE_INLINE eastl::string raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
+				static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> name() { \
+					\
+					if constexpr (ncpp::rtti::secured_name) return ncpp::containers::T_to_string<char, typename F_rtti_traits::F_allocator>(id());\
+					else return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, ""); \
+				}\
+                static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
 				static constexpr ncpp::sz id() { return utilities::T_type_hash_code_v<TF_##MemberName##___ncpp_static_info___>; }\
 				\
 				static constexpr ncpp::sz offset() { return 0; }\
@@ -487,6 +507,8 @@ namespace ncpp {
 			template<typename object_type__, typename return_type__, typename... arg_types__>\
 			struct TF_##MemberName##___ncpp_static_info___<object_type__, return_type__(arg_types__...)>{\
 				\
+			NCPP_PUBLIC_KEYWORD\
+				\
 				using F_member = MemberType;\
 				\
 				static NCPP_FORCE_INLINE auto* member_p(){ return &F_this::MemberName; }\
@@ -499,8 +521,12 @@ namespace ncpp {
 				\
 				static NCPP_FORCE_INLINE ncpp::sz address(){ return reinterpret_cast<ncpp::sz>(&invoke); }\
 				\
-				static NCPP_FORCE_INLINE eastl::string name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, "_" + eastl::to_string(id())); }\
-                static NCPP_FORCE_INLINE eastl::string raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
+				static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> name() { \
+					\
+					if constexpr (ncpp::rtti::secured_name) return ncpp::containers::T_to_string<char, typename F_rtti_traits::F_allocator>(id());\
+					else return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, ""); \
+				}\
+                static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
 				static constexpr ncpp::sz id() { return utilities::T_type_hash_code_v<TF_##MemberName##___ncpp_static_info___>; }\
 				\
 				static constexpr ncpp::sz offset() { return 0; }\
@@ -826,7 +852,11 @@ namespace ncpp {
 				\
 			NCPP_PUBLIC_KEYWORD\
 				using F_this = ObjectTypeName;\
-				static NCPP_FORCE_INLINE eastl::string static_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#ObjectTypeName, "_" + eastl::to_string(static_type_hash_code())); }\
+				static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> static_type_name()  { \
+					\
+					if constexpr (ncpp::rtti::secured_name) return ncpp::containers::T_to_string<char, typename F_rtti_traits::F_allocator>(static_type_hash_code());\
+					else return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#ObjectTypeName, ""); \
+				}\
 				static NCPP_FORCE_INLINE ncpp::sz static_type_hash_code() { return utilities::T_type_hash_code_v<F_this>; }\
 				\
 			NCPP_PRIVATE_KEYWORD\

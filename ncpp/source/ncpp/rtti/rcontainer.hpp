@@ -34,6 +34,7 @@
 
 #include <ncpp/iostream.hpp>
 #include <ncpp/utilities/is_function.hpp>
+#include <ncpp/containers/.hpp>
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -75,8 +76,8 @@ namespace ncpp {
 		private:
 			F_allocator allocator_;
 
-			eastl::unordered_map<sz, F_robject_type_info*> hash_code_to_robject_type_info_p_map_;
-			eastl::unordered_map<eastl::string, F_robject_type_info*> name_to_robject_type_info_p_map_;
+			containers::TF_unordered_map<sz, F_robject_type_info*> hash_code_to_robject_type_info_p_map_;
+			containers::TF_unordered_map<containers::TF_string<char, typename F_rtti_traits::F_allocator>, F_robject_type_info*> name_to_robject_type_info_p_map_;
 
 		public:
 			F_rcontainer_additional_data additional_data;
@@ -85,8 +86,8 @@ namespace ncpp {
 			NCPP_FORCE_INLINE F_allocator& allocator() { return allocator_; }
 			NCPP_FORCE_INLINE const F_allocator& allocator() const { return allocator_; }
             
-            NCPP_FORCE_INLINE const eastl::unordered_map<sz, F_robject_type_info*>& hash_code_to_robject_type_info_p_map() const { return hash_code_to_robject_type_info_p_map_; }
-            NCPP_FORCE_INLINE const eastl::unordered_map<eastl::string, F_robject_type_info*>& name_to_robject_type_info_p_map() const { return name_to_robject_type_info_p_map_; }
+            NCPP_FORCE_INLINE const containers::TF_unordered_map<sz, F_robject_type_info*>& hash_code_to_robject_type_info_p_map() const { return hash_code_to_robject_type_info_p_map_; }
+            NCPP_FORCE_INLINE const containers::TF_unordered_map<containers::TF_string<char, typename F_rtti_traits::F_allocator>, F_robject_type_info*>& name_to_robject_type_info_p_map() const { return name_to_robject_type_info_p_map_; }
 
 			inline F_robject_type_info* robject_type_info(sz hash_code) {
 
@@ -106,7 +107,7 @@ namespace ncpp {
 
 				return it->second;
 			}
-			inline F_robject_type_info* robject_type_info(const eastl::string& name) {
+			inline F_robject_type_info* robject_type_info(const containers::TF_string<char, typename F_rtti_traits::F_allocator>& name) {
 
 				auto it = name_to_robject_type_info_p_map_.find(name);
 
@@ -115,7 +116,7 @@ namespace ncpp {
 
 				return it->second;
 			}
-			inline const F_robject_type_info* robject_type_info(const eastl::string& name) const {
+			inline const F_robject_type_info* robject_type_info(const containers::TF_string<char, typename F_rtti_traits::F_allocator>& name) const {
 
 				auto it = name_to_robject_type_info_p_map_.find(name);
 
@@ -148,7 +149,7 @@ namespace ncpp {
 
 				}
 			}
-			inline void remove_robject_type_info(const eastl::string& name) {
+			inline void remove_robject_type_info(const containers::TF_string<char, typename F_rtti_traits::F_allocator>& name) {
 
 				auto it = name_to_robject_type_info_p_map_.find(name);
 

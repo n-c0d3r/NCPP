@@ -248,7 +248,7 @@ std::ostream& operator << (std::ostream& os, const eastl::basic_string<F_item__,
 
 	if (&os == &std::cout) {
 
-		eastl::string colored_str = "";
+        eastl::basic_string<F_item__, F_allocator__> colored_str = "";
 		colored_str += NCPP_FOREGROUND_GREEN;
 		colored_str += '"';
 		colored_str += str;
