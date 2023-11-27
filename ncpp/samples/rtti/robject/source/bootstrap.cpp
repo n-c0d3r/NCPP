@@ -183,7 +183,7 @@ void log_type_info(A::F_robject_type_info* type_info_p){
     
     for(const auto& it : type_info_p->name_to_member_info_p_map()){
         
-        std::cout << it.first << std::endl;
+        cout << it.first << std::endl;
         
     }
     
