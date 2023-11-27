@@ -1,4 +1,3 @@
-#include <ncpp/mem/memory_helper.hpp>
 #include <ncpp/mem/default_allocator.hpp>
 
 using namespace ncpp;

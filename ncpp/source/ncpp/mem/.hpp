@@ -39,7 +39,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/mem/memory_counting.hpp>
-#include <ncpp/mem/memory_helper.hpp>
 #include <ncpp/mem/allocator.hpp>
 #include <ncpp/mem/default_allocator.hpp>
 #include <ncpp/mem/dummy_allocator.hpp>
