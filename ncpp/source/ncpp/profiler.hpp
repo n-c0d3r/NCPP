@@ -81,7 +81,7 @@ namespace ncpp {
 			const eastl::string& content = "",
 			F_output_function* output_function_p = [](const eastl::string& content, u64 nanoseconds) {
 
-                std::cout << content.c_str() << F_cout_nanoseconds{nanoseconds} << F_cout_lowlight{" (nanoseconds)"} << std::endl;
+                cout << content.c_str() << F_cout_nanoseconds{nanoseconds} << F_cout_lowlight{" (nanoseconds)"} << std::endl;
 
 			}
 		) :
@@ -96,7 +96,7 @@ namespace ncpp {
 			eastl::string&& content = "",
 			F_output_function* output_function_p = [](const eastl::string& content, u64 nanoseconds) {
 
-                std::cout << content.c_str() << F_cout_nanoseconds{nanoseconds} << F_cout_lowlight{" (nanoseconds)"} << std::endl;
+                cout << content.c_str() << F_cout_nanoseconds{nanoseconds} << F_cout_lowlight{" (nanoseconds)"} << std::endl;
 
 			}
 		) :

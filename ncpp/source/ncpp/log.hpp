@@ -148,6 +148,100 @@
 
 
 
+#ifdef NCPP_ENABLE_LOG_COLOR
+
+#define NCPP_FOREGROUND_BACK_TEXT L"\x1B[30m"
+#define NCPP_FOREGROUND_RED_TEXT L"\x1B[31m"
+#define NCPP_FOREGROUND_GREEN_TEXT L"\x1B[32m"
+#define NCPP_FOREGROUND_YELLOW_TEXT L"\x1B[33m"
+#define NCPP_FOREGROUND_BLUE_TEXT L"\x1B[34m"
+#define NCPP_FOREGROUND_MAGNETA_TEXT L"\x1B[35m"
+#define NCPP_FOREGROUND_CYAN_TEXT L"\x1B[36m"
+#define NCPP_FOREGROUND_WHITE_TEXT L"\x1B[37m"
+#define NCPP_FOREGROUND_BRIGHT_BACK_TEXT L"\x1B[90m"
+#define NCPP_FOREGROUND_BRIGHT_RED_TEXT L"\x1B[91m"
+#define NCPP_FOREGROUND_BRIGHT_GREEN_TEXT L"\x1B[92m"
+#define NCPP_FOREGROUND_BRIGHT_YELLOW_TEXT L"\x1B[93m"
+#define NCPP_FOREGROUND_BRIGHT_BLUE_TEXT L"\x1B[94m"
+#define NCPP_FOREGROUND_BRIGHT_MAGNETA_TEXT L"\x1B[95m"
+#define NCPP_FOREGROUND_BRIGHT_CYAN_TEXT L"\x1B[96m"
+#define NCPP_FOREGROUND_BRIGHT_WHITE_TEXT L"\x1B[97m"
+
+#define NCPP_BACKGROUND_BACK_TEXT L"\x1B[40m"
+#define NCPP_BACKGROUND_RED_TEXT L"\x1B[41m"
+#define NCPP_BACKGROUND_GREEN_TEXT L"\x1B[42m"
+#define NCPP_BACKGROUND_YELLOW_TEXT L"\x1B[43m"
+#define NCPP_BACKGROUND_BLUE_TEXT L"\x1B[44m"
+#define NCPP_BACKGROUND_MAGNETA_TEXT L"\x1B[45m"
+#define NCPP_BACKGROUND_CYAN_TEXT L"\x1B[46m"
+#define NCPP_BACKGROUND_WHITE_TEXT L"\x1B[47m"
+#define NCPP_BACKGROUND_BRIGHT_BACK_TEXT L"\x1B[100m"
+#define NCPP_BACKGROUND_BRIGHT_RED_TEXT L"\x1B[101m"
+#define NCPP_BACKGROUND_BRIGHT_GREEN_TEXT L"\x1B[102m"
+#define NCPP_BACKGROUND_BRIGHT_YELLOW_TEXT L"\x1B[103m"
+#define NCPP_BACKGROUND_BRIGHT_BLUE_TEXT L"\x1B[104m"
+#define NCPP_BACKGROUND_BRIGHT_MAGNETA_TEXT L"\x1B[105m"
+#define NCPP_BACKGROUND_BRIGHT_CYAN_TEXT L"\x1B[106m"
+#define NCPP_BACKGROUND_BRIGHT_WHITE_TEXT L"\x1B[107m"
+
+#define NCPP_RESET_CONSOLE_COLOR_TEXT L"\033[0m"
+
+#else
+
+#define NCPP_FOREGROUND_BACK_TEXT L""
+#define NCPP_FOREGROUND_RED_TEXT L""
+#define NCPP_FOREGROUND_GREEN_TEXT L""
+#define NCPP_FOREGROUND_YELLOW_TEXT L""
+#define NCPP_FOREGROUND_BLUE_TEXT L""
+#define NCPP_FOREGROUND_MAGNETA_TEXT L""
+#define NCPP_FOREGROUND_CYAN_TEXT L""
+#define NCPP_FOREGROUND_WHITE_TEXT L""
+#define NCPP_FOREGROUND_BRIGHT_BACK_TEXT L""
+#define NCPP_FOREGROUND_BRIGHT_RED_TEXT L""
+#define NCPP_FOREGROUND_BRIGHT_GREEN_TEXT L""
+#define NCPP_FOREGROUND_BRIGHT_YELLOW_TEXT L""
+#define NCPP_FOREGROUND_BRIGHT_BLUE_TEXT L""
+#define NCPP_FOREGROUND_BRIGHT_MAGNETA_TEXT L""
+#define NCPP_FOREGROUND_BRIGHT_CYAN_TEXT L""
+#define NCPP_FOREGROUND_BRIGHT_WHITE_TEXT L""
+
+#define NCPP_BACKGROUND_BACK_TEXT L""
+#define NCPP_BACKGROUND_RED_TEXT L""
+#define NCPP_BACKGROUND_GREEN_TEXT L""
+#define NCPP_BACKGROUND_YELLOW_TEXT L""
+#define NCPP_BACKGROUND_BLUE_TEXT L""
+#define NCPP_BACKGROUND_MAGNETA_TEXT L""
+#define NCPP_BACKGROUND_CYAN_TEXT L""
+#define NCPP_BACKGROUND_WHITE_TEXT L""
+#define NCPP_BACKGROUND_BRIGHT_BACK_TEXT L""
+#define NCPP_BACKGROUND_BRIGHT_RED_TEXT L""
+#define NCPP_BACKGROUND_BRIGHT_GREEN_TEXT L""
+#define NCPP_BACKGROUND_BRIGHT_YELLOW_TEXT L""
+#define NCPP_BACKGROUND_BRIGHT_BLUE_TEXT L""
+#define NCPP_BACKGROUND_BRIGHT_MAGNETA_TEXT L""
+#define NCPP_BACKGROUND_BRIGHT_CYAN_TEXT L""
+#define NCPP_BACKGROUND_BRIGHT_WHITE_TEXT L""
+
+#define NCPP_RESET_CONSOLE_COLOR_TEXT L""
+
+#endif
+
+
+
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 namespace ncpp {
 
 #pragma region Colorized Contents
@@ -155,13 +249,13 @@ namespace ncpp {
 	 *	Wraps content string inside to be streamed out with low light color.
 	 */
 	struct F_cout_lowlight {
-		eastl::string content;
+		containers::F_string content;
 	};
 	/**
 	 *	Wraps content string inside to be streamed out with field name color.
 	 */
 	struct F_cout_field_name {
-		eastl::string content;
+		containers::F_string content;
 	}; 
 	/**
 	 *	Wraps nanoseconds number inside to be streamed out with nanoseconds color.
@@ -169,13 +263,31 @@ namespace ncpp {
 	struct F_cout_nanoseconds {
 		u64 nanoseconds;
 	};
+
+
+
+	/**
+	 *	Wraps content string inside to be streamed out with low light color.
+	 */
+	struct F_wcout_lowlight {
+		containers::F_wstring content;
+	};
+	/**
+	 *	Wraps content string inside to be streamed out with field name color.
+	 */
+	struct F_wcout_field_name {
+		containers::F_wstring content;
+	}; 
+	/**
+	 *	Wraps nanoseconds number inside to be streamed out with nanoseconds color.
+	 */
+	struct F_wcout_nanoseconds {
+		u64 nanoseconds;
+	};
 #pragma endregion
 
 }
-
-
-
-
+    
 
 
 
@@ -198,41 +310,71 @@ namespace ncpp {
 /**
  *	Streams out F_cout_lowlight.
  */
-NCPP_FORCE_INLINE std::ostream& operator << (
-	std::ostream& os,
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+	ncpp::F_ostream& os,
 	const ncpp::F_cout_lowlight& input
 ) {
 
-	if (&os != &std::cout)
+	if (&os != &ncpp::cout)
 		return os << input.content.c_str();
 
 	return (os << (NCPP_FOREGROUND_BRIGHT_BACK + input.content + NCPP_RESET_CONSOLE_COLOR).c_str());
 }
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+	ncpp::F_wostream& os,
+	const ncpp::F_wcout_lowlight& input
+) {
+
+	if (&os != &ncpp::wcout)
+		return os << input.content.c_str();
+
+	return (os << (NCPP_FOREGROUND_BRIGHT_BACK_TEXT + input.content + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str());
+}
 /**
  *	Streams out F_cout_field_name.
  */
-NCPP_FORCE_INLINE std::ostream& operator << (
-	std::ostream& os,
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+	ncpp::F_ostream& os,
 	const ncpp::F_cout_field_name& input
 ) {
 
-	if (&os != &std::cout)
+	if (&os != &ncpp::cout)
 		return os << input.content.c_str();
 
 	return (os << (NCPP_FOREGROUND_CYAN + input.content + NCPP_RESET_CONSOLE_COLOR).c_str());
 }
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+	ncpp::F_wostream& os,
+	const ncpp::F_wcout_field_name& input
+) {
+
+	if (&os != &ncpp::wcout)
+		return os << input.content.c_str();
+
+	return (os << (NCPP_FOREGROUND_CYAN_TEXT + input.content + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str());
+}
 /**
  *	Streams out F_cout_nanoseconds.
  */
-NCPP_FORCE_INLINE std::ostream& operator << (
-	std::ostream& os,
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+	ncpp::F_ostream& os,
 	const ncpp::F_cout_nanoseconds& input
 ) {
 
-	if (&os != &std::cout)
+	if (&os != &ncpp::cout)
 		return os << input.nanoseconds;
 
-	return (os << (NCPP_FOREGROUND_RED + eastl::to_string(input.nanoseconds) + NCPP_RESET_CONSOLE_COLOR).c_str());
+	return (os << (NCPP_FOREGROUND_RED + ncpp::containers::T_to_string<char>(input.nanoseconds) + NCPP_RESET_CONSOLE_COLOR).c_str());
+}
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+	ncpp::F_wostream& os,
+	const ncpp::F_wcout_nanoseconds& input
+) {
+
+	if (&os != &ncpp::wcout)
+		return os << input.nanoseconds;
+
+	return (os << (NCPP_FOREGROUND_RED_TEXT + ncpp::containers::T_to_string<wchar_t>(input.nanoseconds) + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str());
 }
 #pragma endregion
 
@@ -240,26 +382,25 @@ NCPP_FORCE_INLINE std::ostream& operator << (
 
 #pragma region String
 /**
- *	Streams out eastl::string.
+ *	Streams out containers::F_string.
  */
-template<typename F_item__, class F_allocator__>
-std::ostream& operator << (std::ostream& os, const eastl::basic_string<F_item__, F_allocator__>& str)
+template<class F_allocator__>
+ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl::basic_string<char, F_allocator__>& str)
 {
 
-	if (&os == &std::cout) {
+	os << str.c_str();
 
-        eastl::basic_string<F_item__, F_allocator__> colored_str = "";
-		colored_str += NCPP_FOREGROUND_GREEN;
-		colored_str += '"';
-		colored_str += str;
-		colored_str += '"';
-		colored_str += NCPP_RESET_CONSOLE_COLOR;
+	return os;
+}
 
-		os << colored_str.c_str();
+/**
+ *	Streams out containers::F_string.
+ */
+template<class F_allocator__>
+ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eastl::basic_string<wchar_t, F_allocator__>& str)
+{
 
-	}
-	else
-		os << str.c_str();
+	os << str.c_str();
 
 	return os;
 }
@@ -272,8 +413,8 @@ std::ostream& operator << (std::ostream& os, const eastl::basic_string<F_item__,
  *	Streams out eastl::vector with tabs.
  */
 template<typename F_item__, class F_allocator__>
-std::ostream& operator << (
-	std::ostream& os,
+ncpp::F_ostream& operator << (
+	ncpp::F_ostream& os,
 	const ncpp::TF_ostream_input<
 		eastl::vector<F_item__, F_allocator__>
 	>& input
@@ -290,7 +431,7 @@ std::ostream& operator << (
 	os << NCPP_FOREGROUND_YELLOW << "vector" << NCPP_RESET_CONSOLE_COLOR
     << ncpp::F_cout_lowlight{"<"} << (NCPP_FOREGROUND_BLUE + ncpp::utilities::T_type_name<F_item__>() + NCPP_RESET_CONSOLE_COLOR).c_str()
     << ncpp::F_cout_lowlight{">"}
-    << ncpp::F_cout_lowlight{"("} << (NCPP_FOREGROUND_MAGNETA + eastl::to_string(input.first.size()) + NCPP_RESET_CONSOLE_COLOR).c_str()
+    << ncpp::F_cout_lowlight{"("} << (NCPP_FOREGROUND_MAGNETA + ncpp::containers::T_to_string<char>(input.first.size()) + NCPP_RESET_CONSOLE_COLOR).c_str()
     << ncpp::F_cout_lowlight{")"}
     << " ";
 
@@ -304,9 +445,9 @@ std::ostream& operator << (
 
 		}
 
-        os << ncpp::F_cout_field_name{eastl::to_string(i)} << ncpp::F_cout_lowlight{": "};
+        os << ncpp::F_cout_field_name{ncpp::containers::T_to_string<char>(i)} << ncpp::F_cout_lowlight{": "};
 
-		ncpp::T_safe_ostream_with_tab<std::ostream, F_item__>(os, { input.first[i], input.second + 1 });
+		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, F_item__>(os, { input.first[i], input.second + 1 });
 
 		if (i != input.first.size() - 1)
             os << ncpp::F_cout_lowlight{","};
@@ -329,12 +470,83 @@ std::ostream& operator << (
  *	Streams out eastl::vector with no tab.
  */
 template<typename F_item__, class F_allocator__>
-std::ostream& operator << (std::ostream& os, const eastl::vector<F_item__, F_allocator__>& v)
+ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl::vector<F_item__, F_allocator__>& v)
 {
 
 	os << ncpp::TF_ostream_input<eastl::vector<F_item__, F_allocator__>> { v, 0 };
 
 	return os;
+}
+
+
+
+/**
+ *    Streams out eastl::vector with tabs.
+ */
+template<typename F_item__, class F_allocator__>
+ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        eastl::vector<F_item__, F_allocator__>
+    >& input
+)
+{
+
+    if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+
+        os << ncpp::F_wcout_lowlight{L"..."};
+
+        return os;
+    }
+
+    os << NCPP_FOREGROUND_YELLOW_TEXT << L"vector" << NCPP_RESET_CONSOLE_COLOR_TEXT
+    << ncpp::F_wcout_lowlight{L"<"} << (NCPP_FOREGROUND_BLUE_TEXT + ncpp::utilities::T_type_name<F_item__, wchar_t>() + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str()
+    << ncpp::F_wcout_lowlight{L">"}
+    << ncpp::F_wcout_lowlight{L"("} << (NCPP_FOREGROUND_MAGNETA_TEXT + ncpp::containers::T_to_string<wchar_t>(input.first.size()) + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str()
+    << ncpp::F_wcout_lowlight{L")"}
+    << L" ";
+
+    os << ncpp::F_wcout_lowlight{L"{"} << std::endl;
+
+    for (ncpp::sz i = 0; i < input.first.size(); ++i) {
+
+        for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+            os << L" ";
+
+        }
+
+        os << ncpp::F_wcout_field_name{ncpp::containers::T_to_string<wchar_t>(i)} << ncpp::F_wcout_lowlight{L": "};
+
+        ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, F_item__>(os, { input.first[i], input.second + 1 });
+
+        if (i != input.first.size() - 1)
+            os << ncpp::F_wcout_lowlight{L","};
+
+        os << std::endl;
+
+    }
+
+    for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+        os << L" ";
+
+    }
+    os << ncpp::F_wcout_lowlight{L"}"};
+
+    return os;
+}
+
+/**
+ *    Streams out eastl::vector with no tab.
+ */
+template<typename F_item__, class F_allocator__>
+ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eastl::vector<F_item__, F_allocator__>& v)
+{
+
+    os << ncpp::TF_ostream_input<eastl::vector<F_item__, F_allocator__>> { v, 0 };
+
+    return os;
 }
 #pragma endregion
 
@@ -345,8 +557,8 @@ std::ostream& operator << (std::ostream& os, const eastl::vector<F_item__, F_all
  *	Streams out std::initialier_list<T> with tabs.
  */
 template<typename F_item__>
-std::ostream& operator << (
-	std::ostream& os,
+ncpp::F_ostream& operator << (
+	ncpp::F_ostream& os,
 	const ncpp::TF_ostream_input<
 		std::initializer_list<F_item__>
 	>& input
@@ -363,7 +575,7 @@ std::ostream& operator << (
 	os << NCPP_FOREGROUND_YELLOW << "initializer_list" << NCPP_RESET_CONSOLE_COLOR
     << ncpp::F_cout_lowlight{"<"} << (NCPP_FOREGROUND_BLUE + ncpp::utilities::T_type_name<F_item__>() + NCPP_RESET_CONSOLE_COLOR).c_str()
     << ncpp::F_cout_lowlight{","}
-    << (NCPP_FOREGROUND_MAGNETA + eastl::to_string(input.first.size()) + NCPP_RESET_CONSOLE_COLOR).c_str()
+    << (NCPP_FOREGROUND_MAGNETA + ncpp::containers::T_to_string<char>(input.first.size()) + NCPP_RESET_CONSOLE_COLOR).c_str()
     << ncpp::F_cout_lowlight{">"}
     << " ";
 
@@ -379,9 +591,9 @@ std::ostream& operator << (
 
 		}
 
-        os << ncpp::F_cout_field_name{eastl::to_string(i)} << ncpp::F_cout_lowlight{": "};
+        os << ncpp::F_cout_field_name{ncpp::containers::T_to_string<char>(i)} << ncpp::F_cout_lowlight{": "};
 
-		ncpp::T_safe_ostream_with_tab<std::ostream, F_item__>(os, { *j, input.second + 1 });
+		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, F_item__>(os, { *j, input.second + 1 });
 
 		if (i != input.first.size() - 1)
             os << ncpp::F_cout_lowlight{","};
@@ -406,7 +618,7 @@ std::ostream& operator << (
  *	Streams out std::initialier_list<T> with no tab.
  */
 template<typename F_item__>
-std::ostream& operator << (std::ostream& os, const std::initializer_list<F_item__>& v)
+ncpp::F_ostream& operator << (ncpp::F_ostream& os, const std::initializer_list<F_item__>& v)
 {
 
 	os << ncpp::TF_ostream_input<std::initializer_list<F_item__>> { v, 0 };
@@ -422,8 +634,8 @@ std::ostream& operator << (std::ostream& os, const std::initializer_list<F_item_
  *	Streams out eastl::array<T, N> with tabs.
  */
 template<typename F_item__, ncpp::sz size__>
-std::ostream& operator << (
-	std::ostream& os,
+ncpp::F_ostream& operator << (
+	ncpp::F_ostream& os,
 	const ncpp::TF_ostream_input<
 		eastl::array<F_item__, size__>
 	>& input
@@ -440,7 +652,7 @@ std::ostream& operator << (
 	os << NCPP_FOREGROUND_YELLOW << "array" << NCPP_RESET_CONSOLE_COLOR
     << ncpp::F_cout_lowlight{"<"} << (NCPP_FOREGROUND_BLUE + ncpp::utilities::T_type_name<F_item__>() + NCPP_RESET_CONSOLE_COLOR).c_str()
     << ncpp::F_cout_lowlight{","}
-    << (NCPP_FOREGROUND_MAGNETA + eastl::to_string(input.first.size()) + NCPP_RESET_CONSOLE_COLOR).c_str()
+    << (NCPP_FOREGROUND_MAGNETA + ncpp::containers::T_to_string<char>(input.first.size()) + NCPP_RESET_CONSOLE_COLOR).c_str()
     << ncpp::F_cout_lowlight{">"}
     << " ";
 
@@ -456,9 +668,9 @@ std::ostream& operator << (
 
 		}
 
-        os << ncpp::F_cout_field_name{eastl::to_string(i)} << ncpp::F_cout_lowlight{": "};
+        os << ncpp::F_cout_field_name{ncpp::containers::T_to_string<char>(i)} << ncpp::F_cout_lowlight{": "};
 
-		ncpp::T_safe_ostream_with_tab<std::ostream, F_item__>(os, { input.first[i], input.second + 1 });
+		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, F_item__>(os, { input.first[i], input.second + 1 });
 
 		if (i != size__ - 1)
             os << ncpp::F_cout_lowlight{","};
@@ -482,7 +694,7 @@ std::ostream& operator << (
  *	Streams out eastl::array<T, N> with no tab.
  */
 template<typename F_item__, ncpp::sz size__>
-std::ostream& operator << (std::ostream& os, const eastl::array<F_item__, size__>& v)
+ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl::array<F_item__, size__>& v)
 {
 
 	os << ncpp::TF_ostream_input<eastl::array<F_item__, size__>> { v, 0 };

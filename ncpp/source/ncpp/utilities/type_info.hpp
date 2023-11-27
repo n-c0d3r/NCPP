@@ -29,6 +29,14 @@
 
 #include <ncpp/prerequisites.hpp>
 
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
+#include <ncpp/mem/default_allocator.hpp>
+#include <ncpp/rtti/security_helper.hpp>
+#include <ncpp/containers/eastl_containers.hpp>
+
 #pragma endregion 
 
 
@@ -105,10 +113,12 @@ namespace ncpp {
 
 
 
-        template<typename F__> 
-        NCPP_FORCE_INLINE eastl::string T_type_name() {
+        template<typename F__, typename F_char__ = char, typename F_allocator__ = mem::F_default_allocator>
+        NCPP_FORCE_INLINE containers::TF_string<F_char__, F_allocator__> T_type_name() {
 
-            return NCPP_PARSE_RTTI_SECURED_NAME_CODE(typeid(F__).name(), "_" + eastl::to_string(T_type_hash_code_v<F__>));
+            if constexpr (rtti::secured_name)
+                return containers::T_to_string<F_char__, F_allocator__>("_" + containers::to_string(T_type_hash_code_v<F__>));
+            else return typeid(F__).name();
         }
 
     }

@@ -75,6 +75,68 @@ namespace ncpp {
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+
+
+    namespace internal {
+
+        template<typename F_char__ = char>
+        struct TF_ostream_helper {
+            
+            using F = std::ostream;
+            
+            static NCPP_FORCE_INLINE F& cout() { return std::cout; }
+            
+        };
+    
+        template<>
+        struct TF_ostream_helper<wchar_t> {
+            
+            using F = std::wostream;
+            
+            static NCPP_FORCE_INLINE F& cout() { return std::wcout; }
+            
+        };
+
+        template<typename F_char__ = char>
+        struct TF_istream_helper {
+            
+            using F = std::istream;
+            
+            static NCPP_FORCE_INLINE F& cin() { return std::cin; }
+            
+        };
+    
+        template<>
+        struct TF_istream_helper<wchar_t> {
+            
+            using F = std::wistream;
+            
+            static NCPP_FORCE_INLINE F& cin() { return std::wcin; }
+            
+        };
+
+    }
+
+    template<typename F_char__ = char>
+    using TF_ostream = typename internal::TF_ostream_helper<F_char__>::F;
+    using F_ostream = TF_ostream<char>;
+    using F_wostream = TF_ostream<wchar_t>;
+
+    template<typename F_char__ = char>
+    inline TF_ostream<F_char__>& T_cout = internal::TF_ostream_helper<F_char__>::cout();
+    inline F_ostream& cout = internal::TF_ostream_helper<char>::cout();
+    inline F_wostream& wcout = internal::TF_ostream_helper<wchar_t>::cout();
+
+    template<typename F_char__ = char>
+    using TF_istream = typename internal::TF_istream_helper<F_char__>::F;
+    using F_istream = TF_istream<char>;
+    using F_wistream = TF_istream<wchar_t>;
+
+    template<typename F_char__ = char>
+    inline TF_istream<F_char__>& T_cin = internal::TF_istream_helper<F_char__>::cin();
+    inline F_istream& cin = internal::TF_istream_helper<char>::cin();
+    inline F_wistream& wcin = internal::TF_istream_helper<wchar_t>::cin();
 
 
 

@@ -63,6 +63,8 @@ namespace ncpp {
         using TF_string = eastl::basic_string<F_char__, F_allocator__>;
         using F_string = TF_string<char>;
         using F_wstring = TF_string<wchar_t>;
+        using F_name = F_string;
+        using F_text = F_wstring;
             
         ////////////////////////////////////////////////////////////////////////////////////
         //  to string
@@ -83,7 +85,7 @@ namespace ncpp {
 
                 using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
                 
-                static NCPP_FORCE_INLINE TF_string<char, F_allocator__> to_string(int value)
+                static inline TF_string<char, F_allocator__> to_string(int value)
                 {
                     
                     static char format[] = "%d";
@@ -102,7 +104,7 @@ namespace ncpp {
 
                 using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
                 
-                static NCPP_FORCE_INLINE TF_string<char, F_allocator__> to_string(long value)
+                static inline TF_string<char, F_allocator__> to_string(long value)
                 {
                     
                     static char format[] = "%ld";
@@ -121,7 +123,7 @@ namespace ncpp {
 
                 using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
                 
-                static NCPP_FORCE_INLINE TF_string<char, F_allocator__> to_string(long long value)
+                static inline TF_string<char, F_allocator__> to_string(long long value)
                 {
                     
                     static char format[] = "%lld";
@@ -140,7 +142,7 @@ namespace ncpp {
 
                 using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
                 
-                static NCPP_FORCE_INLINE TF_string<char, F_allocator__> to_string(unsigned value)
+                static inline TF_string<char, F_allocator__> to_string(unsigned value)
                 {
                     
                     static char format[] = "%u";
@@ -159,7 +161,7 @@ namespace ncpp {
 
                 using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
                 
-                static NCPP_FORCE_INLINE TF_string<char, F_allocator__> to_string(unsigned long value)
+                static inline TF_string<char, F_allocator__> to_string(unsigned long value)
                 {
                     
                     static char format[] = "%lu";
@@ -178,7 +180,7 @@ namespace ncpp {
 
                 using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
                 
-                static NCPP_FORCE_INLINE TF_string<char, F_allocator__> to_string(unsigned long long value)
+                static inline TF_string<char, F_allocator__> to_string(unsigned long long value)
                 {
                     
                     static char format[] = "%llu";
@@ -197,7 +199,7 @@ namespace ncpp {
 
                 using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
                 
-                static NCPP_FORCE_INLINE TF_string<char, F_allocator__> to_string(float value)
+                static inline TF_string<char, F_allocator__> to_string(float value)
                 {
                     
                     static char format[] = "%f";
@@ -216,7 +218,7 @@ namespace ncpp {
 
                 using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
                 
-                static NCPP_FORCE_INLINE TF_string<char, F_allocator__> to_string(double value)
+                static inline TF_string<char, F_allocator__> to_string(double value)
                 {
                     
                     static char format[] = "%f";
@@ -235,7 +237,7 @@ namespace ncpp {
 
                 using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
                 
-                static NCPP_FORCE_INLINE TF_string<char, F_allocator__> to_string(long double value)
+                static inline TF_string<char, F_allocator__> to_string(long double value)
                 {
                     
                     static char format[] = "%Lf";
@@ -248,15 +250,76 @@ namespace ncpp {
                 }
 
             };
+        
+            template<typename F_allocator__>
+            struct TF_to_string_helper<char, F_allocator__, TF_string<wchar_t, F_allocator__>> {
 
+                using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
+                
+                static inline TF_string<char, F_allocator__> to_string(const TF_string<wchar_t, F_allocator__>& value)
+                {
+                        
+                    TF_string<char, F_allocator__> result;
+                    
+                    int n = value.length();
+                    
+                    result.resize(n);
+                    
+                    for (i32 i = 0; i < n; ++i)
+                        result[i] = value[i];
+                    
+                    return eastl::move(result);
+                }
+
+            };
+        
+            template<typename F_allocator__>
+            struct TF_to_string_helper<char, F_allocator__, const wchar_t*> {
+
+                using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
+                
+                static NCPP_FORCE_INLINE TF_string<char, F_allocator__> to_string(const wchar_t* value)
+                {
+                    
+                    return TF_to_string_helper<char, F_allocator__, TF_string<wchar_t, F_allocator__>>::to_string(value);
+                }
+
+            };
             
+            template<typename F_allocator__>
+            struct TF_to_string_helper<char, F_allocator__, TF_string<char, F_allocator__>> {
+
+                using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
+                
+                static NCPP_FORCE_INLINE TF_string<char, F_allocator__> to_string(const TF_string<char, F_allocator__>& value)
+                {
+                    
+                    return value;
+                }
+
+            };
+        
+            template<typename F_allocator__>
+            struct TF_to_string_helper<char, F_allocator__, const char*> {
+
+                using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
+                
+                static NCPP_FORCE_INLINE TF_string<char, F_allocator__> to_string(const char* value)
+                {
+                    
+                    return value;
+                }
+
+            };
+
+                
 
             template<typename F_allocator__>
             struct TF_to_string_helper<wchar_t, F_allocator__, int> {
 
                 using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
                 
-                static NCPP_FORCE_INLINE TF_string<wchar_t, F_allocator__> to_string(int value)
+                static inline TF_string<wchar_t, F_allocator__> to_string(int value)
                 {
                     
                     static wchar_t format[] = L"%d";
@@ -275,7 +338,7 @@ namespace ncpp {
 
                 using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
                 
-                static NCPP_FORCE_INLINE TF_string<wchar_t, F_allocator__> to_string(long value)
+                static inline TF_string<wchar_t, F_allocator__> to_string(long value)
                 {
                     
                     static wchar_t format[] = L"%ld";
@@ -294,7 +357,7 @@ namespace ncpp {
 
                 using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
                 
-                static NCPP_FORCE_INLINE TF_string<wchar_t, F_allocator__> to_string(long long value)
+                static inline TF_string<wchar_t, F_allocator__> to_string(long long value)
                 {
                     
                     static wchar_t format[] = L"%lld";
@@ -313,7 +376,7 @@ namespace ncpp {
 
                 using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
                 
-                static NCPP_FORCE_INLINE TF_string<wchar_t, F_allocator__> to_string(unsigned value)
+                static inline TF_string<wchar_t, F_allocator__> to_string(unsigned value)
                 {
                     
                     static wchar_t format[] = L"%u";
@@ -332,7 +395,7 @@ namespace ncpp {
 
                 using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
                 
-                static NCPP_FORCE_INLINE TF_string<wchar_t, F_allocator__> to_string(unsigned long value)
+                static inline TF_string<wchar_t, F_allocator__> to_string(unsigned long value)
                 {
                     
                     static wchar_t format[] = L"%lu";
@@ -351,7 +414,7 @@ namespace ncpp {
 
                 using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
                 
-                static NCPP_FORCE_INLINE TF_string<wchar_t, F_allocator__> to_string(unsigned long long value)
+                static inline TF_string<wchar_t, F_allocator__> to_string(unsigned long long value)
                 {
                     
                     static wchar_t format[] = L"%llu";
@@ -370,7 +433,7 @@ namespace ncpp {
 
                 using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
                 
-                static NCPP_FORCE_INLINE TF_string<wchar_t, F_allocator__> to_string(float value)
+                static inline TF_string<wchar_t, F_allocator__> to_string(float value)
                 {
                     
                     static wchar_t format[] = L"%f";
@@ -389,7 +452,7 @@ namespace ncpp {
 
                 using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
                 
-                static NCPP_FORCE_INLINE TF_string<wchar_t, F_allocator__> to_string(double value)
+                static inline TF_string<wchar_t, F_allocator__> to_string(double value)
                 {
                     
                     static wchar_t format[] = L"%f";
@@ -408,7 +471,7 @@ namespace ncpp {
 
                 using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
                 
-                static NCPP_FORCE_INLINE TF_string<wchar_t, F_allocator__> to_string(long double value)
+                static inline TF_string<wchar_t, F_allocator__> to_string(long double value)
                 {
                     
                     static wchar_t format[] = L"%Lf";
@@ -422,10 +485,71 @@ namespace ncpp {
 
             };
 
+            template<typename F_allocator__>
+            struct TF_to_string_helper<wchar_t, F_allocator__, TF_string<char, F_allocator__>> {
+
+                using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
+                
+                static inline TF_string<wchar_t, F_allocator__> to_string(const TF_string<char, F_allocator__>& value)
+                {
+                        
+                    TF_string<wchar_t, F_allocator__> result;
+                    
+                    int n = value.length();
+                    
+                    result.resize(n);
+                    
+                    for (i32 i = 0; i < n; ++i)
+                        result[i] = value[i];
+                    
+                    return eastl::move(result);
+                }
+
+            };
+        
+            template<typename F_allocator__>
+            struct TF_to_string_helper<wchar_t, F_allocator__, const char*> {
+
+                using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
+                
+                static NCPP_FORCE_INLINE TF_string<wchar_t, F_allocator__> to_string(const char* value)
+                {
+                    
+                    return TF_to_string_helper<wchar_t, F_allocator__, TF_string<char, F_allocator__>>::to_string(value);
+                }
+
+            };
+        
+            template<typename F_allocator__>
+            struct TF_to_string_helper<wchar_t, F_allocator__, TF_string<wchar_t, F_allocator__>> {
+
+                using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
+                
+                static NCPP_FORCE_INLINE TF_string<wchar_t, F_allocator__> to_string(const TF_string<wchar_t, F_allocator__>& value)
+                {
+                    
+                    return value;
+                }
+
+            };
+        
+            template<typename F_allocator__>
+            struct TF_to_string_helper<wchar_t, F_allocator__, const wchar_t*> {
+
+                using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
+                
+                static NCPP_FORCE_INLINE TF_string<wchar_t, F_allocator__> to_string(const wchar_t* value)
+                {
+                    
+                    return value;
+                }
+
+            };
+
         }
         
         template<typename F_char__ = char, typename F_allocator__ = mem::F_default_allocator, typename F_value__ = int>
-        NCPP_FORCE_INLINE TF_string<F_char__, F_allocator__> T_to_string(F_value__ value) {
+        inline TF_string<F_char__, F_allocator__> T_to_string(const F_value__& value) {
 
             return internal::TF_to_string_helper<F_char__, F_allocator__, F_value__>::to_string(value);
         }
@@ -448,6 +572,14 @@ namespace ncpp {
             { return T_to_string(value); }
         NCPP_FORCE_INLINE F_string to_string(long double value)
             { return T_to_string(value); }
+        NCPP_FORCE_INLINE F_string to_string(const TF_string<wchar_t>& value)
+            { return T_to_string<char, mem::F_default_allocator, F_wstring>(value); }
+        NCPP_FORCE_INLINE F_string to_string(const wchar_t* value)
+            { return T_to_string<char, mem::F_default_allocator, const wchar_t*>(value); }
+        NCPP_FORCE_INLINE F_string to_string(const TF_string<char>& value)
+            { return T_to_string<char, mem::F_default_allocator, F_string>(value); }
+        NCPP_FORCE_INLINE F_string to_string(const char* value)
+            { return T_to_string<char, mem::F_default_allocator, const char*>(value); }
 
         NCPP_FORCE_INLINE F_wstring to_wstring(int value)
             { return T_to_string<wchar_t>(value); }
@@ -467,6 +599,14 @@ namespace ncpp {
             { return T_to_string<wchar_t>(value); }
         NCPP_FORCE_INLINE F_wstring to_wstring(long double value)
             { return T_to_string<wchar_t>(value); }
+        NCPP_FORCE_INLINE F_wstring to_wstring(const TF_string<char>& value)
+            { return T_to_string<wchar_t, mem::F_default_allocator, F_string>(value); }
+        NCPP_FORCE_INLINE F_wstring to_wstring(const char* value)
+            { return T_to_string<wchar_t, mem::F_default_allocator, const char*>(value); }
+        NCPP_FORCE_INLINE F_wstring to_wstring(const TF_string<wchar_t>& value)
+            { return T_to_string<wchar_t, mem::F_default_allocator, F_wstring>(value); }
+        NCPP_FORCE_INLINE F_wstring to_wstring(const wchar_t* value)
+            { return T_to_string<wchar_t, mem::F_default_allocator, const wchar_t*>(value); }
         
 
 
