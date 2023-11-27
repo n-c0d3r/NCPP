@@ -392,6 +392,17 @@ ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl::basic_string<cha
 
 	return os;
 }
+/**
+ *    Streams out containers::F_string.
+ */
+template<class F_allocator__>
+ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl::basic_string<wchar_t, F_allocator__>& str)
+{
+
+    os << to_string(str.c_str());
+
+    return os;
+}
 
 /**
  *	Streams out containers::F_string.
@@ -403,6 +414,17 @@ ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eastl::basic_string<w
 	os << str.c_str();
 
 	return os;
+}
+/**
+ *    Streams out containers::F_string.
+ */
+template<class F_allocator__>
+ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eastl::basic_string<char, F_allocator__>& str)
+{
+
+    os << to_wstring(str.c_str());
+
+    return os;
 }
 #pragma endregion
 
@@ -574,8 +596,6 @@ ncpp::F_ostream& operator << (
 
 	os << NCPP_FOREGROUND_YELLOW << "initializer_list" << NCPP_RESET_CONSOLE_COLOR
     << ncpp::F_cout_lowlight{"<"} << (NCPP_FOREGROUND_BLUE + ncpp::utilities::T_type_name<F_item__>() + NCPP_RESET_CONSOLE_COLOR).c_str()
-    << ncpp::F_cout_lowlight{","}
-    << (NCPP_FOREGROUND_MAGNETA + ncpp::containers::T_to_string<char>(input.first.size()) + NCPP_RESET_CONSOLE_COLOR).c_str()
     << ncpp::F_cout_lowlight{">"}
     << " ";
 
@@ -624,6 +644,79 @@ ncpp::F_ostream& operator << (ncpp::F_ostream& os, const std::initializer_list<F
 	os << ncpp::TF_ostream_input<std::initializer_list<F_item__>> { v, 0 };
 
 	return os;
+}
+
+
+
+/**
+ *    Streams out std::initialier_list<T> with tabs.
+ */
+template<typename F_item__>
+ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        std::initializer_list<F_item__>
+    >& input
+)
+{
+
+    if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+
+        os << ncpp::F_wcout_lowlight{L"..."};
+
+        return os;
+    }
+
+    os << NCPP_FOREGROUND_YELLOW_TEXT << L"initializer_list" << NCPP_RESET_CONSOLE_COLOR_TEXT
+    << ncpp::F_wcout_lowlight{L"<"} << (NCPP_FOREGROUND_BLUE_TEXT + ncpp::utilities::T_type_name<F_item__, wchar_t>() + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str()
+    << ncpp::F_wcout_lowlight{L">"}
+    << L" ";
+
+    os << ncpp::F_wcout_lowlight{L"{"} << std::endl;
+
+    auto j = input.first.begin();
+
+    for (ncpp::sz i = 0; i < input.first.size(); ++i) {
+
+        for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+            os << L" ";
+
+        }
+
+        os << ncpp::F_wcout_field_name{ncpp::containers::T_to_string<wchar_t>(i)} << ncpp::F_wcout_lowlight{L": "};
+
+        ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, F_item__>(os, { *j, input.second + 1 });
+
+        if (i != input.first.size() - 1)
+            os << ncpp::F_wcout_lowlight{L","};
+
+        os << std::endl;
+
+        ++j;
+
+    }
+
+    for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+        os <<L" ";
+
+    }
+    os << ncpp::F_wcout_lowlight{L"}"};
+
+    return os;
+}
+
+/**
+ *    Streams out std::initialier_list<T> with no tab.
+ */
+template<typename F_item__>
+ncpp::F_wostream& operator << (ncpp::F_wostream& os, const std::initializer_list<F_item__>& v)
+{
+
+    os << ncpp::TF_ostream_input<std::initializer_list<F_item__>> { v, 0 };
+
+    return os;
 }
 #pragma endregion
 
@@ -700,6 +793,80 @@ ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl::array<F_item__, 
 	os << ncpp::TF_ostream_input<eastl::array<F_item__, size__>> { v, 0 };
 
 	return os;
+}
+
+
+
+/**
+ *    Streams out eastl::array<T, N> with tabs.
+ */
+template<typename F_item__, ncpp::sz size__>
+ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        eastl::array<F_item__, size__>
+    >& input
+)
+{
+
+    if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+
+        os << ncpp::F_wcout_lowlight{L"..."};
+
+        return os;
+    }
+
+    os << NCPP_FOREGROUND_YELLOW_TEXT << L"array" << NCPP_RESET_CONSOLE_COLOR_TEXT
+    << ncpp::F_wcout_lowlight{L"<"} << (NCPP_FOREGROUND_BLUE_TEXT + ncpp::utilities::T_type_name<F_item__, wchar_t>() + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str()
+    << ncpp::F_wcout_lowlight{L","}
+    << (NCPP_FOREGROUND_MAGNETA_TEXT + ncpp::containers::T_to_string<wchar_t>(input.first.size()) + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str()
+    << ncpp::F_wcout_lowlight{L">"}
+    << L" ";
+
+    os << ncpp::F_wcout_lowlight{L"{"} << std::endl;
+
+
+
+    for (ncpp::sz i = 0; i < size__; ++i) {
+
+        for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+            os << L" ";
+
+        }
+
+        os << ncpp::F_wcout_field_name{ncpp::containers::T_to_string<wchar_t>(i)} << ncpp::F_wcout_lowlight{L": "};
+
+        ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, F_item__>(os, { input.first[i], input.second + 1 });
+
+        if (i != size__ - 1)
+            os << ncpp::F_wcout_lowlight{L","};
+
+        os << std::endl;
+
+    }
+
+    for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+        os << L" ";
+
+    }
+        
+    os << ncpp::F_wcout_lowlight{L"}"};
+
+    return os;
+}
+
+/**
+ *    Streams out eastl::array<T, N> with no tab.
+ */
+template<typename F_item__, ncpp::sz size__>
+ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eastl::array<F_item__, size__>& v)
+{
+
+    os << ncpp::TF_ostream_input<eastl::array<F_item__, size__>> { v, 0 };
+
+    return os;
 }
 #pragma endregion
 

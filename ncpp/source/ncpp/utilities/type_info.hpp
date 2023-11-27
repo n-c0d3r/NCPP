@@ -118,7 +118,7 @@ namespace ncpp {
 
             if constexpr (rtti::secured_name)
                 return containers::T_to_string<F_char__, F_allocator__>("_" + containers::to_string(T_type_hash_code_v<F__>));
-            else return typeid(F__).name();
+            else return containers::T_to_string<F_char__, F_allocator__>(typeid(F__).name());
         }
 
     }
