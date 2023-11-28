@@ -67,7 +67,7 @@ namespace ncpp {
         using F_listener_list_allocator = F_listener_list_allocator__;
 
         using F_listener = eastl::function<void(F_this&)>;
-        using F_listener_list = eastl::list<F_listener, F_listener_list_allocator>;
+        using F_listener_list = containers::TF_list<F_listener, F_listener_list_allocator>;
         using F_listener_handle = typename F_listener_list::iterator;
 
 
