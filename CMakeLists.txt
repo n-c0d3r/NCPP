@@ -45,7 +45,7 @@ NCPP_VersionUtils_CreateVersionMacros(
     PROJECT_NAME NCPP
     OUTPUT_FILE "${NCPP_GENERATED_FILES_DIR}/version.hpp"
     MAJOR 0
-    MINOR 4
+    MINOR 5
     PATCH 0
 )
 
