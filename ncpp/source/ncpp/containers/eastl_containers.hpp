@@ -261,11 +261,11 @@ namespace ncpp {
                         
                     TF_string<char, F_allocator__> result;
                     
-                    int n = value.length();
+                    size_t n = value.length();
                     
                     result.resize(n);
                     
-                    for (i32 i = 0; i < n; ++i)
+                    for (size_t i = 0; i < n; ++i)
                         result[i] = value[i];
                     
                     return eastl::move(result);
@@ -495,11 +495,11 @@ namespace ncpp {
                         
                     TF_string<wchar_t, F_allocator__> result;
                     
-                    int n = value.length();
+                    size_t n = value.length();
                     
                     result.resize(n);
                     
-                    for (i32 i = 0; i < n; ++i)
+                    for (size_t i = 0; i < n; ++i)
                         result[i] = value[i];
                     
                     return eastl::move(result);
