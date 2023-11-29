@@ -57,7 +57,7 @@ def open_clion():
 
             project(''' + project_name + '''-clion)
 
-            add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/../.." "${CMAKE_CURRENT_LIST_DIR}/build")
+            add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/../.." "${CMAKE_CURRENT_BINARY_DIR}/''' + project_name + '''")
         ''' 
     write_file(
         root_cmake_lists_path, 
