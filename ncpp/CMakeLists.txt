@@ -7,6 +7,13 @@ set(NCPP_CXX_STANDARD 20 CACHE STRING "CXX Standard")
 
 
 #####################################################################################
+#   Pre-include global variables
+#####################################################################################
+NCPP_SetGlobal(NCPP_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
+
+
+
+#####################################################################################
 #   Includes
 #####################################################################################
 include(NCPP/SetGlobal)
@@ -17,6 +24,8 @@ include(NCPP/RTTIMacros)
 include(NCPP/SIMDCompilerFlags)
 
 include(NCPP/ConfigureCompiler)
+
+include(NCPP/DefaultAllocatorConfig)
 
 
 
@@ -79,6 +88,7 @@ option(NCPP_RTTI_SECURED_NAME "Secure name for RTTI functionalities" OFF)
 #####################################################################################
 # ncpp target configure file
 set(NCPP_CONFIG_HPP_PATH "${NCPP_GENERATED_FILES_DIR}/config.hpp")
+
 configure_file(source/ncpp/.config ${NCPP_CONFIG_HPP_PATH})
 
 # eastl combined header
@@ -114,8 +124,6 @@ endforeach()
 #####################################################################################
 #   ncpp target's files
 #####################################################################################
-NCPP_SetGlobal(NCPP_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
-
 # ncpp target source files
 file(GLOB_RECURSE source_files
     "source/*.cpp"

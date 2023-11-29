@@ -14,8 +14,9 @@ Having designed for game engine learning purposes, we focus on high performance 
 ---
 
 ## Allocators
-- **ncpp::mem::F_default_allocator**: our customized current runtime allocator that supports NCPP's alignment, memory counting and memory debugging approach.
-- **ncpp::mem::TF_link_allocator**: the allocator allocates and deallocates memory through the pointer to another one.
+- **ncpp::mem::F_default_allocator**: the default allocator that can be set be user through CMake.
+- **ncpp::mem::F_crt_allocator**: our customized current runtime allocator that supports NCPP's alignment, memory counting and memory debugging approach.
+- **ncpp::mem::TF_reference_allocator**: the allocator allocates and deallocates memory through the pointer to another one.
 - **Chunk Based Allocators**:
     + As the most powerful allocators in NCPP, chunk based allocators come up with high allocating performance, cache optimization and much more.
     + However, they also have some drawbacks in term of memory usage and memory lifetime due to their mechanism of memory deallocating. 

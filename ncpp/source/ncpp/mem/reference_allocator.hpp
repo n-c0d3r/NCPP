@@ -56,15 +56,29 @@ namespace ncpp {
 
 	namespace mem {
 
+        template<typename F_target_allocator__>
+        class TF_default_reference_allocator_getter {
+
+        public:
+            static constexpr F_target_allocator__* get_default() {
+
+                return 0;
+            }
+
+        };
+
+
+
 		/**
 		 *	An allocator using another allocator to allocate and deallocate memory by referenceing into the target allocator reference.
 		 *	@param <F_target_allocator__> the target allocator to use.
 		 */
-		template<typename F_target_allocator__>
+		template<typename F_target_allocator__, class F_default_allocator_getter__ = TF_default_reference_allocator_getter<F_target_allocator__>>
 		class TF_reference_allocator : public TI_allocator<TF_reference_allocator<F_target_allocator__>> {
 
 		public:
 			using F_target_allocator = F_target_allocator__;
+			using F_default_allocator_getter = F_default_allocator_getter__;
 
 
 
@@ -81,7 +95,8 @@ namespace ncpp {
 
 		public:
 			inline TF_reference_allocator(const char* name = 0) :
-				TI_allocator<TF_reference_allocator<F_target_allocator__>>(name)
+				TI_allocator<TF_reference_allocator<F_target_allocator__>>(name),
+                target_allocator_p_(F_default_allocator_getter::get_default())
 			{
 
 
