@@ -35,6 +35,7 @@
 #include <ncpp/utilities/.hpp>
 #include <ncpp/mem/default_allocator.hpp>
 #include <ncpp/containers/eastl_containers.hpp>
+#include <ncpp/containers/binding_helper.hpp>
 
 #pragma endregion
 
@@ -296,4 +297,11 @@ namespace ncpp {
 	}
 
 }
+
+NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
+    NCPP_MA(ncpp::containers::TF_hash_table<F_allocator__>),
+    NCPP_MA(F_allocator__),
+    NCPP_MA(ncpp::containers::TF_hash_table<F_new_allocator__>),
+    typename F_allocator__
+);
 
