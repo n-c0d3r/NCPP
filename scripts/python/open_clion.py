@@ -50,12 +50,14 @@ def open_clion():
         print(f"Found CLion executable: {clion_exe_command_args}")
 
     # setup project dir
-    project_dir = f"{project_root}/build/clion/{project_name}"
+    project_dir = f"{project_root}/build/clion"
     root_cmake_lists_path = f"{project_dir}/CMakeLists.txt"
     root_cmake_lists_content = '''
             cmake_minimum_required(VERSION 3.12)
 
-            add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/../../.." "${CMAKE_CURRENT_LIST_DIR}")
+            project(''' + project_name + '''-clion)
+
+            add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/../.." "${CMAKE_CURRENT_LIST_DIR}/build")
         ''' 
     write_file(
         root_cmake_lists_path, 
