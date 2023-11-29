@@ -1,7 +1,7 @@
 #pragma once
 
-/** @file ncpp/mem/link_allocator.hpp
-*	@brief Implements link allocator.
+/** @file ncpp/mem/reference_allocator.hpp
+*	@brief Implements reference allocator.
 */
 
 
@@ -57,11 +57,11 @@ namespace ncpp {
 	namespace mem {
 
 		/**
-		 *	An allocator using another allocator to allocate and deallocate memory by linking into the target allocator reference.
+		 *	An allocator using another allocator to allocate and deallocate memory by referenceing into the target allocator reference.
 		 *	@param <F_target_allocator__> the target allocator to use.
 		 */
 		template<typename F_target_allocator__>
-		class TF_link_allocator : public TI_allocator<TF_link_allocator<F_target_allocator__>> {
+		class TF_reference_allocator : public TI_allocator<TF_reference_allocator<F_target_allocator__>> {
 
 		public:
 			using F_target_allocator = F_target_allocator__;
@@ -80,30 +80,30 @@ namespace ncpp {
 
 
 		public:
-			inline TF_link_allocator(const char* name = 0) :
-				TI_allocator<TF_link_allocator<F_target_allocator__>>(name)
+			inline TF_reference_allocator(const char* name = 0) :
+				TI_allocator<TF_reference_allocator<F_target_allocator__>>(name)
 			{
 
 
 
 			}
-			inline TF_link_allocator(F_target_allocator& target_allocator, const char* name = 0) :
-				TI_allocator<TF_link_allocator<F_target_allocator__>>(name),
+			inline TF_reference_allocator(F_target_allocator& target_allocator, const char* name = 0) :
+				TI_allocator<TF_reference_allocator<F_target_allocator__>>(name),
 				target_allocator_p_(&target_allocator)
 			{
 
 
 
 			}
-			inline TF_link_allocator(const TF_link_allocator& x) :
-				TF_link_allocator(x.target_allocator(), x.name_)
+			inline TF_reference_allocator(const TF_reference_allocator& x) :
+				TF_reference_allocator(x.target_allocator(), x.name_)
 			{
 
 
 
 			}
 
-			~TF_link_allocator() {
+			~TF_reference_allocator() {
 
 				reset();
 			}

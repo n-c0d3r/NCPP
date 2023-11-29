@@ -10,7 +10,7 @@ int main() {
 	{
 
 		mem::F_incremental_chunk_allocator incremental_chunk_allocator;
-		mem::TF_link_allocator<mem::F_incremental_chunk_allocator> link_allocator(incremental_chunk_allocator);
+		mem::TF_reference_allocator<mem::F_incremental_chunk_allocator> reference_allocator(incremental_chunk_allocator);
 
 		mem::F_default_allocator default_allocator;
 
@@ -57,11 +57,11 @@ int main() {
 
 			{
 
-				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::TF_link_allocator<ncpp::mem::F_incremental_chunk_allocator>::allocate ");
+				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::TF_reference_allocator<ncpp::mem::F_incremental_chunk_allocator>::allocate ");
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
-					pointers[i] = link_allocator.allocate(allocation_size, 0);
+					pointers[i] = reference_allocator.allocate(allocation_size, 0);
 
 				}
 
@@ -71,11 +71,11 @@ int main() {
 
 			{
 
-				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::TF_link_allocator<ncpp::mem::F_incremental_chunk_allocator>::deallocate ");
+				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::TF_reference_allocator<ncpp::mem::F_incremental_chunk_allocator>::deallocate ");
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
-					link_allocator.deallocate(pointers[i]);
+					reference_allocator.deallocate(pointers[i]);
 
 				}
 

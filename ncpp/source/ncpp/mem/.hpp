@@ -44,7 +44,7 @@
 #include <ncpp/mem/dummy_allocator.hpp>
 #include <ncpp/mem/incremental_chunk_allocator.hpp>
 #include <ncpp/mem/smart_chunk_allocator.hpp>
-#include <ncpp/mem/link_allocator.hpp>
+#include <ncpp/mem/reference_allocator.hpp>
 #include <ncpp/mem/flstack_allocator.hpp>
 #include <ncpp/mem/garbage_collection.hpp>
 
