@@ -41,11 +41,13 @@ def open_clion():
     clion_exe_command_args = None
     if platform.system() == "Darwin":
         clion_exe_command_args = 'open -na "CLion.app"'
-    elif os.nt():
+    elif os.name == "nt":
         clion_exe_command_args = 'clion64.exe'
 
     if not clion_exe_command_args:
         raise Exception("CLion executable not found")
+    else:
+        print(f"Found CLion executable: {clion_exe_command_args}")
 
     # setup project dir
     project_dir = f"{project_root}/build/clion/{project_name}"
@@ -59,8 +61,10 @@ def open_clion():
         root_cmake_lists_path, 
         root_cmake_lists_content
     )
+    print(f"Set up CMakeLists.txt done")
 
     # open clion
+    print(f"Open CLion")
     os.system(f'{clion_exe_command_args} "{project_dir}"')
 
 
