@@ -187,7 +187,7 @@ namespace ncpp {
 
 				reader_lock_.unlock();
 				
-				begin_.fetch_add(std::memory_order_release);
+				begin_.fetch_add(1, eastl::memory_order_acq_rel);
 
 				return std::move(item_vector_[begin % capacity_]);
 			}
@@ -201,7 +201,7 @@ namespace ncpp {
 
 				if ((end - begin)> 0) {
 				
-					begin_.fetch_add(std::memory_order_release);
+					begin_.fetch_add(1, eastl::memory_order_acq_rel);
 
 					item = std::move(item_vector_[begin % capacity_]);
 
