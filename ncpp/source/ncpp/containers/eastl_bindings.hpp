@@ -56,7 +56,7 @@
 ////////////////////////////////////////////////////////////////////////////////////
 //  string
 ////////////////////////////////////////////////////////////////////////////////////
-NCPP_CONTAINERS_DEFINE_BINDING(
+NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
     NCPP_MA(ncpp::containers::TF_string<F_char__, F_allocator__>),
     NCPP_MA(F_allocator__),
     NCPP_MA(ncpp::containers::TF_string<F_char__, F_new_allocator__>),
@@ -69,21 +69,21 @@ NCPP_CONTAINERS_DEFINE_BINDING(
 ////////////////////////////////////////////////////////////////////////////////////
 //  list, vector, deque
 ////////////////////////////////////////////////////////////////////////////////////
-NCPP_CONTAINERS_DEFINE_BINDING(
+NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
     NCPP_MA(ncpp::containers::TF_list<F_item__, F_allocator__>),
     NCPP_MA(F_allocator__),
     NCPP_MA(ncpp::containers::TF_list<F_item__, F_new_allocator__>),
     typename F_item__,
     typename F_allocator__
 );
-NCPP_CONTAINERS_DEFINE_BINDING(
+NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
     NCPP_MA(ncpp::containers::TF_vector<F_item__, F_allocator__>),
     NCPP_MA(F_allocator__),
     NCPP_MA(ncpp::containers::TF_vector<F_item__, F_new_allocator__>),
     typename F_item__,
     typename F_allocator__
 );
-NCPP_CONTAINERS_DEFINE_BINDING(
+NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
     NCPP_MA(ncpp::containers::TF_deque<F_item__, F_allocator__>),
     NCPP_MA(F_allocator__),
     NCPP_MA(ncpp::containers::TF_deque<F_item__, F_new_allocator__>),
@@ -96,7 +96,7 @@ NCPP_CONTAINERS_DEFINE_BINDING(
 ////////////////////////////////////////////////////////////////////////////////////
 //  set, map, unordered set, unordered map
 ////////////////////////////////////////////////////////////////////////////////////
-NCPP_CONTAINERS_DEFINE_BINDING(
+NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
     NCPP_MA(ncpp::containers::TF_set<F_item__, F_compare, F_allocator__>),
     NCPP_MA(F_allocator__),
     NCPP_MA(ncpp::containers::TF_set<F_item__, F_compare, F_new_allocator__>),
@@ -104,7 +104,7 @@ NCPP_CONTAINERS_DEFINE_BINDING(
     typename F_compare,
     typename F_allocator__
 );
-NCPP_CONTAINERS_DEFINE_BINDING(
+NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
     NCPP_MA(ncpp::containers::TF_map<F_key__, F_value__, F_compare, F_allocator__>),
     NCPP_MA(F_allocator__),
     NCPP_MA(ncpp::containers::TF_map<F_key__, F_value__, F_compare, F_new_allocator__>),
@@ -113,7 +113,7 @@ NCPP_CONTAINERS_DEFINE_BINDING(
     typename F_compare,
     typename F_allocator__
 );
-NCPP_CONTAINERS_DEFINE_BINDING(
+NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
     NCPP_MA(ncpp::containers::TF_unordered_set<F_item__, F_compare, F_allocator__>),
     NCPP_MA(F_allocator__),
     NCPP_MA(ncpp::containers::TF_unordered_set<F_item__, F_compare, F_new_allocator__>),
@@ -121,7 +121,7 @@ NCPP_CONTAINERS_DEFINE_BINDING(
     typename F_compare,
     typename F_allocator__
 );
-NCPP_CONTAINERS_DEFINE_BINDING(
+NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
     NCPP_MA(ncpp::containers::TF_unordered_map<F_key__, F_value__, F_hash__, F_predicate__, F_allocator__>),
     NCPP_MA(F_allocator__),
     NCPP_MA(ncpp::containers::TF_unordered_map<F_key__, F_value__, F_hash__, F_predicate__, F_new_allocator__>),
@@ -137,14 +137,14 @@ NCPP_CONTAINERS_DEFINE_BINDING(
 ////////////////////////////////////////////////////////////////////////////////////
 //  queue, stack
 ////////////////////////////////////////////////////////////////////////////////////
-NCPP_CONTAINERS_DEFINE_BINDING(
+NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
     NCPP_MA(ncpp::containers::TF_queue<F_item__, F_deque__>),
     NCPP_MA(ncpp::containers::TF_container_allocator<F_deque__>),
     NCPP_MA(ncpp::containers::TF_queue<F_item__, ncpp::containers::TF_bind_container_allocator<F_deque__, F_new_allocator__>>),
     typename F_item__,
     typename F_deque__
 );
-NCPP_CONTAINERS_DEFINE_BINDING(
+NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
     NCPP_MA(ncpp::containers::TF_stack<F_item__, F_stack__>),
     NCPP_MA(ncpp::containers::TF_container_allocator<F_stack__>),
     NCPP_MA(ncpp::containers::TF_stack<F_item__, ncpp::containers::TF_bind_container_allocator<F_stack__, F_new_allocator__>>),
