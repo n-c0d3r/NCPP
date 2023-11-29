@@ -176,22 +176,6 @@ namespace ncpp {
 				T_push(std::forward<F_item>(item));
 			}
 
-			inline F_item pop() {
-
-				reader_lock_.lock();
-
-				ptrd end = end_.load(eastl::memory_order_acquire);
-				ptrd begin = begin_.load(eastl::memory_order_acquire);
-
-				assert((end - begin) > 0 && "concurrent ring buffer is empty");
-
-				reader_lock_.unlock();
-				
-				begin_.fetch_add(1, eastl::memory_order_acq_rel);
-
-				return std::move(item_vector_[begin % capacity_]);
-			}
-
 			inline b8 try_pop(F_item& item) {
 
 				reader_lock_.lock();
