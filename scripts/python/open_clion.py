@@ -55,7 +55,7 @@ def open_clion():
     root_cmake_lists_content = '''
             cmake_minimum_required(VERSION 3.12)
 
-            project(''' + project_name + '''-clion)
+            project(''' + project_name + ''')
 
             add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/../.." "${CMAKE_CURRENT_BINARY_DIR}/''' + project_name + '''")
         ''' 
