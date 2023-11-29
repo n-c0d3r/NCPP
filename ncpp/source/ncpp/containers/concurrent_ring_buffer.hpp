@@ -183,7 +183,7 @@ namespace ncpp {
 				ptrd end = end_.load(eastl::memory_order_acquire);
 				ptrd begin = begin_.load(eastl::memory_order_acquire);
 
-				assert((end - begin) > 0 && "ring buffer is empty");
+				assert((end - begin) > 0 && "concurrent ring buffer is empty");
 
 				reader_lock_.unlock();
 				
