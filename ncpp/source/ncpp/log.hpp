@@ -34,6 +34,7 @@
 
 #include <ncpp/containers/.hpp>
 #include <ncpp/utilities/type_info.hpp>
+#include <ncpp/utilities/is_streamable.hpp>
 #include <ncpp/iostream.hpp>
 
 #pragma endregion
