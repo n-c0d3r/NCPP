@@ -439,6 +439,7 @@ namespace ncpp {
         };
 
     }
+
     template<typename F__>
     using TF_cout_value = typename internal::TF_cout_value_helper<F__>::F;
 
@@ -1077,13 +1078,14 @@ ncpp::F_ostream& operator << (
 		return os;
 	}
 
+    
 	os << NCPP_FOREGROUND_YELLOW << "vector" << NCPP_RESET_CONSOLE_COLOR
     << ncpp::F_cout_lowlight{"<"} << (NCPP_FOREGROUND_BLUE + ncpp::utilities::T_type_name<F_item__>() + NCPP_RESET_CONSOLE_COLOR).c_str()
     << ncpp::F_cout_lowlight{">"}
     << ncpp::F_cout_lowlight{"("} << (NCPP_FOREGROUND_MAGNETA + ncpp::containers::T_to_string<char>(input.first.size()) + NCPP_RESET_CONSOLE_COLOR).c_str()
     << ncpp::F_cout_lowlight{")"}
     << " ";
-
+    
     os << ncpp::F_cout_lowlight{"{"} << std::endl;
 
 	for (ncpp::sz i = 0; i < input.first.size(); ++i) {
@@ -1096,7 +1098,7 @@ ncpp::F_ostream& operator << (
 
         os << ncpp::F_cout_field_name{ncpp::containers::T_to_string<char>(i)} << ncpp::F_cout_lowlight{": "};
 
-		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(input.first[i]), input.second + 1 });
+		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, F_item__>(os, { input.first[i], input.second + 1 });
 
 		if (i != input.first.size() - 1)
             os << ncpp::F_cout_lowlight{","};
