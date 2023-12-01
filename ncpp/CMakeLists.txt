@@ -157,15 +157,15 @@ set_target_properties(ncpp
         FOLDER "ncpp"
 )
 
+target_precompile_headers(ncpp
+        PRIVATE
+        source/ncpp/prerequisites.hpp
+)
+
 target_include_directories(ncpp
     PUBLIC 
         ${CMAKE_CURRENT_SOURCE_DIR}/source
         ${CMAKE_CURRENT_BINARY_DIR}/generated_files
-)
-
-target_precompile_headers(ncpp
-    PRIVATE
-        source/ncpp/prerequisites.hpp
 )
 
 target_link_libraries(ncpp
