@@ -86,147 +86,109 @@ namespace ncpp {
                 
             };
 
-
+             
 
             template<typename F_allocator__>
             struct TF_to_string_helper<char, F_allocator__, int> {
-
-                using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
                 
                 static inline TF_string<char, F_allocator__> to_string(int value)
                 {
 
-                    TF_string<char, F_allocator__> result(typename TF_string<char, F_allocator__>::CtorSprintf(), "%d", value);
-                    
-                    return eastl::move(result);
+                    return eastl::to_string(value).c_str();
                 }
 
             };
 
             template<typename F_allocator__>
             struct TF_to_string_helper<char, F_allocator__, long> {
-
-                using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
                 
                 static inline TF_string<char, F_allocator__> to_string(long value)
                 {
 
-                    TF_string<char, F_allocator__> result(typename TF_string<char, F_allocator__>::CtorSprintf(), "%ld", value);
-                    
-                    return eastl::move(result);
+                    return eastl::to_string(value).c_str();
                 }
 
             };
 
             template<typename F_allocator__>
             struct TF_to_string_helper<char, F_allocator__, long long> {
-
-                using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
                 
                 static inline TF_string<char, F_allocator__> to_string(long long value)
                 {
 
-                    TF_string<char, F_allocator__> result(typename TF_string<char, F_allocator__>::CtorSprintf(), "%lld", value);
-                    
-                    return eastl::move(result);
+                    return eastl::to_string(value).c_str();
                 }
 
             };
 
             template<typename F_allocator__>
             struct TF_to_string_helper<char, F_allocator__, unsigned> {
-
-                using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
                 
                 static inline TF_string<char, F_allocator__> to_string(unsigned value)
                 {
 
-                    TF_string<char, F_allocator__> result(typename TF_string<char, F_allocator__>::CtorSprintf(), "%u", value);
-                    
-                    return eastl::move(result);
+                    return eastl::to_string(value).c_str();
                 }
 
             };
 
             template<typename F_allocator__>
             struct TF_to_string_helper<char, F_allocator__, unsigned long> {
-
-                using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
                 
                 static inline TF_string<char, F_allocator__> to_string(unsigned long value)
                 {
 
-                    TF_string<char, F_allocator__> result(typename TF_string<char, F_allocator__>::CtorSprintf(), "%lu", value);
-                    
-                    return eastl::move(result);
+                    return eastl::to_string(value).c_str();
                 }
 
             };
 
             template<typename F_allocator__>
             struct TF_to_string_helper<char, F_allocator__, unsigned long long> {
-
-                using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
                 
                 static inline TF_string<char, F_allocator__> to_string(unsigned long long value)
                 {
 
-                    TF_string<char, F_allocator__> result(typename TF_string<char, F_allocator__>::CtorSprintf(), "%llu", value);
-                    
-                    return eastl::move(result);
+                    return eastl::to_string(value).c_str();
                 }
 
             };
 
             template<typename F_allocator__>
             struct TF_to_string_helper<char, F_allocator__, float> {
-
-                using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
                 
                 static inline TF_string<char, F_allocator__> to_string(float value)
                 {
 
-                    TF_string<char, F_allocator__> result(typename TF_string<char, F_allocator__>::CtorSprintf(), "%f", value);
-                    
-                    return eastl::move(result);
+                    return eastl::to_string(value).c_str();
                 }
 
             };
 
             template<typename F_allocator__>
             struct TF_to_string_helper<char, F_allocator__, double> {
-
-                using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
                 
                 static inline TF_string<char, F_allocator__> to_string(double value)
                 {
 
-                    TF_string<char, F_allocator__> result(typename TF_string<char, F_allocator__>::CtorSprintf(), "%f", value);
-                    
-                    return eastl::move(result);
+                    return eastl::to_string(value).c_str();
                 }
 
             };
 
             template<typename F_allocator__>
             struct TF_to_string_helper<char, F_allocator__, long double> {
-
-                using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
                 
                 static inline TF_string<char, F_allocator__> to_string(long double value)
                 {
 
-                    TF_string<char, F_allocator__> result(typename TF_string<char, F_allocator__>::CtorSprintf(), "%Lf", value);
-                    
-                    return eastl::move(result);
+                    return eastl::to_string(value).c_str();
                 }
 
             };
         
             template<typename F_allocator__>
             struct TF_to_string_helper<char, F_allocator__, TF_string<wchar_t, F_allocator__>> {
-
-                using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
                 
                 static inline TF_string<char, F_allocator__> to_string(const TF_string<wchar_t, F_allocator__>& value)
                 {
@@ -247,8 +209,6 @@ namespace ncpp {
         
             template<typename F_allocator__>
             struct TF_to_string_helper<char, F_allocator__, const wchar_t*> {
-
-                using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
                 
                 static NCPP_FORCE_INLINE TF_string<char, F_allocator__> to_string(const wchar_t* value)
                 {
@@ -260,8 +220,6 @@ namespace ncpp {
             
             template<typename F_allocator__>
             struct TF_to_string_helper<char, F_allocator__, TF_string<char, F_allocator__>> {
-
-                using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
                 
                 static NCPP_FORCE_INLINE TF_string<char, F_allocator__> to_string(const TF_string<char, F_allocator__>& value)
                 {
@@ -273,8 +231,6 @@ namespace ncpp {
         
             template<typename F_allocator__>
             struct TF_to_string_helper<char, F_allocator__, const char*> {
-
-                using F_ctor_sprintf = typename TF_string<char, F_allocator__>::CtorSprintf;
                 
                 static NCPP_FORCE_INLINE TF_string<char, F_allocator__> to_string(const char* value)
                 {
@@ -288,143 +244,105 @@ namespace ncpp {
 
             template<typename F_allocator__>
             struct TF_to_string_helper<wchar_t, F_allocator__, int> {
-
-                using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
                 
                 static inline TF_string<wchar_t, F_allocator__> to_string(int value)
                 {
 
-                    TF_string<wchar_t, F_allocator__> result(typename TF_string<wchar_t, F_allocator__>::CtorSprintf(), L"%d", value);
-                    
-                    return eastl::move(result);
+                    return eastl::to_wstring(value).c_str();
                 }
 
             };
 
             template<typename F_allocator__>
             struct TF_to_string_helper<wchar_t, F_allocator__, long> {
-
-                using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
                 
                 static inline TF_string<wchar_t, F_allocator__> to_string(long value)
                 {
 
-                    TF_string<wchar_t, F_allocator__> result(typename TF_string<wchar_t, F_allocator__>::CtorSprintf(), L"%ld", value);
-                    
-                    return eastl::move(result);
+                    return eastl::to_wstring(value).c_str();
                 }
 
             };
 
             template<typename F_allocator__>
             struct TF_to_string_helper<wchar_t, F_allocator__, long long> {
-
-                using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
                 
                 static inline TF_string<wchar_t, F_allocator__> to_string(long long value)
                 {
 
-                    TF_string<wchar_t, F_allocator__> result(typename TF_string<wchar_t, F_allocator__>::CtorSprintf(), L"%lld", value);
-                    
-                    return eastl::move(result);
+                    return eastl::to_wstring(value).c_str();
                 }
 
             };
 
             template<typename F_allocator__>
             struct TF_to_string_helper<wchar_t, F_allocator__, unsigned> {
-
-                using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
                 
                 static inline TF_string<wchar_t, F_allocator__> to_string(unsigned value)
                 {
 
-                    TF_string<wchar_t, F_allocator__> result(typename TF_string<wchar_t, F_allocator__>::CtorSprintf(), L"%u", value);
-                    
-                    return eastl::move(result);
+                    return eastl::to_wstring(value).c_str();
                 }
 
             };
 
             template<typename F_allocator__>
             struct TF_to_string_helper<wchar_t, F_allocator__, unsigned long> {
-
-                using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
                 
                 static inline TF_string<wchar_t, F_allocator__> to_string(unsigned long value)
                 {
 
-                    TF_string<wchar_t, F_allocator__> result(typename TF_string<wchar_t, F_allocator__>::CtorSprintf(), L"%lu", value);
-                    
-                    return eastl::move(result);
+                    return eastl::to_wstring(value).c_str();
                 }
 
             };
 
             template<typename F_allocator__>
             struct TF_to_string_helper<wchar_t, F_allocator__, unsigned long long> {
-
-                using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
                 
                 static inline TF_string<wchar_t, F_allocator__> to_string(unsigned long long value)
                 {
 
-                    TF_string<wchar_t, F_allocator__> result(typename TF_string<wchar_t, F_allocator__>::CtorSprintf(), L"%llu", value);
-                    
-                    return eastl::move(result);
+                    return eastl::to_wstring(value).c_str();
                 }
 
             };
 
             template<typename F_allocator__>
             struct TF_to_string_helper<wchar_t, F_allocator__, float> {
-
-                using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
                 
                 static inline TF_string<wchar_t, F_allocator__> to_string(float value)
                 {
 
-                    TF_string<wchar_t, F_allocator__> result(typename TF_string<wchar_t, F_allocator__>::CtorSprintf(), L"%f", value);
-                    
-                    return eastl::move(result);
+                    return eastl::to_wstring(value).c_str();
                 }
 
             };
 
             template<typename F_allocator__>
             struct TF_to_string_helper<wchar_t, F_allocator__, double> {
-
-                using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
                 
                 static inline TF_string<wchar_t, F_allocator__> to_string(double value)
                 {
 
-                    TF_string<wchar_t, F_allocator__> result(typename TF_string<wchar_t, F_allocator__>::CtorSprintf(), L"%f", value);
-                    
-                    return eastl::move(result);
+                    return eastl::to_wstring(value).c_str();
                 }
 
             };
 
             template<typename F_allocator__>
             struct TF_to_string_helper<wchar_t, F_allocator__, long double> {
-
-                using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
                 
                 static inline TF_string<wchar_t, F_allocator__> to_string(long double value)
                 {
 
-                    TF_string<wchar_t, F_allocator__> result(typename TF_string<wchar_t, F_allocator__>::CtorSprintf(), L"%Lf", value);
-                    
-                    return eastl::move(result);
+                    return eastl::to_wstring(value).c_str();
                 }
 
             };
 
             template<typename F_allocator__>
             struct TF_to_string_helper<wchar_t, F_allocator__, TF_string<char, F_allocator__>> {
-
-                using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
                 
                 static inline TF_string<wchar_t, F_allocator__> to_string(const TF_string<char, F_allocator__>& value)
                 {
@@ -445,8 +363,6 @@ namespace ncpp {
         
             template<typename F_allocator__>
             struct TF_to_string_helper<wchar_t, F_allocator__, const char*> {
-
-                using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
                 
                 static NCPP_FORCE_INLINE TF_string<wchar_t, F_allocator__> to_string(const char* value)
                 {
@@ -458,8 +374,6 @@ namespace ncpp {
         
             template<typename F_allocator__>
             struct TF_to_string_helper<wchar_t, F_allocator__, TF_string<wchar_t, F_allocator__>> {
-
-                using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
                 
                 static NCPP_FORCE_INLINE TF_string<wchar_t, F_allocator__> to_string(const TF_string<wchar_t, F_allocator__>& value)
                 {
@@ -471,8 +385,6 @@ namespace ncpp {
         
             template<typename F_allocator__>
             struct TF_to_string_helper<wchar_t, F_allocator__, const wchar_t*> {
-
-                using F_ctor_sprintf = typename TF_string<wchar_t, F_allocator__>::CtorSprintf;
                 
                 static NCPP_FORCE_INLINE TF_string<wchar_t, F_allocator__> to_string(const wchar_t* value)
                 {
