@@ -26,6 +26,7 @@ include(NCPP/SIMDCompilerFlags)
 include(NCPP/ConfigureCompiler)
 
 include(NCPP/DefaultAllocatorConfig)
+include(NCPP/GTempAllocatorConfig)
 
 
 

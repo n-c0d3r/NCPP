@@ -293,6 +293,8 @@ namespace ncpp {
     
     
         using F_hash_table = TF_hash_table<>;
+
+        using G_hash_buffer = TF_hash_table<mem::F_gtemp_allocator>;
     
 	}
 
