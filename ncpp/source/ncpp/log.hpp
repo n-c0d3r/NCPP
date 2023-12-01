@@ -351,6 +351,20 @@ namespace ncpp {
 
                 i32 value;
 
+                friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+                        ncpp::F_ostream& os,
+                        const F& input
+                ) {
+
+                    os << NCPP_FOREGROUND_BRIGHT_CYAN;
+
+                    os << input.value;
+
+                    os << NCPP_RESET_CONSOLE_COLOR;
+
+                    return os;
+                }
+
             };
 
         };
@@ -700,19 +714,19 @@ NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
 
     return os;
 }
-NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-    ncpp::F_ostream& os,
-    const ncpp::TF_cout_value<ncpp::i32>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_CYAN;
-
-    os << input.value;
-
-    os << NCPP_RESET_CONSOLE_COLOR;
-
-    return os;
-}
+//NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+//    ncpp::F_ostream& os,
+//    const ncpp::TF_cout_value<ncpp::i32>& input
+//) {
+//
+//    os << NCPP_FOREGROUND_BRIGHT_CYAN;
+//
+//    os << input.value;
+//
+//    os << NCPP_RESET_CONSOLE_COLOR;
+//
+//    return os;
+//}
 NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
     ncpp::F_ostream& os,
     const ncpp::TF_cout_value<ncpp::i64>& input
