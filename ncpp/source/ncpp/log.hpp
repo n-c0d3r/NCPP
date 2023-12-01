@@ -282,10 +282,164 @@ namespace ncpp {
         u64 nanoseconds;
     };
 
+    namespace internal {
+
+        template<typename F__>
+        struct TF_cout_value_helper {
+
+            using F = F__;
+
+        };
+
+        template<>
+        struct TF_cout_value_helper<b8> {
+
+            struct F {
+
+                b8 value;
+
+            };
+
+        };
+
+        template<>
+        struct TF_cout_value_helper<f32> {
+
+            struct F {
+
+                f32 value;
+
+            };
+
+        };
+        template<>
+        struct TF_cout_value_helper<f64> {
+
+            struct F {
+
+                f64 value;
+
+            };
+
+        };
+
+        template<>
+        struct TF_cout_value_helper<i8> {
+
+            struct F {
+
+                i8 value;
+
+            };
+
+        };
+        template<>
+        struct TF_cout_value_helper<i16> {
+
+            struct F {
+
+                i16 value;
+
+            };
+
+        };
+        template<>
+        struct TF_cout_value_helper<i32> {
+
+            struct F {
+
+                i32 value;
+
+            };
+
+        };
+        template<>
+        struct TF_cout_value_helper<i64> {
+
+            struct F {
+
+                i64 value;
+
+            };
+
+        };
+
+        template<>
+        struct TF_cout_value_helper<u8> {
+
+            struct F {
+
+                u8 value;
+
+            };
+
+        };
+        template<>
+        struct TF_cout_value_helper<u16> {
+
+            struct F {
+
+                u16 value;
+
+            };
+
+        };
+        template<>
+        struct TF_cout_value_helper<u32> {
+
+            struct F {
+
+                u32 value;
+
+            };
+
+        };
+        template<>
+        struct TF_cout_value_helper<u64> {
+
+            struct F {
+
+                u64 value;
+
+            };
+
+        };
+
+        template<>
+        struct TF_cout_value_helper<const char*> {
+
+            struct F {
+
+                const char* value;
+
+            };
+
+        };
+        template<>
+        struct TF_cout_value_helper<const wchar_t*> {
+
+            struct F {
+
+                const wchar_t* value;
+
+            };
+
+        };
+
+        template<typename F_char__, typename F_allocator__>
+        struct TF_cout_value_helper<containers::TF_string<F_char__, F_allocator__>> {
+
+            struct F {
+
+                containers::TF_string<F_char__, F_allocator__> value;
+
+            };
+
+        };
+
+    }
     template<typename F__>
-    struct TF_cout_value {
-        F__ value;
-    };
+    using TF_cout_value = typename internal::TF_cout_value_helper<F__>::F;
 
     template<typename F__>
     NCPP_FORCE_INLINE TF_cout_value<F__> T_cout_value(const F__& value){
@@ -296,7 +450,7 @@ namespace ncpp {
 #pragma endregion
 
 }
-    
+
 
 
 
@@ -381,7 +535,7 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const cha
     return os;
 }
 #pragma endregion
-    
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -477,29 +631,14 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
 
 
 
-template<typename F__>
 NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
     ncpp::F_ostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<F__>
-    >& input
-) {
-
-    ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, F__>(os, { input.first.value, input.second });
-
-    return os;
-}
-
-NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-    ncpp::F_ostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<ncpp::b8>
-    >& input
+    const ncpp::TF_cout_value<ncpp::b8>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_RED;
 
-    os << input.first.value;
+    os << input.value;
 
     os << NCPP_RESET_CONSOLE_COLOR;
 
@@ -508,14 +647,12 @@ NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
 
 NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
     ncpp::F_ostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<ncpp::f32>
-    >& input
+    const ncpp::TF_cout_value<ncpp::f32>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_MAGNETA;
 
-    os << input.first.value;
+    os << input.value;
 
     os << NCPP_RESET_CONSOLE_COLOR;
 
@@ -523,14 +660,12 @@ NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
 }
 NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
     ncpp::F_ostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<ncpp::f64>
-    >& input
+    const ncpp::TF_cout_value<ncpp::f64>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_MAGNETA;
 
-    os << input.first.value;
+    os << input.value;
 
     os << NCPP_RESET_CONSOLE_COLOR;
 
@@ -539,14 +674,12 @@ NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
 
 NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
     ncpp::F_ostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<ncpp::i8>
-    >& input
+    const ncpp::TF_cout_value<ncpp::i8>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_CYAN;
 
-    os << input.first.value;
+    os << input.value;
 
     os << NCPP_RESET_CONSOLE_COLOR;
 
@@ -554,14 +687,12 @@ NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
 }
 NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
     ncpp::F_ostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<ncpp::i16>
-    >& input
+    const ncpp::TF_cout_value<ncpp::i16>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_CYAN;
 
-    os << input.first.value;
+    os << input.value;
 
     os << NCPP_RESET_CONSOLE_COLOR;
 
@@ -569,14 +700,12 @@ NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
 }
 NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
     ncpp::F_ostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<ncpp::i32>
-    >& input
+    const ncpp::TF_cout_value<ncpp::i32>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_CYAN;
 
-    os << input.first.value;
+    os << input.value;
 
     os << NCPP_RESET_CONSOLE_COLOR;
 
@@ -584,14 +713,12 @@ NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
 }
 NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
     ncpp::F_ostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<ncpp::i64>
-    >& input
+    const ncpp::TF_cout_value<ncpp::i64>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_CYAN;
 
-    os << input.first.value;
+    os << input.value;
 
     os << NCPP_RESET_CONSOLE_COLOR;
 
@@ -600,14 +727,12 @@ NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
 
 NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
     ncpp::F_ostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<ncpp::u8>
-    >& input
+    const ncpp::TF_cout_value<ncpp::u8>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_CYAN;
 
-    os << input.first.value;
+    os << input.value;
 
     os << NCPP_RESET_CONSOLE_COLOR;
 
@@ -615,14 +740,12 @@ NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
 }
 NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
     ncpp::F_ostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<ncpp::u16>
-    >& input
+    const ncpp::TF_cout_value<ncpp::u16>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_CYAN;
 
-    os << input.first.value;
+    os << input.value;
 
     os << NCPP_RESET_CONSOLE_COLOR;
 
@@ -630,14 +753,12 @@ NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
 }
 NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
     ncpp::F_ostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<ncpp::u32>
-    >& input
+    const ncpp::TF_cout_value<ncpp::u32>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_CYAN;
 
-    os << input.first.value;
+    os << input.value;
 
     os << NCPP_RESET_CONSOLE_COLOR;
 
@@ -645,14 +766,12 @@ NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
 }
 NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
     ncpp::F_ostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<ncpp::u64>
-    >& input
+    const ncpp::TF_cout_value<ncpp::u64>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_CYAN;
 
-    os << input.first.value;
+    os << input.value;
 
     os << NCPP_RESET_CONSOLE_COLOR;
 
@@ -662,14 +781,12 @@ NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
 template<typename F_allocator__>
 NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
     ncpp::F_ostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<eastl::basic_string<char, F_allocator__>>
-    >& input
+    const ncpp::TF_cout_value<eastl::basic_string<char, F_allocator__>>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_GREEN << '"';
 
-    os << input.first.value;
+    os << input.value;
 
     os << '"' << NCPP_RESET_CONSOLE_COLOR;
 
@@ -677,14 +794,12 @@ NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
 }
 NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
     ncpp::F_ostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<const char*>
-    >& input
+    const ncpp::TF_cout_value<const char*>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_GREEN << '"';
 
-    os << input.first.value;
+    os << input.value;
 
     os << '"' << NCPP_RESET_CONSOLE_COLOR;
 
@@ -694,14 +809,12 @@ NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
 template<typename F_allocator__>
 NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
     ncpp::F_ostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<eastl::basic_string<wchar_t, F_allocator__>>
-    >& input
+    const ncpp::TF_cout_value<eastl::basic_string<wchar_t, F_allocator__>>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_YELLOW << 'L' << '"';
 
-    os << input.first.value;
+    os << input.value;
 
     os << '"' << NCPP_RESET_CONSOLE_COLOR;
 
@@ -709,56 +822,28 @@ NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
 }
 NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
     ncpp::F_ostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<const wchar_t*>
-    >& input
+    const ncpp::TF_cout_value<const wchar_t*>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_YELLOW << 'L' << '"';
 
-    os << input.first.value;
+    os << input.value;
 
     os << '"' << NCPP_RESET_CONSOLE_COLOR;
 
     return os;
 }
 
-template<typename F__>
-NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-    ncpp::F_ostream& os,
-    const ncpp::TF_cout_value<F__>& input
-) {
 
-    os << ncpp::TF_ostream_input<ncpp::TF_cout_value<F__>> { input, 0 };
-
-    return os;
-}
-
-
-
-template<typename F__>
-NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-    ncpp::F_wostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<F__>
-    >& input
-) {
-
-    ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, F__>(os, { input.first.value, input.second });
-
-    return os;
-}
 
 NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
     ncpp::F_wostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<ncpp::b8>
-    >& input
+    const ncpp::TF_cout_value<ncpp::b8>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_RED_TEXT;
 
-    os << input.first.value;
+    os << input.value;
 
     os << NCPP_RESET_CONSOLE_COLOR_TEXT;
 
@@ -767,14 +852,12 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
 
 NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
     ncpp::F_wostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<ncpp::f32>
-    >& input
+    const ncpp::TF_cout_value<ncpp::f32>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_MAGNETA_TEXT;
 
-    os << input.first.value;
+    os << input.value;
 
     os << NCPP_RESET_CONSOLE_COLOR_TEXT;
 
@@ -782,14 +865,12 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
 }
 NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
     ncpp::F_wostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<ncpp::f64>
-    >& input
+    const ncpp::TF_cout_value<ncpp::f64>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_MAGNETA_TEXT;
 
-    os << input.first.value;
+    os << input.value;
 
     os << NCPP_RESET_CONSOLE_COLOR_TEXT;
 
@@ -798,14 +879,12 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
 
 NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
     ncpp::F_wostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<ncpp::i8>
-    >& input
+    const ncpp::TF_cout_value<ncpp::i8>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
 
-    os << input.first.value;
+    os << input.value;
 
     os << NCPP_RESET_CONSOLE_COLOR_TEXT;
 
@@ -813,14 +892,12 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
 }
 NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
     ncpp::F_wostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<ncpp::i16>
-    >& input
+    const ncpp::TF_cout_value<ncpp::i16>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
 
-    os << input.first.value;
+    os << input.value;
 
     os << NCPP_RESET_CONSOLE_COLOR_TEXT;
 
@@ -828,14 +905,12 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
 }
 NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
     ncpp::F_wostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<ncpp::i32>
-    >& input
+    const ncpp::TF_cout_value<ncpp::i32>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
 
-    os << input.first.value;
+    os << input.value;
 
     os << NCPP_RESET_CONSOLE_COLOR_TEXT;
 
@@ -843,14 +918,12 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
 }
 NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
     ncpp::F_wostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<ncpp::i64>
-    >& input
+    const ncpp::TF_cout_value<ncpp::i64>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
 
-    os << input.first.value;
+    os << input.value;
 
     os << NCPP_RESET_CONSOLE_COLOR_TEXT;
 
@@ -859,14 +932,12 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
 
 NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
     ncpp::F_wostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<ncpp::u8>
-    >& input
+    const ncpp::TF_cout_value<ncpp::u8>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
 
-    os << input.first.value;
+    os << input.value;
 
     os << NCPP_RESET_CONSOLE_COLOR_TEXT;
 
@@ -874,14 +945,12 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
 }
 NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
     ncpp::F_wostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<ncpp::u16>
-    >& input
+    const ncpp::TF_cout_value<ncpp::u16>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
 
-    os << input.first.value;
+    os << input.value;
 
     os << NCPP_RESET_CONSOLE_COLOR_TEXT;
 
@@ -889,14 +958,12 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
 }
 NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
     ncpp::F_wostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<ncpp::u32>
-    >& input
+    const ncpp::TF_cout_value<ncpp::u32>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
 
-    os << input.first.value;
+    os << input.value;
 
     os << NCPP_RESET_CONSOLE_COLOR_TEXT;
 
@@ -904,14 +971,12 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
 }
 NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
     ncpp::F_wostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<ncpp::u64>
-    >& input
+    const ncpp::TF_cout_value<ncpp::u64>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
 
-    os << input.first.value;
+    os << input.value;
 
     os << NCPP_RESET_CONSOLE_COLOR_TEXT;
 
@@ -921,14 +986,12 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
 template<typename F_allocator__>
 NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
     ncpp::F_wostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<eastl::basic_string<char, F_allocator__>>
-    >& input
+    const ncpp::TF_cout_value<eastl::basic_string<char, F_allocator__>>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_GREEN_TEXT << '"';
 
-    os << input.first.value;
+    os << input.value;
 
     os << '"' << NCPP_RESET_CONSOLE_COLOR_TEXT;
 
@@ -936,14 +999,12 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
 }
 NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
     ncpp::F_wostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<const char*>
-    >& input
+    const ncpp::TF_cout_value<const char*>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_GREEN_TEXT << '"';
 
-    os << input.first.value;
+    os << input.value;
 
     os << '"' << NCPP_RESET_CONSOLE_COLOR_TEXT;
 
@@ -953,14 +1014,12 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
 template<typename F_allocator__>
 NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
     ncpp::F_wostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<eastl::basic_string<wchar_t, F_allocator__>>
-    >& input
+    const ncpp::TF_cout_value<eastl::basic_string<wchar_t, F_allocator__>>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_YELLOW_TEXT << L'L' << L'"';
 
-    os << input.first.value;
+    os << input.value;
 
     os << L'"' << NCPP_RESET_CONSOLE_COLOR_TEXT;
 
@@ -968,32 +1027,19 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
 }
 NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
     ncpp::F_wostream& os,
-    const ncpp::TF_ostream_input<
-        ncpp::TF_cout_value<const wchar_t*>
-    >& input
+    const ncpp::TF_cout_value<const wchar_t*>& input
 ) {
 
     os << NCPP_FOREGROUND_BRIGHT_YELLOW_TEXT << L'L' << L'"';
 
-    os << input.first.value;
+    os << input.value;
 
     os << L'"' << NCPP_RESET_CONSOLE_COLOR_TEXT;
-
-    return os;
-}
-
-template<typename F__>
-NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-    ncpp::F_wostream& os,
-    const ncpp::TF_cout_value<F__>& input
-) {
-
-    os << ncpp::TF_ostream_input<ncpp::TF_cout_value<F__>> { input, 0 };
 
     return os;
 }
 #pragma endregion
-    
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1049,7 +1095,7 @@ ncpp::F_ostream& operator << (
 
         os << ncpp::F_cout_field_name{ncpp::containers::T_to_string<char>(i)} << ncpp::F_cout_lowlight{": "};
 
-		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, F_item__>(os, { input.first[i], input.second + 1 });
+		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(input.first[i]), input.second + 1 });
 
 		if (i != input.first.size() - 1)
             os << ncpp::F_cout_lowlight{","};
@@ -1120,7 +1166,7 @@ ncpp::F_wostream& operator << (
 
         os << ncpp::F_wcout_field_name{ncpp::containers::T_to_string<wchar_t>(i)} << ncpp::F_wcout_lowlight{L": "};
 
-        ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, F_item__>(os, { input.first[i], input.second + 1 });
+        ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(input.first[i]), input.second + 1 });
 
         if (i != input.first.size() - 1)
             os << ncpp::F_wcout_lowlight{L","};
@@ -1151,7 +1197,7 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eas
     return os;
 }
 #pragma endregion
-    
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1207,7 +1253,7 @@ ncpp::F_ostream& operator << (
 
         os << ncpp::F_cout_field_name{ncpp::containers::T_to_string<char>(i)} << ncpp::F_cout_lowlight{": "};
 
-		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, F_item__>(os, { *j, input.second + 1 });
+		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(*j), input.second + 1 });
 
 		if (i != input.first.size() - 1)
             os << ncpp::F_cout_lowlight{","};
@@ -1280,7 +1326,7 @@ ncpp::F_wostream& operator << (
 
         os << ncpp::F_wcout_field_name{ncpp::containers::T_to_string<wchar_t>(i)} << ncpp::F_wcout_lowlight{L": "};
 
-        ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, F_item__>(os, { *j, input.second + 1 });
+        ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(*j), input.second + 1 });
 
         if (i != input.first.size() - 1)
             os << ncpp::F_wcout_lowlight{L","};
@@ -1313,7 +1359,7 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const std
     return os;
 }
 #pragma endregion
-    
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1371,7 +1417,7 @@ ncpp::F_ostream& operator << (
 
         os << ncpp::F_cout_field_name{ncpp::containers::T_to_string<char>(i)} << ncpp::F_cout_lowlight{": "};
 
-		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, F_item__>(os, { input.first[i], input.second + 1 });
+		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(input.first[i]), input.second + 1 });
 
 		if (i != size__ - 1)
             os << ncpp::F_cout_lowlight{","};
@@ -1385,7 +1431,7 @@ ncpp::F_ostream& operator << (
 		os << " ";
 
 	}
-        
+
     os << ncpp::F_cout_lowlight{"}"};
 
 	return os;
@@ -1445,7 +1491,7 @@ ncpp::F_wostream& operator << (
 
         os << ncpp::F_wcout_field_name{ncpp::containers::T_to_string<wchar_t>(i)} << ncpp::F_wcout_lowlight{L": "};
 
-        ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, F_item__>(os, { input.first[i], input.second + 1 });
+        ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(input.first[i]), input.second + 1 });
 
         if (i != size__ - 1)
             os << ncpp::F_wcout_lowlight{L","};
@@ -1459,7 +1505,7 @@ ncpp::F_wostream& operator << (
         os << L" ";
 
     }
-        
+
     os << ncpp::F_wcout_lowlight{L"}"};
 
     return os;
