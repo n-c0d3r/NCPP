@@ -256,12 +256,6 @@ namespace ncpp {
 	 */
 	struct F_cout_field_name {
 		containers::F_string content;
-	}; 
-	/**
-	 *	Wraps nanoseconds number inside to be streamed out with nanoseconds color.
-	 */
-	struct F_cout_nanoseconds {
-		u64 nanoseconds;
 	};
 
 
@@ -277,18 +271,117 @@ namespace ncpp {
 	 */
 	struct F_wcout_field_name {
 		containers::F_wstring content;
-	}; 
-	/**
-	 *	Wraps nanoseconds number inside to be streamed out with nanoseconds color.
-	 */
-	struct F_wcout_nanoseconds {
-		u64 nanoseconds;
 	};
+
+
+
+    /**
+     *	Wraps nanoseconds number inside to be streamed out with nanoseconds color.
+     */
+    struct F_cout_nanoseconds {
+        u64 nanoseconds;
+    };
+
+    template<typename F__>
+    struct TF_cout_value {
+        F__ value;
+    };
+
+    template<typename F__>
+    NCPP_FORCE_INLINE TF_cout_value<F__> T_cout_value(const F__& value){
+
+        return { value };
+    }
+
 #pragma endregion
 
 }
     
 
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+#pragma region String
+/**
+ *	Streams out containers::F_string.
+ */
+template<class F_allocator__>
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl::basic_string<char, F_allocator__>& str)
+{
+
+	os << str.c_str();
+
+	return os;
+}
+/**
+ *    Streams out containers::F_string.
+ */
+template<class F_allocator__>
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl::basic_string<wchar_t, F_allocator__>& str)
+{
+
+    os << ncpp::containers::to_string(str.c_str());
+
+    return os;
+}
+/**
+ *    Streams out const wchar_t*.
+ */
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (ncpp::F_ostream& os, const wchar_t* str)
+{
+
+    os << ncpp::containers::to_string(str);
+
+    return os;
+}
+
+/**
+ *	Streams out containers::F_string.
+ */
+template<class F_allocator__>
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eastl::basic_string<wchar_t, F_allocator__>& str)
+{
+
+	os << str.c_str();
+
+	return os;
+}
+/**
+ *    Streams out containers::F_string.
+ */
+template<class F_allocator__>
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eastl::basic_string<char, F_allocator__>& str)
+{
+
+    os << ncpp::containers::to_wstring(str.c_str());
+
+    return os;
+}
+/**
+ *    Streams out const char*.
+ */
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const char* str)
+{
+
+    os << ncpp::containers::to_wstring(str);
+
+    return os;
+}
+#pragma endregion
+    
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -330,6 +423,8 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
 
 	return (os << (NCPP_FOREGROUND_BRIGHT_BACK_TEXT + input.content + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str());
 }
+
+
 /**
  *	Streams out F_cout_field_name.
  */
@@ -353,6 +448,9 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
 
 	return (os << (NCPP_FOREGROUND_CYAN_TEXT + input.content + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str());
 }
+
+
+
 /**
  *	Streams out F_cout_nanoseconds.
  */
@@ -364,69 +462,551 @@ NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
 	if (&os != &ncpp::cout)
 		return os << input.nanoseconds;
 
-	return (os << (NCPP_FOREGROUND_RED + ncpp::containers::T_to_string<char>(input.nanoseconds) + NCPP_RESET_CONSOLE_COLOR).c_str());
+	return (os << (NCPP_FOREGROUND_BLUE + ncpp::containers::T_to_string<char>(input.nanoseconds) + NCPP_RESET_CONSOLE_COLOR).c_str());
 }
 NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
 	ncpp::F_wostream& os,
-	const ncpp::F_wcout_nanoseconds& input
+	const ncpp::F_cout_nanoseconds& input
 ) {
 
 	if (&os != &ncpp::wcout)
 		return os << input.nanoseconds;
 
-	return (os << (NCPP_FOREGROUND_RED_TEXT + ncpp::containers::T_to_string<wchar_t>(input.nanoseconds) + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str());
+	return (os << (NCPP_FOREGROUND_BLUE_TEXT + ncpp::containers::T_to_string<wchar_t>(input.nanoseconds) + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str());
 }
-#pragma endregion
 
 
 
-#pragma region String
-/**
- *	Streams out containers::F_string.
- */
-template<class F_allocator__>
-ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl::basic_string<char, F_allocator__>& str)
-{
+template<typename F__>
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+    ncpp::F_ostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<F__>
+    >& input
+) {
 
-	os << str.c_str();
-
-	return os;
-}
-/**
- *    Streams out containers::F_string.
- */
-template<class F_allocator__>
-ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl::basic_string<wchar_t, F_allocator__>& str)
-{
-
-    os << to_string(str.c_str());
+    ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, F__>(os, { input.first.value, input.second });
 
     return os;
 }
 
-/**
- *	Streams out containers::F_string.
- */
-template<class F_allocator__>
-ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eastl::basic_string<wchar_t, F_allocator__>& str)
-{
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+    ncpp::F_ostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<ncpp::b8>
+    >& input
+) {
 
-	os << str.c_str();
+    os << NCPP_FOREGROUND_BRIGHT_RED;
 
-	return os;
+    os << input.first.value;
+
+    os << NCPP_RESET_CONSOLE_COLOR;
+
+    return os;
 }
-/**
- *    Streams out containers::F_string.
- */
-template<class F_allocator__>
-ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eastl::basic_string<char, F_allocator__>& str)
-{
 
-    os << to_wstring(str.c_str());
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+    ncpp::F_ostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<ncpp::f32>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_MAGNETA;
+
+    os << input.first.value;
+
+    os << NCPP_RESET_CONSOLE_COLOR;
+
+    return os;
+}
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+    ncpp::F_ostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<ncpp::f64>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_MAGNETA;
+
+    os << input.first.value;
+
+    os << NCPP_RESET_CONSOLE_COLOR;
+
+    return os;
+}
+
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+    ncpp::F_ostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<ncpp::i8>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_CYAN;
+
+    os << input.first.value;
+
+    os << NCPP_RESET_CONSOLE_COLOR;
+
+    return os;
+}
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+    ncpp::F_ostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<ncpp::i16>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_CYAN;
+
+    os << input.first.value;
+
+    os << NCPP_RESET_CONSOLE_COLOR;
+
+    return os;
+}
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+    ncpp::F_ostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<ncpp::i32>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_CYAN;
+
+    os << input.first.value;
+
+    os << NCPP_RESET_CONSOLE_COLOR;
+
+    return os;
+}
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+    ncpp::F_ostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<ncpp::i64>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_CYAN;
+
+    os << input.first.value;
+
+    os << NCPP_RESET_CONSOLE_COLOR;
+
+    return os;
+}
+
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+    ncpp::F_ostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<ncpp::u8>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_CYAN;
+
+    os << input.first.value;
+
+    os << NCPP_RESET_CONSOLE_COLOR;
+
+    return os;
+}
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+    ncpp::F_ostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<ncpp::u16>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_CYAN;
+
+    os << input.first.value;
+
+    os << NCPP_RESET_CONSOLE_COLOR;
+
+    return os;
+}
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+    ncpp::F_ostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<ncpp::u32>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_CYAN;
+
+    os << input.first.value;
+
+    os << NCPP_RESET_CONSOLE_COLOR;
+
+    return os;
+}
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+    ncpp::F_ostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<ncpp::u64>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_CYAN;
+
+    os << input.first.value;
+
+    os << NCPP_RESET_CONSOLE_COLOR;
+
+    return os;
+}
+
+template<typename F_allocator__>
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+    ncpp::F_ostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<eastl::basic_string<char, F_allocator__>>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_GREEN << '"';
+
+    os << input.first.value;
+
+    os << '"' << NCPP_RESET_CONSOLE_COLOR;
+
+    return os;
+}
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+    ncpp::F_ostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<const char*>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_GREEN << '"';
+
+    os << input.first.value;
+
+    os << '"' << NCPP_RESET_CONSOLE_COLOR;
+
+    return os;
+}
+
+template<typename F_allocator__>
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+    ncpp::F_ostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<eastl::basic_string<wchar_t, F_allocator__>>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_YELLOW << 'L' << '"';
+
+    os << input.first.value;
+
+    os << '"' << NCPP_RESET_CONSOLE_COLOR;
+
+    return os;
+}
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+    ncpp::F_ostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<const wchar_t*>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_YELLOW << 'L' << '"';
+
+    os << input.first.value;
+
+    os << '"' << NCPP_RESET_CONSOLE_COLOR;
+
+    return os;
+}
+
+template<typename F__>
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+    ncpp::F_ostream& os,
+    const ncpp::TF_cout_value<F__>& input
+) {
+
+    os << ncpp::TF_ostream_input<ncpp::TF_cout_value<F__>> { input, 0 };
+
+    return os;
+}
+
+
+
+template<typename F__>
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<F__>
+    >& input
+) {
+
+    ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, F__>(os, { input.first.value, input.second });
+
+    return os;
+}
+
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<ncpp::b8>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_RED_TEXT;
+
+    os << input.first.value;
+
+    os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+    return os;
+}
+
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<ncpp::f32>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_MAGNETA_TEXT;
+
+    os << input.first.value;
+
+    os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+    return os;
+}
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<ncpp::f64>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_MAGNETA_TEXT;
+
+    os << input.first.value;
+
+    os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+    return os;
+}
+
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<ncpp::i8>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
+
+    os << input.first.value;
+
+    os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+    return os;
+}
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<ncpp::i16>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
+
+    os << input.first.value;
+
+    os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+    return os;
+}
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<ncpp::i32>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
+
+    os << input.first.value;
+
+    os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+    return os;
+}
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<ncpp::i64>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
+
+    os << input.first.value;
+
+    os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+    return os;
+}
+
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<ncpp::u8>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
+
+    os << input.first.value;
+
+    os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+    return os;
+}
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<ncpp::u16>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
+
+    os << input.first.value;
+
+    os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+    return os;
+}
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<ncpp::u32>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
+
+    os << input.first.value;
+
+    os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+    return os;
+}
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<ncpp::u64>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
+
+    os << input.first.value;
+
+    os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+    return os;
+}
+
+template<typename F_allocator__>
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<eastl::basic_string<char, F_allocator__>>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_GREEN_TEXT << '"';
+
+    os << input.first.value;
+
+    os << '"' << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+    return os;
+}
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<const char*>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_GREEN_TEXT << '"';
+
+    os << input.first.value;
+
+    os << '"' << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+    return os;
+}
+
+template<typename F_allocator__>
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<eastl::basic_string<wchar_t, F_allocator__>>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_YELLOW_TEXT << L'L' << L'"';
+
+    os << input.first.value;
+
+    os << L'"' << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+    return os;
+}
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        ncpp::TF_cout_value<const wchar_t*>
+    >& input
+) {
+
+    os << NCPP_FOREGROUND_BRIGHT_YELLOW_TEXT << L'L' << L'"';
+
+    os << input.first.value;
+
+    os << L'"' << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+    return os;
+}
+
+template<typename F__>
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_cout_value<F__>& input
+) {
+
+    os << ncpp::TF_ostream_input<ncpp::TF_cout_value<F__>> { input, 0 };
 
     return os;
 }
 #pragma endregion
+    
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -492,7 +1072,7 @@ ncpp::F_ostream& operator << (
  *	Streams out eastl::vector with no tab.
  */
 template<typename F_item__, class F_allocator__>
-ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl::vector<F_item__, F_allocator__>& v)
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl::vector<F_item__, F_allocator__>& v)
 {
 
 	os << ncpp::TF_ostream_input<eastl::vector<F_item__, F_allocator__>> { v, 0 };
@@ -563,7 +1143,7 @@ ncpp::F_wostream& operator << (
  *    Streams out eastl::vector with no tab.
  */
 template<typename F_item__, class F_allocator__>
-ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eastl::vector<F_item__, F_allocator__>& v)
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eastl::vector<F_item__, F_allocator__>& v)
 {
 
     os << ncpp::TF_ostream_input<eastl::vector<F_item__, F_allocator__>> { v, 0 };
@@ -571,6 +1151,20 @@ ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eastl::vector<F_item_
     return os;
 }
 #pragma endregion
+    
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -638,7 +1232,7 @@ ncpp::F_ostream& operator << (
  *	Streams out std::initialier_list<T> with no tab.
  */
 template<typename F_item__>
-ncpp::F_ostream& operator << (ncpp::F_ostream& os, const std::initializer_list<F_item__>& v)
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (ncpp::F_ostream& os, const std::initializer_list<F_item__>& v)
 {
 
 	os << ncpp::TF_ostream_input<std::initializer_list<F_item__>> { v, 0 };
@@ -711,7 +1305,7 @@ ncpp::F_wostream& operator << (
  *    Streams out std::initialier_list<T> with no tab.
  */
 template<typename F_item__>
-ncpp::F_wostream& operator << (ncpp::F_wostream& os, const std::initializer_list<F_item__>& v)
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const std::initializer_list<F_item__>& v)
 {
 
     os << ncpp::TF_ostream_input<std::initializer_list<F_item__>> { v, 0 };
@@ -719,6 +1313,20 @@ ncpp::F_wostream& operator << (ncpp::F_wostream& os, const std::initializer_list
     return os;
 }
 #pragma endregion
+    
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -787,7 +1395,7 @@ ncpp::F_ostream& operator << (
  *	Streams out eastl::array<T, N> with no tab.
  */
 template<typename F_item__, ncpp::sz size__>
-ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl::array<F_item__, size__>& v)
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl::array<F_item__, size__>& v)
 {
 
 	os << ncpp::TF_ostream_input<eastl::array<F_item__, size__>> { v, 0 };
@@ -861,7 +1469,7 @@ ncpp::F_wostream& operator << (
  *    Streams out eastl::array<T, N> with no tab.
  */
 template<typename F_item__, ncpp::sz size__>
-ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eastl::array<F_item__, size__>& v)
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eastl::array<F_item__, size__>& v)
 {
 
     os << ncpp::TF_ostream_input<eastl::array<F_item__, size__>> { v, 0 };

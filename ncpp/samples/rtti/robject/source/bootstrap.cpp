@@ -90,7 +90,7 @@ public:
         std::enable_if_t<F_member_static_info__::is_static(), i32> = 0
     ) {
         
-        cout << "user pre reflect static member: " << F_member_static_info__::name() << " (" << F_member_static_info__::static_get() << ")" << " " << custom_params_p->message << std::endl;
+        cout << "user pre reflect static member: " << F_member_static_info__::name() << " (" << T_cout_value(F_member_static_info__::static_get()) << ")" << " " << custom_params_p->message << std::endl;
         
     }
     NCPP_ROBJECT_USER_POST_REFLECT_MEMBER(
@@ -98,7 +98,7 @@ public:
         std::enable_if_t<F_member_static_info__::is_static(), i32> = 0
     ) {
         
-        cout << "user post reflect static member: " << F_member_static_info__::name() << " (" << F_member_static_info__::static_get() << ")" << " " << custom_params_p->message << std::endl;
+        cout << "user post reflect static member: " << F_member_static_info__::name() << " (" << T_cout_value(F_member_static_info__::static_get()) << ")" << " " << custom_params_p->message << std::endl;
         
     }
     NCPP_ROBJECT_USER_PRE_REFLECT_BASE(

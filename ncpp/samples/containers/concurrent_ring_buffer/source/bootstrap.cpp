@@ -22,7 +22,7 @@ int main() {
             i32 value;
             concurrent_ring_buffer.try_pop(value);
 
-            cout << value << std::endl;
+            cout << T_cout_value(value) << std::endl;
 
         }
 
