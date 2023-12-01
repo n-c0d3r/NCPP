@@ -110,10 +110,8 @@ namespace ncpp {
                 
                 static inline TF_string<char, F_allocator__> to_string(long value)
                 {
-                        
-                    TF_string<char, F_allocator__> result;
-                    
-                    result.append_sprintf("%ld", value);
+
+                    TF_string<char, F_allocator__> result(typename TF_string<char, F_allocator__>::CtorSprintf(), "%ld", value);
                     
                     return eastl::move(result);
                 }
@@ -127,10 +125,8 @@ namespace ncpp {
                 
                 static inline TF_string<char, F_allocator__> to_string(long long value)
                 {
-                        
-                    TF_string<char, F_allocator__> result;
-                    
-                    result.append_sprintf("%lld", value);
+
+                    TF_string<char, F_allocator__> result(typename TF_string<char, F_allocator__>::CtorSprintf(), "%lld", value);
                     
                     return eastl::move(result);
                 }
@@ -144,10 +140,8 @@ namespace ncpp {
                 
                 static inline TF_string<char, F_allocator__> to_string(unsigned value)
                 {
-                        
-                    TF_string<char, F_allocator__> result;
-                    
-                    result.append_sprintf("%u", value);
+
+                    TF_string<char, F_allocator__> result(typename TF_string<char, F_allocator__>::CtorSprintf(), "%u", value);
                     
                     return eastl::move(result);
                 }
@@ -161,10 +155,8 @@ namespace ncpp {
                 
                 static inline TF_string<char, F_allocator__> to_string(unsigned long value)
                 {
-                        
-                    TF_string<char, F_allocator__> result;
-                    
-                    result.append_sprintf("%lu", value);
+
+                    TF_string<char, F_allocator__> result(typename TF_string<char, F_allocator__>::CtorSprintf(), "%lu", value);
                     
                     return eastl::move(result);
                 }
@@ -178,10 +170,8 @@ namespace ncpp {
                 
                 static inline TF_string<char, F_allocator__> to_string(unsigned long long value)
                 {
-                        
-                    TF_string<char, F_allocator__> result;
-                    
-                    result.append_sprintf("%llu", value);
+
+                    TF_string<char, F_allocator__> result(typename TF_string<char, F_allocator__>::CtorSprintf(), "%llu", value);
                     
                     return eastl::move(result);
                 }
@@ -195,10 +185,8 @@ namespace ncpp {
                 
                 static inline TF_string<char, F_allocator__> to_string(float value)
                 {
-                        
-                    TF_string<char, F_allocator__> result;
-                    
-                    result.append_sprintf("%f", value);
+
+                    TF_string<char, F_allocator__> result(typename TF_string<char, F_allocator__>::CtorSprintf(), "%f", value);
                     
                     return eastl::move(result);
                 }
@@ -212,10 +200,8 @@ namespace ncpp {
                 
                 static inline TF_string<char, F_allocator__> to_string(double value)
                 {
-                        
-                    TF_string<char, F_allocator__> result;
-                    
-                    result.append_sprintf("%f", value);
+
+                    TF_string<char, F_allocator__> result(typename TF_string<char, F_allocator__>::CtorSprintf(), "%f", value);
                     
                     return eastl::move(result);
                 }
@@ -229,10 +215,8 @@ namespace ncpp {
                 
                 static inline TF_string<char, F_allocator__> to_string(long double value)
                 {
-                        
-                    TF_string<char, F_allocator__> result;
-                    
-                    result.append_sprintf("%Lf", value);
+
+                    TF_string<char, F_allocator__> result(typename TF_string<char, F_allocator__>::CtorSprintf(), "%Lf", value);
                     
                     return eastl::move(result);
                 }
@@ -309,10 +293,8 @@ namespace ncpp {
                 
                 static inline TF_string<wchar_t, F_allocator__> to_string(int value)
                 {
-                        
-                    TF_string<wchar_t, F_allocator__> result;
-                    
-                    result.append_sprintf(L"%d", value);
+
+                    TF_string<wchar_t, F_allocator__> result(typename TF_string<wchar_t, F_allocator__>::CtorSprintf(), L"%d", value);
                     
                     return eastl::move(result);
                 }
@@ -326,10 +308,8 @@ namespace ncpp {
                 
                 static inline TF_string<wchar_t, F_allocator__> to_string(long value)
                 {
-                        
-                    TF_string<wchar_t, F_allocator__> result;
-                    
-                    result.append_sprintf(L"%ld", value);
+
+                    TF_string<wchar_t, F_allocator__> result(typename TF_string<wchar_t, F_allocator__>::CtorSprintf(), L"%ld", value);
                     
                     return eastl::move(result);
                 }
@@ -343,10 +323,8 @@ namespace ncpp {
                 
                 static inline TF_string<wchar_t, F_allocator__> to_string(long long value)
                 {
-                        
-                    TF_string<wchar_t, F_allocator__> result;
-                    
-                    result.append_sprintf(L"%lld", value);
+
+                    TF_string<wchar_t, F_allocator__> result(typename TF_string<wchar_t, F_allocator__>::CtorSprintf(), L"%lld", value);
                     
                     return eastl::move(result);
                 }
@@ -360,10 +338,8 @@ namespace ncpp {
                 
                 static inline TF_string<wchar_t, F_allocator__> to_string(unsigned value)
                 {
-                        
-                    TF_string<wchar_t, F_allocator__> result;
-                    
-                    result.append_sprintf(L"%u", value);
+
+                    TF_string<wchar_t, F_allocator__> result(typename TF_string<wchar_t, F_allocator__>::CtorSprintf(), L"%u", value);
                     
                     return eastl::move(result);
                 }
@@ -377,10 +353,8 @@ namespace ncpp {
                 
                 static inline TF_string<wchar_t, F_allocator__> to_string(unsigned long value)
                 {
-                        
-                    TF_string<wchar_t, F_allocator__> result;
-                    
-                    result.append_sprintf(L"%lu", value);
+
+                    TF_string<wchar_t, F_allocator__> result(typename TF_string<wchar_t, F_allocator__>::CtorSprintf(), L"%lu", value);
                     
                     return eastl::move(result);
                 }
@@ -394,10 +368,8 @@ namespace ncpp {
                 
                 static inline TF_string<wchar_t, F_allocator__> to_string(unsigned long long value)
                 {
-                        
-                    TF_string<wchar_t, F_allocator__> result;
-                    
-                    result.append_sprintf(L"%llu", value);
+
+                    TF_string<wchar_t, F_allocator__> result(typename TF_string<wchar_t, F_allocator__>::CtorSprintf(), L"%llu", value);
                     
                     return eastl::move(result);
                 }
@@ -411,10 +383,8 @@ namespace ncpp {
                 
                 static inline TF_string<wchar_t, F_allocator__> to_string(float value)
                 {
-                        
-                    TF_string<wchar_t, F_allocator__> result;
-                    
-                    result.append_sprintf(L"%f", value);
+
+                    TF_string<wchar_t, F_allocator__> result(typename TF_string<wchar_t, F_allocator__>::CtorSprintf(), L"%f", value);
                     
                     return eastl::move(result);
                 }
@@ -428,10 +398,8 @@ namespace ncpp {
                 
                 static inline TF_string<wchar_t, F_allocator__> to_string(double value)
                 {
-                        
-                    TF_string<wchar_t, F_allocator__> result;
-                    
-                    result.append_sprintf(L"%f", value);
+
+                    TF_string<wchar_t, F_allocator__> result(typename TF_string<wchar_t, F_allocator__>::CtorSprintf(), L"%f", value);
                     
                     return eastl::move(result);
                 }
@@ -445,10 +413,8 @@ namespace ncpp {
                 
                 static inline TF_string<wchar_t, F_allocator__> to_string(long double value)
                 {
-                        
-                    TF_string<wchar_t, F_allocator__> result;
-                    
-                    result.append_sprintf(L"%Lf", value);
+
+                    TF_string<wchar_t, F_allocator__> result(typename TF_string<wchar_t, F_allocator__>::CtorSprintf(), L"%Lf", value);
                     
                     return eastl::move(result);
                 }

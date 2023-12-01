@@ -1078,7 +1078,7 @@ ncpp::F_ostream& operator << (
 		return os;
 	}
 
-    
+    /*
 	os << NCPP_FOREGROUND_YELLOW << "vector" << NCPP_RESET_CONSOLE_COLOR
     << ncpp::F_cout_lowlight{"<"} << (NCPP_FOREGROUND_BLUE + ncpp::utilities::T_type_name<F_item__>() + NCPP_RESET_CONSOLE_COLOR).c_str()
     << ncpp::F_cout_lowlight{">"}
@@ -1105,7 +1105,7 @@ ncpp::F_ostream& operator << (
 
 		os << std::endl;
 
-	}
+	}*/
 
 	for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
 
