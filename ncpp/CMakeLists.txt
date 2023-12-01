@@ -158,7 +158,7 @@ set_target_properties(ncpp
 )
 
 target_precompile_headers(ncpp
-        PRIVATE
+    PRIVATE
         source/ncpp/prerequisites.hpp
 )
 
