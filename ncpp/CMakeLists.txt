@@ -163,6 +163,11 @@ target_include_directories(ncpp
         ${CMAKE_CURRENT_BINARY_DIR}/generated_files
 )
 
+target_precompile_headers(ncpp
+    PRIVATE
+        source/ncpp/prerequisites.hpp
+)
+
 target_link_libraries(ncpp
     PUBLIC
         EABase
