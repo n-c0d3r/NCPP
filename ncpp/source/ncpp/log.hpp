@@ -251,122 +251,98 @@ namespace ncpp {
 	/**
 	 *	Wraps content string inside to be streamed out with low light color.
 	 */
-	struct F_cout_lowlight {
+    template<typename F__>
+	struct TF_cout_lowlight {
 
-		containers::F_string content;
-
-        friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-                ncpp::F_ostream& os,
-                const ncpp::F_cout_lowlight& input
-        ) {
-
-            if (&os != &ncpp::cout)
-                return os << input.content;
-
-            return (os << (NCPP_FOREGROUND_BRIGHT_BACK + input.content + NCPP_RESET_CONSOLE_COLOR));
-        }
-        friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-                ncpp::F_wostream& os,
-                const ncpp::F_cout_lowlight& input
-        ) {
-
-            if (&os != &ncpp::wcout)
-                return os << input.content;
-
-            return (os << (NCPP_FOREGROUND_BRIGHT_BACK + input.content + NCPP_RESET_CONSOLE_COLOR));
-        }
-
-	};
-	/**
-	 *	Wraps content string inside to be streamed out with field name color.
-	 */
-	struct F_cout_field_name {
-
-		containers::F_string content;
+        F__ value;
 
         friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
                 ncpp::F_ostream& os,
-                const ncpp::F_cout_field_name& input
+                const TF_cout_lowlight& input
         ) {
 
             if (&os != &ncpp::cout)
-                return os << input.content.c_str();
+                os << NCPP_FOREGROUND_BRIGHT_BACK;
 
-            return (os << (NCPP_FOREGROUND_CYAN + input.content + NCPP_RESET_CONSOLE_COLOR).c_str());
+            os << input.value;
+
+            if (&os != &ncpp::cout)
+                os << NCPP_RESET_CONSOLE_COLOR;
+
+            return os;
         }
         friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
                 ncpp::F_wostream& os,
-                const ncpp::F_cout_field_name& input
+                const TF_cout_lowlight& input
         ) {
 
             if (&os != &ncpp::wcout)
-                return os << input.content;
+                os << NCPP_FOREGROUND_BRIGHT_BACK_TEXT;
 
-            return (os << (NCPP_FOREGROUND_CYAN + input.content + NCPP_RESET_CONSOLE_COLOR));
+            os << input.value;
+
+            if (&os != &ncpp::wcout)
+                os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+            return os;
         }
 
 	};
 
+    template<typename F__>
+    NCPP_FORCE_INLINE TF_cout_lowlight<std::remove_reference_t<std::remove_const_t<F__>>> T_cout_lowlight(F__ value){
+
+        return { value };
+    }
 
 
-	/**
-	 *	Wraps content string inside to be streamed out with low light color.
-	 */
-	struct F_wcout_lowlight {
 
-		containers::F_wstring content;
-
-        friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-            ncpp::F_ostream& os,
-            const ncpp::F_wcout_lowlight& input
-        ) {
-
-            if (&os != &ncpp::cout)
-                return os << input.content;
-
-            return (os << (NCPP_FOREGROUND_BRIGHT_BACK_TEXT + input.content + NCPP_RESET_CONSOLE_COLOR_TEXT));
-        }
-        friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-            ncpp::F_wostream& os,
-            const ncpp::F_wcout_lowlight& input
-        ) {
-
-            if (&os != &ncpp::wcout)
-                return os << input.content.c_str();
-
-            return (os << (NCPP_FOREGROUND_BRIGHT_BACK_TEXT + input.content + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str());
-        }
-
-	};
 	/**
 	 *	Wraps content string inside to be streamed out with field name color.
 	 */
-	struct F_wcout_field_name {
+    template<typename F__>
+    struct TF_cout_field_name {
 
-		containers::F_wstring content;
+        F__ value;
 
         friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
                 ncpp::F_ostream& os,
-                const ncpp::F_wcout_field_name& input
+                const TF_cout_field_name& input
         ) {
 
             if (&os != &ncpp::cout)
-                return os << input.content;
+                os << NCPP_FOREGROUND_BRIGHT_CYAN;
 
-            return (os << (NCPP_FOREGROUND_CYAN_TEXT + input.content + NCPP_RESET_CONSOLE_COLOR_TEXT));
+            os << input.value;
+
+            if (&os != &ncpp::cout)
+                os << NCPP_RESET_CONSOLE_COLOR;
+
+            return os;
         }
         friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
                 ncpp::F_wostream& os,
-                const ncpp::F_wcout_field_name& input
+                const TF_cout_field_name& input
         ) {
 
             if (&os != &ncpp::wcout)
-                return os << input.content.c_str();
+                os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
 
-            return (os << (NCPP_FOREGROUND_CYAN_TEXT + input.content + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str());
+            os << input.value;
+
+            if (&os != &ncpp::wcout)
+                os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+            return os;
         }
 
-	};
+    };
+
+    template<typename F__>
+    NCPP_FORCE_INLINE TF_cout_field_name<std::remove_reference_t<std::remove_const_t<F__>>> T_cout_field_name(F__ value){
+
+        return { value };
+    }
 
 
 
@@ -879,7 +855,11 @@ namespace ncpp {
                     if(&os == &cout)
                         os << NCPP_FOREGROUND_BRIGHT_GREEN;
 
+                    os << '"';
+
                     os << input.value;
+
+                    os << '"';
 
                     if(&os == &cout)
                         os << NCPP_RESET_CONSOLE_COLOR;
@@ -894,7 +874,11 @@ namespace ncpp {
                     if(&os == &wcout)
                         os << NCPP_FOREGROUND_BRIGHT_GREEN_TEXT;
 
+                    os << L'"';
+
                     os << input.value;
+
+                    os << L'"';
 
                     if(&os == &wcout)
                         os << NCPP_RESET_CONSOLE_COLOR_TEXT;
@@ -920,7 +904,16 @@ namespace ncpp {
                     if(&os == &cout)
                         os << NCPP_FOREGROUND_BRIGHT_YELLOW;
 
+                    os << 'L';
+
+                    if(&os == &cout)
+                        os << NCPP_FOREGROUND_BRIGHT_GREEN;
+
+                    os << '"';
+
                     os << input.value;
+
+                    os << '"';
 
                     if(&os == &cout)
                         os << NCPP_RESET_CONSOLE_COLOR;
@@ -935,7 +928,16 @@ namespace ncpp {
                     if(&os == &wcout)
                         os << NCPP_FOREGROUND_BRIGHT_YELLOW_TEXT;
 
+                    os << L'L';
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_BRIGHT_GREEN_TEXT;
+
+                    os << L'"';
+
                     os << input.value;
+
+                    os << L'"';
 
                     if(&os == &wcout)
                         os << NCPP_RESET_CONSOLE_COLOR_TEXT;
@@ -1017,7 +1019,7 @@ namespace ncpp {
     using TF_cout_value = typename internal::TF_cout_value_helper<F__>::F;
 
     template<typename F__>
-    NCPP_FORCE_INLINE TF_cout_value<F__> T_cout_value(const F__& value){
+    NCPP_FORCE_INLINE TF_cout_value<std::remove_reference_t<std::remove_const_t<F__>>> T_cout_value(F__ value){
 
         return { value };
     }
@@ -1142,19 +1144,19 @@ ncpp::F_ostream& operator << (
 
 	if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
 
-        os << ncpp::F_cout_lowlight{"..."};
+        os << ncpp::T_cout_lowlight("...");
 
 		return os;
 	}
 
 	os << NCPP_FOREGROUND_YELLOW << "vector" << NCPP_RESET_CONSOLE_COLOR
-    << ncpp::F_cout_lowlight{"<"} << (NCPP_FOREGROUND_BLUE + ncpp::utilities::T_type_name<F_item__>() + NCPP_RESET_CONSOLE_COLOR).c_str()
-    << ncpp::F_cout_lowlight{">"}
-    << ncpp::F_cout_lowlight{"("} << (NCPP_FOREGROUND_MAGNETA + ncpp::containers::T_to_string<char>(input.first.size()) + NCPP_RESET_CONSOLE_COLOR).c_str()
-    << ncpp::F_cout_lowlight{")"}
+    << ncpp::T_cout_lowlight("<") << (NCPP_FOREGROUND_BLUE + ncpp::utilities::T_type_name<F_item__>() + NCPP_RESET_CONSOLE_COLOR).c_str()
+    << ncpp::T_cout_lowlight(">")
+    << ncpp::T_cout_lowlight("(") << (NCPP_FOREGROUND_MAGNETA + ncpp::containers::T_to_string<char>(input.first.size()) + NCPP_RESET_CONSOLE_COLOR).c_str()
+    << ncpp::T_cout_lowlight(")")
     << " ";
     
-    os << ncpp::F_cout_lowlight{"{"} << std::endl;
+    os << ncpp::T_cout_lowlight("{") << std::endl;
 
 	for (ncpp::sz i = 0; i < input.first.size(); ++i) {
 
@@ -1164,12 +1166,12 @@ ncpp::F_ostream& operator << (
 
 		}
 
-        os << ncpp::F_cout_field_name{ncpp::containers::T_to_string<char>(i)} << ncpp::F_cout_lowlight{": "};
+        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<char>(i)) << ncpp::T_cout_lowlight(": ");
 
 		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(input.first[i]), input.second + 1 });
 
 		if (i != input.first.size() - 1)
-            os << ncpp::F_cout_lowlight{","};
+            os << ncpp::T_cout_lowlight(",");
 
 		os << std::endl;
 
@@ -1180,7 +1182,7 @@ ncpp::F_ostream& operator << (
 		os << " ";
 
 	}
-    os << ncpp::F_cout_lowlight{"}"};
+    os << ncpp::T_cout_lowlight("}");
 
 	return os;
 }
@@ -1213,19 +1215,19 @@ ncpp::F_wostream& operator << (
 
     if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
 
-        os << ncpp::F_wcout_lowlight{L"..."};
+        os << ncpp::T_cout_lowlight(L"...");
 
         return os;
     }
 
     os << NCPP_FOREGROUND_YELLOW_TEXT << L"vector" << NCPP_RESET_CONSOLE_COLOR_TEXT
-    << ncpp::F_wcout_lowlight{L"<"} << (NCPP_FOREGROUND_BLUE_TEXT + ncpp::utilities::T_type_name<F_item__, wchar_t>() + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str()
-    << ncpp::F_wcout_lowlight{L">"}
-    << ncpp::F_wcout_lowlight{L"("} << (NCPP_FOREGROUND_MAGNETA_TEXT + ncpp::containers::T_to_string<wchar_t>(input.first.size()) + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str()
-    << ncpp::F_wcout_lowlight{L")"}
+    << ncpp::T_cout_lowlight(L"<") << (NCPP_FOREGROUND_BLUE_TEXT + ncpp::utilities::T_type_name<F_item__, wchar_t>() + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str()
+    << ncpp::T_cout_lowlight(L">")
+    << ncpp::T_cout_lowlight(L"(") << (NCPP_FOREGROUND_MAGNETA_TEXT + ncpp::containers::T_to_string<wchar_t>(input.first.size()) + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str()
+    << ncpp::T_cout_lowlight(L")")
     << L" ";
 
-    os << ncpp::F_wcout_lowlight{L"{"} << std::endl;
+    os << ncpp::T_cout_lowlight(L"{") << std::endl;
 
     for (ncpp::sz i = 0; i < input.first.size(); ++i) {
 
@@ -1235,12 +1237,12 @@ ncpp::F_wostream& operator << (
 
         }
 
-        os << ncpp::F_wcout_field_name{ncpp::containers::T_to_string<wchar_t>(i)} << ncpp::F_wcout_lowlight{L": "};
+        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<wchar_t>(i)) << ncpp::T_cout_lowlight(L": ");
 
         ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(input.first[i]), input.second + 1 });
 
         if (i != input.first.size() - 1)
-            os << ncpp::F_wcout_lowlight{L","};
+            os << ncpp::T_cout_lowlight(L",");
 
         os << std::endl;
 
@@ -1251,7 +1253,7 @@ ncpp::F_wostream& operator << (
         os << L" ";
 
     }
-    os << ncpp::F_wcout_lowlight{L"}"};
+    os << ncpp::T_cout_lowlight(L"}");
 
     return os;
 }
@@ -1300,17 +1302,17 @@ ncpp::F_ostream& operator << (
 
 	if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
 
-        os << ncpp::F_cout_lowlight{"..."};
+        os << ncpp::T_cout_lowlight("...");
 
 		return os;
 	}
 
 	os << NCPP_FOREGROUND_YELLOW << "initializer_list" << NCPP_RESET_CONSOLE_COLOR
-    << ncpp::F_cout_lowlight{"<"} << (NCPP_FOREGROUND_BLUE + ncpp::utilities::T_type_name<F_item__>() + NCPP_RESET_CONSOLE_COLOR).c_str()
-    << ncpp::F_cout_lowlight{">"}
+    << ncpp::T_cout_lowlight("<") << (NCPP_FOREGROUND_BLUE + ncpp::utilities::T_type_name<F_item__>() + NCPP_RESET_CONSOLE_COLOR).c_str()
+    << ncpp::T_cout_lowlight(">")
     << " ";
 
-    os << ncpp::F_cout_lowlight{"{"} << std::endl;
+    os << ncpp::T_cout_lowlight("{") << std::endl;
 
 	auto j = input.first.begin();
 
@@ -1322,12 +1324,12 @@ ncpp::F_ostream& operator << (
 
 		}
 
-        os << ncpp::F_cout_field_name{ncpp::containers::T_to_string<char>(i)} << ncpp::F_cout_lowlight{": "};
+        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<char>(i)) << ncpp::T_cout_lowlight(": ");
 
 		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(*j), input.second + 1 });
 
 		if (i != input.first.size() - 1)
-            os << ncpp::F_cout_lowlight{","};
+            os << ncpp::T_cout_lowlight(",");
 
 		os << std::endl;
 
@@ -1340,7 +1342,7 @@ ncpp::F_ostream& operator << (
 		os << " ";
 
 	}
-    os << ncpp::F_cout_lowlight{"}"};
+    os << ncpp::T_cout_lowlight("}");
 
 	return os;
 }
@@ -1373,17 +1375,17 @@ ncpp::F_wostream& operator << (
 
     if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
 
-        os << ncpp::F_wcout_lowlight{L"..."};
+        os << ncpp::T_cout_lowlight(L"...");
 
         return os;
     }
 
     os << NCPP_FOREGROUND_YELLOW_TEXT << L"initializer_list" << NCPP_RESET_CONSOLE_COLOR_TEXT
-    << ncpp::F_wcout_lowlight{L"<"} << (NCPP_FOREGROUND_BLUE_TEXT + ncpp::utilities::T_type_name<F_item__, wchar_t>() + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str()
-    << ncpp::F_wcout_lowlight{L">"}
+    << ncpp::T_cout_lowlight(L"<") << (NCPP_FOREGROUND_BLUE_TEXT + ncpp::utilities::T_type_name<F_item__, wchar_t>() + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str()
+    << ncpp::T_cout_lowlight(L">")
     << L" ";
 
-    os << ncpp::F_wcout_lowlight{L"{"} << std::endl;
+    os << ncpp::T_cout_lowlight(L"{") << std::endl;
 
     auto j = input.first.begin();
 
@@ -1395,12 +1397,12 @@ ncpp::F_wostream& operator << (
 
         }
 
-        os << ncpp::F_wcout_field_name{ncpp::containers::T_to_string<wchar_t>(i)} << ncpp::F_wcout_lowlight{L": "};
+        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<wchar_t>(i)) << ncpp::T_cout_lowlight(L": ");
 
         ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(*j), input.second + 1 });
 
         if (i != input.first.size() - 1)
-            os << ncpp::F_wcout_lowlight{L","};
+            os << ncpp::T_cout_lowlight(L",");
 
         os << std::endl;
 
@@ -1413,7 +1415,7 @@ ncpp::F_wostream& operator << (
         os <<L" ";
 
     }
-    os << ncpp::F_wcout_lowlight{L"}"};
+    os << ncpp::T_cout_lowlight(L"}");
 
     return os;
 }
@@ -1462,19 +1464,19 @@ ncpp::F_ostream& operator << (
 
 	if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
 
-        os << ncpp::F_cout_lowlight{"..."};
+        os << ncpp::T_cout_lowlight("...");
 
 		return os;
 	}
 
 	os << NCPP_FOREGROUND_YELLOW << "array" << NCPP_RESET_CONSOLE_COLOR
-    << ncpp::F_cout_lowlight{"<"} << (NCPP_FOREGROUND_BLUE + ncpp::utilities::T_type_name<F_item__>() + NCPP_RESET_CONSOLE_COLOR).c_str()
-    << ncpp::F_cout_lowlight{","}
+    << ncpp::T_cout_lowlight("<") << (NCPP_FOREGROUND_BLUE + ncpp::utilities::T_type_name<F_item__>() + NCPP_RESET_CONSOLE_COLOR).c_str()
+    << ncpp::T_cout_lowlight(",")
     << (NCPP_FOREGROUND_MAGNETA + ncpp::containers::T_to_string<char>(input.first.size()) + NCPP_RESET_CONSOLE_COLOR).c_str()
-    << ncpp::F_cout_lowlight{">"}
+    << ncpp::T_cout_lowlight(">")
     << " ";
 
-    os << ncpp::F_cout_lowlight{"{"} << std::endl;
+    os << ncpp::T_cout_lowlight("{") << std::endl;
 
 
 
@@ -1486,12 +1488,12 @@ ncpp::F_ostream& operator << (
 
 		}
 
-        os << ncpp::F_cout_field_name{ncpp::containers::T_to_string<char>(i)} << ncpp::F_cout_lowlight{": "};
+        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<char>(i)) << ncpp::T_cout_lowlight(": ");
 
 		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(input.first[i]), input.second + 1 });
 
 		if (i != size__ - 1)
-            os << ncpp::F_cout_lowlight{","};
+            os << ncpp::T_cout_lowlight(",");
 
 		os << std::endl;
 
@@ -1503,7 +1505,7 @@ ncpp::F_ostream& operator << (
 
 	}
 
-    os << ncpp::F_cout_lowlight{"}"};
+    os << ncpp::T_cout_lowlight("}");
 
 	return os;
 }
@@ -1536,19 +1538,19 @@ ncpp::F_wostream& operator << (
 
     if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
 
-        os << ncpp::F_wcout_lowlight{L"..."};
+        os << ncpp::T_cout_lowlight(L"...");
 
         return os;
     }
 
     os << NCPP_FOREGROUND_YELLOW_TEXT << L"array" << NCPP_RESET_CONSOLE_COLOR_TEXT
-    << ncpp::F_wcout_lowlight{L"<"} << (NCPP_FOREGROUND_BLUE_TEXT + ncpp::utilities::T_type_name<F_item__, wchar_t>() + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str()
-    << ncpp::F_wcout_lowlight{L","}
+    << ncpp::T_cout_lowlight(L"<") << (NCPP_FOREGROUND_BLUE_TEXT + ncpp::utilities::T_type_name<F_item__, wchar_t>() + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str()
+    << ncpp::T_cout_lowlight(L",")
     << (NCPP_FOREGROUND_MAGNETA_TEXT + ncpp::containers::T_to_string<wchar_t>(input.first.size()) + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str()
-    << ncpp::F_wcout_lowlight{L">"}
+    << ncpp::T_cout_lowlight(L">")
     << L" ";
 
-    os << ncpp::F_wcout_lowlight{L"{"} << std::endl;
+    os << ncpp::T_cout_lowlight(L"{") << std::endl;
 
 
 
@@ -1560,12 +1562,12 @@ ncpp::F_wostream& operator << (
 
         }
 
-        os << ncpp::F_wcout_field_name{ncpp::containers::T_to_string<wchar_t>(i)} << ncpp::F_wcout_lowlight{L": "};
+        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<wchar_t>(i)) << ncpp::T_cout_lowlight(L": ");
 
         ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(input.first[i]), input.second + 1 });
 
         if (i != size__ - 1)
-            os << ncpp::F_wcout_lowlight{L","};
+            os << ncpp::T_cout_lowlight(L",");
 
         os << std::endl;
 
@@ -1577,7 +1579,7 @@ ncpp::F_wostream& operator << (
 
     }
 
-    os << ncpp::F_wcout_lowlight{L"}"};
+    os << ncpp::T_cout_lowlight(L"}");
 
     return os;
 }
