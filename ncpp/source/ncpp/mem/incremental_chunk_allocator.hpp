@@ -125,7 +125,7 @@ namespace ncpp {
 
 			}
 			inline F_incremental_chunk_allocator(const F_incremental_chunk_allocator& x) :
-				F_incremental_chunk_allocator(x.chunk_capacity_, x.min_chunk_count_, x.name_)
+				F_incremental_chunk_allocator(x.chunk_capacity_, x.min_chunk_count_, x.name())
 			{
 
 

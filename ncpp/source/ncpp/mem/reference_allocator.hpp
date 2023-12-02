@@ -85,18 +85,20 @@ namespace ncpp {
 
 
 		private:
-			F_target_allocator* target_allocator_p_;
+			F_target_allocator* target_allocator_p_ = 0;
 
 
 
 		public:
+            NCPP_FORCE_INLINE F_target_allocator* target_allocator_p() { return target_allocator_p_; }
+            NCPP_FORCE_INLINE const F_target_allocator* target_allocator_p() const { return target_allocator_p_; }
 			NCPP_FORCE_INLINE F_target_allocator& target_allocator() { return *target_allocator_p_; }
 			NCPP_FORCE_INLINE const F_target_allocator& target_allocator() const { return *target_allocator_p_; }
 
 
 
 		public:
-			inline TF_reference_allocator(const char* name = 0) :
+            NCPP_FORCE_INLINE TF_reference_allocator(const char* name = 0) :
 				TI_allocator<TF_reference_allocator<F_target_allocator__>>(name),
                 target_allocator_p_(F_config::get_default())
 			{
@@ -104,7 +106,7 @@ namespace ncpp {
 
 
 			}
-			inline TF_reference_allocator(F_target_allocator& target_allocator, const char* name = 0) :
+            NCPP_FORCE_INLINE TF_reference_allocator(F_target_allocator& target_allocator, const char* name = 0) :
 				TI_allocator<TF_reference_allocator<F_target_allocator__>>(name),
 				target_allocator_p_(&target_allocator)
 			{
@@ -112,13 +114,32 @@ namespace ncpp {
 
 
 			}
-			inline TF_reference_allocator(const TF_reference_allocator& x) :
-				TF_reference_allocator((F_target_allocator&)x.target_allocator_p_, x.name_)
+            NCPP_FORCE_INLINE TF_reference_allocator& operator = (F_target_allocator& target_allocator) noexcept
+            {
+
+                target_allocator_p_ = &target_allocator;
+
+                return *this;
+            }
+
+            NCPP_FORCE_INLINE TF_reference_allocator(const TF_reference_allocator& x) :
+				TF_reference_allocator((F_target_allocator&)x.target_allocator(), x.name())
 			{
 
 
 
 			}
+            NCPP_FORCE_INLINE TF_reference_allocator& operator = (const TF_reference_allocator& x) noexcept
+            {
+
+                target_allocator_p_ = (F_target_allocator*)x.target_allocator_p_;
+
+#ifdef NCPP_ENABLE_ALLOCATOR_NAME
+                set_name(x.name());
+#endif
+
+                return *this;
+            }
 
 			~TF_reference_allocator() {
 
@@ -130,19 +151,19 @@ namespace ncpp {
 		public:
 			NCPP_FORCE_INLINE void* allocate(sz n, int flags = 0) {
 
-				assert(target_allocator_p_ && "allocator reference is null, cant allocate memory");
+				assert(target_allocator_p_ && F_config::can_be_invalid && "allocator reference is null, cant allocate memory");
 
 				return target_allocator_p_->allocate(n, flags);
 			}
 			NCPP_FORCE_INLINE void* allocate(sz n, sz alignment, sz alignment_offset, int flags = 0) {
 
-				assert(target_allocator_p_ && "allocator reference is null, cant allocate memory");
+				assert(target_allocator_p_ && F_config::can_be_invalid && "allocator reference is null, cant allocate memory");
 
 				return target_allocator_p_->allocate(n, alignment, alignment_offset, flags);
 			}
 			NCPP_FORCE_INLINE void  deallocate(void* p, sz n = 1) {
 
-				assert(target_allocator_p_ && "allocator reference is null, cant deallocate memory");
+				assert(target_allocator_p_ && F_config::can_be_invalid && "allocator reference is null, cant deallocate memory");
 
 				target_allocator_p_->deallocate(p, n);
 			}

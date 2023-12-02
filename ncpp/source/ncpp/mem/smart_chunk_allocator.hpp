@@ -486,7 +486,7 @@ namespace ncpp {
 
 			}
 			inline TF_smart_chunk_allocator(const TF_smart_chunk_allocator& x) :
-				TF_smart_chunk_allocator(x.adaptor_p_, x.min_chunk_count_, x.name_)
+				TF_smart_chunk_allocator(x.adaptor_p_, x.min_chunk_count_, x.name())
 			{
 
 

@@ -117,6 +117,7 @@ namespace ncpp {
 
                 container_p_ = reinterpret_cast<const F_container*>(&other_container);
 
+                return *this;
             }
 
 
@@ -142,6 +143,7 @@ namespace ncpp {
 
                 container_p_ = reinterpret_cast<const F_container*>(other_view.container_p_());
 
+                return *this;
             }
 
 
@@ -169,6 +171,7 @@ namespace ncpp {
 
                 other_view.reset();
 
+                return *this;
             }
 
 

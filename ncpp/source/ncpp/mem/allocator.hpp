@@ -112,16 +112,19 @@ namespace ncpp {
 
 
 		protected:
-#ifdef NCPP_ENABLE_ALLOCATOR_NAME
+#ifdef NCPP_HAS_ALLOC_DEBUG_INFO
 			// \cond INTERNAL
 			const char* name_;
 			// \endcond
 #endif
 
 		public:
-#ifdef NCPP_ENABLE_ALLOCATOR_NAME
+#ifdef NCPP_HAS_ALLOC_DEBUG_INFO
 			NCPP_FORCE_INLINE const char* name() const { return name_; }
 			NCPP_FORCE_INLINE void set_name(const char* new_name) { name_ = new_name; }
+#else
+            NCPP_FORCE_INLINE const char* name() const { return 0; }
+            NCPP_FORCE_INLINE void set_name(const char* new_name) {  }
 #endif
 
 
@@ -130,7 +133,7 @@ namespace ncpp {
 			inline TI_allocator(const char* name = 0)
 			{
 
-#if NCPP_ENABLE_ALLOCATOR_NAME
+#ifdef NCPP_ENABLE_ALLOCATOR_NAME
 				name_ = name;
 #endif
 
@@ -138,7 +141,7 @@ namespace ncpp {
 			inline TI_allocator(const TI_allocator& x)
 			{
 
-#if NCPP_ENABLE_ALLOCATOR_NAME
+#ifdef NCPP_ENABLE_ALLOCATOR_NAME
 				name_ = x.name_;
 #endif
 
@@ -176,9 +179,13 @@ namespace ncpp {
 #endif
 
 #ifdef NCPP_HAS_ALLOC_DEBUG_INFO
+                    const char* name = 0;
+                    if(this)
+                        name = name_;
+
 					F_alloc_debug_info debug_info = {
 
-						name_,
+						name,
 						actual_size,
 						n,
 						is_default_alloc__
@@ -209,9 +216,13 @@ namespace ncpp {
 #endif
 
 #ifdef NCPP_HAS_ALLOC_DEBUG_INFO
-					F_alloc_debug_info debug_info = {
+                    const char* name = 0;
+                    if(this)
+                        name = name_;
 
-						name_,
+                    F_alloc_debug_info debug_info = {
+
+                        name,
 						actual_size,
 						n,
 						is_default_alloc__
@@ -260,9 +271,13 @@ namespace ncpp {
 #endif
 
 #ifdef NCPP_HAS_ALLOC_DEBUG_INFO
-					F_alloc_debug_info debug_info = {
+                    const char* name = 0;
+                    if(this)
+                        name = name_;
 
-						name_,
+                    F_alloc_debug_info debug_info = {
+
+                        name,
 						actual_size,
 						n,
 						is_default_alloc__
@@ -293,9 +308,13 @@ namespace ncpp {
 #endif
 
 #ifdef NCPP_HAS_ALLOC_DEBUG_INFO
-					F_alloc_debug_info debug_info = {
+                    const char* name = 0;
+                    if(this)
+                        name = name_;
 
-						name_,
+                    F_alloc_debug_info debug_info = {
+
+                        name,
 						actual_size,
 						n,
 						is_default_alloc__
