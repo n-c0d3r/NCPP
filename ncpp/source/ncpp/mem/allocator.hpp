@@ -132,10 +132,26 @@ namespace ncpp {
 
 		public:
 #ifdef NCPP_HAS_ALLOC_DEBUG_INFO
-			NCPP_FORCE_INLINE const char* name() const { return name_; }
+			NCPP_FORCE_INLINE const char* name() const {
+
+                static const char* default_name = "";
+
+                if(!this)
+                    return default_name;
+
+                if(!name_)
+                    return default_name;
+
+                return name_;
+            }
 			NCPP_FORCE_INLINE void set_name(const char* new_name) { name_ = new_name; }
 #else
-            NCPP_FORCE_INLINE const char* name() const { return 0; }
+            NCPP_FORCE_INLINE const char* name() const {
+
+                static const char* default_name = "";
+
+                return default_name;
+            }
             NCPP_FORCE_INLINE void set_name(const char* new_name) {  }
 #endif
 

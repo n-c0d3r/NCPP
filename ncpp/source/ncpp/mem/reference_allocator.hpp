@@ -81,6 +81,7 @@ namespace ncpp {
 		public:
 			using F_target_allocator = F_target_allocator__;
 			using F_config = F_config__;
+			using F_base = TI_allocator<TF_reference_allocator<F_target_allocator__>>;
 
 
 
@@ -143,7 +144,7 @@ namespace ncpp {
 
 			~TF_reference_allocator() {
 
-				reset();
+                unreference();
 			}
 
 
@@ -176,8 +177,6 @@ namespace ncpp {
 
 				target_allocator_p_->reset();
 
-				target_allocator_p_ = 0;
-
 			}
 			NCPP_FORCE_INLINE void clear() {
 
@@ -188,6 +187,13 @@ namespace ncpp {
 				target_allocator_p_->clear();
 
 			}
+
+            NCPP_FORCE_INLINE void unreference() {
+
+
+                target_allocator_p_ = F_config::get_default();
+
+            }
 
 		};
 
