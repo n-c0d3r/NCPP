@@ -9,7 +9,7 @@ int main() {
 
 	{
 
-		containers::TF_concurrent_ring_buffer<i32> concurrent_ring_buffer(128);
+		TF_concurrent_ring_buffer<i32> concurrent_ring_buffer(128);
 
         for(i32 i = 0; i < 5; ++i) {
 
