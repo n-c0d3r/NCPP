@@ -123,7 +123,7 @@ namespace ncpp {
 
 			};
 
-			using F_allocator = mem::F_default_allocator;
+			using F_allocator = mem::F_gtemp_allocator;
 
 		};
 
