@@ -186,6 +186,7 @@ namespace ncpp {}
 
 #if _HAS_CXX20
 #include <coroutine>
+#include <string_view>
 #endif
 
 #pragma endregion
