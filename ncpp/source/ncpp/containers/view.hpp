@@ -35,6 +35,7 @@
 #include <ncpp/containers/binding_helper.hpp>
 #include <ncpp/mem/general_allocator.hpp>
 #include <ncpp/utilities/iterator.hpp>
+#include <ncpp/iostream.hpp>
 
 #pragma endregion
 
@@ -281,6 +282,14 @@ namespace ncpp {
             NCPP_FORCE_INLINE void reset() noexcept {
 
                 container_p_ = 0;
+            }
+
+
+        public:
+            template<typename F_ostream__, std::enable_if_t<utilities::T_is_ostreamable_v<F_ostream__, F_container>, i32> = 0>
+            friend NCPP_FORCE_INLINE F_ostream__& operator << (F_ostream__& os, const TF_view& view) {
+
+                return (os << (*view.container_p_));
             }
 
         };
