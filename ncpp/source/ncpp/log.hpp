@@ -960,12 +960,20 @@ namespace ncpp {
                 ) {
 
                     if(&os == &cout)
-                        if constexpr (std::is_same_v<F_char__,char>)
-                            os << NCPP_FOREGROUND_BRIGHT_GREEN;
-                        else
+                        if constexpr (std::is_same_v<F_char__,wchar_t>)
                             os << NCPP_FOREGROUND_BRIGHT_YELLOW;
 
+                    if constexpr (std::is_same_v<F_char__,wchar_t>)
+                        os << 'L';
+
+                    if(&os == &cout)
+                        os << NCPP_FOREGROUND_BRIGHT_GREEN;
+
+                    os << '"';
+
                     os << input.value;
+
+                    os << '"';
 
                     if(&os == &cout)
                         os << NCPP_RESET_CONSOLE_COLOR;
@@ -978,12 +986,20 @@ namespace ncpp {
                 ) {
 
                     if(&os == &wcout)
-                        if constexpr (std::is_same_v<F_char__,char>)
-                            os << NCPP_FOREGROUND_BRIGHT_GREEN_TEXT;
-                        else
+                        if constexpr (std::is_same_v<F_char__,wchar_t>)
                             os << NCPP_FOREGROUND_BRIGHT_YELLOW_TEXT;
 
+                    if constexpr (std::is_same_v<F_char__,wchar_t>)
+                        os << L'L';
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_BRIGHT_GREEN_TEXT;
+
+                    os << L'"';
+
                     os << input.value;
+
+                    os << L'"';
 
                     if(&os == &wcout)
                         os << NCPP_RESET_CONSOLE_COLOR_TEXT;
