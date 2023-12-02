@@ -34,7 +34,7 @@
 
 #include <ncpp/utilities/.hpp>
 #include <ncpp/mem/default_allocator.hpp>
-#include <ncpp/mem/gtemp_allocator.hpp>
+#include <ncpp/mem/general_allocator.hpp>
 #include <ncpp/containers/eastl_containers.hpp>
 #include <ncpp/containers/binding_helper.hpp>
 
@@ -190,7 +190,7 @@ namespace ncpp {
 		};
 
         template<typename F_item__>
-        using TG_ring_buffer = TF_ring_buffer<F_item__, mem::F_gtemp_allocator>;
+        using TG_ring_buffer = TF_ring_buffer<F_item__, mem::F_general_allocator>;
 
 	}
 

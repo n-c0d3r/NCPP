@@ -33,7 +33,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/mem/default_allocator.hpp>
-#include <ncpp/mem/gtemp_allocator.hpp>
+#include <ncpp/mem/general_allocator.hpp>
 
 #pragma endregion
 
@@ -68,7 +68,7 @@ namespace ncpp {
         using F_text = F_wstring;
 
         template<typename F_char__ = char>
-        using TG_string = eastl::basic_string<F_char__, mem::F_gtemp_allocator>;
+        using TG_string = eastl::basic_string<F_char__, mem::F_general_allocator>;
         using G_string = TG_string<char>;
         using G_wstring = TG_string<wchar_t>;
         using G_name = G_string;
@@ -457,58 +457,58 @@ namespace ncpp {
             { return T_to_string<wchar_t, mem::F_default_allocator, const wchar_t*>(value); }
 
         NCPP_FORCE_INLINE G_string G_to_string(int value)
-            { return T_to_string<char, mem::F_gtemp_allocator>(value); }
+            { return T_to_string<char, mem::F_general_allocator>(value); }
         NCPP_FORCE_INLINE G_string G_to_string(long value)
-            { return T_to_string<char, mem::F_gtemp_allocator>(value); }
+            { return T_to_string<char, mem::F_general_allocator>(value); }
         NCPP_FORCE_INLINE G_string G_to_string(long long value)
-            { return T_to_string<char, mem::F_gtemp_allocator>(value); }
+            { return T_to_string<char, mem::F_general_allocator>(value); }
         NCPP_FORCE_INLINE G_string G_to_string(unsigned value)
-            { return T_to_string<char, mem::F_gtemp_allocator>(value); }
+            { return T_to_string<char, mem::F_general_allocator>(value); }
         NCPP_FORCE_INLINE G_string G_to_string(unsigned long value)
-            { return T_to_string<char, mem::F_gtemp_allocator>(value); }
+            { return T_to_string<char, mem::F_general_allocator>(value); }
         NCPP_FORCE_INLINE G_string G_to_string(unsigned long long value)
-            { return T_to_string<char, mem::F_gtemp_allocator>(value); }
+            { return T_to_string<char, mem::F_general_allocator>(value); }
         NCPP_FORCE_INLINE G_string G_to_string(float value)
-            { return T_to_string<char, mem::F_gtemp_allocator>(value); }
+            { return T_to_string<char, mem::F_general_allocator>(value); }
         NCPP_FORCE_INLINE G_string G_to_string(double value)
-            { return T_to_string<char, mem::F_gtemp_allocator>(value); }
+            { return T_to_string<char, mem::F_general_allocator>(value); }
         NCPP_FORCE_INLINE G_string G_to_string(long double value)
-            { return T_to_string<char, mem::F_gtemp_allocator>(value); }
+            { return T_to_string<char, mem::F_general_allocator>(value); }
         NCPP_FORCE_INLINE G_string G_to_string(const TG_string<wchar_t>& value)
-            { return T_to_string<char, mem::F_gtemp_allocator, G_wstring>(value); }
+            { return T_to_string<char, mem::F_general_allocator, G_wstring>(value); }
         NCPP_FORCE_INLINE G_string G_to_string(const wchar_t* value)
-            { return T_to_string<char, mem::F_gtemp_allocator, const wchar_t*>(value); }
+            { return T_to_string<char, mem::F_general_allocator, const wchar_t*>(value); }
         NCPP_FORCE_INLINE G_string G_to_string(const TG_string<char>& value)
-            { return T_to_string<char, mem::F_gtemp_allocator, G_string>(value); }
+            { return T_to_string<char, mem::F_general_allocator, G_string>(value); }
         NCPP_FORCE_INLINE G_string G_to_string(const char* value)
-            { return T_to_string<char, mem::F_gtemp_allocator, const char*>(value); }
+            { return T_to_string<char, mem::F_general_allocator, const char*>(value); }
 
         NCPP_FORCE_INLINE G_wstring G_to_wstring(int value)
-            { return T_to_string<wchar_t, mem::F_gtemp_allocator>(value); }
+            { return T_to_string<wchar_t, mem::F_general_allocator>(value); }
         NCPP_FORCE_INLINE G_wstring G_to_wstring(long value)
-            { return T_to_string<wchar_t, mem::F_gtemp_allocator>(value); }
+            { return T_to_string<wchar_t, mem::F_general_allocator>(value); }
         NCPP_FORCE_INLINE G_wstring G_to_wstring(long long value)
-            { return T_to_string<wchar_t, mem::F_gtemp_allocator>(value); }
+            { return T_to_string<wchar_t, mem::F_general_allocator>(value); }
         NCPP_FORCE_INLINE G_wstring G_to_wstring(unsigned value)
-            { return T_to_string<wchar_t, mem::F_gtemp_allocator>(value); }
+            { return T_to_string<wchar_t, mem::F_general_allocator>(value); }
         NCPP_FORCE_INLINE G_wstring G_to_wstring(unsigned long value)
-            { return T_to_string<wchar_t, mem::F_gtemp_allocator>(value); }
+            { return T_to_string<wchar_t, mem::F_general_allocator>(value); }
         NCPP_FORCE_INLINE G_wstring G_to_wstring(unsigned long long value)
-            { return T_to_string<wchar_t, mem::F_gtemp_allocator>(value); }
+            { return T_to_string<wchar_t, mem::F_general_allocator>(value); }
         NCPP_FORCE_INLINE G_wstring G_to_wstring(float value)
-            { return T_to_string<wchar_t, mem::F_gtemp_allocator>(value); }
+            { return T_to_string<wchar_t, mem::F_general_allocator>(value); }
         NCPP_FORCE_INLINE G_wstring G_to_wstring(double value)
-            { return T_to_string<wchar_t, mem::F_gtemp_allocator>(value); }
+            { return T_to_string<wchar_t, mem::F_general_allocator>(value); }
         NCPP_FORCE_INLINE G_wstring G_to_wstring(long double value)
-            { return T_to_string<wchar_t, mem::F_gtemp_allocator>(value); }
+            { return T_to_string<wchar_t, mem::F_general_allocator>(value); }
         NCPP_FORCE_INLINE G_wstring G_to_wstring(const TG_string<char>& value)
-            { return T_to_string<wchar_t, mem::F_gtemp_allocator, G_string>(value); }
+            { return T_to_string<wchar_t, mem::F_general_allocator, G_string>(value); }
         NCPP_FORCE_INLINE G_wstring G_to_wstring(const char* value)
-            { return T_to_string<wchar_t, mem::F_gtemp_allocator, const char*>(value); }
+            { return T_to_string<wchar_t, mem::F_general_allocator, const char*>(value); }
         NCPP_FORCE_INLINE G_wstring G_to_wstring(const TG_string<wchar_t>& value)
-            { return T_to_string<wchar_t, mem::F_gtemp_allocator, G_wstring>(value); }
+            { return T_to_string<wchar_t, mem::F_general_allocator, G_wstring>(value); }
         NCPP_FORCE_INLINE G_wstring G_to_wstring(const wchar_t* value)
-            { return T_to_string<wchar_t, mem::F_gtemp_allocator, const wchar_t*>(value); }
+            { return T_to_string<wchar_t, mem::F_general_allocator, const wchar_t*>(value); }
 
 
 
@@ -518,17 +518,17 @@ namespace ncpp {
         template<typename F_item__, typename F_allocator__ = mem::F_default_allocator>
         using TF_vector = eastl::vector<F_item__, F_allocator__>;
         template<typename F_item__>
-        using TG_vector = eastl::vector<F_item__, mem::F_gtemp_allocator>;
+        using TG_vector = eastl::vector<F_item__, mem::F_general_allocator>;
 
         template<typename F_item__, typename F_allocator__ = mem::F_default_allocator>
         using TF_list = eastl::list<F_item__, F_allocator__>;
         template<typename F_item__>
-        using TG_list = eastl::list<F_item__, mem::F_gtemp_allocator>;
+        using TG_list = eastl::list<F_item__, mem::F_general_allocator>;
 
         template<typename F_item__, typename F_allocator__ = mem::F_default_allocator>
         using TF_deque = eastl::deque<F_item__, F_allocator__>;
         template<typename F_item__>
-        using TG_deque = eastl::deque<F_item__, mem::F_gtemp_allocator>;
+        using TG_deque = eastl::deque<F_item__, mem::F_general_allocator>;
 
 
 
@@ -583,22 +583,22 @@ namespace ncpp {
         template<typename F_item__, typename F_compare__ = eastl::less<F_item__>, typename F_allocator__ = mem::F_default_allocator>
         using TF_set = eastl::set<F_item__, F_compare__, F_allocator__>;
         template<typename F_item__, typename F_compare__ = eastl::less<F_item__>>
-        using TG_set = eastl::set<F_item__, F_compare__, mem::F_gtemp_allocator>;
+        using TG_set = eastl::set<F_item__, F_compare__, mem::F_general_allocator>;
 
         template<typename F_key__, typename F_value__, typename F_compare__ = eastl::less<F_key__>, typename F_allocator__ = mem::F_default_allocator>
         using TF_map = eastl::map<F_key__, F_value__, F_compare__, F_allocator__>;
         template<typename F_key__, typename F_value__, typename F_compare__ = eastl::less<F_key__>>
-        using TG_map = eastl::map<F_key__, F_value__, F_compare__, mem::F_gtemp_allocator>;
+        using TG_map = eastl::map<F_key__, F_value__, F_compare__, mem::F_general_allocator>;
 
         template<typename F_item__, typename F_hash__ = TF_hash<F_item__>, typename F_predicate__ = eastl::equal_to<F_item__>, typename F_allocator__ = mem::F_default_allocator>
         using TF_unordered_set = eastl::unordered_set<F_item__, F_hash__, F_predicate__, F_allocator__>;
         template<typename F_item__, typename F_hash__ = TF_hash<F_item__>, typename F_predicate__ = eastl::equal_to<F_item__>>
-        using TG_unordered_set = eastl::unordered_set<F_item__, F_hash__, F_predicate__, mem::F_gtemp_allocator>;
+        using TG_unordered_set = eastl::unordered_set<F_item__, F_hash__, F_predicate__, mem::F_general_allocator>;
 
         template<typename F_key__, typename F_value__, typename F_hash__ = TF_hash<F_key__>, typename F_predicate__ = eastl::equal_to<F_key__>, typename F_allocator__ = mem::F_default_allocator>
         using TF_unordered_map = eastl::unordered_map<F_key__, F_value__, F_hash__, F_predicate__, F_allocator__>;
         template<typename F_key__, typename F_value__, typename F_hash__ = TF_hash<F_key__>, typename F_predicate__ = eastl::equal_to<F_key__>>
-        using TG_unordered_map = eastl::unordered_map<F_key__, F_value__, F_hash__, F_predicate__, mem::F_gtemp_allocator>;
+        using TG_unordered_map = eastl::unordered_map<F_key__, F_value__, F_hash__, F_predicate__, mem::F_general_allocator>;
 
 
 

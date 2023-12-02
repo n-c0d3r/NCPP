@@ -1,7 +1,7 @@
 #pragma once
 
-/** @file ncpp/mem/gtemp_allocator.hpp
-*	@brief Implements gtemp allocator.
+/** @file ncpp/mem/general_allocator.hpp
+*	@brief Implements general allocator.
 */
 
 
@@ -32,7 +32,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <ncpp/gtemp_allocator_config.hpp>
+#include <ncpp/general_allocator_config.hpp>
 
 #pragma endregion
 
@@ -41,8 +41,8 @@
 namespace ncpp::mem {
 
     template<typename F_allocator__>
-    static constexpr b8 T_can_be_gtemp_allocator_v = (sizeof(F_allocator__) == sizeof(F_default_reference_allocator));
+    static constexpr b8 T_can_be_general_allocator_v = (sizeof(F_allocator__) == sizeof(F_default_reference_allocator));
 
-    static_assert(T_can_be_gtemp_allocator_v<F_gtemp_allocator>, "GTemp allocator's size must be equal to the size of F_default_reference_allocator");
+    static_assert(T_can_be_general_allocator_v<F_general_allocator>, "GTemp allocator's size must be equal to the size of F_default_reference_allocator");
 
 }

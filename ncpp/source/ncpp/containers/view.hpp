@@ -33,7 +33,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/containers/binding_helper.hpp>
-#include <ncpp/mem/gtemp_allocator.hpp>
+#include <ncpp/mem/general_allocator.hpp>
 
 #pragma endregion
 
@@ -60,7 +60,7 @@ namespace ncpp {
         template<typename F1__, typename F2__>
         static constexpr b8 T_is_same_viewable_container_v = (
             T_is_same_container_v<F1__, F2__>
-            && mem::T_can_be_gtemp_allocator_v<
+            && mem::T_can_be_general_allocator_v<
                 TF_container_allocator<F1__>
             >
         );
@@ -74,7 +74,7 @@ namespace ncpp {
             using F_container = F_container__;
 
             static_assert(
-                mem::T_can_be_gtemp_allocator_v<
+                mem::T_can_be_general_allocator_v<
                     TF_container_allocator<F_container__>
                 >,
                 "non-viewable container"
@@ -227,7 +227,7 @@ namespace ncpp {
         template<
             typename F_container__,
             std::enable_if_t<
-                mem::T_can_be_gtemp_allocator_v<
+                mem::T_can_be_general_allocator_v<
                     TF_container_allocator<F_container__>
                 >,
                 i32
