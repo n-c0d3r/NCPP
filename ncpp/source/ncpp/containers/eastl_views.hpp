@@ -1,7 +1,7 @@
 #pragma once
 
-/** @file ncpp/containers/binding_helper.hpp
-*	@brief Implements binding helper.
+/** @file ncpp/containers/eastl_views.hpp
+*	@brief Typedefs eastl views.
 */
 
 
@@ -28,6 +28,14 @@
 
 #include <ncpp/prerequisites.hpp>
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#include <ncpp/containers/eastl_containers.hpp>
+#include <ncpp/containers/eastl_bindings.hpp>
+#include <ncpp/containers/view.hpp>
+
 #pragma endregion
 
 
@@ -49,60 +57,59 @@
 namespace ncpp {
 
 	namespace containers {
+        
+        ////////////////////////////////////////////////////////////////////////////////////
+        //  string
+        ////////////////////////////////////////////////////////////////////////////////////
+        template<typename F_char__ = char>
+        using TV_string = TF_view<TG_string<F_char__>>;
+        using V_string = TV_string<char>;
+        using V_wstring = TV_string<wchar_t>;
+        using V_name = V_string;
+        using V_text = V_wstring;
 
-        namespace internal {
 
-            template<typename F__>
-            struct TF_allocator_binding_helper {
 
-                using F_container = void;
+        ////////////////////////////////////////////////////////////////////////////////////
+        //  list, vector, deque
+        ////////////////////////////////////////////////////////////////////////////////////
+        template<typename F_item__>
+        using TV_vector = TF_view<TG_vector<F_item__>>;
 
-                using F_allocator = void;
+        template<typename F_item__>
+        using TV_list = TF_view<TG_list<F_item__>>;
 
-                template<typename F_new_allocator__>
-                using TF_bind_new_allocator = void;
+        template<typename F_item__>
+        using TV_deque = TF_view<TG_deque<F_item__>>;
+    
 
-            };
 
-        }
+        ////////////////////////////////////////////////////////////////////////////////////
+        //  set, map, unordered set, unordered map
+        ////////////////////////////////////////////////////////////////////////////////////
+        template<typename F_item__, typename F_compare__ = eastl::less<F_item__>>
+        using TV_set = TF_view<TG_set<F_item__, F_compare__>>;
 
-        template<typename F__>
-        using TF_container_allocator = typename internal::TF_allocator_binding_helper<F__>::F_allocator;
+        template<typename F_key__, typename F_value__, typename F_compare__ = eastl::less<F_key__>>
+        using TV_map = TF_view<TG_map<F_key__, F_value__, F_compare__>>;
 
-        template<typename F__, typename F_new_allocator__>
-        using TF_bind_container_allocator = typename internal::TF_allocator_binding_helper<F__>::template TF_bind_new_allocator<F_new_allocator__>;
+        template<typename F_item__, typename F_hash__ = TF_hash<F_item__>, typename F_predicate__ = eastl::equal_to<F_item__>>
+        using TV_unordered_set = TF_view<TG_unordered_set<F_item__, F_hash__, F_predicate__>>;
 
-        template<typename F1__, typename F2__>
-        static constexpr b8 T_is_same_container_v = std::is_same_v<
-            F1__,
-            TF_bind_container_allocator<F2__, TF_container_allocator<F1__>>
-        >;
+        template<typename F_key__, typename F_value__, typename F_hash__ = TF_hash<F_key__>, typename F_predicate__ = eastl::equal_to<F_key__>>
+        using TV_unordered_map = TF_view<TG_unordered_map<F_key__, F_value__, F_hash__, F_predicate__>>;
+
+
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        //  queue, stack
+        ////////////////////////////////////////////////////////////////////////////////////
+        template<typename F_item__, typename F_deque__ = TF_deque<F_item__>>
+        using TV_queue = TF_view<TG_queue<F_item__, F_deque__>>;
+
+        template<typename F_item__, typename F_vector__ = TF_vector<F_item__>>
+        using TV_stack = TF_view<TG_stack<F_item__, F_vector__>>;
 
     }
 
-}
-
-#define NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(ContainerType, AllocatorType, NewAllocatorContainerType, ...) \
-namespace ncpp {\
-    \
-    namespace containers {\
-        \
-        namespace internal {\
-            \
-            template<__VA_ARGS__>\
-            struct TF_allocator_binding_helper<ContainerType> {\
-                \
-                using F_container = ContainerType;\
-                \
-                using F_allocator = AllocatorType;\
-                \
-                template<typename F_new_allocator__>\
-                using TF_bind_new_allocator = NewAllocatorContainerType;\
-                \
-            };\
-            \
-        }\
-        \
-    }\
-    \
 }

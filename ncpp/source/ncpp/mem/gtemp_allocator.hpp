@@ -40,6 +40,9 @@
 
 namespace ncpp::mem {
 
-    static_assert(sizeof(F_gtemp_allocator) == sizeof(F_default_reference_allocator), "GTemp allocator's size must be equal to the size of F_default_reference_allocator");
+    template<typename F_allocator__>
+    static constexpr b8 T_can_be_gtemp_allocator_v = (sizeof(F_allocator__) == sizeof(F_default_reference_allocator));
+
+    static_assert(T_can_be_gtemp_allocator_v<F_gtemp_allocator>, "GTemp allocator's size must be equal to the size of F_default_reference_allocator");
 
 }
