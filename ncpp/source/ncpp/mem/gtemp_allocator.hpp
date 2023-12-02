@@ -35,3 +35,11 @@
 #include <ncpp/gtemp_allocator_config.hpp>
 
 #pragma endregion
+
+
+
+namespace ncpp::mem {
+
+    static_assert(sizeof(F_gtemp_allocator) == sizeof(F_default_reference_allocator), "GTemp allocator's size must be equal to the size of F_default_reference_allocator");
+
+}

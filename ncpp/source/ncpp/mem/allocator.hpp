@@ -112,13 +112,17 @@ namespace ncpp {
 
 
 		protected:
+#ifdef NCPP_ENABLE_ALLOCATOR_NAME
 			// \cond INTERNAL
 			const char* name_;
 			// \endcond
+#endif
 
 		public:
+#ifdef NCPP_ENABLE_ALLOCATOR_NAME
 			NCPP_FORCE_INLINE const char* name() const { return name_; }
 			NCPP_FORCE_INLINE void set_name(const char* new_name) { name_ = new_name; }
+#endif
 
 
 

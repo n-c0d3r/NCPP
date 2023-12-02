@@ -33,6 +33,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/mem/allocator.hpp>
+#include <ncpp/mem/default_allocator.hpp>
 
 #pragma endregion
 
@@ -57,13 +58,14 @@ namespace ncpp {
 	namespace mem {
 
         template<typename F_target_allocator__>
-        class TF_default_reference_allocator_getter {
+        class TF_default_reference_allocator_config {
 
         public:
             static constexpr F_target_allocator__* get_default() {
 
                 return 0;
             }
+            static constexpr b8 can_be_invalid = !std::is_same_v<F_target_allocator__, F_default_allocator>;
 
         };
 
@@ -73,12 +75,12 @@ namespace ncpp {
 		 *	An allocator using another allocator to allocate and deallocate memory by referenceing into the target allocator reference.
 		 *	@param <F_target_allocator__> the target allocator to use.
 		 */
-		template<typename F_target_allocator__, class F_default_allocator_getter__ = TF_default_reference_allocator_getter<F_target_allocator__>>
+		template<typename F_target_allocator__ = F_default_allocator, class F_config__ = TF_default_reference_allocator_config<F_target_allocator__>>
 		class TF_reference_allocator : public TI_allocator<TF_reference_allocator<F_target_allocator__>> {
 
 		public:
 			using F_target_allocator = F_target_allocator__;
-			using F_default_allocator_getter = F_default_allocator_getter__;
+			using F_config = F_config__;
 
 
 
@@ -96,7 +98,7 @@ namespace ncpp {
 		public:
 			inline TF_reference_allocator(const char* name = 0) :
 				TI_allocator<TF_reference_allocator<F_target_allocator__>>(name),
-                target_allocator_p_(F_default_allocator_getter::get_default())
+                target_allocator_p_(F_config::get_default())
 			{
 
 
@@ -111,7 +113,7 @@ namespace ncpp {
 
 			}
 			inline TF_reference_allocator(const TF_reference_allocator& x) :
-				TF_reference_allocator(x.target_allocator(), x.name_)
+				TF_reference_allocator((F_target_allocator&)x.target_allocator_p_, x.name_)
 			{
 
 
@@ -147,8 +149,9 @@ namespace ncpp {
 
 			NCPP_FORCE_INLINE void reset() {
 
-				if (!target_allocator_p_)
-					return;
+                if constexpr (F_config::can_be_invalid)
+                    if (!target_allocator_p_)
+                        return;
 
 				target_allocator_p_->reset();
 
@@ -157,14 +160,17 @@ namespace ncpp {
 			}
 			NCPP_FORCE_INLINE void clear() {
 
-				if (!target_allocator_p_)
-					return;
+                if constexpr (F_config::can_be_invalid)
+                    if (!target_allocator_p_)
+                        return;
 
 				target_allocator_p_->clear();
 
 			}
 
 		};
+
+        using F_default_reference_allocator = TF_reference_allocator<>;
 
 	}
 

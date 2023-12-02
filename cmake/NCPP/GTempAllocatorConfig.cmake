@@ -8,8 +8,8 @@ set(NCPP_GTEMP_ALLOCATOR_CONFIG_HPP_PATH "${NCPP_GENERATED_FILES_DIR}/gtemp_allo
 
 
 if(NOT NCPP_GTEMP_ALLOCATOR_NAME OR NOT NCPP_GTEMP_ALLOCATOR_HEADER)
-    NCPP_SetGlobal(NCPP_GTEMP_ALLOCATOR_NAME "ncpp::mem::F_crt_allocator")
-    NCPP_SetGlobal(NCPP_GTEMP_ALLOCATOR_HEADER "${NCPP_SOURCE_DIR}/ncpp/mem/crt_allocator.hpp")
+    NCPP_SetGlobal(NCPP_GTEMP_ALLOCATOR_NAME "ncpp::mem::F_default_reference_allocator")
+    NCPP_SetGlobal(NCPP_GTEMP_ALLOCATOR_HEADER "${NCPP_SOURCE_DIR}/ncpp/mem/reference_allocator.hpp")
 endif()
 
 

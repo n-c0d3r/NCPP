@@ -91,7 +91,7 @@ namespace ncpp {
 		class TF_robject_type_info;
 
 		template<typename F_options__>
-		struct TF_robject_member_info;
+        class TF_robject_member_info;
 
 
 
