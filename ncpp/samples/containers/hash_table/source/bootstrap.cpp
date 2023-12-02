@@ -9,7 +9,7 @@ int main() {
 
 	{
 
-        containers::F_hash_table ht;
+        F_hash_table ht;
         
         ht.add(1, 1);
         ht.add(1, 2);
