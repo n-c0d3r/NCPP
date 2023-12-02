@@ -151,19 +151,19 @@ namespace ncpp {
 		public:
 			NCPP_FORCE_INLINE void* allocate(sz n, int flags = 0) {
 
-				assert(target_allocator_p_ && F_config::can_be_invalid && "allocator reference is null, cant allocate memory");
+				assert((target_allocator_p_ || !F_config::can_be_invalid) && "allocator reference is null, cant allocate memory");
 
 				return target_allocator_p_->allocate(n, flags);
 			}
 			NCPP_FORCE_INLINE void* allocate(sz n, sz alignment, sz alignment_offset, int flags = 0) {
 
-				assert(target_allocator_p_ && F_config::can_be_invalid && "allocator reference is null, cant allocate memory");
+				assert((target_allocator_p_ || !F_config::can_be_invalid) && "allocator reference is null, cant allocate memory");
 
 				return target_allocator_p_->allocate(n, alignment, alignment_offset, flags);
 			}
 			NCPP_FORCE_INLINE void  deallocate(void* p, sz n = 1) {
 
-				assert(target_allocator_p_ && F_config::can_be_invalid && "allocator reference is null, cant deallocate memory");
+				assert((target_allocator_p_ || !F_config::can_be_invalid) && "allocator reference is null, cant deallocate memory");
 
 				target_allocator_p_->deallocate(p, n);
 			}

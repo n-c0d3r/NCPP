@@ -66,6 +66,18 @@ namespace ncpp {
             assert((align & mask) == 0); // pwr of 2
             return (addr + mask) & ~mask;
         }
+        NCPP_FORCE_INLINE uintptr_t align_address_always_shift(uintptr_t addr, size_t align = EASTL_ALLOCATOR_MIN_ALIGNMENT)
+        {
+            const size_t mask = align - 1;
+            assert((align & mask) == 0); // pwr of 2
+
+            uintptr_t result = (addr + mask) & ~mask;
+
+            if (result == addr)
+                return result + align;
+
+            return result;
+        }
     
     
 
