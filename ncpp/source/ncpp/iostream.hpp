@@ -41,6 +41,7 @@
 ////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/utilities/is_streamable.hpp>
+#include <ncpp/ostream_input.hpp>
 
 #pragma endregion
 
@@ -137,14 +138,6 @@ namespace ncpp {
     inline TF_istream<F_char__>& T_cin = internal::TF_istream_helper<F_char__>::cin();
     inline F_istream& cin = internal::TF_istream_helper<char>::cin();
     inline F_wistream& wcin = internal::TF_istream_helper<wchar_t>::cin();
-
-
-
-	/**
-	 *	Wraps the input data reference inside and also stores the tab count for with-tabs out streaming operation. 
-	 */
-	template<typename F__>
-	using TF_ostream_input = typename std::pair<const F__&, u32>;
 
 
 

@@ -32,6 +32,8 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#include <ncpp/declare_eastl_container_operators.hpp>
+
 #include <ncpp/containers/.hpp>
 #include <ncpp/utilities/type_info.hpp>
 #include <ncpp/utilities/is_streamable.hpp>
@@ -250,13 +252,59 @@ namespace ncpp {
 	 *	Wraps content string inside to be streamed out with low light color.
 	 */
 	struct F_cout_lowlight {
+
 		containers::F_string content;
+
+        friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+                ncpp::F_ostream& os,
+                const ncpp::F_cout_lowlight& input
+        ) {
+
+            if (&os != &ncpp::cout)
+                return os << input.content;
+
+            return (os << (NCPP_FOREGROUND_BRIGHT_BACK + input.content + NCPP_RESET_CONSOLE_COLOR));
+        }
+        friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+                ncpp::F_wostream& os,
+                const ncpp::F_cout_lowlight& input
+        ) {
+
+            if (&os != &ncpp::wcout)
+                return os << input.content;
+
+            return (os << (NCPP_FOREGROUND_BRIGHT_BACK + input.content + NCPP_RESET_CONSOLE_COLOR));
+        }
+
 	};
 	/**
 	 *	Wraps content string inside to be streamed out with field name color.
 	 */
 	struct F_cout_field_name {
+
 		containers::F_string content;
+
+        friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+                ncpp::F_ostream& os,
+                const ncpp::F_cout_field_name& input
+        ) {
+
+            if (&os != &ncpp::cout)
+                return os << input.content.c_str();
+
+            return (os << (NCPP_FOREGROUND_CYAN + input.content + NCPP_RESET_CONSOLE_COLOR).c_str());
+        }
+        friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+                ncpp::F_wostream& os,
+                const ncpp::F_cout_field_name& input
+        ) {
+
+            if (&os != &ncpp::wcout)
+                return os << input.content;
+
+            return (os << (NCPP_FOREGROUND_CYAN + input.content + NCPP_RESET_CONSOLE_COLOR));
+        }
+
 	};
 
 
@@ -265,13 +313,59 @@ namespace ncpp {
 	 *	Wraps content string inside to be streamed out with low light color.
 	 */
 	struct F_wcout_lowlight {
+
 		containers::F_wstring content;
+
+        friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+            ncpp::F_ostream& os,
+            const ncpp::F_wcout_lowlight& input
+        ) {
+
+            if (&os != &ncpp::cout)
+                return os << input.content;
+
+            return (os << (NCPP_FOREGROUND_BRIGHT_BACK_TEXT + input.content + NCPP_RESET_CONSOLE_COLOR_TEXT));
+        }
+        friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+            ncpp::F_wostream& os,
+            const ncpp::F_wcout_lowlight& input
+        ) {
+
+            if (&os != &ncpp::wcout)
+                return os << input.content.c_str();
+
+            return (os << (NCPP_FOREGROUND_BRIGHT_BACK_TEXT + input.content + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str());
+        }
+
 	};
 	/**
 	 *	Wraps content string inside to be streamed out with field name color.
 	 */
 	struct F_wcout_field_name {
+
 		containers::F_wstring content;
+
+        friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+                ncpp::F_ostream& os,
+                const ncpp::F_wcout_field_name& input
+        ) {
+
+            if (&os != &ncpp::cout)
+                return os << input.content;
+
+            return (os << (NCPP_FOREGROUND_CYAN_TEXT + input.content + NCPP_RESET_CONSOLE_COLOR_TEXT));
+        }
+        friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+                ncpp::F_wostream& os,
+                const ncpp::F_wcout_field_name& input
+        ) {
+
+            if (&os != &ncpp::wcout)
+                return os << input.content.c_str();
+
+            return (os << (NCPP_FOREGROUND_CYAN_TEXT + input.content + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str());
+        }
+
 	};
 
 
@@ -280,7 +374,30 @@ namespace ncpp {
      *	Wraps nanoseconds number inside to be streamed out with nanoseconds color.
      */
     struct F_cout_nanoseconds {
+
         u64 nanoseconds;
+
+        friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+                ncpp::F_ostream& os,
+                const ncpp::F_cout_nanoseconds& input
+        ) {
+
+            if (&os != &ncpp::cout)
+                return os << input.nanoseconds;
+
+            return (os << (NCPP_FOREGROUND_BLUE + ncpp::containers::T_to_string<char>(input.nanoseconds) + NCPP_RESET_CONSOLE_COLOR).c_str());
+        }
+        friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+                ncpp::F_wostream& os,
+                const ncpp::F_cout_nanoseconds& input
+        ) {
+
+            if (&os != &ncpp::wcout)
+                return os << input.nanoseconds;
+
+            return (os << (NCPP_FOREGROUND_BLUE_TEXT + ncpp::containers::T_to_string<wchar_t>(input.nanoseconds) + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str());
+        }
+
     };
 
     namespace internal {
@@ -299,6 +416,37 @@ namespace ncpp {
 
                 b8 value;
 
+                friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+                        ncpp::F_ostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &cout)
+                        os << NCPP_FOREGROUND_BRIGHT_RED;
+
+                    os << input.value;
+
+                    if(&os == &cout)
+                        os << NCPP_RESET_CONSOLE_COLOR;
+
+                    return os;
+                }
+                friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+                        ncpp::F_wostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_BRIGHT_RED_TEXT;
+
+                    os << input.value;
+
+                    if(&os == &wcout)
+                        os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+                    return os;
+                }
+
             };
 
         };
@@ -310,6 +458,37 @@ namespace ncpp {
 
                 f32 value;
 
+                friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+                        ncpp::F_ostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &cout)
+                        os << NCPP_FOREGROUND_BRIGHT_MAGNETA;
+
+                    os << input.value;
+
+                    if(&os == &cout)
+                        os << NCPP_RESET_CONSOLE_COLOR;
+
+                    return os;
+                }
+                friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+                        ncpp::F_wostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_BRIGHT_MAGNETA_TEXT;
+
+                    os << input.value;
+
+                    if(&os == &wcout)
+                        os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+                    return os;
+                }
+
             };
 
         };
@@ -319,6 +498,37 @@ namespace ncpp {
             struct F {
 
                 f64 value;
+
+                friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+                        ncpp::F_ostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &cout)
+                        os << NCPP_FOREGROUND_BRIGHT_MAGNETA;
+
+                    os << input.value;
+
+                    if(&os == &cout)
+                        os << NCPP_RESET_CONSOLE_COLOR;
+
+                    return os;
+                }
+                friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+                        ncpp::F_wostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_BRIGHT_MAGNETA_TEXT;
+
+                    os << input.value;
+
+                    if(&os == &wcout)
+                        os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+                    return os;
+                }
 
             };
 
@@ -331,6 +541,37 @@ namespace ncpp {
 
                 i8 value;
 
+                friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+                        ncpp::F_ostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &cout)
+                        os << NCPP_FOREGROUND_BRIGHT_CYAN;
+
+                    os << input.value;
+
+                    if(&os == &cout)
+                        os << NCPP_RESET_CONSOLE_COLOR;
+
+                    return os;
+                }
+                friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+                        ncpp::F_wostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
+
+                    os << input.value;
+
+                    if(&os == &wcout)
+                        os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+                    return os;
+                }
+
             };
 
         };
@@ -340,6 +581,37 @@ namespace ncpp {
             struct F {
 
                 i16 value;
+
+                friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+                        ncpp::F_ostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &cout)
+                        os << NCPP_FOREGROUND_BRIGHT_CYAN;
+
+                    os << input.value;
+
+                    if(&os == &cout)
+                        os << NCPP_RESET_CONSOLE_COLOR;
+
+                    return os;
+                }
+                friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+                        ncpp::F_wostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
+
+                    os << input.value;
+
+                    if(&os == &wcout)
+                        os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+                    return os;
+                }
 
             };
 
@@ -356,11 +628,28 @@ namespace ncpp {
                         const F& input
                 ) {
 
-                    os << NCPP_FOREGROUND_BRIGHT_CYAN;
+                    if(&os == &cout)
+                        os << NCPP_FOREGROUND_BRIGHT_CYAN;
 
                     os << input.value;
 
-                    os << NCPP_RESET_CONSOLE_COLOR;
+                    if(&os == &cout)
+                        os << NCPP_RESET_CONSOLE_COLOR;
+
+                    return os;
+                }
+                friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+                        ncpp::F_wostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
+
+                    os << input.value;
+
+                    if(&os == &wcout)
+                        os << NCPP_RESET_CONSOLE_COLOR_TEXT;
 
                     return os;
                 }
@@ -375,6 +664,37 @@ namespace ncpp {
 
                 i64 value;
 
+                friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+                        ncpp::F_ostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &cout)
+                        os << NCPP_FOREGROUND_BRIGHT_CYAN;
+
+                    os << input.value;
+
+                    if(&os == &cout)
+                        os << NCPP_RESET_CONSOLE_COLOR;
+
+                    return os;
+                }
+                friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+                        ncpp::F_wostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
+
+                    os << input.value;
+
+                    if(&os == &wcout)
+                        os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+                    return os;
+                }
+
             };
 
         };
@@ -386,6 +706,37 @@ namespace ncpp {
 
                 u8 value;
 
+                friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+                        ncpp::F_ostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &cout)
+                        os << NCPP_FOREGROUND_BRIGHT_CYAN;
+
+                    os << input.value;
+
+                    if(&os == &cout)
+                        os << NCPP_RESET_CONSOLE_COLOR;
+
+                    return os;
+                }
+                friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+                        ncpp::F_wostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
+
+                    os << input.value;
+
+                    if(&os == &wcout)
+                        os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+                    return os;
+                }
+
             };
 
         };
@@ -395,6 +746,37 @@ namespace ncpp {
             struct F {
 
                 u16 value;
+
+                friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+                        ncpp::F_ostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &cout)
+                        os << NCPP_FOREGROUND_BRIGHT_CYAN;
+
+                    os << input.value;
+
+                    if(&os == &cout)
+                        os << NCPP_RESET_CONSOLE_COLOR;
+
+                    return os;
+                }
+                friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+                        ncpp::F_wostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
+
+                    os << input.value;
+
+                    if(&os == &wcout)
+                        os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+                    return os;
+                }
 
             };
 
@@ -406,6 +788,37 @@ namespace ncpp {
 
                 u32 value;
 
+                friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+                        ncpp::F_ostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &cout)
+                        os << NCPP_FOREGROUND_BRIGHT_CYAN;
+
+                    os << input.value;
+
+                    if(&os == &cout)
+                        os << NCPP_RESET_CONSOLE_COLOR;
+
+                    return os;
+                }
+                friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+                        ncpp::F_wostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
+
+                    os << input.value;
+
+                    if(&os == &wcout)
+                        os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+                    return os;
+                }
+
             };
 
         };
@@ -415,6 +828,37 @@ namespace ncpp {
             struct F {
 
                 u64 value;
+
+                friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+                        ncpp::F_ostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &cout)
+                        os << NCPP_FOREGROUND_BRIGHT_CYAN;
+
+                    os << input.value;
+
+                    if(&os == &cout)
+                        os << NCPP_RESET_CONSOLE_COLOR;
+
+                    return os;
+                }
+                friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+                        ncpp::F_wostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
+
+                    os << input.value;
+
+                    if(&os == &wcout)
+                        os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+                    return os;
+                }
 
             };
 
@@ -427,6 +871,37 @@ namespace ncpp {
 
                 const char* value;
 
+                friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+                        ncpp::F_ostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &cout)
+                        os << NCPP_FOREGROUND_BRIGHT_GREEN;
+
+                    os << input.value;
+
+                    if(&os == &cout)
+                        os << NCPP_RESET_CONSOLE_COLOR;
+
+                    return os;
+                }
+                friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+                        ncpp::F_wostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_BRIGHT_GREEN_TEXT;
+
+                    os << input.value;
+
+                    if(&os == &wcout)
+                        os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+                    return os;
+                }
+
             };
 
         };
@@ -436,6 +911,37 @@ namespace ncpp {
             struct F {
 
                 const wchar_t* value;
+
+                friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+                        ncpp::F_ostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &cout)
+                        os << NCPP_FOREGROUND_BRIGHT_YELLOW;
+
+                    os << input.value;
+
+                    if(&os == &cout)
+                        os << NCPP_RESET_CONSOLE_COLOR;
+
+                    return os;
+                }
+                friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+                        ncpp::F_wostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_BRIGHT_YELLOW_TEXT;
+
+                    os << input.value;
+
+                    if(&os == &wcout)
+                        os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+                    return os;
+                }
 
             };
 
@@ -447,6 +953,43 @@ namespace ncpp {
             struct F {
 
                 containers::TF_string<F_char__, F_allocator__> value;
+
+                friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+                        ncpp::F_ostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &cout)
+                        if constexpr (std::is_same_v<F_char__,char>)
+                            os << NCPP_FOREGROUND_BRIGHT_GREEN;
+                        else
+                            os << NCPP_FOREGROUND_BRIGHT_YELLOW;
+
+                    os << input.value;
+
+                    if(&os == &cout)
+                        os << NCPP_RESET_CONSOLE_COLOR;
+
+                    return os;
+                }
+                friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+                        ncpp::F_wostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &wcout)
+                        if constexpr (std::is_same_v<F_char__,char>)
+                            os << NCPP_FOREGROUND_BRIGHT_GREEN_TEXT;
+                        else
+                            os << NCPP_FOREGROUND_BRIGHT_YELLOW_TEXT;
+
+                    os << input.value;
+
+                    if(&os == &wcout)
+                        os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+                    return os;
+                }
 
             };
 
@@ -547,510 +1090,6 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const cha
 {
 
     os << ncpp::containers::to_wstring(str);
-
-    return os;
-}
-#pragma endregion
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-#pragma region Colorized Contents
-
-/**
- *	Streams out F_cout_lowlight.
- */
-NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-	ncpp::F_ostream& os,
-	const ncpp::F_cout_lowlight& input
-) {
-
-	if (&os != &ncpp::cout)
-		return os << input.content.c_str();
-
-	return (os << (NCPP_FOREGROUND_BRIGHT_BACK + input.content + NCPP_RESET_CONSOLE_COLOR).c_str());
-}
-NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-	ncpp::F_wostream& os,
-	const ncpp::F_wcout_lowlight& input
-) {
-
-	if (&os != &ncpp::wcout)
-		return os << input.content.c_str();
-
-	return (os << (NCPP_FOREGROUND_BRIGHT_BACK_TEXT + input.content + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str());
-}
-
-
-/**
- *	Streams out F_cout_field_name.
- */
-NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-	ncpp::F_ostream& os,
-	const ncpp::F_cout_field_name& input
-) {
-
-	if (&os != &ncpp::cout)
-		return os << input.content.c_str();
-
-	return (os << (NCPP_FOREGROUND_CYAN + input.content + NCPP_RESET_CONSOLE_COLOR).c_str());
-}
-NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-	ncpp::F_wostream& os,
-	const ncpp::F_wcout_field_name& input
-) {
-
-	if (&os != &ncpp::wcout)
-		return os << input.content.c_str();
-
-	return (os << (NCPP_FOREGROUND_CYAN_TEXT + input.content + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str());
-}
-
-
-
-/**
- *	Streams out F_cout_nanoseconds.
- */
-NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-	ncpp::F_ostream& os,
-	const ncpp::F_cout_nanoseconds& input
-) {
-
-	if (&os != &ncpp::cout)
-		return os << input.nanoseconds;
-
-	return (os << (NCPP_FOREGROUND_BLUE + ncpp::containers::T_to_string<char>(input.nanoseconds) + NCPP_RESET_CONSOLE_COLOR).c_str());
-}
-NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-	ncpp::F_wostream& os,
-	const ncpp::F_cout_nanoseconds& input
-) {
-
-	if (&os != &ncpp::wcout)
-		return os << input.nanoseconds;
-
-	return (os << (NCPP_FOREGROUND_BLUE_TEXT + ncpp::containers::T_to_string<wchar_t>(input.nanoseconds) + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str());
-}
-
-
-
-NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-    ncpp::F_ostream& os,
-    const ncpp::TF_cout_value<ncpp::b8>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_RED;
-
-    os << input.value;
-
-    os << NCPP_RESET_CONSOLE_COLOR;
-
-    return os;
-}
-
-NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-    ncpp::F_ostream& os,
-    const ncpp::TF_cout_value<ncpp::f32>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_MAGNETA;
-
-    os << input.value;
-
-    os << NCPP_RESET_CONSOLE_COLOR;
-
-    return os;
-}
-NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-    ncpp::F_ostream& os,
-    const ncpp::TF_cout_value<ncpp::f64>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_MAGNETA;
-
-    os << input.value;
-
-    os << NCPP_RESET_CONSOLE_COLOR;
-
-    return os;
-}
-
-NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-    ncpp::F_ostream& os,
-    const ncpp::TF_cout_value<ncpp::i8>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_CYAN;
-
-    os << input.value;
-
-    os << NCPP_RESET_CONSOLE_COLOR;
-
-    return os;
-}
-NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-    ncpp::F_ostream& os,
-    const ncpp::TF_cout_value<ncpp::i16>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_CYAN;
-
-    os << input.value;
-
-    os << NCPP_RESET_CONSOLE_COLOR;
-
-    return os;
-}
-//NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-//    ncpp::F_ostream& os,
-//    const ncpp::TF_cout_value<ncpp::i32>& input
-//) {
-//
-//    os << NCPP_FOREGROUND_BRIGHT_CYAN;
-//
-//    os << input.value;
-//
-//    os << NCPP_RESET_CONSOLE_COLOR;
-//
-//    return os;
-//}
-NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-    ncpp::F_ostream& os,
-    const ncpp::TF_cout_value<ncpp::i64>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_CYAN;
-
-    os << input.value;
-
-    os << NCPP_RESET_CONSOLE_COLOR;
-
-    return os;
-}
-
-NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-    ncpp::F_ostream& os,
-    const ncpp::TF_cout_value<ncpp::u8>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_CYAN;
-
-    os << input.value;
-
-    os << NCPP_RESET_CONSOLE_COLOR;
-
-    return os;
-}
-NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-    ncpp::F_ostream& os,
-    const ncpp::TF_cout_value<ncpp::u16>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_CYAN;
-
-    os << input.value;
-
-    os << NCPP_RESET_CONSOLE_COLOR;
-
-    return os;
-}
-NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-    ncpp::F_ostream& os,
-    const ncpp::TF_cout_value<ncpp::u32>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_CYAN;
-
-    os << input.value;
-
-    os << NCPP_RESET_CONSOLE_COLOR;
-
-    return os;
-}
-NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-    ncpp::F_ostream& os,
-    const ncpp::TF_cout_value<ncpp::u64>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_CYAN;
-
-    os << input.value;
-
-    os << NCPP_RESET_CONSOLE_COLOR;
-
-    return os;
-}
-
-template<typename F_allocator__>
-NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-    ncpp::F_ostream& os,
-    const ncpp::TF_cout_value<eastl::basic_string<char, F_allocator__>>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_GREEN << '"';
-
-    os << input.value;
-
-    os << '"' << NCPP_RESET_CONSOLE_COLOR;
-
-    return os;
-}
-NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-    ncpp::F_ostream& os,
-    const ncpp::TF_cout_value<const char*>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_GREEN << '"';
-
-    os << input.value;
-
-    os << '"' << NCPP_RESET_CONSOLE_COLOR;
-
-    return os;
-}
-
-template<typename F_allocator__>
-NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-    ncpp::F_ostream& os,
-    const ncpp::TF_cout_value<eastl::basic_string<wchar_t, F_allocator__>>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_YELLOW << 'L' << '"';
-
-    os << input.value;
-
-    os << '"' << NCPP_RESET_CONSOLE_COLOR;
-
-    return os;
-}
-NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-    ncpp::F_ostream& os,
-    const ncpp::TF_cout_value<const wchar_t*>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_YELLOW << 'L' << '"';
-
-    os << input.value;
-
-    os << '"' << NCPP_RESET_CONSOLE_COLOR;
-
-    return os;
-}
-
-
-
-NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-    ncpp::F_wostream& os,
-    const ncpp::TF_cout_value<ncpp::b8>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_RED_TEXT;
-
-    os << input.value;
-
-    os << NCPP_RESET_CONSOLE_COLOR_TEXT;
-
-    return os;
-}
-
-NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-    ncpp::F_wostream& os,
-    const ncpp::TF_cout_value<ncpp::f32>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_MAGNETA_TEXT;
-
-    os << input.value;
-
-    os << NCPP_RESET_CONSOLE_COLOR_TEXT;
-
-    return os;
-}
-NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-    ncpp::F_wostream& os,
-    const ncpp::TF_cout_value<ncpp::f64>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_MAGNETA_TEXT;
-
-    os << input.value;
-
-    os << NCPP_RESET_CONSOLE_COLOR_TEXT;
-
-    return os;
-}
-
-NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-    ncpp::F_wostream& os,
-    const ncpp::TF_cout_value<ncpp::i8>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
-
-    os << input.value;
-
-    os << NCPP_RESET_CONSOLE_COLOR_TEXT;
-
-    return os;
-}
-NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-    ncpp::F_wostream& os,
-    const ncpp::TF_cout_value<ncpp::i16>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
-
-    os << input.value;
-
-    os << NCPP_RESET_CONSOLE_COLOR_TEXT;
-
-    return os;
-}
-NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-    ncpp::F_wostream& os,
-    const ncpp::TF_cout_value<ncpp::i32>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
-
-    os << input.value;
-
-    os << NCPP_RESET_CONSOLE_COLOR_TEXT;
-
-    return os;
-}
-NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-    ncpp::F_wostream& os,
-    const ncpp::TF_cout_value<ncpp::i64>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
-
-    os << input.value;
-
-    os << NCPP_RESET_CONSOLE_COLOR_TEXT;
-
-    return os;
-}
-
-NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-    ncpp::F_wostream& os,
-    const ncpp::TF_cout_value<ncpp::u8>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
-
-    os << input.value;
-
-    os << NCPP_RESET_CONSOLE_COLOR_TEXT;
-
-    return os;
-}
-NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-    ncpp::F_wostream& os,
-    const ncpp::TF_cout_value<ncpp::u16>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
-
-    os << input.value;
-
-    os << NCPP_RESET_CONSOLE_COLOR_TEXT;
-
-    return os;
-}
-NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-    ncpp::F_wostream& os,
-    const ncpp::TF_cout_value<ncpp::u32>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
-
-    os << input.value;
-
-    os << NCPP_RESET_CONSOLE_COLOR_TEXT;
-
-    return os;
-}
-NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-    ncpp::F_wostream& os,
-    const ncpp::TF_cout_value<ncpp::u64>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
-
-    os << input.value;
-
-    os << NCPP_RESET_CONSOLE_COLOR_TEXT;
-
-    return os;
-}
-
-template<typename F_allocator__>
-NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-    ncpp::F_wostream& os,
-    const ncpp::TF_cout_value<eastl::basic_string<char, F_allocator__>>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_GREEN_TEXT << '"';
-
-    os << input.value;
-
-    os << '"' << NCPP_RESET_CONSOLE_COLOR_TEXT;
-
-    return os;
-}
-NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-    ncpp::F_wostream& os,
-    const ncpp::TF_cout_value<const char*>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_GREEN_TEXT << '"';
-
-    os << input.value;
-
-    os << '"' << NCPP_RESET_CONSOLE_COLOR_TEXT;
-
-    return os;
-}
-
-template<typename F_allocator__>
-NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-    ncpp::F_wostream& os,
-    const ncpp::TF_cout_value<eastl::basic_string<wchar_t, F_allocator__>>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_YELLOW_TEXT << L'L' << L'"';
-
-    os << input.value;
-
-    os << L'"' << NCPP_RESET_CONSOLE_COLOR_TEXT;
-
-    return os;
-}
-NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-    ncpp::F_wostream& os,
-    const ncpp::TF_cout_value<const wchar_t*>& input
-) {
-
-    os << NCPP_FOREGROUND_BRIGHT_YELLOW_TEXT << L'L' << L'"';
-
-    os << input.value;
-
-    os << L'"' << NCPP_RESET_CONSOLE_COLOR_TEXT;
 
     return os;
 }
