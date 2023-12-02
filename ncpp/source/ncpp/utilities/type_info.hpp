@@ -165,13 +165,19 @@ namespace ncpp {
 
 
 
+#ifdef NCPP_RTTI_SECURED_NAME
         template<typename F__, typename F_char__ = char, typename F_allocator__ = mem::F_default_allocator>
         NCPP_FORCE_INLINE containers::TF_string<F_char__, F_allocator__> T_type_name() {
 
-            if constexpr (rtti::secured_name)
-                return containers::T_to_string<F_char__, F_allocator__>("_" + containers::to_string(T_type_hash_code_v<F__>));
-            else return containers::T_to_string<F_char__, F_allocator__>(std::string(internal::type_name<F__>()).c_str());
+            return containers::T_to_string<F_char__, F_allocator__>("_" + containers::to_string(T_type_hash_code_v<F__>));
         }
+#else
+        template<typename F__, typename F_char__ = char, typename F_allocator__ = mem::F_default_allocator>
+        NCPP_FORCE_INLINE containers::TF_string<F_char__, F_allocator__> T_type_name() {
+
+            return containers::T_to_string<F_char__, F_allocator__>(std::string(internal::type_name<F__>()).c_str());
+        }
+#endif
 
     }
 
