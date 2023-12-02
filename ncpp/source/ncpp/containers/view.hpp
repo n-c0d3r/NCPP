@@ -34,6 +34,7 @@
 
 #include <ncpp/containers/binding_helper.hpp>
 #include <ncpp/mem/general_allocator.hpp>
+#include <ncpp/utilities/iterator.hpp>
 
 #pragma endregion
 
@@ -210,6 +211,64 @@ namespace ncpp {
             NCPP_FORCE_INLINE operator F_other_container__() const {
 
                 return *reinterpret_cast<const F_other_container__*>(container_p_);
+            }
+
+
+
+        private:
+            template<typename F__, std::enable_if_t<utilities::T_is_has_begin_const_v<F__>, i32> = 0>
+            NCPP_FORCE_INLINE auto T_begin_internal() const {
+
+                return container_p_->begin();
+            }
+            template<typename F__, std::enable_if_t<!utilities::T_is_has_begin_const_v<F__>, i32> = 0>
+            NCPP_FORCE_INLINE void T_begin_internal() const {
+
+            }
+            template<typename F__, std::enable_if_t<utilities::T_is_has_cbegin_v<F__>, i32> = 0>
+            NCPP_FORCE_INLINE auto T_cbegin_internal() const {
+
+                return container_p_->cbegin();
+            }
+            template<typename F__, std::enable_if_t<!utilities::T_is_has_cbegin_v<F__>, i32> = 0>
+            NCPP_FORCE_INLINE void T_cbegin_internal() const {
+
+            }
+            template<typename F__, std::enable_if_t<utilities::T_is_has_end_const_v<F__>, i32> = 0>
+            NCPP_FORCE_INLINE auto T_end_internal() const {
+
+                return container_p_->end();
+            }
+            template<typename F__, std::enable_if_t<!utilities::T_is_has_end_const_v<F__>, i32> = 0>
+            NCPP_FORCE_INLINE void T_end_internal() const {
+
+            }
+            template<typename F__, std::enable_if_t<utilities::T_is_has_cend_v<F__>, i32> = 0>
+            NCPP_FORCE_INLINE auto T_cend_internal() const {
+
+                return container_p_->cend();
+            }
+            template<typename F__, std::enable_if_t<!utilities::T_is_has_cend_v<F__>, i32> = 0>
+            NCPP_FORCE_INLINE void T_cend_internal() const {
+
+            }
+
+        public:
+            NCPP_FORCE_INLINE auto begin() const {
+
+                return T_begin_internal<F_container>();
+            }
+            NCPP_FORCE_INLINE auto cbegin() const {
+
+                return T_cbegin_internal<F_container>();
+            }
+            NCPP_FORCE_INLINE auto end() const {
+
+                return T_end_internal<F_container>();
+            }
+            NCPP_FORCE_INLINE auto cend() const {
+
+                return T_cend_internal<F_container>();
             }
 
 

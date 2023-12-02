@@ -75,4 +75,6 @@ namespace ncpp {
 
 #include <ncpp/utilities/type_info.hpp>
 
+#include <ncpp/utilities/iterator.hpp>
+
 #pragma endregion

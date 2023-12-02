@@ -36,6 +36,7 @@
 #include <ncpp/mem/default_allocator.hpp>
 #include <ncpp/containers/eastl_containers.hpp>
 #include <ncpp/containers/binding_helper.hpp>
+#include <ncpp/containers/view.hpp>
 
 #pragma endregion
 
@@ -294,7 +295,9 @@ namespace ncpp {
     
         using F_hash_table = TF_hash_table<>;
 
-        using G_hash_buffer = TF_hash_table<mem::F_general_allocator>;
+        using G_hash_table = TF_hash_table<mem::F_general_allocator>;
+
+        using V_hash_table = TF_view<G_hash_table>;
     
 	}
 
