@@ -33,6 +33,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/general_allocator_config.hpp>
+#include <ncpp/utilities/sizeof.hpp>
 
 #pragma endregion
 
@@ -41,7 +42,7 @@
 namespace ncpp::mem {
 
     template<typename F_allocator__>
-    static constexpr b8 T_can_be_general_allocator_v = (sizeof(F_allocator__) == sizeof(F_default_reference_allocator));
+    static constexpr b8 T_can_be_general_allocator_v = (utilities::T_sizeof_v<F_allocator__> == utilities::T_sizeof_v<F_default_reference_allocator>);
 
     static_assert(T_can_be_general_allocator_v<F_general_allocator>, "General allocator's size must be equal to the size of F_default_reference_allocator");
 

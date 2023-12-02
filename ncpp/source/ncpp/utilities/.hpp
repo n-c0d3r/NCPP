@@ -77,4 +77,6 @@ namespace ncpp {
 
 #include <ncpp/utilities/iterator.hpp>
 
+#include <ncpp/utilities/sizeof.hpp>
+
 #pragma endregion
