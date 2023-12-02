@@ -229,11 +229,11 @@ namespace ncpp {
                 index_size_ = index_size;
                 
             }
-            NCPP_FORCE_INLINE u32 first(u32 key){
+            NCPP_FORCE_INLINE u32 first(u32 key) const {
                 
                 return hash_vector_[key & hash_mask_];
             }
-            NCPP_FORCE_INLINE u32 next(u32 index){
+            NCPP_FORCE_INLINE u32 next(u32 index) const {
                 
                 assert(index < index_size_);
                 assert(index_vector_[index] != index);
