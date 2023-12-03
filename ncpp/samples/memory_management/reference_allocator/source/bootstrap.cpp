@@ -9,6 +9,7 @@ int main() {
 
 	{
 
+		mem::F_default_reference_allocator default_reference_allocator;
 		mem::F_incremental_chunk_allocator incremental_chunk_allocator;
 		mem::TF_reference_allocator<mem::F_incremental_chunk_allocator> reference_allocator(incremental_chunk_allocator);
 
@@ -21,7 +22,43 @@ int main() {
 
 		TG_vector<void*> pointers(allocation_count);
 
+        {
+
+            mem::log_memory_stats();
+
+            {
+
+                NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_default_reference_allocator::allocate ");
+
+                for (u32 i = 0; i < allocation_count; ++i) {
+
+                    pointers[i] = default_reference_allocator.allocate(allocation_size, 0);
+
+                }
+
+            }
+
+            mem::log_memory_stats();
+
+            {
+
+                NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_default_reference_allocator::deallocate ");
+
+                for (u32 i = 0; i < allocation_count; ++i) {
+
+                    default_reference_allocator.deallocate(pointers[i]);
+
+                }
+
+            }
+
+            mem::log_memory_stats();
+
+        }
+
 		{
+
+            mem::log_memory_stats();
 
 			{
 
