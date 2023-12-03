@@ -25,11 +25,6 @@ target_link_libraries(ncpp.samples.hello_ncpp
     PUBLIC 
         ncpp
 )
-target_include_directories(ncpp.samples.hello_ncpp
-    PUBLIC 
-        ncpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/source
-)
 
 
 
