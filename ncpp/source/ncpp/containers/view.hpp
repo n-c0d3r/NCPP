@@ -110,6 +110,29 @@ namespace ncpp {
 
         public:
             template<
+                typename F__,
+                std::enable_if_t<!T_is_same_viewable_container_v<F_container, F__>, i32> = 0
+            >
+            NCPP_FORCE_INLINE TF_view(const F__& x, const F_container& container = F_container()) :
+                container_p_(&container)
+            {
+
+                (F_container&)container = x;
+
+            }
+            template<
+                typename F__,
+                std::enable_if_t<!T_is_same_viewable_container_v<F_container, F__>, i32> = 0
+            >
+            NCPP_FORCE_INLINE TF_view(const std::initializer_list<F__>& x, const F_container& container = F_container()) :
+                container_p_(&container)
+            {
+
+                (F_container&)container = x;
+
+            }
+
+            template<
                 typename F_other_container__,
                 std::enable_if_t<T_is_same_viewable_container_v<F_container, F_other_container__>, i32> = 0
             >
