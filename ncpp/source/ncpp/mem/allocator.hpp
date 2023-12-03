@@ -194,6 +194,14 @@ namespace ncpp {
 
 
 
+        public:
+            NCPP_FORCE_INLINE b8 operator==(const TI_allocator& x) noexcept {
+
+                return (this == &x);
+            }
+
+
+
 		private:
 			template<class F_overloaded_allocator__, b8 is_default_alloc__>
 			NCPP_FORCE_INLINE void* T_aligned_allocate_internal(sz n, sz alignment, sz alignment_offset, int flags = 0) {

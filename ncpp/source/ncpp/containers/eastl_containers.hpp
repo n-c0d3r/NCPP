@@ -187,10 +187,10 @@ namespace ncpp {
 
             };
 
-            template<typename F_allocator__>
-            struct TF_to_string_helper<char, F_allocator__, TF_string<wchar_t, F_allocator__>> {
+            template<typename F_allocator__, typename F_allocator2__>
+            struct TF_to_string_helper<char, F_allocator__, TF_string<wchar_t, F_allocator2__>> {
 
-                static inline TF_string<char, F_allocator__> to_string(const TF_string<wchar_t, F_allocator__>& value)
+                static inline TF_string<char, F_allocator__> to_string(const TF_string<wchar_t, F_allocator2__>& value)
                 {
 
                     TF_string<char, F_allocator__> result;
@@ -218,13 +218,13 @@ namespace ncpp {
 
             };
 
-            template<typename F_allocator__>
-            struct TF_to_string_helper<char, F_allocator__, TF_string<char, F_allocator__>> {
+            template<typename F_allocator__, typename F_allocator2__>
+            struct TF_to_string_helper<char, F_allocator__, TF_string<char, F_allocator2__>> {
 
-                static NCPP_FORCE_INLINE TF_string<char, F_allocator__> to_string(const TF_string<char, F_allocator__>& value)
+                static NCPP_FORCE_INLINE TF_string<char, F_allocator__> to_string(const TF_string<char, F_allocator2__>& value)
                 {
 
-                    return value;
+                    return value.c_str();
                 }
 
             };
@@ -341,10 +341,10 @@ namespace ncpp {
 
             };
 
-            template<typename F_allocator__>
-            struct TF_to_string_helper<wchar_t, F_allocator__, TF_string<char, F_allocator__>> {
+            template<typename F_allocator__, typename F_allocator2__>
+            struct TF_to_string_helper<wchar_t, F_allocator__, TF_string<char, F_allocator2__>> {
 
-                static inline TF_string<wchar_t, F_allocator__> to_string(const TF_string<char, F_allocator__>& value)
+                static inline TF_string<wchar_t, F_allocator__> to_string(const TF_string<char, F_allocator2__>& value)
                 {
 
                     TF_string<wchar_t, F_allocator__> result;
@@ -372,13 +372,13 @@ namespace ncpp {
 
             };
 
-            template<typename F_allocator__>
-            struct TF_to_string_helper<wchar_t, F_allocator__, TF_string<wchar_t, F_allocator__>> {
+            template<typename F_allocator__, typename F_allocator2__>
+            struct TF_to_string_helper<wchar_t, F_allocator__, TF_string<wchar_t, F_allocator2__>> {
 
-                static NCPP_FORCE_INLINE TF_string<wchar_t, F_allocator__> to_string(const TF_string<wchar_t, F_allocator__>& value)
+                static NCPP_FORCE_INLINE TF_string<wchar_t, F_allocator__> to_string(const TF_string<wchar_t, F_allocator2__>& value)
                 {
 
-                    return value;
+                    return value.c_str();
                 }
 
             };
@@ -398,6 +398,11 @@ namespace ncpp {
 
         template<typename F_char__ = char, typename F_allocator__ = mem::F_default_allocator, typename F_value__ = int>
         inline TF_string<F_char__, F_allocator__> T_to_string(const F_value__& value) {
+
+            return internal::TF_to_string_helper<F_char__, F_allocator__, F_value__>::to_string(value);
+        }
+        template<typename F_char__ = char, typename F_allocator__ = mem::F_general_allocator, typename F_value__ = int>
+        inline TF_string<F_char__, F_allocator__> TG_to_string(const F_value__& value) {
 
             return internal::TF_to_string_helper<F_char__, F_allocator__, F_value__>::to_string(value);
         }
