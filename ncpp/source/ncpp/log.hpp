@@ -75,7 +75,7 @@ namespace ncpp {
         ) {
 
             if (&os != &ncpp::cout)
-                os << NCPP_FOREGROUND_BRIGHT_BACK;
+                os << NCPP_FOREGROUND_BRIGHT_BLACK;
 
             os << input.value;
 
@@ -90,7 +90,7 @@ namespace ncpp {
         ) {
 
             if (&os != &ncpp::wcout)
-                os << NCPP_FOREGROUND_BRIGHT_BACK_TEXT;
+                os << NCPP_FOREGROUND_BRIGHT_BLACK_TEXT;
 
             os << input.value;
 
@@ -741,7 +741,7 @@ namespace ncpp {
 
                     os << L'"';
 
-                    os << input.value;
+                    os << containers::to_wstring(input.value).c_str();
 
                     os << L'"';
 
@@ -776,7 +776,7 @@ namespace ncpp {
 
                     os << '"';
 
-                    os << input.value;
+                    os << containers::to_string(input.value).c_str();
 
                     os << '"';
 
@@ -929,7 +929,7 @@ template<class F_allocator__>
 NCPP_FORCE_INLINE ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl::basic_string<wchar_t, F_allocator__>& str)
 {
 
-    os << ncpp::containers::to_string(str.c_str());
+    os << ncpp::containers::T_to_string<char, F_allocator__>(str);
 
     return os;
 }
@@ -962,7 +962,7 @@ template<class F_allocator__>
 NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eastl::basic_string<char, F_allocator__>& str)
 {
 
-    os << ncpp::containers::to_wstring(str.c_str());
+    os << ncpp::containers::T_to_string<wchar_t, F_allocator__>(str);
 
     return os;
 }
