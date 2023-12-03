@@ -132,6 +132,9 @@ namespace ncpp {
 
             }
 
+
+
+        public:
             template<
                 typename F_other_container__,
                 std::enable_if_t<T_is_same_viewable_container_v<F_container, F_other_container__>, i32> = 0
