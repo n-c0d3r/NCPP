@@ -22,7 +22,7 @@ int main() {
 		const u32 allocation_count = 4096;
 		const u32 allocation_size = 1024;
 
-		eastl::vector<void*> pointers(allocation_count);
+		TG_vector<void*> pointers(allocation_count);
 
 		{
 

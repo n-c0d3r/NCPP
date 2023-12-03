@@ -234,7 +234,7 @@ namespace ncpp {
 
 
 
-				return reinterpret_cast<u8*>(align_address_always_shift(reinterpret_cast<uintptr_t>(memory_p + alignment_offset), alignment)) - alignment_offset;
+				return reinterpret_cast<u8*>(align_address(reinterpret_cast<uintptr_t>(memory_p + alignment_offset), alignment)) - alignment_offset;
 
 			}
 			NCPP_FORCE_INLINE void delete_mem(void* p) {
