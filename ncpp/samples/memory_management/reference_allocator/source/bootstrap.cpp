@@ -24,8 +24,6 @@ int main() {
 
         {
 
-            mem::log_memory_stats();
-
             {
 
                 NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_default_reference_allocator::allocate ");
@@ -57,8 +55,6 @@ int main() {
         }
 
 		{
-
-            mem::log_memory_stats();
 
 			{
 
