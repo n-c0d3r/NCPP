@@ -211,12 +211,12 @@ namespace ncpp {
                 ) {
 
                     if(&os == &cout)
-                        os << NCPP_FOREGROUND_CYAN;
+                        os << NCPP_FOREGROUND_MAGNETA;
 
                     os << "0x";
 
                     if(&os == &cout)
-                        os << NCPP_FOREGROUND_BRIGHT_CYAN;
+                        os << NCPP_FOREGROUND_BRIGHT_BLUE;
 
                     os << reinterpret_cast<sz>(input.value);
 
@@ -231,12 +231,12 @@ namespace ncpp {
                 ) {
 
                     if(&os == &wcout)
-                        os << NCPP_FOREGROUND_CYAN_TEXT;
+                        os << NCPP_FOREGROUND_MAGNETA_TEXT;
 
                     os << "0x";
 
                     if(&os == &wcout)
-                        os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
+                        os << NCPP_FOREGROUND_BRIGHT_BLUE_TEXT;
 
                     os << reinterpret_cast<sz>(input.value);
 
