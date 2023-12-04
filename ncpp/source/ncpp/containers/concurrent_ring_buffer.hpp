@@ -35,6 +35,7 @@
 #include <ncpp/utilities/.hpp>
 #include <ncpp/mem/default_allocator.hpp>
 #include <ncpp/mem/general_allocator.hpp>
+#include <ncpp/mem/ephemeral_allocator.hpp>
 #include <ncpp/containers/eastl_containers.hpp>
 #include <ncpp/containers/binding_helper.hpp>
 #include <ncpp/containers/view.hpp>
@@ -212,6 +213,8 @@ namespace ncpp {
 
         template<typename F_item__>
         using TG_concurrent_ring_buffer = TF_concurrent_ring_buffer<F_item__, mem::F_general_allocator>;
+        template<typename F_item__>
+        using TEP_concurrent_ring_buffer = TF_concurrent_ring_buffer<F_item__, mem::F_ephemeral_allocator>;
 
         template<typename F_item__>
         using TV_concurrent_ring_buffer = TF_view<TG_concurrent_ring_buffer<F_item__>>;

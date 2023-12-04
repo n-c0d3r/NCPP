@@ -296,6 +296,7 @@ namespace ncpp {
         using F_hash_table = TF_hash_table<>;
 
         using G_hash_table = TF_hash_table<mem::F_general_allocator>;
+        using EP_hash_table = TF_hash_table<mem::F_ephemeral_allocator>;
 
         using V_hash_table = TF_view<G_hash_table>;
     

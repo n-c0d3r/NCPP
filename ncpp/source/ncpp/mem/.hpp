@@ -43,6 +43,7 @@
 #include <ncpp/mem/crt_allocator.hpp>
 #include <ncpp/mem/default_allocator.hpp>
 #include <ncpp/mem/general_allocator.hpp>
+#include <ncpp/mem/ephemeral_allocator.hpp>
 #include <ncpp/mem/dummy_allocator.hpp>
 #include <ncpp/mem/incremental_chunk_allocator.hpp>
 #include <ncpp/mem/smart_chunk_allocator.hpp>

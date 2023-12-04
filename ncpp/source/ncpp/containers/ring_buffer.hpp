@@ -192,6 +192,8 @@ namespace ncpp {
 
         template<typename F_item__>
         using TG_ring_buffer = TF_ring_buffer<F_item__, mem::F_general_allocator>;
+        template<typename F_item__>
+        using TEP_ring_buffer = TF_ring_buffer<F_item__, mem::F_ephemeral_allocator>;
 
         template<typename F_item__>
         using TV_ring_buffer = TF_view<TG_ring_buffer<F_item__>>;
