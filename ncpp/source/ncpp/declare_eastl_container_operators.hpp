@@ -59,7 +59,7 @@
 template<class F_allocator__>
 std::ostream& operator << (std::ostream& os, const eastl::basic_string<char, F_allocator__>& str);
 /**
- *    Streams out containers::F_string.
+ *    Streams out containers::F_wstring.
  */
 template<class F_allocator__>
 std::ostream& operator << (std::ostream& os, const eastl::basic_string<wchar_t, F_allocator__>& str);
@@ -69,7 +69,7 @@ std::ostream& operator << (std::ostream& os, const eastl::basic_string<wchar_t, 
 std::ostream& operator << (std::ostream& os, const wchar_t* str);
 
 /**
- *	Streams out containers::F_string.
+ *	Streams out containers::F_wstring.
  */
 template<class F_allocator__>
 std::wostream& operator << (std::wostream& os, const eastl::basic_string<wchar_t, F_allocator__>& str);

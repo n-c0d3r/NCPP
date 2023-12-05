@@ -74,12 +74,12 @@ namespace ncpp {
                 const TF_cout_lowlight& input
         ) {
 
-            if (&os != &ncpp::cout)
+            if (&os == &ncpp::cout)
                 os << NCPP_FOREGROUND_BRIGHT_BLACK;
 
-            os << input.value;
+            os << ncpp::containers::T_to_string<char, mem::F_default_allocator, F__>(input.value).c_str();
 
-            if (&os != &ncpp::cout)
+            if (&os == &ncpp::cout)
                 os << NCPP_RESET_CONSOLE_COLOR;
 
             return os;
@@ -89,12 +89,12 @@ namespace ncpp {
                 const TF_cout_lowlight& input
         ) {
 
-            if (&os != &ncpp::wcout)
+            if (&os == &ncpp::wcout)
                 os << NCPP_FOREGROUND_BRIGHT_BLACK_TEXT;
 
-            os << input.value;
+            os << ncpp::containers::T_to_string<wchar_t, mem::F_default_allocator, F__>(input.value).c_str();
 
-            if (&os != &ncpp::wcout)
+            if (&os == &ncpp::wcout)
                 os << NCPP_RESET_CONSOLE_COLOR_TEXT;
 
             return os;
@@ -123,12 +123,12 @@ namespace ncpp {
                 const TF_cout_field_name& input
         ) {
 
-            if (&os != &ncpp::cout)
+            if (&os == &ncpp::cout)
                 os << NCPP_FOREGROUND_BRIGHT_CYAN;
 
-            os << input.value;
+            os << ncpp::containers::T_to_string<char, mem::F_default_allocator, F__>(input.value).c_str();
 
-            if (&os != &ncpp::cout)
+            if (&os == &ncpp::cout)
                 os << NCPP_RESET_CONSOLE_COLOR;
 
             return os;
@@ -138,12 +138,12 @@ namespace ncpp {
                 const TF_cout_field_name& input
         ) {
 
-            if (&os != &ncpp::wcout)
+            if (&os == &ncpp::wcout)
                 os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
 
-            os << input.value;
+            os << ncpp::containers::T_to_string<wchar_t, mem::F_default_allocator, F__>(input.value).c_str();
 
-            if (&os != &ncpp::wcout)
+            if (&os == &ncpp::wcout)
                 os << NCPP_RESET_CONSOLE_COLOR_TEXT;
 
             return os;
@@ -895,7 +895,6 @@ namespace ncpp {
 
 
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -923,7 +922,7 @@ NCPP_FORCE_INLINE ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl
 	return os;
 }
 /**
- *    Streams out containers::F_string.
+ *    Streams out containers::F_wstring.
  */
 template<class F_allocator__>
 NCPP_FORCE_INLINE ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl::basic_string<wchar_t, F_allocator__>& str)
@@ -945,7 +944,7 @@ NCPP_FORCE_INLINE ncpp::F_ostream& operator << (ncpp::F_ostream& os, const wchar
 }
 
 /**
- *	Streams out containers::F_string.
+ *	Streams out containers::F_wstring.
  */
 template<class F_allocator__>
 NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eastl::basic_string<wchar_t, F_allocator__>& str)
