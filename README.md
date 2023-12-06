@@ -1,5 +1,5 @@
 # NCPP
-NCoder's Game Engine Learning Aimed C++ Library
+NCoder's Game Engine Learning Aimed C++ Library.
 
 ---
 
@@ -7,19 +7,27 @@ NCoder's Game Engine Learning Aimed C++ Library
 + Memory management:
   + Incremental chunk allocator
   + Smart chunk allocator
-  + Link allocator
-  + Memory helper for aligned memory allocating
+  + Reference allocator
+  + Powerful allocator base class
++ Containers:
+  + EASTL containers (typedefs)
+  + Ring buffer (Both concurrent and non-concurrent versions)
+  + Hash table (like Unreal Engine's one)
+  + Container view (constant container reference)
 + Logging:
-  + eastl::basic_string
-  + eastl::vector
-  + eastl::array
-  + std::initialier_list
+  + string
+  + vector
+  + array
+  + initialier_list
+  + convenient coloring
+  + ...
 + Utilities:
   + Nth template argument getter
   + Function traits
   + Is derived from checker
   + Is streamable
   + Singleton
+  + Type info
   + ...
 + RTTI:
   + Easy to use
@@ -27,8 +35,7 @@ NCoder's Game Engine Learning Aimed C++ Library
   + Metadata supports 
   + Fast compilation
   + Highly customizable
-+ Containers:
-  + Ring buffer
+  + Type flag
 
 ---
 
@@ -42,6 +49,14 @@ NCoder's Game Engine Learning Aimed C++ Library
   + Windows
   + MacOS
   + Unix Platforms
+
+---
+
+## Supported IDEs and Text Editors (for scripts)
+  + Visual Studio
+  + Xcode
+  + CLion
+  + Visual Studio Code
 
 ---
 
