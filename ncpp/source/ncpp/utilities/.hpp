@@ -58,6 +58,8 @@ namespace ncpp {
 #include <ncpp/utilities/template_arg_count.hpp>
 #include <ncpp/utilities/template_arg_list.hpp>
 
+#include <ncpp/utilities/no_deduct.hpp>
+
 #include <ncpp/utilities/singleton.hpp>
 #include <ncpp/utilities/unique_lock.hpp>
 
