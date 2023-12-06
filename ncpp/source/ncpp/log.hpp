@@ -32,8 +32,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <ncpp/declare_eastl_container_operators.hpp>
-
 #include <ncpp/containers/.hpp>
 #include <ncpp/utilities/type_info.hpp>
 #include <ncpp/utilities/is_streamable.hpp>
@@ -838,7 +836,7 @@ namespace ncpp {
 
                     os << '"';
 
-                    os << input.value;
+                    os << containers::T_to_string<char, F_allocator__>(input.value).c_str();
 
                     os << '"';
 
@@ -864,7 +862,7 @@ namespace ncpp {
 
                     os << L'"';
 
-                    os << input.value;
+                    os << containers::T_to_string<wchar_t, F_allocator__>(input.value).c_str();
 
                     os << L'"';
 

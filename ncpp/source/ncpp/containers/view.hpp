@@ -953,8 +953,9 @@ namespace ncpp {
             }
 
 
+
         public:
-            template<typename F_ostream__, std::enable_if_t<utilities::T_is_ostreamable_v<F_ostream__, F_container>, i32> = 0>
+            template<typename F_ostream__>
             friend NCPP_FORCE_INLINE F_ostream__& operator << (F_ostream__& os, const TF_view& view) {
 
                 return (os << (*view.container_p_));
