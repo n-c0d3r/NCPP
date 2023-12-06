@@ -32,7 +32,8 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <ncpp/mem/object_allocator.hpp>
+#include <ncpp/mem/default_allocator.hpp>
+//#include <ncpp/mem/object_allocator.hpp>
 
 #pragma endregion
 
@@ -54,16 +55,21 @@
 
 namespace ncpp {
 
-//    /**
-//     *	Wraps the input data reference inside and also stores the tab count for with-tabs out streaming operation.
-//     */
-//    template<typename F_object__, typename F_allocator__ = mem::F_object_allocator, typename... F_args__>
-//    NCPP_FORCE_INLINE F_object__* T_create(, F_args__&&... args) {
-//
-//        F_object__* object_p =
-//
-//        return new() F_object__{  };
-//    }
+    template<typename F_object__, typename F_allocator__ = mem::F_default_allocator, typename... F_args__>
+    NCPP_FORCE_INLINE F_object__* T_create(utilities::TF_no_deduct_t<F_allocator__>* allocator_p, F_args__&&... args) {
+
+        F_object__* object_p = reinterpret_cast<F_object__*>(allocator_p->allocate(sizeof(F_object__), NCPP_ALIGNOF(F_object__), 0, 0));
+
+        return new(object_p) F_object__{ std::forward<F_args__>(args)... };
+    }
+
+    template<typename F_object__, typename F_allocator__ = mem::F_default_allocator>
+    NCPP_FORCE_INLINE void T_delete(utilities::TF_no_deduct_t<F_allocator__>* allocator_p, F_object__* object_p) {
+
+        object_p->~F_object__();
+
+        allocator_p->deallocate(object_p, 1);
+    }
 
 }
 
