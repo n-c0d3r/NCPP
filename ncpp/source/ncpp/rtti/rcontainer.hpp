@@ -143,7 +143,7 @@ namespace ncpp {
 
 					name_to_robject_type_info_p_map_.erase(name_to_robject_type_info_p_map_.find(it->second->name()));
 
-					F_rtti_traits::template T_delete<F_robject_type_info>(allocator_, it->second);
+					F_rtti_traits::template T_delete<F_robject_type_info>(&allocator_, it->second);
 
 					hash_code_to_robject_type_info_p_map_.erase(it);
 
@@ -157,7 +157,7 @@ namespace ncpp {
 
 					hash_code_to_robject_type_info_p_map_.erase(hash_code_to_robject_type_info_p_map_.find(it->second->hash_code()));
 
-					F_rtti_traits::template T_delete<F_robject_type_info>(allocator_, it->second);
+					F_rtti_traits::template T_delete<F_robject_type_info>(&allocator_, it->second);
 
 					name_to_robject_type_info_p_map_.erase(it);
 

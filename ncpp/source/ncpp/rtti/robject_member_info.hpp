@@ -225,7 +225,7 @@ namespace ncpp {
 				return member_info_p;
 
 			member_info_p = F_rtti_traits__::template T_new<F_robject_member_info__>(
-				robject_type_info_p->rcontainer_p()->allocator(),
+				&(robject_type_info_p->rcontainer_p()->allocator()),
 				F_robject_member_info__(
 
 					utilities::T_type_hash_code_v<F_member__>,

@@ -143,7 +143,7 @@ namespace ncpp {
 
 				if (it != name_to_member_info_p_map_.end()) {
 
-					F_rtti_traits::template T_delete<F_robject_member_info>(rcontainer_p_->allocator(), it->second);
+					F_rtti_traits::template T_delete<F_robject_member_info>(&(rcontainer_p_->allocator()), it->second);
 
 					name_to_member_info_p_map_.erase(it);
 
@@ -202,7 +202,7 @@ namespace ncpp {
 				return robject_type_info_p;
 
 			robject_type_info_p = F_rtti_traits__::template T_new<F_robject_type_info__>(
-				rcontainer_p->allocator(),
+				&(rcontainer_p->allocator()),
 				rcontainer_p,
 				F_robject__::static_type_hash_code(),
 				F_robject__::static_type_name()

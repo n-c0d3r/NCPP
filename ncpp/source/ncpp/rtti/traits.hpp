@@ -164,21 +164,21 @@ namespace ncpp {
 
 
 			template<class F__>
-			static NCPP_FORCE_INLINE F__* T_allocate(F_allocator& allocator) {
+			static NCPP_FORCE_INLINE F__* T_allocate(F_allocator* allocator_p) {
 
-				return reinterpret_cast<F__*>(allocator.allocate(sizeof(F__), 0));
+				return reinterpret_cast<F__*>(allocator_p->allocate(sizeof(F__), NCPP_ALIGNOF(F__), 0, 0));
 			}
 			template<class F__, typename... arg_types__>
-			static NCPP_FORCE_INLINE F__* T_new(F_allocator& allocator, arg_types__&&... args) {
+			static NCPP_FORCE_INLINE F__* T_new(F_allocator* allocator_p, arg_types__&&... args) {
 
-				return new(T_allocate<F__>(allocator)) F__(std::forward<arg_types__>(args)...);
+				return new(T_allocate<F__>(allocator_p)) F__(std::forward<arg_types__>(args)...);
 			}
 			template<class F__>
-			static NCPP_FORCE_INLINE void T_delete(F_allocator& allocator, F__* pointer) {
+			static NCPP_FORCE_INLINE void T_delete(F_allocator* allocator_p, F__* pointer) {
 
 				pointer->~F__();
 
-				allocator.deallocate(pointer, sizeof(F__));
+                allocator_p->deallocate(pointer, 1);
 			}
             
             
