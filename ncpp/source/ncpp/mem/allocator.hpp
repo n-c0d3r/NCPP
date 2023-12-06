@@ -120,6 +120,11 @@ namespace ncpp {
 
 		public:
 			static constexpr b8 enable_manual_alignment = enable_manual_alignment__;
+#ifdef NCPP_HAS_ALLOC_DEBUG_INFO
+			static constexpr b8 is_has_debug_info = true;
+#else
+			static constexpr b8 is_has_debug_info = false;
+#endif
 
 
 

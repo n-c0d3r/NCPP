@@ -208,7 +208,7 @@ namespace ncpp {
                     result.resize(n);
 
                     for (size_t i = 0; i < n; ++i)
-                        result[i] = value[i];
+                        result[i] = static_cast<char>(value[i]);
 
                     return eastl::move(result);
                 }
@@ -362,7 +362,7 @@ namespace ncpp {
                     result.resize(n);
 
                     for (size_t i = 0; i < n; ++i)
-                        result[i] = value[i];
+                        result[i] = static_cast<wchar_t>(value[i]);
 
                     return eastl::move(result);
                 }
