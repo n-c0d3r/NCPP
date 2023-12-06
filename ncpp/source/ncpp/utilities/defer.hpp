@@ -72,7 +72,7 @@ namespace ncpp {
 
             F__ functor;
 
-            ~TF_defer(){
+            NCPP_FORCE_INLINE ~TF_defer(){
 
                 functor();
 
