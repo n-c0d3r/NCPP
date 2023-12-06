@@ -71,10 +71,12 @@ namespace ncpp {
 
 
         ////////////////////////////////////////////////////////////////////////////////////
-        //  array
+        //  array, span
         ////////////////////////////////////////////////////////////////////////////////////
         template<typename F_item__, sz size__>
         using TV_array = TF_view<TG_array<F_item__, size__>>;
+        template<typename F_item__>
+        using TV_span = TF_view<TG_span<F_item__>>;
 
 
 

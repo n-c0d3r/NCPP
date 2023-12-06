@@ -526,7 +526,7 @@ namespace ncpp {
 
 
         ////////////////////////////////////////////////////////////////////////////////////
-        //  array
+        //  array, span
         ////////////////////////////////////////////////////////////////////////////////////
         template<typename F_item__, sz size__>
         using TF_array = eastl::array<F_item__, size__>;
@@ -534,6 +534,13 @@ namespace ncpp {
         using TG_array = TF_array<F_item__, size__>;
         template<typename F_item__, sz size__>
         using TEP_array = TF_array<F_item__, size__>;
+
+        template<typename F_item__>
+        using TF_span = eastl::span<F_item__>;
+        template<typename F_item__>
+        using TG_span = TF_span<F_item__>;
+        template<typename F_item__>
+        using TEP_span = TF_span<F_item__>;
 
 
 
