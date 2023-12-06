@@ -28,6 +28,7 @@ include(NCPP/ConfigureCompiler)
 include(NCPP/DefaultAllocatorConfig)
 include(NCPP/GeneralAllocatorConfig)
 include(NCPP/EphemeralAllocatorConfig)
+include(NCPP/ObjectAllocatorConfig)
 
 
 
