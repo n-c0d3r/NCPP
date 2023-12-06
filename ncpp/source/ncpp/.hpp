@@ -112,7 +112,7 @@ extern ncpp::i32 abstract_main___ncpp_internal___(ncpp::containers::TV_vector<nc
 
 #ifdef _MSC_VER
 #define NCPP_ENTRY_POINT(...) \
-    int main(int argc, char* argv[]) {\
+    int wmain(int argc, wchar_t* argv[]) {\
         ncpp::containers::TG_vector<ncpp::containers::G_wstring> args(argc); \
         for(ncpp::i32 i = 0; i < argc; ++i)                                 \
             args[i] = ncpp::containers::to_wstring(argv[i]);   \
@@ -121,7 +121,7 @@ extern ncpp::i32 abstract_main___ncpp_internal___(ncpp::containers::TV_vector<nc
     ncpp::i32 abstract_main___ncpp_internal___(ncpp::containers::TV_vector<ncpp::containers::G_wstring> __VA_ARGS__)
 #elif defined(__GNUC__) || defined(__clang__)
 #define NCPP_ENTRY_POINT(...) \
-    int main(int argc, wchar_t* argv[]) {\
+    int main(int argc, char* argv[]) {\
         ncpp::containers::TG_vector<ncpp::containers::G_wstring> args(argc); \
         for(ncpp::i32 i = 0; i < argc; ++i)                                 \
             args[i] = ncpp::containers::to_wstring(argv[i]);   \
