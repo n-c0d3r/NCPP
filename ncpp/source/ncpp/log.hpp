@@ -209,9 +209,14 @@ namespace ncpp {
                 ) {
 
                     if(&os == &cout)
+                        os << NCPP_FOREGROUND_BLUE;
+
+                    os << "0";
+
+                    if(&os == &cout)
                         os << NCPP_FOREGROUND_MAGNETA;
 
-                    os << "0x";
+                    os << "x";
 
                     if(&os == &cout)
                         os << NCPP_FOREGROUND_BRIGHT_BLUE;
@@ -229,9 +234,14 @@ namespace ncpp {
                 ) {
 
                     if(&os == &wcout)
+                        os << NCPP_FOREGROUND_BLUE_TEXT;
+
+                    os << L"0";
+
+                    if(&os == &wcout)
                         os << NCPP_FOREGROUND_MAGNETA_TEXT;
 
-                    os << "0x";
+                    os << L"x";
 
                     if(&os == &wcout)
                         os << NCPP_FOREGROUND_BRIGHT_BLUE_TEXT;
