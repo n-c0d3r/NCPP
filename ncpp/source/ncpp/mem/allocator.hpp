@@ -125,6 +125,10 @@ namespace ncpp {
 #else
 			static constexpr b8 is_has_debug_info = false;
 #endif
+            static constexpr F_allocator__* default_p() {
+
+                return 0;
+            }
 
 
 

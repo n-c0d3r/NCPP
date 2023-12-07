@@ -61,7 +61,7 @@ namespace ncpp {
         class TF_default_reference_allocator_config {
 
         public:
-            static constexpr F_target_allocator__* get_default() {
+            static constexpr F_target_allocator__* default_p() {
 
                 return 0;
             }
@@ -85,6 +85,11 @@ namespace ncpp {
 
 
 
+        public:
+            static constexpr F_target_allocator__* default_p() { return F_config::default_p(); }
+
+
+
 		private:
 			F_target_allocator* target_allocator_p_ = 0;
 
@@ -101,7 +106,7 @@ namespace ncpp {
 		public:
             NCPP_FORCE_INLINE TF_reference_allocator(const char* name = 0) :
 				TI_allocator<TF_reference_allocator<F_target_allocator__>>(name),
-                target_allocator_p_(F_config::get_default())
+                target_allocator_p_(default_p())
 			{
 
 
@@ -152,19 +157,22 @@ namespace ncpp {
 		public:
 			NCPP_FORCE_INLINE void* allocate(sz n, int flags = 0) {
 
-				assert((target_allocator_p_ || !F_config::can_be_invalid) && "allocator reference is null, cant allocate memory");
+                if constexpr (F_config::can_be_invalid)
+				    assert(target_allocator_p_ && "allocator reference is null, cant allocate memory");
 
 				return target_allocator_p_->allocate(n, flags);
 			}
 			NCPP_FORCE_INLINE void* allocate(sz n, sz alignment, sz alignment_offset, int flags = 0) {
 
-				assert((target_allocator_p_ || !F_config::can_be_invalid) && "allocator reference is null, cant allocate memory");
+                if constexpr (F_config::can_be_invalid)
+                    assert(target_allocator_p_ && "allocator reference is null, cant allocate memory");
 
 				return target_allocator_p_->allocate(n, alignment, alignment_offset, flags);
 			}
 			NCPP_FORCE_INLINE void  deallocate(void* p, sz n = 1) {
 
-				assert((target_allocator_p_ || !F_config::can_be_invalid) && "allocator reference is null, cant deallocate memory");
+                if constexpr (F_config::can_be_invalid)
+                    assert(target_allocator_p_ && "allocator reference is null, cant deallocate memory");
 
 				target_allocator_p_->deallocate(p, n);
 			}
@@ -190,8 +198,7 @@ namespace ncpp {
 
             NCPP_FORCE_INLINE void unreference() {
 
-
-                target_allocator_p_ = F_config::get_default();
+                target_allocator_p_ = default_p();
 
             }
 

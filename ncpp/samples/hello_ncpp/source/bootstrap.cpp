@@ -17,6 +17,13 @@ NCPP_ENTRY_POINT(args) {
 
     cout << args << std::endl;
 
+    i32* a = NCPP_CREATE(0, i32);
+
+    *a = 4;
+    cout << T_cout_value(*a) << std::endl;
+
+    NCPP_DESTROY(0, a);
+
     pause_console();
 
 	return 0;
