@@ -3,7 +3,7 @@
 
 using namespace ncpp;
 
-
+using A = rtti::F_default_rcontainer;
 
 NCPP_ENTRY_POINT(args) {
 
@@ -14,15 +14,6 @@ NCPP_ENTRY_POINT(args) {
         << NCPP_VERSION_STR
         << F_log_color::RESET
         << std::endl;
-
-    wcout << args << std::endl;
-    wcout << TG_vector<i32>() << std::endl;
-
-    TG_array<i32, 3> a = { 1, 2, 3 };
-    wcout << a << std::endl;
-
-    auto il = { 1, 2, 3 };
-    wcout << il << std::endl;
 
     pause_console();
 

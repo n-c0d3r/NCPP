@@ -192,7 +192,90 @@ namespace ncpp {
         template<typename F__>
         struct TF_cout_value_helper {
 
-            using F = F__;
+            struct F {
+
+                F__ value;
+
+                friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+                        ncpp::F_ostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &cout)
+                        os << NCPP_FOREGROUND_WHITE;
+
+                    ncpp::containers::F_string type_name = ncpp::utilities::T_type_name<F__>();
+
+                    if(&os == &cout)
+                        os << ncpp::containers::to_string(
+                            ncpp::containers::T_replace_all(
+                                ncpp::containers::T_replace_all(
+                                    ncpp::containers::T_replace_all(
+                                        type_name,
+                                        ">",
+                                        ncpp::containers::F_string(NCPP_FOREGROUND_BRIGHT_BLACK) + ">" + ncpp::containers::F_string(NCPP_FOREGROUND_WHITE)
+                                    ),
+                                    "<",
+                                    ncpp::containers::F_string(NCPP_FOREGROUND_BRIGHT_BLACK) + "<" + ncpp::containers::F_string(NCPP_FOREGROUND_WHITE)
+                                ),
+                                "::",
+                                ncpp::containers::F_string(NCPP_FOREGROUND_BRIGHT_BLACK) + "::" + ncpp::containers::F_string(NCPP_FOREGROUND_WHITE)
+                            )
+                        ).c_str();
+                    else
+                        os << type_name.c_str();
+
+                    if(&os == &cout)
+                        os << NCPP_FOREGROUND_BRIGHT_BLACK;
+
+                    os << " {...}";
+
+                    if(&os == &cout)
+                        os << NCPP_RESET_CONSOLE_COLOR;
+
+                    return os;
+                }
+                friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+                        ncpp::F_wostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_WHITE_TEXT;
+
+                    ncpp::containers::F_string type_name = ncpp::utilities::T_type_name<F__>();
+
+                    if(&os == &wcout)
+                        os << ncpp::containers::to_wstring(
+                            ncpp::containers::T_replace_all(
+                                ncpp::containers::T_replace_all(
+                                    ncpp::containers::T_replace_all(
+                                        type_name,
+                                        ">",
+                                        ncpp::containers::F_string(NCPP_FOREGROUND_BRIGHT_BLACK) + ">" + ncpp::containers::F_string(NCPP_FOREGROUND_WHITE)
+                                    ),
+                                    "<",
+                                    ncpp::containers::F_string(NCPP_FOREGROUND_BRIGHT_BLACK) + "<" + ncpp::containers::F_string(NCPP_FOREGROUND_WHITE)
+                                ),
+                                "::",
+                                ncpp::containers::F_string(NCPP_FOREGROUND_BRIGHT_BLACK) + "::" + ncpp::containers::F_string(NCPP_FOREGROUND_WHITE)
+                            )
+                        ).c_str();
+                    else
+                        os << type_name.c_str();
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_BRIGHT_BLACK_TEXT;
+
+                    os << L" {...}";
+
+                    if(&os == &wcout)
+                        os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+                    return os;
+                }
+
+            };
 
         };
 
@@ -1028,7 +1111,7 @@ ncpp::F_ostream& operator << (
         << ncpp::T_cout_lowlight(")")
         << " ";
     
-    os << ncpp::T_cout_lowlight("[") << " ";
+    os << ncpp::T_cout_lowlight("[");
 
 	for (ncpp::sz i = 0; i < input.first.size(); ++i) {
 
@@ -1107,7 +1190,7 @@ ncpp::F_wostream& operator << (
         << ncpp::T_cout_lowlight(L")")
         << L" ";
 
-    os << ncpp::T_cout_lowlight(L"[") << L" ";
+    os << ncpp::T_cout_lowlight(L"[");
 
     for (ncpp::sz i = 0; i < input.first.size(); ++i) {
 
@@ -1202,7 +1285,7 @@ ncpp::F_ostream& operator << (
         << ncpp::T_cout_lowlight(")")
     << " ";
 
-    os << ncpp::T_cout_lowlight("[") << " ";
+    os << ncpp::T_cout_lowlight("[");
 
 	auto j = input.first.begin();
 
@@ -1285,7 +1368,7 @@ ncpp::F_wostream& operator << (
         << ncpp::T_cout_lowlight(L")")
     << L" ";
 
-    os << ncpp::T_cout_lowlight(L"[") << L" ";
+    os << ncpp::T_cout_lowlight(L"[");
 
     auto j = input.first.begin();
 
@@ -1384,7 +1467,7 @@ ncpp::F_ostream& operator << (
     << ncpp::T_cout_lowlight(")")
     << " ";
 
-    os << ncpp::T_cout_lowlight("[") << " ";
+    os << ncpp::T_cout_lowlight("[");
 
 	for (ncpp::sz i = 0; i < size__; ++i) {
 
@@ -1464,7 +1547,7 @@ ncpp::F_wostream& operator << (
     << ncpp::T_cout_lowlight(L")")
     << L" ";
 
-    os << ncpp::T_cout_lowlight(L"[") << L" ";
+    os << ncpp::T_cout_lowlight(L"[");
 
     for (ncpp::sz i = 0; i < size__; ++i) {
 
