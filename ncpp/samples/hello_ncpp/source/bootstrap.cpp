@@ -15,7 +15,14 @@ NCPP_ENTRY_POINT(args) {
         << F_log_color::RESET
         << std::endl;
 
-    cout << args << std::endl;
+    wcout << args << std::endl;
+    wcout << TG_vector<i32>() << std::endl;
+
+    TG_array<i32, 3> a = { 1, 2, 3 };
+    wcout << a << std::endl;
+
+    auto il = { 1, 2, 3 };
+    wcout << il << std::endl;
 
     pause_console();
 

@@ -1,7 +1,7 @@
 #pragma once
 
-/** @file ncpp/mem/tipie_allocator.hpp
-*	@brief Implements tipie allocator.
+/** @file ncpp/mem/clusafi_allocator.hpp
+*	@brief Implements clusafi allocator.
 */
 
 
