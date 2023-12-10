@@ -31,7 +31,10 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#include <ncpp/iostream.hpp>
 #include <ncpp/mem/memory_counting.hpp>
+#include <ncpp/utilities/type_info.hpp>
+#include <ncpp/declare_alloc_debug_info_operators.hpp>
 
 #pragma endregion
 
@@ -88,18 +91,20 @@ namespace ncpp {
 #ifdef NCPP_HAS_ALLOC_DEBUG_INFO
 		struct NCPP_ALIGN(EASTL_ALLOCATOR_MIN_ALIGNMENT) F_alloc_debug_info {
 
-			const char* allocator_name = 0;
-			sz actual_size = 0;
-			sz payload_size = 0;
-			bool is_default_alloc = 0;
+            void* allocator_address = 0;
+            const char* allocator_name = 0;
+            const char* allocator_type_name = 0;
+            sz actual_size = 0;
+            sz payload_size = 0;
+            bool is_default_alloc = 0;
 
-		};
+        };
 #endif
 
 
 
 #ifdef NCPP_HAS_ALLOC_DEBUG_INFO
-		static NCPP_FORCE_INLINE F_alloc_debug_info get_alloc_debug_info(void* p) {
+		static NCPP_FORCE_INLINE const F_alloc_debug_info& get_alloc_debug_info(void* p) {
 
 			return reinterpret_cast<F_alloc_debug_info*>(p)[-1];
 		}
@@ -228,9 +233,13 @@ namespace ncpp {
                     if(this)
                         name = name_;
 
+                    static auto type_name = utilities::T_type_name<F_allocator__>();
+
 					F_alloc_debug_info debug_info = {
 
+                        this,
 						name,
+						type_name,
 						actual_size,
 						n,
 						is_default_alloc__
@@ -265,9 +274,13 @@ namespace ncpp {
                     if(this)
                         name = name_;
 
+                    static auto type_name = utilities::T_type_name<F_allocator__>();
+
                     F_alloc_debug_info debug_info = {
 
+                        this,
                         name,
+                        type_name,
 						actual_size,
 						n,
 						is_default_alloc__
@@ -320,9 +333,13 @@ namespace ncpp {
                     if(this)
                         name = name_;
 
+                    static auto type_name = utilities::T_type_name<F_allocator__>();
+
                     F_alloc_debug_info debug_info = {
 
+                        this,
                         name,
+                        type_name,
 						actual_size,
 						n,
 						is_default_alloc__
@@ -357,9 +374,13 @@ namespace ncpp {
                     if(this)
                         name = name_;
 
+                    static auto type_name = utilities::T_type_name<F_allocator__>();
+
                     F_alloc_debug_info debug_info = {
 
+                        this,
                         name,
+                        type_name,
 						actual_size,
 						n,
 						is_default_alloc__
@@ -398,7 +419,7 @@ namespace ncpp {
 			NCPP_FORCE_INLINE void T_deallocate_internal(void* p, sz n = 1) {
 
 #ifdef NCPP_HAS_ALLOC_DEBUG_INFO
-				F_alloc_debug_info debug_info = get_alloc_debug_info(p);
+				const F_alloc_debug_info& debug_info = get_alloc_debug_info(p);
 
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
 				if (debug_info.is_default_alloc) {

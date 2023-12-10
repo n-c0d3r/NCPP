@@ -33,9 +33,7 @@
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
-#include <ncpp/mem/default_allocator.hpp>
 #include <ncpp/rtti/security_helper.hpp>
-#include <ncpp/containers/eastl_containers.hpp>
 
 #pragma endregion 
 
@@ -161,21 +159,56 @@ namespace ncpp {
                 return std::string_view{value.data(), value.size()};
             }
 
+            template<typename F_char__>
+            struct F_type_name_char_flag {};
+            NCPP_FORCE_INLINE std::string type_name_char_convert(std::string&& str, F_type_name_char_flag<char>){
+
+                return str;
+            }
+            NCPP_FORCE_INLINE std::string type_name_char_convert(std::wstring&& str, F_type_name_char_flag<char>){
+
+                std::string value;
+                value.resize(str.size());
+
+                for(sz i = 0; i < str.length(); ++i)
+                    value[i] = str[i];
+
+                return value;
+            }
+            NCPP_FORCE_INLINE std::wstring type_name_char_convert(std::wstring&& str, F_type_name_char_flag<wchar_t>){
+
+                return str;
+            }
+            NCPP_FORCE_INLINE std::wstring type_name_char_convert(std::string&& str, F_type_name_char_flag<wchar_t>){
+
+                std::wstring value;
+                value.resize(str.size());
+
+                for(sz i = 0; i < str.length(); ++i)
+                    value[i] = str[i];
+
+                return value;
+            }
+
         }
 
 
 
 #ifdef NCPP_RTTI_SECURED_NAME
-        template<typename F__, typename F_char__ = char, typename F_allocator__ = mem::F_default_allocator>
-        NCPP_FORCE_INLINE containers::TF_string<F_char__, F_allocator__> T_type_name() {
+        template<typename F__, typename F_char__ = char>
+        NCPP_FORCE_INLINE const F_char__* T_type_name() {
 
-            return containers::T_to_string<F_char__, F_allocator__>("_" + containers::to_string(T_type_hash_code_v<F__>));
+            static std::basic_string<F_char__> value = ((F_char__)'_') + (std::basic_stringstream<F_char__>() << T_type_hash_code_v<F__>).str();
+
+            return value.c_str();
         }
 #else
-        template<typename F__, typename F_char__ = char, typename F_allocator__ = mem::F_default_allocator>
-        NCPP_FORCE_INLINE containers::TF_string<F_char__, F_allocator__> T_type_name() {
+        template<typename F__, typename F_char__ = char>
+        NCPP_FORCE_INLINE const F_char__* T_type_name() {
 
-            return containers::T_to_string<F_char__, F_allocator__>(std::string(internal::type_name<F__>()).c_str());
+            static std::basic_string<F_char__> value = (std::basic_stringstream<F_char__>() << internal::type_name<F__>()).str();
+
+            return value.c_str();
         }
 #endif
 
