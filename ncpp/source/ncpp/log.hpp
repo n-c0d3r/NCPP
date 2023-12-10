@@ -2350,3 +2350,643 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eas
     return os;
 }
 #pragma endregions
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+#pragma region Set
+template<typename F_item__, typename F_compare__, class F_allocator__>
+ncpp::F_ostream& operator << (
+	ncpp::F_ostream& os,
+	const ncpp::TF_ostream_input<
+		eastl::set<F_item__, F_compare__, F_allocator__>
+	>& input
+)
+{
+
+	if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+
+        os << ncpp::T_cout_lowlight("...");
+
+		return os;
+	}
+
+	os << NCPP_FOREGROUND_YELLOW << "set"
+        << " ";
+    
+    os << ncpp::T_cout_lowlight("{");
+
+	for (auto i = input.first.begin(); i != input.first.end();) {
+
+        os << std::endl;
+
+		for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+			os << " ";
+
+		}
+
+		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(*i), input.second + 1 });
+
+        ++i;
+
+        if (i != input.first.end()) {
+
+            os << ncpp::T_cout_lowlight(",");
+
+        }
+        else {
+
+            os << std::endl;
+
+        }
+
+	}
+
+    if(input.first.size() != 0)
+        for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+            os << " ";
+
+        }
+    os << ncpp::T_cout_lowlight("}");
+
+	return os;
+}
+
+template<typename F_item__, typename F_compare__, class F_allocator__>
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl::set<F_item__, F_compare__, F_allocator__>& v)
+{
+
+	os << ncpp::TF_ostream_input<eastl::set<F_item__, F_compare__, F_allocator__>> { v, 0 };
+
+	return os;
+}
+
+
+
+template<typename F_item__, typename F_compare__, class F_allocator__>
+ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        eastl::set<F_item__, F_compare__, F_allocator__>
+    >& input
+)
+{
+
+    if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+
+        os << ncpp::T_cout_lowlight(L"...");
+
+        return os;
+    }
+
+    os << NCPP_FOREGROUND_YELLOW_TEXT << L"set"
+        << L" ";
+
+    os << ncpp::T_cout_lowlight(L"{");
+
+	for (auto i = input.first.begin(); i != input.first.end();) {
+
+        os << std::endl;
+
+		for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+			os << L" ";
+
+		}
+
+		ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(*i), input.second + 1 });
+
+        ++i;
+
+        if (i != input.first.end()) {
+
+            os << ncpp::T_cout_lowlight(",");
+
+        }
+        else {
+
+            os << std::endl;
+
+        }
+
+	}
+
+    if(input.first.size() != 0)
+        for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+            os << L" ";
+
+        }
+    os << ncpp::T_cout_lowlight(L"}");
+
+    return os;
+}
+
+template<typename F_item__, typename F_compare__, class F_allocator__>
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eastl::set<F_item__, F_compare__, F_allocator__>& v)
+{
+
+    os << ncpp::TF_ostream_input<eastl::set<F_item__, F_compare__, F_allocator__>> { v, 0 };
+
+    return os;
+}
+#pragma endregions
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+#pragma region Unordered Map
+template<typename F_key__, typename F_value__, typename F_compare__, class F_allocator__>
+ncpp::F_ostream& operator << (
+	ncpp::F_ostream& os,
+	const ncpp::TF_ostream_input<
+		eastl::map<F_key__, F_value__, F_compare__, F_allocator__>
+	>& input
+)
+{
+
+	if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+
+        os << ncpp::T_cout_lowlight("...");
+
+		return os;
+	}
+
+	os << NCPP_FOREGROUND_YELLOW << "map"
+        << " ";
+    
+    os << ncpp::T_cout_lowlight("{");
+
+	for (auto i = input.first.begin(); i != input.first.end();) {
+
+        os << std::endl;
+
+		for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+			os << " ";
+
+		}
+
+		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_key__>>(os, { ncpp::T_cout_value(i->first), input.second + 1 });
+
+        os << ncpp::T_cout_lowlight(" : ");
+
+		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_value__>>(os, { ncpp::T_cout_value(i->second), input.second + 1 });
+
+        ++i;
+
+        if (i != input.first.end()) {
+
+            os << ncpp::T_cout_lowlight(",");
+
+        }
+        else {
+
+            os << std::endl;
+
+        }
+
+	}
+
+    if(input.first.size() != 0)
+        for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+            os << " ";
+
+        }
+    os << ncpp::T_cout_lowlight("}");
+
+	return os;
+}
+
+template<typename F_key__, typename F_value__, typename F_compare__, class F_allocator__>
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl::map<F_key__, F_value__, F_compare__, F_allocator__>& v)
+{
+
+	os << ncpp::TF_ostream_input<eastl::map<F_key__, F_value__, F_compare__, F_allocator__>> { v, 0 };
+
+	return os;
+}
+
+
+
+template<typename F_key__, typename F_value__, typename F_compare__, class F_allocator__>
+ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        eastl::map<F_key__, F_value__, F_compare__, F_allocator__>
+    >& input
+)
+{
+
+    if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+
+        os << ncpp::T_cout_lowlight(L"...");
+
+        return os;
+    }
+
+    os << NCPP_FOREGROUND_YELLOW_TEXT << L"map"
+        << L" ";
+
+    os << ncpp::T_cout_lowlight(L"{");
+
+	for (auto i = input.first.begin(); i != input.first.end();) {
+
+        os << std::endl;
+
+		for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+			os << L" ";
+
+		}
+
+		ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, ncpp::TF_cout_value<F_key__>>(os, { ncpp::T_cout_value(i->first), input.second + 1 });
+
+        os << ncpp::T_cout_lowlight(" : ");
+
+		ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, ncpp::TF_cout_value<F_value__>>(os, { ncpp::T_cout_value(i->second), input.second + 1 });
+
+        ++i;
+
+        if (i != input.first.end()) {
+
+            os << ncpp::T_cout_lowlight(",");
+
+        }
+        else {
+
+            os << std::endl;
+
+        }
+
+	}
+
+    if(input.first.size() != 0)
+        for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+            os << L" ";
+
+        }
+    os << ncpp::T_cout_lowlight(L"}");
+
+    return os;
+}
+
+template<typename F_key__, typename F_value__, typename F_compare__, class F_allocator__>
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eastl::map<F_key__, F_value__, F_compare__, F_allocator__>& v)
+{
+
+    os << ncpp::TF_ostream_input<eastl::map<F_key__, F_value__, F_compare__, F_allocator__>> { v, 0 };
+
+    return os;
+}
+#pragma endregions
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+#pragma region Unordered Set
+template<typename F_item__, typename F_hash__, typename F_predicate__, class F_allocator__>
+ncpp::F_ostream& operator << (
+	ncpp::F_ostream& os,
+	const ncpp::TF_ostream_input<
+		eastl::unordered_set<F_item__, F_hash__, F_predicate__, F_allocator__>
+	>& input
+)
+{
+
+	if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+
+        os << ncpp::T_cout_lowlight("...");
+
+		return os;
+	}
+
+	os << NCPP_FOREGROUND_YELLOW << "unordered_set"
+        << " ";
+    
+    os << ncpp::T_cout_lowlight("{");
+
+	for (auto i = input.first.begin(); i != input.first.end();) {
+
+        os << std::endl;
+
+		for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+			os << " ";
+
+		}
+
+		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(*i), input.second + 1 });
+
+        ++i;
+
+        if (i != input.first.end()) {
+
+            os << ncpp::T_cout_lowlight(",");
+
+        }
+        else {
+
+            os << std::endl;
+
+        }
+
+	}
+
+    if(input.first.size() != 0)
+        for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+            os << " ";
+
+        }
+    os << ncpp::T_cout_lowlight("}");
+
+	return os;
+}
+
+template<typename F_item__, typename F_hash__, typename F_predicate__, class F_allocator__>
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl::unordered_set<F_item__, F_hash__, F_predicate__, F_allocator__>& v)
+{
+
+	os << ncpp::TF_ostream_input<eastl::unordered_set<F_item__, F_hash__, F_predicate__, F_allocator__>> { v, 0 };
+
+	return os;
+}
+
+
+
+template<typename F_item__, typename F_hash__, typename F_predicate__, class F_allocator__>
+ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        eastl::unordered_set<F_item__, F_hash__, F_predicate__, F_allocator__>
+    >& input
+)
+{
+
+    if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+
+        os << ncpp::T_cout_lowlight(L"...");
+
+        return os;
+    }
+
+    os << NCPP_FOREGROUND_YELLOW_TEXT << L"unordered_set"
+        << L" ";
+
+    os << ncpp::T_cout_lowlight(L"{");
+
+	for (auto i = input.first.begin(); i != input.first.end();) {
+
+        os << std::endl;
+
+		for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+			os << L" ";
+
+		}
+
+		ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(*i), input.second + 1 });
+
+        ++i;
+
+        if (i != input.first.end()) {
+
+            os << ncpp::T_cout_lowlight(",");
+
+        }
+        else {
+
+            os << std::endl;
+
+        }
+
+	}
+
+    if(input.first.size() != 0)
+        for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+            os << L" ";
+
+        }
+    os << ncpp::T_cout_lowlight(L"}");
+
+    return os;
+}
+
+template<typename F_item__, typename F_hash__, typename F_predicate__, class F_allocator__>
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eastl::unordered_set<F_item__, F_hash__, F_predicate__, F_allocator__>& v)
+{
+
+    os << ncpp::TF_ostream_input<eastl::unordered_set<F_item__, F_hash__, F_predicate__, F_allocator__>> { v, 0 };
+
+    return os;
+}
+#pragma endregions
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+#pragma region Unordered Map
+template<typename F_key__, typename F_value__, typename F_hash__, typename F_predicate__, class F_allocator__>
+ncpp::F_ostream& operator << (
+	ncpp::F_ostream& os,
+	const ncpp::TF_ostream_input<
+		eastl::unordered_map<F_key__, F_value__, F_hash__, F_predicate__, F_allocator__>
+	>& input
+)
+{
+
+	if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+
+        os << ncpp::T_cout_lowlight("...");
+
+		return os;
+	}
+
+	os << NCPP_FOREGROUND_YELLOW << "unordered_map"
+        << " ";
+    
+    os << ncpp::T_cout_lowlight("{");
+
+	for (auto i = input.first.begin(); i != input.first.end();) {
+
+        os << std::endl;
+
+		for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+			os << " ";
+
+		}
+
+		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_key__>>(os, { ncpp::T_cout_value(i->first), input.second + 1 });
+
+        os << ncpp::T_cout_lowlight(" : ");
+
+		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_value__>>(os, { ncpp::T_cout_value(i->second), input.second + 1 });
+
+        ++i;
+
+        if (i != input.first.end()) {
+
+            os << ncpp::T_cout_lowlight(",");
+
+        }
+        else {
+
+            os << std::endl;
+
+        }
+
+	}
+
+    if(input.first.size() != 0)
+        for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+            os << " ";
+
+        }
+    os << ncpp::T_cout_lowlight("}");
+
+	return os;
+}
+
+template<typename F_key__, typename F_value__, typename F_hash__, typename F_predicate__, class F_allocator__>
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl::unordered_map<F_key__, F_value__, F_hash__, F_predicate__, F_allocator__>& v)
+{
+
+	os << ncpp::TF_ostream_input<eastl::unordered_map<F_key__, F_value__, F_hash__, F_predicate__, F_allocator__>> { v, 0 };
+
+	return os;
+}
+
+
+
+template<typename F_key__, typename F_value__, typename F_hash__, typename F_predicate__, class F_allocator__>
+ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        eastl::unordered_map<F_key__, F_value__, F_hash__, F_predicate__, F_allocator__>
+    >& input
+)
+{
+
+    if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+
+        os << ncpp::T_cout_lowlight(L"...");
+
+        return os;
+    }
+
+    os << NCPP_FOREGROUND_YELLOW_TEXT << L"unordered_map"
+        << L" ";
+
+    os << ncpp::T_cout_lowlight(L"{");
+
+	for (auto i = input.first.begin(); i != input.first.end();) {
+
+        os << std::endl;
+
+		for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+			os << L" ";
+
+		}
+
+		ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, ncpp::TF_cout_value<F_key__>>(os, { ncpp::T_cout_value(i->first), input.second + 1 });
+
+        os << ncpp::T_cout_lowlight(" : ");
+
+		ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, ncpp::TF_cout_value<F_value__>>(os, { ncpp::T_cout_value(i->second), input.second + 1 });
+
+        ++i;
+
+        if (i != input.first.end()) {
+
+            os << ncpp::T_cout_lowlight(",");
+
+        }
+        else {
+
+            os << std::endl;
+
+        }
+
+	}
+
+    if(input.first.size() != 0)
+        for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+            os << L" ";
+
+        }
+    os << ncpp::T_cout_lowlight(L"}");
+
+    return os;
+}
+
+template<typename F_key__, typename F_value__, typename F_hash__, typename F_predicate__, class F_allocator__>
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eastl::unordered_map<F_key__, F_value__, F_hash__, F_predicate__, F_allocator__>& v)
+{
+
+    os << ncpp::TF_ostream_input<eastl::unordered_map<F_key__, F_value__, F_hash__, F_predicate__, F_allocator__>> { v, 0 };
+
+    return os;
+}
+#pragma endregions
