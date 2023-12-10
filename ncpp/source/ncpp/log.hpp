@@ -304,7 +304,7 @@ namespace ncpp {
                     if(&os == &cout)
                         os << NCPP_FOREGROUND_BRIGHT_BLUE;
 
-                    os << reinterpret_cast<sz>(input.value);
+                    os << ncpp::containers::T_decimal_to_hex(reinterpret_cast<sz>(input.value)).c_str();
 
                     if(&os == &cout)
                         os << NCPP_RESET_CONSOLE_COLOR;
@@ -329,7 +329,7 @@ namespace ncpp {
                     if(&os == &wcout)
                         os << NCPP_FOREGROUND_BRIGHT_BLUE_TEXT;
 
-                    os << reinterpret_cast<sz>(input.value);
+                    os << ncpp::containers::T_decimal_to_hex<ncpp::containers::F_wstring>(reinterpret_cast<sz>(input.value)).c_str();
 
                     if(&os == &wcout)
                         os << NCPP_RESET_CONSOLE_COLOR_TEXT;
@@ -795,6 +795,88 @@ namespace ncpp {
             };
 
         };
+        template<>
+        struct TF_cout_value_helper<sz> {
+
+            struct F {
+
+                sz value;
+
+                friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+                        ncpp::F_ostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &cout)
+                        os << NCPP_FOREGROUND_BRIGHT_CYAN;
+
+                    os << input.value;
+
+                    if(&os == &cout)
+                        os << NCPP_RESET_CONSOLE_COLOR;
+
+                    return os;
+                }
+                friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+                        ncpp::F_wostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
+
+                    os << input.value;
+
+                    if(&os == &wcout)
+                        os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+                    return os;
+                }
+
+            };
+
+        };
+        template<>
+        struct TF_cout_value_helper<ptrd> {
+
+            struct F {
+
+                ptrd value;
+
+                friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+                        ncpp::F_ostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &cout)
+                        os << NCPP_FOREGROUND_BRIGHT_CYAN;
+
+                    os << input.value;
+
+                    if(&os == &cout)
+                        os << NCPP_RESET_CONSOLE_COLOR;
+
+                    return os;
+                }
+                friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+                        ncpp::F_wostream& os,
+                        const F& input
+                ) {
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
+
+                    os << input.value;
+
+                    if(&os == &wcout)
+                        os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+                    return os;
+                }
+
+            };
+
+        };
 
         template<>
         struct TF_cout_value_helper<const char*> {
@@ -1104,10 +1186,13 @@ ncpp::F_ostream& operator << (
 		return os;
 	}
 
-	os << NCPP_FOREGROUND_YELLOW << "vector" << NCPP_RESET_CONSOLE_COLOR
+	os << NCPP_FOREGROUND_YELLOW << "vector"
         << ncpp::T_cout_lowlight("(")
+        << ncpp::T_cout_lowlight("data_p: ")
+        << ncpp::T_cout_value(input.first.data())
+        << ncpp::T_cout_lowlight(", ")
         << ncpp::T_cout_lowlight("size: ")
-        << (NCPP_FOREGROUND_MAGNETA + ncpp::containers::T_to_string<char>(input.first.size()) + NCPP_RESET_CONSOLE_COLOR).c_str()
+        << ncpp::T_cout_value(input.first.size())
         << ncpp::T_cout_lowlight(")")
         << " ";
     
@@ -1183,11 +1268,14 @@ ncpp::F_wostream& operator << (
         return os;
     }
 
-    os << NCPP_FOREGROUND_YELLOW_TEXT << L"vector" << NCPP_RESET_CONSOLE_COLOR_TEXT
-        << ncpp::T_cout_lowlight(L"(")
+    os << NCPP_FOREGROUND_YELLOW_TEXT << L"vector"
+        << ncpp::T_cout_lowlight("(")
+        << ncpp::T_cout_lowlight("data_p: ")
+        << ncpp::T_cout_value(input.first.data())
+        << ncpp::T_cout_lowlight(", ")
         << ncpp::T_cout_lowlight("size: ")
-        << (NCPP_FOREGROUND_MAGNETA_TEXT + ncpp::containers::T_to_string<wchar_t>(input.first.size()) + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str()
-        << ncpp::T_cout_lowlight(L")")
+        << ncpp::T_cout_value(input.first.size())
+        << ncpp::T_cout_lowlight(")")
         << L" ";
 
     os << ncpp::T_cout_lowlight(L"[");
@@ -1280,10 +1368,13 @@ ncpp::F_ostream& operator << (
 
 	os << NCPP_FOREGROUND_YELLOW << "initializer_list"
         << ncpp::T_cout_lowlight("(")
+        << ncpp::T_cout_lowlight("data_p: ")
+        << ncpp::T_cout_value(input.first.begin())
+        << ncpp::T_cout_lowlight(", ")
         << ncpp::T_cout_lowlight("size: ")
-        << (NCPP_FOREGROUND_MAGNETA + ncpp::containers::T_to_string<char>(input.first.size()) + NCPP_RESET_CONSOLE_COLOR).c_str()
+        << ncpp::T_cout_value(input.first.size())
         << ncpp::T_cout_lowlight(")")
-    << " ";
+        << " ";
 
     os << ncpp::T_cout_lowlight("[");
 
@@ -1362,11 +1453,14 @@ ncpp::F_wostream& operator << (
     }
 
     os << NCPP_FOREGROUND_YELLOW_TEXT << L"initializer_list"
-        << ncpp::T_cout_lowlight(L"(")
-        << ncpp::T_cout_lowlight(L"size: ")
-        << (NCPP_FOREGROUND_MAGNETA_TEXT + ncpp::containers::T_to_string<wchar_t>(input.first.size()) + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str()
-        << ncpp::T_cout_lowlight(L")")
-    << L" ";
+        << ncpp::T_cout_lowlight("(")
+        << ncpp::T_cout_lowlight("data_p: ")
+        << ncpp::T_cout_value(input.first.begin())
+        << ncpp::T_cout_lowlight(", ")
+        << ncpp::T_cout_lowlight("size: ")
+        << ncpp::T_cout_value(input.first.size())
+        << ncpp::T_cout_lowlight(")")
+        << L" ";
 
     os << ncpp::T_cout_lowlight(L"[");
 
@@ -1460,12 +1554,15 @@ ncpp::F_ostream& operator << (
 		return os;
 	}
 
-	os << NCPP_FOREGROUND_YELLOW << "array" << NCPP_RESET_CONSOLE_COLOR
-    << ncpp::T_cout_lowlight("(")
-    << ncpp::T_cout_lowlight("size: ")
-    << (NCPP_FOREGROUND_MAGNETA + ncpp::containers::T_to_string<char>(input.first.size()) + NCPP_RESET_CONSOLE_COLOR).c_str()
-    << ncpp::T_cout_lowlight(")")
-    << " ";
+	os << NCPP_FOREGROUND_YELLOW << "array"
+        << ncpp::T_cout_lowlight("(")
+        << ncpp::T_cout_lowlight("data_p: ")
+        << ncpp::T_cout_value(input.first.data())
+        << ncpp::T_cout_lowlight(", ")
+        << ncpp::T_cout_lowlight("size: ")
+        << ncpp::T_cout_value(size__)
+        << ncpp::T_cout_lowlight(")")
+        << " ";
 
     os << ncpp::T_cout_lowlight("[");
 
@@ -1540,12 +1637,15 @@ ncpp::F_wostream& operator << (
         return os;
     }
 
-    os << NCPP_FOREGROUND_YELLOW_TEXT << L"array" << NCPP_RESET_CONSOLE_COLOR_TEXT
-    << ncpp::T_cout_lowlight(L"(")
-    << ncpp::T_cout_lowlight("size: ")
-    << (NCPP_FOREGROUND_MAGNETA_TEXT + ncpp::containers::T_to_string<wchar_t>(input.first.size()) + NCPP_RESET_CONSOLE_COLOR_TEXT).c_str()
-    << ncpp::T_cout_lowlight(L")")
-    << L" ";
+    os << NCPP_FOREGROUND_YELLOW_TEXT << L"array"
+        << ncpp::T_cout_lowlight("(")
+        << ncpp::T_cout_lowlight("data_p: ")
+        << ncpp::T_cout_value(input.first.data())
+        << ncpp::T_cout_lowlight(", ")
+        << ncpp::T_cout_lowlight("size: ")
+        << ncpp::T_cout_value(size__)
+        << ncpp::T_cout_lowlight(")")
+        << L" ";
 
     os << ncpp::T_cout_lowlight(L"[");
 
@@ -1595,6 +1695,182 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eas
 {
 
     os << ncpp::TF_ostream_input<eastl::array<F_item__, size__>> { v, 0 };
+
+    return os;
+}
+#pragma endregion
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+#pragma region Span
+template<typename F_item__>
+std::ostream& operator << (
+	std::ostream& os,
+	const ncpp::TF_ostream_input<
+		eastl::span<F_item__>
+	>& input
+)
+{
+
+	if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+
+        os << ncpp::T_cout_lowlight("...");
+
+		return os;
+	}
+
+	os << NCPP_FOREGROUND_YELLOW << "span"
+        << ncpp::T_cout_lowlight("(")
+        << ncpp::T_cout_lowlight("data_p: ")
+        << ncpp::T_cout_value(input.first.data())
+        << ncpp::T_cout_lowlight(", ")
+        << ncpp::T_cout_lowlight("size: ")
+        << ncpp::T_cout_value(input.first.size())
+        << ncpp::T_cout_lowlight(")")
+        << " ";
+
+    os << ncpp::T_cout_lowlight("[");
+
+	auto j = input.first.begin();
+
+	for (ncpp::sz i = 0; i < input.first.size(); ++i) {
+
+        os << std::endl;
+
+		for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+			os << " ";
+
+		}
+
+        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<char>(i)) << ncpp::T_cout_lowlight(": ");
+
+		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(*j), input.second + 1 });
+
+		if (i != input.first.size() - 1) {
+
+            os << ncpp::T_cout_lowlight(",");
+
+        }
+        else {
+
+            os << std::endl;
+
+        }
+
+		++j;
+
+	}
+
+	for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+		os << " ";
+
+	}
+    os << ncpp::T_cout_lowlight("]");
+
+	return os;
+}
+
+template<typename F_item__>
+std::ostream& operator << (std::ostream& os, const eastl::span<F_item__>& v)
+{
+
+    os << ncpp::TF_ostream_input<eastl::span<F_item__>> { v, 0 };
+
+    return os;
+}
+
+
+
+template<typename F_item__>
+std::wostream& operator << (
+    std::wostream& os,
+    const ncpp::TF_ostream_input<
+        eastl::span<F_item__>
+    >& input
+)
+{
+
+	if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+
+        os << ncpp::T_cout_lowlight("...");
+
+		return os;
+	}
+
+	os << NCPP_FOREGROUND_YELLOW << L"span"
+        << ncpp::T_cout_lowlight("(")
+        << ncpp::T_cout_lowlight("data_p: ")
+        << ncpp::T_cout_value(input.first.data())
+        << ncpp::T_cout_lowlight(", ")
+        << ncpp::T_cout_lowlight("size: ")
+        << ncpp::T_cout_value(input.first.size())
+        << ncpp::T_cout_lowlight(")")
+        << L" ";
+
+    os << ncpp::T_cout_lowlight("[");
+
+	auto j = input.first.begin();
+
+	for (ncpp::sz i = 0; i < input.first.size(); ++i) {
+
+        os << std::endl;
+
+		for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+			os << L" ";
+
+		}
+
+        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<wchar_t>(i)) << ncpp::T_cout_lowlight(": ");
+
+		ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(*j), input.second + 1 });
+
+		if (i != input.first.size() - 1) {
+
+            os << ncpp::T_cout_lowlight(",");
+
+        }
+        else {
+
+            os << std::endl;
+
+        }
+
+		++j;
+
+	}
+
+	for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+		os << L" ";
+
+	}
+    os << ncpp::T_cout_lowlight("]");
+
+	return os;
+}
+
+template<typename F_item__>
+std::wostream& operator << (std::wostream& os, const eastl::span<F_item__>& v)
+{
+
+    os << ncpp::TF_ostream_input<eastl::span<F_item__>> { v, 0 };
 
     return os;
 }

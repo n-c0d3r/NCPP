@@ -92,6 +92,15 @@ namespace ncpp {
             return result;
         }
 
+        template<typename F_string__ = F_string>
+        inline F_string__ T_decimal_to_hex(i64 decimal_in) {
+
+            std::basic_stringstream<typename F_string__::value_type> stream;
+            stream << std::hex << decimal_in;
+
+            return stream.str().c_str();
+        }
+
     }
 
 }

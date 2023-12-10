@@ -77,6 +77,8 @@ namespace ncpp {
         using TV_array = TF_view<TG_array<F_item__, size__>>;
         template<typename F_item__>
         using TV_span = TF_view<TG_span<F_item__>>;
+        template<typename F_item__>
+        using TV_initializer_list = TF_view<TG_initializer_list<F_item__>>;
 
 
 

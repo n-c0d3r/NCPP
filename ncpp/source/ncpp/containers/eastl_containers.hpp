@@ -526,7 +526,7 @@ namespace ncpp {
 
 
         ////////////////////////////////////////////////////////////////////////////////////
-        //  array, span
+        //  array, span, initializer_list
         ////////////////////////////////////////////////////////////////////////////////////
         template<typename F_item__, sz size__>
         using TF_array = eastl::array<F_item__, size__>;
@@ -541,6 +541,13 @@ namespace ncpp {
         using TG_span = TF_span<F_item__>;
         template<typename F_item__>
         using TEP_span = TF_span<F_item__>;
+
+        template<typename F_item__>
+        using TF_initializer_list = std::initializer_list<F_item__>;
+        template<typename F_item__>
+        using TG_initializer_list = TF_initializer_list<F_item__>;
+        template<typename F_item__>
+        using TEP_initializer_list = TF_initializer_list<F_item__>;
 
 
 
