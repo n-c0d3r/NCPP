@@ -20,10 +20,10 @@ NCPP_ENTRY_POINT(args) {
     TG_array<i32, 3> a = { 1, 2, 3 };
     TG_span<i32> s = { a.data(), 3 };
 
-    wcout << il << std::endl;
-    wcout << v << std::endl;
-    wcout << a << std::endl;
-    wcout << s << std::endl;
+    wcout << T_to_view(il) << std::endl;
+    wcout << T_to_view(v) << std::endl;
+    wcout << T_to_view(a) << std::endl;
+    wcout << T_to_view(s) << std::endl;
 
     pause_console();
 

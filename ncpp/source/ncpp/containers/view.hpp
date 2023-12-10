@@ -33,6 +33,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/containers/binding_helper.hpp>
+#include <ncpp/containers/eastl_containers.hpp>
 #include <ncpp/mem/general_allocator.hpp>
 #include <ncpp/utilities/iterator.hpp>
 #include <ncpp/iostream.hpp>
