@@ -1355,7 +1355,7 @@ ncpp::F_ostream& operator << (
 
 		}
 
-        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<char>(i)) << ncpp::T_cout_lowlight(": ");
+        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<char>(i)) << ncpp::T_cout_lowlight(" -> ");
 
 		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(input.first[i]), input.second + 1 });
 
@@ -1438,7 +1438,7 @@ ncpp::F_wostream& operator << (
 
         }
 
-        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<wchar_t>(i)) << ncpp::T_cout_lowlight(L": ");
+        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<wchar_t>(i)) << ncpp::T_cout_lowlight(L" -> ");
 
         ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(input.first[i]), input.second + 1 });
 
@@ -1539,7 +1539,7 @@ ncpp::F_ostream& operator << (
 
 		}
 
-        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<char>(i)) << ncpp::T_cout_lowlight(": ");
+        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<char>(i)) << ncpp::T_cout_lowlight(" -> ");
 
 		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(*j), input.second + 1 });
 
@@ -1626,7 +1626,7 @@ ncpp::F_wostream& operator << (
 
         }
 
-        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<wchar_t>(i)) << ncpp::T_cout_lowlight(L": ");
+        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<wchar_t>(i)) << ncpp::T_cout_lowlight(L" -> ");
 
         ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(*j), input.second + 1 });
 
@@ -1727,7 +1727,7 @@ ncpp::F_ostream& operator << (
 
 		}
 
-        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<char>(i)) << ncpp::T_cout_lowlight(": ");
+        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<char>(i)) << ncpp::T_cout_lowlight(" -> ");
 
 		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(input.first[i]), input.second + 1 });
 
@@ -1811,7 +1811,7 @@ ncpp::F_wostream& operator << (
 
         }
 
-        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<wchar_t>(i)) << ncpp::T_cout_lowlight(L": ");
+        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<wchar_t>(i)) << ncpp::T_cout_lowlight(L" -> ");
 
         ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(input.first[i]), input.second + 1 });
 
@@ -1910,7 +1910,7 @@ std::ostream& operator << (
 
 		}
 
-        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<char>(i)) << ncpp::T_cout_lowlight(": ");
+        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<char>(i)) << ncpp::T_cout_lowlight(" -> ");
 
 		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(*j), input.second + 1 });
 
@@ -1991,7 +1991,7 @@ std::wostream& operator << (
 
 		}
 
-        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<wchar_t>(i)) << ncpp::T_cout_lowlight(": ");
+        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<wchar_t>(i)) << ncpp::T_cout_lowlight(" -> ");
 
 		ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(*j), input.second + 1 });
 
@@ -2070,7 +2070,7 @@ ncpp::F_ostream& operator << (
         << ncpp::T_cout_value(input.first.size())
         << ncpp::T_cout_lowlight(")")
         << " ";
-    
+
     os << ncpp::T_cout_lowlight("{");
 
 	for (ncpp::sz i = 0; i < input.first.size(); ++i) {
@@ -2083,7 +2083,7 @@ ncpp::F_ostream& operator << (
 
 		}
 
-        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<char>(i)) << ncpp::T_cout_lowlight(": ");
+        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<char>(i)) << ncpp::T_cout_lowlight(" -> ");
 
 		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(input.first[i]), input.second + 1 });
 
@@ -2157,7 +2157,7 @@ ncpp::F_wostream& operator << (
 
         }
 
-        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<wchar_t>(i)) << ncpp::T_cout_lowlight(L": ");
+        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<wchar_t>(i)) << ncpp::T_cout_lowlight(L" -> ");
 
         ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(input.first[i]), input.second + 1 });
 
@@ -2230,7 +2230,7 @@ ncpp::F_ostream& operator << (
 
 	os << NCPP_FOREGROUND_YELLOW << "list"
         << " ";
-    
+
     os << ncpp::T_cout_lowlight("{");
 
 	for (auto i = input.first.begin(); i != input.first.end();) {
@@ -2386,7 +2386,7 @@ ncpp::F_ostream& operator << (
 
 	os << NCPP_FOREGROUND_YELLOW << "set"
         << " ";
-    
+
     os << ncpp::T_cout_lowlight("{");
 
 	for (auto i = input.first.begin(); i != input.first.end();) {
@@ -2523,7 +2523,7 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eas
 
 
 
-#pragma region Unordered Map
+#pragma region Map
 template<typename F_key__, typename F_value__, typename F_compare__, class F_allocator__>
 ncpp::F_ostream& operator << (
 	ncpp::F_ostream& os,
@@ -2542,7 +2542,7 @@ ncpp::F_ostream& operator << (
 
 	os << NCPP_FOREGROUND_YELLOW << "map"
         << " ";
-    
+
     os << ncpp::T_cout_lowlight("{");
 
 	for (auto i = input.first.begin(); i != input.first.end();) {
@@ -2557,7 +2557,7 @@ ncpp::F_ostream& operator << (
 
 		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_key__>>(os, { ncpp::T_cout_value(i->first), input.second + 1 });
 
-        os << ncpp::T_cout_lowlight(" : ");
+        os << ncpp::T_cout_lowlight(" -> ");
 
 		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_value__>>(os, { ncpp::T_cout_value(i->second), input.second + 1 });
 
@@ -2631,7 +2631,7 @@ ncpp::F_wostream& operator << (
 
 		ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, ncpp::TF_cout_value<F_key__>>(os, { ncpp::T_cout_value(i->first), input.second + 1 });
 
-        os << ncpp::T_cout_lowlight(" : ");
+        os << ncpp::T_cout_lowlight(" -> ");
 
 		ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, ncpp::TF_cout_value<F_value__>>(os, { ncpp::T_cout_value(i->second), input.second + 1 });
 
@@ -2706,7 +2706,7 @@ ncpp::F_ostream& operator << (
 
 	os << NCPP_FOREGROUND_YELLOW << "unordered_set"
         << " ";
-    
+
     os << ncpp::T_cout_lowlight("{");
 
 	for (auto i = input.first.begin(); i != input.first.end();) {
@@ -2862,7 +2862,7 @@ ncpp::F_ostream& operator << (
 
 	os << NCPP_FOREGROUND_YELLOW << "unordered_map"
         << " ";
-    
+
     os << ncpp::T_cout_lowlight("{");
 
 	for (auto i = input.first.begin(); i != input.first.end();) {
@@ -2877,7 +2877,7 @@ ncpp::F_ostream& operator << (
 
 		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_key__>>(os, { ncpp::T_cout_value(i->first), input.second + 1 });
 
-        os << ncpp::T_cout_lowlight(" : ");
+        os << ncpp::T_cout_lowlight(" -> ");
 
 		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_value__>>(os, { ncpp::T_cout_value(i->second), input.second + 1 });
 
@@ -2951,7 +2951,7 @@ ncpp::F_wostream& operator << (
 
 		ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, ncpp::TF_cout_value<F_key__>>(os, { ncpp::T_cout_value(i->first), input.second + 1 });
 
-        os << ncpp::T_cout_lowlight(" : ");
+        os << ncpp::T_cout_lowlight(" -> ");
 
 		ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, ncpp::TF_cout_value<F_value__>>(os, { ncpp::T_cout_value(i->second), input.second + 1 });
 
