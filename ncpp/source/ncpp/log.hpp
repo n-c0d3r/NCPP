@@ -189,16 +189,156 @@ namespace ncpp {
 
     namespace internal {
 
+        template<typename F__, typename...>
+        struct TF_cout_value_helper_default_case;
+
         template<typename F__>
-        struct TF_cout_value_helper {
+        struct TF_cout_value_helper_default_case<
+            F__, 
+            std::enable_if_t<
+                (ncpp::utilities::T_is_ostreamable_v<F_ostream, F__>)
+                || (ncpp::utilities::T_is_ostreamable_v<F_wostream, F__>),
+                i32
+            >
+        > {
+
+            using F = F__;
+
+        };
+
+        template<typename F__>
+        struct TF_cout_value_helper_default_case<
+            F__, 
+            std::enable_if_t<
+                (!ncpp::utilities::T_is_ostreamable_v<F_ostream, F__>)
+                && (ncpp::utilities::T_is_ostreamable_v<F_wostream, F__>),
+                i32
+            >
+        > {
 
             struct F {
 
                 F__ value;
 
                 friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-                        ncpp::F_ostream& os,
+                    ncpp::F_ostream& os,
+                    const F& input
+                ) {
+
+                    if(&os == &cout)
+                        os << NCPP_FOREGROUND_WHITE;
+
+                    ncpp::containers::F_string type_name = ncpp::utilities::T_type_name<F__>();
+
+                    if(&os == &cout)
+                        os << ncpp::containers::to_string(
+                            ncpp::containers::T_replace_all(
+                                ncpp::containers::T_replace_all(
+                                    ncpp::containers::T_replace_all(
+                                        type_name,
+                                        ">",
+                                        ncpp::containers::F_string(NCPP_FOREGROUND_BRIGHT_BLACK) + ">" + ncpp::containers::F_string(NCPP_FOREGROUND_WHITE)
+                                    ),
+                                    "<",
+                                    ncpp::containers::F_string(NCPP_FOREGROUND_BRIGHT_BLACK) + "<" + ncpp::containers::F_string(NCPP_FOREGROUND_WHITE)
+                                ),
+                                "::",
+                                ncpp::containers::F_string(NCPP_FOREGROUND_BRIGHT_BLACK) + "::" + ncpp::containers::F_string(NCPP_FOREGROUND_WHITE)
+                            )
+                        ).c_str();
+                    else
+                        os << type_name.c_str();
+
+                    if(&os == &cout)
+                        os << NCPP_FOREGROUND_BRIGHT_BLACK;
+
+                    os << " {...}";
+
+                    if(&os == &cout)
+                        os << NCPP_RESET_CONSOLE_COLOR;
+
+                    return os;
+                }
+
+            };
+
+        };
+
+        template<typename F__>
+        struct TF_cout_value_helper_default_case<
+            F__, 
+            std::enable_if_t<
+                (ncpp::utilities::T_is_ostreamable_v<F_ostream, F__>)
+                && (!ncpp::utilities::T_is_ostreamable_v<F_wostream, F__>),
+                i32
+            >
+        > {
+
+            struct F {
+
+                F__ value;
+
+                friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
+                        ncpp::F_wostream& os,
                         const F& input
+                ) {
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_WHITE_TEXT;
+
+                    ncpp::containers::F_string type_name = ncpp::utilities::T_type_name<F__>();
+
+                    if(&os == &wcout)
+                        os << ncpp::containers::to_wstring(
+                            ncpp::containers::T_replace_all(
+                                ncpp::containers::T_replace_all(
+                                    ncpp::containers::T_replace_all(
+                                        type_name,
+                                        ">",
+                                        ncpp::containers::F_string(NCPP_FOREGROUND_BRIGHT_BLACK) + ">" + ncpp::containers::F_string(NCPP_FOREGROUND_WHITE)
+                                    ),
+                                    "<",
+                                    ncpp::containers::F_string(NCPP_FOREGROUND_BRIGHT_BLACK) + "<" + ncpp::containers::F_string(NCPP_FOREGROUND_WHITE)
+                                ),
+                                "::",
+                                ncpp::containers::F_string(NCPP_FOREGROUND_BRIGHT_BLACK) + "::" + ncpp::containers::F_string(NCPP_FOREGROUND_WHITE)
+                            )
+                        ).c_str();
+                    else
+                        os << type_name.c_str();
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_BRIGHT_BLACK_TEXT;
+
+                    os << L" {...}";
+
+                    if(&os == &wcout)
+                        os << NCPP_RESET_CONSOLE_COLOR_TEXT;
+
+                    return os;
+                }
+
+            };
+
+        };
+
+        template<typename F__>
+        struct TF_cout_value_helper_default_case<
+            F__, 
+            std::enable_if_t<
+                (!ncpp::utilities::T_is_ostreamable_v<F_ostream, F__>)
+                && (!ncpp::utilities::T_is_ostreamable_v<F_wostream, F__>),
+                i32
+            >
+        > {
+
+            struct F {
+
+                F__ value;
+
+                friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
+                    ncpp::F_ostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &cout)
@@ -276,6 +416,13 @@ namespace ncpp {
                 }
 
             };
+
+        };
+
+        template<typename F__, typename...>
+        struct TF_cout_value_helper {
+
+            using F = TF_cout_value_helper_default_case<F__, i32>::F;
 
         };
 
@@ -1225,11 +1372,12 @@ ncpp::F_ostream& operator << (
 
 	}
 
-	for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+    if(input.first.size() != 0)
+        for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
 
-		os << " ";
+            os << " ";
 
-	}
+        }
     os << ncpp::T_cout_lowlight("}");
 
 	return os;
@@ -1307,11 +1455,12 @@ ncpp::F_wostream& operator << (
 
     }
 
-    for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+    if(input.first.size() != 0)
+        for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
 
-        os << L" ";
+            os << L" ";
 
-    }
+        }
     os << ncpp::T_cout_lowlight(L"}");
 
     return os;
@@ -1409,11 +1558,12 @@ ncpp::F_ostream& operator << (
 
 	}
 
-	for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+    if(input.first.size() != 0)
+        for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
 
-		os << " ";
+            os << " ";
 
-	}
+        }
     os << ncpp::T_cout_lowlight("}");
 
 	return os;
@@ -1495,11 +1645,12 @@ ncpp::F_wostream& operator << (
 
     }
 
-    for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+    if(input.first.size() != 0)
+        for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
 
-        os <<L" ";
+            os <<L" ";
 
-    }
+        }
     os << ncpp::T_cout_lowlight(L"}");
 
     return os;
@@ -1593,11 +1744,12 @@ ncpp::F_ostream& operator << (
 
 	}
 
-	for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+    if(size__ != 0)
+        for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
 
-		os << " ";
+            os << " ";
 
-	}
+        }
 
     os << ncpp::T_cout_lowlight("}");
 
@@ -1676,11 +1828,12 @@ ncpp::F_wostream& operator << (
 
     }
 
-    for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+    if(size__ != 0)
+        for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
 
-        os << L" ";
+            os << L" ";
 
-    }
+        }
 
     os << ncpp::T_cout_lowlight(L"}");
 
@@ -1776,11 +1929,12 @@ std::ostream& operator << (
 
 	}
 
-	for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+    if(input.first.size() != 0)
+        for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
 
-		os << " ";
+            os << " ";
 
-	}
+        }
     os << ncpp::T_cout_lowlight("}");
 
 	return os;
@@ -1856,11 +2010,12 @@ std::wostream& operator << (
 
 	}
 
-	for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+    if(input.first.size() != 0)
+        for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
 
-		os << L" ";
+            os << L" ";
 
-	}
+        }
     os << ncpp::T_cout_lowlight("}");
 
 	return os;
@@ -1945,11 +2100,12 @@ ncpp::F_ostream& operator << (
 
 	}
 
-	for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+    if(input.first.size() != 0)
+        for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
 
-		os << " ";
+            os << " ";
 
-	}
+        }
     os << ncpp::T_cout_lowlight("}");
 
 	return os;
@@ -2018,11 +2174,12 @@ ncpp::F_wostream& operator << (
 
     }
 
-    for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+    if(input.first.size() != 0)
+        for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
 
-        os << L" ";
+            os << L" ";
 
-    }
+        }
     os << ncpp::T_cout_lowlight(L"}");
 
     return os;
@@ -2037,3 +2194,159 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eas
     return os;
 }
 #pragma endregion
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+#pragma region List
+template<typename F_item__, class F_allocator__>
+ncpp::F_ostream& operator << (
+	ncpp::F_ostream& os,
+	const ncpp::TF_ostream_input<
+		eastl::list<F_item__, F_allocator__>
+	>& input
+)
+{
+
+	if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+
+        os << ncpp::T_cout_lowlight("...");
+
+		return os;
+	}
+
+	os << NCPP_FOREGROUND_YELLOW << "list"
+        << " ";
+    
+    os << ncpp::T_cout_lowlight("{");
+
+	for (auto i = input.first.begin(); i != input.first.end();) {
+
+        os << std::endl;
+
+		for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+			os << " ";
+
+		}
+
+		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(*i), input.second + 1 });
+
+        ++i;
+
+        if (i != input.first.end()) {
+
+            os << ncpp::T_cout_lowlight(",");
+
+        }
+        else {
+
+            os << std::endl;
+
+        }
+
+	}
+
+    if(input.first.size() != 0)
+        for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+            os << " ";
+
+        }
+    os << ncpp::T_cout_lowlight("}");
+
+	return os;
+}
+
+template<typename F_item__, class F_allocator__>
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl::list<F_item__, F_allocator__>& v)
+{
+
+	os << ncpp::TF_ostream_input<eastl::list<F_item__, F_allocator__>> { v, 0 };
+
+	return os;
+}
+
+
+
+template<typename F_item__, class F_allocator__>
+ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        eastl::list<F_item__, F_allocator__>
+    >& input
+)
+{
+
+    if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+
+        os << ncpp::T_cout_lowlight(L"...");
+
+        return os;
+    }
+
+    os << NCPP_FOREGROUND_YELLOW_TEXT << L"list"
+        << L" ";
+
+    os << ncpp::T_cout_lowlight(L"{");
+
+	for (auto i = input.first.begin(); i != input.first.end();) {
+
+        os << std::endl;
+
+		for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+			os << L" ";
+
+		}
+
+		ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(*i), input.second + 1 });
+
+        ++i;
+
+        if (i != input.first.end()) {
+
+            os << ncpp::T_cout_lowlight(",");
+
+        }
+        else {
+
+            os << std::endl;
+
+        }
+
+	}
+
+    if(input.first.size() != 0)
+        for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+            os << L" ";
+
+        }
+    os << ncpp::T_cout_lowlight(L"}");
+
+    return os;
+}
+
+template<typename F_item__, class F_allocator__>
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eastl::list<F_item__, F_allocator__>& v)
+{
+
+    os << ncpp::TF_ostream_input<eastl::list<F_item__, F_allocator__>> { v, 0 };
+
+    return os;
+}
+#pragma endregions
