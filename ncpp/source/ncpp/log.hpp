@@ -1196,7 +1196,7 @@ ncpp::F_ostream& operator << (
         << ncpp::T_cout_lowlight(")")
         << " ";
     
-    os << ncpp::T_cout_lowlight("[");
+    os << ncpp::T_cout_lowlight("{");
 
 	for (ncpp::sz i = 0; i < input.first.size(); ++i) {
 
@@ -1230,7 +1230,7 @@ ncpp::F_ostream& operator << (
 		os << " ";
 
 	}
-    os << ncpp::T_cout_lowlight("]");
+    os << ncpp::T_cout_lowlight("}");
 
 	return os;
 }
@@ -1278,7 +1278,7 @@ ncpp::F_wostream& operator << (
         << ncpp::T_cout_lowlight(")")
         << L" ";
 
-    os << ncpp::T_cout_lowlight(L"[");
+    os << ncpp::T_cout_lowlight(L"{");
 
     for (ncpp::sz i = 0; i < input.first.size(); ++i) {
 
@@ -1312,7 +1312,7 @@ ncpp::F_wostream& operator << (
         os << L" ";
 
     }
-    os << ncpp::T_cout_lowlight(L"]");
+    os << ncpp::T_cout_lowlight(L"}");
 
     return os;
 }
@@ -1376,7 +1376,7 @@ ncpp::F_ostream& operator << (
         << ncpp::T_cout_lowlight(")")
         << " ";
 
-    os << ncpp::T_cout_lowlight("[");
+    os << ncpp::T_cout_lowlight("{");
 
 	auto j = input.first.begin();
 
@@ -1414,7 +1414,7 @@ ncpp::F_ostream& operator << (
 		os << " ";
 
 	}
-    os << ncpp::T_cout_lowlight("]");
+    os << ncpp::T_cout_lowlight("}");
 
 	return os;
 }
@@ -1462,7 +1462,7 @@ ncpp::F_wostream& operator << (
         << ncpp::T_cout_lowlight(")")
         << L" ";
 
-    os << ncpp::T_cout_lowlight(L"[");
+    os << ncpp::T_cout_lowlight(L"{");
 
     auto j = input.first.begin();
 
@@ -1500,7 +1500,7 @@ ncpp::F_wostream& operator << (
         os <<L" ";
 
     }
-    os << ncpp::T_cout_lowlight(L"]");
+    os << ncpp::T_cout_lowlight(L"}");
 
     return os;
 }
@@ -1564,7 +1564,7 @@ ncpp::F_ostream& operator << (
         << ncpp::T_cout_lowlight(")")
         << " ";
 
-    os << ncpp::T_cout_lowlight("[");
+    os << ncpp::T_cout_lowlight("{");
 
 	for (ncpp::sz i = 0; i < size__; ++i) {
 
@@ -1599,7 +1599,7 @@ ncpp::F_ostream& operator << (
 
 	}
 
-    os << ncpp::T_cout_lowlight("]");
+    os << ncpp::T_cout_lowlight("}");
 
 	return os;
 }
@@ -1647,7 +1647,7 @@ ncpp::F_wostream& operator << (
         << ncpp::T_cout_lowlight(")")
         << L" ";
 
-    os << ncpp::T_cout_lowlight(L"[");
+    os << ncpp::T_cout_lowlight(L"{");
 
     for (ncpp::sz i = 0; i < size__; ++i) {
 
@@ -1682,7 +1682,7 @@ ncpp::F_wostream& operator << (
 
     }
 
-    os << ncpp::T_cout_lowlight(L"]");
+    os << ncpp::T_cout_lowlight(L"}");
 
     return os;
 }
@@ -1743,7 +1743,7 @@ std::ostream& operator << (
         << ncpp::T_cout_lowlight(")")
         << " ";
 
-    os << ncpp::T_cout_lowlight("[");
+    os << ncpp::T_cout_lowlight("{");
 
 	auto j = input.first.begin();
 
@@ -1781,7 +1781,7 @@ std::ostream& operator << (
 		os << " ";
 
 	}
-    os << ncpp::T_cout_lowlight("]");
+    os << ncpp::T_cout_lowlight("}");
 
 	return os;
 }
@@ -1823,7 +1823,7 @@ std::wostream& operator << (
         << ncpp::T_cout_lowlight(")")
         << L" ";
 
-    os << ncpp::T_cout_lowlight("[");
+    os << ncpp::T_cout_lowlight("{");
 
 	auto j = input.first.begin();
 
@@ -1861,7 +1861,7 @@ std::wostream& operator << (
 		os << L" ";
 
 	}
-    os << ncpp::T_cout_lowlight("]");
+    os << ncpp::T_cout_lowlight("}");
 
 	return os;
 }
