@@ -1877,3 +1877,163 @@ std::wostream& operator << (std::wostream& os, const eastl::span<F_item__>& v)
 #pragma endregion
 
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+#pragma region Deque
+template<typename F_item__, class F_allocator__>
+ncpp::F_ostream& operator << (
+	ncpp::F_ostream& os,
+	const ncpp::TF_ostream_input<
+		eastl::deque<F_item__, F_allocator__>
+	>& input
+)
+{
+
+	if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+
+        os << ncpp::T_cout_lowlight("...");
+
+		return os;
+	}
+
+	os << NCPP_FOREGROUND_YELLOW << "deque"
+        << ncpp::T_cout_lowlight("(")
+        << ncpp::T_cout_lowlight("size: ")
+        << ncpp::T_cout_value(input.first.size())
+        << ncpp::T_cout_lowlight(")")
+        << " ";
+    
+    os << ncpp::T_cout_lowlight("{");
+
+	for (ncpp::sz i = 0; i < input.first.size(); ++i) {
+
+        os << std::endl;
+
+		for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+			os << " ";
+
+		}
+
+        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<char>(i)) << ncpp::T_cout_lowlight(": ");
+
+		ncpp::T_safe_ostream_with_tab<ncpp::F_ostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(input.first[i]), input.second + 1 });
+
+        if (i != input.first.size() - 1) {
+
+            os << ncpp::T_cout_lowlight(",");
+
+        }
+        else {
+
+            os << std::endl;
+
+        }
+
+	}
+
+	for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+		os << " ";
+
+	}
+    os << ncpp::T_cout_lowlight("}");
+
+	return os;
+}
+
+template<typename F_item__, class F_allocator__>
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl::deque<F_item__, F_allocator__>& v)
+{
+
+	os << ncpp::TF_ostream_input<eastl::deque<F_item__, F_allocator__>> { v, 0 };
+
+	return os;
+}
+
+
+
+template<typename F_item__, class F_allocator__>
+ncpp::F_wostream& operator << (
+    ncpp::F_wostream& os,
+    const ncpp::TF_ostream_input<
+        eastl::deque<F_item__, F_allocator__>
+    >& input
+)
+{
+
+    if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+
+        os << ncpp::T_cout_lowlight(L"...");
+
+        return os;
+    }
+
+    os << NCPP_FOREGROUND_YELLOW_TEXT << L"deque"
+        << ncpp::T_cout_lowlight("(")
+        << ncpp::T_cout_lowlight("size: ")
+        << ncpp::T_cout_value(input.first.size())
+        << ncpp::T_cout_lowlight(")")
+        << L" ";
+
+    os << ncpp::T_cout_lowlight(L"{");
+
+    for (ncpp::sz i = 0; i < input.first.size(); ++i) {
+
+        os << std::endl;
+
+        for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+            os << L" ";
+
+        }
+
+        os << ncpp::T_cout_field_name(ncpp::containers::T_to_string<wchar_t>(i)) << ncpp::T_cout_lowlight(L": ");
+
+        ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, ncpp::TF_cout_value<F_item__>>(os, { ncpp::T_cout_value(input.first[i]), input.second + 1 });
+
+        if (i != input.first.size() - 1) {
+
+            os << ncpp::T_cout_lowlight(L",");
+
+        }
+        else {
+
+            os << std::endl;
+
+        }
+
+    }
+
+    for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+        os << L" ";
+
+    }
+    os << ncpp::T_cout_lowlight(L"}");
+
+    return os;
+}
+
+template<typename F_item__, class F_allocator__>
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eastl::deque<F_item__, F_allocator__>& v)
+{
+
+    os << ncpp::TF_ostream_input<eastl::deque<F_item__, F_allocator__>> { v, 0 };
+
+    return os;
+}
+#pragma endregion
