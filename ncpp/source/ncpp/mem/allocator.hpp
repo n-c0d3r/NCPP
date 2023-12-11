@@ -81,12 +81,8 @@ namespace ncpp {
 
             return result;
         }
-    
-    
 
-#if defined(NCPP_ENABLE_ALLOCATOR_NAME) || defined(NCPP_ENABLE_MEMORY_COUNTING)
-#define NCPP_HAS_ALLOC_DEBUG_INFO
-#endif
+
 
 #ifdef NCPP_HAS_ALLOC_DEBUG_INFO
 		struct NCPP_ALIGN(EASTL_ALLOCATOR_MIN_ALIGNMENT) F_alloc_debug_info {
@@ -96,6 +92,8 @@ namespace ncpp {
             const char* allocator_type_name = 0;
             sz actual_size = 0;
             sz payload_size = 0;
+            u16 alignment = 0;
+            u16 alignment_offset = 0;
             bool is_default_alloc = 0;
 
         };
@@ -242,6 +240,8 @@ namespace ncpp {
 						type_name,
 						actual_size,
 						n,
+                        (u16)alignment,
+                        (u16)alignment_offset,
 						is_default_alloc__
 
 					};
@@ -283,6 +283,8 @@ namespace ncpp {
                         type_name,
 						actual_size,
 						n,
+                        (u16)alignment,
+                        (u16)alignment_offset,
 						is_default_alloc__
 
 					};
@@ -342,6 +344,8 @@ namespace ncpp {
                         type_name,
 						actual_size,
 						n,
+                        0,
+                        0,
 						is_default_alloc__
 
 					};
@@ -383,6 +387,8 @@ namespace ncpp {
                         type_name,
 						actual_size,
 						n,
+                        0,
+                        0,
 						is_default_alloc__
 
 					};

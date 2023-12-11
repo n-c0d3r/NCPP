@@ -15,6 +15,14 @@ NCPP_ENTRY_POINT(args) {
         << F_log_color::RESET
         << std::endl;
 
+    i32* a_p = NCPP_CREATE(0, i32);
+
+    const F_alloc_debug_info& debug_info = get_alloc_debug_info(a_p);
+
+    cout << debug_info << std::endl;
+
+    NCPP_DESTROY(0, a_p);
+
     pause_console();
 
 	return 0;

@@ -38,6 +38,11 @@ include(NCPP/ObjectAllocatorConfig)
 # ncpp mem options
 option(NCPP_ENABLE_MEMORY_COUNTING "Enable memory counting" ON)
 option(NCPP_ENABLE_ALLOCATOR_NAME "Enable allocator name" ON)
+if(NCPP_ENABLE_MEMORY_COUNTING OR NCPP_ENABLE_ALLOCATOR_NAME)
+    NCPP_SetGlobal(NCPP_HAS_ALLOC_DEBUG_INFO ON)
+else()
+    NCPP_SetGlobal(NCPP_HAS_ALLOC_DEBUG_INFO OFF)
+endif()
 
 # ncpp pac options
 option(NCPP_ENABLE_WEAKLOCK_WARNING "If enabled, weaklock will automatically warn when race condition occurs" ON)

@@ -38,7 +38,7 @@
 
 
 
-#if defined(NCPP_ENABLE_ALLOCATOR_NAME) || defined(NCPP_ENABLE_MEMORY_COUNTING)
+#ifdef NCPP_HAS_ALLOC_DEBUG_INFO
 namespace ncpp::mem {
 
     struct NCPP_ALIGN(EASTL_ALLOCATOR_MIN_ALIGNMENT) F_alloc_debug_info;

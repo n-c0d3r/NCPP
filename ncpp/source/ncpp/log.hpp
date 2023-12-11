@@ -1422,6 +1422,38 @@ inline ncpp::F_ostream& operator << (ncpp::F_ostream& os, const ncpp::TF_ostream
             os << " ";
 
         }
+        os << ncpp::T_cout_field_name("alignment");
+        os << ncpp::T_cout_lowlight(" -> ");
+        os << ncpp::T_cout_value(input.first.alignment);
+        os << ncpp::T_cout_lowlight(", ");
+
+    }
+
+    {
+
+        os << std::endl;
+
+        for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+            os << " ";
+
+        }
+        os << ncpp::T_cout_field_name("alignment_offset");
+        os << ncpp::T_cout_lowlight(" -> ");
+        os << ncpp::T_cout_value(input.first.alignment_offset);
+        os << ncpp::T_cout_lowlight(", ");
+
+    }
+
+    {
+
+        os << std::endl;
+
+        for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+            os << " ";
+
+        }
         os << ncpp::T_cout_field_name("is_default_alloc");
         os << ncpp::T_cout_lowlight(" -> ");
         os << ncpp::T_cout_value(input.first.is_default_alloc);
@@ -1522,6 +1554,38 @@ inline ncpp::F_wostream& operator << (ncpp::F_wostream& os, const ncpp::TF_ostre
         os << ncpp::T_cout_field_name("payload_size");
         os << ncpp::T_cout_lowlight(" -> ");
         os << ncpp::T_cout_value(input.first.payload_size);
+        os << ncpp::T_cout_lowlight(", ");
+
+    }
+
+    {
+
+        os << std::endl;
+
+        for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+            os << L" ";
+
+        }
+        os << ncpp::T_cout_field_name("alignment");
+        os << ncpp::T_cout_lowlight(" -> ");
+        os << ncpp::T_cout_value(input.first.alignment);
+        os << ncpp::T_cout_lowlight(", ");
+
+    }
+
+    {
+
+        os << std::endl;
+
+        for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+            os << L" ";
+
+        }
+        os << ncpp::T_cout_field_name("alignment_offset");
+        os << ncpp::T_cout_lowlight(" -> ");
+        os << ncpp::T_cout_value(input.first.alignment_offset);
         os << ncpp::T_cout_lowlight(", ");
 
     }
