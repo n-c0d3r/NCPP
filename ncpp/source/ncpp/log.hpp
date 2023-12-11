@@ -501,9 +501,12 @@ namespace ncpp {
                 ) {
 
                     if(&os == &cout)
-                        os << NCPP_FOREGROUND_BRIGHT_RED;
+                        os << NCPP_FOREGROUND_BRIGHT_YELLOW;
 
-                    os << input.value;
+                    if(input.value)
+                        os << "true";
+                    else
+                        os << "false";
 
                     if(&os == &cout)
                         os << NCPP_RESET_CONSOLE_COLOR;
@@ -516,9 +519,12 @@ namespace ncpp {
                 ) {
 
                     if(&os == &wcout)
-                        os << NCPP_FOREGROUND_BRIGHT_RED_TEXT;
+                        os << NCPP_FOREGROUND_BRIGHT_YELLOW_TEXT;
 
-                    os << input.value;
+                    if(input.value)
+                        os << L"true";
+                    else
+                        os << L"false";
 
                     if(&os == &wcout)
                         os << NCPP_RESET_CONSOLE_COLOR_TEXT;
@@ -1349,6 +1355,7 @@ inline ncpp::F_ostream& operator << (ncpp::F_ostream& os, const ncpp::TF_ostream
 
     }
 
+#ifdef NCPP_ENABLE_ALLOCATOR_NAME
     {
 
         os << std::endl;
@@ -1364,6 +1371,7 @@ inline ncpp::F_ostream& operator << (ncpp::F_ostream& os, const ncpp::TF_ostream
         os << ncpp::T_cout_lowlight(", ");
 
     }
+#endif
 
     {
 
@@ -1377,6 +1385,22 @@ inline ncpp::F_ostream& operator << (ncpp::F_ostream& os, const ncpp::TF_ostream
         os << ncpp::T_cout_field_name("allocator_type_name");
         os << ncpp::T_cout_lowlight(" -> ");
         os << ncpp::T_cout_value(input.first.allocator_type_name);
+        os << ncpp::T_cout_lowlight(", ");
+
+    }
+
+    {
+
+        os << std::endl;
+
+        for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+            os << " ";
+
+        }
+        os << ncpp::T_cout_field_name("allocator_type_hash_code");
+        os << ncpp::T_cout_lowlight(" -> ");
+        os << ncpp::T_cout_value(input.first.allocator_type_hash_code);
         os << ncpp::T_cout_lowlight(", ");
 
     }
@@ -1503,12 +1527,30 @@ inline ncpp::F_wostream& operator << (ncpp::F_wostream& os, const ncpp::TF_ostre
             os << L" ";
 
         }
+        os << ncpp::T_cout_field_name("allocator_address");
+        os << ncpp::T_cout_lowlight(" -> ");
+        os << ncpp::T_cout_value(input.first.allocator_address);
+        os << ncpp::T_cout_lowlight(", ");
+
+    }
+
+#ifdef NCPP_ENABLE_ALLOCATOR_NAME
+    {
+
+        os << std::endl;
+
+        for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+            os << L" ";
+
+        }
         os << ncpp::T_cout_field_name("allocator_name");
         os << ncpp::T_cout_lowlight(" -> ");
         os << ncpp::T_cout_value(input.first.allocator_name);
         os << ncpp::T_cout_lowlight(", ");
 
     }
+#endif
 
     {
 
@@ -1522,6 +1564,22 @@ inline ncpp::F_wostream& operator << (ncpp::F_wostream& os, const ncpp::TF_ostre
         os << ncpp::T_cout_field_name("allocator_type_name");
         os << ncpp::T_cout_lowlight(" -> ");
         os << ncpp::T_cout_value(input.first.allocator_type_name);
+        os << ncpp::T_cout_lowlight(", ");
+
+    }
+
+    {
+
+        os << std::endl;
+
+        for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+            os << L" ";
+
+        }
+        os << ncpp::T_cout_field_name("allocator_type_hash_code");
+        os << ncpp::T_cout_lowlight(" -> ");
+        os << ncpp::T_cout_value(input.first.allocator_type_hash_code);
         os << ncpp::T_cout_lowlight(", ");
 
     }
