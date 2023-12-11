@@ -1750,7 +1750,7 @@ ncpp::F_ostream& operator << (
         << ncpp::T_cout_value(input.first.size())
         << ncpp::T_cout_lowlight(")")
         << " ";
-    
+
     os << ncpp::T_cout_lowlight("{");
 
 	for (ncpp::sz i = 0; i < input.first.size(); ++i) {
@@ -3415,74 +3415,294 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eas
 
 
 
-//#pragma region Queue
-//template<typename F_item__, typename F_container__>
-//std::ostream& operator << (
-//	std::ostream& os,
-//	const ncpp::TF_ostream_input<
-//		eastl::queue<F_item__, F_container__>
-//	>& input
-//)
-//{
-//
-//    return os;
-//}
-//
-//template<typename F_item__, typename F_container__>
-//std::ostream& operator << (std::ostream& os, const eastl::queue<F_item__, F_container__>& v)
-//{
-//
-//    os << ncpp::TF_ostream_input<eastl::queue<F_item__, F_container__>> { v, 0 };
-//
-//    return os;
-//}
-//
-//
-//
-//template<typename F_item__, typename F_container__>
-//std::wostream& operator << (
-//    std::wostream& os,
-//    const ncpp::TF_ostream_input<
-//        eastl::queue<F_item__, F_container__>
-//    >& input
-//)
-//{
-//
-//    if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
-//
-//        os << ncpp::T_cout_lowlight(L"...");
-//
-//        return os;
-//    }
-//
-//    os << NCPP_FOREGROUND_YELLOW_TEXT << L"queue"
-//        << L" ";
-//
-//    os << ncpp::T_cout_lowlight(L"{");
-//
-//    auto b = ncpp::utilities::T_is_ostreamable_v<ncpp::F_wostream, F_container__>;
-//    auto b2 = ncpp::utilities::T_is_ostreamable_v<ncpp::F_wostream, ncpp::containers::TG_deque<int>>;
-//    auto b3 = ncpp::utilities::T_is_ostreamable_v<ncpp::F_wostream, ncpp::containers::TG_vector<int>>;
-//    std::cout << ncpp::utilities::T_type_name<F_container__>() << std::endl;
-//
-//	ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, F_container__>(os, { input.first.get_container(), input.second + 1 });
-//
-//    for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
-//
-//        os << L" ";
-//
-//    }
-//    os << ncpp::T_cout_lowlight(L"}");
-//
-//    return os;
-//}
-//
-//template<typename F_item__, typename F_container__>
-//std::wostream& operator << (std::wostream& os, const eastl::queue<F_item__, F_container__>& v)
-//{
-//
-//    os << ncpp::TF_ostream_input<eastl::queue<F_item__, F_container__>> { v, 0 };
-//
-//    return os;
-//}
-//#pragma endregion
+#pragma region Queue
+template<typename F_item__, typename F_container__>
+std::ostream& operator << (
+	std::ostream& os,
+	const ncpp::TF_ostream_input<
+		eastl::queue<F_item__, F_container__>
+	>& input
+)
+{
+
+    if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+
+        os << ncpp::T_cout_lowlight(L"...");
+
+        return os;
+    }
+
+    os << NCPP_FOREGROUND_YELLOW << "queue"
+        << ncpp::T_cout_lowlight("(")
+        << ncpp::T_cout_lowlight("size: ")
+        << ncpp::T_cout_value(input.first.size())
+        << ncpp::T_cout_lowlight(")")
+        << " ";
+
+    os << ncpp::T_cout_lowlight("{") << std::endl;
+
+    for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+        os << " ";
+
+    }
+
+	ncpp::T_safe_ostream_with_tab<
+        ncpp::F_ostream,
+        ncpp::TF_ostream_input<
+            ncpp::TF_cout_value<F_container__>
+        >
+    >(
+        os,
+        ncpp::TF_ostream_input<
+            ncpp::TF_cout_value<F_container__>
+        > {
+            ncpp::T_cout_value(input.first.get_container()),
+            input.second + 1
+        }
+    );
+
+    os << std::endl;
+
+    for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+        os << " ";
+
+    }
+    os << ncpp::T_cout_lowlight("}");
+
+    return os;
+}
+
+template<typename F_item__, typename F_container__>
+std::ostream& operator << (std::ostream& os, const eastl::queue<F_item__, F_container__>& v)
+{
+
+    os << ncpp::TF_ostream_input<eastl::queue<F_item__, F_container__>> { v, 0 };
+
+    return os;
+}
+
+
+
+template<typename F_item__, typename F_container__>
+std::wostream& operator << (
+    std::wostream& os,
+    const ncpp::TF_ostream_input<
+        eastl::queue<F_item__, F_container__>
+    >& input
+)
+{
+
+    if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+
+        os << ncpp::T_cout_lowlight(L"...");
+
+        return os;
+    }
+
+    os << NCPP_FOREGROUND_YELLOW_TEXT << L"queue"
+        << ncpp::T_cout_lowlight("(")
+        << ncpp::T_cout_lowlight("size: ")
+        << ncpp::T_cout_value(input.first.size())
+        << ncpp::T_cout_lowlight(")")
+        << L" ";
+
+    os << ncpp::T_cout_lowlight(L"{") << std::endl;
+
+    for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+        os << L" ";
+
+    }
+
+	ncpp::T_safe_ostream_with_tab<
+        ncpp::F_wostream,
+        ncpp::TF_ostream_input<
+            ncpp::TF_cout_value<F_container__>
+        >
+    >(
+        os,
+        ncpp::TF_ostream_input<
+            ncpp::TF_cout_value<F_container__>
+        > {
+            ncpp::T_cout_value(input.first.get_container()),
+            input.second + 1
+        }
+    );
+
+    os << std::endl;
+
+    for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+        os << L" ";
+
+    }
+    os << ncpp::T_cout_lowlight(L"}");
+
+    return os;
+}
+
+template<typename F_item__, typename F_container__>
+std::wostream& operator << (std::wostream& os, const eastl::queue<F_item__, F_container__>& v)
+{
+
+    os << ncpp::TF_ostream_input<eastl::queue<F_item__, F_container__>> { v, 0 };
+
+    return os;
+}
+#pragma endregion
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+#pragma region Queue
+template<typename F_item__, typename F_container__>
+std::ostream& operator << (
+	std::ostream& os,
+	const ncpp::TF_ostream_input<
+		eastl::stack<F_item__, F_container__>
+	>& input
+)
+{
+
+    if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+
+        os << ncpp::T_cout_lowlight(L"...");
+
+        return os;
+    }
+
+    os << NCPP_FOREGROUND_YELLOW << "stack"
+        << ncpp::T_cout_lowlight("(")
+        << ncpp::T_cout_lowlight("size: ")
+        << ncpp::T_cout_value(input.first.size())
+        << ncpp::T_cout_lowlight(")")
+        << " ";
+
+    os << ncpp::T_cout_lowlight("{") << std::endl;
+
+    for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+        os << " ";
+
+    }
+
+	ncpp::T_safe_ostream_with_tab<
+        ncpp::F_ostream,
+        ncpp::TF_ostream_input<
+            ncpp::TF_cout_value<F_container__>
+        >
+    >(
+        os,
+        ncpp::TF_ostream_input<
+            ncpp::TF_cout_value<F_container__>
+        > {
+            ncpp::T_cout_value(input.first.get_container()),
+            input.second + 1
+        }
+    );
+
+    os << std::endl;
+
+    for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+        os << " ";
+
+    }
+    os << ncpp::T_cout_lowlight("}");
+
+    return os;
+}
+
+template<typename F_item__, typename F_container__>
+std::ostream& operator << (std::ostream& os, const eastl::stack<F_item__, F_container__>& v)
+{
+
+    os << ncpp::TF_ostream_input<eastl::stack<F_item__, F_container__>> { v, 0 };
+
+    return os;
+}
+
+
+
+template<typename F_item__, typename F_container__>
+std::wostream& operator << (
+    std::wostream& os,
+    const ncpp::TF_ostream_input<
+        eastl::stack<F_item__, F_container__>
+    >& input
+)
+{
+
+    if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+
+        os << ncpp::T_cout_lowlight(L"...");
+
+        return os;
+    }
+
+    os << NCPP_FOREGROUND_YELLOW_TEXT << L"stack"
+        << ncpp::T_cout_lowlight("(")
+        << ncpp::T_cout_lowlight("size: ")
+        << ncpp::T_cout_value(input.first.size())
+        << ncpp::T_cout_lowlight(")")
+        << L" ";
+
+    os << ncpp::T_cout_lowlight(L"{") << std::endl;
+
+    for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+        os << L" ";
+
+    }
+
+	ncpp::T_safe_ostream_with_tab<
+        ncpp::F_wostream,
+        ncpp::TF_ostream_input<
+            ncpp::TF_cout_value<F_container__>
+        >
+    >(
+        os,
+        ncpp::TF_ostream_input<
+            ncpp::TF_cout_value<F_container__>
+        > {
+            ncpp::T_cout_value(input.first.get_container()),
+            input.second + 1
+        }
+    );
+
+    os << std::endl;
+
+    for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+        os << L" ";
+
+    }
+    os << ncpp::T_cout_lowlight(L"}");
+
+    return os;
+}
+
+template<typename F_item__, typename F_container__>
+std::wostream& operator << (std::wostream& os, const eastl::stack<F_item__, F_container__>& v)
+{
+
+    os << ncpp::TF_ostream_input<eastl::stack<F_item__, F_container__>> { v, 0 };
+
+    return os;
+}
+#pragma endregion
