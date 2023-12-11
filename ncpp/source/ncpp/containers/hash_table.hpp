@@ -37,6 +37,7 @@
 #include <ncpp/containers/eastl_containers.hpp>
 #include <ncpp/containers/binding_helper.hpp>
 #include <ncpp/containers/view.hpp>
+#include <ncpp/colorized_log.hpp>
 
 #pragma endregion
 
@@ -100,7 +101,7 @@ namespace ncpp {
             {
                 
 				assert(hash_size_ > 0 && "hash size must be greater than zero");
-				assert(utilities::is_power_of_two(hash_size_) && "hash size must be power of two");
+				assert(utilities::is_power_of_two(static_cast<f32>(hash_size_)) && "hash size must be power of two");
                 
                 if(index_size > 0) {
                     
@@ -247,12 +248,13 @@ namespace ncpp {
                 
                 if( index >= index_size_ )
                 {
-                    resize(utilities::round_up_to_power_of_two(index + 1));
+                    resize(utilities::round_up_to_power_of_two(static_cast<f32>(index + 1)));
                 }
 
                 key &= hash_mask_;
                 index_vector_[index] = hash_vector_[key];
                 hash_vector_[key] = index;
+
             }
             inline void add_concurrent(u32 key, u32 index){
                 assert(index < index_size_);
@@ -288,6 +290,203 @@ namespace ncpp {
                 }
                 
             }
+
+
+
+       public:
+			friend std::ostream& operator << (
+				std::ostream& os,
+				const ncpp::TF_ostream_input<
+                    TF_hash_table
+				>& input
+			)
+			{
+
+				if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+
+					os << ncpp::T_cout_lowlight(L"...");
+
+					return os;
+				}
+
+				os << NCPP_FOREGROUND_YELLOW << "hash_table"
+					<< " ";
+
+				os << ncpp::T_cout_lowlight("{") << std::endl;
+
+				for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+					os << " ";
+
+				}
+        		os << ncpp::T_cout_field_name("hash_size") << ncpp::T_cout_lowlight(" -> ") << ncpp::T_cout_value(input.first.hash_size()) << std::endl;
+
+				for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+					os << " ";
+
+				}
+        		os << ncpp::T_cout_field_name("index_size") << ncpp::T_cout_lowlight(" -> ") << ncpp::T_cout_value(input.first.index_size()) << std::endl;
+
+				for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+					os << " ";
+
+				}
+        		os << ncpp::T_cout_field_name("hash_vector") << ncpp::T_cout_lowlight(" -> ");
+				ncpp::T_safe_ostream_with_tab<
+					ncpp::F_ostream,
+					ncpp::TF_ostream_input<
+						ncpp::TF_cout_value<eastl::vector<u32, F_allocator>>
+					>
+				>(
+					os,
+					ncpp::TF_ostream_input<
+						ncpp::TF_cout_value<eastl::vector<u32, F_allocator>>
+					> {
+						ncpp::T_cout_value(input.first.hash_vector_),
+						input.second + 1
+					}
+				);
+				os << std::endl;
+
+				for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+					os << " ";
+
+				}
+        		os << ncpp::T_cout_field_name("index_vector") << ncpp::T_cout_lowlight(" -> ");
+				ncpp::T_safe_ostream_with_tab<
+					ncpp::F_ostream,
+					ncpp::TF_ostream_input<
+						ncpp::TF_cout_value<eastl::vector<u32, F_allocator>>
+					>
+				>(
+					os,
+					ncpp::TF_ostream_input<
+						ncpp::TF_cout_value<eastl::vector<u32, F_allocator>>
+					> {
+						ncpp::T_cout_value(input.first.index_vector_),
+						input.second + 1
+					}
+				);
+				os << std::endl;
+
+				for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+					os << " ";
+
+				}
+				os << ncpp::T_cout_lowlight("}");
+
+				return os;
+			}
+
+           	friend std::ostream& operator << (std::ostream& os, const TF_hash_table& v)
+			{
+
+				os << ncpp::TF_ostream_input<TF_hash_table> { v, 0 };
+
+				return os;
+			}
+
+
+
+           	friend std::wostream& operator << (
+				std::wostream& os,
+				const ncpp::TF_ostream_input<
+                    TF_hash_table
+				>& input
+			)
+			{
+
+				if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+
+					os << ncpp::T_cout_lowlight(L"...");
+
+					return os;
+				}
+
+				os << NCPP_FOREGROUND_YELLOW_TEXT << L"hash_table"
+					<< L" ";
+
+				os << ncpp::T_cout_lowlight(L"{") << std::endl;
+
+				for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+					os << L" ";
+
+				}
+        		os << ncpp::T_cout_field_name("hash_size") << ncpp::T_cout_lowlight(" -> ") << ncpp::T_cout_value(input.first.hash_size()) << std::endl;
+
+				for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+					os << L" ";
+
+				}
+        		os << ncpp::T_cout_field_name("index_size") << ncpp::T_cout_lowlight(" -> ") << ncpp::T_cout_value(input.first.index_size()) << std::endl;
+
+				for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+					os << L" ";
+
+				}
+        		os << ncpp::T_cout_field_name("hash_vector") << ncpp::T_cout_lowlight(" -> ");
+				ncpp::T_safe_ostream_with_tab<
+					ncpp::F_wostream,
+					ncpp::TF_ostream_input<
+						ncpp::TF_cout_value<eastl::vector<u32, F_allocator>>
+					>
+				>(
+					os,
+					ncpp::TF_ostream_input<
+						ncpp::TF_cout_value<eastl::vector<u32, F_allocator>>
+					> {
+						ncpp::T_cout_value(input.first.hash_vector_),
+						input.second + 1
+					}
+				);
+				os << std::endl;
+
+				for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+
+					os << L" ";
+
+				}
+        		os << ncpp::T_cout_field_name("index_vector") << ncpp::T_cout_lowlight(" -> ");
+				ncpp::T_safe_ostream_with_tab<
+					ncpp::F_wostream,
+					ncpp::TF_ostream_input<
+						ncpp::TF_cout_value<eastl::vector<u32, F_allocator>>
+					>
+				>(
+					os,
+					ncpp::TF_ostream_input<
+						ncpp::TF_cout_value<eastl::vector<u32, F_allocator>>
+					> {
+						ncpp::T_cout_value(input.first.index_vector_),
+						input.second + 1
+					}
+				);
+				os << std::endl;
+
+				for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+
+					os << L" ";
+
+				}
+				os << ncpp::T_cout_lowlight(L"}");
+
+				return os;
+			}
+
+           	friend std::wostream& operator << (std::wostream& os, const TF_hash_table& v)
+			{
+
+				os << ncpp::TF_ostream_input<TF_hash_table> { v, 0 };
+
+				return os;
+			}
             
         };
     

@@ -36,6 +36,7 @@
 #include <ncpp/containers/eastl_containers.hpp>
 #include <ncpp/mem/general_allocator.hpp>
 #include <ncpp/utilities/iterator.hpp>
+#include <ncpp/utilities/nth_template_arg.hpp>
 #include <ncpp/iostream.hpp>
 #include <ncpp/rtti/rtti_flag.hpp>
 
