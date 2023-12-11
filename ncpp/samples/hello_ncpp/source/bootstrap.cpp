@@ -15,13 +15,6 @@ NCPP_ENTRY_POINT(args) {
         << F_log_color::RESET
         << std::endl;
 
-    TG_queue<i32> q;
-    q.push(1);
-    q.push(2);
-    q.push(3);
-
-    cout << q << std::endl;
-
     pause_console();
 
 	return 0;
