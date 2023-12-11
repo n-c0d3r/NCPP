@@ -347,29 +347,29 @@ std::wostream& operator << (std::wostream& os, const eastl::list<F_item__, F_all
 
 
 #pragma region Deque
-template<typename F_item__, typename F_allocator__>
+template<typename F_item__, typename F_allocator__, unsigned subarray_size__ = DEQUE_DEFAULT_SUBARRAY_SIZE(F_item__)>
 std::ostream& operator << (
 	std::ostream& os,
 	const ncpp::TF_ostream_input<
-		eastl::deque<F_item__, F_allocator__>
+		eastl::deque<F_item__, F_allocator__, subarray_size__>
 	>& input
 );
 
-template<typename F_item__, typename F_allocator__>
-std::ostream& operator << (std::ostream& os, const eastl::deque<F_item__, F_allocator__>& v);
+template<typename F_item__, typename F_allocator__, unsigned subarray_size__ = DEQUE_DEFAULT_SUBARRAY_SIZE(F_item__)>
+std::ostream& operator << (std::ostream& os, const eastl::deque<F_item__, F_allocator__, subarray_size__>& v);
 
 
 
-template<typename F_item__, typename F_allocator__>
+template<typename F_item__, typename F_allocator__, unsigned subarray_size__ = DEQUE_DEFAULT_SUBARRAY_SIZE(F_item__)>
 std::wostream& operator << (
     std::wostream& os,
     const ncpp::TF_ostream_input<
-        eastl::deque<F_item__, F_allocator__>
+        eastl::deque<F_item__, F_allocator__, subarray_size__>
     >& input
 );
 
-template<typename F_item__, typename F_allocator__>
-std::wostream& operator << (std::wostream& os, const eastl::deque<F_item__, F_allocator__>& v);
+template<typename F_item__, typename F_allocator__, unsigned subarray_size__ = DEQUE_DEFAULT_SUBARRAY_SIZE(F_item__)>
+std::wostream& operator << (std::wostream& os, const eastl::deque<F_item__, F_allocator__, subarray_size__>& v);
 #pragma endregion
 
 

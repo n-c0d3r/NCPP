@@ -9,13 +9,15 @@ int main() {
 
 	{
 
-		TF_concurrent_ring_buffer<i32> concurrent_ring_buffer(128);
+		TG_concurrent_ring_buffer<i32> concurrent_ring_buffer(128);
 
         for(i32 i = 0; i < 5; ++i) {
 
             concurrent_ring_buffer.push(i);
 
         }
+
+        //cout << concurrent_ring_buffer << std::endl;
 
         for(i32 i = 0; i < 5; ++i) {
 
@@ -25,6 +27,8 @@ int main() {
             cout << T_cout_value(value) << std::endl;
 
         }
+
+        //cout << concurrent_ring_buffer << std::endl;
 
 	}
 

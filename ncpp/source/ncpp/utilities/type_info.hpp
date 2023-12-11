@@ -171,7 +171,7 @@ namespace ncpp {
                 value.resize(str.size());
 
                 for(sz i = 0; i < str.length(); ++i)
-                    value[i] = str[i];
+                    value[i] = static_cast<char>(str[i]);
 
                 return value;
             }
@@ -185,7 +185,7 @@ namespace ncpp {
                 value.resize(str.size());
 
                 for(sz i = 0; i < str.length(); ++i)
-                    value[i] = str[i];
+                    value[i] = static_cast<wchar_t>(str[i]);
 
                 return value;
             }

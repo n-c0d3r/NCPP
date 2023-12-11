@@ -84,11 +84,12 @@ NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
     typename F_allocator__
 );
 NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
-    NCPP_MA(ncpp::containers::TF_deque<F_item__, F_allocator__>),
+    NCPP_MA(ncpp::containers::TF_deque<F_item__, F_allocator__, subarray_size__>),
     NCPP_MA(F_allocator__),
-    NCPP_MA(ncpp::containers::TF_deque<F_item__, F_new_allocator__>),
+    NCPP_MA(ncpp::containers::TF_deque<F_item__, F_new_allocator__, subarray_size__>),
     typename F_item__,
-    typename F_allocator__
+    typename F_allocator__,
+    unsigned subarray_size__
 );
 
 

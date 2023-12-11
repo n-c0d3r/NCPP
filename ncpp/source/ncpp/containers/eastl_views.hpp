@@ -91,8 +91,8 @@ namespace ncpp {
         template<typename F_item__>
         using TV_list = TF_view<TG_list<F_item__>>;
 
-        template<typename F_item__>
-        using TV_deque = TF_view<TG_deque<F_item__>>;
+        template<typename F_item__, unsigned subarray_size__ = DEQUE_DEFAULT_SUBARRAY_SIZE(F_item__)>
+        using TV_deque = TF_view<TG_deque<F_item__, subarray_size__>>;
     
 
 

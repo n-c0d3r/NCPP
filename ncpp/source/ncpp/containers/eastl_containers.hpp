@@ -568,12 +568,12 @@ namespace ncpp {
         template<typename F_item__>
         using TEP_list = eastl::list<F_item__, mem::F_ephemeral_allocator>;
 
-        template<typename F_item__, typename F_allocator__ = mem::F_default_allocator>
-        using TF_deque = eastl::deque<F_item__, F_allocator__>;
-        template<typename F_item__>
-        using TG_deque = eastl::deque<F_item__, mem::F_general_allocator>;
-        template<typename F_item__>
-        using TEP_deque = eastl::deque<F_item__, mem::F_ephemeral_allocator>;
+        template<typename F_item__, typename F_allocator__ = mem::F_default_allocator, unsigned subarray_size__ = DEQUE_DEFAULT_SUBARRAY_SIZE(F_item__)>
+        using TF_deque = eastl::deque<F_item__, F_allocator__, subarray_size__>;
+        template<typename F_item__, unsigned subarray_size__ = DEQUE_DEFAULT_SUBARRAY_SIZE(F_item__)>
+        using TG_deque = eastl::deque<F_item__, mem::F_general_allocator, subarray_size__>;
+        template<typename F_item__, unsigned subarray_size__ = DEQUE_DEFAULT_SUBARRAY_SIZE(F_item__)>
+        using TEP_deque = eastl::deque<F_item__, mem::F_ephemeral_allocator, subarray_size__>;
 
 
 

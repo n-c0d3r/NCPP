@@ -279,8 +279,8 @@ namespace ncpp {
                 F__ value;
 
                 friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-                        ncpp::F_wostream& os,
-                        const F& input
+                    ncpp::F_wostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &wcout)
@@ -376,8 +376,8 @@ namespace ncpp {
                     return os;
                 }
                 friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-                        ncpp::F_wostream& os,
-                        const F& input
+                    ncpp::F_wostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &wcout)
@@ -419,7 +419,7 @@ namespace ncpp {
 
         };
 
-        template<typename F__, typename...>
+        template<typename F__, typename F_placeholder__ = void>
         struct TF_cout_value_helper {
 
             using F = TF_cout_value_helper_default_case<F__, i32>::F;
@@ -496,8 +496,8 @@ namespace ncpp {
                 b8 value;
 
                 friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-                        ncpp::F_ostream& os,
-                        const F& input
+                    ncpp::F_ostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &cout)
@@ -514,8 +514,8 @@ namespace ncpp {
                     return os;
                 }
                 friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-                        ncpp::F_wostream& os,
-                        const F& input
+                    ncpp::F_wostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &wcout)
@@ -544,8 +544,8 @@ namespace ncpp {
                 f32 value;
 
                 friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-                        ncpp::F_ostream& os,
-                        const F& input
+                    ncpp::F_ostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &cout)
@@ -559,8 +559,8 @@ namespace ncpp {
                     return os;
                 }
                 friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-                        ncpp::F_wostream& os,
-                        const F& input
+                    ncpp::F_wostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &wcout)
@@ -585,8 +585,8 @@ namespace ncpp {
                 f64 value;
 
                 friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-                        ncpp::F_ostream& os,
-                        const F& input
+                    ncpp::F_ostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &cout)
@@ -600,8 +600,8 @@ namespace ncpp {
                     return os;
                 }
                 friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-                        ncpp::F_wostream& os,
-                        const F& input
+                    ncpp::F_wostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &wcout)
@@ -627,8 +627,8 @@ namespace ncpp {
                 i8 value;
 
                 friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-                        ncpp::F_ostream& os,
-                        const F& input
+                    ncpp::F_ostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &cout)
@@ -642,8 +642,8 @@ namespace ncpp {
                     return os;
                 }
                 friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-                        ncpp::F_wostream& os,
-                        const F& input
+                    ncpp::F_wostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &wcout)
@@ -668,8 +668,8 @@ namespace ncpp {
                 i16 value;
 
                 friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-                        ncpp::F_ostream& os,
-                        const F& input
+                    ncpp::F_ostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &cout)
@@ -683,8 +683,8 @@ namespace ncpp {
                     return os;
                 }
                 friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-                        ncpp::F_wostream& os,
-                        const F& input
+                    ncpp::F_wostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &wcout)
@@ -709,8 +709,8 @@ namespace ncpp {
                 i32 value;
 
                 friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-                        ncpp::F_ostream& os,
-                        const F& input
+                    ncpp::F_ostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &cout)
@@ -724,8 +724,8 @@ namespace ncpp {
                     return os;
                 }
                 friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-                        ncpp::F_wostream& os,
-                        const F& input
+                    ncpp::F_wostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &wcout)
@@ -750,8 +750,8 @@ namespace ncpp {
                 i64 value;
 
                 friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-                        ncpp::F_ostream& os,
-                        const F& input
+                    ncpp::F_ostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &cout)
@@ -765,8 +765,8 @@ namespace ncpp {
                     return os;
                 }
                 friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-                        ncpp::F_wostream& os,
-                        const F& input
+                    ncpp::F_wostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &wcout)
@@ -792,8 +792,8 @@ namespace ncpp {
                 u8 value;
 
                 friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-                        ncpp::F_ostream& os,
-                        const F& input
+                    ncpp::F_ostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &cout)
@@ -807,8 +807,8 @@ namespace ncpp {
                     return os;
                 }
                 friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-                        ncpp::F_wostream& os,
-                        const F& input
+                    ncpp::F_wostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &wcout)
@@ -833,8 +833,8 @@ namespace ncpp {
                 u16 value;
 
                 friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-                        ncpp::F_ostream& os,
-                        const F& input
+                    ncpp::F_ostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &cout)
@@ -848,8 +848,8 @@ namespace ncpp {
                     return os;
                 }
                 friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-                        ncpp::F_wostream& os,
-                        const F& input
+                    ncpp::F_wostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &wcout)
@@ -874,8 +874,8 @@ namespace ncpp {
                 u32 value;
 
                 friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-                        ncpp::F_ostream& os,
-                        const F& input
+                    ncpp::F_ostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &cout)
@@ -889,8 +889,8 @@ namespace ncpp {
                     return os;
                 }
                 friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-                        ncpp::F_wostream& os,
-                        const F& input
+                    ncpp::F_wostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &wcout)
@@ -915,8 +915,8 @@ namespace ncpp {
                 u64 value;
 
                 friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-                        ncpp::F_ostream& os,
-                        const F& input
+                    ncpp::F_ostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &cout)
@@ -930,8 +930,8 @@ namespace ncpp {
                     return os;
                 }
                 friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-                        ncpp::F_wostream& os,
-                        const F& input
+                    ncpp::F_wostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &wcout)
@@ -948,16 +948,26 @@ namespace ncpp {
             };
 
         };
-        template<>
-        struct TF_cout_value_helper<sz> {
+        template<typename F__>
+        struct TF_cout_value_helper<
+            F__,
+            std::enable_if_t<
+                std::is_same_v<F__, sz>
+                && !std::is_same_v<F__, u8>
+                && !std::is_same_v<F__, u16>
+                && !std::is_same_v<F__, u32>
+                && !std::is_same_v<F__, u64>,
+                void
+            >
+        > {
 
             struct F {
 
                 sz value;
 
                 friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-                        ncpp::F_ostream& os,
-                        const F& input
+                    ncpp::F_ostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &cout)
@@ -971,8 +981,8 @@ namespace ncpp {
                     return os;
                 }
                 friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-                        ncpp::F_wostream& os,
-                        const F& input
+                    ncpp::F_wostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &wcout)
@@ -989,16 +999,26 @@ namespace ncpp {
             };
 
         };
-        template<>
-        struct TF_cout_value_helper<ptrd> {
+        template<typename F__>
+        struct TF_cout_value_helper<
+            F__,
+            std::enable_if_t<
+                std::is_same_v<F__, ptrd>
+                && !std::is_same_v<F__, i8>
+                && !std::is_same_v<F__, i16>
+                && !std::is_same_v<F__, i32>
+                && !std::is_same_v<F__, i64>,
+                void
+            >
+        > {
 
             struct F {
 
                 ptrd value;
 
                 friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-                        ncpp::F_ostream& os,
-                        const F& input
+                    ncpp::F_ostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &cout)
@@ -1012,8 +1032,8 @@ namespace ncpp {
                     return os;
                 }
                 friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-                        ncpp::F_wostream& os,
-                        const F& input
+                    ncpp::F_wostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &wcout)
@@ -1039,8 +1059,8 @@ namespace ncpp {
                 const char* value;
 
                 friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-                        ncpp::F_ostream& os,
-                        const F& input
+                    ncpp::F_ostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &cout)
@@ -1059,8 +1079,8 @@ namespace ncpp {
                     return os;
                 }
                 friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-                        ncpp::F_wostream& os,
-                        const F& input
+                    ncpp::F_wostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &wcout)
@@ -1090,8 +1110,8 @@ namespace ncpp {
                 const wchar_t* value;
 
                 friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-                        ncpp::F_ostream& os,
-                        const F& input
+                    ncpp::F_ostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &cout)
@@ -1115,8 +1135,8 @@ namespace ncpp {
                     return os;
                 }
                 friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-                        ncpp::F_wostream& os,
-                        const F& input
+                    ncpp::F_wostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &wcout)
@@ -1152,8 +1172,8 @@ namespace ncpp {
                 containers::TF_string<F_char__, F_allocator__> value;
 
                 friend NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
-                        ncpp::F_ostream& os,
-                        const F& input
+                    ncpp::F_ostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &cout)
@@ -1178,8 +1198,8 @@ namespace ncpp {
                     return os;
                 }
                 friend NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
-                        ncpp::F_wostream& os,
-                        const F& input
+                    ncpp::F_wostream& os,
+                    const F& input
                 ) {
 
                     if(&os == &wcout)
@@ -2436,11 +2456,11 @@ std::wostream& operator << (std::wostream& os, const eastl::span<F_item__>& v)
 
 
 #pragma region Deque
-template<typename F_item__, class F_allocator__>
+template<typename F_item__, class F_allocator__, unsigned subarray_size__>
 ncpp::F_ostream& operator << (
 	ncpp::F_ostream& os,
 	const ncpp::TF_ostream_input<
-		eastl::deque<F_item__, F_allocator__>
+		eastl::deque<F_item__, F_allocator__, subarray_size__>
 	>& input
 )
 {
@@ -2499,22 +2519,22 @@ ncpp::F_ostream& operator << (
 	return os;
 }
 
-template<typename F_item__, class F_allocator__>
-NCPP_FORCE_INLINE ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl::deque<F_item__, F_allocator__>& v)
+template<typename F_item__, class F_allocator__, unsigned subarray_size__>
+NCPP_FORCE_INLINE ncpp::F_ostream& operator << (ncpp::F_ostream& os, const eastl::deque<F_item__, F_allocator__, subarray_size__>& v)
 {
 
-	os << ncpp::TF_ostream_input<eastl::deque<F_item__, F_allocator__>> { v, 0 };
+	os << ncpp::TF_ostream_input<eastl::deque<F_item__, F_allocator__, subarray_size__>> { v, 0 };
 
 	return os;
 }
 
 
 
-template<typename F_item__, class F_allocator__>
+template<typename F_item__, class F_allocator__, unsigned subarray_size__>
 ncpp::F_wostream& operator << (
     ncpp::F_wostream& os,
     const ncpp::TF_ostream_input<
-        eastl::deque<F_item__, F_allocator__>
+        eastl::deque<F_item__, F_allocator__, subarray_size__>
     >& input
 )
 {
@@ -2573,11 +2593,11 @@ ncpp::F_wostream& operator << (
     return os;
 }
 
-template<typename F_item__, class F_allocator__>
-NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eastl::deque<F_item__, F_allocator__>& v)
+template<typename F_item__, class F_allocator__, unsigned subarray_size__>
+NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eastl::deque<F_item__, F_allocator__, subarray_size__>& v)
 {
 
-    os << ncpp::TF_ostream_input<eastl::deque<F_item__, F_allocator__>> { v, 0 };
+    os << ncpp::TF_ostream_input<eastl::deque<F_item__, F_allocator__, subarray_size__>> { v, 0 };
 
     return os;
 }
@@ -2737,7 +2757,7 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eas
 
     return os;
 }
-#pragma endregions
+#pragma endregion
 
 
 
@@ -2893,7 +2913,7 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eas
 
     return os;
 }
-#pragma endregions
+#pragma endregion
 
 
 
@@ -3057,7 +3077,7 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eas
 
     return os;
 }
-#pragma endregions
+#pragma endregion
 
 
 
@@ -3213,7 +3233,7 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eas
 
     return os;
 }
-#pragma endregions
+#pragma endregion
 
 
 
@@ -3377,4 +3397,92 @@ NCPP_FORCE_INLINE ncpp::F_wostream& operator << (ncpp::F_wostream& os, const eas
 
     return os;
 }
-#pragma endregions
+#pragma endregion
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+//#pragma region Queue
+//template<typename F_item__, typename F_container__>
+//std::ostream& operator << (
+//	std::ostream& os,
+//	const ncpp::TF_ostream_input<
+//		eastl::queue<F_item__, F_container__>
+//	>& input
+//)
+//{
+//
+//    return os;
+//}
+//
+//template<typename F_item__, typename F_container__>
+//std::ostream& operator << (std::ostream& os, const eastl::queue<F_item__, F_container__>& v)
+//{
+//
+//    os << ncpp::TF_ostream_input<eastl::queue<F_item__, F_container__>> { v, 0 };
+//
+//    return os;
+//}
+//
+//
+//
+//template<typename F_item__, typename F_container__>
+//std::wostream& operator << (
+//    std::wostream& os,
+//    const ncpp::TF_ostream_input<
+//        eastl::queue<F_item__, F_container__>
+//    >& input
+//)
+//{
+//
+//    if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+//
+//        os << ncpp::T_cout_lowlight(L"...");
+//
+//        return os;
+//    }
+//
+//    os << NCPP_FOREGROUND_YELLOW_TEXT << L"queue"
+//        << L" ";
+//
+//    os << ncpp::T_cout_lowlight(L"{");
+//
+//    auto b = ncpp::utilities::T_is_ostreamable_v<ncpp::F_wostream, F_container__>;
+//    auto b2 = ncpp::utilities::T_is_ostreamable_v<ncpp::F_wostream, ncpp::containers::TG_deque<int>>;
+//    auto b3 = ncpp::utilities::T_is_ostreamable_v<ncpp::F_wostream, ncpp::containers::TG_vector<int>>;
+//    std::cout << ncpp::utilities::T_type_name<F_container__>() << std::endl;
+//
+//	ncpp::T_safe_ostream_with_tab<ncpp::F_wostream, F_container__>(os, { input.first.get_container(), input.second + 1 });
+//
+//    for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+//
+//        os << L" ";
+//
+//    }
+//    os << ncpp::T_cout_lowlight(L"}");
+//
+//    return os;
+//}
+//
+//template<typename F_item__, typename F_container__>
+//std::wostream& operator << (std::wostream& os, const eastl::queue<F_item__, F_container__>& v)
+//{
+//
+//    os << ncpp::TF_ostream_input<eastl::queue<F_item__, F_container__>> { v, 0 };
+//
+//    return os;
+//}
+//#pragma endregion
