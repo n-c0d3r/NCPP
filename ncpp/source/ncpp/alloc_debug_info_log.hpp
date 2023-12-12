@@ -60,7 +60,7 @@
 
 
 #pragma region Alloc Debug Info
-#if defined(NCPP_ENABLE_ALLOCATOR_NAME) || defined(NCPP_ENABLE_MEMORY_COUNTING)
+#ifdef NCPP_HAS_ALLOC_DEBUG_INFO
 inline ncpp::F_ostream& operator << (ncpp::F_ostream& os, const ncpp::TF_ostream_input<ncpp::mem::F_alloc_debug_info>& input){
 
     if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
