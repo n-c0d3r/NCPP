@@ -9,7 +9,7 @@ int main() {
 
 	{
 
-        F_hash_table ht;
+        G_hash_table ht;
         
         ht.add(1, 1);
         ht.add(1, 2);
