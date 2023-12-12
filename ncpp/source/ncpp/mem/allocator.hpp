@@ -125,7 +125,7 @@ namespace ncpp {
 		/**
 		 *	Base allocator class.
 		 */
-		template<class F_allocator__, b8 enable_manual_alignment__ = false>
+		template<class F_allocator__, b8 enable_manual_alignment__ = false, b8 auto_count_non_default_allocations__ = false>
 		class TI_allocator {
 
 		private:
@@ -308,7 +308,7 @@ namespace ncpp {
 					};
 
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
-					if constexpr (is_default_alloc__) {
+					if constexpr (is_default_alloc__ || auto_count_non_default_allocations__) {
 
 						NCPP_INCREASE_TOTAL_ALLOCATED_MEMORY(actual_size);
 
@@ -418,7 +418,7 @@ namespace ncpp {
 					};
 
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
-					if constexpr (is_default_alloc__) {
+					if constexpr (is_default_alloc__ || auto_count_non_default_allocations__) {
 
 						NCPP_INCREASE_TOTAL_ALLOCATED_MEMORY(actual_size);
 
@@ -452,11 +452,11 @@ namespace ncpp {
 				const F_alloc_debug_info& debug_info = get_alloc_debug_info(p);
 
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
-				if (debug_info.is_default_alloc) {
+                if (debug_info.is_default_alloc || auto_count_non_default_allocations__) {
 
-					NCPP_DECREASE_TOTAL_ALLOCATED_MEMORY(debug_info.actual_size);
+                    NCPP_DECREASE_TOTAL_ALLOCATED_MEMORY(debug_info.actual_size);
 
-				}
+                }
 #endif
 #endif
 
