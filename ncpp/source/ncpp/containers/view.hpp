@@ -91,11 +91,11 @@ namespace ncpp {
 
 	namespace containers {
 
-        struct F___ncpp_view_flag___ {};
-
-
-
         namespace internal {
+
+            struct F___ncpp_view_flag___ {};
+
+
 
             template<typename F_container__, typename F_another__, b8 is_another_has_allocator__>
             struct TF_try_march_container_allocator;
@@ -182,7 +182,7 @@ namespace ncpp {
             using F_container = F_container__;
             using F_allocator = TF_container_allocator<F_container__>;
 
-            using F___ncpp_view_flag___ = containers::F___ncpp_view_flag___;
+            using F___ncpp_view_flag___ = containers::internal::F___ncpp_view_flag___;
 
 
 
