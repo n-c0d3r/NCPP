@@ -36,6 +36,9 @@
 #include <ncpp/containers/eastl_containers.hpp>
 #include <ncpp/mem/general_allocator.hpp>
 #include <ncpp/utilities/value_type.hpp>
+#include <ncpp/utilities/item_type.hpp>
+#include <ncpp/utilities/key_type.hpp>
+#include <ncpp/utilities/node_type.hpp>
 #include <ncpp/utilities/iterator.hpp>
 #include <ncpp/utilities/sizeof.hpp>
 #include <ncpp/utilities/nth_template_arg.hpp>
@@ -118,8 +121,33 @@ namespace ncpp {
                 (F_container&)container = x;
 
             }
-            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_value<F_container>> x, const F_container& container = F_container()) :
+            template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_key<F_fake_container__>>, i32> = 0>
+            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_key<F_container>> x, const F_container& container = F_container()) :
                 container_p_(&container)
+            {
+
+                (F_container&)container = x;
+
+            }
+            template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_value<F_fake_container__>>, i32> = 0>
+            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_value<F_container>> x, const F_container& container = F_container()) :
+                    container_p_(&container)
+            {
+
+                (F_container&)container = x;
+
+            }
+            template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_node<F_fake_container__>>, i32> = 0>
+            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_node<F_container>> x, const F_container& container = F_container()) :
+                    container_p_(&container)
+            {
+
+                (F_container&)container = x;
+
+            }
+            template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_item<F_fake_container__>>, i32> = 0>
+            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_item<F_container>> x, const F_container& container = F_container()) :
+                    container_p_(&container)
             {
 
                 (F_container&)container = x;

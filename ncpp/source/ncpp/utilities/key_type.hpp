@@ -91,14 +91,14 @@ namespace ncpp {
         template<class F__>
         using TF_key = typename internal::TF_key_helper<
             F__,
-            internal::TF_is_has_eastl_key_type<F__>::key * 1
-            + internal::TF_is_has_ncpp_key_type<F__>::key * 2
+            internal::TF_is_has_eastl_key_type<F__>::value * 1
+            + internal::TF_is_has_ncpp_key_type<F__>::value * 2
         >::F;
 
         template<class F__>
         static constexpr b8 T_is_has_key_v = (
-            internal::TF_is_has_eastl_key_type<F__>::key
-            || internal::TF_is_has_ncpp_key_type<F__>::key
+            internal::TF_is_has_eastl_key_type<F__>::value
+            || internal::TF_is_has_ncpp_key_type<F__>::value
         );
 
     }

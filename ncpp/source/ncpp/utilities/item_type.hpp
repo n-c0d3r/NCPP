@@ -91,14 +91,14 @@ namespace ncpp {
         template<class F__>
         using TF_item = typename internal::TF_item_helper<
             F__,
-            internal::TF_is_has_eastl_item_type<F__>::item * 1
-            + internal::TF_is_has_ncpp_item_type<F__>::item * 2
+            internal::TF_is_has_eastl_item_type<F__>::value * 1
+            + internal::TF_is_has_ncpp_item_type<F__>::value * 2
         >::F;
 
         template<class F__>
         static constexpr b8 T_is_has_item_v = (
-            internal::TF_is_has_eastl_item_type<F__>::item
-            || internal::TF_is_has_ncpp_item_type<F__>::item
+            internal::TF_is_has_eastl_item_type<F__>::value
+            || internal::TF_is_has_ncpp_item_type<F__>::value
         );
 
     }

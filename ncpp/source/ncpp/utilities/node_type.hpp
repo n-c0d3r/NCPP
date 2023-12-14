@@ -91,14 +91,14 @@ namespace ncpp {
         template<class F__>
         using TF_node = typename internal::TF_node_helper<
             F__,
-            internal::TF_is_has_eastl_node_type<F__>::node * 1
-            + internal::TF_is_has_ncpp_node_type<F__>::node * 2
+            internal::TF_is_has_eastl_node_type<F__>::value * 1
+            + internal::TF_is_has_ncpp_node_type<F__>::value * 2
         >::F;
 
         template<class F__>
         static constexpr b8 T_is_has_node_v = (
-            internal::TF_is_has_eastl_node_type<F__>::node
-            || internal::TF_is_has_ncpp_node_type<F__>::node
+            internal::TF_is_has_eastl_node_type<F__>::value
+            || internal::TF_is_has_ncpp_node_type<F__>::value
         );
 
     }
