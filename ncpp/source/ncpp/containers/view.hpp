@@ -191,7 +191,6 @@ namespace ncpp {
 
 #ifdef NCPP_DEBUG
             F_view_owner_counter* owner_counter_p_ = 0;
-            b8 is_root_owner_ = false;
 #endif
 
         public:
@@ -235,8 +234,7 @@ namespace ncpp {
 
 #ifdef NCPP_DEBUG
                 ,
-                owner_counter_p_((F_view_owner_counter*)(&owner_counter)),
-                is_root_owner_(true)
+                owner_counter_p_((F_view_owner_counter*)(&owner_counter))
 #endif
             {
 
@@ -253,8 +251,7 @@ namespace ncpp {
 
 #ifdef NCPP_DEBUG
                 ,
-                owner_counter_p_((F_view_owner_counter*)(&owner_counter)),
-                is_root_owner_(true)
+                owner_counter_p_((F_view_owner_counter*)(&owner_counter))
 #endif
             {
 
@@ -271,8 +268,7 @@ namespace ncpp {
 
 #ifdef NCPP_DEBUG
                 ,
-                owner_counter_p_((F_view_owner_counter*)(&owner_counter)),
-                is_root_owner_(true)
+                owner_counter_p_((F_view_owner_counter*)(&owner_counter))
 #endif
             {
 
@@ -289,8 +285,7 @@ namespace ncpp {
 
 #ifdef NCPP_DEBUG
                 ,
-                owner_counter_p_((F_view_owner_counter*)(&owner_counter)),
-                is_root_owner_(true)
+                owner_counter_p_((F_view_owner_counter*)(&owner_counter))
 #endif
             {
 
@@ -307,8 +302,7 @@ namespace ncpp {
 
 #ifdef NCPP_DEBUG
                 ,
-                owner_counter_p_((F_view_owner_counter*)(&owner_counter)),
-                is_root_owner_(true)
+                owner_counter_p_((F_view_owner_counter*)(&owner_counter))
 #endif
             {
 
