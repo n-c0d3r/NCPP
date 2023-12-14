@@ -42,7 +42,8 @@
 #include <ncpp/utilities/iterator.hpp>
 #include <ncpp/utilities/sizeof.hpp>
 #include <ncpp/utilities/nth_template_arg.hpp>
-#include <ncpp/utilities/mem_wrap.hpp>
+#include <ncpp/utilities/no_constructor.hpp>
+#include <ncpp/utilities/is_streamable.hpp>
 #include <ncpp/iostream.hpp>
 #include <ncpp/rtti/rtti_flag.hpp>
 
@@ -66,12 +67,60 @@
 
 namespace ncpp {
 
+    namespace containers {
+
+        template<typename F_container__>
+        class TF_view;
+
+    }
+
+}
+
+
+
+NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
+    NCPP_MA(ncpp::containers::TF_view<F_container__>),
+    NCPP_MA(ncpp::containers::TF_container_allocator<F_container__>),
+    NCPP_MA(ncpp::containers::TF_view<ncpp::containers::TF_bind_container_allocator<F_container__, F_new_allocator__>>),
+    typename F_container__
+);
+
+
+
+namespace ncpp {
+
 	namespace containers {
 
-        template<sz allocator_size__>
-        struct TF_view_with_allocator_flag {};
-
         struct F_view_flag {};
+
+
+
+        namespace internal {
+
+            template<typename F_container__, typename F_another__, b8 is_another_has_allocator__>
+            struct TF_try_march_container_allocator;
+
+            template<typename F_container__, typename F_another__>
+            struct TF_try_march_container_allocator<F_container__, F_another__, true> {
+
+                using F = TF_bind_container_allocator<F_container__, containers::TF_container_allocator<F_another__>>;
+
+            };
+            template<typename F_container__, typename F_another__>
+            struct TF_try_march_container_allocator<F_container__, F_another__, false> {
+
+                using F = F_container__;
+
+            };
+
+        }
+
+        template<typename F_container__, typename F_another__>
+        using TF_try_march_container_allocator = typename internal::TF_try_march_container_allocator<
+            F_container__,
+            std::remove_const_t<std::remove_reference_t<F_another__>>,
+            !std::is_same_v<containers::TF_container_allocator<std::remove_const_t<std::remove_reference_t<F_another__>>>, void>
+        >::F;
 
 
 
@@ -83,6 +132,15 @@ namespace ncpp {
 
 
 
+        template<typename F__>
+        concept T_is_view = requires {
+
+            typename std::remove_reference_t<std::remove_const_t<F__>>::F_view_flag;
+
+        };
+
+
+
         template<typename F_container__>
         class TF_view {
 
@@ -91,8 +149,7 @@ namespace ncpp {
             using F_container = F_container__;
             using F_allocator = TF_container_allocator<F_container__>;
 
-            NCPP_RTTI_IMPLEMENT_FLAG(F_this, TF_view_with_allocator_flag<utilities::T_sizeof<F_allocator>>);
-            NCPP_RTTI_IMPLEMENT_FLAG(F_this, F_view_flag);
+            using F_view_flag = containers::F_view_flag;
 
 
 
@@ -136,7 +193,7 @@ namespace ncpp {
                 typename F__,
                 std::enable_if_t<!T_is_same_viewable_container_v<F_container, F__>, i32> = 0
             >
-            NCPP_FORCE_INLINE TF_view(const F__& x, const utilities::TF_mem_wrap<F_container>& container = utilities::TF_mem_wrap<F_container>{}) :
+            NCPP_FORCE_INLINE TF_view(const F__& x, const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}) :
                 container_p_((const F_container*)&container)
 
 #ifdef NCPP_DEBUG
@@ -150,7 +207,7 @@ namespace ncpp {
 
             }
             template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_key<F_fake_container__>>, i32> = 0>
-            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_key<F_container>> x, const utilities::TF_mem_wrap<F_container>& container = utilities::TF_mem_wrap<F_container>{}) :
+            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_key<F_container>> x, const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}) :
                 container_p_((const F_container*)&container)
 
 #ifdef NCPP_DEBUG
@@ -164,7 +221,7 @@ namespace ncpp {
 
             }
             template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_value<F_fake_container__>>, i32> = 0>
-            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_value<F_container>> x, const utilities::TF_mem_wrap<F_container>& container = utilities::TF_mem_wrap<F_container>{}) :
+            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_value<F_container>> x, const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}) :
                 container_p_((const F_container*)&container)
 
 #ifdef NCPP_DEBUG
@@ -178,7 +235,7 @@ namespace ncpp {
 
             }
             template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_node<F_fake_container__>>, i32> = 0>
-            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_node<F_container>> x, const utilities::TF_mem_wrap<F_container>& container = utilities::TF_mem_wrap<F_container>{}) :
+            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_node<F_container>> x, const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}) :
                 container_p_((const F_container*)&container)
 
 #ifdef NCPP_DEBUG
@@ -192,7 +249,7 @@ namespace ncpp {
 
             }
             template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_item<F_fake_container__>>, i32> = 0>
-            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_item<F_container>> x, const utilities::TF_mem_wrap<F_container>& container = utilities::TF_mem_wrap<F_container>{}) :
+            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_item<F_container>> x, const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}) :
                 container_p_((const F_container*)&container)
 
 #ifdef NCPP_DEBUG
@@ -321,7 +378,7 @@ namespace ncpp {
                 typename F_arg__,
                 typename F_default_return__ = std::remove_const_t<
                     std::remove_reference_t<
-                        decltype((*container_p_)[std::declval<std::remove_const_t<F_arg__>>()])
+                        decltype((*container_p_)[std::declval<std::remove_reference_t<std::remove_const_t<F_arg__>>>()])
                     >
                 >
             >
@@ -329,640 +386,56 @@ namespace ncpp {
                 sizeof(F_default_return__) <= sizeof(void*),
                 const F_default_return__&,
                 F_default_return__
-            > operator[](std::remove_const_t<F_arg__> arg) const {
+            > operator[](F_arg__ arg) const {
 
                 return (*container_p_)[arg];
             }
 
 
 
-        public:
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator + (const F_this& a, F_arg__& arg)
-            -> decltype(
-                std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container&,
-                        const std::remove_const_t<F_arg__>&
-                    >
-                >()
-                + std::declval<const std::remove_const_t<F_arg__>&>()
-            )
-            {
-
-                return *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_) + arg;
-            }
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator + (F_arg__& arg, const F_this& a)
-            -> decltype(
-                std::declval<const std::remove_const_t<F_arg__>&>()
-                + std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container&,
-                        const std::remove_const_t<F_arg__>&
-                    >
-                >()
-            )
-            {
-
-                return arg + *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_);
-            }
-            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator + (F_arg__& arg, const F_this& a)
-            -> decltype(
-                std::declval<const typename std::remove_const_t<F_arg__>::F_container&>()
-                + std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<typename std::remove_const_t<F_arg__>::F_container, F_container>,
-                        const F_container&,
-                        const typename std::remove_const_t<F_arg__>::F_container&
-                    >
-                >()
-            )
-            {
-
-                return arg.container() + *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_);
+#define NCPP_CONTAINERS_DEFINE_VIEW_OPERATORS(Operator) \
+            template<typename F_arg__, std::enable_if_t<!T_is_view<F_arg__>, i32> = 0>\
+            friend NCPP_FORCE_INLINE auto operator Operator (const F_this& a, F_arg__&& arg)\
+            -> decltype(\
+                std::declval<const TF_try_march_container_allocator<F_container__, F_arg__>&>()\
+                Operator std::declval<F_arg__&&>()\
+            )\
+            {\
+\
+                return *((const TF_try_march_container_allocator<F_container__, F_arg__>*)(a.container_p_)) Operator arg;\
+            }\
+            template<typename F_arg__, std::enable_if_t<!T_is_view<F_arg__>, i32> = 0>\
+            friend NCPP_FORCE_INLINE auto operator Operator (F_arg__&& arg, const F_this& a)\
+            -> decltype(\
+                std::declval<F_arg__&&>()\
+                Operator std::declval<const TF_try_march_container_allocator<F_container__, F_arg__>&>()\
+            )\
+            {\
+\
+                return arg Operator *((const TF_try_march_container_allocator<F_container__, F_arg__>*)(a.container_p_));\
+            }\
+            template<typename F_arg__, std::enable_if_t<T_is_view<F_arg__>, i32> = 0>\
+            friend NCPP_FORCE_INLINE auto operator Operator (const F_this& a, F_arg__&& arg)\
+            -> decltype(\
+                std::declval<const TF_try_march_container_allocator<F_container__, F_arg__>&>()\
+                Operator std::declval<F_arg__&&>()\
+            )\
+            {\
+\
+                return *((const TF_try_march_container_allocator<F_container__, F_arg__>*)(a.container_p_)) Operator arg;\
             }
 
 
 
         public:
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator - (const F_this& a, F_arg__& arg)
-            -> decltype(
-                std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container&,
-                        const std::remove_const_t<F_arg__>&
-                    >
-                >()
-                - std::declval<const std::remove_const_t<F_arg__>&>()
-            )
-            {
-
-                return *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_) - arg;
-            }
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator - (F_arg__& arg, const F_this& a)
-            -> decltype(
-                std::declval<const std::remove_const_t<F_arg__>&>()
-                - std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container&,
-                        const std::remove_const_t<F_arg__>&
-                    >
-                >()
-            )
-            {
-
-                return arg - *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_);
-            }
-            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator - (F_arg__& arg, const F_this& a)
-            -> decltype(
-                std::declval<const typename std::remove_const_t<F_arg__>::F_container&>()
-                - std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<typename std::remove_const_t<F_arg__>::F_container, F_container>,
-                        const F_container&,
-                        const typename std::remove_const_t<F_arg__>::F_container&
-                    >
-                >()
-            )
-            {
-
-                return arg.container() - *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_);
-            }
-
-
-
-        public:
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator == (const F_this& a, F_arg__& arg)
-            -> decltype(
-                std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container&,
-                        const std::remove_const_t<F_arg__>&
-                    >
-                >()
-                == std::declval<const std::remove_const_t<F_arg__>&>()
-            )
-            {
-
-                return *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_) == arg;
-            }
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator == (F_arg__& arg, const F_this& a)
-            -> decltype(
-                std::declval<const std::remove_const_t<F_arg__>&>()
-                == std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container&,
-                        const std::remove_const_t<F_arg__>&
-                    >
-                >()
-            )
-            {
-
-                return arg == *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_);
-            }
-            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator == (F_arg__& arg, const F_this& a)
-            -> decltype(
-                std::declval<const typename std::remove_const_t<F_arg__>::F_container&>()
-                == std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<typename std::remove_const_t<F_arg__>::F_container, F_container>,
-                        const F_container&,
-                        const typename std::remove_const_t<F_arg__>::F_container&
-                    >
-                >()
-            )
-            {
-
-                return arg.container() == *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_);
-            }
-
-
-
-        public:
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator != (const F_this& a, F_arg__& arg)
-            -> decltype(
-                std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container&,
-                        const std::remove_const_t<F_arg__>&
-                    >
-                >()
-                != std::declval<const std::remove_const_t<F_arg__>&>()
-            )
-            {
-
-                return *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_) != arg;
-            }
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator != (F_arg__& arg, const F_this& a)
-            -> decltype(
-                std::declval<const std::remove_const_t<F_arg__>&>()
-                != std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container&,
-                        const std::remove_const_t<F_arg__>&
-                    >
-                >()
-            )
-            {
-
-                return arg != *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_);
-            }
-            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator != (F_arg__& arg, const F_this& a)
-            -> decltype(
-                std::declval<const typename std::remove_const_t<F_arg__>::F_container&>()
-                != std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<typename std::remove_const_t<F_arg__>::F_container, F_container>,
-                        const F_container&,
-                        const typename std::remove_const_t<F_arg__>::F_container&
-                    >
-                >()
-            )
-            {
-
-                return arg.container() != *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_);
-            }
-
-
-
-        public:
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator << (const F_this& a, std::remove_const_t<F_arg__>& arg)
-            -> decltype(
-                std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container&,
-                        const std::remove_const_t<F_arg__>&
-                    >
-                >()
-                << std::declval<const std::remove_const_t<F_arg__>&>()
-            )
-            {
-
-                return *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_) << arg;
-            }
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator << (std::remove_const_t<F_arg__>& arg, const F_this& a)
-            -> decltype(
-                std::declval<const std::remove_const_t<F_arg__>&>()
-                << std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container&,
-                        const std::remove_const_t<F_arg__>&
-                    >
-                >()
-            )
-            {
-
-                return arg << *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_);
-            }
-            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator << (F_arg__& arg, const F_this& a)
-            -> decltype(
-                std::declval<const typename std::remove_const_t<F_arg__>::F_container&>()
-                << std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<typename std::remove_const_t<F_arg__>::F_container, F_container>,
-                        const F_container&,
-                        const typename std::remove_const_t<F_arg__>::F_container&
-                    >
-                >()
-            )
-            {
-
-                return arg.container() << *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_);
-            }
-
-
-
-        public:
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator >> (const F_this& a, F_arg__& arg)
-            -> decltype(
-                std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container&,
-                        const std::remove_const_t<F_arg__>&
-                    >
-                >()
-                >> std::declval<const std::remove_const_t<F_arg__>&>()
-            )
-            {
-
-                return *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_) >> arg;
-            }
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator >> (F_arg__& arg, const F_this& a)
-            -> decltype(
-                std::declval<const std::remove_const_t<F_arg__>&>()
-                >> std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container&,
-                        const std::remove_const_t<F_arg__>&
-                    >
-                >()
-            )
-            {
-
-                return arg >> *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_);
-            }
-            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator >> (F_arg__& arg, const F_this& a)
-            -> decltype(
-                std::declval<const typename std::remove_const_t<F_arg__>::F_container&>()
-                >> std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<typename std::remove_const_t<F_arg__>::F_container, F_container>,
-                        const F_container&,
-                        const typename std::remove_const_t<F_arg__>::F_container&
-                    >
-                >()
-            )
-            {
-
-                return arg.container() >> *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_);
-            }
-
-
-
-        public:
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator % (const F_this& a, F_arg__& arg)
-            -> decltype(
-                std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container&,
-                        const std::remove_const_t<F_arg__>&
-                    >
-                >()
-                % std::declval<const std::remove_const_t<F_arg__>&>()
-            )
-            {
-
-                return *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_) % arg;
-            }
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator % (F_arg__& arg, const F_this& a)
-            -> decltype(
-                std::declval<const std::remove_const_t<F_arg__>&>()
-                % std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container&,
-                        const std::remove_const_t<F_arg__>&
-                    >
-                >()
-            )
-            {
-
-                return arg % *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_);
-            }
-            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator % (F_arg__& arg, const F_this& a)
-            -> decltype(
-                std::declval<const typename std::remove_const_t<F_arg__>::F_container&>()
-                % std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<typename std::remove_const_t<F_arg__>::F_container, F_container>,
-                        const F_container&,
-                        const typename std::remove_const_t<F_arg__>::F_container&
-                    >
-                >()
-            )
-            {
-
-                return arg.container() % *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_);
-            }
-
-
-
-        public:
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator * (const F_this& a, F_arg__& arg)
-            -> decltype(
-                std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container&,
-                        const std::remove_const_t<F_arg__>&
-                    >
-                >()
-                * std::declval<const std::remove_const_t<F_arg__>&>()
-            )
-            {
-
-                return *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_) * arg;
-            }
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator * (F_arg__& arg, const F_this& a)
-            -> decltype(
-                std::declval<const std::remove_const_t<F_arg__>&>()
-                * std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container&,
-                        const std::remove_const_t<F_arg__>&
-                    >
-                >()
-            )
-            {
-
-                return arg * *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_);
-            }
-            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator * (F_arg__& arg, const F_this& a)
-            -> decltype(
-                std::declval<const typename std::remove_const_t<F_arg__>::F_container&>()
-                * std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<typename std::remove_const_t<F_arg__>::F_container, F_container>,
-                        const F_container&,
-                        const typename std::remove_const_t<F_arg__>::F_container&
-                    >
-                >()
-            )
-            {
-
-                return arg.container() * *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_);
-            }
-
-
-
-        public:
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator / (const F_this& a, F_arg__& arg)
-            -> decltype(
-                std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container&,
-                        const std::remove_const_t<F_arg__>&
-                    >
-                >()
-                / std::declval<const std::remove_const_t<F_arg__>&>()
-            )
-            {
-
-                return *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_) / arg;
-            }
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator / (F_arg__& arg, const F_this& a)
-            -> decltype(
-                std::declval<const std::remove_const_t<F_arg__>&>()
-                / std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container&,
-                        const std::remove_const_t<F_arg__>&
-                    >
-                >()
-            )
-            {
-
-                return arg / *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_);
-            }
-            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(std::remove_const_t<F_arg__>, F_view_flag), i32> = 0>
-            friend NCPP_FORCE_INLINE auto operator / (F_arg__& arg, const F_this& a)
-            -> decltype(
-                std::declval<const typename std::remove_const_t<F_arg__>::F_container&>()
-                / std::declval<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<typename std::remove_const_t<F_arg__>::F_container, F_container>,
-                        const F_container&,
-                        const typename std::remove_const_t<F_arg__>::F_container&
-                    >
-                >()
-            )
-            {
-
-                return arg.container() / *reinterpret_cast<
-                    utilities::TF_nth_template_arg<
-                        T_is_same_viewable_container_v<std::remove_const_t<F_arg__>, F_container>,
-                        const F_container*,
-                        const std::remove_const_t<F_arg__>*
-                    >
-                >(a.container_p_);
-            }
+            NCPP_CONTAINERS_DEFINE_VIEW_OPERATORS(<<);
+            NCPP_CONTAINERS_DEFINE_VIEW_OPERATORS(>>);
+            NCPP_CONTAINERS_DEFINE_VIEW_OPERATORS(+);
+            NCPP_CONTAINERS_DEFINE_VIEW_OPERATORS(-);
+            NCPP_CONTAINERS_DEFINE_VIEW_OPERATORS(*);
+            NCPP_CONTAINERS_DEFINE_VIEW_OPERATORS(/);
+            NCPP_CONTAINERS_DEFINE_VIEW_OPERATORS(%);
+            NCPP_CONTAINERS_DEFINE_VIEW_OPERATORS(&);
 
 
 
@@ -1072,15 +545,6 @@ namespace ncpp {
                 container_p_ = 0;
             }
 
-
-
-        public:
-            template<typename F_ostream__>
-            friend NCPP_FORCE_INLINE F_ostream__& operator << (F_ostream__& os, const TF_view& view) {
-
-                return (os << (*view.container_p_));
-            }
-
         };
 
 
@@ -1094,12 +558,3 @@ namespace ncpp {
     }
 
 }
-
-
-
-NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
-    NCPP_MA(ncpp::containers::TF_view<F_container__>),
-    NCPP_MA(ncpp::containers::TF_container_allocator<F_container__>),
-    NCPP_MA(ncpp::containers::TF_view<ncpp::containers::TF_bind_container_allocator<F_container__, F_new_allocator__>>),
-    typename F_container__
-);
