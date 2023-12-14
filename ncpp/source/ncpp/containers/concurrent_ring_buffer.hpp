@@ -110,7 +110,7 @@ namespace ncpp {
 
 
 			}
-			inline TF_concurrent_ring_buffer(i64 capacity) :
+			inline TF_concurrent_ring_buffer(sz capacity) :
 				capacity_(capacity),
 				item_vector_(capacity)
 			{
