@@ -91,7 +91,7 @@ namespace ncpp {
 
 	namespace containers {
 
-        struct F_view_flag {};
+        struct F___ncpp_view_flag___ {};
 
 
 
@@ -135,7 +135,7 @@ namespace ncpp {
         template<typename F__>
         concept T_is_view = requires {
 
-            typename std::remove_reference_t<std::remove_const_t<F__>>::F_view_flag;
+            typename std::remove_reference_t<std::remove_const_t<F__>>::F___ncpp_view_flag___;
 
         };
 
@@ -149,7 +149,7 @@ namespace ncpp {
             using F_container = F_container__;
             using F_allocator = TF_container_allocator<F_container__>;
 
-            using F_view_flag = containers::F_view_flag;
+            using F___ncpp_view_flag___ = containers::F___ncpp_view_flag___;
 
 
 
@@ -414,7 +414,7 @@ namespace ncpp {
 \
                 return arg Operator *((const TF_try_march_container_allocator<F_container__, F_arg__>*)(a.container_p_));\
             }\
-            template<typename F_arg__, std::enable_if_t<T_is_view<F_arg__>, i32> = 0>\
+            template<typename F_arg__, typename = typename F_arg__::F___ncpp_view_flag___>\
             friend NCPP_FORCE_INLINE auto operator Operator (const F_this& a, F_arg__&& arg)\
             -> decltype(\
                 std::declval<const TF_try_march_container_allocator<F_container__, F_arg__>&>()\
@@ -422,7 +422,7 @@ namespace ncpp {
             )\
             {\
 \
-                return *((const TF_try_march_container_allocator<F_container__, F_arg__>*)(a.container_p_)) Operator arg;\
+                return ( *((const TF_try_march_container_allocator<F_container__, F_arg__>*)(a.container_p())) ) Operator ( *((const typename F_arg__::F_container*)(arg.container_p())) );\
             }
 
 
@@ -436,6 +436,8 @@ namespace ncpp {
             NCPP_CONTAINERS_DEFINE_VIEW_OPERATORS(/);
             NCPP_CONTAINERS_DEFINE_VIEW_OPERATORS(%);
             NCPP_CONTAINERS_DEFINE_VIEW_OPERATORS(&);
+            NCPP_CONTAINERS_DEFINE_VIEW_OPERATORS(==);
+            NCPP_CONTAINERS_DEFINE_VIEW_OPERATORS(!=);
 
 
 
