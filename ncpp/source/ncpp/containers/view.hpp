@@ -42,6 +42,7 @@
 #include <ncpp/utilities/iterator.hpp>
 #include <ncpp/utilities/sizeof.hpp>
 #include <ncpp/utilities/nth_template_arg.hpp>
+#include <ncpp/utilities/mem_wrap.hpp>
 #include <ncpp/iostream.hpp>
 #include <ncpp/rtti/rtti_flag.hpp>
 
@@ -114,43 +115,43 @@ namespace ncpp {
                 typename F__,
                 std::enable_if_t<!T_is_same_viewable_container_v<F_container, F__>, i32> = 0
             >
-            NCPP_FORCE_INLINE TF_view(const F__& x, const F_container& container = F_container()) :
-                container_p_(&container)
+            NCPP_FORCE_INLINE TF_view(const F__& x, const utilities::TF_mem_wrap<F_container>& container = utilities::TF_mem_wrap<F_container>{}) :
+                container_p_((const F_container*)&container)
             {
 
-                (F_container&)container = F_container(x);
+                new ((F_container*)&container) F_container(x);
 
             }
             template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_key<F_fake_container__>>, i32> = 0>
-            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_key<F_container>> x, const F_container& container = F_container()) :
-                container_p_(&container)
+            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_key<F_container>> x, const utilities::TF_mem_wrap<F_container>& container = utilities::TF_mem_wrap<F_container>{}) :
+                container_p_((const F_container*)&container)
             {
 
-                (F_container&)container = F_container(x);
+                new ((F_container*)&container) F_container(x);
 
             }
             template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_value<F_fake_container__>>, i32> = 0>
-            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_value<F_container>> x, const F_container& container = F_container()) :
-                    container_p_(&container)
+            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_value<F_container>> x, const utilities::TF_mem_wrap<F_container>& container = utilities::TF_mem_wrap<F_container>{}) :
+                container_p_((const F_container*)&container)
             {
 
-                (F_container&)container = F_container(x);
+                new ((F_container*)&container) F_container(x);
 
             }
             template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_node<F_fake_container__>>, i32> = 0>
-            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_node<F_container>> x, const F_container& container = F_container()) :
-                    container_p_(&container)
+            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_node<F_container>> x, const utilities::TF_mem_wrap<F_container>& container = utilities::TF_mem_wrap<F_container>{}) :
+                container_p_((const F_container*)&container)
             {
 
-                (F_container&)container = F_container(x);
+                new ((F_container*)&container) F_container(x);
 
             }
             template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_item<F_fake_container__>>, i32> = 0>
-            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_item<F_container>> x, const F_container& container = F_container()) :
-                    container_p_(&container)
+            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_item<F_container>> x, const utilities::TF_mem_wrap<F_container>& container = utilities::TF_mem_wrap<F_container>{}) :
+                container_p_((const F_container*)&container)
             {
 
-                (F_container&)container = F_container(x);
+                new ((F_container*)&container) F_container(x);
 
             }
 

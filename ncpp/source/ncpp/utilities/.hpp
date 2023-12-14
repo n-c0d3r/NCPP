@@ -88,4 +88,6 @@ namespace ncpp {
 #include <ncpp/utilities/item_type.hpp>
 #include <ncpp/utilities/node_type.hpp>
 
+#include <ncpp/utilities/mem_wrap.hpp>
+
 #pragma endregion
