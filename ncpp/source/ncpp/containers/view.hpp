@@ -158,6 +158,22 @@ namespace ncpp {
 
 
 
+#ifdef NCPP_DEBUG
+        struct F_view_owner_counter {
+
+            au64 m = 1;
+
+            ~F_view_owner_counter(){
+
+                assert((m.load(eastl::memory_order_acquire) == 0) && "the current view is in container-owned mode, all references to the owned container have to be unreferenced before the view owner counter is destroyed");
+
+            }
+
+        };
+#endif
+
+
+
         template<typename F_container__>
         class TF_view {
 
@@ -174,8 +190,7 @@ namespace ncpp {
             const F_container* container_p_ = 0;
 
 #ifdef NCPP_DEBUG
-            au64* owner_counter_p_ = 0;
-            u64 prev_owner_counter_ = 1;
+            F_view_owner_counter* owner_counter_p_ = 0;
             b8 is_root_owner_ = false;
 #endif
 
@@ -187,9 +202,9 @@ namespace ncpp {
             NCPP_FORCE_INLINE b8 is_valid() const { return (container_p_ != 0); }
 
 #ifdef NCPP_DEBUG
-            NCPP_FORCE_INLINE au64* owner_counter_p() const {
+            NCPP_FORCE_INLINE F_view_owner_counter* owner_counter_p() const {
 
-                return (au64*)owner_counter_p_;
+                return (F_view_owner_counter*)owner_counter_p_;
             }
 #endif
 
@@ -202,16 +217,6 @@ namespace ncpp {
 
                 reset();
 
-#ifdef NCPP_DEBUG
-                if(is_root_owner_) {
-
-                    assert((prev_owner_counter_ == 1) && "the current view is in container-owned mode, all references to the owned container have to be unreferenced before the root owner is destroyed");
-
-                    delete owner_counter_p_;
-
-                }
-#endif
-
             }
 
 
@@ -221,13 +226,16 @@ namespace ncpp {
                 typename F__,
                 std::enable_if_t<!T_is_same_viewable_container_v<F_container, F__>, i32> = 0
             >
-            NCPP_FORCE_INLINE TF_view(const F__& x, const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}) :
+            NCPP_FORCE_INLINE TF_view(
+                const F__& x, 
+                const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}
+                NCPP_ENABLE_IF_DEBUG(, const F_view_owner_counter& owner_counter = F_view_owner_counter())
+            ) :
                 container_p_((const F_container*)&container)
 
 #ifdef NCPP_DEBUG
                 ,
-                owner_counter_p_(new au64(1)),
-                prev_owner_counter_(1),
+                owner_counter_p_((F_view_owner_counter*)(&owner_counter)),
                 is_root_owner_(true)
 #endif
             {
@@ -236,13 +244,16 @@ namespace ncpp {
 
             }
             template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_key<F_fake_container__>>, i32> = 0>
-            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_key<F_container>> x, const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}) :
+            NCPP_FORCE_INLINE TF_view(
+                std::initializer_list<utilities::TF_key<F_container>> x, 
+                const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}
+                NCPP_ENABLE_IF_DEBUG(, const F_view_owner_counter& owner_counter = F_view_owner_counter())
+            ) :
                 container_p_((const F_container*)&container)
 
 #ifdef NCPP_DEBUG
                 ,
-                owner_counter_p_(new au64(1)),
-                prev_owner_counter_(1),
+                owner_counter_p_((F_view_owner_counter*)(&owner_counter)),
                 is_root_owner_(true)
 #endif
             {
@@ -251,13 +262,16 @@ namespace ncpp {
 
             }
             template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_value<F_fake_container__>>, i32> = 0>
-            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_value<F_container>> x, const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}) :
+            NCPP_FORCE_INLINE TF_view(
+                std::initializer_list<utilities::TF_value<F_container>> x, 
+                const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}
+                NCPP_ENABLE_IF_DEBUG(, const F_view_owner_counter& owner_counter = F_view_owner_counter())
+            ) :
                 container_p_((const F_container*)&container)
 
 #ifdef NCPP_DEBUG
                 ,
-                owner_counter_p_(new au64(1)),
-                prev_owner_counter_(1),
+                owner_counter_p_((F_view_owner_counter*)(&owner_counter)),
                 is_root_owner_(true)
 #endif
             {
@@ -266,13 +280,16 @@ namespace ncpp {
 
             }
             template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_node<F_fake_container__>>, i32> = 0>
-            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_node<F_container>> x, const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}) :
+            NCPP_FORCE_INLINE TF_view(
+                std::initializer_list<utilities::TF_node<F_container>> x, 
+                const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}
+                NCPP_ENABLE_IF_DEBUG(, const F_view_owner_counter& owner_counter = F_view_owner_counter())
+            ) :
                 container_p_((const F_container*)&container)
 
 #ifdef NCPP_DEBUG
                 ,
-                owner_counter_p_(new au64(1)),
-                prev_owner_counter_(1),
+                owner_counter_p_((F_view_owner_counter*)(&owner_counter)),
                 is_root_owner_(true)
 #endif
             {
@@ -281,13 +298,16 @@ namespace ncpp {
 
             }
             template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_item<F_fake_container__>>, i32> = 0>
-            NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_item<F_container>> x, const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}) :
+            NCPP_FORCE_INLINE TF_view(
+                std::initializer_list<utilities::TF_item<F_container>> x, 
+                const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}
+                NCPP_ENABLE_IF_DEBUG(, const F_view_owner_counter& owner_counter = F_view_owner_counter())
+            ) :
                 container_p_((const F_container*)&container)
 
 #ifdef NCPP_DEBUG
                 ,
-                owner_counter_p_(new au64(1)),
-                prev_owner_counter_(1),
+                owner_counter_p_((F_view_owner_counter*)(&owner_counter)),
                 is_root_owner_(true)
 #endif
             {
@@ -608,7 +628,7 @@ namespace ncpp {
                     owner_counter_p_ = other_view.owner_counter_p();
 
                     assert(
-                        ([&]()->b8{ owner_counter_p_->fetch_add(1, eastl::memory_order_acq_rel); return true;})()
+                        ([&]()->b8{ owner_counter_p_->m.fetch_add(1, eastl::memory_order_acq_rel); return true;})()
                         && "the current view is in container-owned mode, all references to the owned container have to be unreferenced before the root owner is destroyed"
                     );
 
@@ -620,7 +640,7 @@ namespace ncpp {
                 if(owner_counter_p_) {
 
                     assert(
-                        ([this]()->b8{ prev_owner_counter_ = owner_counter_p_->fetch_sub(1, eastl::memory_order_acq_rel); return true;})()
+                        ([this]()->b8{ owner_counter_p_->m.fetch_sub(1, eastl::memory_order_acq_rel); return true;})()
                         && "the current view is in container-owned mode, all references to the owned container have to be unreferenced before the root owner is destroyed"
                     );
 
