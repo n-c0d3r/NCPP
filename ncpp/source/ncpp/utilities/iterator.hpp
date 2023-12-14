@@ -68,58 +68,58 @@ namespace ncpp {
 
 
         template <typename F__>
-        concept T_is_has_begin_v = requires(F__ x)
+        concept T_is_has_begin = requires(F__ x)
         {
             { x.begin() };
         };
 
         template <typename F__>
-        concept T_is_has_begin_const_v = requires(const F__& x)
+        concept T_is_has_begin_const = requires(const F__& x)
         {
             { x.begin() };
         };
 
         template <typename F__>
-        concept T_is_has_cbegin_v = requires(const F__& x)
+        concept T_is_has_cbegin = requires(const F__& x)
         {
             { x.cbegin() };
         };
 
         template <typename F__>
-        static constexpr b8 T_is_has_begin_full_v = (
+        static constexpr b8 T_is_has_begin_full = (
 
-            T_is_has_begin_v<F__>,
-            T_is_has_begin_const_v<F__>,
-            T_is_has_cbegin_v<F__>
+            T_is_has_begin<F__>,
+            T_is_has_begin_const<F__>,
+            T_is_has_cbegin<F__>
 
         );
         
 
 
         template <typename F__>
-        concept T_is_has_end_v = requires(F__ x)
+        concept T_is_has_end = requires(F__ x)
         {
             { x.end() };
         };
 
         template <typename F__>
-        concept T_is_has_end_const_v = requires(const F__& x)
+        concept T_is_has_end_const = requires(const F__& x)
         {
             { x.end() };
         };
 
         template <typename F__>
-        concept T_is_has_cend_v = requires(const F__& x)
+        concept T_is_has_cend = requires(const F__& x)
         {
             { x.cend() };
         };
 
         template <typename F__>
-        static constexpr b8 T_is_has_end_full_v = (
+        static constexpr b8 T_is_has_end_full = (
 
-            T_is_has_end_v<F__>,
-            T_is_has_end_const_v<F__>,
-            T_is_has_cend_v<F__>
+            T_is_has_end<F__>,
+            T_is_has_end_const<F__>,
+            T_is_has_cend<F__>
 
         );
 

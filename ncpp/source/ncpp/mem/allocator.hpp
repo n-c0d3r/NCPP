@@ -252,7 +252,7 @@ namespace ncpp {
 #endif
 
                         utilities::T_type_name<F_allocator__>(),
-                        utilities::T_type_hash_code_v<F_allocator__>,
+                        utilities::T_type_hash_code<F_allocator__>,
 						actual_size,
 						n,
                         (u16)alignment,
@@ -298,7 +298,7 @@ namespace ncpp {
 #endif
 
                         utilities::T_type_name<F_allocator__>(),
-                        utilities::T_type_hash_code_v<F_allocator__>,
+                        utilities::T_type_hash_code<F_allocator__>,
 						actual_size,
 						n,
                         (u16)alignment,
@@ -362,7 +362,7 @@ namespace ncpp {
 #endif
 
                         utilities::T_type_name<F_allocator__>(),
-                        utilities::T_type_hash_code_v<F_allocator__>,
+                        utilities::T_type_hash_code<F_allocator__>,
 						actual_size,
 						n,
                         0,
@@ -408,7 +408,7 @@ namespace ncpp {
 #endif
 
                         utilities::T_type_name<F_allocator__>(),
-                        utilities::T_type_hash_code_v<F_allocator__>,
+                        utilities::T_type_hash_code<F_allocator__>,
 						actual_size,
 						n,
                         0,

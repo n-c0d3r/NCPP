@@ -150,23 +150,7 @@ namespace ncpp {
          *  @param <F_args__...> the template argument list.
          */
         template<sz nth__, typename... F_args__>
-        struct TF_nth_template_arg {
-
-            static_assert(nth__ < sizeof...(F_args__), "invalid 'nth__' value!");
-
-
-
-            using type = typename nth___template_arg_helper::TF_nth_template_arg<sizeof...(F_args__) == 1, nth__ == 0, nth__, F_args__...>::type;
-
-        };
-
-        /**
-         *  Finds out the nth__ template argument.
-         *  @param <nth__> the index of template argument need to get.
-         *  @param <F_args__...> the template argument list.
-         */
-        template<sz nth__, typename... F_args__>
-        using TF_nth_template_arg_t = typename TF_nth_template_arg<nth__, F_args__...>::type;
+        using TF_nth_template_arg = typename nth___template_arg_helper::TF_nth_template_arg<sizeof...(F_args__) == 1, nth__ == 0, nth__, F_args__...>::type;
 
     }
 

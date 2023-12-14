@@ -74,7 +74,7 @@ namespace ncpp {
 
 
         template<typename F__>
-        using TF_no_deduct_t = TF_first_template_arg_t<F__>;
+        using TF_no_deduct_t = TF_first_template_arg<F__>;
 
     }
 

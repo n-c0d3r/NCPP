@@ -67,30 +67,30 @@ namespace ncpp {
 
 
 
-        /**
-         *  
-         */
-        template<typename F__> 
-        struct TF_is_function {
+        namespace internal {
 
-            static constexpr b8 value = false;/**< If type__ is function type, value will be true.*/
+            template<typename F__>
+            struct TF_is_function {
 
-        };
+                static constexpr b8 value = false;/**< If type__ is function type, value will be true.*/
 
-        // \cond INTERNAL
-        template<typename F_return__, typename... F_args__>
-        struct TF_is_function<F_return__(F_args__...)> {
+            };
 
-            static constexpr b8 value = true;
+            // \cond INTERNAL
+            template<typename F_return__, typename... F_args__>
+            struct TF_is_function<F_return__(F_args__...)> {
 
-        };
-        // \endcond
+                static constexpr b8 value = true;
 
-        /**
-         *
-         */
+            };
+            // \endcond
+
+        }
+
+
+
         template<typename F__>
-        static constexpr b8 T_is_function_v = TF_is_function<F__>::value;
+        static constexpr b8 T_is_function = internal::TF_is_function<F__>::value;
 
     }
 

@@ -80,13 +80,6 @@ namespace ncpp {
         template<typename... F_args__>
         using TF_first_template_arg = TF_nth_template_arg<0, F_args__...>;
 
-        /**
-         *  Finds out the first template argument.
-         *  @param <F_args__...> template argument list.
-         */
-        template<typename... F_args__>
-        using TF_first_template_arg_t = TF_nth_template_arg_t<0, F_args__...>;
-
     }
 
 }

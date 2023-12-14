@@ -93,7 +93,7 @@ namespace ncpp {
 
 
         template<typename F__>
-        static constexpr sz T_sizeof_v = internal::TF_sizeof_helper<F__, std::is_same_v<F__, void>>::value;
+        static constexpr sz T_sizeof = internal::TF_sizeof_helper<F__, std::is_same_v<F__, void>>::value;
 
     }
 

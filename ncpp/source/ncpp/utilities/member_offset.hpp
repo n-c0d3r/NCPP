@@ -113,7 +113,7 @@ namespace ncpp {
         template<typename F_class__, typename F_member__>
         static constexpr sz T_member_offset(F_member__ F_class__::* member)
         {
-            return internal::TF_member_offset<TF_is_function<F_member__>::value, F_class__, F_member__>::value(member);
+            return internal::TF_member_offset<T_is_function<F_member__>, F_class__, F_member__>::value(member);
         }
 
     }

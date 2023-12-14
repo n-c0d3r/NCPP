@@ -153,7 +153,7 @@ namespace ncpp {
                 
                 static NCPP_FORCE_INLINE F__& invoke(void* object_p, const TF_robject_member_info& member_info) {
                     
-                    assert((utilities::T_type_hash_code_v<F__> == member_info.type_hash_code_) && "invalid F__");
+                    assert((utilities::T_type_hash_code<F__> == member_info.type_hash_code_) && "invalid F__");
                     
                     return *reinterpret_cast<F__*>(reinterpret_cast<sz>(object_p) + member_info.offset_);
                 }
@@ -169,7 +169,7 @@ namespace ncpp {
             public:
                 static NCPP_FORCE_INLINE F_invoke* invoke(void* object_p, const TF_robject_member_info& member_info) {
                     
-                    assert((utilities::T_type_hash_code_v<F> == member_info.type_hash_code_) && "invalid F__");
+                    assert((utilities::T_type_hash_code<F> == member_info.type_hash_code_) && "invalid F__");
                     assert(!member_info.is_static_ || (member_info.is_static_ && !object_p) && "object_p must be zero if member is static");
                     
                     return reinterpret_cast<F_invoke*>(member_info.offset_);
@@ -183,24 +183,24 @@ namespace ncpp {
             template<typename F__>
             NCPP_FORCE_INLINE b8 T_is() const {
                 
-                return (utilities::T_type_hash_code_v<F__> == type_hash_code_);
+                return (utilities::T_type_hash_code<F__> == type_hash_code_);
             }
-            template<typename F__, std::enable_if_t<!utilities::T_is_function_v<F__>, i32> = 0>
+            template<typename F__, std::enable_if_t<!utilities::T_is_function<F__>, i32> = 0>
             NCPP_FORCE_INLINE F__& T_get(void* object_p = 0) const {
                 
                 return TF_get_internal<F__>::invoke(object_p, *this);
             }
-            template<typename F__, std::enable_if_t<utilities::T_is_function_v<F__>, i32> = 0>
+            template<typename F__, std::enable_if_t<utilities::T_is_function<F__>, i32> = 0>
             NCPP_FORCE_INLINE auto T_get(void* object_p = 0) const {
                 
                 return TF_get_internal<F__>::invoke(object_p, *this);
             }
-            template<typename F__, std::enable_if_t<!utilities::T_is_function_v<F__>, i32> = 0>
+            template<typename F__, std::enable_if_t<!utilities::T_is_function<F__>, i32> = 0>
             NCPP_FORCE_INLINE void T_invoke(void* object_p = 0) const {
                 
-                static_assert(utilities::T_is_function_v<F__> && "cant invoke non function type");
+                static_assert(utilities::T_is_function<F__> && "cant invoke non function type");
             }
-            template<typename F__, typename... F_args__, std::enable_if_t<utilities::T_is_function_v<F__>, i32> = 0>
+            template<typename F__, typename... F_args__, std::enable_if_t<utilities::T_is_function<F__>, i32> = 0>
             NCPP_FORCE_INLINE typename utilities::TF_function_traits<F__>::F_return T_invoke(F_args__... args, void* object_p = 0) const {
                 
                 return T_get<F__>()(std::forward<F_args__>(args)..., object_p);
@@ -228,7 +228,7 @@ namespace ncpp {
 				&(robject_type_info_p->rcontainer_p()->allocator()),
 				F_robject_member_info__(
 
-					utilities::T_type_hash_code_v<F_member__>,
+					utilities::T_type_hash_code<F_member__>,
 					F_member_static_info__::address() | F_member_static_info__::offset(),
 					F_member_static_info__::name(),
 					F_member_static_info__::id(),

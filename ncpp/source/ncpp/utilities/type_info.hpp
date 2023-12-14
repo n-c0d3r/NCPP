@@ -73,10 +73,12 @@ namespace ncpp {
 
 
 
-        template<typename F__> 
-        constexpr sz T_type_hash_code(){
+        namespace internal {
 
-            std::size_t result{0};
+            template<typename F__>
+            constexpr sz T_type_hash_code(){
+
+                std::size_t result{0};
 
 #ifdef _MSC_VER
 #define CURRENT_FUNCTION_SIGNATURE __FUNCSIG__
@@ -84,16 +86,18 @@ namespace ncpp {
 #define CURRENT_FUNCTION_SIGNATURE __PRETTY_FUNCTION__
 #endif
 
-            for (const auto &c : CURRENT_FUNCTION_SIGNATURE)
-                (result ^= c) <<= 1;
-            
+                for (const auto &c : CURRENT_FUNCTION_SIGNATURE)
+                    (result ^= c) <<= 1;
+
 #undef CURRENT_FUNCTION_SIGNATURE
 
-            return result;
+                return result;
+            }
+
         }
 
         template<typename F__>
-        constexpr sz T_type_hash_code_v = T_type_hash_code<F__>();
+        constexpr sz T_type_hash_code = internal::T_type_hash_code<F__>();
 
 
 
@@ -198,7 +202,7 @@ namespace ncpp {
         template<typename F__, typename F_char__ = char>
         NCPP_FORCE_INLINE const F_char__* T_type_name() {
 
-            static std::basic_string<F_char__> value = ((F_char__)'_') + (std::basic_stringstream<F_char__>() << T_type_hash_code_v<F__>).str();
+            static std::basic_string<F_char__> value = ((F_char__)'_') + (std::basic_stringstream<F_char__>() << T_type_hash_code<F__>).str();
 
             return value.c_str();
         }

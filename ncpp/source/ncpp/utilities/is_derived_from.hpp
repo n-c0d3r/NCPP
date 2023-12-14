@@ -67,14 +67,8 @@ namespace ncpp {
 
 
 
-        /**
-         *  .
-         */
         template<class F_derived__, class F_base__>
-        NCPP_FORCE_INLINE constexpr b8 T_is_derived_from() {
-
-            return std::is_convertible<F_derived__* , F_base__*>::value;
-        };
+        static constexpr b8 T_is_derived_from = std::is_convertible<F_derived__* , F_base__*>::value;
 
     }
 
