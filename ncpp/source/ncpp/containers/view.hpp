@@ -1094,3 +1094,12 @@ namespace ncpp {
     }
 
 }
+
+
+
+NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
+    NCPP_MA(ncpp::containers::TF_view<F_container__>),
+    NCPP_MA(ncpp::containers::TF_container_allocator<F_container__>),
+    NCPP_MA(ncpp::containers::TF_view<ncpp::containers::TF_bind_container_allocator<F_container__, F_new_allocator__>>),
+    typename F_container__
+);

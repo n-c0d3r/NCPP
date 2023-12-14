@@ -55,12 +55,12 @@ namespace ncpp {
             template<typename F__>
             struct TF_allocator_binding_helper {
 
-                using F_container = void;
+                using F_container = F__;
 
                 using F_allocator = void;
 
                 template<typename F_new_allocator__>
-                using TF_bind_new_allocator = void;
+                using TF_bind_new_allocator = F__;
 
             };
 
@@ -92,26 +92,14 @@ namespace ncpp {
 }
 
 #define NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(ContainerType, AllocatorType, NewAllocatorContainerType, ...) \
-namespace ncpp {\
-    \
-    namespace containers {\
+    template<__VA_ARGS__>\
+    struct ::ncpp::containers::internal::TF_allocator_binding_helper<ContainerType> {\
         \
-        namespace internal {\
-            \
-            template<__VA_ARGS__>\
-            struct TF_allocator_binding_helper<ContainerType> {\
-                \
-                using F_container = ContainerType;\
-                \
-                using F_allocator = AllocatorType;\
-                \
-                template<typename F_new_allocator__>\
-                using TF_bind_new_allocator = NewAllocatorContainerType;\
-                \
-            };\
-            \
-        }\
+        using F_container = ContainerType;\
         \
-    }\
-    \
-}
+        using F_allocator = AllocatorType;\
+        \
+        template<typename F_new_allocator__>\
+        using TF_bind_new_allocator = NewAllocatorContainerType;\
+        \
+    };
