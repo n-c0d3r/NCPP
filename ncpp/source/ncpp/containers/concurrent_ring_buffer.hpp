@@ -84,22 +84,22 @@ namespace ncpp {
 
 		protected:
 			F_item_vector item_vector_;
-			aptrd begin_index_ = 0;
-			aptrd end_index_ = 0;
+			ai64 begin_index_ = 0;
+			ai64 end_index_ = 0;
 			
 		private:
-			sz capacity_ = 0;
+			i64 capacity_ = 0;
 			F_lock reader_lock_;
 			F_lock writer_lock_;
 
 
 		public:
-			NCPP_FORCE_INLINE sz size() const { return end_index_ - begin_index_; }
-			NCPP_FORCE_INLINE sz capacity() const { return capacity_; }
+			NCPP_FORCE_INLINE i64 size() const { return end_index_.load(eastl::memory_order_acquire) - begin_index_.load(eastl::memory_order_acquire); }
+			NCPP_FORCE_INLINE i64 capacity() const { return capacity_; }
 			NCPP_FORCE_INLINE bool is_empty() const { return !size(); }
 			NCPP_FORCE_INLINE bool is_null() const { return !capacity_; }
-            NCPP_FORCE_INLINE ptrd begin_index() const { return begin_index_; }
-            NCPP_FORCE_INLINE ptrd end_index() const { return end_index_; }
+            NCPP_FORCE_INLINE i64 begin_index() const { return begin_index_.load(eastl::memory_order_acquire); }
+            NCPP_FORCE_INLINE i64 end_index() const { return end_index_.load(eastl::memory_order_acquire); }
             NCPP_FORCE_INLINE TF_view<F_item_vector> item_vector() const { return item_vector_; }
 
 
@@ -110,7 +110,7 @@ namespace ncpp {
 
 
 			}
-			inline TF_concurrent_ring_buffer(sz capacity) :
+			inline TF_concurrent_ring_buffer(i64 capacity) :
 				capacity_(capacity),
 				item_vector_(capacity)
 			{
@@ -122,8 +122,8 @@ namespace ncpp {
 			inline TF_concurrent_ring_buffer(const TF_concurrent_ring_buffer& x) :
 				item_vector_(x.item_vector_),
 				capacity_(x.capacity_),
-				begin_index_(x.begin_index_),
-				end_index_(x.end_index_)
+				begin_index_(x.begin_index_.load(eastl::memory_order_acquire)),
+				end_index_(x.end_index_.load(eastl::memory_order_acquire))
 			{
 
 
@@ -133,16 +133,17 @@ namespace ncpp {
 
 				item_vector_ = x.item_vector_;
 				capacity_ = x.capacity_;
-				begin_index_ = x.begin_index_;
-				end_index_ = x.end_index_;
+				begin_index_.store(x.begin_index_.load(eastl::memory_order_acquire), eastl::memory_order_release);
+				end_index_.store(x.end_index_.load(eastl::memory_order_acquire), eastl::memory_order_release);
 
+                return *this;
 			}
 
 			inline TF_concurrent_ring_buffer(TF_concurrent_ring_buffer&& x) :
 				item_vector_(std::move(x.item_vector_)),
 				capacity_(x.capacity_),
-				begin_index_(x.begin_index_),
-				end_index_(x.end_index_)
+				begin_index_(x.begin_index_.load(eastl::memory_order_acquire)),
+				end_index_(x.end_index_.load(eastl::memory_order_acquire))
 			{
 
 
@@ -152,9 +153,10 @@ namespace ncpp {
 
 				item_vector_ = std::move(x.item_vector_);
 				capacity_ = x.capacity_;
-				begin_index_ = x.begin_index_;
-				end_index_ = x.end_index_;
+                begin_index_.store(x.begin_index_.load(eastl::memory_order_acquire), eastl::memory_order_release);
+                end_index_.store(x.end_index_.load(eastl::memory_order_acquire), eastl::memory_order_release);
 
+                return *this;
 			}
 
 
@@ -189,8 +191,8 @@ namespace ncpp {
 
 				reader_lock_.lock();
 
-				ptrd end = end_index_.load(eastl::memory_order_acquire);
-				ptrd begin = begin_index_.load(eastl::memory_order_acquire);
+				i64 end = end_index_.load(eastl::memory_order_acquire);
+				i64 begin = begin_index_.load(eastl::memory_order_acquire);
 
 				if ((end - begin)> 0) {
 				

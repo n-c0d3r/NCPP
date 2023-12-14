@@ -903,7 +903,7 @@ namespace ncpp {
                 typename F_other_container__,
                 std::enable_if_t<T_is_same_viewable_container_v<F_container, F_other_container__>, i32> = 0
             >
-            NCPP_FORCE_INLINE operator F_other_container__() const {
+            NCPP_FORCE_INLINE operator const F_other_container__&() const {
 
                 return *reinterpret_cast<const F_other_container__*>(container_p_);
             }

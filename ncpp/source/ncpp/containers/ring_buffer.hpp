@@ -125,6 +125,7 @@ namespace ncpp {
 				begin_index_ = x.begin_index_;
 				end_index_ = x.end_index_;
 
+                return *this;
 			}
 
 			inline TF_ring_buffer(TF_ring_buffer&& x) :
@@ -144,6 +145,7 @@ namespace ncpp {
 				begin_index_ = x.begin_index_;
 				end_index_ = x.end_index_;
 
+                return *this;
 			}
 
 
