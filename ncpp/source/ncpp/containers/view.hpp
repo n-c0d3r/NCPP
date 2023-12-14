@@ -135,7 +135,7 @@ namespace ncpp {
         template<typename F__>
         concept T_is_view = requires {
 
-            typename std::remove_reference_t<std::remove_const_t<F__>>::F___ncpp_view_flag___;
+            typename std::remove_const_t<std::remove_reference_t<F__>>::F___ncpp_view_flag___;
 
         };
 
