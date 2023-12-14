@@ -69,6 +69,9 @@ namespace ncpp {
             using F_int = F_int__;
             using F_allocator = F_allocator__;
 
+            using F_vector = TF_vector<F_int, F_allocator>;
+            using V_vector = TF_view<F_vector>;
+
             
             
         private:
@@ -76,9 +79,9 @@ namespace ncpp {
             F_int index_size_ = 0;
             
             F_int hash_mask_ = 0;
-            
-            TF_vector<F_int, F_allocator> hash_vector_;
-            TF_vector<F_int, F_allocator> index_vector_;
+
+            F_vector hash_vector_;
+            F_vector index_vector_;
             
         public:
             NCPP_FORCE_INLINE F_int hash_size() const { return hash_size_; }
@@ -86,8 +89,8 @@ namespace ncpp {
             
             NCPP_FORCE_INLINE F_int hash_mask() const { return hash_mask_; }
             
-            NCPP_FORCE_INLINE TF_view<TF_vector<F_int, F_allocator>> hash_vector() const { return hash_vector_; }
-            NCPP_FORCE_INLINE TF_view<TF_vector<F_int, F_allocator>> index_vector() const { return index_vector_; }
+            NCPP_FORCE_INLINE V_vector hash_vector() const { return hash_vector_; }
+            NCPP_FORCE_INLINE V_vector index_vector() const { return index_vector_; }
             
             
             
