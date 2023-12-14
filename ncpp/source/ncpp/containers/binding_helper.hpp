@@ -77,11 +77,7 @@ namespace ncpp {
 
         template<typename F1__, typename F2__>
         static constexpr b8 T_is_same_container_v = (
-            (
-                !T_is_has_container_allocator_v<F1__>
-                && std::is_same_v<F1__, F2__>
-            )
-            || std::is_same_v<
+            std::is_same_v<
                 F1__,
                 TF_bind_container_allocator<F2__, TF_container_allocator<F1__>>
             >
