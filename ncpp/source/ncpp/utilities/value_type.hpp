@@ -95,6 +95,12 @@ namespace ncpp {
             + internal::TF_is_has_ncpp_value_type<F__>::value * 2
         >::F;
 
+        template<class F__>
+        static constexpr b8 T_is_has_value_v = (
+            internal::TF_is_has_eastl_value_type<F__>::value
+            || internal::TF_is_has_ncpp_value_type<F__>::value
+        );
+
     }
 
 }

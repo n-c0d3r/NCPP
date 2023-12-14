@@ -95,6 +95,12 @@ namespace ncpp {
             + internal::TF_is_has_ncpp_key_type<F__>::key * 2
         >::F;
 
+        template<class F__>
+        static constexpr b8 T_is_has_key_v = (
+            internal::TF_is_has_eastl_key_type<F__>::key
+            || internal::TF_is_has_ncpp_key_type<F__>::key
+        );
+
     }
 
 }

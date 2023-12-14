@@ -95,6 +95,12 @@ namespace ncpp {
             + internal::TF_is_has_ncpp_item_type<F__>::item * 2
         >::F;
 
+        template<class F__>
+        static constexpr b8 T_is_has_item_v = (
+            internal::TF_is_has_eastl_item_type<F__>::item
+            || internal::TF_is_has_ncpp_item_type<F__>::item
+        );
+
     }
 
 }
