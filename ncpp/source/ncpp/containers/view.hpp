@@ -118,7 +118,7 @@ namespace ncpp {
                 container_p_(&container)
             {
 
-                (F_container&)container = x;
+                (F_container&)container = F_container(x);
 
             }
             template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_key<F_fake_container__>>, i32> = 0>
@@ -126,7 +126,7 @@ namespace ncpp {
                 container_p_(&container)
             {
 
-                (F_container&)container = x;
+                (F_container&)container = F_container(x);
 
             }
             template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_value<F_fake_container__>>, i32> = 0>
@@ -134,7 +134,7 @@ namespace ncpp {
                     container_p_(&container)
             {
 
-                (F_container&)container = x;
+                (F_container&)container = F_container(x);
 
             }
             template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_node<F_fake_container__>>, i32> = 0>
@@ -142,7 +142,7 @@ namespace ncpp {
                     container_p_(&container)
             {
 
-                (F_container&)container = x;
+                (F_container&)container = F_container(x);
 
             }
             template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_item<F_fake_container__>>, i32> = 0>
@@ -150,7 +150,7 @@ namespace ncpp {
                     container_p_(&container)
             {
 
-                (F_container&)container = x;
+                (F_container&)container = F_container(x);
 
             }
 
