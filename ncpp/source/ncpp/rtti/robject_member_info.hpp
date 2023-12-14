@@ -98,7 +98,7 @@ namespace ncpp {
 			NCPP_FORCE_INLINE sz type_hash_code() const { return type_hash_code_; }
             NCPP_FORCE_INLINE sz address() const { return address_; }
 			NCPP_FORCE_INLINE sz offset() const { return offset_; }
-			NCPP_FORCE_INLINE containers::V_string name() const { return name_; }
+			NCPP_FORCE_INLINE containers::TF_view<containers::TF_string<char, F_allocator>> name() const { return name_; }
 			NCPP_FORCE_INLINE sz id() const { return id_; }
             NCPP_FORCE_INLINE u16 size() const { return size_; }
 			NCPP_FORCE_INLINE b8 is_function() const { return (size_ == 0); }
@@ -115,7 +115,7 @@ namespace ncpp {
 			TF_robject_member_info(
 				sz type_hash_code,
 				sz address_or_offset,
-                containers::V_string name,
+                containers::TF_view<containers::TF_string<char, F_allocator>> name,
 				sz id,
 				u16 size,
                 b8 is_virtual_function,
