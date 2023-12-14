@@ -35,6 +35,7 @@
 #include <ncpp/utilities/.hpp>
 #include <ncpp/mem/default_allocator.hpp>
 #include <ncpp/containers/eastl_containers.hpp>
+#include <ncpp/containers/eastl_bindings.hpp>
 #include <ncpp/containers/binding_helper.hpp>
 #include <ncpp/containers/view.hpp>
 #include <ncpp/colorized_log.hpp>
@@ -76,8 +77,8 @@ namespace ncpp {
             
             F_int hash_mask_ = 0;
             
-            eastl::vector<F_int, F_allocator> hash_vector_;
-            eastl::vector<F_int, F_allocator> index_vector_;
+            TF_vector<F_int, F_allocator> hash_vector_;
+            TF_vector<F_int, F_allocator> index_vector_;
             
         public:
             NCPP_FORCE_INLINE F_int hash_size() const { return hash_size_; }
@@ -85,8 +86,8 @@ namespace ncpp {
             
             NCPP_FORCE_INLINE F_int hash_mask() const { return hash_mask_; }
             
-            NCPP_FORCE_INLINE const eastl::vector<F_int, F_allocator>& hash_vector() const { return hash_vector_; }
-            NCPP_FORCE_INLINE const eastl::vector<F_int, F_allocator>& index_vector() const { return index_vector_; }
+            NCPP_FORCE_INLINE TF_view<TF_vector<F_int, F_allocator>> hash_vector() const { return hash_vector_; }
+            NCPP_FORCE_INLINE TF_view<TF_vector<F_int, F_allocator>> index_vector() const { return index_vector_; }
             
             
             
@@ -338,12 +339,12 @@ namespace ncpp {
 				ncpp::T_safe_ostream_with_tab<
 					ncpp::F_ostream,
 					ncpp::TF_ostream_input<
-						ncpp::TF_cout_value<eastl::vector<F_int, F_allocator>>
+						ncpp::TF_cout_value<TF_vector<F_int, F_allocator>>
 					>
 				>(
 					os,
 					ncpp::TF_ostream_input<
-						ncpp::TF_cout_value<eastl::vector<F_int, F_allocator>>
+						ncpp::TF_cout_value<TF_vector<F_int, F_allocator>>
 					> {
 						ncpp::T_cout_value(input.first.hash_vector_),
 						input.second + 1
@@ -360,12 +361,12 @@ namespace ncpp {
 				ncpp::T_safe_ostream_with_tab<
 					ncpp::F_ostream,
 					ncpp::TF_ostream_input<
-						ncpp::TF_cout_value<eastl::vector<F_int, F_allocator>>
+						ncpp::TF_cout_value<TF_vector<F_int, F_allocator>>
 					>
 				>(
 					os,
 					ncpp::TF_ostream_input<
-						ncpp::TF_cout_value<eastl::vector<F_int, F_allocator>>
+						ncpp::TF_cout_value<TF_vector<F_int, F_allocator>>
 					> {
 						ncpp::T_cout_value(input.first.index_vector_),
 						input.second + 1
@@ -436,12 +437,12 @@ namespace ncpp {
 				ncpp::T_safe_ostream_with_tab<
 					ncpp::F_wostream,
 					ncpp::TF_ostream_input<
-						ncpp::TF_cout_value<eastl::vector<F_int, F_allocator>>
+						ncpp::TF_cout_value<TF_vector<F_int, F_allocator>>
 					>
 				>(
 					os,
 					ncpp::TF_ostream_input<
-						ncpp::TF_cout_value<eastl::vector<F_int, F_allocator>>
+						ncpp::TF_cout_value<TF_vector<F_int, F_allocator>>
 					> {
 						ncpp::T_cout_value(input.first.hash_vector_),
 						input.second + 1
@@ -458,12 +459,12 @@ namespace ncpp {
 				ncpp::T_safe_ostream_with_tab<
 					ncpp::F_wostream,
 					ncpp::TF_ostream_input<
-						ncpp::TF_cout_value<eastl::vector<F_int, F_allocator>>
+						ncpp::TF_cout_value<TF_vector<F_int, F_allocator>>
 					>
 				>(
 					os,
 					ncpp::TF_ostream_input<
-						ncpp::TF_cout_value<eastl::vector<F_int, F_allocator>>
+						ncpp::TF_cout_value<TF_vector<F_int, F_allocator>>
 					> {
 						ncpp::T_cout_value(input.first.index_vector_),
 						input.second + 1

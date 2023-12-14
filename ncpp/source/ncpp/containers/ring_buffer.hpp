@@ -36,6 +36,7 @@
 #include <ncpp/mem/default_allocator.hpp>
 #include <ncpp/mem/general_allocator.hpp>
 #include <ncpp/containers/eastl_containers.hpp>
+#include <ncpp/containers/eastl_bindings.hpp>
 #include <ncpp/containers/binding_helper.hpp>
 #include <ncpp/containers/view.hpp>
 #include <ncpp/colorized_log.hpp>
@@ -69,7 +70,7 @@ namespace ncpp {
 			using F_item = F_item__;
 			using F_allocator = F_allocator__;
 
-			using F_item_vector = eastl::vector<F_item, F_allocator>;
+			using F_item_vector = TF_vector<F_item, F_allocator>;
 
 
 
@@ -88,7 +89,7 @@ namespace ncpp {
 			NCPP_FORCE_INLINE bool is_null() const { return !capacity_; }
             NCPP_FORCE_INLINE ptrd begin_index() const { return begin_index_; }
             NCPP_FORCE_INLINE ptrd end_index() const { return end_index_; }
-            NCPP_FORCE_INLINE const F_item_vector& item_vector() const { return item_vector_; }
+            NCPP_FORCE_INLINE TF_view<F_item_vector> item_vector() const { return item_vector_; }
 
 
 

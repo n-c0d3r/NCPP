@@ -36,6 +36,7 @@
 #include <ncpp/containers/eastl_containers.hpp>
 #include <ncpp/mem/general_allocator.hpp>
 #include <ncpp/utilities/iterator.hpp>
+#include <ncpp/utilities/sizeof.hpp>
 #include <ncpp/utilities/nth_template_arg.hpp>
 #include <ncpp/iostream.hpp>
 #include <ncpp/rtti/rtti_flag.hpp>
@@ -62,20 +63,15 @@ namespace ncpp {
 
 	namespace containers {
 
-        struct F_view_flag {};
+        template<sz allocator_size__>
+        struct TF_view_flag {};
 
-        template<typename F__>
-        static constexpr b8 T_is_viewable_container_v = (
-            !T_is_has_container_allocator_v<F__>
-            || mem::T_can_be_general_allocator_v<
-                TF_container_allocator<F__>
-            >
-        );
+
 
         template<typename F1__, typename F2__>
         static constexpr b8 T_is_same_viewable_container_v = (
             T_is_same_container_v<F1__, F2__>
-            && T_is_viewable_container_v<F1__>
+            && (utilities::T_sizeof_v<TF_container_allocator<F1__>> == utilities::T_sizeof_v<TF_container_allocator<F2__>>)
         );
 
 
@@ -86,13 +82,9 @@ namespace ncpp {
         public:
             using F_this = TF_view<F_container__>;
             using F_container = F_container__;
+            using F_allocator = TF_container_allocator<F_container__>;
 
-            static_assert(
-                T_is_viewable_container_v<F_container__>,
-                "non-viewable container"
-            );
-
-            NCPP_RTTI_IMPLEMENT_FLAG(F_this, F_view_flag);
+            NCPP_RTTI_IMPLEMENT_FLAG(F_this, TF_view_flag<utilities::T_sizeof_v<F_allocator>>);
 
 
 
@@ -126,7 +118,7 @@ namespace ncpp {
                 typename F__,
                 std::enable_if_t<!T_is_same_viewable_container_v<F_container, F__>, i32> = 0
             >
-            NCPP_FORCE_INLINE TF_view(const std::initializer_list<F__>& x, const F_container& container = F_container()) :
+            NCPP_FORCE_INLINE TF_view(std::initializer_list<F__> x, const F_container& container = F_container()) :
                 container_p_(&container)
             {
 
@@ -249,7 +241,7 @@ namespace ncpp {
 
 
         public:
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator + (const F_this& a, const F_arg__& arg)
             -> decltype(
                 std::declval<
@@ -259,7 +251,7 @@ namespace ncpp {
                         const F_arg__&
                     >
                 >()
-                + std::declval<const F_arg__&>() 
+                + std::declval<const F_arg__&>()
             )
             {
 
@@ -271,10 +263,10 @@ namespace ncpp {
                     >
                 >(a.container_p_) + arg;
             }
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator + (const F_arg__& arg, const F_this& a)
             -> decltype(
-                std::declval<const F_arg__&>() 
+                std::declval<const F_arg__&>()
                 + std::declval<
                     utilities::TF_nth_template_arg_t<
                         T_is_same_viewable_container_v<F_arg__, F_container>,
@@ -293,10 +285,10 @@ namespace ncpp {
                     >
                 >(a.container_p_);
             }
-            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator + (const F_arg__& arg, const F_this& a)
             -> decltype(
-                std::declval<const typename F_arg__::F_container&>() 
+                std::declval<const typename F_arg__::F_container&>()
                 + std::declval<
                     utilities::TF_nth_template_arg_t<
                         T_is_same_viewable_container_v<typename F_arg__::F_container, F_container>,
@@ -319,7 +311,7 @@ namespace ncpp {
 
 
         public:
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator - (const F_this& a, const F_arg__& arg)
             -> decltype(
                 std::declval<
@@ -341,10 +333,10 @@ namespace ncpp {
                     >
                 >(a.container_p_) - arg;
             }
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator - (const F_arg__& arg, const F_this& a)
             -> decltype(
-                std::declval<const F_arg__&>() 
+                std::declval<const F_arg__&>()
                 - std::declval<
                     utilities::TF_nth_template_arg_t<
                         T_is_same_viewable_container_v<F_arg__, F_container>,
@@ -363,10 +355,10 @@ namespace ncpp {
                     >
                 >(a.container_p_);
             }
-            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator - (const F_arg__& arg, const F_this& a)
             -> decltype(
-                std::declval<const typename F_arg__::F_container&>() 
+                std::declval<const typename F_arg__::F_container&>()
                 - std::declval<
                     utilities::TF_nth_template_arg_t<
                         T_is_same_viewable_container_v<typename F_arg__::F_container, F_container>,
@@ -389,7 +381,7 @@ namespace ncpp {
 
 
         public:
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator == (const F_this& a, const F_arg__& arg)
             -> decltype(
                 std::declval<
@@ -411,10 +403,10 @@ namespace ncpp {
                     >
                 >(a.container_p_) == arg;
             }
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator == (const F_arg__& arg, const F_this& a)
             -> decltype(
-                std::declval<const F_arg__&>() 
+                std::declval<const F_arg__&>()
                 == std::declval<
                     utilities::TF_nth_template_arg_t<
                         T_is_same_viewable_container_v<F_arg__, F_container>,
@@ -433,10 +425,10 @@ namespace ncpp {
                     >
                 >(a.container_p_);
             }
-            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator == (const F_arg__& arg, const F_this& a)
             -> decltype(
-                std::declval<const typename F_arg__::F_container&>() 
+                std::declval<const typename F_arg__::F_container&>()
                 == std::declval<
                     utilities::TF_nth_template_arg_t<
                         T_is_same_viewable_container_v<typename F_arg__::F_container, F_container>,
@@ -459,7 +451,7 @@ namespace ncpp {
 
 
         public:
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator != (const F_this& a, const F_arg__& arg)
             -> decltype(
                 std::declval<
@@ -481,10 +473,10 @@ namespace ncpp {
                     >
                 >(a.container_p_) != arg;
             }
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator != (const F_arg__& arg, const F_this& a)
             -> decltype(
-                std::declval<const F_arg__&>() 
+                std::declval<const F_arg__&>()
                 != std::declval<
                     utilities::TF_nth_template_arg_t<
                         T_is_same_viewable_container_v<F_arg__, F_container>,
@@ -503,10 +495,10 @@ namespace ncpp {
                     >
                 >(a.container_p_);
             }
-            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator != (const F_arg__& arg, const F_this& a)
             -> decltype(
-                std::declval<const typename F_arg__::F_container&>() 
+                std::declval<const typename F_arg__::F_container&>()
                 != std::declval<
                     utilities::TF_nth_template_arg_t<
                         T_is_same_viewable_container_v<typename F_arg__::F_container, F_container>,
@@ -529,7 +521,7 @@ namespace ncpp {
 
 
         public:
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator << (const F_this& a, const F_arg__& arg)
             -> decltype(
                 std::declval<
@@ -551,10 +543,10 @@ namespace ncpp {
                     >
                 >(a.container_p_) << arg;
             }
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator << (const F_arg__& arg, const F_this& a)
             -> decltype(
-                std::declval<const F_arg__&>() 
+                std::declval<const F_arg__&>()
                 << std::declval<
                     utilities::TF_nth_template_arg_t<
                         T_is_same_viewable_container_v<F_arg__, F_container>,
@@ -573,10 +565,10 @@ namespace ncpp {
                     >
                 >(a.container_p_);
             }
-            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator << (const F_arg__& arg, const F_this& a)
             -> decltype(
-                std::declval<const typename F_arg__::F_container&>() 
+                std::declval<const typename F_arg__::F_container&>()
                 << std::declval<
                     utilities::TF_nth_template_arg_t<
                         T_is_same_viewable_container_v<typename F_arg__::F_container, F_container>,
@@ -599,7 +591,7 @@ namespace ncpp {
 
 
         public:
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator >> (const F_this& a, const F_arg__& arg)
             -> decltype(
                 std::declval<
@@ -621,10 +613,10 @@ namespace ncpp {
                     >
                 >(a.container_p_) >> arg;
             }
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator >> (const F_arg__& arg, const F_this& a)
             -> decltype(
-                std::declval<const F_arg__&>() 
+                std::declval<const F_arg__&>()
                 >> std::declval<
                     utilities::TF_nth_template_arg_t<
                         T_is_same_viewable_container_v<F_arg__, F_container>,
@@ -643,10 +635,10 @@ namespace ncpp {
                     >
                 >(a.container_p_);
             }
-            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator >> (const F_arg__& arg, const F_this& a)
             -> decltype(
-                std::declval<const typename F_arg__::F_container&>() 
+                std::declval<const typename F_arg__::F_container&>()
                 >> std::declval<
                     utilities::TF_nth_template_arg_t<
                         T_is_same_viewable_container_v<typename F_arg__::F_container, F_container>,
@@ -669,7 +661,7 @@ namespace ncpp {
 
 
         public:
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator % (const F_this& a, const F_arg__& arg)
             -> decltype(
                 std::declval<
@@ -691,10 +683,10 @@ namespace ncpp {
                     >
                 >(a.container_p_) % arg;
             }
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator % (const F_arg__& arg, const F_this& a)
             -> decltype(
-                std::declval<const F_arg__&>() 
+                std::declval<const F_arg__&>()
                 % std::declval<
                     utilities::TF_nth_template_arg_t<
                         T_is_same_viewable_container_v<F_arg__, F_container>,
@@ -713,10 +705,10 @@ namespace ncpp {
                     >
                 >(a.container_p_);
             }
-            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator % (const F_arg__& arg, const F_this& a)
             -> decltype(
-                std::declval<const typename F_arg__::F_container&>() 
+                std::declval<const typename F_arg__::F_container&>()
                 % std::declval<
                     utilities::TF_nth_template_arg_t<
                         T_is_same_viewable_container_v<typename F_arg__::F_container, F_container>,
@@ -739,7 +731,7 @@ namespace ncpp {
 
 
         public:
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator * (const F_this& a, const F_arg__& arg)
             -> decltype(
                 std::declval<
@@ -761,10 +753,10 @@ namespace ncpp {
                     >
                 >(a.container_p_) * arg;
             }
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator * (const F_arg__& arg, const F_this& a)
             -> decltype(
-                std::declval<const F_arg__&>() 
+                std::declval<const F_arg__&>()
                 * std::declval<
                     utilities::TF_nth_template_arg_t<
                         T_is_same_viewable_container_v<F_arg__, F_container>,
@@ -783,10 +775,10 @@ namespace ncpp {
                     >
                 >(a.container_p_);
             }
-            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator * (const F_arg__& arg, const F_this& a)
             -> decltype(
-                std::declval<const typename F_arg__::F_container&>() 
+                std::declval<const typename F_arg__::F_container&>()
                 * std::declval<
                     utilities::TF_nth_template_arg_t<
                         T_is_same_viewable_container_v<typename F_arg__::F_container, F_container>,
@@ -809,7 +801,7 @@ namespace ncpp {
 
 
         public:
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator / (const F_this& a, const F_arg__& arg)
             -> decltype(
                 std::declval<
@@ -831,10 +823,10 @@ namespace ncpp {
                     >
                 >(a.container_p_) / arg;
             }
-            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<!NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator / (const F_arg__& arg, const F_this& a)
             -> decltype(
-                std::declval<const F_arg__&>() 
+                std::declval<const F_arg__&>()
                 / std::declval<
                     utilities::TF_nth_template_arg_t<
                         T_is_same_viewable_container_v<F_arg__, F_container>,
@@ -853,10 +845,10 @@ namespace ncpp {
                     >
                 >(a.container_p_);
             }
-            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(F_arg__, F_view_flag), i32> = 0>
+            template<typename F_arg__, std::enable_if_t<NCPP_RTTI_IS_HAS_FLAG(F_arg__, TF_view_flag<utilities::T_sizeof_v<F_allocator>>), i32> = 0>
             friend NCPP_FORCE_INLINE auto operator / (const F_arg__& arg, const F_this& a)
             -> decltype(
-                std::declval<const typename F_arg__::F_container&>() 
+                std::declval<const typename F_arg__::F_container&>()
                 / std::declval<
                     utilities::TF_nth_template_arg_t<
                         T_is_same_viewable_container_v<typename F_arg__::F_container, F_container>,
@@ -967,13 +959,7 @@ namespace ncpp {
 
 
 
-        template<
-            typename F_container__,
-            std::enable_if_t<
-                T_is_viewable_container_v<F_container__>,
-                i32
-            > = 0
-        >
+        template<typename F_container__>
         NCPP_FORCE_INLINE TF_view<F_container__> T_to_view(const F_container__& container) noexcept {
 
             return container;

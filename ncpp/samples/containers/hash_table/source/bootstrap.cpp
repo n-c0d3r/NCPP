@@ -10,12 +10,12 @@ int main() {
 	{
 
         G_hash_table ht;
-        
+
         ht.add(1, 1);
         ht.add(1, 2);
         ht.add(1, 3);
         ht.add(1, 4);
-        
+
         ht.add(2, 5);
         ht.add(2, 6);
 
