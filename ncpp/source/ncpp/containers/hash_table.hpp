@@ -43,17 +43,17 @@
 
 
 
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -61,36 +61,37 @@ namespace ncpp {
 
 	namespace containers {
 
-        template<class F_allocator__ = mem::F_default_allocator>
+        template<typename F_int__ = u32, class F_allocator__ = mem::F_default_allocator>
         class TF_hash_table {
             
         public:
+            using F_int = F_int__;
             using F_allocator = F_allocator__;
-            
+
             
             
         private:
-            u32 hash_size_ = 2;
-            u32 index_size_ = 0;
+            F_int hash_size_ = 2;
+            F_int index_size_ = 0;
             
-            u32 hash_mask_ = 0;
+            F_int hash_mask_ = 0;
             
-            eastl::vector<u32, F_allocator> hash_vector_;
-            eastl::vector<u32, F_allocator> index_vector_;
-            
-        public:
-            NCPP_FORCE_INLINE u32 hash_size() const { return hash_size_; }
-            NCPP_FORCE_INLINE u32 index_size() const { return index_size_; }
-            
-            NCPP_FORCE_INLINE u32 hash_mask() const { return hash_mask_; }
-            
-            NCPP_FORCE_INLINE const eastl::vector<u32, F_allocator>& hash_vector() const { return hash_vector_; }
-            NCPP_FORCE_INLINE const eastl::vector<u32, F_allocator>& index_vector() const { return index_vector_; }
-            
-            
+            eastl::vector<F_int, F_allocator> hash_vector_;
+            eastl::vector<F_int, F_allocator> index_vector_;
             
         public:
-            inline TF_hash_table(u32 hash_size = 2, u32 index_size = 0, const F_allocator& allocator = F_allocator()) :
+            NCPP_FORCE_INLINE F_int hash_size() const { return hash_size_; }
+            NCPP_FORCE_INLINE F_int index_size() const { return index_size_; }
+            
+            NCPP_FORCE_INLINE F_int hash_mask() const { return hash_mask_; }
+            
+            NCPP_FORCE_INLINE const eastl::vector<F_int, F_allocator>& hash_vector() const { return hash_vector_; }
+            NCPP_FORCE_INLINE const eastl::vector<F_int, F_allocator>& index_vector() const { return index_vector_; }
+            
+            
+            
+        public:
+            inline TF_hash_table(F_int hash_size = 2, F_int index_size = 0, const F_allocator& allocator = F_allocator()) :
                 hash_size_(hash_size),
                 index_size_(index_size),
 
@@ -186,7 +187,7 @@ namespace ncpp {
                 }
                 
             }
-            inline void clear(u32 hash_size, u32 index_size){
+            inline void clear(F_int hash_size, F_int index_size){
                 
                 reset();
                 
@@ -206,7 +207,7 @@ namespace ncpp {
                 }
                 
             }
-            inline void resize(u32 index_size) {
+            inline void resize(F_int index_size) {
                 
                 if( index_size_ == index_size )
                 {
@@ -230,21 +231,21 @@ namespace ncpp {
                 index_size_ = index_size;
                 
             }
-            NCPP_FORCE_INLINE u32 first(u32 key) const {
+            NCPP_FORCE_INLINE F_int first(F_int key) const {
                 
                 return hash_vector_[key & hash_mask_];
             }
-            NCPP_FORCE_INLINE u32 next(u32 index) const {
+            NCPP_FORCE_INLINE F_int next(F_int index) const {
                 
                 assert(index < index_size_);
                 assert(index_vector_[index] != index);
                 return index_vector_[index];
             }
-            NCPP_FORCE_INLINE b8 is_valid(u32 index) const {
+            NCPP_FORCE_INLINE b8 is_valid(F_int index) const {
                 
                 return index != ~0u;
             }
-            inline void add(u32 key, u32 index){
+            inline void add(F_int key, F_int index){
                 
                 if( index >= index_size_ )
                 {
@@ -256,13 +257,13 @@ namespace ncpp {
                 hash_vector_[key] = index;
 
             }
-            inline void add_concurrent(u32 key, u32 index){
+            inline void add_concurrent(F_int key, F_int index){
                 assert(index < index_size_);
 
                 key &= hash_mask_;
                 index_vector_[index] = EA::Thread::AtomicFetchSwap((i32*)(hash_vector_.data() + key), index);
             }
-            inline void remove(u32 key, u32 index){
+            inline void remove(F_int key, F_int index){
                 
                 if(index >= index_size_)
                 {
@@ -278,7 +279,7 @@ namespace ncpp {
                 }
                 else
                 {
-                    for(u32 i = hash_vector_[key]; is_valid(i); i = index_vector_[i])
+                    for(F_int i = hash_vector_[key]; is_valid(i); i = index_vector_[i])
                     {
                         if(index_vector_[i] == index)
                         {
@@ -302,7 +303,7 @@ namespace ncpp {
 			)
 			{
 
-				if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+				if (input.second > (F_int)NCPP_MAX_TAB_COUNT) {
 
 					os << ncpp::T_cout_lowlight(L"...");
 
@@ -314,21 +315,21 @@ namespace ncpp {
 
 				os << ncpp::T_cout_lowlight("{") << std::endl;
 
-				for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+				for (F_int j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
 					os << " ";
 
 				}
         		os << ncpp::T_cout_field_name("hash_size") << ncpp::T_cout_lowlight(" -> ") << ncpp::T_cout_value(input.first.hash_size()) << ncpp::T_cout_lowlight(",") << std::endl;
 
-				for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+				for (F_int j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
 					os << " ";
 
 				}
         		os << ncpp::T_cout_field_name("index_size") << ncpp::T_cout_lowlight(" -> ") << ncpp::T_cout_value(input.first.index_size()) << ncpp::T_cout_lowlight(",") << std::endl;
 
-				for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+				for (F_int j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
 					os << " ";
 
@@ -337,12 +338,12 @@ namespace ncpp {
 				ncpp::T_safe_ostream_with_tab<
 					ncpp::F_ostream,
 					ncpp::TF_ostream_input<
-						ncpp::TF_cout_value<eastl::vector<u32, F_allocator>>
+						ncpp::TF_cout_value<eastl::vector<F_int, F_allocator>>
 					>
 				>(
 					os,
 					ncpp::TF_ostream_input<
-						ncpp::TF_cout_value<eastl::vector<u32, F_allocator>>
+						ncpp::TF_cout_value<eastl::vector<F_int, F_allocator>>
 					> {
 						ncpp::T_cout_value(input.first.hash_vector_),
 						input.second + 1
@@ -350,7 +351,7 @@ namespace ncpp {
 				);
 				os << ncpp::T_cout_lowlight(",") << std::endl;
 
-				for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+				for (F_int j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
 					os << " ";
 
@@ -359,12 +360,12 @@ namespace ncpp {
 				ncpp::T_safe_ostream_with_tab<
 					ncpp::F_ostream,
 					ncpp::TF_ostream_input<
-						ncpp::TF_cout_value<eastl::vector<u32, F_allocator>>
+						ncpp::TF_cout_value<eastl::vector<F_int, F_allocator>>
 					>
 				>(
 					os,
 					ncpp::TF_ostream_input<
-						ncpp::TF_cout_value<eastl::vector<u32, F_allocator>>
+						ncpp::TF_cout_value<eastl::vector<F_int, F_allocator>>
 					> {
 						ncpp::T_cout_value(input.first.index_vector_),
 						input.second + 1
@@ -372,7 +373,7 @@ namespace ncpp {
 				);
 				os << std::endl;
 
-				for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+				for (F_int j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
 
 					os << " ";
 
@@ -400,7 +401,7 @@ namespace ncpp {
 			)
 			{
 
-				if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
+				if (input.second > (F_int)NCPP_MAX_TAB_COUNT) {
 
 					os << ncpp::T_cout_lowlight(L"...");
 
@@ -412,21 +413,21 @@ namespace ncpp {
 
 				os << ncpp::T_cout_lowlight(L"{") << std::endl;
 
-				for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+				for (F_int j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
 					os << L" ";
 
 				}
         		os << ncpp::T_cout_field_name("hash_size") << ncpp::T_cout_lowlight(" -> ") << ncpp::T_cout_value(input.first.hash_size()) << ncpp::T_cout_lowlight(",") << std::endl;
 
-				for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+				for (F_int j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
 					os << L" ";
 
 				}
         		os << ncpp::T_cout_field_name("index_size") << ncpp::T_cout_lowlight(" -> ") << ncpp::T_cout_value(input.first.index_size()) << ncpp::T_cout_lowlight(",") << std::endl;
 
-				for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+				for (F_int j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
 					os << L" ";
 
@@ -435,12 +436,12 @@ namespace ncpp {
 				ncpp::T_safe_ostream_with_tab<
 					ncpp::F_wostream,
 					ncpp::TF_ostream_input<
-						ncpp::TF_cout_value<eastl::vector<u32, F_allocator>>
+						ncpp::TF_cout_value<eastl::vector<F_int, F_allocator>>
 					>
 				>(
 					os,
 					ncpp::TF_ostream_input<
-						ncpp::TF_cout_value<eastl::vector<u32, F_allocator>>
+						ncpp::TF_cout_value<eastl::vector<F_int, F_allocator>>
 					> {
 						ncpp::T_cout_value(input.first.hash_vector_),
 						input.second + 1
@@ -448,7 +449,7 @@ namespace ncpp {
 				);
 				os << ncpp::T_cout_lowlight(",") << std::endl;
 
-				for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
+				for (F_int j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
 					os << L" ";
 
@@ -457,12 +458,12 @@ namespace ncpp {
 				ncpp::T_safe_ostream_with_tab<
 					ncpp::F_wostream,
 					ncpp::TF_ostream_input<
-						ncpp::TF_cout_value<eastl::vector<u32, F_allocator>>
+						ncpp::TF_cout_value<eastl::vector<F_int, F_allocator>>
 					>
 				>(
 					os,
 					ncpp::TF_ostream_input<
-						ncpp::TF_cout_value<eastl::vector<u32, F_allocator>>
+						ncpp::TF_cout_value<eastl::vector<F_int, F_allocator>>
 					> {
 						ncpp::T_cout_value(input.first.index_vector_),
 						input.second + 1
@@ -470,7 +471,7 @@ namespace ncpp {
 				);
 				os << std::endl;
 
-				for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
+				for (F_int j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
 
 					os << L" ";
 
@@ -494,8 +495,8 @@ namespace ncpp {
     
         using F_hash_table = TF_hash_table<>;
 
-        using G_hash_table = TF_hash_table<mem::F_general_allocator>;
-        using EP_hash_table = TF_hash_table<mem::F_ephemeral_allocator>;
+        using G_hash_table = TF_hash_table<u32, mem::F_general_allocator>;
+        using EP_hash_table = TF_hash_table<u32, mem::F_ephemeral_allocator>;
 
         using V_hash_table = TF_view<G_hash_table>;
     
@@ -504,9 +505,10 @@ namespace ncpp {
 }
 
 NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
-    NCPP_MA(ncpp::containers::TF_hash_table<F_allocator__>),
+    NCPP_MA(ncpp::containers::TF_hash_table<F_int__, F_allocator__>),
     NCPP_MA(F_allocator__),
-    NCPP_MA(ncpp::containers::TF_hash_table<F_new_allocator__>),
+    NCPP_MA(ncpp::containers::TF_hash_table<F_int__, F_new_allocator__>),
+    typename F_int__,
     typename F_allocator__
 );
 
