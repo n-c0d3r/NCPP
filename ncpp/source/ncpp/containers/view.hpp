@@ -490,28 +490,25 @@ namespace ncpp {
             template<typename F_arg__, std::enable_if_t<!T_is_view<F_arg__>, i32> = 0>\
             friend NCPP_FORCE_INLINE auto operator Operator (const F_this& a, F_arg__&& arg)\
             -> decltype(\
-                std::declval<const TF_try_march_container_allocator<F_container__, F_arg__>&>()\
-                Operator std::declval<F_arg__&&>()\
+                std::declval<const TF_try_march_container_allocator<F_container__, F_arg__>&>() Operator std::declval<F_arg__&&>()\
             )\
             {\
 \
-                return *((const TF_try_march_container_allocator<F_container__, F_arg__>*)(a.container_p_)) Operator arg;\
+                return ( *((const TF_try_march_container_allocator<F_container__, F_arg__>*)(a.container_p_)) ) Operator std::forward<F_arg__>(arg);\
             }\
             template<typename F_arg__, std::enable_if_t<!T_is_view<F_arg__>, i32> = 0>\
             friend NCPP_FORCE_INLINE auto operator Operator (F_arg__&& arg, const F_this& a)\
             -> decltype(\
-                std::declval<F_arg__&&>()\
-                Operator std::declval<const TF_try_march_container_allocator<F_container__, F_arg__>&>()\
+                std::declval<F_arg__&&>() Operator std::declval<const TF_try_march_container_allocator<F_container__, F_arg__>&>()\
             )\
             {\
 \
-                return arg Operator *((const TF_try_march_container_allocator<F_container__, F_arg__>*)(a.container_p_));\
+                return std::forward<F_arg__>(arg) Operator ( *((const TF_try_march_container_allocator<F_container__, F_arg__>*)(a.container_p_)) );\
             }\
             template<typename F_arg__, typename = typename F_arg__::F___ncpp_view_flag___>\
             friend NCPP_FORCE_INLINE auto operator Operator (const F_this& a, F_arg__&& arg)\
             -> decltype(\
-                std::declval<const TF_try_march_container_allocator<F_container__, F_arg__>&>()\
-                Operator std::declval<F_arg__&&>()\
+                std::declval<const TF_try_march_container_allocator<F_container__, F_arg__>&>() Operator std::declval<F_arg__&&>()\
             )\
             {\
 \
@@ -531,6 +528,15 @@ namespace ncpp {
             NCPP_CONTAINERS_DEFINE_VIEW_OPERATORS(&);
             NCPP_CONTAINERS_DEFINE_VIEW_OPERATORS(==);
             NCPP_CONTAINERS_DEFINE_VIEW_OPERATORS(!=);
+
+
+
+        public:
+            template<typename F_ostream__>
+            friend NCPP_FORCE_INLINE F_ostream__& operator << (F_ostream__& os, const TF_view& view) {
+
+                return (os << (*view.container_p_));
+            }
 
 
 
