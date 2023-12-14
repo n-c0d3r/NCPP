@@ -5,7 +5,7 @@ using namespace ncpp;
 
 
 
-NCPP_ENTRY_POINT(args) {
+int main() {
 
     cout << G_string("Hello ")
         << F_log_color::V_FOREGROUND_BRIGHT_BLUE

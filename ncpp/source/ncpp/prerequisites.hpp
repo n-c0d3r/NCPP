@@ -312,11 +312,16 @@ struct NCPP_PP_CAT(NCPP_STATIC_WARNING,__LINE__) { \
 
 #ifndef NDEBUG 
 #define NCPP_DEBUG
+#define NCPP_ENABLE_IF_DEBUG(...) __VA_ARGS__
+#define NCPP_ENABLE_IF_RELEASE(...)
 #define NCPP_WARNING(cond,...) if(!(cond)) {\
         std::cout << "Warning (" << __FILE__ << " at line " << __LINE__ << "):" << std::endl;\
         std::cout << __VA_ARGS__ << std::endl;\
     }
 #else
+#define NCPP_RELEASE
+#define NCPP_ENABLE_IF_DEBUG(...)
+#define NCPP_ENABLE_IF_RELEASE(...) __VA_ARGS__
 #define NCPP_WARNING(cond,...) ;
 #endif
 

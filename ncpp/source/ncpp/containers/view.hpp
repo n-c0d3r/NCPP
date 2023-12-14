@@ -99,14 +99,35 @@ namespace ncpp {
         private:
             const F_container* container_p_ = 0;
 
+#ifdef NCPP_DEBUG
+            au64* owner_counter_p_ = 0;
+            b8 is_root_owner_ = false;
+#endif
+
         public:
             NCPP_FORCE_INLINE const F_container* container_p() const { return container_p_; }
             NCPP_FORCE_INLINE const F_container& container() const { return *container_p_; }
+
+            NCPP_FORCE_INLINE b8 is_null() const { return (container_p_ == 0); }
+            NCPP_FORCE_INLINE b8 is_valid() const { return (container_p_ != 0); }
+
+#ifdef NCPP_DEBUG
+            NCPP_FORCE_INLINE au64* owner_counter_p() const {
+
+                return (au64*)owner_counter_p_;
+            }
+#endif
 
 
 
         public:
             NCPP_FORCE_INLINE TF_view() = default;
+
+            NCPP_FORCE_INLINE ~TF_view() NCPP_ENABLE_IF_RELEASE(noexcept) {
+
+                reset();
+
+            }
 
 
 
@@ -117,6 +138,12 @@ namespace ncpp {
             >
             NCPP_FORCE_INLINE TF_view(const F__& x, const utilities::TF_mem_wrap<F_container>& container = utilities::TF_mem_wrap<F_container>{}) :
                 container_p_((const F_container*)&container)
+
+#ifdef NCPP_DEBUG
+                ,
+                owner_counter_p_(new au64(1)),
+                is_root_owner_(true)
+#endif
             {
 
                 new ((F_container*)&container) F_container(x);
@@ -125,6 +152,12 @@ namespace ncpp {
             template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_key<F_fake_container__>>, i32> = 0>
             NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_key<F_container>> x, const utilities::TF_mem_wrap<F_container>& container = utilities::TF_mem_wrap<F_container>{}) :
                 container_p_((const F_container*)&container)
+
+#ifdef NCPP_DEBUG
+                ,
+                owner_counter_p_(new au64(1)),
+                is_root_owner_(true)
+#endif
             {
 
                 new ((F_container*)&container) F_container(x);
@@ -133,6 +166,12 @@ namespace ncpp {
             template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_value<F_fake_container__>>, i32> = 0>
             NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_value<F_container>> x, const utilities::TF_mem_wrap<F_container>& container = utilities::TF_mem_wrap<F_container>{}) :
                 container_p_((const F_container*)&container)
+
+#ifdef NCPP_DEBUG
+                ,
+                owner_counter_p_(new au64(1)),
+                is_root_owner_(true)
+#endif
             {
 
                 new ((F_container*)&container) F_container(x);
@@ -141,6 +180,12 @@ namespace ncpp {
             template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_node<F_fake_container__>>, i32> = 0>
             NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_node<F_container>> x, const utilities::TF_mem_wrap<F_container>& container = utilities::TF_mem_wrap<F_container>{}) :
                 container_p_((const F_container*)&container)
+
+#ifdef NCPP_DEBUG
+                ,
+                owner_counter_p_(new au64(1)),
+                is_root_owner_(true)
+#endif
             {
 
                 new ((F_container*)&container) F_container(x);
@@ -149,10 +194,28 @@ namespace ncpp {
             template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_item<F_fake_container__>>, i32> = 0>
             NCPP_FORCE_INLINE TF_view(std::initializer_list<utilities::TF_item<F_container>> x, const utilities::TF_mem_wrap<F_container>& container = utilities::TF_mem_wrap<F_container>{}) :
                 container_p_((const F_container*)&container)
+
+#ifdef NCPP_DEBUG
+                ,
+                owner_counter_p_(new au64(1)),
+                is_root_owner_(true)
+#endif
             {
 
                 new ((F_container*)&container) F_container(x);
 
+            }
+
+
+
+        public:
+            template<
+                typename F_other_container__,
+                std::enable_if_t<T_is_same_viewable_container_v<F_container, F_other_container__>, i32> = 0
+            >
+            NCPP_FORCE_INLINE operator const F_other_container__&() const noexcept {
+
+                return *reinterpret_cast<const F_other_container__*>(container_p_);
             }
 
 
@@ -169,12 +232,12 @@ namespace ncpp {
 
 
             }
-
             template<
                 typename F_other_container__,
                 std::enable_if_t<T_is_same_viewable_container_v<F_container, F_other_container__>, i32> = 0
             >
-            NCPP_FORCE_INLINE TF_view& operator = (const F_other_container__& other_container) noexcept {
+            NCPP_FORCE_INLINE TF_view& operator = (const F_other_container__& other_container) noexcept
+            {
 
                 container_p_ = reinterpret_cast<const F_container*>(&other_container);
 
@@ -185,24 +248,25 @@ namespace ncpp {
 
         public:
             template<
-                typename F_other_container__,
-                std::enable_if_t<T_is_same_viewable_container_v<F_container, F_other_container__>, i32> = 0
+                class F_other_view__,
+                typename = decltype(T_is_same_viewable_container_v<F_container, typename F_other_view__::F_container>)
             >
-            NCPP_FORCE_INLINE TF_view(const TF_view<F_other_container__>& other_view) noexcept :
-                    container_p_(reinterpret_cast<const F_container*>(other_view.container_p_()))
+            NCPP_FORCE_INLINE TF_view(const F_other_view__& other_view) NCPP_ENABLE_IF_RELEASE(noexcept) :
+                container_p_(reinterpret_cast<const F_container*>(other_view.container_p()))
             {
 
-
+                NCPP_ENABLE_IF_DEBUG(T_increase_owner_counter((F_other_view__&)other_view));
 
             }
-
             template<
-                typename F_other_container__,
-                std::enable_if_t<T_is_same_viewable_container_v<F_container, F_other_container__>, i32> = 0
+                class F_other_view__,
+                typename = decltype(T_is_same_viewable_container_v<F_container, typename F_other_view__::F_container>)
             >
-            NCPP_FORCE_INLINE TF_view& operator = (const TF_view<F_other_container__>& other_view) noexcept {
+            NCPP_FORCE_INLINE TF_view& operator = (const F_other_view__& other_view) NCPP_ENABLE_IF_RELEASE(noexcept) {
 
-                container_p_ = reinterpret_cast<const F_container*>(other_view.container_p_());
+                container_p_ = reinterpret_cast<const F_container*>(other_view.container_p());
+
+                NCPP_ENABLE_IF_DEBUG(T_increase_owner_counter((F_other_view__&)other_view));
 
                 return *this;
             }
@@ -211,24 +275,27 @@ namespace ncpp {
 
         public:
             template<
-                typename F_other_container__,
-                std::enable_if_t<T_is_same_viewable_container_v<F_container, F_other_container__>, i32> = 0
+                class F_other_view__,
+                typename = decltype(T_is_same_viewable_container_v<F_container, typename F_other_view__::F_container>)
             >
-            NCPP_FORCE_INLINE TF_view(TF_view<F_other_container__>&& other_view) noexcept :
-                    container_p_(reinterpret_cast<const F_container*>(other_view.container_p_()))
+            NCPP_FORCE_INLINE TF_view(F_other_view__&& other_view) NCPP_ENABLE_IF_RELEASE(noexcept) :
+                container_p_(reinterpret_cast<const F_container*>(other_view.container_p()))
             {
+
+                NCPP_ENABLE_IF_DEBUG(T_increase_owner_counter((F_other_view__&)other_view));
 
                 other_view.reset();
 
             }
-
             template<
-                typename F_other_container__,
-                std::enable_if_t<T_is_same_viewable_container_v<F_container, F_other_container__>, i32> = 0
+                class F_other_view__,
+                typename = decltype(T_is_same_viewable_container_v<F_container, typename F_other_view__::F_container>)
             >
-            NCPP_FORCE_INLINE TF_view& operator = (TF_view<F_other_container__>&& other_view) noexcept {
+            NCPP_FORCE_INLINE TF_view& operator = (F_other_view__&& other_view) NCPP_ENABLE_IF_RELEASE(noexcept) {
 
-                container_p_ = reinterpret_cast<const F_container*>(other_view.container_p_());
+                container_p_ = reinterpret_cast<const F_container*>(other_view.container_p());
+
+                NCPP_ENABLE_IF_DEBUG(T_increase_owner_counter((F_other_view__&)other_view));
 
                 other_view.reset();
 
@@ -899,18 +966,6 @@ namespace ncpp {
 
 
 
-        public:
-            template<
-                typename F_other_container__,
-                std::enable_if_t<T_is_same_viewable_container_v<F_container, F_other_container__>, i32> = 0
-            >
-            NCPP_FORCE_INLINE operator const F_other_container__&() const {
-
-                return *reinterpret_cast<const F_other_container__*>(container_p_);
-            }
-
-
-
         private:
             template<typename F__, std::enable_if_t<utilities::T_is_has_begin_const<F__>, i32> = 0>
             NCPP_FORCE_INLINE auto T_begin_internal() const {
@@ -970,7 +1025,49 @@ namespace ncpp {
 
 
         public:
-            NCPP_FORCE_INLINE void reset() noexcept {
+#ifdef NCPP_DEBUG
+            template<class F_other_view__>
+            NCPP_FORCE_INLINE void T_increase_owner_counter(F_other_view__& other_view) {
+
+                if(other_view.owner_counter_p()) {
+
+                    owner_counter_p_ = other_view.owner_counter_p();
+
+                    assert(
+                        ([&]()->b8{ owner_counter_p_->fetch_add(1, eastl::memory_order_acq_rel); return true;})()
+                        && "the current view is in container-owned mode, all references to the owned container have to be unreferenced before the root owner is destroyed or reset"
+                    );
+
+                }
+
+            }
+            NCPP_FORCE_INLINE void decrease_owner_counter() {
+
+                if(owner_counter_p_) {
+
+                    u64 prev_owner_counter;
+
+                    assert(
+                        ([&]()->b8{ prev_owner_counter = owner_counter_p_->fetch_sub(1, eastl::memory_order_acq_rel); return true;})()
+                        && "the current view is in container-owned mode, all references to the owned container have to be unreferenced before the root owner is destroyed or reset"
+                    );
+
+                    if(is_root_owner_) {
+
+                        assert((prev_owner_counter == 1) && "the current view is in container-owned mode, all references to the owned container have to be unreferenced before the root owner is destroyed or reset");
+
+                        delete owner_counter_p_;
+
+                    }
+
+                }
+
+            }
+#endif
+
+            NCPP_FORCE_INLINE void reset() NCPP_ENABLE_IF_RELEASE(noexcept) {
+
+                NCPP_ENABLE_IF_DEBUG(decrease_owner_counter());
 
                 container_p_ = 0;
             }
