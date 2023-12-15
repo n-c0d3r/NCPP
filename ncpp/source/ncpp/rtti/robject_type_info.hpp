@@ -75,7 +75,7 @@ namespace ncpp {
 
 		private:
 			F_rcontainer* rcontainer_p_ = 0;
-			sz hash_code_ = 0;
+            u64 hash_code_ = 0;
 			containers::TF_string<char, typename F_rtti_traits::F_allocator> name_;
 			containers::TF_set<F_robject_type_info*> base_type_info_p_set_;
             
@@ -87,7 +87,7 @@ namespace ncpp {
 		public:
 			NCPP_FORCE_INLINE F_rcontainer* rcontainer_p() { return rcontainer_p_; }
 			NCPP_FORCE_INLINE const F_rcontainer* rcontainer_p() const { return rcontainer_p_; }
-			NCPP_FORCE_INLINE sz hash_code() const { return hash_code_; }
+			NCPP_FORCE_INLINE u64 hash_code() const { return hash_code_; }
 			NCPP_FORCE_INLINE containers::TF_view<containers::TF_string<char, F_allocator>> name() const { return name_; }
 
 			NCPP_FORCE_INLINE const containers::TF_set<F_robject_type_info*>& base_type_info_p_set() const { return base_type_info_p_set_; }
@@ -153,7 +153,7 @@ namespace ncpp {
 
 
 		public:
-			NCPP_FORCE_INLINE TF_robject_type_info(F_rcontainer* rcontainer_p, sz hash_code, containers::TF_view<containers::TF_string<char, F_allocator>> name) :
+			NCPP_FORCE_INLINE TF_robject_type_info(F_rcontainer* rcontainer_p, u64 hash_code, containers::TF_view<containers::TF_string<char, F_allocator>> name) :
 				rcontainer_p_(rcontainer_p),
 				hash_code_(hash_code),
 				name_(name)

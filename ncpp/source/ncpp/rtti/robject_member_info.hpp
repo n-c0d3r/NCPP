@@ -73,7 +73,7 @@ namespace ncpp {
 
 
 		private:
-			sz type_hash_code_ = 0;
+			u64 type_hash_code_ = 0;
             union {
                 sz address_ = 0;
                 sz offset_;
@@ -95,7 +95,7 @@ namespace ncpp {
 
 
 		public:
-			NCPP_FORCE_INLINE sz type_hash_code() const { return type_hash_code_; }
+			NCPP_FORCE_INLINE u64 type_hash_code() const { return type_hash_code_; }
             NCPP_FORCE_INLINE sz address() const { return address_; }
 			NCPP_FORCE_INLINE sz offset() const { return offset_; }
 			NCPP_FORCE_INLINE containers::TF_view<containers::TF_string<char, F_allocator>> name() const { return name_; }

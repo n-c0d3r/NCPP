@@ -76,9 +76,9 @@ namespace ncpp {
         namespace internal {
 
             template<typename F__>
-            constexpr sz T_type_hash_code(){
+            constexpr u64 T_type_hash_code(){
 
-                std::size_t result{0};
+                u64 result{0};
 
 #ifdef _MSC_VER
 #define CURRENT_FUNCTION_SIGNATURE __FUNCSIG__
@@ -97,7 +97,7 @@ namespace ncpp {
         }
 
         template<typename F__>
-        constexpr sz T_type_hash_code = internal::T_type_hash_code<F__>();
+        constexpr u64 T_type_hash_code = internal::T_type_hash_code<F__>();
 
 
 
