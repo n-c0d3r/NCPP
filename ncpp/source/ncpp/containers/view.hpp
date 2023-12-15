@@ -165,7 +165,7 @@ namespace ncpp {
 
             ~F_view_owner_counter(){
 
-                assert((m.load(eastl::memory_order_acquire) == 0) && "the current view is in container-owned mode, all references to the owned container have to be unreferenced before the view owner counter is destroyed");
+                assert((m.load(eastl::memory_order_acquire) == 0) && "all references to the owned container have to be unreferenced before the view owner counter is destroyed");
 
             }
 
@@ -629,7 +629,7 @@ namespace ncpp {
 
                     assert(
                         ([&]()->b8{ owner_counter_p_->m.fetch_add(1, eastl::memory_order_acq_rel); return true;})()
-                        && "the current view is in container-owned mode, all references to the owned container have to be unreferenced before the root owner is destroyed"
+                        && "all references to the owned container have to be unreferenced before the view owner counter is destroyed"
                     );
 
                 }
@@ -641,7 +641,7 @@ namespace ncpp {
 
                     assert(
                         ([this]()->b8{ owner_counter_p_->m.fetch_sub(1, eastl::memory_order_acq_rel); return true;})()
-                        && "the current view is in container-owned mode, all references to the owned container have to be unreferenced before the root owner is destroyed"
+                        && "all references to the owned container have to be unreferenced before the view owner counter is destroyed"
                     );
 
                 }
