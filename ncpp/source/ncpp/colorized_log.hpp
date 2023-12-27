@@ -229,7 +229,7 @@ namespace ncpp {
                     if(&os == &cout)
                         os << NCPP_FOREGROUND_WHITE;
 
-                    ncpp::containers::F_string type_name = ncpp::utilities::T_type_name<F__>();
+                    ncpp::containers::F_string type_name = ncpp::utilities::T_type_fullname<F__>();
 
                     if(&os == &cout)
                         os << ncpp::containers::to_string(
@@ -287,7 +287,7 @@ namespace ncpp {
                     if(&os == &wcout)
                         os << NCPP_FOREGROUND_WHITE_TEXT;
 
-                    ncpp::containers::F_string type_name = ncpp::utilities::T_type_name<F__>();
+                    ncpp::containers::F_string type_name = ncpp::utilities::T_type_fullname<F__>();
 
                     if(&os == &wcout)
                         os << ncpp::containers::to_wstring(
@@ -345,7 +345,7 @@ namespace ncpp {
                     if(&os == &cout)
                         os << NCPP_FOREGROUND_WHITE;
 
-                    ncpp::containers::F_string type_name = ncpp::utilities::T_type_name<F__>();
+                    ncpp::containers::F_string type_name = ncpp::utilities::T_type_fullname<F__>();
 
                     if(&os == &cout)
                         os << ncpp::containers::to_string(
@@ -384,7 +384,7 @@ namespace ncpp {
                     if(&os == &wcout)
                         os << NCPP_FOREGROUND_WHITE_TEXT;
 
-                    ncpp::containers::F_string type_name = ncpp::utilities::T_type_name<F__>();
+                    ncpp::containers::F_string type_name = ncpp::utilities::T_type_fullname<F__>();
 
                     if(&os == &wcout)
                         os << ncpp::containers::to_wstring(

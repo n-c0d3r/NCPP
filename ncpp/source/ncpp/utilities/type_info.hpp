@@ -200,7 +200,7 @@ namespace ncpp {
 
 #ifdef NCPP_RTTI_SECURED_NAME
         template<typename F__, typename F_char__ = char>
-        NCPP_FORCE_INLINE const F_char__* T_type_name() {
+        NCPP_FORCE_INLINE const F_char__* T_type_fullname() {
 
             static std::basic_string<F_char__> value = ((F_char__)'_') + (std::basic_stringstream<F_char__>() << T_type_hash_code<F__>).str();
 
@@ -208,7 +208,7 @@ namespace ncpp {
         }
 #else
         template<typename F__, typename F_char__ = char>
-        NCPP_FORCE_INLINE const F_char__* T_type_name() {
+        NCPP_FORCE_INLINE const F_char__* T_type_fullname() {
 
             static std::basic_string<F_char__> value = (std::basic_stringstream<F_char__>() << internal::type_name<F__>()).str();
 
