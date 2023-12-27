@@ -108,7 +108,7 @@ namespace ncpp {
 
 
         private:
-            F_subtype_data* data_p_ = 0;
+            const F_subtype_data* data_p_ = 0;
 
         public:
             NCPP_FORCE_INLINE const F_subtype_data& data() const { return *data_p_; }
@@ -126,6 +126,15 @@ namespace ncpp {
             NCPP_FORCE_INLINE ~TF_subtype() noexcept {
 
                 reset();
+            }
+
+
+
+        private:
+            NCPP_FORCE_INLINE TF_subtype(const F_subtype_data* data_p) noexcept :
+                data_p_(data_p_)
+            {
+
             }
 
 
@@ -168,9 +177,31 @@ namespace ncpp {
 
 
         public:
+            template<typename F_other__, std::enable_if_t<std::is_convertible_v<F_other__, F__> || std::is_same_v<F__, void>, i32> = 0>
+            NCPP_FORCE_INLINE b8 operator == (const TF_subtype<F_other__, F_subtype_data__>& x) const noexcept {
+
+                return (((sz)data_p_) == ((sz)x.data_p_));
+            }
+            template<typename F_other__, std::enable_if_t<std::is_convertible_v<F_other__, F__> || std::is_same_v<F__, void>, i32> = 0>
+            NCPP_FORCE_INLINE b8 operator != (const TF_subtype<F_other__, F_subtype_data__>& x) const noexcept {
+
+                return (((sz)data_p_) != ((sz)x.data_p_));
+            }
+
+
+
+        public:
             NCPP_FORCE_INLINE void reset() noexcept {
 
                 data_p_ = &T_default_subtype_data<F__, F_subtype_data__>;
+            }
+            template<typename F_other__>
+            NCPP_FORCE_INLINE TF_subtype<F_other__, F_subtype_data> T_cast() const noexcept {
+
+                if constexpr (std::is_convertible_v<F_other__, F__> || std::is_convertible_v<F__, F_other__>)
+                    return data_p_;
+
+                return &T_default_subtype_data<F_other__, F_subtype_data__>;
             }
 
         };
