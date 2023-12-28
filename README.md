@@ -6,7 +6,8 @@ NCoder's Game Engine Learning Aimed C++ Library.
 ## Features
 + Memory management:
   + Incremental chunk allocator
-  + Smart chunk allocator (not available on NCPPLite distribution)
+  + Smart chunk allocator
+    > **Warning**: not avaiable on NCPP Lite Distribution
   + Reference allocator
   + Powerful allocator base class
 + Containers:
@@ -32,7 +33,8 @@ NCoder's Game Engine Learning Aimed C++ Library.
 + RTTI (Runtime-Type Information):
   + Type flag
   + Subtype
-  + Reflection (not available on NCPPLite distribution)
+  + Reflection
+    > **Warning**: not avaiable on NCPP Lite Distribution
     + Easy to use
     + No memory cost on reflected object
     + Metadata supports 
