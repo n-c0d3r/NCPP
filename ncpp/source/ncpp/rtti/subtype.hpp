@@ -200,7 +200,7 @@ namespace ncpp {
             template<typename F_other__>
             NCPP_FORCE_INLINE TF_subtype<F_other__, F_subtype_data> T_cast() const noexcept {
 
-                if constexpr (std::is_convertible_v<F_other__, F__> || std::is_convertible_v<F__, F_other__>)
+                if constexpr (std::is_convertible_v<F_other__, F__> || std::is_convertible_v<F__, F_other__> || std::is_same_v<F_other__, void>)
                     return data_p_;
 
                 return &T_default_subtype_data<F_other__, F_subtype_data__>;
