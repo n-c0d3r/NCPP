@@ -35,6 +35,12 @@ NCPP_SetGlobal(NCPP_CMAKE_MODULE_DIR "${CMAKE_CURRENT_LIST_DIR}/cmake")
 NCPP_SetGlobal(NCPP_DEPENDENCIES_DIR "${CMAKE_CURRENT_BINARY_DIR}/dependencies")
 NCPP_SetGlobal(NCPP_GENERATED_FILES_DIR "${CMAKE_CURRENT_BINARY_DIR}/ncpp/generated_files/ncpp")
 
+if(NCPP_LITE) # <REPLACER::NCPP_LITE>. Replaced to ON in generated lite distribution
+    NCPP_SetGlobal(NCPP_LITE ON)
+else()
+    NCPP_SetGlobal(NCPP_LITE OFF)
+endif()
+
 
 
 #####################################################################################

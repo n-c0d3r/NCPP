@@ -5,4 +5,6 @@ add_subdirectory(dummy_allocator)
 add_subdirectory(chunk_based_allocators)
 add_subdirectory(reference_allocator)
 
-add_subdirectory(garbage_collection)
+if(NOT NCPP_LITE)
+    add_subdirectory(garbage_collection)
+endif()

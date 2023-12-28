@@ -19,7 +19,10 @@ NCPP_SetGlobal(NCPP_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
 include(NCPP/SetGlobal)
 
 include(NCPP/PrerequisiteMacros)
-include(NCPP/RTTIMacros)
+
+if(NOT NCPP_LITE)
+    include(NCPP/RTTIMacros)
+endif()
 
 include(NCPP/SIMDCompilerFlags)
 
