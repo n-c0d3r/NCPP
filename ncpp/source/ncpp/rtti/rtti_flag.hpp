@@ -60,11 +60,30 @@ namespace ncpp {
         namespace internal {
 
             template<typename F__>
+            struct TF_rtti_flag_represent_implement_helper {
+
+                using F = F__;
+
+            };
+            template<typename F__>
             struct TF_rtti_flag_represent_helper {
 
                 using F = F__;
 
             };
+            template<typename F__>
+            struct TF_rtti_flag_implement_helper {
+
+                using F = F__;
+
+            };
+
+            template<typename F__>
+            using TF_rtti_flag_represent_implement = typename TF_rtti_flag_represent_implement_helper<F__>::F;
+            template<typename F__>
+            using TF_rtti_flag_represent = typename TF_rtti_flag_represent_helper<F__>::F;
+            template<typename F__>
+            using TF_rtti_flag_implement = typename TF_rtti_flag_implement_helper<F__>::F;
 
         }
 
@@ -74,7 +93,10 @@ namespace ncpp {
 
 #define NCPP_RTTI_IMPLEMENT_FLAG(TypeName, Name) friend void operator << (TypeName&, const Name& flag) { }
 
-#define NCPP_RTTI_IS_HAS_FLAG(TypeName, Name) utilities::T_is_ostreamable_v<typename ::ncpp::rtti::internal::TF_rtti_flag_represent_helper<TypeName>::F, Name>
+#define NCPP_RTTI_REPRESENT_IMPLEMENT(TypeName) ncpp::rtti::internal::TF_rtti_flag_represent_implement<TypeName>
+#define NCPP_RTTI_REPRESENT(TypeName) ncpp::rtti::internal::TF_rtti_flag_represent<TypeName>
+#define NCPP_RTTI_IMPLEMENT(TypeName) ncpp::rtti::internal::TF_rtti_flag_implement<TypeName>
+#define NCPP_RTTI_IS_HAS_FLAG(TypeName, Name) utilities::T_is_ostreamable_v<NCPP_RTTI_REPRESENT_IMPLEMENT(TypeName), Name>
 
 }
 
@@ -101,5 +123,29 @@ namespace ncpp {
                                                                   \
                                                                   \
                 };                                                      \
+                                                                  \
+            };\
+            template<__VA_ARGS__>\
+            struct ::ncpp::rtti::internal::TF_rtti_flag_represent_helper<Implement> {  \
+                                                                  \
+                using F = Represent;                                                     \
+                                                                  \
+            }; \
+            template<__VA_ARGS__>\
+            struct ::ncpp::rtti::internal::TF_rtti_flag_represent_helper<Represent> {  \
+                                                                  \
+                using F = Represent;                                                     \
+                                                                  \
+            };\
+            template<__VA_ARGS__>\
+            struct ::ncpp::rtti::internal::TF_rtti_flag_implement_helper<Implement> {  \
+                                                                  \
+                using F = Implement;                                                     \
+                                                                  \
+            }; \
+            template<__VA_ARGS__>\
+            struct ::ncpp::rtti::internal::TF_rtti_flag_implement_helper<Represent> {  \
+                                                                  \
+                using F = Implement;                                                     \
                                                                   \
             };

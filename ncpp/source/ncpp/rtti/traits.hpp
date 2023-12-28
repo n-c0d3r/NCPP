@@ -210,12 +210,13 @@ namespace ncpp {
 					i32
 				> = 0
 			>
-			static NCPP_FORCE_INLINE F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, TF_safe_custom_params<F_reflect_flag__>* custom_params_p = 0) {
+			static NCPP_FORCE_INLINE F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p,
+                                                                         NCPP_RTTI_IMPLEMENT(F_robject__)* object_p = 0, TF_safe_custom_params<F_reflect_flag__>* custom_params_p = 0) {
 
 				if(object_p)
 					return object_p->virtual_reflect(rcontainer_p, custom_params_p);
 				else
-					return F_robject__::static_reflect(rcontainer_p, custom_params_p);
+					return NCPP_RTTI_REPRESENT(F_robject__)::static_reflect(rcontainer_p, custom_params_p);
 
 				return 0;
 			}
@@ -229,9 +230,9 @@ namespace ncpp {
 					i32
 				> = 0
 			>
-			static NCPP_FORCE_INLINE F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, TF_safe_custom_params<F_reflect_flag__>* custom_params_p = 0) {
+			static NCPP_FORCE_INLINE F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, NCPP_RTTI_IMPLEMENT(F_robject__)* object_p = 0, TF_safe_custom_params<F_reflect_flag__>* custom_params_p = 0) {
 
-				return F_robject__::template T_static_reflect<F_reflect_flag__>(rcontainer_p, custom_params_p);
+				return NCPP_RTTI_REPRESENT(F_robject__)::template T_static_reflect<F_reflect_flag__>(rcontainer_p, custom_params_p);
 			}
 			template<
 				class F_robject__,
@@ -242,7 +243,7 @@ namespace ncpp {
 					i32
 				> = 0
 			>
-			static NCPP_FORCE_INLINE F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, F_robject__* object_p = 0, TF_safe_custom_params<F_reflect_flag__>* custom_params_p = 0) {
+			static NCPP_FORCE_INLINE F_robject_type_info* T_safe_reflect(F_rcontainer* rcontainer_p, NCPP_RTTI_IMPLEMENT(F_robject__)* object_p = 0, TF_safe_custom_params<F_reflect_flag__>* custom_params_p = 0) {
 
 				return 0;
 			}
