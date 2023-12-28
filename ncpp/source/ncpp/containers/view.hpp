@@ -502,31 +502,39 @@ namespace ncpp {
 
 #define NCPP_CONTAINERS_DEFINE_VIEW_OPERATORS(Operator) \
             template<typename F_arg__, std::enable_if_t<!T_is_view<F_arg__>, i32> = 0>\
-            friend NCPP_FORCE_INLINE auto operator Operator (const F_this& a, F_arg__&& arg)\
-            -> decltype(\
-                std::declval<const TF_try_march_container_allocator<F_container__, F_arg__>&>() Operator std::declval<F_arg__&&>()\
-            )\
+            friend NCPP_FORCE_INLINE auto operator Operator (F_arg__&& arg, const F_this& a) \
+            ->decltype(                                  \
+                (arg Operator std::declval<TF_try_march_container_allocator<F_container__, F_arg__>>())                                             \
+            )                                             \
             {\
 \
-                return ( *((const TF_try_march_container_allocator<F_container__, F_arg__>*)(a.container_p_)) ) Operator std::forward<F_arg__>(arg);\
+                return (arg Operator ( *((const TF_try_march_container_allocator<F_container__, F_arg__>*)a.container_p_) ));\
             }\
             template<typename F_arg__, std::enable_if_t<!T_is_view<F_arg__>, i32> = 0>\
-            friend NCPP_FORCE_INLINE auto operator Operator (F_arg__&& arg, const F_this& a)\
-            -> decltype(\
-                std::declval<F_arg__&&>() Operator std::declval<const TF_try_march_container_allocator<F_container__, F_arg__>&>()\
-            )\
+            friend NCPP_FORCE_INLINE auto operator Operator (const F_this& a, F_arg__&& arg) \
+            ->decltype(                                  \
+                (std::declval<TF_try_march_container_allocator<F_container__, F_arg__>>() Operator arg)                                             \
+            )                                             \
             {\
 \
-                return std::forward<F_arg__>(arg) Operator ( *((const TF_try_march_container_allocator<F_container__, F_arg__>*)(a.container_p_)) );\
+                return (arg Operator ( *((const TF_try_march_container_allocator<F_container__, F_arg__>*)a.container_p_) ));\
             }\
-            template<typename F_arg__, typename = typename F_arg__::F___ncpp_view_flag___>\
-            friend NCPP_FORCE_INLINE auto operator Operator (const F_this& a, F_arg__&& arg)\
-            -> decltype(\
-                std::declval<const TF_try_march_container_allocator<F_container__, F_arg__>&>() Operator std::declval<F_arg__&&>()\
-            )\
+            template<typename F_arg__, std::enable_if_t<T_is_view<F_arg__>, i32> = 0>\
+            friend NCPP_FORCE_INLINE auto operator Operator (const F_this& a, F_arg__&& arg) \
+            ->decltype(                                  \
+                (                                        \
+                    std::declval<typename TF_try_march_container_allocator<F_this, F_arg__>::F_container>()                                            \
+                    Operator                                 \
+                    std::declval<typename F_arg__::F_container>()                                      \
+                )                                             \
+            )                                             \
             {\
 \
-                return ( *((const TF_try_march_container_allocator<F_container__, F_arg__>*)(a.container_p())) ) Operator ( *((const typename F_arg__::F_container*)(arg.container_p())) );\
+                return (                                 \
+                    ( *((const TF_try_march_container_allocator<F_this, F_arg__>*)a.container_p()) )                             \
+                    Operator                             \
+                    ( *((const TF_try_march_container_allocator<F_arg__, F_this>*)arg.container_p()) )                             \
+                );\
             }
 
 

@@ -538,6 +538,14 @@ namespace ncpp {
                 
             }
 
+
+
+            template<typename F__>
+            static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, F_allocator> T_safe_type_name() {
+
+                return internal::TF_rtti_flag_represent_helper<F__>::F::static_type_name();
+            }
+
 		};
 
 		////////////////////////////////////////////////////////////////////////////////////

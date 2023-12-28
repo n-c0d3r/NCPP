@@ -60,7 +60,7 @@ namespace ncpp {
         namespace internal {
 
             template<typename F__>
-            struct TF_represent_helper {
+            struct TF_rtti_flag_represent_helper {
 
                 using F = F__;
 
@@ -74,7 +74,7 @@ namespace ncpp {
 
 #define NCPP_RTTI_IMPLEMENT_FLAG(TypeName, Name) friend void operator << (TypeName&, const Name& flag) { }
 
-#define NCPP_RTTI_IS_HAS_FLAG(TypeName, Name) utilities::T_is_ostreamable_v<typename ::ncpp::rtti::internal::TF_represent_helper<TypeName>::F, Name>
+#define NCPP_RTTI_IS_HAS_FLAG(TypeName, Name) utilities::T_is_ostreamable_v<typename ::ncpp::rtti::internal::TF_rtti_flag_represent_helper<TypeName>::F, Name>
 
 }
 
@@ -84,7 +84,7 @@ namespace ncpp {
 
 #define NCPP_RTTI_FLAG_BIND_REPRESENT(Represent, Implement,...) \
             template<__VA_ARGS__>\
-            struct ::ncpp::rtti::internal::TF_represent_helper<Implement> {  \
+            struct ::ncpp::rtti::internal::TF_rtti_flag_represent_helper<Implement> {  \
                                                                   \
                 struct F: public Represent, Implement {                                        \
                                                                   \
@@ -94,7 +94,7 @@ namespace ncpp {
                                                                   \
             }; \
             template<__VA_ARGS__>\
-            struct ::ncpp::rtti::internal::TF_represent_helper<Represent> {  \
+            struct ::ncpp::rtti::internal::TF_rtti_flag_represent_helper<Represent> {  \
                                                                   \
                 struct F: public Represent, Implement {                                        \
                                                                   \

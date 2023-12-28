@@ -29,15 +29,15 @@ class A : public B, public C {
 
 	NCPP_BASIC_RCLASS(
 		A,
-                      
+
         EXTENDS(B),
         EXTENDS(C),
 
 		PUBLIC(i32, i),
 		PUBLIC_CONST(void(), foo),
                       
-        STATIC_PUBLIC(i32, si),
-        STATIC_PUBLIC(void(), foo2)
+        PUBLIC_STATIC(i32, si),
+        PUBLIC_STATIC(void(), foo2)
 	);
 
 };

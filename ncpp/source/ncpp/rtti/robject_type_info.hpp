@@ -235,7 +235,7 @@ namespace ncpp {
 			F_rcontainer__* rcontainer_p
 		) {
 
-			F_robject_type_info__* robject_type_info_p = rcontainer_p->robject_type_info(F_robject__::static_type_hash_code());
+			F_robject_type_info__* robject_type_info_p = rcontainer_p->robject_type_info(utilities::T_type_hash_code<F_robject__>);
 
 			if (robject_type_info_p)
 				return robject_type_info_p;
@@ -243,7 +243,7 @@ namespace ncpp {
 			robject_type_info_p = F_rtti_traits__::template T_new<F_robject_type_info__>(
 				&(rcontainer_p->allocator()),
 				rcontainer_p,
-				F_robject__::static_type_name(),
+                F_rtti_traits__::template T_safe_type_name<F_robject__>(),
                 TF_subtype<F_robject__>()
 			);
 

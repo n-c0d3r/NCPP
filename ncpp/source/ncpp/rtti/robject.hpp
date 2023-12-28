@@ -280,8 +280,8 @@ namespace ncpp {
 
 
 
-#define NCPP_ROBJECT_WRAP_TYPE(Type) typename ncpp::utilities::TF_first_template_arg<Type>
-#define NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(Type) typename ncpp::utilities::TF_nth_template_arg<ncpp::utilities::T_is_function<Type>, Type, NCPP_ROBJECT_WRAP_TYPE(Type)*>
+#define NCPP_ROBJECT_WRAP_TYPE(Type) ncpp::utilities::TF_first_template_arg<Type>
+#define NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(Type) ncpp::utilities::TF_nth_template_arg<ncpp::utilities::T_is_function<Type>, Type, NCPP_ROBJECT_WRAP_TYPE(Type)*>
 
 
 
@@ -467,6 +467,58 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
+#define NCPP_ROBJECT_BODY_MEMBER_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName,...) \
+			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberReturnType MemberArgs, MemberName);\
+			NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberReturnType MemberArgs, MemberName, false, false);\
+			MemberReturnType MemberName MemberArgs
+
+#define NCPP_ROBJECT_BODY_BASE_PRIVATE_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PROTECTED_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PUBLIC_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName,...) NCPP_PUBLIC_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))
+
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+
+#define NCPP_ROBJECT_BODY_MEMBER_CONST_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName,...)\
+			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberReturnType MemberArgs, MemberName);\
+			NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberReturnType MemberArgs, MemberName, false, true);\
+			MemberReturnType MemberName MemberArgs const
+
+#define NCPP_ROBJECT_BODY_BASE_PRIVATE_CONST_FUNCTION(Overrider, MemberType, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_CONST_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PROTECTED_CONST_FUNCTION(Overrider, MemberType, MemberName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_CONST_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PUBLIC_CONST_FUNCTION(Overrider, MemberType, MemberName,...) NCPP_PUBLIC_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_CONST_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))
+
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+
+#define NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName,...) \
+			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberReturnType MemberArgs, MemberName);\
+			NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberReturnType MemberArgs, MemberName, true, false);\
+			virtual MemberReturnType MemberName MemberArgs
+
+#define NCPP_ROBJECT_BODY_BASE_PRIVATE_VIRTUAL_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PROTECTED_VIRTUAL_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PUBLIC_VIRTUAL_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName,...) NCPP_PUBLIC_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))
+
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+
+#define NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_CONST_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName,...)\
+			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberReturnType MemberArgs, MemberName);\
+			NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberReturnType MemberArgs, MemberName, true, true);\
+			virtual MemberReturnType MemberName MemberArgs const
+
+#define NCPP_ROBJECT_BODY_BASE_PRIVATE_VIRTUAL_CONST_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_CONST_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PROTECTED_VIRTUAL_CONST_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_CONST_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PUBLIC_VIRTUAL_CONST_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName,...) NCPP_PUBLIC_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_CONST_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))
+
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+
 #define NCPP_ROBJECT_BODY_STATIC_MEMBER_STATIC_INFO(MemberType, MemberName) \
 			template<typename object_type__ = F_this, typename member_type__ = MemberType>\
 			struct TF_##MemberName##___ncpp_static_info___;\
@@ -550,9 +602,22 @@ namespace ncpp {
 			NCPP_ROBJECT_BODY_STATIC_MEMBER_STATIC_INFO(MemberType, MemberName);\
 			static NCPP_ROBJECT_WRAP_TYPE(MemberType) MemberName
 
-#define NCPP_ROBJECT_BODY_BASE_STATIC_PRIVATE(Overrider, MemberType, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_STATIC_MEMBER(Overrider, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_BODY_BASE_STATIC_PROTECTED(Overrider, MemberType, MemberName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_STATIC_MEMBER(Overrider, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_BODY_BASE_STATIC_PUBLIC(Overrider, MemberType, MemberName,...) NCPP_PUBLIC_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_STATIC_MEMBER(Overrider, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PRIVATE_STATIC(Overrider, MemberType, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_STATIC_MEMBER(Overrider, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PROTECTED_STATIC(Overrider, MemberType, MemberName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_STATIC_MEMBER(Overrider, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PUBLIC_STATIC(Overrider, MemberType, MemberName,...) NCPP_PUBLIC_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_STATIC_MEMBER(Overrider, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
+
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+
+#define NCPP_ROBJECT_BODY_STATIC_MEMBER_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName,...) \
+			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberReturnType MemberArgs, MemberName);\
+			NCPP_ROBJECT_BODY_STATIC_MEMBER_STATIC_INFO(MemberReturnType MemberArgs, MemberName);\
+			static MemberReturnType MemberName MemberArgs
+
+#define NCPP_ROBJECT_BODY_BASE_PRIVATE_STATIC_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_STATIC_MEMBER_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PROTECTED_STATIC_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_STATIC_MEMBER_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PUBLIC_STATIC_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName,...) NCPP_PUBLIC_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_STATIC_MEMBER_FUNCTION(Overrider, MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
@@ -802,9 +867,9 @@ namespace ncpp {
 			if constexpr (false)\
 				NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(MemberType) MemberName##_tail
 
-#define NCPP_ROBJECT_REFLECT_BASE_STATIC_PRIVATE(Overrider, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_STATIC_MEMBER(Overrider, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_REFLECT_BASE_STATIC_PROTECTED(Overrider, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_STATIC_MEMBER(Overrider, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_REFLECT_BASE_STATIC_PUBLIC(Overrider, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_STATIC_MEMBER(Overrider, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_BASE_PRIVATE_STATIC(Overrider, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_STATIC_MEMBER(Overrider, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_BASE_PROTECTED_STATIC(Overrider, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_STATIC_MEMBER(Overrider, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_BASE_PUBLIC_STATIC(Overrider, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_STATIC_MEMBER(Overrider, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
@@ -856,10 +921,9 @@ namespace ncpp {
 				using F_this = ObjectImplementTypeName;\
 				static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> static_type_name()  { \
 					\
-					if constexpr (ncpp::rtti::secured_name) return ("_" + ncpp::containers::T_to_string<char, typename F_rtti_traits::F_allocator>(static_type_hash_code()));\
+					if constexpr (ncpp::rtti::secured_name) return ("_" + ncpp::containers::T_to_string<char, typename F_rtti_traits::F_allocator>(ncpp::utilities::T_type_hash_code<F_this>));\
 					else return NCPP_PARSE_RTTI_SECURED_NAME_CODE(NCPP_EXPAND(NCPP_CSTR(ObjectImplementTypeName)), ""); \
 				}\
-				static NCPP_FORCE_INLINE ncpp::u64 static_type_hash_code() { return utilities::T_type_hash_code<F_this>; }\
 				\
 				\
 				\
