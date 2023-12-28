@@ -60,7 +60,7 @@ namespace ncpp {
 
             const char* fullname = 0;
 
-            u64 hash_type = 0;
+            u64 hash_code = 0;
 
             u16 size = 0;
             u16 alignment = 0;
@@ -72,6 +72,8 @@ namespace ncpp {
             template<typename F__>
             static NCPP_FORCE_INLINE F_subtype_data T_default() noexcept {
 
+                static constexpr u16 alignment = NCPP_ALIGNOF(NCPP_MA(utilities::TF_nth_template_arg<NCPP_MA(std::is_same_v<F__, void> || utilities::T_is_function<F__>), F__, u8>));
+
                 return F_subtype_data {
 
                     {
@@ -81,7 +83,7 @@ namespace ncpp {
                         utilities::T_type_hash_code<F__>,
 
                         utilities::T_sizeof<F__>,
-                        NCPP_ALIGNOF(F__)
+                        alignment
 
                     }
 
@@ -209,5 +211,26 @@ namespace ncpp {
         using F_subtype = TF_subtype<>;
 
 	}
+
+}
+
+
+
+namespace ncpp {
+
+    namespace containers {
+
+        template<typename F__, typename F_subtype_data__>
+        struct TF_hash<rtti::TF_subtype<F__, F_subtype_data__>> {
+
+            inline size_t operator()(rtti::TF_subtype<F__, F_subtype_data__> x) const
+            {
+
+                return x.data().hash_code;
+            }
+
+        };
+
+    }
 
 }

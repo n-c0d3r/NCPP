@@ -41,6 +41,7 @@
 
 #include <ncpp/rtti/traits.hpp>
 #include <ncpp/rtti/security_helper.hpp>
+#include <ncpp/rtti/subtype.hpp>
 
 #pragma endregion
 
@@ -87,6 +88,8 @@ namespace ncpp {
             
             F_robject_type_info* robject_type_info_p_ = 0;
 
+            F_subtype subtype_;
+
 
 
 		public:
@@ -109,6 +112,8 @@ namespace ncpp {
             NCPP_FORCE_INLINE F_robject_type_info* robject_type_info_p() { return robject_type_info_p_; }
             NCPP_FORCE_INLINE const F_robject_type_info* robject_type_info_p() const { return robject_type_info_p_; }
 
+            NCPP_FORCE_INLINE F_subtype subtype() const { return subtype_; }
+
 
 
 		public:
@@ -122,7 +127,9 @@ namespace ncpp {
                 b8 is_const_function,
                 b8 is_static,
                                    
-                F_robject_type_info* robject_type_info_p
+                F_robject_type_info* robject_type_info_p,
+
+                F_subtype subtype
 			) :
 				type_hash_code_(type_hash_code),
 				address_(address_or_offset),
@@ -133,7 +140,9 @@ namespace ncpp {
                 is_const_function_(is_const_function),
                 is_static_(is_static),
             
-                robject_type_info_p_(robject_type_info_p)
+                robject_type_info_p_(robject_type_info_p),
+
+                subtype_(subtype)
 			{
 
 
@@ -237,7 +246,9 @@ namespace ncpp {
                     F_member_static_info__::is_const_function(),
                     F_member_static_info__::is_static(),
                                         
-                    robject_type_info_p
+                    robject_type_info_p,
+
+                    TF_subtype<F_member__>()
 
 				)
 			);

@@ -42,6 +42,7 @@
 
 #include <ncpp/rtti/traits.hpp>
 #include <ncpp/rtti/security_helper.hpp>
+#include <ncpp/rtti/subtype.hpp>
 
 #pragma endregion
 
@@ -77,6 +78,8 @@ namespace ncpp {
 			F_rcontainer* rcontainer_p_ = 0;
             u64 hash_code_ = 0;
 			containers::TF_string<char, typename F_rtti_traits::F_allocator> name_;
+            F_subtype subtype_;
+
 			containers::TF_set<F_robject_type_info*> base_type_info_p_set_;
             
             containers::TF_unordered_map<containers::TF_string<char, typename F_rtti_traits::F_allocator>, F_robject_member_info*> name_to_member_info_p_map_;
@@ -89,6 +92,7 @@ namespace ncpp {
 			NCPP_FORCE_INLINE const F_rcontainer* rcontainer_p() const { return rcontainer_p_; }
 			NCPP_FORCE_INLINE u64 hash_code() const { return hash_code_; }
 			NCPP_FORCE_INLINE containers::TF_view<containers::TF_string<char, F_allocator>> name() const { return name_; }
+			NCPP_FORCE_INLINE F_subtype subtype() const { return subtype_; }
 
 			NCPP_FORCE_INLINE const containers::TF_set<F_robject_type_info*>& base_type_info_p_set() const { return base_type_info_p_set_; }
             NCPP_FORCE_INLINE b8 is_has_base(F_robject_type_info* base_type_info_p) const {
@@ -153,10 +157,11 @@ namespace ncpp {
 
 
 		public:
-			NCPP_FORCE_INLINE TF_robject_type_info(F_rcontainer* rcontainer_p, u64 hash_code, containers::TF_view<containers::TF_string<char, F_allocator>> name) :
+			NCPP_FORCE_INLINE TF_robject_type_info(F_rcontainer* rcontainer_p, u64 hash_code, containers::TF_view<containers::TF_string<char, F_allocator>> name, F_subtype subtype) :
 				rcontainer_p_(rcontainer_p),
 				hash_code_(hash_code),
-				name_(name)
+				name_(name),
+                subtype_(subtype)
 			{
 
 
@@ -205,7 +210,8 @@ namespace ncpp {
 				&(rcontainer_p->allocator()),
 				rcontainer_p,
 				F_robject__::static_type_hash_code(),
-				F_robject__::static_type_name()
+				F_robject__::static_type_name(),
+                TF_subtype<F_robject__>()
 			);
 
 			rcontainer_p->add_robject_type_info(robject_type_info_p);

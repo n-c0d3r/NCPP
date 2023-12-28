@@ -42,6 +42,7 @@
 
 #include <ncpp/rtti/traits.hpp>
 #include <ncpp/rtti/security_helper.hpp>
+#include <ncpp/rtti/subtype.hpp>
 
 #pragma endregion
 
@@ -77,7 +78,8 @@ namespace ncpp {
 			F_allocator allocator_;
 
 			containers::TF_unordered_map<sz, F_robject_type_info*> hash_code_to_robject_type_info_p_map_;
-			containers::TF_unordered_map<containers::TF_string<char, typename F_rtti_traits::F_allocator>, F_robject_type_info*> name_to_robject_type_info_p_map_;
+			containers::TF_unordered_map<containers::TF_string<char, typename F_rtti_traits::F_allocator>, F_robject_type_info*> fullname_to_robject_type_info_p_map_;
+			containers::TF_unordered_map<F_subtype, F_robject_type_info*> subtype_to_robject_type_info_p_map_;
 
 		public:
 			F_rcontainer_additional_data additional_data;
@@ -87,17 +89,36 @@ namespace ncpp {
 			NCPP_FORCE_INLINE const F_allocator& allocator() const { return allocator_; }
             
             NCPP_FORCE_INLINE const containers::TF_unordered_map<sz, F_robject_type_info*>& hash_code_to_robject_type_info_p_map() const { return hash_code_to_robject_type_info_p_map_; }
-            NCPP_FORCE_INLINE const containers::TF_unordered_map<containers::TF_string<char, typename F_rtti_traits::F_allocator>, F_robject_type_info*>& name_to_robject_type_info_p_map() const { return name_to_robject_type_info_p_map_; }
+            NCPP_FORCE_INLINE const containers::TF_unordered_map<containers::TF_string<char, typename F_rtti_traits::F_allocator>, F_robject_type_info*>& fullname_to_robject_type_info_p_map() const { return fullname_to_robject_type_info_p_map_; }
+            NCPP_FORCE_INLINE const containers::TF_unordered_map<F_subtype, F_robject_type_info*>& subtype_to_robject_type_info_p_map() const { return subtype_to_robject_type_info_p_map_; }
 
-			inline F_robject_type_info* robject_type_info(sz hash_code) {
+            inline F_robject_type_info* robject_type_info(sz hash_code) {
 
-				auto it = hash_code_to_robject_type_info_p_map_.find(hash_code);
+                auto it = hash_code_to_robject_type_info_p_map_.find(hash_code);
 
-				if (it == hash_code_to_robject_type_info_p_map_.end())
-					return 0;
+                if (it == hash_code_to_robject_type_info_p_map_.end())
+                    return 0;
 
-				return it->second;
-			}
+                return it->second;
+            }
+            inline F_robject_type_info* robject_type_info(containers::TF_view<containers::TF_string<char, F_allocator>> fullname) {
+
+                auto it = fullname_to_robject_type_info_p_map_.find(fullname);
+
+                if (it == fullname_to_robject_type_info_p_map_.end())
+                    return 0;
+
+                return it->second;
+            }
+            inline F_robject_type_info* robject_type_info(F_subtype subtype) {
+
+                auto it = subtype_to_robject_type_info_p_map_.find(subtype);
+
+                if (it == subtype_to_robject_type_info_p_map_.end())
+                    return 0;
+
+                return it->second;
+            }
 			inline const F_robject_type_info* robject_type_info(sz hash_code) const {
 
 				auto it = hash_code_to_robject_type_info_p_map_.find(hash_code);
@@ -107,24 +128,24 @@ namespace ncpp {
 
 				return it->second;
 			}
-			inline F_robject_type_info* robject_type_info(containers::TF_view<containers::TF_string<char, F_allocator>> name) {
+			inline const F_robject_type_info* robject_type_info(containers::TF_view<containers::TF_string<char, F_allocator>> fullname) const {
 
-				auto it = name_to_robject_type_info_p_map_.find(name);
+				auto it = fullname_to_robject_type_info_p_map_.find(fullname);
 
-				if (it == name_to_robject_type_info_p_map_.end())
+				if (it == fullname_to_robject_type_info_p_map_.end())
 					return 0;
 
 				return it->second;
 			}
-			inline const F_robject_type_info* robject_type_info(containers::TF_view<containers::TF_string<char, F_allocator>> name) const {
+            inline const F_robject_type_info* robject_type_info(F_subtype subtype) const {
 
-				auto it = name_to_robject_type_info_p_map_.find(name);
+                auto it = subtype_to_robject_type_info_p_map_.find(subtype);
 
-				if (it == name_to_robject_type_info_p_map_.end())
-					return 0;
+                if (it == subtype_to_robject_type_info_p_map_.end())
+                    return 0;
 
-				return it->second;
-			}
+                return it->second;
+            }
 			inline void add_robject_type_info(F_robject_type_info* info) {
 
 				auto it = hash_code_to_robject_type_info_p_map_.find(info->hash_code());
@@ -133,7 +154,8 @@ namespace ncpp {
 					return;
 
 				hash_code_to_robject_type_info_p_map_[info->hash_code()] = info;
-				name_to_robject_type_info_p_map_[info->name()] = info;
+				fullname_to_robject_type_info_p_map_[info->subtype().data().fullname] = info;
+				subtype_to_robject_type_info_p_map_[info->subtype()] = info;
 			}
 			inline void remove_robject_type_info(sz hash_code) {
 
@@ -141,7 +163,8 @@ namespace ncpp {
 
 				if (it != hash_code_to_robject_type_info_p_map_.end()) {
 
-					name_to_robject_type_info_p_map_.erase(name_to_robject_type_info_p_map_.find(it->second->name()));
+					fullname_to_robject_type_info_p_map_.erase(fullname_to_robject_type_info_p_map_.find(it->second->subtype().data().fullname));
+					subtype_to_robject_type_info_p_map_.erase(subtype_to_robject_type_info_p_map_.find(it->second->subtype()));
 
 					F_rtti_traits::template T_delete<F_robject_type_info>(&allocator_, it->second);
 
@@ -149,17 +172,18 @@ namespace ncpp {
 
 				}
 			}
-			inline void remove_robject_type_info(containers::TF_view<containers::TF_string<char, F_allocator>> name) {
+			inline void remove_robject_type_info(containers::TF_view<containers::TF_string<char, F_allocator>> fullname) {
 
-				auto it = name_to_robject_type_info_p_map_.find(name);
+				auto it = fullname_to_robject_type_info_p_map_.find(fullname);
 
-				if (it != name_to_robject_type_info_p_map_.end()) {
+				if (it != fullname_to_robject_type_info_p_map_.end()) {
 
 					hash_code_to_robject_type_info_p_map_.erase(hash_code_to_robject_type_info_p_map_.find(it->second->hash_code()));
+                    subtype_to_robject_type_info_p_map_.erase(subtype_to_robject_type_info_p_map_.find(it->second->subtype()));
 
 					F_rtti_traits::template T_delete<F_robject_type_info>(&allocator_, it->second);
 
-					name_to_robject_type_info_p_map_.erase(it);
+					fullname_to_robject_type_info_p_map_.erase(it);
 
 				}
 			}
