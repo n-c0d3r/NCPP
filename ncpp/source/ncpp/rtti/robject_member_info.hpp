@@ -74,7 +74,7 @@ namespace ncpp {
 
 
 		private:
-			u64 type_hash_code_ = 0;
+			u64 hash_code_ = 0;
             union {
                 sz address_ = 0;
                 sz offset_;
@@ -98,7 +98,7 @@ namespace ncpp {
 
 
 		public:
-			NCPP_FORCE_INLINE u64 type_hash_code() const { return type_hash_code_; }
+			NCPP_FORCE_INLINE u64 hash_code() const { return hash_code_; }
             NCPP_FORCE_INLINE sz address() const { return address_; }
 			NCPP_FORCE_INLINE sz offset() const { return offset_; }
 			NCPP_FORCE_INLINE containers::TF_view<containers::TF_string<char, F_allocator>> name() const { return name_; }
@@ -118,7 +118,7 @@ namespace ncpp {
 
 		public:
 			TF_robject_member_info(
-				sz type_hash_code,
+				sz hash_code,
 				sz address_or_offset,
                 containers::TF_view<containers::TF_string<char, F_allocator>> name,
 				sz id,
@@ -131,7 +131,7 @@ namespace ncpp {
 
                 F_subtype subtype
 			) :
-				type_hash_code_(type_hash_code),
+				hash_code_(hash_code),
 				address_(address_or_offset),
 				name_(name),
 				id_(id),
@@ -162,7 +162,7 @@ namespace ncpp {
                 
                 static NCPP_FORCE_INLINE F__& invoke(void* object_p, const TF_robject_member_info& member_info) {
                     
-                    assert((utilities::T_type_hash_code<F__> == member_info.type_hash_code_) && "invalid F__");
+                    assert((utilities::T_type_hash_code<F__> == member_info.subtype().data().hash_code) && "invalid F__");
                     
                     return *reinterpret_cast<F__*>(reinterpret_cast<sz>(object_p) + member_info.offset_);
                 }
@@ -178,7 +178,7 @@ namespace ncpp {
             public:
                 static NCPP_FORCE_INLINE F_invoke* invoke(void* object_p, const TF_robject_member_info& member_info) {
                     
-                    assert((utilities::T_type_hash_code<F> == member_info.type_hash_code_) && "invalid F__");
+                    assert((utilities::T_type_hash_code<F> == member_info.subtype().data().hash_code) && "invalid F__");
                     assert(!member_info.is_static_ || (member_info.is_static_ && !object_p) && "object_p must be zero if member is static");
                     
                     return reinterpret_cast<F_invoke*>(member_info.offset_);
@@ -192,7 +192,7 @@ namespace ncpp {
             template<typename F__>
             NCPP_FORCE_INLINE b8 T_is() const {
                 
-                return (utilities::T_type_hash_code<F__> == type_hash_code_);
+                return (utilities::T_type_hash_code<F__> == subtype().data().hash_code);
             }
             template<typename F__, std::enable_if_t<!utilities::T_is_function<F__>, i32> = 0>
             NCPP_FORCE_INLINE F__& T_get(void* object_p = 0) const {
@@ -237,7 +237,7 @@ namespace ncpp {
 				&(robject_type_info_p->rcontainer_p()->allocator()),
 				F_robject_member_info__(
 
-					utilities::T_type_hash_code<F_member__>,
+					utilities::T_type_hash_code<F_member_static_info__>,
 					F_member_static_info__::address() | F_member_static_info__::offset(),
 					F_member_static_info__::name(),
 					F_member_static_info__::id(),

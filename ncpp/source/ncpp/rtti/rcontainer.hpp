@@ -148,12 +148,14 @@ namespace ncpp {
             }
 			inline void add_robject_type_info(F_robject_type_info* info) {
 
-				auto it = hash_code_to_robject_type_info_p_map_.find(info->hash_code());
+                u64 hash_code = info->subtype().data().hash_code;
+
+				auto it = hash_code_to_robject_type_info_p_map_.find(hash_code);
 
 				if (it != hash_code_to_robject_type_info_p_map_.end())
 					return;
 
-				hash_code_to_robject_type_info_p_map_[info->hash_code()] = info;
+				hash_code_to_robject_type_info_p_map_[hash_code] = info;
 				fullname_to_robject_type_info_p_map_[info->subtype().data().fullname] = info;
 				subtype_to_robject_type_info_p_map_[info->subtype()] = info;
 			}
@@ -178,7 +180,7 @@ namespace ncpp {
 
 				if (it != fullname_to_robject_type_info_p_map_.end()) {
 
-					hash_code_to_robject_type_info_p_map_.erase(hash_code_to_robject_type_info_p_map_.find(it->second->hash_code()));
+					hash_code_to_robject_type_info_p_map_.erase(hash_code_to_robject_type_info_p_map_.find(it->second->subtype().data().hash_code));
                     subtype_to_robject_type_info_p_map_.erase(subtype_to_robject_type_info_p_map_.find(it->second->subtype()));
 
 					F_rtti_traits::template T_delete<F_robject_type_info>(&allocator_, it->second);
