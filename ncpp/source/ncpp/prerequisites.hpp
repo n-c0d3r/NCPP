@@ -51,6 +51,7 @@ namespace ncpp {}
 ////////////////////////////////////////////////////////////////////////////////////
 
 #define NCPP_EXPAND(X) X
+#define NCPP_CSTR(...) #__VA_ARGS__
 #define NCPP_GLUE_HELPER(x, y) x##y
 #define NCPP_GLUE(x, y) NCPP_GLUE_HELPER(x, y)
 

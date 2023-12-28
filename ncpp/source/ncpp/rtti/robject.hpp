@@ -846,24 +846,32 @@ namespace ncpp {
 
 
 
-#define NCPP_ROBJECT(RTTIOptions, ObjectTypeName,...)\
+#define NCPP_ROBJECT(RTTIOptions, ObjectRepresentTypeName, ObjectImplementTypeName,...)\
 			NCPP_PUBLIC_KEYWORD\
 				NCPP_RTTI_SPECIFIC_USING(RTTIOptions);\
 				\
+				\
+				\
 			NCPP_PUBLIC_KEYWORD\
-				using F_this = ObjectTypeName;\
+				using F_this = ObjectImplementTypeName;\
 				static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> static_type_name()  { \
 					\
 					if constexpr (ncpp::rtti::secured_name) return ("_" + ncpp::containers::T_to_string<char, typename F_rtti_traits::F_allocator>(static_type_hash_code()));\
-					else return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#ObjectTypeName, ""); \
+					else return NCPP_PARSE_RTTI_SECURED_NAME_CODE(NCPP_EXPAND(NCPP_CSTR(ObjectImplementTypeName)), ""); \
 				}\
 				static NCPP_FORCE_INLINE ncpp::u64 static_type_hash_code() { return utilities::T_type_hash_code<F_this>; }\
+				\
+				\
 				\
 			NCPP_PRIVATE_KEYWORD\
 				NCPP_RTTI_IMPLEMENT_FLAG(F_this, ncpp::rtti::F_robject_flag);\
 				\
+				\
+				\
 			NCPP_PRIVATE_KEYWORD\
 				NCPP_EXPAND(NCPP_FOR_EACH(NCPP_ROBJECT_BODY_STEP __VA_OPT__(,) __VA_ARGS__));\
+				\
+				\
 				\
 			NCPP_PUBLIC_KEYWORD\
 				template<typename F_reflect_flag__>\
@@ -895,6 +903,8 @@ namespace ncpp {
 					return T_static_reflect<void>(rcontainer_p, custom_params_p);\
 				}\
 				\
+				\
+				\
 			NCPP_PUBLIC_KEYWORD\
 				static constexpr ncpp::b8 is_virtual = NCPP_RTTI_IS_HAS_FLAG(F_this, ncpp::rtti::F_robject_virtual_flag);\
 
@@ -902,15 +912,21 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_RCLASS(RTTIOptions, ObjectTypeName,...) NCPP_EXPAND(NCPP_ROBJECT(RTTIOptions, ObjectTypeName, VIRTUAL __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_RSTRUCT(RTTIOptions, ObjectTypeName,...) NCPP_EXPAND(NCPP_ROBJECT(RTTIOptions, ObjectTypeName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_RCLASS(RTTIOptions, ObjectRepresentTypeName, ObjectImplementTypeName,...) NCPP_EXPAND(NCPP_ROBJECT(RTTIOptions, NCPP_MA(ObjectRepresentTypeName), NCPP_MA(ObjectImplementTypeName), VIRTUAL __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_RSTRUCT(RTTIOptions, ObjectRepresentTypeName, ObjectImplementTypeName,...) NCPP_EXPAND(NCPP_ROBJECT(RTTIOptions, NCPP_MA(ObjectRepresentTypeName), NCPP_MA(ObjectImplementTypeName) __VA_OPT__(,) __VA_ARGS__))
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_BASIC_RCLASS(ObjectTypeName,...) NCPP_EXPAND(NCPP_ROBJECT(ncpp::rtti::F_default_options, ObjectTypeName, VIRTUAL __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_BASIC_RSTRUCT(ObjectTypeName,...) NCPP_EXPAND(NCPP_ROBJECT(ncpp::rtti::F_default_options, ObjectTypeName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_BASIC_RCLASS(ObjectTypeName,...) NCPP_EXPAND(NCPP_ROBJECT(ncpp::rtti::F_default_options, NCPP_MA(ObjectTypeName), NCPP_MA(ObjectTypeName), VIRTUAL __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_BASIC_RSTRUCT(ObjectTypeName,...) NCPP_EXPAND(NCPP_ROBJECT(ncpp::rtti::F_default_options, NCPP_MA(ObjectTypeName), NCPP_MA(ObjectTypeName), __VA_OPT__(,) __VA_ARGS__))
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+#define NCPP_ROBJECT_FINALIZE_REPRESENT(ObjectRepresentTypeName, ObjectImplementTypeName,...) NCPP_EXPAND(NCPP_RTTI_FLAG_BIND_REPRESENT(NCPP_MA(ObjectRepresentTypeName), NCPP_MA(ObjectImplementTypeName) __VA_OPT__(,) __VA_ARGS__))
 
 	}
 

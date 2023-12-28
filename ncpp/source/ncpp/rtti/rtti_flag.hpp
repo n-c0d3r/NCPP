@@ -57,12 +57,49 @@ namespace ncpp {
 
 	namespace rtti {
 
+        namespace internal {
+
+            template<typename F__>
+            struct TF_represent_helper {
+
+                using F = F__;
+
+            };
+
+        }
+
+    }
+
 #define NCPP_RTTI_CREATE_FLAG(Name) struct Name {};
 
 #define NCPP_RTTI_IMPLEMENT_FLAG(TypeName, Name) friend void operator << (TypeName&, const Name& flag) { }
 
-#define NCPP_RTTI_IS_HAS_FLAG(TypeName, Name) utilities::T_is_ostreamable_v<TypeName, Name>
-
-	}
+#define NCPP_RTTI_IS_HAS_FLAG(TypeName, Name) utilities::T_is_ostreamable_v<typename ::ncpp::rtti::internal::TF_represent_helper<TypeName>::F, Name>
 
 }
+
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
+#define NCPP_RTTI_FLAG_BIND_REPRESENT(Represent, Implement,...) \
+            template<__VA_ARGS__>\
+            struct ::ncpp::rtti::internal::TF_represent_helper<Implement> {  \
+                                                                  \
+                struct F: public Represent, Implement {                                        \
+                                                                  \
+                                                                  \
+                                                                  \
+                };                                                      \
+                                                                  \
+            }; \
+            template<__VA_ARGS__>\
+            struct ::ncpp::rtti::internal::TF_represent_helper<Represent> {  \
+                                                                  \
+                struct F: public Represent, Implement {                                        \
+                                                                  \
+                                                                  \
+                                                                  \
+                };                                                      \
+                                                                  \
+            };

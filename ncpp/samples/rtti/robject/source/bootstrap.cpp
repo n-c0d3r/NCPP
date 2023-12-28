@@ -225,6 +225,7 @@ public:
 
 
 
+
 void log_type_info(A::F_robject_type_info* type_info_p){
     
     for(const auto& it : type_info_p->base_type_info_p_set()){
@@ -253,9 +254,9 @@ int main() {
     log_type_info(type_info_p);
     
     F_demo_compiletime_rflag::F_user_reflect_custom_params user_reflect_custom_params = {
-        
+
         "(user reflect custom params)"
-        
+
     };
     A::T_static_reflect<F_demo_compiletime_rflag>(&rcontainer, &user_reflect_custom_params);
 
