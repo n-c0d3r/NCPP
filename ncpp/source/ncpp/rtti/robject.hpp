@@ -69,7 +69,7 @@ namespace ncpp {
 	namespace rtti {
 
 #define NCPP_ROBJECT_USER_REFLECT_CUSTOM_DATA(CompileTimeRFlagType, CustomDataType) \
-			friend CustomDataType operator << (CompileTimeRFlagType&, ncpp::rtti::F_user_reflect_custom_params_flag flag) { }
+			friend CustomDataType operator << (CompileTimeRFlagType&, ncpp::rtti::F_user_reflect_custom_params_flag flag) { return std::declval<CustomDataType>(); }
 
 
 

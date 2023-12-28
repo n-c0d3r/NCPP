@@ -160,8 +160,10 @@ namespace ncpp {
 
                 static const char* default_name = "";
 
+NCPP_DISABLE_ALL_WARNINGS_PUSH
                 if(!this)
                     return default_name;
+NCPP_DISABLE_ALL_WARNINGS_POP
 
                 if(!name_)
                     return default_name;
@@ -240,8 +242,11 @@ namespace ncpp {
 
 #ifdef NCPP_HAS_ALLOC_DEBUG_INFO
                     const char* name = 0;
+
+NCPP_DISABLE_ALL_WARNINGS_PUSH
                     if(this)
                         name = name_;
+NCPP_DISABLE_ALL_WARNINGS_POP
 
 					F_alloc_debug_info debug_info = {
 
@@ -286,8 +291,11 @@ namespace ncpp {
 
 #ifdef NCPP_HAS_ALLOC_DEBUG_INFO
                     const char* name = 0;
+
+NCPP_DISABLE_ALL_WARNINGS_PUSH
                     if(this)
                         name = name_;
+NCPP_DISABLE_ALL_WARNINGS_POP
 
                     F_alloc_debug_info debug_info = {
 
@@ -350,8 +358,11 @@ namespace ncpp {
 
 #ifdef NCPP_HAS_ALLOC_DEBUG_INFO
                     const char* name = 0;
+
+NCPP_DISABLE_ALL_WARNINGS_PUSH
                     if(this)
                         name = name_;
+NCPP_DISABLE_ALL_WARNINGS_POP
 
                     F_alloc_debug_info debug_info = {
 
@@ -396,8 +407,11 @@ namespace ncpp {
 
 #ifdef NCPP_HAS_ALLOC_DEBUG_INFO
                     const char* name = 0;
+
+NCPP_DISABLE_ALL_WARNINGS_PUSH
                     if(this)
                         name = name_;
+NCPP_DISABLE_ALL_WARNINGS_POP
 
                     F_alloc_debug_info debug_info = {
 

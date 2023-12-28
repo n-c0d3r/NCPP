@@ -394,6 +394,27 @@ struct NCPP_PP_CAT(NCPP_STATIC_WARNING,__LINE__) { \
 
 #define NCPP_MA(...) __VA_ARGS__
 
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
+#ifdef _MSC_VER
+// For Microsoft Visual Studio
+    #define NCPP_DISABLE_ALL_WARNINGS_PUSH __pragma(warning( push, 0 ))
+    #define NCPP_DISABLE_ALL_WARNINGS_POP  __pragma(warning( pop ))
+#elif defined(__clang__)
+// For Clang
+#define NCPP_DISABLE_ALL_WARNINGS_PUSH _Pragma("clang diagnostic push") _Pragma("clang diagnostic ignored \"-Weverything\"")
+#define NCPP_DISABLE_ALL_WARNINGS_POP  _Pragma("clang diagnostic pop")
+#elif defined(__GNUC__)
+// For GCC
+#define NCPP_DISABLE_ALL_WARNINGS_PUSH _Pragma("GCC diagnostic push") _Pragma("GCC diagnostic ignored \"-Wall\"") _Pragma("GCC diagnostic ignored \"-Wextra\"")
+#define NCPP_DISABLE_ALL_WARNINGS_POP  _Pragma("GCC diagnostic pop")
+#else
+    #define NCPP_DISABLE_ALL_WARNINGS_PUSH
+    #define NCPP_DISABLE_ALL_WARNINGS_POP
+#endif
+
 #pragma endregion
 
 ////////////////////////////////////////////////////////////////////////////////////

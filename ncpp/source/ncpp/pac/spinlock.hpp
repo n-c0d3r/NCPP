@@ -65,8 +65,10 @@ namespace ncpp {
             
             
         public:
+NCPP_DISABLE_ALL_WARNINGS_PUSH
             F_spinlock() :
                 is_locked_(ATOMIC_FLAG_INIT)
+NCPP_DISABLE_ALL_WARNINGS_POP
             {
                 
                 
