@@ -74,7 +74,8 @@ namespace ncpp {
 			class F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info__ = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__::F_robject_member_info,\
 			class F_##__VA_OPT__(__VA_ARGS__##_)##rcontainer_additional_data__ = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__::F_rcontainer_additional_data,\
 			class F_##__VA_OPT__(__VA_ARGS__##_)##robject_type_info_additional_data__ = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__::F_robject_type_info_additional_data,\
-			class F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data__ = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__::F_robject_member_info_additional_data
+			class F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data__ = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__::F_robject_member_info_additional_data,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##subtype__ = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__::F_subtype
 
 #define NCPP_RTTI_PASS_SPECIFIC_TARGS(...) \
 			F_##__VA_OPT__(__VA_ARGS__##_)##rtti_options__, \
@@ -85,7 +86,8 @@ namespace ncpp {
 			F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info__,\
 			F_##__VA_OPT__(__VA_ARGS__##_)##rcontainer_additional_data__,\
 			F_##__VA_OPT__(__VA_ARGS__##_)##robject_type_info_additional_data__,\
-			F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data__
+			F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data__,\
+			F_##__VA_OPT__(__VA_ARGS__##_)##subtype__
 
 #define NCPP_RTTI_SPECIFIC_USING(RTTIOptions, ...) \
 			using F_##__VA_OPT__(__VA_ARGS__##_)##rtti_options = RTTIOptions;\
@@ -96,7 +98,8 @@ namespace ncpp {
 			using F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_robject_member_info;\
 			using F_##__VA_OPT__(__VA_ARGS__##_)##rcontainer_additional_data = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_rcontainer_additional_data;\
 			using F_##__VA_OPT__(__VA_ARGS__##_)##robject_type_info_additional_data = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_robject_type_info_additional_data;\
-            using F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_robject_member_info_additional_data;
+            using F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_robject_member_info_additional_data;\
+            using F_##__VA_OPT__(__VA_ARGS__##_)##subtype = typename F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits::F_subtype;
 
 #define NCPP_RTTI_PASS_SPECIFIC_USING(...) \
 			F_##__VA_OPT__(__VA_ARGS__##_)##rtti_options, \
@@ -107,7 +110,8 @@ namespace ncpp {
 			F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info,\
 			F_##__VA_OPT__(__VA_ARGS__##_)##rcontainer_additional_data,\
 			F_##__VA_OPT__(__VA_ARGS__##_)##robject_type_info_additional_data,\
-			F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data
+			F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data,\
+			F_##__VA_OPT__(__VA_ARGS__##_)##subtype
 
 
 

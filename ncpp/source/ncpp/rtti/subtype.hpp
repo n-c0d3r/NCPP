@@ -104,6 +104,9 @@ namespace ncpp {
             template<typename F_other__, typename F_other_subtype_data__>
             friend class TF_subtype;
 
+            template<typename F_other__>
+            using TF_rebind = TF_subtype<F_other__, F_subtype_data__>;
+
             using F = F__;
             using F_subtype_data = F_subtype_data__;
 

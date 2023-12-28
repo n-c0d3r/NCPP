@@ -45,6 +45,7 @@
 #include <ncpp/rtti/traits_defs.hpp>
 #include <ncpp/rtti/robject_flag.hpp>
 #include <ncpp/rtti/security_helper.hpp>
+#include <ncpp/rtti/subtype.hpp>
 
 #pragma endregion
 
@@ -125,6 +126,8 @@ namespace ncpp {
 
 			using F_allocator = mem::F_general_allocator;
 
+			using F_subtype = rtti::F_subtype;
+
 		};
 
 
@@ -160,6 +163,8 @@ namespace ncpp {
 			using F_rcontainer = TF_rcontainer<F_options>;
 			using F_robject_type_info = TF_robject_type_info<F_options>;
 			using F_robject_member_info = TF_robject_member_info<F_options>;
+
+			using F_subtype = typename F_options::F_subtype;
 
 
 
