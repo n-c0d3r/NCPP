@@ -7,7 +7,7 @@ NCoder's Game Engine Learning Aimed C++ Library.
 + Memory management:
   + Incremental chunk allocator
   + Smart chunk allocator
-    > **Warning**: not avaiable on NCPP Lite Distribution
+    + **⚠️ Warning**: `not avaiable on NCPP Lite Distribution`
   + Reference allocator
   + Powerful allocator base class
 + Containers:
@@ -34,7 +34,7 @@ NCoder's Game Engine Learning Aimed C++ Library.
   + Type flag
   + Subtype
   + Reflection
-    > **Warning**: not avaiable on NCPP Lite Distribution
+    + **⚠️ Warning**: `not avaiable on NCPP Lite Distribution`
     + Easy to use
     + No memory cost on reflected object
     + Metadata supports 
