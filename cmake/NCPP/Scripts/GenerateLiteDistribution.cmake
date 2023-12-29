@@ -32,6 +32,17 @@ file(WRITE "${NCPP_LITE_DISTRIBUTION_DIR}/.project_name" ncpp_lite)
 
 
 # Read the file contents
+file(READ "${NCPP_LITE_DISTRIBUTION_DIR}/README.md" ROOT_README_FILE_CONTENTS)
+
+# Replace all occurrences of A with B
+string(REPLACE "[Abytek Software Private License](https://github.com/Abytek/NCPP/blob/main/LICENSE)" "[MIT License](https://github.com/n-c0d3r/NCPPLite/blob/main/LICENSE)" MODIFED_ROOT_README_FILE_CONTENTS "${ROOT_README_FILE_CONTENTS}")
+
+# Write the modified contents back to the file
+file(WRITE "${NCPP_LITE_DISTRIBUTION_DIR}/README.md" "${MODIFED_ROOT_README_FILE_CONTENTS}")
+
+
+
+# Read the file contents
 file(READ "${NCPP_LITE_DISTRIBUTION_DIR}/CMakeLists.txt" ROOT_CMAKELISTS_FILE_CONTENTS)
 
 # Replace all occurrences of A with B
@@ -46,6 +57,7 @@ file(WRITE "${NCPP_LITE_DISTRIBUTION_DIR}/CMakeLists.txt" "${MODIFED_ROOT_CMAKEL
 set(FILES_TO_DELETE
 
     # cmake
+    "cmake/NCPP/Scripts/GenerateLiteDistribution.cmake"
     "cmake/NCPP/RTTIMacros.cmake"
 
     # mem
