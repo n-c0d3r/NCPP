@@ -36,6 +36,16 @@ file(READ "${NCPP_LITE_DISTRIBUTION_DIR}/README.md" ROOT_README_FILE_CONTENTS)
 
 # Replace all occurrences of A with B
 string(REPLACE "[Abytek Software Private License](https://github.com/Abytek/NCPP/blob/main/LICENSE)" "[MIT License](https://github.com/n-c0d3r/NCPPLite/blob/main/LICENSE)" MODIFED_ROOT_README_FILE_CONTENTS "${ROOT_README_FILE_CONTENTS}")
+# Replace all occurrences of A with B
+string(REPLACE "Abytek" "n-c0d3r" MODIFED_ROOT_README_FILE_CONTENTS "${MODIFED_ROOT_README_FILE_CONTENTS}")
+# Replace all occurrences of A with B
+string(REPLACE "NCPP" "NCPP Lite" MODIFED_ROOT_README_FILE_CONTENTS "${MODIFED_ROOT_README_FILE_CONTENTS}")
+# Replace all occurrences of A with B
+string(REPLACE "NCPP Lite Lite" "NCPP Lite" MODIFED_ROOT_README_FILE_CONTENTS "${MODIFED_ROOT_README_FILE_CONTENTS}")
+# Replace all occurrences of A with B
+string(REPLACE "NCPP LiteLite" "NCPPLite" MODIFED_ROOT_README_FILE_CONTENTS "${MODIFED_ROOT_README_FILE_CONTENTS}")
+# Replace all occurrences of A with B
+string(REPLACE "/NCPP Lite" "NCPPLite" MODIFED_ROOT_README_FILE_CONTENTS "${MODIFED_ROOT_README_FILE_CONTENTS}")
 
 # Write the modified contents back to the file
 file(WRITE "${NCPP_LITE_DISTRIBUTION_DIR}/README.md" "${MODIFED_ROOT_README_FILE_CONTENTS}")

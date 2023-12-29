@@ -57,7 +57,7 @@ namespace ncpp {
     namespace internal {
 
         template<typename F_object__, typename F_allocator__ = mem::F_object_allocator, b8 is_default__ = true>
-        NCPP_FORCE_INLINE F_object__* T_allocate_object(utilities::TF_no_deduct_t<F_allocator__>* allocator_p) {
+        NCPP_FORCE_INLINE F_object__* T_allocate_object(utilities::TF_no_deduct<F_allocator__>* allocator_p) {
 
             if constexpr (is_default__)
                 return reinterpret_cast<F_object__*>(F_allocator__::default_p()->allocate(sizeof(F_object__), eastl::max((sz)NCPP_ALIGNOF(F_object__), (sz)EASTL_ALLOCATOR_MIN_ALIGNMENT), 0, 0));
@@ -66,7 +66,7 @@ namespace ncpp {
         }
 
         template<typename F_object__, typename F_allocator__ = mem::F_object_allocator, b8 is_default__ = true>
-        NCPP_FORCE_INLINE void T_deallocate_object(utilities::TF_no_deduct_t<F_allocator__>* allocator_p, F_object__* object_p) {
+        NCPP_FORCE_INLINE void T_deallocate_object(utilities::TF_no_deduct<F_allocator__>* allocator_p, F_object__* object_p) {
 
             if constexpr (is_default__)
                 F_allocator__::default_p()->deallocate(object_p, 1);
