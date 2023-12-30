@@ -10,7 +10,7 @@ class B {
     NCPP_BASIC_RCLASS(
         B,
 
-        PUBLIC(i32, i)
+        PUBLIC((i32), i)
     );
 
 };
@@ -20,7 +20,7 @@ class C {
     NCPP_BASIC_RCLASS(
         C,
 
-        PUBLIC(i32, cc)
+        PUBLIC((i32), cc)
     );
 
 };
@@ -33,11 +33,11 @@ class A : public B, public C {
         EXTENDS(B),
         EXTENDS(C),
 
-		PUBLIC(i32, i),
-		PUBLIC_CONST(void(), foo),
+		PUBLIC((i32), i),
+		PUBLIC((void()), foo),
                       
-        PUBLIC_STATIC(i32, si),
-        PUBLIC_STATIC(void(), foo2)
+        PUBLIC_STATIC((i32), si),
+        PUBLIC_STATIC((void(int, int, TF_vector<int, F_default_allocator>)), foo2)
 	);
 
 };
@@ -49,7 +49,7 @@ void A::foo() {
 }
 
 i32 A::si = 4;
-void A::foo2() {
+void A::foo2(int, int, TF_vector<int, F_default_allocator>) {
 
     
 
