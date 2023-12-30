@@ -52,6 +52,8 @@ namespace ncpp {}
 
 #define NCPP_EXPAND(X) X
 #define NCPP_CSTR(...) #__VA_ARGS__
+#define NCPP_WRAPPED_ARGS_TO_CSTR_INTERNAL(Args) NCPP_CSTR(Args)
+#define NCPP_WRAPPED_ARGS_TO_CSTR(Args) NCPP_WRAPPED_ARGS_TO_CSTR_INTERNAL(NCPP_EXPAND Args)
 #define NCPP_GLUE_HELPER(x, y) x##y
 #define NCPP_GLUE(x, y) NCPP_GLUE_HELPER(x, y)
 

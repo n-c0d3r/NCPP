@@ -69,7 +69,7 @@ namespace ncpp {
 	namespace rtti {
 
 #define NCPP_ROBJECT_USER_REFLECT_CUSTOM_DATA(CompileTimeRFlagType, CustomDataType) \
-			friend CustomDataType operator << (CompileTimeRFlagType&, ncpp::rtti::F_user_reflect_custom_params_flag flag) { return std::declval<CustomDataType>(); }
+			friend CustomDataType operator << (CompileTimeRFlagType&, ncpp::rtti::F_user_reflect_custom_params_flag flag);
 
 
 
@@ -349,7 +349,7 @@ namespace ncpp {
 					if constexpr (ncpp::rtti::secured_name) return ncpp::containers::T_to_string<char, typename F_rtti_traits::F_allocator>(id());\
 					else return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, ""); \
 				}\
-                static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
+                static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(NCPP_WRAPPED_ARGS_TO_CSTR(MemberType), ""); }\
 				static constexpr ncpp::u64 id() { return utilities::T_type_hash_code<TF_##MemberName##___ncpp_static_info___>; }\
 				\
 				static constexpr ncpp::sz offset() { return (ncpp::sz)reinterpret_cast<ncpp::sz>(&(reinterpret_cast<object_type__*>(0)->MemberName)); }\
@@ -386,7 +386,7 @@ namespace ncpp {
 					if constexpr (ncpp::rtti::secured_name) return ncpp::containers::T_to_string<char, typename F_rtti_traits::F_allocator>(id());\
 					else return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, ""); \
 				}\
-                static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
+                static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(NCPP_WRAPPED_ARGS_TO_CSTR(MemberType), ""); }\
 				static constexpr ncpp::u64 id() { return utilities::T_type_hash_code<TF_##MemberName##___ncpp_static_info___>; }\
 				\
 				static constexpr ncpp::sz offset() { return 0; }\
@@ -541,7 +541,7 @@ namespace ncpp {
 					if constexpr (ncpp::rtti::secured_name) return ncpp::containers::T_to_string<char, typename F_rtti_traits::F_allocator>(id());\
 					else return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, ""); \
 				}\
-                static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
+                static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(NCPP_WRAPPED_ARGS_TO_CSTR(MemberType), ""); }\
 				static constexpr ncpp::u64 id() { return utilities::T_type_hash_code<TF_##MemberName##___ncpp_static_info___>; }\
 				\
 				static constexpr ncpp::sz offset() { return 0; }\
@@ -578,7 +578,7 @@ namespace ncpp {
 					if constexpr (ncpp::rtti::secured_name) return ncpp::containers::T_to_string<char, typename F_rtti_traits::F_allocator>(id());\
 					else return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, ""); \
 				}\
-                static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
+                static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(NCPP_WRAPPED_ARGS_TO_CSTR(MemberType), ""); }\
 				static constexpr ncpp::u64 id() { return utilities::T_type_hash_code<TF_##MemberName##___ncpp_static_info___>; }\
 				\
 				static constexpr ncpp::sz offset() { return 0; }\

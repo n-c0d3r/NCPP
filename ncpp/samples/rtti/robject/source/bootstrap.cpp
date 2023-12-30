@@ -44,7 +44,7 @@ class A : public B, public C {
 
 void A::foo() {
 
-    std::cout << "A::foo" << std::endl;
+
     
 }
 
