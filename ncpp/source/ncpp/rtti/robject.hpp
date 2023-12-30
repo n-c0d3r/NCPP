@@ -712,7 +712,7 @@ namespace ncpp {
                 using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, NCPP_EXPAND(NCPP_MA MemberType)>;\
 				\
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
-					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_PRE_REFLECT_MEMBER();\
 				\
@@ -722,7 +722,7 @@ namespace ncpp {
 					!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata)\
 					&& !NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info)\
 				)\
-					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_POST_REFLECT_MEMBER();\
 				\
@@ -746,7 +746,7 @@ namespace ncpp {
                 using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, NCPP_EXPAND(NCPP_MA MemberType)>;\
 				\
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
-					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_PRE_REFLECT_MEMBER();\
 				\
@@ -756,7 +756,7 @@ namespace ncpp {
 					!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata)\
 					&& !NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info)\
 				)\
-					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_POST_REFLECT_MEMBER();\
 				\
@@ -780,7 +780,7 @@ namespace ncpp {
                 using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, NCPP_EXPAND(NCPP_MA MemberType)>;\
 				\
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
-					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_PRE_REFLECT_MEMBER();\
 				\
@@ -790,7 +790,7 @@ namespace ncpp {
 					!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata)\
 					&& !NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info)\
 				)\
-					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_POST_REFLECT_MEMBER();\
 				\
@@ -814,7 +814,7 @@ namespace ncpp {
                 using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, NCPP_EXPAND(NCPP_MA MemberType)>;\
 				\
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
-					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_PRE_REFLECT_MEMBER();\
 				\
@@ -824,7 +824,7 @@ namespace ncpp {
 					!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata)\
 					&& !NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info)\
 				)\
-					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_POST_REFLECT_MEMBER();\
 				\
@@ -848,7 +848,7 @@ namespace ncpp {
                 using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, NCPP_EXPAND(NCPP_MA MemberType)>;\
 				\
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
-					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_PRE_REFLECT_MEMBER();\
 				\
@@ -858,7 +858,7 @@ namespace ncpp {
 					!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata)\
 					&& !NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info)\
 				)\
-					NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__));\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_POST_REFLECT_MEMBER();\
 				\
