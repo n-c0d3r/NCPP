@@ -649,7 +649,7 @@ namespace ncpp {
 				__VA_ARGS__;\
 			}
 
-#define NCPP_ROBJECT_REFLECT_(...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_METADATA( __VA_ARGS__));
+#define NCPP_ROBJECT_REFLECT_(...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_METADATA(__VA_ARGS__));
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
