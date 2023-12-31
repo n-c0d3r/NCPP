@@ -68,14 +68,11 @@ namespace ncpp {
 
 	namespace rtti {
 
-#define NCPP_ROBJECT_USER_REFLECT_CUSTOM_DATA(CompileTimeRFlagType, CustomDataType) \
-			friend CustomDataType operator << (CompileTimeRFlagType&, ncpp::rtti::F_user_reflect_custom_params_flag flag); \
-            NCPP_RTTI_IMPLEMENT_FLAG(CompileTimeRFlagType, CustomDataType);
+#define NCPP_ROBJECT_USER_REFLECT_CUSTOM_DATA(CustomReflector, CustomDataType) \
+			friend CustomDataType operator << (CustomReflector&, ncpp::rtti::F_user_reflect_custom_params_flag flag); \
+            NCPP_RTTI_IMPLEMENT_FLAG(CustomReflector, CustomDataType);
 
 
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,11 +82,15 @@ namespace ncpp {
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#define NCPP_ROBJECT_USER_PRE_REFLECT_MEMBER(CompileTimeRFlagType) \
+
+#define NCPP_ROBJECT_USER_PRE_REFLECT_MEMBER(CustomReflector) \
         NCPP_RTTI_IMPLEMENT_FLAG(                                       \
-            CompileTimeRFlagType,                                       \
+            CustomReflector,                                       \
             NCPP_MA(                                                    \
                 ncpp::rtti::TF_user_pre_reflect_member_flag<F_robject__, F_member__, F_member_static_info__, NCPP_RTTI_PASS_SPECIFIC_TARGS()> \
             ),\
@@ -103,7 +104,7 @@ namespace ncpp {
 			F_rcontainer__* rcontainer_p, \
 			F_robject_type_info__* robject_type_info_p,\
 			F_robject_member_info__* robject_member_info_p,\
-			ncpp::rtti::F_default_rtti_traits::template TF_safe_custom_params<CompileTimeRFlagType>* custom_params_p = 0\
+			ncpp::rtti::F_default_rtti_traits::template TF_safe_custom_params<CustomReflector>* custom_params_p = 0\
 		)
 
 #define NCPP_ROBJECT_CALL_USER_PRE_REFLECT_MEMBER() F_rtti_traits::template T_safe_user_pre_reflect_member<\
@@ -118,9 +119,9 @@ namespace ncpp {
 			custom_params_p\
 		);
 
-#define NCPP_ROBJECT_USER_POST_REFLECT_MEMBER(CompileTimeRFlagType) \
+#define NCPP_ROBJECT_USER_POST_REFLECT_MEMBER(CustomReflector) \
         NCPP_RTTI_IMPLEMENT_FLAG(                                       \
-            CompileTimeRFlagType,                                       \
+            CustomReflector,                                       \
             NCPP_MA(                                                    \
                 ncpp::rtti::TF_user_post_reflect_member_flag<F_robject__, F_member__, F_member_static_info__, NCPP_RTTI_PASS_SPECIFIC_TARGS()> \
             ),\
@@ -134,7 +135,7 @@ namespace ncpp {
 			F_rcontainer__* rcontainer_p, \
 			F_robject_type_info__* robject_type_info_p,\
 			F_robject_member_info__* robject_member_info_p,\
-			ncpp::rtti::F_default_rtti_traits::template TF_safe_custom_params<CompileTimeRFlagType>* custom_params_p = 0\
+			ncpp::rtti::F_default_rtti_traits::template TF_safe_custom_params<CustomReflector>* custom_params_p = 0\
 		)
 
 #define NCPP_ROBJECT_CALL_USER_POST_REFLECT_MEMBER() F_rtti_traits::template T_safe_user_post_reflect_member<\
@@ -165,9 +166,9 @@ namespace ncpp {
 
 
 
-#define NCPP_ROBJECT_USER_PRE_REFLECT_BASE(CompileTimeRFlagType) \
+#define NCPP_ROBJECT_USER_PRE_REFLECT_BASE(CustomReflector) \
         NCPP_RTTI_IMPLEMENT_FLAG(                                       \
-            CompileTimeRFlagType,                                       \
+            CustomReflector,                                       \
             NCPP_MA(                                                    \
                 ncpp::rtti::TF_user_pre_reflect_base_flag<F_robject__, F_base__, NCPP_RTTI_PASS_SPECIFIC_TARGS()> \
             ),\
@@ -179,7 +180,7 @@ namespace ncpp {
 		static NCPP_FORCE_INLINE void T_user_pre_reflect_base(\
 			F_rcontainer__* rcontainer_p, \
 			F_robject_type_info__* robject_type_info_p,\
-			ncpp::rtti::F_default_rtti_traits::template TF_safe_custom_params<CompileTimeRFlagType>* custom_params_p = 0\
+			ncpp::rtti::F_default_rtti_traits::template TF_safe_custom_params<CustomReflector>* custom_params_p = 0\
 		)
 
 #define NCPP_ROBJECT_CALL_USER_PRE_REFLECT_BASE() F_rtti_traits::template T_safe_user_pre_reflect_base<\
@@ -192,9 +193,9 @@ namespace ncpp {
 			custom_params_p\
 		);
 
-#define NCPP_ROBJECT_USER_POST_REFLECT_BASE(CompileTimeRFlagType) \
+#define NCPP_ROBJECT_USER_POST_REFLECT_BASE(CustomReflector) \
         NCPP_RTTI_IMPLEMENT_FLAG(                                       \
-            CompileTimeRFlagType,                                       \
+            CustomReflector,                                       \
             NCPP_MA(                                                    \
                 ncpp::rtti::TF_user_post_reflect_base_flag<F_robject__, F_base__, NCPP_RTTI_PASS_SPECIFIC_TARGS()> \
             ),\
@@ -207,7 +208,7 @@ namespace ncpp {
 			F_rcontainer__* rcontainer_p, \
 			F_robject_type_info__* robject_type_info_p,\
 			F_robject_type_info__* base_info_p,\
-			ncpp::rtti::F_default_rtti_traits::template TF_safe_custom_params<CompileTimeRFlagType>* custom_params_p = 0\
+			ncpp::rtti::F_default_rtti_traits::template TF_safe_custom_params<CustomReflector>* custom_params_p = 0\
 		)
 
 #define NCPP_ROBJECT_CALL_USER_POST_REFLECT_BASE() F_rtti_traits::template T_safe_user_post_reflect_base<\
@@ -237,9 +238,9 @@ namespace ncpp {
 
 
 
-#define NCPP_ROBJECT_USER_PRE_REFLECT_OBJECT(CompileTimeRFlagType) \
+#define NCPP_ROBJECT_USER_PRE_REFLECT_OBJECT(CustomReflector) \
         NCPP_RTTI_IMPLEMENT_FLAG(                                       \
-            CompileTimeRFlagType,                                       \
+            CustomReflector,                                       \
             NCPP_MA(                                                    \
                 ncpp::rtti::TF_user_pre_reflect_object_flag<F_robject__, NCPP_RTTI_PASS_SPECIFIC_TARGS()> \
             ),\
@@ -250,7 +251,7 @@ namespace ncpp {
 		static NCPP_FORCE_INLINE void T_user_pre_reflect_object(\
 			F_rcontainer__* rcontainer_p, \
 			F_robject_type_info__* robject_type_info_p,\
-			ncpp::rtti::F_default_rtti_traits::template TF_safe_custom_params<CompileTimeRFlagType>* custom_params_p = 0\
+			ncpp::rtti::F_default_rtti_traits::template TF_safe_custom_params<CustomReflector>* custom_params_p = 0\
 		)
 
 #define NCPP_ROBJECT_CALL_USER_PRE_REFLECT_OBJECT() F_rtti_traits::template T_safe_user_pre_reflect_object<\
@@ -262,9 +263,9 @@ namespace ncpp {
 			custom_params_p\
 		);
 
-#define NCPP_ROBJECT_USER_POST_REFLECT_OBJECT(CompileTimeRFlagType) \
+#define NCPP_ROBJECT_USER_POST_REFLECT_OBJECT(CustomReflector) \
         NCPP_RTTI_IMPLEMENT_FLAG(                                       \
-            CompileTimeRFlagType,                                       \
+            CustomReflector,                                       \
             NCPP_MA(                                                    \
                 ncpp::rtti::TF_user_post_reflect_object_flag<F_robject__, NCPP_RTTI_PASS_SPECIFIC_TARGS()> \
             ),\
@@ -275,7 +276,7 @@ namespace ncpp {
 		static NCPP_FORCE_INLINE void T_user_post_reflect_object(\
 			F_rcontainer__* rcontainer_p, \
 			F_robject_type_info__* robject_type_info_p,\
-			ncpp::rtti::F_default_rtti_traits::template TF_safe_custom_params<CompileTimeRFlagType>* custom_params_p = 0\
+			ncpp::rtti::F_default_rtti_traits::template TF_safe_custom_params<CustomReflector>* custom_params_p = 0\
 		)
 
 #define NCPP_ROBJECT_CALL_USER_POST_REFLECT_OBJECT() F_rtti_traits::template T_safe_user_post_reflect_object<\

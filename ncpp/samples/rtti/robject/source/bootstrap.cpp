@@ -101,7 +101,7 @@ void A::foo2(int, int, TF_vector<int, F_default_allocator>) {
 
 
 
-struct F_demo_compiletime_rflag {
+struct F_customm_reflector {
     
 public:
     struct F_user_reflect_custom_params {
@@ -109,11 +109,11 @@ public:
         G_string message;
         
     };
-    NCPP_ROBJECT_USER_REFLECT_CUSTOM_DATA(F_demo_compiletime_rflag, F_user_reflect_custom_params);
+    NCPP_ROBJECT_USER_REFLECT_CUSTOM_DATA(F_customm_reflector, F_user_reflect_custom_params);
     
 public:
     NCPP_ROBJECT_USER_PRE_REFLECT_MEMBER(
-        F_demo_compiletime_rflag
+        F_customm_reflector
     ) {
         
         cout << "user pre reflect member: "
@@ -127,7 +127,7 @@ public:
         
     }
     NCPP_ROBJECT_USER_POST_REFLECT_MEMBER(
-        F_demo_compiletime_rflag
+        F_customm_reflector
     ) {
         
         cout << "user post reflect member: "
@@ -141,7 +141,7 @@ public:
         
     }
     NCPP_ROBJECT_USER_PRE_REFLECT_BASE(
-        F_demo_compiletime_rflag
+        F_customm_reflector
     ) {
         
         cout << "user pre reflect base: "
@@ -152,7 +152,7 @@ public:
         
     }
     NCPP_ROBJECT_USER_POST_REFLECT_BASE(
-        F_demo_compiletime_rflag
+        F_customm_reflector
     ) {
         
         cout << "user post reflect base: "
@@ -163,7 +163,7 @@ public:
         
     }
     NCPP_ROBJECT_USER_PRE_REFLECT_OBJECT(
-        F_demo_compiletime_rflag
+        F_customm_reflector
     ) {
         
         cout << "user pre reflect object: "
@@ -174,7 +174,7 @@ public:
         
     }
     NCPP_ROBJECT_USER_POST_REFLECT_OBJECT(
-        F_demo_compiletime_rflag
+        F_customm_reflector
     ) {
         
         cout << "user post reflect object: "
@@ -186,7 +186,7 @@ public:
     }
     
 public:
-    NCPP_ROBJECT_DISABLE_DEFAULT_REFLECT(F_demo_compiletime_rflag);
+    NCPP_ROBJECT_DISABLE_DEFAULT_REFLECT(F_customm_reflector);
     
 };
 
@@ -208,31 +208,23 @@ void log_type_info(A::F_robject_type_info* type_info_p){
     
 }
 
-template<typename F__>
-struct DDDF {};
-class DDD {
 
-    NCPP_RTTI_IMPLEMENT_FLAG(DDD, DDDF<F__>, typename F__);
-
-};
 
 int main() {
 
 	A a;
-
-    static constexpr b8 bbb = NCPP_RTTI_IS_HAS_FLAG(A, rtti::F_robject_flag);
 
 	A::F_rcontainer rcontainer;
 
 	A::F_robject_type_info* type_info_p = A::F_rtti_traits::template T_safe_reflect<A>(&rcontainer, &a);
     log_type_info(type_info_p);
     
-    F_demo_compiletime_rflag::F_user_reflect_custom_params user_reflect_custom_params = {
+    F_customm_reflector::F_user_reflect_custom_params user_reflect_custom_params = {
 
         "(user reflect custom params)"
 
     };
-    A::T_static_reflect<F_demo_compiletime_rflag>(&rcontainer, &user_reflect_custom_params);
+    A::T_static_reflect<F_customm_reflector>(&rcontainer, &user_reflect_custom_params);
 
 	pause_console();
 
