@@ -91,4 +91,6 @@ namespace ncpp {
 #include <ncpp/utilities/mem_wrap.hpp>
 #include <ncpp/utilities/no_constructor.hpp>
 
+#include <ncpp/utilities/safe_initializer_list.hpp>
+
 #pragma endregion

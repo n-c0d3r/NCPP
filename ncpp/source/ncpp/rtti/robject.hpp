@@ -69,13 +69,9 @@ namespace ncpp {
 	namespace rtti {
 
 #define NCPP_ROBJECT_USER_REFLECT_CUSTOM_DATA(CompileTimeRFlagType, CustomDataType) \
-			friend CustomDataType operator << (CompileTimeRFlagType&, ncpp::rtti::F_user_reflect_custom_params_flag flag);
+			friend CustomDataType operator << (CompileTimeRFlagType&, ncpp::rtti::F_user_reflect_custom_params_flag flag); \
+            NCPP_RTTI_IMPLEMENT_FLAG(CompileTimeRFlagType, CustomDataType);
 
-
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,12 +81,24 @@ namespace ncpp {
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-#define NCPP_ROBJECT_USER_PRE_REFLECT_MEMBER(CompileTimeRFlagType, ...) \
-		template<class F_robject__, typename F_member__, class F_member_static_info__, NCPP_RTTI_SPECIFIC_TARGS() __VA_OPT__(,) __VA_ARGS__>\
-		friend void operator << (CompileTimeRFlagType&, const ncpp::rtti::TF_user_pre_reflect_member_flag<F_robject__, F_member__, F_member_static_info__, NCPP_RTTI_PASS_SPECIFIC_TARGS()>& flag) { }\
-		template<class F_robject__, typename F_member__, class F_member_static_info__, NCPP_RTTI_SPECIFIC_TARGS() __VA_OPT__(,) __VA_ARGS__>\
+
+#define NCPP_ROBJECT_USER_PRE_REFLECT_MEMBER(CompileTimeRFlagType) \
+        NCPP_RTTI_IMPLEMENT_FLAG(                                       \
+            CompileTimeRFlagType,                                       \
+            NCPP_MA(                                                    \
+                ncpp::rtti::TF_user_pre_reflect_member_flag<F_robject__, F_member__, F_member_static_info__, NCPP_RTTI_PASS_SPECIFIC_TARGS()> \
+            ),\
+            class F_robject__,                                          \
+            typename F_member__,                                        \
+            class F_member_static_info__,                               \
+            NCPP_RTTI_SPECIFIC_TARGS_NO_DEFAULT()                                  \
+        );\
+		template<class F_robject__, typename F_member__, class F_member_static_info__, NCPP_RTTI_SPECIFIC_TARGS()>\
 		static NCPP_FORCE_INLINE void T_user_pre_reflect_member( \
 			F_rcontainer__* rcontainer_p, \
 			F_robject_type_info__* robject_type_info_p,\
@@ -110,10 +118,18 @@ namespace ncpp {
 			custom_params_p\
 		);
 
-#define NCPP_ROBJECT_USER_POST_REFLECT_MEMBER(CompileTimeRFlagType, ...) \
-		template<class F_robject__, typename F_member__, class F_member_static_info__, NCPP_RTTI_SPECIFIC_TARGS() __VA_OPT__(,) __VA_ARGS__>\
-		friend void operator << (CompileTimeRFlagType&, const ncpp::rtti::TF_user_post_reflect_member_flag<F_robject__, F_member__, F_member_static_info__, NCPP_RTTI_PASS_SPECIFIC_TARGS()>& flag) { }\
-		template<class F_robject__, typename F_member__, class F_member_static_info__, NCPP_RTTI_SPECIFIC_TARGS() __VA_OPT__(,) __VA_ARGS__>\
+#define NCPP_ROBJECT_USER_POST_REFLECT_MEMBER(CompileTimeRFlagType) \
+        NCPP_RTTI_IMPLEMENT_FLAG(                                       \
+            CompileTimeRFlagType,                                       \
+            NCPP_MA(                                                    \
+                ncpp::rtti::TF_user_post_reflect_member_flag<F_robject__, F_member__, F_member_static_info__, NCPP_RTTI_PASS_SPECIFIC_TARGS()> \
+            ),\
+            class F_robject__,                                          \
+            typename F_member__,                                        \
+            class F_member_static_info__,                               \
+            NCPP_RTTI_SPECIFIC_TARGS_NO_DEFAULT()                                  \
+        );\
+		template<class F_robject__, typename F_member__, class F_member_static_info__, NCPP_RTTI_SPECIFIC_TARGS()>\
 		static NCPP_FORCE_INLINE void T_user_post_reflect_member( \
 			F_rcontainer__* rcontainer_p, \
 			F_robject_type_info__* robject_type_info_p,\
@@ -149,10 +165,17 @@ namespace ncpp {
 
 
 
-#define NCPP_ROBJECT_USER_PRE_REFLECT_BASE(CompileTimeRFlagType, ...) \
-		template<class F_robject__, class F_base__, NCPP_RTTI_SPECIFIC_TARGS() __VA_OPT__(,) __VA_ARGS__>\
-		friend void operator << (CompileTimeRFlagType&, const ncpp::rtti::TF_user_pre_reflect_base_flag<F_robject__, F_base__, NCPP_RTTI_PASS_SPECIFIC_TARGS()>& flag) { }\
-		template<class F_robject__, class F_base__, NCPP_RTTI_SPECIFIC_TARGS() __VA_OPT__(,) __VA_ARGS__>\
+#define NCPP_ROBJECT_USER_PRE_REFLECT_BASE(CompileTimeRFlagType) \
+        NCPP_RTTI_IMPLEMENT_FLAG(                                       \
+            CompileTimeRFlagType,                                       \
+            NCPP_MA(                                                    \
+                ncpp::rtti::TF_user_pre_reflect_base_flag<F_robject__, F_base__, NCPP_RTTI_PASS_SPECIFIC_TARGS()> \
+            ),\
+            class F_robject__,                                          \
+            class F_base__,                                        \
+            NCPP_RTTI_SPECIFIC_TARGS_NO_DEFAULT()                                  \
+        );\
+		template<class F_robject__, class F_base__, NCPP_RTTI_SPECIFIC_TARGS()>\
 		static NCPP_FORCE_INLINE void T_user_pre_reflect_base(\
 			F_rcontainer__* rcontainer_p, \
 			F_robject_type_info__* robject_type_info_p,\
@@ -169,10 +192,17 @@ namespace ncpp {
 			custom_params_p\
 		);
 
-#define NCPP_ROBJECT_USER_POST_REFLECT_BASE(CompileTimeRFlagType, ...) \
-		template<class F_robject__, class F_base__, NCPP_RTTI_SPECIFIC_TARGS() __VA_OPT__(,) __VA_ARGS__>\
-		friend void operator << (CompileTimeRFlagType&, const ncpp::rtti::TF_user_post_reflect_base_flag<F_robject__, F_base__, NCPP_RTTI_PASS_SPECIFIC_TARGS()>& flag) { }\
-		template<class F_robject__, class F_base__, NCPP_RTTI_SPECIFIC_TARGS() __VA_OPT__(,) __VA_ARGS__>\
+#define NCPP_ROBJECT_USER_POST_REFLECT_BASE(CompileTimeRFlagType) \
+        NCPP_RTTI_IMPLEMENT_FLAG(                                       \
+            CompileTimeRFlagType,                                       \
+            NCPP_MA(                                                    \
+                ncpp::rtti::TF_user_post_reflect_base_flag<F_robject__, F_base__, NCPP_RTTI_PASS_SPECIFIC_TARGS()> \
+            ),\
+            class F_robject__,                                          \
+            class F_base__,                                        \
+            NCPP_RTTI_SPECIFIC_TARGS_NO_DEFAULT()                                  \
+        );\
+		template<class F_robject__, class F_base__, NCPP_RTTI_SPECIFIC_TARGS()>\
 		static NCPP_FORCE_INLINE void T_user_post_reflect_base(\
 			F_rcontainer__* rcontainer_p, \
 			F_robject_type_info__* robject_type_info_p,\
@@ -207,10 +237,16 @@ namespace ncpp {
 
 
 
-#define NCPP_ROBJECT_USER_PRE_REFLECT_OBJECT(CompileTimeRFlagType, ...) \
-		template<class F_robject__, NCPP_RTTI_SPECIFIC_TARGS() __VA_OPT__(,) __VA_ARGS__>\
-		friend void operator << (CompileTimeRFlagType&, const ncpp::rtti::TF_user_pre_reflect_object_flag<F_robject__, NCPP_RTTI_PASS_SPECIFIC_TARGS()>& flag) { }\
-		template<class F_robject__, NCPP_RTTI_SPECIFIC_TARGS() __VA_OPT__(,) __VA_ARGS__>\
+#define NCPP_ROBJECT_USER_PRE_REFLECT_OBJECT(CompileTimeRFlagType) \
+        NCPP_RTTI_IMPLEMENT_FLAG(                                       \
+            CompileTimeRFlagType,                                       \
+            NCPP_MA(                                                    \
+                ncpp::rtti::TF_user_pre_reflect_object_flag<F_robject__, NCPP_RTTI_PASS_SPECIFIC_TARGS()> \
+            ),\
+            class F_robject__,                                          \
+            NCPP_RTTI_SPECIFIC_TARGS_NO_DEFAULT()                                  \
+        );\
+		template<class F_robject__, NCPP_RTTI_SPECIFIC_TARGS()>\
 		static NCPP_FORCE_INLINE void T_user_pre_reflect_object(\
 			F_rcontainer__* rcontainer_p, \
 			F_robject_type_info__* robject_type_info_p,\
@@ -226,10 +262,16 @@ namespace ncpp {
 			custom_params_p\
 		);
 
-#define NCPP_ROBJECT_USER_POST_REFLECT_OBJECT(CompileTimeRFlagType, ...) \
-		template<class F_robject__, NCPP_RTTI_SPECIFIC_TARGS() __VA_OPT__(,) __VA_ARGS__>\
-		friend void operator << (CompileTimeRFlagType&, const ncpp::rtti::TF_user_post_reflect_object_flag<F_robject__, NCPP_RTTI_PASS_SPECIFIC_TARGS()>& flag) { }\
-		template<class F_robject__, NCPP_RTTI_SPECIFIC_TARGS() __VA_OPT__(,) __VA_ARGS__>\
+#define NCPP_ROBJECT_USER_POST_REFLECT_OBJECT(CompileTimeRFlagType) \
+        NCPP_RTTI_IMPLEMENT_FLAG(                                       \
+            CompileTimeRFlagType,                                       \
+            NCPP_MA(                                                    \
+                ncpp::rtti::TF_user_post_reflect_object_flag<F_robject__, NCPP_RTTI_PASS_SPECIFIC_TARGS()> \
+            ),\
+            class F_robject__,                                          \
+            NCPP_RTTI_SPECIFIC_TARGS_NO_DEFAULT()                                  \
+        );\
+		template<class F_robject__, NCPP_RTTI_SPECIFIC_TARGS()>\
 		static NCPP_FORCE_INLINE void T_user_post_reflect_object(\
 			F_rcontainer__* rcontainer_p, \
 			F_robject_type_info__* robject_type_info_p,\
@@ -357,7 +399,7 @@ namespace ncpp {
                 static constexpr ncpp::u16 size() { return (ncpp::u16)ncpp::utilities::T_sizeof<NCPP_EXPAND(NCPP_MA MemberType)>; }\
 				\
 				static constexpr bool is_static() { return false; }\
-				static NCPP_FORCE_INLINE void static_get() {  }\
+				static NCPP_FORCE_INLINE int static_get() { return 0; }\
                 \
                 static constexpr ncpp::b8 is_function() { return false; }\
                 static constexpr ncpp::b8 is_virtual_function() { return false; }\
@@ -394,7 +436,7 @@ namespace ncpp {
 				static constexpr ncpp::u16 size() { return 0; }\
 				\
 				static constexpr bool is_static() { return false; }\
-				static NCPP_FORCE_INLINE void static_get() {  }\
+				static NCPP_FORCE_INLINE int static_get() { return 0; }\
                 \
                 static constexpr ncpp::b8 is_function() { return true; }\
                 static constexpr ncpp::b8 is_virtual_function() { return IsVirtualFunction; }\
@@ -761,7 +803,7 @@ namespace ncpp {
 			{\
 				\
 				using F_member = NCPP_EXPAND(NCPP_MA MemberType);\
-                using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, F_member, ncpp::utilities::T_is_function<F_member>, true, false>;\
+                using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, F_member, ncpp::utilities::T_is_function<F_member>, false, true>;\
 				\
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
 					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName, false, true __VA_OPT__(,) __VA_ARGS__)) };\
@@ -795,7 +837,7 @@ namespace ncpp {
 			{\
 				\
 				using F_member = NCPP_EXPAND(NCPP_MA MemberType);\
-                using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, F_member, ncpp::utilities::T_is_function<F_member>, false, true>;\
+                using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, F_member, ncpp::utilities::T_is_function<F_member>, true, false>;\
 				\
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
 					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName, true, false __VA_OPT__(,) __VA_ARGS__)) };\

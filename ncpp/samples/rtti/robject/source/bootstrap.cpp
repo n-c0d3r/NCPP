@@ -113,37 +113,13 @@ public:
     
 public:
     NCPP_ROBJECT_USER_PRE_REFLECT_MEMBER(
-        F_demo_compiletime_rflag,
-        std::enable_if_t<!F_member_static_info__::is_static(), i32> = 0
+        F_demo_compiletime_rflag
     ) {
         
-        cout << "user pre reflect non-static member: "
+        cout << "user pre reflect member: "
             << T_cout_value(F_member_static_info__::name())
-            << " "
-            << custom_params_p->message
-            << std::endl;
-        
-    }
-    NCPP_ROBJECT_USER_POST_REFLECT_MEMBER(
-        F_demo_compiletime_rflag,
-        std::enable_if_t<!F_member_static_info__::is_static(), i32> = 0
-    ) {
-        
-        cout << "user post reflect non-static member: "
-            << T_cout_value(F_member_static_info__::name())
-            << " "
-            << custom_params_p->message
-            << std::endl;
-        
-    }
-    NCPP_ROBJECT_USER_PRE_REFLECT_MEMBER(
-        F_demo_compiletime_rflag,
-        std::enable_if_t<F_member_static_info__::is_static(), i32> = 0
-    ) {
-        
-        cout << "user pre reflect static member: "
-            << T_cout_value(F_member_static_info__::name())
-            << " (" << T_cout_value(F_member_static_info__::static_get())
+            << " ("
+            << T_cout_value(F_member_static_info__::static_get())
             << ")"
             << " "
             << custom_params_p->message
@@ -151,11 +127,10 @@ public:
         
     }
     NCPP_ROBJECT_USER_POST_REFLECT_MEMBER(
-        F_demo_compiletime_rflag,
-        std::enable_if_t<F_member_static_info__::is_static(), i32> = 0
+        F_demo_compiletime_rflag
     ) {
         
-        cout << "user post reflect static member: "
+        cout << "user post reflect member: "
             << T_cout_value(F_member_static_info__::name())
             << " ("
             << T_cout_value(F_member_static_info__::static_get())
@@ -166,11 +141,10 @@ public:
         
     }
     NCPP_ROBJECT_USER_PRE_REFLECT_BASE(
-        F_demo_compiletime_rflag,
-        std::enable_if_t<std::is_same_v<F_base__, B>, i32> = 0
+        F_demo_compiletime_rflag
     ) {
         
-        cout << "user pre reflect base B: "
+        cout << "user pre reflect base: "
             << T_cout_value(F_base__::static_type_name())
             << " "
             << custom_params_p->message
@@ -178,35 +152,10 @@ public:
         
     }
     NCPP_ROBJECT_USER_POST_REFLECT_BASE(
-        F_demo_compiletime_rflag,
-        std::enable_if_t<std::is_same_v<F_base__, B>, i32> = 0
+        F_demo_compiletime_rflag
     ) {
         
-        cout << "user post reflect base B: "
-            << T_cout_value(F_base__::static_type_name())
-            << " "
-            << custom_params_p->message
-            << std::endl;
-        
-    }
-    NCPP_ROBJECT_USER_PRE_REFLECT_BASE(
-        F_demo_compiletime_rflag,
-        std::enable_if_t<std::is_same_v<F_base__, C>, i32> = 0
-    ) {
-        
-        cout << "user pre reflect base C: "
-            << T_cout_value(F_base__::static_type_name())
-            << " "
-            << custom_params_p->message
-            << std::endl;
-        
-    }
-    NCPP_ROBJECT_USER_POST_REFLECT_BASE(
-        F_demo_compiletime_rflag,
-        std::enable_if_t<std::is_same_v<F_base__, C>, i32> = 0
-    ) {
-        
-        cout << "user post reflect base C: "
+        cout << "user post reflect base: "
             << T_cout_value(F_base__::static_type_name())
             << " "
             << custom_params_p->message
@@ -214,11 +163,10 @@ public:
         
     }
     NCPP_ROBJECT_USER_PRE_REFLECT_OBJECT(
-        F_demo_compiletime_rflag,
-        std::enable_if_t<std::is_same_v<F_robject__, C> || std::is_same_v<F_robject__, B>, i32> = 0
+        F_demo_compiletime_rflag
     ) {
         
-        cout << "user pre reflect object C or B: "
+        cout << "user pre reflect object: "
             << T_cout_value(F_robject__::static_type_name())
             << " "
             << custom_params_p->message
@@ -226,35 +174,10 @@ public:
         
     }
     NCPP_ROBJECT_USER_POST_REFLECT_OBJECT(
-        F_demo_compiletime_rflag,
-        std::enable_if_t<std::is_same_v<F_robject__, C> || std::is_same_v<F_robject__, B>, i32> = 0
+        F_demo_compiletime_rflag
     ) {
         
-        cout << "user post reflect object C or B: "
-            << T_cout_value(F_robject__::static_type_name())
-            << " "
-            << custom_params_p->message
-            << std::endl;
-        
-    }
-    NCPP_ROBJECT_USER_PRE_REFLECT_OBJECT(
-        F_demo_compiletime_rflag,
-        std::enable_if_t<std::is_same_v<F_robject__, A>, i32> = 0
-    ) {
-        
-        cout << "user pre reflect object A: "
-            << T_cout_value(F_robject__::static_type_name())
-            << " "
-            << custom_params_p->message
-            << std::endl;
-        
-    }
-    NCPP_ROBJECT_USER_POST_REFLECT_OBJECT(
-        F_demo_compiletime_rflag,
-        std::enable_if_t<std::is_same_v<F_robject__, A>, i32> = 0
-    ) {
-        
-        cout << "user post reflect object A: "
+        cout << "user post reflect object: "
             << T_cout_value(F_robject__::static_type_name())
             << " "
             << custom_params_p->message
@@ -285,11 +208,19 @@ void log_type_info(A::F_robject_type_info* type_info_p){
     
 }
 
+template<typename F__>
+struct DDDF {};
+class DDD {
 
+    NCPP_RTTI_IMPLEMENT_FLAG(DDD, DDDF<F__>, typename F__);
+
+};
 
 int main() {
 
 	A a;
+
+    static constexpr b8 bbb = NCPP_RTTI_IS_HAS_FLAG(A, rtti::F_robject_flag);
 
 	A::F_rcontainer rcontainer;
 

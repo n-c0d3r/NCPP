@@ -85,18 +85,27 @@ namespace ncpp {
             template<typename F__>
             using TF_rtti_flag_implement = typename TF_rtti_flag_implement_helper<F__>::F;
 
-        }
+            template<class F__, typename F_flag__>
+            concept T_is_has_flag = requires {
+
+                requires (F__::template TF___ncpp_rtti_flag_implement___<F_flag__>::value == true);
+
+            };
+
+        };
 
     }
 
 #define NCPP_RTTI_CREATE_FLAG(Name) struct Name {};
 
-#define NCPP_RTTI_IMPLEMENT_FLAG(TypeName, Name) friend void operator << (TypeName&, const Name& flag) { }
+#define NCPP_RTTI_IMPLEMENT_FLAG(TypeName, Name,...) NCPP_PUBLIC_KEYWORD \
+            template<typename> struct TF___ncpp_rtti_flag_implement___;\
+            template<__VA_ARGS__> struct TF___ncpp_rtti_flag_implement___<Name> { static constexpr ncpp::b8 value = true; };
 
 #define NCPP_RTTI_REPRESENT_IMPLEMENT(TypeName) ncpp::rtti::internal::TF_rtti_flag_represent_implement<TypeName>
 #define NCPP_RTTI_REPRESENT(TypeName) ncpp::rtti::internal::TF_rtti_flag_represent<TypeName>
 #define NCPP_RTTI_IMPLEMENT(TypeName) ncpp::rtti::internal::TF_rtti_flag_implement<TypeName>
-#define NCPP_RTTI_IS_HAS_FLAG(TypeName, Name) utilities::T_is_ostreamable_v<NCPP_RTTI_REPRESENT_IMPLEMENT(TypeName), Name>
+#define NCPP_RTTI_IS_HAS_FLAG(TypeName, Name) ncpp::rtti::internal::T_is_has_flag<NCPP_RTTI_REPRESENT_IMPLEMENT(TypeName), Name>
 
 }
 

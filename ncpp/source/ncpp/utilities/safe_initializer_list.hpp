@@ -1,8 +1,8 @@
 #pragma once
 
 /**
- *  @file ncpp/utilities/value_type.hpp
- *  @brief Implements value_type.
+ *  @file ncpp/utilities/safe_initializer_list.hpp
+ *  @brief Implements safe_initializer_list.
  */
 
 
@@ -54,48 +54,42 @@ namespace ncpp {
         namespace internal {
 
             template<class F__>
-            concept T_is_has_eastl_value_type = requires { typename F__::value_type; };
+            concept T_safe_initializer_list_eastl_style = requires { typename F__::value_type; };
 
             template<class F__>
-            concept T_is_has_ncpp_value_type = requires { typename F__::F_value; };
+            concept T_safe_initializer_list_ncpp_style = requires { typename F__::F_value; };
 
-            template<class F__, i32 = 0>
-            struct TF_value_helper {
+            template<class F__, i32>
+            struct TF_safe_initializer_list_helper {
 
-                using F = void;
+                using F = const F__&;
 
             };
 
             template<class F__>
-            struct TF_value_helper<F__, 1> {
+            struct TF_safe_initializer_list_helper<F__, 1> {
 
                 using F = typename F__::value_type;
 
             };
-
             template<class F__>
-            struct TF_value_helper<F__, 2> {
+            struct TF_safe_initializer_list_helper<F__, 2> {
 
                 using F = typename F__::F_value;
 
             };
 
         }
-        
+
 
 
         template<class F__>
-        using TF_value = typename internal::TF_value_helper<
+        using TF_safe_initializer_list = typename internal::TF_safe_initializer_list_helper<
             F__,
-            internal::T_is_has_eastl_value_type<F__> * 1
-            + internal::T_is_has_ncpp_value_type<F__> * 2
+            (internal::T_safe_initializer_list_eastl_style<F__> + internal::T_safe_initializer_list_ncpp_style<F__> * 2)
         >::F;
-
         template<class F__>
-        static constexpr b8 T_is_has_value = (
-            internal::T_is_has_eastl_value_type<F__>
-            || internal::T_is_has_ncpp_value_type<F__>
-        );
+        concept T_is_has_default_initializer_list = (requires { typename F__::value_type; } || requires { typename F__::F_value; });
 
     }
 

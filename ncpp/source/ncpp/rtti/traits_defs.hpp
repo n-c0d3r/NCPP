@@ -65,6 +65,18 @@ namespace ncpp {
 
 	namespace rtti {
 
+#define NCPP_RTTI_SPECIFIC_TARGS_NO_DEFAULT(...) \
+			class F_##__VA_OPT__(__VA_ARGS__##_)##rtti_options__,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##allocator__,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##rcontainer__,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##robject_type_info__,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info__,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##rcontainer_additional_data__,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##robject_type_info_additional_data__,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##robject_member_info_additional_data__,\
+			class F_##__VA_OPT__(__VA_ARGS__##_)##subtype__
+
 #define NCPP_RTTI_SPECIFIC_TARGS(...) \
 			class F_##__VA_OPT__(__VA_ARGS__##_)##rtti_options__,\
 			class F_##__VA_OPT__(__VA_ARGS__##_)##rtti_traits__ = ncpp::rtti::TF_traits<F_##__VA_OPT__(__VA_ARGS__##_)##rtti_options__>,\

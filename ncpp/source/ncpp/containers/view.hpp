@@ -243,60 +243,9 @@ namespace ncpp {
                 new ((F_container*)&container) F_container(x);
 
             }
-            template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_key<F_fake_container__>>, i32> = 0>
-            NCPP_FORCE_INLINE TF_view(
-                std::initializer_list<utilities::TF_key<F_container>> x, 
-                const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}
-                NCPP_ENABLE_IF_DEBUG(, const F_view_owner_counter& owner_counter = F_view_owner_counter())
-            ) :
-                container_p_((const F_container*)&container)
-
-#ifdef NCPP_DEBUG
-                ,
-                owner_counter_p_((F_view_owner_counter*)(&owner_counter))
-#endif
-            {
-
-                new ((F_container*)&container) F_container(x);
-
-            }
             template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_value<F_fake_container__>>, i32> = 0>
             NCPP_FORCE_INLINE TF_view(
                 std::initializer_list<utilities::TF_value<F_container>> x, 
-                const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}
-                NCPP_ENABLE_IF_DEBUG(, const F_view_owner_counter& owner_counter = F_view_owner_counter())
-            ) :
-                container_p_((const F_container*)&container)
-
-#ifdef NCPP_DEBUG
-                ,
-                owner_counter_p_((F_view_owner_counter*)(&owner_counter))
-#endif
-            {
-
-                new ((F_container*)&container) F_container(x);
-
-            }
-            template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_node<F_fake_container__>>, i32> = 0>
-            NCPP_FORCE_INLINE TF_view(
-                std::initializer_list<utilities::TF_node<F_container>> x, 
-                const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}
-                NCPP_ENABLE_IF_DEBUG(, const F_view_owner_counter& owner_counter = F_view_owner_counter())
-            ) :
-                container_p_((const F_container*)&container)
-
-#ifdef NCPP_DEBUG
-                ,
-                owner_counter_p_((F_view_owner_counter*)(&owner_counter))
-#endif
-            {
-
-                new ((F_container*)&container) F_container(x);
-
-            }
-            template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_item<F_fake_container__>>, i32> = 0>
-            NCPP_FORCE_INLINE TF_view(
-                std::initializer_list<utilities::TF_item<F_container>> x, 
                 const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}
                 NCPP_ENABLE_IF_DEBUG(, const F_view_owner_counter& owner_counter = F_view_owner_counter())
             ) :
@@ -535,7 +484,7 @@ namespace ncpp {
                 return (                                 \
                     ( *((const TF_try_march_container_allocator<F_this, F_arg__>*)a.container_p()) )                             \
                     Operator                             \
-                    ( *((const TF_try_march_container_allocator<F_arg__, F_this>*)arg.container_p()) )                             \
+                    ( *((typename F_arg__::F_container*)arg.container_p()) )                             \
                 );\
             }
 
