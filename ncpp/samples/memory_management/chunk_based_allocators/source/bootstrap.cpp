@@ -10,10 +10,12 @@ int main() {
 	{
 		
 		mem::F_incremental_chunk_allocator incremental_chunk_allocator;
-        
+
+#ifndef NCPP_LITE
 		mem::F_smart_chunk_storage smart_chunk_storage;
 		mem::F_smart_chunk_adaptor smart_chunk_adaptor(&smart_chunk_storage);
 		mem::F_smart_chunk_allocator smart_chunk_allocator(&smart_chunk_adaptor);
+#endif
 
 		mem::F_default_allocator default_allocator;
 
@@ -56,6 +58,7 @@ int main() {
 
 		}
 
+#ifndef NCPP_LITE
 		{
 			
 			{
@@ -87,6 +90,7 @@ int main() {
 			mem::log_memory_stats();
 			
 		}
+#endif
 
 		{
 
