@@ -111,6 +111,12 @@ namespace ncpp {
         template<typename F_key__, typename F_value__, typename F_hash__ = TF_hash<F_key__>, typename F_predicate__ = eastl::equal_to<F_key__>>
         using TV_unordered_map = TF_view<TG_unordered_map<F_key__, F_value__, F_hash__, F_predicate__>>;
 
+        template<typename F_key__, typename F_value__, typename F_compare__ = eastl::less<F_key__>>
+        using TV_multimap = TF_view<TG_multimap<F_key__, F_value__, F_compare__>>;
+
+        template<typename F_key__, typename F_value__, typename F_hash__ = TF_hash<F_key__>, typename F_predicate__ = eastl::equal_to<F_key__>>
+        using TV_unordered_multimap = TF_view<TG_unordered_multimap<F_key__, F_value__, F_hash__, F_predicate__>>;
+
 
 
         ////////////////////////////////////////////////////////////////////////////////////

@@ -90,7 +90,10 @@ namespace ncpp {
 
 
         template<typename F__>
-        static constexpr b8 T_is_function = internal::TF_is_function<F__>::value;
+        concept T_is_function = internal::TF_is_function<F__>::value;
+
+        template<typename F__>
+        concept T_not_function = !internal::TF_is_function<F__>::value;
 
     }
 

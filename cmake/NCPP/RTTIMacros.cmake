@@ -535,17 +535,9 @@ function(NCPP_RTTIMacros_CreateMacro)
         ""
         ${ARGN}
     )
-
-
-
-    if(NOT PARGS_NAME_AND_PARAMS)
-        
-    endif()
     
-
-    
-    file(APPEND "${NCPP_RTTI_MACROS_FILE}" "NCPP_ROBJECT_BODY_${PARGS_NAME_AND_PARAMS} ${BODY} \n")
-    file(APPEND "${NCPP_RTTI_MACROS_FILE}" "NCPP_ROBJECT_REFLECT_${PARGS_NAME_AND_PARAMS} ${REFLECT} \n")
+    file(APPEND "${NCPP_RTTI_MACROS_FILE}" "\n #define NCPP_ROBJECT_BODY_${PARGS_NAME_AND_PARAMS} ${PARGS_BODY} \n")
+    file(APPEND "${NCPP_RTTI_MACROS_FILE}" "\n #define NCPP_ROBJECT_REFLECT_${PARGS_NAME_AND_PARAMS} ${PARGS_REFLECT} \n")
 
 endfunction()
 
@@ -557,12 +549,75 @@ NCPP_RTTIMacros_CreateMemberOverrider(
     REFLECT ";"
     BODY ";"
 )
-NCPP_RTTIMacros_CreateMemberOverrider(
-    NAME DEFAULT_2
-    PREFIX G
-    HIDE_NAME_IN_MEMBER_MACROS
+NCPP_RTTIMacros_CreateMacro(
+    NAME_AND_PARAMS "_(...)"
     REFLECT ";"
-    BODY ";"
+    BODY "__VA_ARGS__;"
+)
+
+NCPP_RTTIMacros_CreateMacro(
+    NAME_AND_PARAMS "GETTER(GetterName, MemberName, ...)"
+    REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
+    BODY "NCPP_PUBLIC_KEYWORD \\
+        NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO((ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName, false, false)\\\; \\
+        NCPP_FORCE_INLINE ncpp::containers::TF_view<decltype(MemberName)> GetterName() { return MemberName\\\; }
+    "
+)
+NCPP_RTTIMacros_CreateMacro(
+    NAME_AND_PARAMS "PRIVATE_GETTER(GetterName, MemberName, ...)"
+    REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
+    BODY "NCPP_PRIVATE_KEYWORD \\
+        NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO((ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName, false, false)\\\; \\
+        NCPP_FORCE_INLINE ncpp::containers::TF_view<decltype(MemberName)> GetterName() { return MemberName\\\; }
+    "
+)
+NCPP_RTTIMacros_CreateMacro(
+    NAME_AND_PARAMS "PROTECTED_GETTER(GetterName, MemberName, ...)"
+    REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
+    BODY "NCPP_PROTECTED_KEYWORD \\
+        NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO((ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName, false, false)\\\; \\
+        NCPP_FORCE_INLINE ncpp::containers::TF_view<decltype(MemberName)> GetterName() { return MemberName\\\; }
+    "
+)
+NCPP_RTTIMacros_CreateMacro(
+    NAME_AND_PARAMS "PUBLIC_GETTER(GetterName, MemberName, ...)"
+    REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
+    BODY "NCPP_PUBLIC_KEYWORD \\
+        NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO((ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName, false, false)\\\; \\
+        NCPP_FORCE_INLINE ncpp::containers::TF_view<decltype(MemberName)> GetterName() { return MemberName\\\; }
+    "
+)
+NCPP_RTTIMacros_CreateMacro(
+    NAME_AND_PARAMS "GETTER_CONST(GetterName, MemberName, ...)"
+    REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_CONST(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
+    BODY "NCPP_PUBLIC_KEYWORD \\
+        NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO((ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName, false, true)\\\; \\
+        NCPP_FORCE_INLINE ncpp::containers::TF_view<decltype(MemberName)> GetterName() const { return MemberName\\\; }
+    "
+)
+NCPP_RTTIMacros_CreateMacro(
+    NAME_AND_PARAMS "PRIVATE_GETTER_CONST(GetterName, MemberName, ...)"
+    REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_CONST(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
+    BODY "NCPP_PRIVATE_KEYWORD \\
+        NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO((ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName, false, true)\\\; \\
+        NCPP_FORCE_INLINE ncpp::containers::TF_view<decltype(MemberName)> GetterName() const { return MemberName\\\; }
+    "
+)
+NCPP_RTTIMacros_CreateMacro(
+    NAME_AND_PARAMS "PROTECTED_GETTER_CONST(GetterName, MemberName, ...)"
+    REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_CONST(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
+    BODY "NCPP_PROTECTED_KEYWORD \\
+        NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO((ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName, false, true)\\\; \\
+        NCPP_FORCE_INLINE ncpp::containers::TF_view<decltype(MemberName)> GetterName() const { return MemberName\\\; }
+    "
+)
+NCPP_RTTIMacros_CreateMacro(
+    NAME_AND_PARAMS "PUBLIC_GETTER_CONST(GetterName, MemberName, ...)"
+    REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_CONST(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
+    BODY "NCPP_PUBLIC_KEYWORD \\
+        NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO((ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName, false, true)\\\; \\
+        NCPP_FORCE_INLINE ncpp::containers::TF_view<decltype(MemberName)> GetterName() const { return MemberName\\\; }
+    "
 )
 
 

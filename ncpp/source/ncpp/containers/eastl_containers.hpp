@@ -653,6 +653,20 @@ namespace ncpp {
         template<typename F_key__, typename F_value__, typename F_hash__ = TF_hash<F_key__>, typename F_predicate__ = eastl::equal_to<F_key__>>
         using TEP_unordered_map = eastl::unordered_map<F_key__, F_value__, F_hash__, F_predicate__, mem::F_ephemeral_allocator>;
 
+        template<typename F_key__, typename F_value__, typename F_compare__ = eastl::less<F_key__>, typename F_allocator__ = mem::F_default_allocator>
+        using TF_multimap = eastl::multimap<F_key__, F_value__, F_compare__, F_allocator__>;
+        template<typename F_key__, typename F_value__, typename F_compare__ = eastl::less<F_key__>>
+        using TG_multimap = eastl::multimap<F_key__, F_value__, F_compare__, mem::F_general_allocator>;
+        template<typename F_key__, typename F_value__, typename F_compare__ = eastl::less<F_key__>>
+        using TEP_multimap = eastl::multimap<F_key__, F_value__, F_compare__, mem::F_ephemeral_allocator>;
+
+        template<typename F_key__, typename F_value__, typename F_hash__ = TF_hash<F_key__>, typename F_predicate__ = eastl::equal_to<F_key__>, typename F_allocator__ = mem::F_default_allocator>
+        using TF_unordered_multimap = eastl::unordered_multimap<F_key__, F_value__, F_hash__, F_predicate__, F_allocator__>;
+        template<typename F_key__, typename F_value__, typename F_hash__ = TF_hash<F_key__>, typename F_predicate__ = eastl::equal_to<F_key__>>
+        using TG_unordered_multimap = eastl::unordered_multimap<F_key__, F_value__, F_hash__, F_predicate__, mem::F_general_allocator>;
+        template<typename F_key__, typename F_value__, typename F_hash__ = TF_hash<F_key__>, typename F_predicate__ = eastl::equal_to<F_key__>>
+        using TEP_unordered_multimap = eastl::unordered_multimap<F_key__, F_value__, F_hash__, F_predicate__, mem::F_ephemeral_allocator>;
+
 
 
         ////////////////////////////////////////////////////////////////////////////////////

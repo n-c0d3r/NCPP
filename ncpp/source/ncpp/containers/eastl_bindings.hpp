@@ -133,6 +133,25 @@ NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
     typename F_predicate__,
     typename F_allocator__
 );
+NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
+    NCPP_MA(ncpp::containers::TF_multimap<F_key__, F_value__, F_compare, F_allocator__>),
+    NCPP_MA(F_allocator__),
+    NCPP_MA(ncpp::containers::TF_multimap<F_key__, F_value__, F_compare, F_new_allocator__>),
+    typename F_key__,
+    typename F_value__,
+    typename F_compare,
+    typename F_allocator__
+);
+NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
+    NCPP_MA(ncpp::containers::TF_unordered_multimap<F_key__, F_value__, F_hash__, F_predicate__, F_allocator__>),
+    NCPP_MA(F_allocator__),
+    NCPP_MA(ncpp::containers::TF_unordered_multimap<F_key__, F_value__, F_hash__, F_predicate__, F_new_allocator__>),
+    typename F_key__,
+    typename F_value__,
+    typename F_hash__,
+    typename F_predicate__,
+    typename F_allocator__
+);
 
 
 

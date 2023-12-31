@@ -299,7 +299,7 @@ namespace ncpp {
 
 
 
-#define NCPP_ROBJECT_BODY_(...) ;
+#define NCPP_ROBJECT_BODY_METADATA(...) ;
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
@@ -307,7 +307,7 @@ namespace ncpp {
 
 #define NCPP_ROBJECT_BODY_BASE(BaseName)
 
-#define NCPP_ROBJECT_BODY_EXTENDS(BaseName) NCPP_ROBJECT_BODY_BASE(BaseName)
+#define NCPP_ROBJECT_BODY_EXTENDS(...) NCPP_ROBJECT_BODY_BASE(__VA_ARGS__)
 
 
 		////////////////////////////////////////////////////////////////////////////////////
@@ -328,11 +328,12 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 #define NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, IsVirtualFunction, IsConstFunction) \
-			template<typename object_type__ = F_this, typename member_type__ = NCPP_EXPAND(NCPP_MA MemberType)>\
-			struct TF_##MemberName##___ncpp_static_info___;\
-			friend struct TF_##MemberName##___ncpp_static_info___<F_this, NCPP_EXPAND(NCPP_MA MemberType)>;\
+			template<typename object_type__, typename member_type__, bool is_function__, bool is_virtual__, bool is_const__>\
+			struct TF_##MemberName##___ncpp_static_info___;                                                       \
+            template<typename object_type__, typename member_type__, bool is_function__, bool is_virtual__, bool is_const__>\
+			friend struct TF_##MemberName##___ncpp_static_info___;\
 			template<typename object_type__, typename member_type__>\
-			struct TF_##MemberName##___ncpp_static_info___{\
+			struct TF_##MemberName##___ncpp_static_info___<object_type__, member_type__, false, IsVirtualFunction, IsConstFunction>{\
 				\
 			NCPP_PUBLIC_KEYWORD\
 				\
@@ -364,8 +365,8 @@ namespace ncpp {
 				\
 			};\
 			\
-			template<typename object_type__, typename return_type__, typename... arg_types__>\
-			struct TF_##MemberName##___ncpp_static_info___<object_type__, return_type__(arg_types__...)>{\
+            template<typename object_type__, typename return_type__, typename... arg_types__>\
+			struct TF_##MemberName##___ncpp_static_info___<object_type__, return_type__(arg_types__...), true, IsVirtualFunction, IsConstFunction>{\
 				\
 			NCPP_PUBLIC_KEYWORD\
 				\
@@ -520,11 +521,12 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 #define NCPP_ROBJECT_BODY_STATIC_MEMBER_STATIC_INFO(MemberType, MemberName) \
-			template<typename object_type__ = F_this, typename member_type__ = NCPP_EXPAND(NCPP_MA MemberType)>\
+			template<typename object_type__, typename member_type__, bool is_function__>\
 			struct TF_##MemberName##___ncpp_static_info___;\
-			friend struct TF_##MemberName##___ncpp_static_info___<F_this, NCPP_EXPAND(NCPP_MA MemberType)>;\
+			template<typename object_type__, typename member_type__, bool is_function__>\
+			friend struct TF_##MemberName##___ncpp_static_info___;\
 			template<typename object_type__, typename member_type__>\
-			struct TF_##MemberName##___ncpp_static_info___{\
+			struct TF_##MemberName##___ncpp_static_info___<object_type__, member_type__, false>{\
 				\
 			NCPP_PUBLIC_KEYWORD\
 				\
@@ -557,7 +559,7 @@ namespace ncpp {
 			};\
 			\
 			template<typename object_type__, typename return_type__, typename... arg_types__>\
-			struct TF_##MemberName##___ncpp_static_info___<object_type__, return_type__(arg_types__...)>{\
+			struct TF_##MemberName##___ncpp_static_info___<object_type__, return_type__(arg_types__...), true>{\
 				\
 			NCPP_PUBLIC_KEYWORD\
 				\
@@ -649,8 +651,6 @@ namespace ncpp {
 				__VA_ARGS__;\
 			}
 
-#define NCPP_ROBJECT_REFLECT_(...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_METADATA(__VA_ARGS__));
-
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
@@ -676,7 +676,7 @@ namespace ncpp {
 				\
 			}
 
-#define NCPP_ROBJECT_REFLECT_EXTENDS(BaseName) NCPP_ROBJECT_REFLECT_BASE(BaseName)
+#define NCPP_ROBJECT_REFLECT_EXTENDS(...) NCPP_ROBJECT_REFLECT_BASE(__VA_ARGS__)
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
@@ -684,19 +684,37 @@ namespace ncpp {
 
 #define NCPP_ROBJECT_REFLECT_VIRTUAL ;
 
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName,...) \
+#define NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName, IsVirtualFunction, IsConstFunction,...) \
 			robject_member_info_p = ncpp::rtti::T_reflect_object_member<\
 				F_this, \
 				NCPP_EXPAND(NCPP_MA MemberType), \
-				TF_##MemberName##___ncpp_static_info___<F_this, NCPP_EXPAND(NCPP_MA MemberType)>, \
+				TF_##MemberName##___ncpp_static_info___<F_this, NCPP_EXPAND(NCPP_MA MemberType), ncpp::utilities::T_is_function<NCPP_EXPAND(NCPP_MA MemberType)>, IsVirtualFunction, IsConstFunction>, \
 				NCPP_RTTI_PASS_SPECIFIC_USING()\
 			>(\
 				robject_type_info_p \
 			);
+
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+
+#define NCPP_ROBJECT_REFLECT_STATIC_MEMBER_INFO(MemberType, MemberName,...) \
+			robject_member_info_p = ncpp::rtti::T_reflect_object_member<\
+				F_this, \
+				NCPP_EXPAND(NCPP_MA MemberType), \
+				TF_##MemberName##___ncpp_static_info___<F_this, NCPP_EXPAND(NCPP_MA MemberType), ncpp::utilities::T_is_function<NCPP_EXPAND(NCPP_MA MemberType)>>, \
+				NCPP_RTTI_PASS_SPECIFIC_USING()\
+			>(\
+				robject_type_info_p \
+			);
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
 
 #define NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName,...) \
 			__VA_ARGS__;
@@ -709,10 +727,10 @@ namespace ncpp {
 			{\
 				\
 				using F_member = NCPP_EXPAND(NCPP_MA MemberType);\
-                using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, NCPP_EXPAND(NCPP_MA MemberType)>;\
+                using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, F_member, ncpp::utilities::T_is_function<F_member>, false, false>;\
 				\
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
-					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName, false, false __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_PRE_REFLECT_MEMBER();\
 				\
@@ -743,10 +761,10 @@ namespace ncpp {
 			{\
 				\
 				using F_member = NCPP_EXPAND(NCPP_MA MemberType);\
-                using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, NCPP_EXPAND(NCPP_MA MemberType)>;\
+                using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, F_member, ncpp::utilities::T_is_function<F_member>, true, false>;\
 				\
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
-					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName, false, true __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_PRE_REFLECT_MEMBER();\
 				\
@@ -777,10 +795,10 @@ namespace ncpp {
 			{\
 				\
 				using F_member = NCPP_EXPAND(NCPP_MA MemberType);\
-                using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, NCPP_EXPAND(NCPP_MA MemberType)>;\
+                using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, F_member, ncpp::utilities::T_is_function<F_member>, false, true>;\
 				\
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
-					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName, true, false __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_PRE_REFLECT_MEMBER();\
 				\
@@ -811,10 +829,10 @@ namespace ncpp {
 			{\
 				\
 				using F_member = NCPP_EXPAND(NCPP_MA MemberType);\
-                using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, NCPP_EXPAND(NCPP_MA MemberType)>;\
+                using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, F_member, ncpp::utilities::T_is_function<F_member>, true, true>;\
 				\
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
-					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName, true, true __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_PRE_REFLECT_MEMBER();\
 				\
@@ -845,10 +863,10 @@ namespace ncpp {
 			{\
 				\
 				using F_member = NCPP_EXPAND(NCPP_MA MemberType);\
-                using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, NCPP_EXPAND(NCPP_MA MemberType)>;\
+                using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, F_member, ncpp::utilities::T_is_function<F_member>>;\
 				\
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
-					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_STATIC_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_PRE_REFLECT_MEMBER();\
 				\

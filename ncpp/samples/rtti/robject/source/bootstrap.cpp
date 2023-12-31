@@ -31,13 +31,39 @@ class C {
 
 };
 
-class A : public B, public C {
+template<typename F__>
+class TD {
+
+    NCPP_BASIC_RCLASS(
+        TD<F__>,
+
+        PUBLIC(
+            (i32),
+            dd
+        )
+    );
+
+};
+
+#define LOG_THIS void log_this() { std::cout << "OK" << std::endl; }
+
+class A : public B, public C, public TD<i32> {
 
 	NCPP_BASIC_RCLASS(
 		A,
 
         EXTENDS(B),
         EXTENDS(C),
+        EXTENDS(TD<i32>),
+
+        _(LOG_THIS),
+
+        PRIVATE(
+            (i32),
+            private_i_
+        ),
+        GETTER(private_i, private_i_),
+        GETTER_CONST(private_i, private_i_),
 
 		PUBLIC(
             (i32),
@@ -240,7 +266,6 @@ public:
     NCPP_ROBJECT_DISABLE_DEFAULT_REFLECT(F_demo_compiletime_rflag);
     
 };
-
 
 
 

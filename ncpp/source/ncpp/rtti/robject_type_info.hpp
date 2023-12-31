@@ -81,7 +81,7 @@ namespace ncpp {
 
 			containers::TF_set<F_robject_type_info*> base_type_info_p_set_;
             
-            containers::TF_unordered_map<containers::TF_string<char, typename F_rtti_traits::F_allocator>, F_robject_member_info*> name_to_member_info_p_map_;
+            containers::TF_unordered_multimap<containers::TF_string<char, typename F_rtti_traits::F_allocator>, F_robject_member_info*> name_to_member_info_p_map_;
             containers::TF_unordered_map<u64, F_robject_member_info*> hash_code_to_member_info_p_map_;
 
 		public:
@@ -111,7 +111,7 @@ namespace ncpp {
                 base_type_info_p_set_.erase(base_type_info_p_set_.find(base_type_info_p));
             }
             
-            NCPP_FORCE_INLINE const containers::TF_unordered_map<containers::TF_string<char, typename F_rtti_traits::F_allocator>, F_robject_member_info*>& name_to_member_info_p_map() const { return name_to_member_info_p_map_; }
+            NCPP_FORCE_INLINE const containers::TF_unordered_multimap<containers::TF_string<char, typename F_rtti_traits::F_allocator>, F_robject_member_info*>& name_to_member_info_p_map() const { return name_to_member_info_p_map_; }
             NCPP_FORCE_INLINE const containers::TF_unordered_map<u64, F_robject_member_info*>& hash_code_to_member_info_p_map() const { return hash_code_to_member_info_p_map_; }
 
 			inline F_robject_member_info* member_info(containers::TF_view<containers::TF_string<char, F_allocator>> name) {
@@ -157,20 +157,29 @@ namespace ncpp {
 				if (it != hash_code_to_member_info_p_map_.end())
 					return;
 
-				name_to_member_info_p_map_[info->name()] = info;
-                hash_code_to_member_info_p_map_[info->hash_code()] = info;
+				name_to_member_info_p_map_.insert({ info->name(), info });
+                hash_code_to_member_info_p_map_.insert({ info->hash_code(), info });
 			}
 			inline void remove_member_info(containers::TF_view<containers::TF_string<char, F_allocator>> name) {
 
-				auto it = name_to_member_info_p_map_.find(name);
+                auto name_range = name_to_member_info_p_map_.equal_range(name);
 
-				if (it != name_to_member_info_p_map_.end()) {
+				if (name_range.first != name_to_member_info_p_map_.end()) {
 
-                    hash_code_to_member_info_p_map_.erase(hash_code_to_member_info_p_map_.find(it->second->hash_code()));
+                    for(auto next_name_it = name_range.first;;) {
 
-					F_rtti_traits::template T_delete<F_robject_member_info>(&(rcontainer_p_->allocator()), it->second);
+                        auto name_it = next_name_it++;
 
-					name_to_member_info_p_map_.erase(it);
+                        hash_code_to_member_info_p_map_.erase(hash_code_to_member_info_p_map_.find(name_it->second->hash_code()));
+
+                        F_rtti_traits::template T_delete<F_robject_member_info>(&(rcontainer_p_->allocator()), name_it->second);
+
+                        name_to_member_info_p_map_.erase(name_it);
+
+                        if(next_name_it == name_range.second)
+                            break;
+
+                    }
 
 				}
 			}
@@ -180,7 +189,25 @@ namespace ncpp {
 
                 if (it != hash_code_to_member_info_p_map_.end()) {
 
-                    name_to_member_info_p_map_.erase(name_to_member_info_p_map_.find(it->second->name()));
+                    auto name_range = name_to_member_info_p_map_.equal_range(it->second->name());
+
+                    if (name_range.first != name_to_member_info_p_map_.end())
+                        for(auto next_name_it = name_range.first;;) {
+
+                            auto name_it = next_name_it++;
+
+                            if(name_it->second->hash_code() == hash_code) {
+
+                                name_to_member_info_p_map_.erase(name_it);
+
+                                break;
+
+                            }
+
+                            if(next_name_it == name_range.second)
+                                break;
+
+                        }
 
                     F_rtti_traits::template T_delete<F_robject_member_info>(&(rcontainer_p_->allocator()), it->second);
 

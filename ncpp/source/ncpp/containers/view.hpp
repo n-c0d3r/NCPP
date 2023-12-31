@@ -138,6 +138,8 @@ namespace ncpp {
             typename std::remove_const_t<std::remove_reference_t<F__>>::F___ncpp_view_flag___;
 
         };
+        template<typename F__>
+        concept T_not_view = !T_is_view<F__>;
 
 
 
@@ -501,7 +503,7 @@ namespace ncpp {
 
 
 #define NCPP_CONTAINERS_DEFINE_VIEW_OPERATORS(Operator) \
-            template<typename F_arg__, std::enable_if_t<!T_is_view<F_arg__>, i32> = 0>\
+            template<T_not_view F_arg__>\
             friend NCPP_FORCE_INLINE auto operator Operator (F_arg__&& arg, const F_this& a) \
             ->decltype(                                  \
                 (arg Operator std::declval<TF_try_march_container_allocator<F_container__, F_arg__>>())                                             \
@@ -510,7 +512,7 @@ namespace ncpp {
 \
                 return (arg Operator ( *((const TF_try_march_container_allocator<F_container__, F_arg__>*)a.container_p_) ));\
             }\
-            template<typename F_arg__, std::enable_if_t<!T_is_view<F_arg__>, i32> = 0>\
+            template<T_not_view F_arg__>\
             friend NCPP_FORCE_INLINE auto operator Operator (const F_this& a, F_arg__&& arg) \
             ->decltype(                                  \
                 (std::declval<TF_try_march_container_allocator<F_container__, F_arg__>>() Operator arg)                                             \
@@ -519,7 +521,7 @@ namespace ncpp {
 \
                 return (arg Operator ( *((const TF_try_march_container_allocator<F_container__, F_arg__>*)a.container_p_) ));\
             }\
-            template<typename F_arg__, std::enable_if_t<T_is_view<F_arg__>, i32> = 0>\
+            template<T_is_view F_arg__>\
             friend NCPP_FORCE_INLINE auto operator Operator (const F_this& a, F_arg__&& arg) \
             ->decltype(                                  \
                 (                                        \

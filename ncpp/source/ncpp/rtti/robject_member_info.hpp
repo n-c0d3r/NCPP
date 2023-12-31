@@ -228,7 +228,7 @@ namespace ncpp {
 			F_robject_type_info__* robject_type_info_p
 		) {
 
-			F_robject_member_info__* member_info_p = robject_type_info_p->member_info(F_member_static_info__::name());
+			F_robject_member_info__* member_info_p = robject_type_info_p->member_info(utilities::T_type_hash_code<F_member_static_info__>);
 
 			if (member_info_p)
 				return member_info_p;
