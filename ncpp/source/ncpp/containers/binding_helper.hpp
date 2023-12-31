@@ -70,18 +70,20 @@ namespace ncpp {
         using TF_container_allocator = typename internal::TF_allocator_binding_helper<F__>::F_allocator;
 
         template<typename F__>
-        static constexpr b8 T_is_has_container_allocator_v = !std::is_same_v<void, TF_container_allocator<F__>>;
+        concept T_is_has_container_allocator_v = !std::is_same_v<void, TF_container_allocator<F__>>;
 
         template<typename F__, typename F_new_allocator__>
         using TF_bind_container_allocator = typename internal::TF_allocator_binding_helper<F__>::template TF_bind_new_allocator<F_new_allocator__>;
 
         template<typename F1__, typename F2__>
-        static constexpr b8 T_is_same_container_v = (
+        concept T_is_same_containers = (
             std::is_same_v<
                 F1__,
                 TF_bind_container_allocator<F2__, TF_container_allocator<F1__>>
             >
         );
+        template<typename F1__, typename F2__>
+        concept T_not_same_containers = !T_is_same_containers<F1__, F2__>;
 
     }
 

@@ -58,7 +58,7 @@ namespace ncpp {
     namespace containers {
 
         template<typename F_string__>
-        inline std::enable_if_t<T_is_same_container_v<F_string__, F_string>, F_string__> T_replace(const F_string__& source, V_string from, V_string to) {
+        inline std::enable_if_t<T_is_same_containers<F_string__, F_string>, F_string__> T_replace(const F_string__& source, V_string from, V_string to) {
 
             F_string__ result = source;
 
@@ -73,7 +73,7 @@ namespace ncpp {
         }
 
         template<typename F_string__>
-        inline std::enable_if_t<T_is_same_container_v<F_string__, F_string>, F_string__> T_replace_all(const F_string__& source, V_string from, V_string to) {
+        inline std::enable_if_t<T_is_same_containers<F_string__, F_string>, F_string__> T_replace_all(const F_string__& source, V_string from, V_string to) {
 
             if(from->empty())
                 return source;

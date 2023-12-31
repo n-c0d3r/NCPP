@@ -115,20 +115,22 @@ namespace ncpp {
 
         }
 
-        template<typename F_container__, typename F_another__>
+        template<typename F_container__, typename F_another__, typename F_cleaned_another__ = std::remove_const_t<std::remove_reference_t<F_another__>>>
         using TF_try_march_container_allocator = typename internal::TF_try_march_container_allocator<
             F_container__,
-            std::remove_const_t<std::remove_reference_t<F_another__>>,
-            !std::is_same_v<containers::TF_container_allocator<std::remove_const_t<std::remove_reference_t<F_another__>>>, void>
+            F_cleaned_another__,
+            !std::is_same_v<containers::TF_container_allocator<F_cleaned_another__>, void>
         >::F;
 
 
 
         template<typename F1__, typename F2__>
-        static constexpr b8 T_is_same_viewable_container_v = (
-            T_is_same_container_v<F1__, F2__>
-            && (utilities::T_sizeof<TF_container_allocator<F1__>> == utilities::T_sizeof<TF_container_allocator<F2__>>)
+        concept T_is_same_viewable_containers = (
+                T_is_same_containers<F1__, F2__>
+                && (utilities::T_sizeof<TF_container_allocator<F1__>> == utilities::T_sizeof<TF_container_allocator<F2__>>)
         );
+        template<typename F1__, typename F2__>
+        concept T_not_same_viewable_containers = !T_is_same_viewable_containers<F1__, F2__>;
 
 
 
@@ -150,7 +152,7 @@ namespace ncpp {
             typename F2__::F_container;
 
             {
-                T_is_same_viewable_container_v<
+                T_is_same_viewable_containers<
                     typename F1__::F_container,
                     typename F2__::F_container
                 >
@@ -224,9 +226,9 @@ namespace ncpp {
 
         public:
             template<
-                typename F__,
-                std::enable_if_t<!T_is_same_viewable_container_v<F_container, F__>, i32> = 0
+                typename F__
             >
+            requires T_not_same_viewable_containers<F_container, F__>
             NCPP_FORCE_INLINE TF_view(
                 const F__& x, 
                 const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}
@@ -243,7 +245,8 @@ namespace ncpp {
                 new ((F_container*)&container) F_container(x);
 
             }
-            template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_key<F_fake_container__>>, i32> = 0>
+            template<typename F_fake_container__ = F_container>
+            requires utilities::T_is_has_key<F_fake_container__>
             NCPP_FORCE_INLINE TF_view(
                 std::initializer_list<utilities::TF_key<F_container>> x, 
                 const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}
@@ -260,7 +263,8 @@ namespace ncpp {
                 new ((F_container*)&container) F_container(x);
 
             }
-            template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_value<F_fake_container__>>, i32> = 0>
+            template<typename F_fake_container__ = F_container>
+            requires utilities::T_is_has_value<F_fake_container__>
             NCPP_FORCE_INLINE TF_view(
                 std::initializer_list<utilities::TF_value<F_container>> x, 
                 const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}
@@ -277,7 +281,8 @@ namespace ncpp {
                 new ((F_container*)&container) F_container(x);
 
             }
-            template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_node<F_fake_container__>>, i32> = 0>
+            template<typename F_fake_container__ = F_container>
+            requires utilities::T_is_has_node<F_fake_container__>
             NCPP_FORCE_INLINE TF_view(
                 std::initializer_list<utilities::TF_node<F_container>> x, 
                 const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}
@@ -294,7 +299,8 @@ namespace ncpp {
                 new ((F_container*)&container) F_container(x);
 
             }
-            template<typename F_fake_container__ = F_container, std::enable_if_t<!std::is_same_v<void, utilities::TF_item<F_fake_container__>>, i32> = 0>
+            template<typename F_fake_container__ = F_container>
+            requires utilities::T_is_has_item<F_fake_container__>
             NCPP_FORCE_INLINE TF_view(
                 std::initializer_list<utilities::TF_item<F_container>> x, 
                 const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}
@@ -316,9 +322,9 @@ namespace ncpp {
 
         public:
             template<
-                typename F_other_container__,
-                std::enable_if_t<T_is_same_viewable_container_v<F_container, F_other_container__>, i32> = 0
+                typename F_other_container__
             >
+            requires T_is_same_viewable_containers<F_container, F_other_container__>
             NCPP_FORCE_INLINE operator const F_other_container__&() const noexcept {
 
                 return *reinterpret_cast<const F_other_container__*>(container_p_);
@@ -388,9 +394,9 @@ namespace ncpp {
 
         public:
             template<
-                typename F_other_container__,
-                std::enable_if_t<T_is_same_viewable_container_v<F_container, F_other_container__>, i32> = 0
+                typename F_other_container__
             >
+            requires T_is_same_viewable_containers<F_container, F_other_container__>
             NCPP_FORCE_INLINE TF_view(const F_other_container__& other_container) noexcept :
                 container_p_(reinterpret_cast<const F_container*>(&other_container))
             {
@@ -399,9 +405,9 @@ namespace ncpp {
 
             }
             template<
-                typename F_other_container__,
-                std::enable_if_t<T_is_same_viewable_container_v<F_container, F_other_container__>, i32> = 0
+                typename F_other_container__
             >
+            requires T_is_same_viewable_containers<F_container, F_other_container__>
             NCPP_FORCE_INLINE TF_view& operator = (const F_other_container__& other_container) noexcept
             {
 
@@ -414,9 +420,9 @@ namespace ncpp {
 
         public:
             template<
-                class F_other_view__,
-                std::enable_if_t<T_is_same_views<F_this, F_other_view__>, i32> = 0
+                class F_other_view__
             >
+            requires T_is_same_views<F_this, F_other_view__>
             NCPP_FORCE_INLINE TF_view(const F_other_view__& other_view) NCPP_ENABLE_IF_RELEASE(noexcept) :
                 container_p_(reinterpret_cast<const F_container*>(other_view.container_p()))
             {
@@ -425,9 +431,9 @@ namespace ncpp {
 
             }
             template<
-                class F_other_view__,
-                std::enable_if_t<T_is_same_views<F_this, F_other_view__>, i32> = 0
+                class F_other_view__
             >
+            requires T_is_same_views<F_this, F_other_view__>
             NCPP_FORCE_INLINE TF_view& operator = (const F_other_view__& other_view) NCPP_ENABLE_IF_RELEASE(noexcept) {
 
                 container_p_ = reinterpret_cast<const F_container*>(other_view.container_p());
@@ -441,9 +447,9 @@ namespace ncpp {
 
         public:
             template<
-                class F_other_view__,
-                std::enable_if_t<T_is_same_views<F_this, F_other_view__>, i32> = 0
+                class F_other_view__
             >
+            requires T_is_same_views<F_this, F_other_view__>
             NCPP_FORCE_INLINE TF_view(F_other_view__&& other_view) NCPP_ENABLE_IF_RELEASE(noexcept) :
                 container_p_(reinterpret_cast<const F_container*>(other_view.container_p()))
             {
@@ -454,9 +460,9 @@ namespace ncpp {
 
             }
             template<
-                class F_other_view__,
-                std::enable_if_t<T_is_same_views<F_this, F_other_view__>, i32> = 0
+                class F_other_view__
             >
+            requires T_is_same_views<F_this, F_other_view__>
             NCPP_FORCE_INLINE TF_view& operator = (F_other_view__&& other_view) NCPP_ENABLE_IF_RELEASE(noexcept) {
 
                 container_p_ = reinterpret_cast<const F_container*>(other_view.container_p());

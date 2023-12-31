@@ -53,52 +53,43 @@ namespace ncpp {
 
         namespace internal {
 
-            template<class F__, typename = void>
-            struct TF_is_has_eastl_node_type : eastl::false_type {};
             template<class F__>
-            struct TF_is_has_eastl_node_type<F__, std::void_t<typename F__::node_type>> : eastl::true_type {};
-
-            template<class F__, typename = void>
-            struct TF_is_has_ncpp_node_type : eastl::false_type {};
+            concept T_is_has_eastl_node_type = requires { typename F__::node_type; };
             template<class F__>
-            struct TF_is_has_ncpp_node_type<F__, std::void_t<typename F__::F_node>> : eastl::true_type {};
+            concept T_is_has_ncpp_node_type = requires { typename F__::F_node; };
 
-            template<class F__, i32 = 0>
+            template<typename F__>
             struct TF_node_helper {
 
                 using F = void;
 
             };
 
-            template<class F__>
-            struct TF_node_helper<F__, 1> {
+            template<T_is_has_eastl_node_type F__>
+            struct TF_node_helper<F__> {
 
                 using F = typename F__::node_type;
 
             };
 
-            template<class F__>
-            struct TF_node_helper<F__, 2> {
+            template<T_is_has_ncpp_node_type F__>
+            struct TF_node_helper<F__> {
 
                 using F = typename F__::F_node;
 
             };
 
         }
-        
 
 
-        template<class F__>
-        using TF_node = typename internal::TF_node_helper<
-            F__,
-            internal::TF_is_has_eastl_node_type<F__>::value * 1
-            + internal::TF_is_has_ncpp_node_type<F__>::value * 2
-        >::F;
 
         template<class F__>
-        static constexpr b8 T_is_has_node = (
-            internal::TF_is_has_eastl_node_type<F__>::value
-            || internal::TF_is_has_ncpp_node_type<F__>::value
+        using TF_node = typename internal::TF_node_helper<F__>::F;
+
+        template<class F__>
+        concept T_is_has_node = (
+            requires { typename F__::node_type; }
+            || requires { typename F__::F_node; }
         );
 
     }
