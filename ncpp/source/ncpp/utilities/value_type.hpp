@@ -53,43 +53,52 @@ namespace ncpp {
 
         namespace internal {
 
+            template<class F__, typename = void>
+            struct TF_is_has_eastl_value_type : eastl::false_type {};
             template<class F__>
-            concept T_is_has_eastl_value_type = requires { typename F__::value_type; };
-            template<class F__>
-            concept T_is_has_ncpp_value_type = requires { typename F__::F_value; };
+            struct TF_is_has_eastl_value_type<F__, std::void_t<typename F__::value_type>> : eastl::true_type {};
 
-            template<typename F__>
+            template<class F__, typename = void>
+            struct TF_is_has_ncpp_value_type : eastl::false_type {};
+            template<class F__>
+            struct TF_is_has_ncpp_value_type<F__, std::void_t<typename F__::F_value>> : eastl::true_type {};
+
+            template<class F__, i32 = 0>
             struct TF_value_helper {
 
                 using F = void;
 
             };
 
-            template<T_is_has_eastl_value_type F__>
-            struct TF_value_helper<F__> {
+            template<class F__>
+            struct TF_value_helper<F__, 1> {
 
                 using F = typename F__::value_type;
 
             };
 
-            template<T_is_has_ncpp_value_type F__>
-            struct TF_value_helper<F__> {
+            template<class F__>
+            struct TF_value_helper<F__, 2> {
 
                 using F = typename F__::F_value;
 
             };
 
         }
-
+        
 
 
         template<class F__>
-        using TF_value = typename internal::TF_value_helper<F__>::F;
+        using TF_value = typename internal::TF_value_helper<
+            F__,
+            internal::TF_is_has_eastl_value_type<F__>::value * 1
+            + internal::TF_is_has_ncpp_value_type<F__>::value * 2
+        >::F;
 
         template<class F__>
-        concept T_is_has_value = (
-            requires { typename F__::value_type; }
-            || requires { typename F__::F_value; }
+        static constexpr b8 T_is_has_value = (
+            internal::TF_is_has_eastl_value_type<F__>::value
+            || internal::TF_is_has_ncpp_value_type<F__>::value
         );
 
     }
