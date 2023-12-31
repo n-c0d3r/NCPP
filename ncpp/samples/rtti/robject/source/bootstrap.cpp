@@ -45,7 +45,7 @@ class TD {
 
 };
 
-#define LOG_THIS void log_this() { std::cout << "OK" << std::endl; }
+#define LOG_THIS void log_this() { std::cout << T_type_fullname<F_this>() << std::endl; }
 
 class A : public B, public C, public TD<i32> {
 
@@ -109,7 +109,7 @@ public:
         G_string message;
         
     };
-    NCPP_ROBJECT_USER_REFLECT_CUSTOM_DATA(F_customm_reflector, F_user_reflect_custom_params);
+    NCPP_ROBJECT_USER_REFLECT_CUSTOM_PARAMS(F_customm_reflector, F_user_reflect_custom_params);
     
 public:
     NCPP_ROBJECT_USER_PRE_REFLECT_MEMBER(

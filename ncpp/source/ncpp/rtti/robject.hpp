@@ -68,9 +68,9 @@ namespace ncpp {
 
 	namespace rtti {
 
-#define NCPP_ROBJECT_USER_REFLECT_CUSTOM_DATA(CustomReflector, CustomDataType) \
-			friend CustomDataType operator << (CustomReflector&, ncpp::rtti::F_user_reflect_custom_params_flag flag); \
-            NCPP_RTTI_IMPLEMENT_FLAG(CustomReflector, CustomDataType);
+#define NCPP_ROBJECT_USER_REFLECT_CUSTOM_PARAMS(CustomReflector, CustomParamsType) \
+			friend CustomParamsType operator << (CustomReflector&, ncpp::rtti::F_user_reflect_custom_params_flag flag); \
+            NCPP_RTTI_IMPLEMENT_FLAG(CustomReflector, CustomParamsType);
 
 
 
