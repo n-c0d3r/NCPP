@@ -65,6 +65,12 @@ class A : public B, public C, public TD<i32> {
         GETTER(private_i, private_i_),
         GETTER_CONST(private_i, private_i_),
 
+        PRIVATE_STATIC(
+            (i32),
+            private_static_i_
+        ),
+        STATIC_GETTER(private_static_i, private_static_i_),
+
 		PUBLIC(
             (i32),
             i
@@ -93,6 +99,7 @@ void A::foo() {
 }
 
 i32 A::si = 4;
+i32 A::private_static_i_ = 6;
 void A::foo2(int, int, TF_vector<int, F_default_allocator>) {
 
     
