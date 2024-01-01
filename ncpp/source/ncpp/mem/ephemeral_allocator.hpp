@@ -41,6 +41,6 @@
 
 namespace ncpp::mem {
 
-    static_assert(T_can_be_general_allocator_v<F_ephemeral_allocator>, "Ephemeral allocators must have capabilities to be used as general allocators");
+    static_assert(T_can_be_general_allocator<F_ephemeral_allocator>, "Ephemeral allocators must have capabilities to be used as general allocators");
 
 }

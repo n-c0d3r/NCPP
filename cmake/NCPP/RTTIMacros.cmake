@@ -652,7 +652,7 @@ NCPP_RTTIMacros_CreateMacro(
     "
 )
 NCPP_RTTIMacros_CreateMacro(
-    NAME_AND_PARAMS "GETTER_VIRTUAL(GetterName, MemberName, ...)"
+    NAME_AND_PARAMS "GETTER_VIRTUAL_CONST(GetterName, MemberName, ...)"
     REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
     BODY "NCPP_PUBLIC_KEYWORD \\
         NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO((ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName, true, true)\\\; \\
@@ -660,7 +660,7 @@ NCPP_RTTIMacros_CreateMacro(
     "
 )
 NCPP_RTTIMacros_CreateMacro(
-    NAME_AND_PARAMS "PRIVATE_GETTER_VIRTUAL(GetterName, MemberName, ...)"
+    NAME_AND_PARAMS "PRIVATE_GETTER_VIRTUAL_CONST(GetterName, MemberName, ...)"
     REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
     BODY "NCPP_PRIVATE_KEYWORD \\
         NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO((ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName, true, true)\\\; \\
@@ -668,7 +668,7 @@ NCPP_RTTIMacros_CreateMacro(
     "
 )
 NCPP_RTTIMacros_CreateMacro(
-    NAME_AND_PARAMS "PROTECTED_GETTER_VIRTUAL(GetterName, MemberName, ...)"
+    NAME_AND_PARAMS "PROTECTED_GETTER_VIRTUAL_CONST(GetterName, MemberName, ...)"
     REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
     BODY "NCPP_PROTECTED_KEYWORD \\
         NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO((ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName, true, true)\\\; \\
@@ -676,7 +676,7 @@ NCPP_RTTIMacros_CreateMacro(
     "
 )
 NCPP_RTTIMacros_CreateMacro(
-    NAME_AND_PARAMS "PUBLIC_GETTER_VIRTUAL(GetterName, MemberName, ...)"
+    NAME_AND_PARAMS "PUBLIC_GETTER_VIRTUAL_CONST(GetterName, MemberName, ...)"
     REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
     BODY "NCPP_PUBLIC_KEYWORD \\
         NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO((ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName, true, true)\\\; \\
