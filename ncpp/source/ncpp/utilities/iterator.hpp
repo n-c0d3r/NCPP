@@ -86,7 +86,7 @@ namespace ncpp {
         };
 
         template <typename F__>
-        static constexpr b8 T_is_has_begin_full = (
+        concept T_is_has_begin_full = (
 
             T_is_has_begin<F__>,
             T_is_has_begin_const<F__>,
@@ -115,7 +115,7 @@ namespace ncpp {
         };
 
         template <typename F__>
-        static constexpr b8 T_is_has_end_full = (
+        concept T_is_has_end_full = (
 
             T_is_has_end<F__>,
             T_is_has_end_const<F__>,

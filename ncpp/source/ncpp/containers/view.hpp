@@ -125,7 +125,7 @@ namespace ncpp {
 
 
         template<typename F1__, typename F2__>
-        static constexpr b8 T_is_same_viewable_container = (
+        concept T_is_same_viewable_container = (
             T_is_same_container<F1__, F2__>
             && (utilities::T_sizeof<TF_container_allocator<F1__>> == utilities::T_sizeof<TF_container_allocator<F2__>>)
         );
@@ -228,7 +228,7 @@ namespace ncpp {
                 std::enable_if_t<!T_is_same_viewable_container<F_container, F__>, i32> = 0
             >
             NCPP_FORCE_INLINE TF_view(
-                const F__& x, 
+                const F__& x,
                 const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}
                 NCPP_ENABLE_IF_DEBUG(, const F_view_owner_counter& owner_counter = F_view_owner_counter())
             ) :

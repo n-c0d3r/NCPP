@@ -96,7 +96,7 @@ namespace ncpp {
         >::F;
 
         template<class F__>
-        static constexpr b8 T_is_has_item = (
+        concept T_is_has_item = (
             internal::TF_is_has_eastl_item_type<F__>::value
             || internal::TF_is_has_ncpp_item_type<F__>::value
         );

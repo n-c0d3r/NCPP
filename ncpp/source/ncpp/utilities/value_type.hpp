@@ -92,7 +92,7 @@ namespace ncpp {
         >::F;
 
         template<class F__>
-        static constexpr b8 T_is_has_value = (
+        concept T_is_has_value = (
             internal::T_is_has_eastl_value_type<F__>
             || internal::T_is_has_ncpp_value_type<F__>
         );

@@ -68,7 +68,7 @@ namespace ncpp {
 
 
         template<class F_derived__, class F_base__>
-        static constexpr b8 T_is_derived_from = std::is_convertible<F_derived__* , F_base__*>::value;
+        concept T_is_derived_from = std::is_convertible<F_derived__* , F_base__*>::value;
 
     }
 
