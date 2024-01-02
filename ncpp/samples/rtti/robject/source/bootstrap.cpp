@@ -47,7 +47,7 @@ class TD {
 
 #define BLOG_THIS void log_this() { std::cout << T_type_fullname<F_this>() << std::endl; }
 #define RLOG_THIS std::cout << "Reflecting" << std::endl;
-
+ 
 class A : public B, public C, public TD<i32> {
 
 	NCPP_BASIC_RCLASS(
@@ -64,16 +64,16 @@ class A : public B, public C, public TD<i32> {
 
         PRIVATE(
             (i32),
-            private_i_
+            private_i_ 
         ),
-        GETTER(private_i, private_i_),
-        GETTER_CONST(private_i, private_i_),
+        PUBLIC_GETTER(private_i, private_i_),
+        PUBLIC_CONST_GETTER(private_i, private_i_),
 
         PRIVATE_STATIC(
             (i32),
             private_static_i_
         ),
-        STATIC_GETTER(private_static_i, private_static_i_),
+        PUBLIC_STATIC_GETTER(private_static_i, private_static_i_),
 
 		PUBLIC(
             (i32),
