@@ -45,7 +45,8 @@ class TD {
 
 };
 
-#define LOG_THIS void log_this() { std::cout << T_type_fullname<F_this>() << std::endl; }
+#define BLOG_THIS void log_this() { std::cout << T_type_fullname<F_this>() << std::endl; }
+#define RLOG_THIS std::cout << "Reflecting" << std::endl;
 
 class A : public B, public C, public TD<i32> {
 
@@ -56,7 +57,8 @@ class A : public B, public C, public TD<i32> {
         EXTENDS(C),
         EXTENDS(TD<i32>),
 
-        BONLY(LOG_THIS),
+        BONLY(BLOG_THIS),
+        RONLY(RLOG_THIS),
 
         SAMPLE_NESTED_MACRO_A(abc),
 
