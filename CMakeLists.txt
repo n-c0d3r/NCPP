@@ -52,7 +52,7 @@ NCPP_VersionHelper_CreateVersionMacros(
     OUTPUT_FILE "${NCPP_GENERATED_FILES_DIR}/version.hpp"
     MAJOR 0
     MINOR 5
-    PATCH 10
+    PATCH 15
 )
 
 
