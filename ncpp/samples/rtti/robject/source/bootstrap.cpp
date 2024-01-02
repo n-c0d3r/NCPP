@@ -56,7 +56,9 @@ class A : public B, public C, public TD<i32> {
         EXTENDS(C),
         EXTENDS(TD<i32>),
 
-        _(LOG_THIS),
+        BONLY(LOG_THIS),
+
+        SAMPLE_NESTED_MACRO_A(abc),
 
         PRIVATE(
             (i32),

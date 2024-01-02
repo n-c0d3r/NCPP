@@ -9,19 +9,54 @@ include(NCPP/MacroHelper)
 
 set(NCPP_RTTI_MACROS_FILE "${NCPP_GENERATED_FILES_DIR}/rtti_macros.hpp")
 
-file(WRITE ${NCPP_RTTI_MACROS_FILE} "\n")
+file(WRITE ${NCPP_RTTI_MACROS_FILE} "\n
+    #include <ncpp/prerequisites.hpp>\n
+"
+)
 
 
 
-function(NCPP_RTTIMacros_CreateMemberOverrider)
+function(NCPP_RTTIMacros_AddIncludes)
+
+    cmake_parse_arguments(
+        PARGS
+        ""
+        ""
+        "INCLUDES"
+        ${ARGN}
+    )
+
+    set(content "\n")
+
+    message(${PARGS_INCLUDES})
+
+    foreach(includePath ${PARGS_INCLUDES})
+        set(content "${content} #include ${includePath} \n ")
+    endforeach()
+
+    file(APPEND "${NCPP_RTTI_MACROS_FILE}" "${content}")
+
+endfunction()
+
+
+
+function(NCPP_RTTIMacros_RObject_CreateMemberOverrider)
     
     cmake_parse_arguments(
         PARGS
         "HIDE_NAME_IN_MEMBER_MACROS"
         "NAME;PREFIX;REFLECT;BODY"
-        ""
+        "INCLUDES"
         ${ARGN}
     )
+
+
+
+    if(PARGS_INCLUDES)
+        NCPP_RTTIMacros_AddIncludes(INCLUDES ${PARGS_INCLUDES})
+    endif()
+
+
 
     NCPP_MacroHelper_CreateFunctionMacro(
         NAME NCPP_ROBJECT_MEMBER_BODY_OVERRIDER_${PARGS_NAME}
@@ -526,15 +561,27 @@ endfunction()
 
 
 
-function(NCPP_RTTIMacros_CreateMacro)
+function(NCPP_RTTIMacros_RObject_CreateMacro)
     
     cmake_parse_arguments(
         PARGS
         ""
         "NAME_AND_PARAMS;REFLECT;BODY"
-        ""
+        "INCLUDES"
         ${ARGN}
     )
+
+
+
+    if(PARGS_INCLUDES)
+        NCPP_RTTIMacros_AddIncludes(INCLUDES ${PARGS_INCLUDES})
+    endif()
+
+
+
+    if(NOT PARGS_NAME_AND_PARAMS)
+        message(FATAL_ERROR "<NCPP_RTTIMacros_RObject_CreateMacro> Require NAME_AND_PARAMS")
+    endif()
     
     file(APPEND "${NCPP_RTTI_MACROS_FILE}" "\n #define NCPP_ROBJECT_BODY_${PARGS_NAME_AND_PARAMS} ${PARGS_BODY} \n")
     file(APPEND "${NCPP_RTTI_MACROS_FILE}" "\n #define NCPP_ROBJECT_REFLECT_${PARGS_NAME_AND_PARAMS} ${PARGS_REFLECT} \n")
@@ -543,19 +590,123 @@ endfunction()
 
 
 
-NCPP_RTTIMacros_CreateMemberOverrider(
+function(NCPP_RTTIMacros_RObject_CreateNestedMacro)
+
+    cmake_parse_arguments(
+        PARGS
+        ""
+        "NAME_AND_PARAMS"
+        "PARTS;INCLUDES"
+        ${ARGN}
+    )
+
+
+
+    if(PARGS_INCLUDES)
+        NCPP_RTTIMacros_AddIncludes(INCLUDES ${PARGS_INCLUDES})
+    endif()
+
+
+
+    if(NOT PARGS_NAME_AND_PARAMS)
+        message(FATAL_ERROR "<NCPP_RTTIMacros_RObject_CreateNestedMacro> Require NAME_AND_PARAMS")
+    endif()
+
+
+
+    set(REFLECT "")
+    set(BODY "")
+
+    foreach(part ${PARGS_PARTS})
+        set(REFLECT "${REFLECT} NCPP_ROBJECT_REFLECT_${part}\\\;")
+        set(BODY "${BODY} NCPP_ROBJECT_BODY_${part}\\\;")
+    endforeach()
+
+    set(REFLECT "${REFLECT}\n")
+    set(BODY "${BODY}\n")
+
+    NCPP_RTTIMacros_RObject_CreateMacro(
+        NAME_AND_PARAMS "${PARGS_NAME_AND_PARAMS}"
+        REFLECT "${REFLECT};"
+        BODY "${BODY};"
+    )
+
+endfunction()
+
+
+
+#####################################################################################
+#   Default member overrider
+#####################################################################################
+NCPP_RTTIMacros_RObject_CreateMemberOverrider(
     NAME DEFAULT
     HIDE_NAME_IN_MEMBER_MACROS
     REFLECT ";"
     BODY ";"
 )
-NCPP_RTTIMacros_CreateMacro(
+
+
+
+#####################################################################################
+#   Body-only macro
+#####################################################################################
+NCPP_RTTIMacros_RObject_CreateMacro(
+    NAME_AND_PARAMS "BONLY(...)"
+    REFLECT ";"
+    BODY "__VA_ARGS__;"
+)
+#####################################################################################
+#   Reflect-only macro
+#####################################################################################
+NCPP_RTTIMacros_RObject_CreateMacro(
+    NAME_AND_PARAMS "RONLY(...)"
+    REFLECT "__VA_ARGS__;"
+    BODY ";"
+)
+
+
+
+#####################################################################################
+#   SAMPLE_NESTED_MACRO_B macro
+#####################################################################################
+NCPP_RTTIMacros_RObject_CreateNestedMacro(
+    NAME_AND_PARAMS "SAMPLE_NESTED_MACRO_B(NAME)"
+    PARTS
+        "PUBLIC((i32), NAME)"
+        "PUBLIC((i32), NAME##_2)"
+        "PUBLIC((i32), NAME##_3)"
+)
+
+#####################################################################################
+#   SAMPLE_NESTED_MACRO_A macro
+#####################################################################################
+NCPP_RTTIMacros_RObject_CreateNestedMacro(
+    NAME_AND_PARAMS "SAMPLE_NESTED_MACRO_A(NAME)"
+    PARTS
+        "PUBLIC((i32), NAME)"
+        "PUBLIC((i32), NAME##_2)"
+        "PUBLIC((i32), NAME##_3)"
+        "SAMPLE_NESTED_MACRO_B(NAME##_B)"
+        "SAMPLE_NESTED_MACRO_B(NAME##_B2)"
+)
+
+
+
+#####################################################################################
+#   _ macro
+#####################################################################################
+NCPP_RTTIMacros_RObject_CreateMacro(
     NAME_AND_PARAMS "_(...)"
     REFLECT ";"
     BODY "__VA_ARGS__;"
 )
 
-NCPP_RTTIMacros_CreateMacro(
+
+
+#####################################################################################
+#   Getter macros
+#####################################################################################
+NCPP_RTTIMacros_RObject_CreateMacro(
     NAME_AND_PARAMS "GETTER(GetterName, MemberName, ...)"
     REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
     BODY "NCPP_PUBLIC_KEYWORD \\
@@ -563,7 +714,7 @@ NCPP_RTTIMacros_CreateMacro(
         NCPP_FORCE_INLINE ncpp::containers::TF_view<decltype(MemberName)> GetterName() { return MemberName\\\; }
     "
 )
-NCPP_RTTIMacros_CreateMacro(
+NCPP_RTTIMacros_RObject_CreateMacro(
     NAME_AND_PARAMS "PRIVATE_GETTER(GetterName, MemberName, ...)"
     REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
     BODY "NCPP_PRIVATE_KEYWORD \\
@@ -571,7 +722,7 @@ NCPP_RTTIMacros_CreateMacro(
         NCPP_FORCE_INLINE ncpp::containers::TF_view<decltype(MemberName)> GetterName() { return MemberName\\\; }
     "
 )
-NCPP_RTTIMacros_CreateMacro(
+NCPP_RTTIMacros_RObject_CreateMacro(
     NAME_AND_PARAMS "PROTECTED_GETTER(GetterName, MemberName, ...)"
     REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
     BODY "NCPP_PROTECTED_KEYWORD \\
@@ -579,7 +730,7 @@ NCPP_RTTIMacros_CreateMacro(
         NCPP_FORCE_INLINE ncpp::containers::TF_view<decltype(MemberName)> GetterName() { return MemberName\\\; }
     "
 )
-NCPP_RTTIMacros_CreateMacro(
+NCPP_RTTIMacros_RObject_CreateMacro(
     NAME_AND_PARAMS "PUBLIC_GETTER(GetterName, MemberName, ...)"
     REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
     BODY "NCPP_PUBLIC_KEYWORD \\
@@ -587,7 +738,7 @@ NCPP_RTTIMacros_CreateMacro(
         NCPP_FORCE_INLINE ncpp::containers::TF_view<decltype(MemberName)> GetterName() { return MemberName\\\; }
     "
 )
-NCPP_RTTIMacros_CreateMacro(
+NCPP_RTTIMacros_RObject_CreateMacro(
     NAME_AND_PARAMS "GETTER_CONST(GetterName, MemberName, ...)"
     REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_CONST(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
     BODY "NCPP_PUBLIC_KEYWORD \\
@@ -595,7 +746,7 @@ NCPP_RTTIMacros_CreateMacro(
         NCPP_FORCE_INLINE ncpp::containers::TF_view<decltype(MemberName)> GetterName() const { return MemberName\\\; }
     "
 )
-NCPP_RTTIMacros_CreateMacro(
+NCPP_RTTIMacros_RObject_CreateMacro(
     NAME_AND_PARAMS "PRIVATE_GETTER_CONST(GetterName, MemberName, ...)"
     REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_CONST(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
     BODY "NCPP_PRIVATE_KEYWORD \\
@@ -603,7 +754,7 @@ NCPP_RTTIMacros_CreateMacro(
         NCPP_FORCE_INLINE ncpp::containers::TF_view<decltype(MemberName)> GetterName() const { return MemberName\\\; }
     "
 )
-NCPP_RTTIMacros_CreateMacro(
+NCPP_RTTIMacros_RObject_CreateMacro(
     NAME_AND_PARAMS "PROTECTED_GETTER_CONST(GetterName, MemberName, ...)"
     REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_CONST(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
     BODY "NCPP_PROTECTED_KEYWORD \\
@@ -611,7 +762,7 @@ NCPP_RTTIMacros_CreateMacro(
         NCPP_FORCE_INLINE ncpp::containers::TF_view<decltype(MemberName)> GetterName() const { return MemberName\\\; }
     "
 )
-NCPP_RTTIMacros_CreateMacro(
+NCPP_RTTIMacros_RObject_CreateMacro(
     NAME_AND_PARAMS "PUBLIC_GETTER_CONST(GetterName, MemberName, ...)"
     REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_CONST(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
     BODY "NCPP_PUBLIC_KEYWORD \\
@@ -619,7 +770,7 @@ NCPP_RTTIMacros_CreateMacro(
         NCPP_FORCE_INLINE ncpp::containers::TF_view<decltype(MemberName)> GetterName() const { return MemberName\\\; }
     "
 )
-NCPP_RTTIMacros_CreateMacro(
+NCPP_RTTIMacros_RObject_CreateMacro(
     NAME_AND_PARAMS "GETTER_VIRTUAL(GetterName, MemberName, ...)"
     REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
     BODY "NCPP_PUBLIC_KEYWORD \\
@@ -627,7 +778,7 @@ NCPP_RTTIMacros_CreateMacro(
         virtual ncpp::containers::TF_view<decltype(MemberName)> GetterName() { return MemberName\\\; }
     "
 )
-NCPP_RTTIMacros_CreateMacro(
+NCPP_RTTIMacros_RObject_CreateMacro(
     NAME_AND_PARAMS "PRIVATE_GETTER_VIRTUAL(GetterName, MemberName, ...)"
     REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
     BODY "NCPP_PRIVATE_KEYWORD \\
@@ -635,7 +786,7 @@ NCPP_RTTIMacros_CreateMacro(
         virtual ncpp::containers::TF_view<decltype(MemberName)> GetterName() { return MemberName\\\; }
     "
 )
-NCPP_RTTIMacros_CreateMacro(
+NCPP_RTTIMacros_RObject_CreateMacro(
     NAME_AND_PARAMS "PROTECTED_GETTER_VIRTUAL(GetterName, MemberName, ...)"
     REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
     BODY "NCPP_PROTECTED_KEYWORD \\
@@ -643,7 +794,7 @@ NCPP_RTTIMacros_CreateMacro(
         virtual ncpp::containers::TF_view<decltype(MemberName)> GetterName() { return MemberName\\\; }
     "
 )
-NCPP_RTTIMacros_CreateMacro(
+NCPP_RTTIMacros_RObject_CreateMacro(
     NAME_AND_PARAMS "PUBLIC_GETTER_VIRTUAL(GetterName, MemberName, ...)"
     REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
     BODY "NCPP_PUBLIC_KEYWORD \\
@@ -651,7 +802,7 @@ NCPP_RTTIMacros_CreateMacro(
         virtual ncpp::containers::TF_view<decltype(MemberName)> GetterName() { return MemberName\\\; }
     "
 )
-NCPP_RTTIMacros_CreateMacro(
+NCPP_RTTIMacros_RObject_CreateMacro(
     NAME_AND_PARAMS "GETTER_VIRTUAL_CONST(GetterName, MemberName, ...)"
     REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
     BODY "NCPP_PUBLIC_KEYWORD \\
@@ -659,7 +810,7 @@ NCPP_RTTIMacros_CreateMacro(
         virtual ncpp::containers::TF_view<decltype(MemberName)> GetterName() { return MemberName\\\; }
     "
 )
-NCPP_RTTIMacros_CreateMacro(
+NCPP_RTTIMacros_RObject_CreateMacro(
     NAME_AND_PARAMS "PRIVATE_GETTER_VIRTUAL_CONST(GetterName, MemberName, ...)"
     REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
     BODY "NCPP_PRIVATE_KEYWORD \\
@@ -667,7 +818,7 @@ NCPP_RTTIMacros_CreateMacro(
         virtual ncpp::containers::TF_view<decltype(MemberName)> GetterName() { return MemberName\\\; }
     "
 )
-NCPP_RTTIMacros_CreateMacro(
+NCPP_RTTIMacros_RObject_CreateMacro(
     NAME_AND_PARAMS "PROTECTED_GETTER_VIRTUAL_CONST(GetterName, MemberName, ...)"
     REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
     BODY "NCPP_PROTECTED_KEYWORD \\
@@ -675,7 +826,7 @@ NCPP_RTTIMacros_CreateMacro(
         virtual ncpp::containers::TF_view<decltype(MemberName)> GetterName() { return MemberName\\\; }
     "
 )
-NCPP_RTTIMacros_CreateMacro(
+NCPP_RTTIMacros_RObject_CreateMacro(
     NAME_AND_PARAMS "PUBLIC_GETTER_VIRTUAL_CONST(GetterName, MemberName, ...)"
     REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
     BODY "NCPP_PUBLIC_KEYWORD \\
@@ -683,7 +834,7 @@ NCPP_RTTIMacros_CreateMacro(
         virtual ncpp::containers::TF_view<decltype(MemberName)> GetterName() { return MemberName\\\; }
     "
 )
-NCPP_RTTIMacros_CreateMacro(
+NCPP_RTTIMacros_RObject_CreateMacro(
     NAME_AND_PARAMS "STATIC_GETTER(GetterName, MemberName, ...)"
     REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_STATIC_MEMBER(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
     BODY "NCPP_PUBLIC_KEYWORD \\
@@ -691,7 +842,7 @@ NCPP_RTTIMacros_CreateMacro(
         static NCPP_FORCE_INLINE ncpp::containers::TF_view<decltype(MemberName)> GetterName() { return MemberName\\\; }
     "
 )
-NCPP_RTTIMacros_CreateMacro(
+NCPP_RTTIMacros_RObject_CreateMacro(
     NAME_AND_PARAMS "PRIVATE_STATIC_GETTER(GetterName, MemberName, ...)"
     REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_STATIC_MEMBER(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
     BODY "NCPP_PRIVATE_KEYWORD \\
@@ -699,7 +850,7 @@ NCPP_RTTIMacros_CreateMacro(
         static NCPP_FORCE_INLINE ncpp::containers::TF_view<decltype(MemberName)> GetterName() { return MemberName\\\; }
     "
 )
-NCPP_RTTIMacros_CreateMacro(
+NCPP_RTTIMacros_RObject_CreateMacro(
     NAME_AND_PARAMS "PROTECTED_STATIC_GETTER(GetterName, MemberName, ...)"
     REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_STATIC_MEMBER(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
     BODY "NCPP_PROTECTED_KEYWORD \\
@@ -707,7 +858,7 @@ NCPP_RTTIMacros_CreateMacro(
         static NCPP_FORCE_INLINE ncpp::containers::TF_view<decltype(MemberName)> GetterName() { return MemberName\\\; }
     "
 )
-NCPP_RTTIMacros_CreateMacro(
+NCPP_RTTIMacros_RObject_CreateMacro(
     NAME_AND_PARAMS "PUBLIC_STATIC_GETTER(GetterName, MemberName, ...)"
     REFLECT "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_STATIC_MEMBER(DEFAULT, (ncpp::containers::TF_view<decltype(MemberName)>)(), GetterName __VA_OPT__(,) __VA_ARGS__))"
     BODY "NCPP_PUBLIC_KEYWORD \\

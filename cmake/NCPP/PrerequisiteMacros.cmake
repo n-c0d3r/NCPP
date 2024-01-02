@@ -77,7 +77,7 @@ function(NCPP_PrerequisiteMacros_Create_NTH_ARG MaxArgCount)
         PARAM_NAMES 
             "I"
             "..."
-        BODY "NCPP_EXPAND(NCPP_GLUE(NCPP_NTH_ARG_, I)( __VA_ARGS__))"        
+        BODY "NCPP_EXPAND(NCPP_EXPAND(NCPP_NTH_ARG_ ## I)( __VA_ARGS__))"
     )
     
 endfunction()
