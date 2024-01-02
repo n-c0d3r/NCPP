@@ -31,7 +31,7 @@ endfunction()
 
 
 
-function(NCPP_Utilities_RTTIHelper_RObject_CreateMemberOverrider)
+function(NCPP_RTTIHelper_RObject_CreateMemberOverrider)
     
     cmake_parse_arguments(
         PARGS
@@ -552,7 +552,7 @@ endfunction()
 
 
 
-function(NCPP_Utilities_RTTIHelper_RObject_CreateMacro)
+function(NCPP_RTTIHelper_RObject_CreateMacro)
     
     cmake_parse_arguments(
         PARGS
@@ -571,7 +571,7 @@ function(NCPP_Utilities_RTTIHelper_RObject_CreateMacro)
 
 
     if(NOT PARGS_NAME_AND_PARAMS)
-        message(FATAL_ERROR "<NCPP_Utilities_RTTIHelper_RObject_CreateMacro> Require NAME_AND_PARAMS")
+        message(FATAL_ERROR "<NCPP_RTTIHelper_RObject_CreateMacro> Require NAME_AND_PARAMS")
     endif()
     
     file(APPEND "${NCPP_RTTI_MACROS_FILE}" "\n #define NCPP_ROBJECT_BODY_${PARGS_NAME_AND_PARAMS} ${PARGS_BODY} \n")
@@ -581,7 +581,7 @@ endfunction()
 
 
 
-function(NCPP_Utilities_RTTIHelper_RObject_CreateNestedMacro)
+function(NCPP_RTTIHelper_RObject_CreateNestedMacro)
 
     cmake_parse_arguments(
         PARGS
@@ -600,7 +600,7 @@ function(NCPP_Utilities_RTTIHelper_RObject_CreateNestedMacro)
 
 
     if(NOT PARGS_NAME_AND_PARAMS)
-        message(FATAL_ERROR "<NCPP_Utilities_RTTIHelper_RObject_CreateNestedMacro> Require NAME_AND_PARAMS")
+        message(FATAL_ERROR "<NCPP_RTTIHelper_RObject_CreateNestedMacro> Require NAME_AND_PARAMS")
     endif()
 
 
@@ -616,7 +616,7 @@ function(NCPP_Utilities_RTTIHelper_RObject_CreateNestedMacro)
     set(REFLECT "${REFLECT}\n")
     set(BODY "${BODY}\n")
 
-    NCPP_Utilities_RTTIHelper_RObject_CreateMacro(
+    NCPP_RTTIHelper_RObject_CreateMacro(
         NAME_AND_PARAMS "${PARGS_NAME_AND_PARAMS}"
         REFLECT "${REFLECT};"
         BODY "${BODY};"

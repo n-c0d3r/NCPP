@@ -47,7 +47,7 @@ add_dependencies(ncpp.samples.rtti.robject
 #####################################################################################
 #   SAMPLE_NESTED_MACRO_B macro
 #####################################################################################
-NCPP_Utilities_RTTIHelper_RObject_CreateNestedMacro(
+NCPP_RTTIHelper_RObject_CreateNestedMacro(
     NAME_AND_PARAMS "SAMPLE_NESTED_MACRO_B(NAME)"
     PARTS
         "PUBLIC((i32), NAME)"
@@ -58,7 +58,7 @@ NCPP_Utilities_RTTIHelper_RObject_CreateNestedMacro(
 #####################################################################################
 #   SAMPLE_NESTED_MACRO_A macro
 #####################################################################################
-NCPP_Utilities_RTTIHelper_RObject_CreateNestedMacro(
+NCPP_RTTIHelper_RObject_CreateNestedMacro(
     NAME_AND_PARAMS "SAMPLE_NESTED_MACRO_A(NAME)"
     PARTS
         "PUBLIC((i32), NAME)"
