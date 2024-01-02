@@ -79,7 +79,11 @@ namespace ncpp {
         namespace internal {
 
             template<sz count__, typename... F__>
-            struct TF_large_pack_implement;
+            struct TF_large_pack_implement {
+
+                eastl::tuple<F__...> tuple = {};
+
+            };
 
             template<typename... F__>
             struct TF_large_pack_implement<1, F__...> {
@@ -362,7 +366,7 @@ namespace ncpp {
             struct TF_unpack_helper<index__, eastl::tuple<F__...>> {
 
                 using F_pack = eastl::tuple<F__...>;
-                using F = eastl::tuple_item_t<index__, F_pack>;
+                using F = eastl::tuple_element_t<index__, F_pack>;
 
                 static NCPP_FORCE_INLINE F& get(F_pack& pack) noexcept {
 
@@ -387,7 +391,7 @@ namespace ncpp {
             struct TF_unpack_helper<index__, TF_large_pack<F__...>> {
 
                 using F_pack = TF_large_pack<F__...>;
-                using F = eastl::tuple_item_t<index__, F_pack>;
+                using F = eastl::tuple_element_t<index__, F_pack>;
 
                 static NCPP_FORCE_INLINE F& get(F_pack& pack) noexcept {
 
