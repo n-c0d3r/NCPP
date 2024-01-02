@@ -18,13 +18,35 @@ file(WRITE ${NCPP_RTTI_MACROS_FILE} "\n
 
 
 #####################################################################################
-#   Default member overrider
+#   Member overriders
 #####################################################################################
 NCPP_RTTIHelper_RObject_CreateMemberOverrider(
-    NAME DEFAULT
+    NAME "DEFAULT"
+
     HIDE_NAME_IN_MEMBER_MACROS
+
     REFLECT ";"
     BODY ";"
+)
+NCPP_RTTIHelper_RObject_CreateMemberOverrider(
+    NAME "INLINE"
+
+    REFLECT ";"
+    BODY ";"
+
+    KEYWORDS "inline"
+
+    FUNCTION_ONLY
+)
+NCPP_RTTIHelper_RObject_CreateMemberOverrider(
+    NAME "FORCE_INLINE"
+
+    REFLECT ";"
+    BODY ";"
+
+    KEYWORDS "NCPP_FORCE_INLINE"
+
+    FUNCTION_ONLY
 )
 
 
@@ -32,7 +54,7 @@ NCPP_RTTIHelper_RObject_CreateMemberOverrider(
 #####################################################################################
 #   Body-only macro
 #####################################################################################
-NCPP_RTTIHelper_RObject_CreateMacro(
+NCPP_RTTIHelper_RObject_CreateLowLevelMacro(
     NAME_AND_PARAMS "BONLY(...)"
     REFLECT ";"
     BODY "__VA_ARGS__;"
@@ -40,7 +62,7 @@ NCPP_RTTIHelper_RObject_CreateMacro(
 #####################################################################################
 #   Reflect-only macro
 #####################################################################################
-NCPP_RTTIHelper_RObject_CreateMacro(
+NCPP_RTTIHelper_RObject_CreateLowLevelMacro(
     NAME_AND_PARAMS "RONLY(...)"
     REFLECT "__VA_ARGS__;"
     BODY ";"
@@ -51,7 +73,7 @@ NCPP_RTTIHelper_RObject_CreateMacro(
 #####################################################################################
 #   _ macro
 #####################################################################################
-NCPP_RTTIHelper_RObject_CreateMacro(
+NCPP_RTTIHelper_RObject_CreateLowLevelMacro(
     NAME_AND_PARAMS "_(...)"
     REFLECT ";"
     BODY "__VA_ARGS__;"
@@ -66,12 +88,13 @@ NCPP_RTTIHelper_RObject_CreateMemberMacro(
     NAME "GETTER"
     PARAMS "GetterName" "MemberName" "..."
 
+    OVERRIDER FORCE_INLINE
+
     MEMBER_NAME "GetterName"
     MEMBER_RETURN_TYPE "ncpp::containers::TF_view<decltype(MemberName)>"
 
     FUNCTION_ONLY
 
-    KEYWORDS "NCPP_FORCE_INLINE"
     IMPLEMENT "{ return MemberName\\\; }"
 )
 
@@ -84,13 +107,14 @@ NCPP_RTTIHelper_RObject_CreateMemberMacro(
     NAME "SETTER"
     PARAMS "SetterName" "MemberName" "..."
 
+    OVERRIDER FORCE_INLINE
+
     MEMBER_NAME "SetterName"
     MEMBER_RETURN_TYPE "void"
     MEMBER_ARG_TYPES "ncpp::containers::TF_view<decltype(MemberName)> value"
 
     FUNCTION_ONLY
 
-    KEYWORDS "NCPP_FORCE_INLINE"
     IMPLEMENT "{ MemberName = value\\\; }"
 
     NO_CONST
