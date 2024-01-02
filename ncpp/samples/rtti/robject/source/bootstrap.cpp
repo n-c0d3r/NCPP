@@ -82,7 +82,7 @@ class A : public B, public C, public TD<i32> {
             i
         ),
 		PUBLIC(
-            (void()),
+            (void)(),
             foo
         ),
                       
@@ -91,12 +91,12 @@ class A : public B, public C, public TD<i32> {
             si
         ),
         PUBLIC_STATIC(
-            (void(int, int, TF_vector<int, F_default_allocator>)),
+            (void)(int, int, TF_vector<int, F_default_allocator>),
             foo2
         ),
 
         PUBLIC_CONSTEXPR(
-            (i32()),
+            (i32)(),
             i32_constexpr
         )
 	);
