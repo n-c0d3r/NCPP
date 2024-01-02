@@ -48,6 +48,17 @@ NCPP_RTTIHelper_RObject_CreateMemberOverrider(
 
     FUNCTION_ONLY
 )
+NCPP_RTTIHelper_RObject_CreateMemberOverrider(
+    NAME "CONSTEXPR"
+
+    REFLECT ";"
+    BODY ";"
+
+    KEYWORDS "constexpr"
+
+    NO_VIRTUAL
+    NO_CONST
+)
 
 
 

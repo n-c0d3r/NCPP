@@ -93,6 +93,11 @@ class A : public B, public C, public TD<i32> {
         PUBLIC_STATIC(
             (void(int, int, TF_vector<int, F_default_allocator>)),
             foo2
+        ),
+
+        PUBLIC_CONSTEXPR(
+            (i32()),
+            i32_constexpr
         )
 	);
 
@@ -110,6 +115,10 @@ void A::foo2(int, int, TF_vector<int, F_default_allocator>) {
 
     
 
+}
+constexpr i32 A::i32_constexpr(){
+
+    return 3;
 }
 
 
