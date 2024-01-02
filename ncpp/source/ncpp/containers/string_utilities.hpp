@@ -130,17 +130,11 @@ namespace ncpp {
         }
         NCPP_FORCE_INLINE F_string decimal_to_hex(i64 decimal_in) {
 
-            std::basic_stringstream<typename F_string::value_type> stream;
-            stream << std::hex << decimal_in;
-
-            return stream.str().c_str();
+            return T_decimal_to_hex<F_string>(decimal_in);
         }
         NCPP_FORCE_INLINE G_string G_decimal_to_hex(i64 decimal_in) {
 
-            std::basic_stringstream<typename G_string::value_type> stream;
-            stream << std::hex << decimal_in;
-
-            return stream.str().c_str();
+            return T_decimal_to_hex<G_string>(decimal_in);
         }
 
     }
