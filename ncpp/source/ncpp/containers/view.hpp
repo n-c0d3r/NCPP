@@ -641,6 +641,12 @@ namespace ncpp {
             TF_reference_view<F__>
         >;
 
+        template<typename F__>
+        NCPP_FORCE_INLINE TF_view<F__> T_view(const F__& container) noexcept {
+
+            return container;
+        }
+
     }
 
 }
