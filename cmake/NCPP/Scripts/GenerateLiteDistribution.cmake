@@ -68,6 +68,7 @@ set(FILES_TO_DELETE
 
     # cmake
     "cmake/NCPP/Scripts/GenerateLiteDistribution.cmake"
+    "cmake/NCPP/Utilities/RTTIHelper.cmake"
     "cmake/NCPP/RTTIMacros.cmake"
 
     # mem
