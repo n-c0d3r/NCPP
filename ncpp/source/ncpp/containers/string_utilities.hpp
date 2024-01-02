@@ -71,11 +71,11 @@ namespace ncpp {
             size_t start_pos = result.find(from);
 
             if(start_pos == std::string::npos)
-                return false;
+                return std::move(result);
 
             result.replace(start_pos, from->length(), to);
 
-            return result;
+            return std::move(result);
         }
         NCPP_FORCE_INLINE F_string replace(const F_string& source, TF_view<F_string> from, TF_view<F_string> to) {
 
@@ -109,7 +109,7 @@ namespace ncpp {
 
             }
 
-            return result;
+            return std::move(result);
         }
         NCPP_FORCE_INLINE F_string replace_all(const F_string& source, TF_view<F_string> from, TF_view<F_string> to) {
 
