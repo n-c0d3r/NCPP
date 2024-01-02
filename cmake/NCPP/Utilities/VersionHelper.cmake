@@ -1,11 +1,11 @@
 
-include(NCPP/SetGlobal)
-include(NCPP/ApplyGlobal)
-include(NCPP/MacroHelper)
+include(NCPP/Utilities/SetGlobal)
+include(NCPP/Utilities/ApplyGlobal)
+include(NCPP/Utilities/MacroHelper)
 
 
 
-function(NCPP_VersionUtils_CreateVersionMacros)
+function(NCPP_VersionHelper_CreateVersionMacros)
 
     cmake_parse_arguments(
         PARGS

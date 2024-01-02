@@ -6,7 +6,7 @@ message(STATUS "<NCPP::CheckEADependencies> Start checking EA dependencies")
 #####################################################################################
 #   Includes
 #####################################################################################
-include(NCPP/GitUtils)
+include(NCPP/Utilities/GitHelper)
 
 
 
@@ -24,7 +24,7 @@ function(NCPP_EARepository_Checkout)
 
     if(PARGS_CUSTOM_DIRECTORY)
         if(NOT EXISTS "${PARGS_CUSTOM_DIRECTORY}/${PARGS_NAME}")
-            NCPP_GitClone(
+            NCPP_GitHelper_Clone(
                 PROJECT_NAME ${PARGS_NAME}
                 GIT_URL ${PARGS_GIT_URL}
                 GIT_COMMIT ${PARGS_GIT_COMMIT}
@@ -33,7 +33,7 @@ function(NCPP_EARepository_Checkout)
         endif()
     else()
         if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/dependencies/${PARGS_NAME}")
-            NCPP_GitClone(
+            NCPP_GitHelper_Clone(
                 PROJECT_NAME ${PARGS_NAME}
                 GIT_URL ${PARGS_GIT_URL}
                 GIT_COMMIT ${PARGS_GIT_COMMIT}

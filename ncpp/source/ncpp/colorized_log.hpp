@@ -197,8 +197,8 @@ namespace ncpp {
         struct TF_cout_value_helper_default_case<
             F__, 
             std::enable_if_t<
-                (ncpp::utilities::T_is_ostreamable_v<F_ostream, F__>)
-                || (ncpp::utilities::T_is_ostreamable_v<F_wostream, F__>),
+                (ncpp::utilities::T_is_ostreamable<F_ostream, F__>)
+                || (ncpp::utilities::T_is_ostreamable<F_wostream, F__>),
                 i32
             >
         > {
@@ -211,8 +211,8 @@ namespace ncpp {
         struct TF_cout_value_helper_default_case<
             F__, 
             std::enable_if_t<
-                (!ncpp::utilities::T_is_ostreamable_v<F_ostream, F__>)
-                && (ncpp::utilities::T_is_ostreamable_v<F_wostream, F__>),
+                (!ncpp::utilities::T_is_ostreamable<F_ostream, F__>)
+                && (ncpp::utilities::T_is_ostreamable<F_wostream, F__>),
                 i32
             >
         > {
@@ -269,8 +269,8 @@ namespace ncpp {
         struct TF_cout_value_helper_default_case<
             F__, 
             std::enable_if_t<
-                (ncpp::utilities::T_is_ostreamable_v<F_ostream, F__>)
-                && (!ncpp::utilities::T_is_ostreamable_v<F_wostream, F__>),
+                (ncpp::utilities::T_is_ostreamable<F_ostream, F__>)
+                && (!ncpp::utilities::T_is_ostreamable<F_wostream, F__>),
                 i32
             >
         > {
@@ -327,8 +327,8 @@ namespace ncpp {
         struct TF_cout_value_helper_default_case<
             F__, 
             std::enable_if_t<
-                (!ncpp::utilities::T_is_ostreamable_v<F_ostream, F__>)
-                && (!ncpp::utilities::T_is_ostreamable_v<F_wostream, F__>),
+                (!ncpp::utilities::T_is_ostreamable<F_ostream, F__>)
+                && (!ncpp::utilities::T_is_ostreamable<F_wostream, F__>),
                 i32
             >
         > {

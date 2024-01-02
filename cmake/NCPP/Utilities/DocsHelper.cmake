@@ -4,7 +4,7 @@ set(DOXYGEN_THEME_FLAT_DESIGN_DIR "${NCPP_DEPENDENCIES_DIR}/doxygen_theme_flat_d
 
 
 
-function(NCPP_DocsUtils_CreateTarget)
+function(NCPP_DocsHelper_CreateTarget)
     cmake_parse_arguments(
         PARGS
         ""

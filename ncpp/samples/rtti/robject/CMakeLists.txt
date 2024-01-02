@@ -1,4 +1,8 @@
 
+include(NCPP/Utilities/RTTIHelper)
+
+
+
 # ncpp.samples.rtti.robject target source files
 file(GLOB source_files
     "source/*.cpp"
@@ -36,4 +40,30 @@ target_include_directories(ncpp.samples.rtti.robject
 # ncpp.samples.rtti.robject target dependencies
 add_dependencies(ncpp.samples.rtti.robject 
     ncpp
+)
+
+
+
+#####################################################################################
+#   SAMPLE_NESTED_MACRO_B macro
+#####################################################################################
+NCPP_Utilities_RTTIHelper_RObject_CreateNestedMacro(
+    NAME_AND_PARAMS "SAMPLE_NESTED_MACRO_B(NAME)"
+    PARTS
+        "PUBLIC((i32), NAME)"
+        "PUBLIC((i32), NAME##_2)"
+        "PUBLIC((i32), NAME##_3)"
+)
+
+#####################################################################################
+#   SAMPLE_NESTED_MACRO_A macro
+#####################################################################################
+NCPP_Utilities_RTTIHelper_RObject_CreateNestedMacro(
+    NAME_AND_PARAMS "SAMPLE_NESTED_MACRO_A(NAME)"
+    PARTS
+        "PUBLIC((i32), NAME)"
+        "PUBLIC((i32), NAME##_2)"
+        "PUBLIC((i32), NAME##_3)"
+        "SAMPLE_NESTED_MACRO_B(NAME##_B)"
+        "SAMPLE_NESTED_MACRO_B(NAME##_B2)"
 )

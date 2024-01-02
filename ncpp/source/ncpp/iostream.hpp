@@ -183,7 +183,7 @@ namespace ncpp {
 		using safe_ostream_forward_type = TF_safe_ostream_forwarder<
 			F_stream__,
 			F__,
-			utilities::T_is_ostreamable_v<
+			utilities::T_is_ostreamable<
 				F_stream__,
 				F__
 			>
@@ -236,7 +236,7 @@ namespace ncpp {
 		using safe_ostream_with_tab_forward_type = TF_safe_ostream_with_tab_forwarder<
 			F_stream__,
 			input_type__,
-			utilities::T_is_ostreamable_v<
+			utilities::T_is_ostreamable<
 				F_stream__,
 				input_type__
 			>
@@ -289,7 +289,7 @@ namespace ncpp {
 		using safe_istream_forward_type = TF_safe_istream_forwarder<
 			F_stream__,
 			F__,
-			utilities::T_is_istreamable_v<
+			utilities::T_is_istreamable<
 				F_stream__,
 				F__
 			>

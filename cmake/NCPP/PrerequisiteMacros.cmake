@@ -3,7 +3,7 @@ message(STATUS "<NCPP::PrerequisiteMacros> Start building prerequisite macro")
 
 
 
-include(NCPP/MacroHelper)
+include(NCPP/Utilities/MacroHelper)
 
 
 

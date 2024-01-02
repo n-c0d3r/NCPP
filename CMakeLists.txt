@@ -26,7 +26,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_LIST_DIR}/cmake")
 #####################################################################################
 #   Global variables
 #####################################################################################
-include(NCPP/SetGlobal)
+include(NCPP/Utilities/SetGlobal)
 NCPP_SetGlobal(NCPP_ROOT_DIR "${CMAKE_CURRENT_LIST_DIR}")
 NCPP_SetGlobal(NCPP_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
 NCPP_SetGlobal(NCPP_SCRIPTS_DIR "${CMAKE_CURRENT_LIST_DIR}/scripts")
@@ -46,8 +46,8 @@ endif()
 #####################################################################################
 #   Version
 #####################################################################################
-include(NCPP/VersionUtils)
-NCPP_VersionUtils_CreateVersionMacros(
+include(NCPP/Utilities/VersionHelper)
+NCPP_VersionHelper_CreateVersionMacros(
     PROJECT_NAME NCPP
     OUTPUT_FILE "${NCPP_GENERATED_FILES_DIR}/version.hpp"
     MAJOR 0
@@ -77,9 +77,9 @@ NCPP_SetGlobal(
 if(NCPP_ENABLE_DOCUMENTATIONS)
     option(NCPP_INTERNAL_DOCS "Generate docs for anything" OFF)
 
-    include(NCPP/DocsUtils)
+    include(NCPP/Utilities/DocsHelper)
 
-    NCPP_DocsUtils_CreateTarget(
+    NCPP_DocsHelper_CreateTarget(
         NAME NCPP
         BRIEF "Ncoder's Game Engine Learning Aimed C++ Library."
 

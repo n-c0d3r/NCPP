@@ -62,7 +62,7 @@ namespace ncpp {
          *  Checks if can perform F_stream__ << type__ operation.
          */
         template<typename F_stream__, typename F__>
-        concept T_is_ostreamable_v = requires(std::remove_reference_t<F_stream__>& fs, const std::remove_reference_t<F__>& f) {
+        concept T_is_ostreamable = requires(std::remove_reference_t<F_stream__>& fs, const std::remove_reference_t<F__>& f) {
             { fs << f };
         };
 
@@ -70,7 +70,7 @@ namespace ncpp {
          *  Checks if can perform F_stream__ >> type__ operation.
          */
         template<typename F_stream__, typename F__>
-        concept T_is_istreamable_v = requires(std::remove_reference_t<F_stream__>& fs, std::remove_reference_t<F__>& f) {
+        concept T_is_istreamable = requires(std::remove_reference_t<F_stream__>& fs, std::remove_reference_t<F__>& f) {
             { fs >> f };
         };
 

@@ -1,12 +1,12 @@
 
-include(NCPP/SetGlobal)
+include(NCPP/Utilities/SetGlobal)
 
 
 
 function(NCPP_ApplyGlobal)
 
     foreach(ARG ${ARGS})
-        SetGlobal(${ARG} ${${ARG}})
+        NCPP_SetGlobal(${ARG} ${${ARG}})
     endforeach()
     
 endfunction()

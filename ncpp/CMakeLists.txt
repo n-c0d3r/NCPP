@@ -16,15 +16,14 @@ NCPP_SetGlobal(NCPP_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source")
 #####################################################################################
 #   Includes
 #####################################################################################
-include(NCPP/SetGlobal)
+include(NCPP/Utilities/SetGlobal)
+include(NCPP/Utilities/SIMDCompilerFlags)
 
 include(NCPP/PrerequisiteMacros)
 
 if(NOT NCPP_LITE)
     include(NCPP/RTTIMacros)
 endif()
-
-include(NCPP/SIMDCompilerFlags)
 
 include(NCPP/ConfigureCompiler)
 
