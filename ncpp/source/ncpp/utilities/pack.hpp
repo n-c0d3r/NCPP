@@ -90,6 +90,8 @@ namespace ncpp {
 
                     TF_nth_template_arg<0, F__...> first;
 
+                    TF_nth_template_arg<0, F__...> item_0;
+
                 };
 
             };
@@ -105,6 +107,13 @@ namespace ncpp {
 
                         TF_nth_template_arg<0, F__...> first;
                         TF_nth_template_arg<1, F__...> second;
+
+                    };
+
+                    struct {
+
+                        TF_nth_template_arg<0, F__...> item_0;
+                        TF_nth_template_arg<1, F__...> item_1;
 
                     };
 
@@ -127,6 +136,14 @@ namespace ncpp {
 
                     };
 
+                    struct {
+
+                        TF_nth_template_arg<0, F__...> item_0;
+                        TF_nth_template_arg<1, F__...> item_1;
+                        TF_nth_template_arg<2, F__...> item_2;
+
+                    };
+
                 };
 
             };
@@ -144,6 +161,15 @@ namespace ncpp {
                         TF_nth_template_arg<1, F__...> second;
                         TF_nth_template_arg<2, F__...> third;
                         TF_nth_template_arg<3, F__...> fourth;
+
+                    };
+
+                    struct {
+
+                        TF_nth_template_arg<0, F__...> item_0;
+                        TF_nth_template_arg<1, F__...> item_1;
+                        TF_nth_template_arg<2, F__...> item_2;
+                        TF_nth_template_arg<3, F__...> item_3;
 
                     };
 
@@ -168,6 +194,16 @@ namespace ncpp {
 
                     };
 
+                    struct {
+
+                        TF_nth_template_arg<0, F__...> item_0;
+                        TF_nth_template_arg<1, F__...> item_1;
+                        TF_nth_template_arg<2, F__...> item_2;
+                        TF_nth_template_arg<3, F__...> item_3;
+                        TF_nth_template_arg<4, F__...> item_4;
+
+                    };
+
                 };
 
             };
@@ -187,6 +223,17 @@ namespace ncpp {
                         TF_nth_template_arg<3, F__...> fourth;
                         TF_nth_template_arg<4, F__...> fifth;
                         TF_nth_template_arg<5, F__...> sixth;
+
+                    };
+
+                    struct {
+
+                        TF_nth_template_arg<0, F__...> item_0;
+                        TF_nth_template_arg<1, F__...> item_1;
+                        TF_nth_template_arg<2, F__...> item_2;
+                        TF_nth_template_arg<3, F__...> item_3;
+                        TF_nth_template_arg<4, F__...> item_4;
+                        TF_nth_template_arg<5, F__...> item_5;
 
                     };
 
@@ -213,6 +260,18 @@ namespace ncpp {
 
                     };
 
+                    struct {
+
+                        TF_nth_template_arg<0, F__...> item_0;
+                        TF_nth_template_arg<1, F__...> item_1;
+                        TF_nth_template_arg<2, F__...> item_2;
+                        TF_nth_template_arg<3, F__...> item_3;
+                        TF_nth_template_arg<4, F__...> item_4;
+                        TF_nth_template_arg<5, F__...> item_5;
+                        TF_nth_template_arg<6, F__...> item_6;
+
+                    };
+
                 };
 
             };
@@ -234,6 +293,19 @@ namespace ncpp {
                         TF_nth_template_arg<5, F__...> sixth;
                         TF_nth_template_arg<6, F__...> seventh;
                         TF_nth_template_arg<7, F__...> eighth;
+
+                    };
+
+                    struct {
+
+                        TF_nth_template_arg<0, F__...> item_0;
+                        TF_nth_template_arg<1, F__...> item_1;
+                        TF_nth_template_arg<2, F__...> item_2;
+                        TF_nth_template_arg<3, F__...> item_3;
+                        TF_nth_template_arg<4, F__...> item_4;
+                        TF_nth_template_arg<5, F__...> item_5;
+                        TF_nth_template_arg<6, F__...> item_6;
+                        TF_nth_template_arg<7, F__...> item_7;
 
                     };
 
@@ -290,7 +362,7 @@ namespace ncpp {
             struct TF_unpack_helper<index__, eastl::tuple<F__...>> {
 
                 using F_pack = eastl::tuple<F__...>;
-                using F = eastl::tuple_element_t<index__, F_pack>;
+                using F = eastl::tuple_item_t<index__, F_pack>;
 
                 static NCPP_FORCE_INLINE F& get(F_pack& pack) noexcept {
 
@@ -315,7 +387,7 @@ namespace ncpp {
             struct TF_unpack_helper<index__, TF_large_pack<F__...>> {
 
                 using F_pack = TF_large_pack<F__...>;
-                using F = eastl::tuple_element_t<index__, F_pack>;
+                using F = eastl::tuple_item_t<index__, F_pack>;
 
                 static NCPP_FORCE_INLINE F& get(F_pack& pack) noexcept {
 
