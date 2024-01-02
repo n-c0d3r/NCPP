@@ -17,10 +17,16 @@ function(NCPP_MacroHelper_CreateFunctionMacro)
     
     # Create the macro
     set(MACRO_STRING "#define ${PARGS_NAME}(")
-    foreach(PARAM_NAME ${PARGS_PARAM_NAMES})
-        set(MACRO_STRING "${MACRO_STRING}${PARAM_NAME}, ")
-    endforeach()
-    string(REGEX REPLACE ", $" ")" MACRO_STRING "${MACRO_STRING}")
+
+    if(PARGS_PARAM_NAMES)
+        foreach(PARAM_NAME ${PARGS_PARAM_NAMES})
+            set(MACRO_STRING "${MACRO_STRING}${PARAM_NAME}, ")
+        endforeach()
+        string(REGEX REPLACE ", $" ")" MACRO_STRING "${MACRO_STRING}")
+    else()
+        set(MACRO_STRING "${MACRO_STRING})")
+    endif()
+
     set(MACRO_STRING "${MACRO_STRING} ${PARGS_BODY}\n")
 
     # Append the macro to the output file

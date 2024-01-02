@@ -98,6 +98,15 @@ class A : public B, public C, public TD<i32> {
         PUBLIC_CONSTEXPR(
             (i32)(),
             i32_constexpr
+        ),
+
+        PUBLIC(
+            (i32, b8),
+            i32_b8_tuple
+        ),
+        PUBLIC(
+            (i32, b8)(f32),
+            i32_b8_tuple_foo
         )
 	);
 
@@ -113,12 +122,17 @@ i32 A::si = 4;
 i32 A::private_static_i_ = 6;
 void A::foo2(int, int, TF_vector<int, F_default_allocator>) {
 
-    
+
 
 }
 constexpr i32 A::i32_constexpr(){
 
     return 3;
+}
+
+TF_pack<i32, b8> A::i32_b8_tuple_foo(f32) {
+
+    return {};
 }
 
 

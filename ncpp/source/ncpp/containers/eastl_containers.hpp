@@ -686,6 +686,18 @@ namespace ncpp {
         template<typename F_item__, typename EP_vector__ = TEP_vector<F_item__>>
         using TEP_stack = eastl::stack<F_item__, EP_vector__>;
 
+
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        //  tuple
+        ////////////////////////////////////////////////////////////////////////////////////
+        template<typename... F__>
+        using TF_tuple = eastl::tuple<F__...>;
+        template<typename... F__>
+        using TG_tuple = eastl::tuple<F__...>;
+        template<typename... F__>
+        using TEP_tuple = eastl::tuple<F__...>;
+
     }
 
 }
