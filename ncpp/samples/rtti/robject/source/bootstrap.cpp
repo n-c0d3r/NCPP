@@ -66,14 +66,15 @@ class A : public B, public C, public TD<i32> {
             (i32),
             private_i_ 
         ),
-        PUBLIC_SETTER(set_private_i, private_i_),
-        PUBLIC_GETTER(private_i, private_i_),
+        PUBLIC_SETTER_NOEXCEPT(set_private_i, private_i_),
+        PUBLIC_GETTER_NOEXCEPT(private_i, private_i_),
         PUBLIC_CONST_GETTER(private_i, private_i_),
 
         PRIVATE_STATIC(
             (i32),
             private_static_i_
         ),
+        PUBLIC_STATIC_SETTER(set_private_static_i, private_static_i_),
         PUBLIC_STATIC_GETTER(private_static_i, private_static_i_),
 
 		PUBLIC(

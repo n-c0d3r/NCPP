@@ -97,6 +97,19 @@ NCPP_RTTIHelper_RObject_CreateMemberMacro(
 
     IMPLEMENT "{ return MemberName\\\; }"
 )
+NCPP_RTTIHelper_RObject_CreateMemberMacro(
+    NAME "GETTER_NOEXCEPT"
+    PARAMS "GetterName" "MemberName" "..."
+
+    OVERRIDER FORCE_INLINE
+
+    MEMBER_NAME "GetterName"
+    MEMBER_RETURN_TYPE "ncpp::containers::TF_view<decltype(MemberName)>"
+
+    FUNCTION_ONLY
+
+    IMPLEMENT "noexcept { return MemberName\\\; }"
+)
 
 
 
@@ -116,6 +129,22 @@ NCPP_RTTIHelper_RObject_CreateMemberMacro(
     FUNCTION_ONLY
 
     IMPLEMENT "{ MemberName = value\\\; }"
+
+    NO_CONST
+)
+NCPP_RTTIHelper_RObject_CreateMemberMacro(
+    NAME "SETTER_NOEXCEPT"
+    PARAMS "SetterName" "MemberName" "..."
+
+    OVERRIDER FORCE_INLINE
+
+    MEMBER_NAME "SetterName"
+    MEMBER_RETURN_TYPE "void"
+    MEMBER_ARG_TYPES "ncpp::containers::TF_view<decltype(MemberName)> value"
+
+    FUNCTION_ONLY
+
+    IMPLEMENT "noexcept { MemberName = value\\\; }"
 
     NO_CONST
 )
