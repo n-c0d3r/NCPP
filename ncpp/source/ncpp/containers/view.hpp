@@ -621,7 +621,7 @@ namespace ncpp {
 
         template<typename F__>
         using TF_size_optimized_view = utilities::TF_nth_template_arg<
-            (utilities::T_sizeof<F__> > utilities::T_sizeof<TF_reference_view<F__>>),
+            (utilities::T_sizeof<F__> > sizeof(void*)),
             F__,
             TF_reference_view<F__>
         >;
