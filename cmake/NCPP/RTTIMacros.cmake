@@ -66,7 +66,7 @@ NCPP_RTTIHelper_RObject_CreateMemberMacro(
     NAME "GETTER"
     PARAMS "GetterName" "MemberName" "..."
 
-    MEMBER_NAME_PARAM "GetterName"
+    MEMBER_NAME "GetterName"
     MEMBER_RETURN_TYPE "ncpp::containers::TF_view<decltype(MemberName)>"
 
     FUNCTION_ONLY
@@ -84,7 +84,7 @@ NCPP_RTTIHelper_RObject_CreateMemberMacro(
     NAME "SETTER"
     PARAMS "SetterName" "MemberName" "..."
 
-    MEMBER_NAME_PARAM "SetterName"
+    MEMBER_NAME "SetterName"
     MEMBER_RETURN_TYPE "void"
     MEMBER_ARG_TYPES "ncpp::containers::TF_view<decltype(MemberName)> value"
 
