@@ -66,6 +66,7 @@ class A : public B, public C, public TD<i32> {
             (i32),
             private_i_ 
         ),
+        PUBLIC_SETTER(set_private_i, private_i_),
         PUBLIC_GETTER(private_i, private_i_),
         PUBLIC_CONST_GETTER(private_i, private_i_),
 

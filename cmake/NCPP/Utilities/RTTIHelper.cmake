@@ -35,7 +35,7 @@ function(NCPP_RTTIHelper_RObject_CreateMemberOverrider)
     
     cmake_parse_arguments(
         PARGS
-        "HIDE_NAME_IN_MEMBER_MACROS;FUNCTION_ONLY;VARIABLE_ONLY"
+        "HIDE_NAME_IN_MEMBER_MACROS;FUNCTION_ONLY;VARIABLE_ONLY;NO_VIRTUAL;NO_CONST;NO_STATIC;MUST_VIRTUAL;MUST_CONST;MUST_STATIC"
         "NAME;PREFIX;REFLECT;BODY;KEYWORDS;IMPLEMENT"
         "INCLUDES"
         ${ARGN}
@@ -86,479 +86,505 @@ function(NCPP_RTTIHelper_RObject_CreateMemberOverrider)
 
     
     # non static
-    NCPP_MacroHelper_CreateFunctionMacro(
-        NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PRIVATE${OVERRIDER_NAME_SUFFIX}
-        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-        PARAM_NAMES "MemberType" "MemberName" "..."
-        BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PRIVATE(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-    )
-    NCPP_MacroHelper_CreateFunctionMacro(
-        NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PROTECTED${OVERRIDER_NAME_SUFFIX}
-        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-        PARAM_NAMES "MemberType" "MemberName" "..."
-        BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PROTECTED(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-    )
-    NCPP_MacroHelper_CreateFunctionMacro(
-        NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PUBLIC${OVERRIDER_NAME_SUFFIX}
-        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-        PARAM_NAMES "MemberType" "MemberName" "..."
-        BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PUBLIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-    )
+    if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_CONST AND NOT PARGS_MUST_STATIC)
+        NCPP_MacroHelper_CreateFunctionMacro(
+            NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PRIVATE${OVERRIDER_NAME_SUFFIX}
+            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+            PARAM_NAMES "MemberType" "MemberName" "..."
+            BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PRIVATE(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+        )
+        NCPP_MacroHelper_CreateFunctionMacro(
+            NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PROTECTED${OVERRIDER_NAME_SUFFIX}
+            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+            PARAM_NAMES "MemberType" "MemberName" "..."
+            BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PROTECTED(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+        )
+        NCPP_MacroHelper_CreateFunctionMacro(
+            NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PUBLIC${OVERRIDER_NAME_SUFFIX}
+            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+            PARAM_NAMES "MemberType" "MemberName" "..."
+            BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PUBLIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+        )
+    endif()
 
-    NCPP_MacroHelper_CreateFunctionMacro(
-        NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PRIVATE_CONST${OVERRIDER_NAME_SUFFIX}
-        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-        PARAM_NAMES "MemberType" "MemberName" "..."
-        BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PRIVATE_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-    )
-    NCPP_MacroHelper_CreateFunctionMacro(
-        NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PROTECTED_CONST${OVERRIDER_NAME_SUFFIX}
-        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-        PARAM_NAMES "MemberType" "MemberName" "..."
-        BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PROTECTED_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-    )
-    NCPP_MacroHelper_CreateFunctionMacro(
-        NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PUBLIC_CONST${OVERRIDER_NAME_SUFFIX}
-        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-        PARAM_NAMES "MemberType" "MemberName" "..."
-        BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PUBLIC_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-    )
+    if(NOT PARGS_NO_CONST)
+        if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_STATIC)
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PRIVATE_CONST${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PRIVATE_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PROTECTED_CONST${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PROTECTED_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PUBLIC_CONST${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PUBLIC_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+        endif()
+    endif()
 
-    NCPP_MacroHelper_CreateFunctionMacro(
-        NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE${OVERRIDER_NAME_SUFFIX}
-        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-        PARAM_NAMES "MemberType" "MemberName" "..."
-        BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-    )
-    NCPP_MacroHelper_CreateFunctionMacro(
-        NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED${OVERRIDER_NAME_SUFFIX}
-        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-        PARAM_NAMES "MemberType" "MemberName" "..."
-        BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-    )
-    NCPP_MacroHelper_CreateFunctionMacro(
-        NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC${OVERRIDER_NAME_SUFFIX}
-        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-        PARAM_NAMES "MemberType" "MemberName" "..."
-        BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-    )
+    if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_CONST AND NOT PARGS_MUST_STATIC)
+        NCPP_MacroHelper_CreateFunctionMacro(
+            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE${OVERRIDER_NAME_SUFFIX}
+            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+            PARAM_NAMES "MemberType" "MemberName" "..."
+            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+        )
+        NCPP_MacroHelper_CreateFunctionMacro(
+            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED${OVERRIDER_NAME_SUFFIX}
+            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+            PARAM_NAMES "MemberType" "MemberName" "..."
+            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+        )
+        NCPP_MacroHelper_CreateFunctionMacro(
+            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC${OVERRIDER_NAME_SUFFIX}
+            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+            PARAM_NAMES "MemberType" "MemberName" "..."
+            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+        )
+    endif()
 
-    NCPP_MacroHelper_CreateFunctionMacro(
-        NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_CONST${OVERRIDER_NAME_SUFFIX}
-        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-        PARAM_NAMES "MemberType" "MemberName" "..."
-        BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-    )
-    NCPP_MacroHelper_CreateFunctionMacro(
-        NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_CONST${OVERRIDER_NAME_SUFFIX}
-        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-        PARAM_NAMES "MemberType" "MemberName" "..."
-        BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-    )
-    NCPP_MacroHelper_CreateFunctionMacro(
-        NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_CONST${OVERRIDER_NAME_SUFFIX}
-        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-        PARAM_NAMES "MemberType" "MemberName" "..."
-        BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-    )
+    if(NOT PARGS_NO_CONST)
+        if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_STATIC)
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_CONST${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_CONST${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_CONST${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+        endif()
+    endif()
 
-    NCPP_MacroHelper_CreateFunctionMacro(
-        NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_VIRTUAL${OVERRIDER_NAME_SUFFIX}
-        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-        PARAM_NAMES "MemberType" "MemberName" "..."
-        BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE_VIRTUAL(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-    )
-    NCPP_MacroHelper_CreateFunctionMacro(
-        NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_VIRTUAL${OVERRIDER_NAME_SUFFIX}
-        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-        PARAM_NAMES "MemberType" "MemberName" "..."
-        BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED_VIRTUAL(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-    )
-    NCPP_MacroHelper_CreateFunctionMacro(
-        NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_VIRTUAL${OVERRIDER_NAME_SUFFIX}
-        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-        PARAM_NAMES "MemberType" "MemberName" "..."
-        BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_VIRTUAL(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-    )
+    if(NOT PARGS_NO_VIRTUAL)
+        if(NOT PARGS_MUST_CONST AND NOT PARGS_MUST_STATIC)
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_VIRTUAL${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE_VIRTUAL(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_VIRTUAL${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED_VIRTUAL(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_VIRTUAL${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_VIRTUAL(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+        endif()
 
-    NCPP_MacroHelper_CreateFunctionMacro(
-        NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_VIRTUAL_CONST${OVERRIDER_NAME_SUFFIX}
-        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-        PARAM_NAMES "MemberType" "MemberName" "..."
-        BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE_VIRTUAL_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-    )
-    NCPP_MacroHelper_CreateFunctionMacro(
-        NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_VIRTUAL_CONST${OVERRIDER_NAME_SUFFIX}
-        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-        PARAM_NAMES "MemberType" "MemberName" "..."
-        BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED_VIRTUAL_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-    )
-    NCPP_MacroHelper_CreateFunctionMacro(
-        NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_VIRTUAL_CONST${OVERRIDER_NAME_SUFFIX}
-        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-        PARAM_NAMES "MemberType" "MemberName" "..."
-        BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_VIRTUAL_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-    )
+        if(NOT PARGS_NO_CONST)
+            if(NOT PARGS_MUST_STATIC)
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_VIRTUAL_CONST${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberType" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE_VIRTUAL_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_VIRTUAL_CONST${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberType" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED_VIRTUAL_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_VIRTUAL_CONST${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberType" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_VIRTUAL_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+            endif()
+        endif()
+    endif()
 
 
 
     # static
-    NCPP_MacroHelper_CreateFunctionMacro(
-        NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PRIVATE_STATIC${OVERRIDER_NAME_SUFFIX}
-        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-        PARAM_NAMES "MemberType" "MemberName" "..."
-        BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PRIVATE_STATIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-    )
-    NCPP_MacroHelper_CreateFunctionMacro(
-        NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PROTECTED_STATIC${OVERRIDER_NAME_SUFFIX}
-        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-        PARAM_NAMES "MemberType" "MemberName" "..."
-        BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PROTECTED_STATIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-    )
-    NCPP_MacroHelper_CreateFunctionMacro(
-        NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PUBLIC_STATIC${OVERRIDER_NAME_SUFFIX}
-        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-        PARAM_NAMES "MemberType" "MemberName" "..."
-        BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PUBLIC_STATIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-    )
+    if(NOT PARGS_NO_STATIC)
+        if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_CONST)
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PRIVATE_STATIC${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PRIVATE_STATIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PROTECTED_STATIC${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PROTECTED_STATIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PUBLIC_STATIC${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PUBLIC_STATIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
 
-    NCPP_MacroHelper_CreateFunctionMacro(
-        NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_STATIC${OVERRIDER_NAME_SUFFIX}
-        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-        PARAM_NAMES "MemberType" "MemberName" "..."
-        BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE_STATIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-    )
-    NCPP_MacroHelper_CreateFunctionMacro(
-        NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_STATIC${OVERRIDER_NAME_SUFFIX}
-        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-        PARAM_NAMES "MemberType" "MemberName" "..."
-        BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED_STATIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-    )
-    NCPP_MacroHelper_CreateFunctionMacro(
-        NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_STATIC${OVERRIDER_NAME_SUFFIX}
-        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-        PARAM_NAMES "MemberType" "MemberName" "..."
-        BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_STATIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-    )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_STATIC${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE_STATIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_STATIC${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED_STATIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_STATIC${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_STATIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+        endif()
+    endif()
 
 
 
     if(NOT PARGS_VARIABLE_ONLY)
         # non static
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PRIVATE_FUNCTION${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PRIVATE_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PROTECTED_FUNCTION${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PROTECTED_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PUBLIC_FUNCTION${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PUBLIC_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
+        if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_CONST AND NOT PARGS_MUST_STATIC)
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PRIVATE_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PRIVATE_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PROTECTED_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PROTECTED_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PUBLIC_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PUBLIC_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+        endif()
 
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PRIVATE_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PRIVATE_CONST_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PROTECTED_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PROTECTED_CONST_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PUBLIC_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PUBLIC_CONST_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
+        if(NOT PARGS_NO_CONST)
+            if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_STATIC)
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PRIVATE_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PRIVATE_CONST_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PROTECTED_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PROTECTED_CONST_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PUBLIC_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PUBLIC_CONST_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+            endif()
+        endif()
 
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_FUNCTION${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_FUNCTION${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_FUNCTION${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
+        if(NOT PARGS_NO_VIRTUAL)
+            if(NOT PARGS_MUST_CONST AND NOT PARGS_MUST_STATIC)
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PRIVATE_VIRTUAL_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PRIVATE_VIRTUAL_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PROTECTED_VIRTUAL_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PROTECTED_VIRTUAL_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PUBLIC_VIRTUAL_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PUBLIC_VIRTUAL_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+            endif()
 
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE_CONST_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED_CONST_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_CONST_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
+            if(NOT PARGS_NO_CONST)
+                if(NOT PARGS_MUST_STATIC)
+                    NCPP_MacroHelper_CreateFunctionMacro(
+                        NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PRIVATE_VIRTUAL_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                        PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                        BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PRIVATE_VIRTUAL_CONST_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                    )
+                    NCPP_MacroHelper_CreateFunctionMacro(
+                        NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PROTECTED_VIRTUAL_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                        PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                        BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PROTECTED_VIRTUAL_CONST_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                    )
+                    NCPP_MacroHelper_CreateFunctionMacro(
+                        NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PUBLIC_VIRTUAL_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                        PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                        BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PUBLIC_VIRTUAL_CONST_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                    )
+                endif()
+            endif()
+        endif()
+#abc
+        if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_CONST AND NOT PARGS_MUST_STATIC)
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+        endif()
 
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_VIRTUAL_FUNCTION${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE_VIRTUAL_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_VIRTUAL_FUNCTION${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED_VIRTUAL_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_VIRTUAL_FUNCTION${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_VIRTUAL_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
+        if(NOT PARGS_NO_CONST)
+            if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_STATIC)
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE_CONST_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED_CONST_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_CONST_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+            endif()
+        endif()
 
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_VIRTUAL_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE_VIRTUAL_CONST_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_VIRTUAL_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED_VIRTUAL_CONST_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_VIRTUAL_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_VIRTUAL_CONST_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
+        if(NOT PARGS_NO_VIRTUAL)
+            if(NOT PARGS_MUST_CONST AND NOT PARGS_MUST_STATIC)
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_VIRTUAL_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE_VIRTUAL_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_VIRTUAL_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED_VIRTUAL_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_VIRTUAL_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_VIRTUAL_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+            endif()
+
+            if(NOT PARGS_NO_CONST)
+                if(NOT PARGS_MUST_STATIC)
+                    NCPP_MacroHelper_CreateFunctionMacro(
+                        NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_VIRTUAL_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                        PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                        BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE_VIRTUAL_CONST_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                    )
+                    NCPP_MacroHelper_CreateFunctionMacro(
+                        NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_VIRTUAL_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                        PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                        BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED_VIRTUAL_CONST_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                    )
+                    NCPP_MacroHelper_CreateFunctionMacro(
+                        NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_VIRTUAL_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                        OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                        PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                        BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_VIRTUAL_CONST_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                    )
+                endif()
+            endif()
+        endif()
 
 
 
         # static
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PRIVATE_STATIC_FUNCTION${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PRIVATE_STATIC_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PROTECTED_STATIC_FUNCTION${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PROTECTED_STATIC_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PUBLIC_STATIC_FUNCTION${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PUBLIC_STATIC_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
+        if(NOT PARGS_NO_STATIC)
+            if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_CONST)
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PRIVATE_STATIC_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PRIVATE_STATIC_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PROTECTED_STATIC_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PROTECTED_STATIC_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PUBLIC_STATIC_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PUBLIC_STATIC_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType, MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
 
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_STATIC_FUNCTION${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE_STATIC_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_STATIC_FUNCTION${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED_STATIC_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_STATIC_FUNCTION${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_STATIC_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_STATIC_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE_STATIC_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_STATIC_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED_STATIC_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_STATIC_FUNCTION${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberReturnType" "MemberArgs" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_STATIC_FUNCTION(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberReturnType MemberArgs, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+            endif()
+        endif()
     endif()
 
 
 
     if(NOT PARGS_FUNCTION_ONLY)
         # non static
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PRIVATE_VARIABLE${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberType" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PRIVATE(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PROTECTED_VARIABLE${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberType" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PROTECTED(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PUBLIC_VARIABLE${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberType" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PUBLIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
+        if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_CONST AND NOT PARGS_MUST_STATIC)
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PRIVATE_VARIABLE${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PRIVATE(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PROTECTED_VARIABLE${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PROTECTED(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PUBLIC_VARIABLE${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PUBLIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+        endif()
 
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PRIVATE_CONST_VARIABLE${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberType" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PRIVATE_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PROTECTED_CONST_VARIABLE${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberType" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PROTECTED_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PUBLIC_CONST_VARIABLE${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberType" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PUBLIC_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_VARIABLE${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberType" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_VARIABLE${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberType" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_VARIABLE${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberType" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_CONST_VARIABLE${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberType" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_CONST_VARIABLE${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberType" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_CONST_VARIABLE${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberType" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_VIRTUAL_VARIABLE${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberType" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE_VIRTUAL(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_VIRTUAL_VARIABLE${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberType" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED_VIRTUAL(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_VIRTUAL_VARIABLE${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberType" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_VIRTUAL(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_VIRTUAL_CONST_VARIABLE${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberType" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE_VIRTUAL_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_VIRTUAL_CONST_VARIABLE${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberType" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED_VIRTUAL_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_VIRTUAL_CONST_VARIABLE${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberType" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_VIRTUAL_CONST(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
+        if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_CONST AND NOT PARGS_MUST_STATIC)
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_VARIABLE${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_VARIABLE${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_VARIABLE${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+        endif()
 
 
 
         # static
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PRIVATE_STATIC_VARIABLE${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberType" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PRIVATE_STATIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PROTECTED_STATIC_VARIABLE${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberType" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PROTECTED_STATIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PUBLIC_STATIC_VARIABLE${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberType" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PUBLIC_STATIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
+        if(NOT PARGS_NO_STATIC)
+            if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_CONST)
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PRIVATE_STATIC_VARIABLE${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberType" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PRIVATE_STATIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PROTECTED_STATIC_VARIABLE${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberType" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PROTECTED_STATIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_BODY_${PARGS_PREFIX}PUBLIC_STATIC_VARIABLE${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberType" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_BODY_BASE_PUBLIC_STATIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
 
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_STATIC_VARIABLE${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberType" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE_STATIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_STATIC_VARIABLE${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberType" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED_STATIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
-        NCPP_MacroHelper_CreateFunctionMacro(
-            NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_STATIC_VARIABLE${OVERRIDER_NAME_SUFFIX}
-            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
-            PARAM_NAMES "MemberType" "MemberName" "..."
-            BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_STATIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
-        )
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PRIVATE_STATIC_VARIABLE${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberType" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PRIVATE_STATIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PROTECTED_STATIC_VARIABLE${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberType" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PROTECTED_STATIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_REFLECT_${PARGS_PREFIX}PUBLIC_STATIC_VARIABLE${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberType" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_STATIC(${PARGS_NAME}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+            endif()
+        endif()
     endif()
 
 endfunction()
@@ -645,8 +671,8 @@ function(NCPP_RTTIHelper_RObject_CreateMemberMacro)
 
     cmake_parse_arguments(
         PARGS
-        "FUNCTION_ONLY;VARIABLE_ONLY"
-        "NAME;PREFIX;KEYWORDS;IMPLEMENT;MEMBER_TYPE;MEMBER_RETURN_TYPE;OVERRIDER"
+        "FUNCTION_ONLY;VARIABLE_ONLY;NO_VIRTUAL;NO_CONST;NO_STATIC;MUST_VIRTUAL;MUST_CONST;MUST_STATIC"
+        "NAME;PREFIX;KEYWORDS;IMPLEMENT;MEMBER_TYPE;MEMBER_RETURN_TYPE;OVERRIDER;MEMBER_NAME_PARAM"
         "PARAMS;MEMBER_ARG_TYPES;INCLUDES"
         ${ARGN}
     )
@@ -664,6 +690,10 @@ function(NCPP_RTTIHelper_RObject_CreateMemberMacro)
     if(NOT PARGS_NAME)
         message(FATAL_ERROR "<NCPP_RTTIHelper_RObject_CreateMemberMacro> NAME is required")
     endif()
+    if(NOT PARGS_MEMBER_NAME_PARAM)
+        message(FATAL_ERROR "<NCPP_RTTIHelper_RObject_CreateMemberMacro> MEMBER_NAME_PARAM is required")
+    endif()
+
     if(PARGS_PREFIX)
         set(PARGS_PREFIX "${PARGS_PREFIX}_")
     endif()
@@ -703,251 +733,229 @@ function(NCPP_RTTIHelper_RObject_CreateMemberMacro)
 
 
     if(NOT PARGS_FUNCTION_ONLY)
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PRIVATE(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PROTECTED(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PUBLIC(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_CONST${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PRIVATE_CONST(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_CONST${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PROTECTED_CONST(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_CONST${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PUBLIC_CONST(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_VIRTUAL${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PRIVATE_VIRTUAL(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_VIRTUAL${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PROTECTED_VIRTUAL(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_VIRTUAL${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PUBLIC_VIRTUAL(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_VIRTUAL_CONST${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PRIVATE_VIRTUAL_CONST(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_VIRTUAL_CONST${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PROTECTED_VIRTUAL_CONST(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_VIRTUAL_CONST${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PUBLIC_VIRTUAL_CONST(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_STATIC${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PRIVATE_STATIC(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_STATIC${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PROTECTED_STATIC(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_STATIC${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PUBLIC_STATIC(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
+        if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_CONST AND NOT PARGS_MUST_STATIC)
+            NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                SINGLE_PART "BASE_PRIVATE(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+            )
+            NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                SINGLE_PART "BASE_PROTECTED(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+            )
+            NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                SINGLE_PART "BASE_PUBLIC(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+            )
+        endif()
 
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_VARIABLE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PRIVATE(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_VARIABLE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PROTECTED(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_VARIABLE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PUBLIC(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_CONST_VARIABLE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PRIVATE_CONST(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_CONST_VARIABLE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PROTECTED_CONST(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_CONST_VARIABLE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PUBLIC_CONST(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_VIRTUAL_VARIABLE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PRIVATE_VIRTUAL(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_VIRTUAL_VARIABLE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PROTECTED_VIRTUAL(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_VIRTUAL_VARIABLE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PUBLIC_VIRTUAL(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_VIRTUAL_CONST_VARIABLE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PRIVATE_VIRTUAL_CONST(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_VIRTUAL_CONST_VARIABLE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PROTECTED_VIRTUAL_CONST(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_VIRTUAL_CONST_VARIABLE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PUBLIC_VIRTUAL_CONST(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_STATIC_VARIABLE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PRIVATE_STATIC_VARIABLE(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_STATIC_VARIABLE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PROTECTED_STATIC_VARIABLE(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_STATIC_VARIABLE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PUBLIC_STATIC_VARIABLE(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
+        if(NOT PARGS_NO_STATIC)
+            if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_CONST)
+                NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                    NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_STATIC${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                    SINGLE_PART "BASE_PRIVATE_STATIC(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                )
+                NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                    NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_STATIC${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                    SINGLE_PART "BASE_PROTECTED_STATIC(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                )
+                NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                    NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_STATIC${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                    SINGLE_PART "BASE_PUBLIC_STATIC(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                )
+            endif()
+        endif()
+
+        if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_CONST AND NOT PARGS_MUST_STATIC)
+            NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_VARIABLE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                SINGLE_PART "BASE_PRIVATE(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+            )
+            NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_VARIABLE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                SINGLE_PART "BASE_PROTECTED(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+            )
+            NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_VARIABLE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                SINGLE_PART "BASE_PUBLIC(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), ${PARGS_MEMBER_TYPE}, ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+            )
+        endif()
+
+        if(NOT PARGS_NO_STATIC)
+            if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_CONST)
+                NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                    NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_STATIC_VARIABLE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                    SINGLE_PART "BASE_PRIVATE_STATIC_VARIABLE(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                )
+                NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                    NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_STATIC_VARIABLE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                    SINGLE_PART "BASE_PROTECTED_STATIC_VARIABLE(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                )
+                NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                    NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_STATIC_VARIABLE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                    SINGLE_PART "BASE_PUBLIC_STATIC_VARIABLE(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                )
+            endif()
+        endif()
     else()
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PRIVATE_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PROTECTED_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PUBLIC_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_CONST${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PRIVATE_CONST_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_CONST${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PROTECTED_CONST_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_CONST${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PUBLIC_CONST_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_VIRTUAL${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PRIVATE_VIRTUAL_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_VIRTUAL${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PROTECTED_VIRTUAL_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_VIRTUAL${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PUBLIC_VIRTUAL_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_VIRTUAL_CONST${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PRIVATE_VIRTUAL_CONST_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_VIRTUAL_CONST${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PROTECTED_VIRTUAL_CONST_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_VIRTUAL_CONST${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PUBLIC_VIRTUAL_CONST_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_STATIC${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PRIVATE_STATIC_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_STATIC${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PROTECTED_STATIC_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_STATIC${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PUBLIC_STATIC_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
+        if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_CONST AND NOT PARGS_MUST_STATIC)
+            NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                SINGLE_PART "BASE_PRIVATE_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+            )
+            NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                SINGLE_PART "BASE_PROTECTED_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+            )
+            NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                SINGLE_PART "BASE_PUBLIC_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+            )
+        endif()
+        if(NOT PARGS_NO_CONST)
+            if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_STATIC)
+                NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                    NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_CONST${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                    SINGLE_PART "BASE_PRIVATE_CONST_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                )
+                NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                    NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_CONST${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                    SINGLE_PART "BASE_PROTECTED_CONST_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                )
+                NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                    NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_CONST${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                    SINGLE_PART "BASE_PUBLIC_CONST_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                )
+            endif()
+        endif()
+        if(NOT PARGS_NO_VIRTUAL)
+            if(NOT PARGS_MUST_CONST AND NOT PARGS_MUST_STATIC)
+                NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                    NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_VIRTUAL${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                    SINGLE_PART "BASE_PRIVATE_VIRTUAL_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                )
+                NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                    NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_VIRTUAL${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                    SINGLE_PART "BASE_PROTECTED_VIRTUAL_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                )
+                NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                    NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_VIRTUAL${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                    SINGLE_PART "BASE_PUBLIC_VIRTUAL_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                )
+            endif()
+            if(NOT PARGS_NO_CONST)
+                if(NOT PARGS_MUST_STATIC)
+                    NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                        NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_VIRTUAL_CONST${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                        SINGLE_PART "BASE_PRIVATE_VIRTUAL_CONST_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                    )
+                    NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                        NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_VIRTUAL_CONST${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                        SINGLE_PART "BASE_PROTECTED_VIRTUAL_CONST_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                    )
+                    NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                        NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_VIRTUAL_CONST${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                        SINGLE_PART "BASE_PUBLIC_VIRTUAL_CONST_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                    )
+                endif()
+            endif()
+        endif()
+        if(NOT PARGS_NO_STATIC)
+            if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_CONST)
+                NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                    NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_STATIC${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                    SINGLE_PART "BASE_PRIVATE_STATIC_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                )
+                NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                    NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_STATIC${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                    SINGLE_PART "BASE_PROTECTED_STATIC_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                )
+                NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                    NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_STATIC${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                    SINGLE_PART "BASE_PUBLIC_STATIC_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                )
+            endif()
+        endif()
     endif()
 
     if(NOT PARGS_VARIABLE_ONLY)
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PRIVATE_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PROTECTED_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PUBLIC_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PRIVATE_CONST_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PROTECTED_CONST_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PUBLIC_CONST_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_VIRTUAL_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PRIVATE_VIRTUAL_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_VIRTUAL_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PROTECTED_VIRTUAL_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_VIRTUAL_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PUBLIC_VIRTUAL_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_VIRTUAL_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PRIVATE_VIRTUAL_CONST_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_VIRTUAL_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PROTECTED_VIRTUAL_CONST_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_VIRTUAL_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PUBLIC_VIRTUAL_CONST_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_STATIC_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PRIVATE_STATIC_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_STATIC_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PROTECTED_STATIC_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
-        NCPP_RTTIHelper_RObject_CreateNestedMacro(
-            NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_STATIC_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
-            SINGLE_PART "BASE_PUBLIC_STATIC_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), GetterName __VA_OPT__(,) __VA_ARGS__)"
-        )
+        if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_CONST AND NOT PARGS_MUST_STATIC)
+            NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                SINGLE_PART "BASE_PRIVATE_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+            )
+            NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                SINGLE_PART "BASE_PROTECTED_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+            )
+            NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                SINGLE_PART "BASE_PUBLIC_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+            )
+        endif()
+        if(NOT PARGS_NO_CONST)
+            if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_STATIC)
+                NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                    NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                    SINGLE_PART "BASE_PRIVATE_CONST_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                )
+                NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                    NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                    SINGLE_PART "BASE_PROTECTED_CONST_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                )
+                NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                    NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                    SINGLE_PART "BASE_PUBLIC_CONST_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                )
+            endif()
+        endif()
+        if(NOT PARGS_NO_VIRTUAL)
+            if(NOT PARGS_MUST_CONST AND NOT PARGS_MUST_STATIC)
+                NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                    NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_VIRTUAL_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                    SINGLE_PART "BASE_PRIVATE_VIRTUAL_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                )
+                NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                    NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_VIRTUAL_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                    SINGLE_PART "BASE_PROTECTED_VIRTUAL_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                )
+                NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                    NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_VIRTUAL_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                    SINGLE_PART "BASE_PUBLIC_VIRTUAL_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                )
+            endif()
+            if(NOT PARGS_NO_CONST)
+                if(NOT PARGS_MUST_STATIC)
+                    NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                        NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_VIRTUAL_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                        SINGLE_PART "BASE_PRIVATE_VIRTUAL_CONST_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                    )
+                    NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                        NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_VIRTUAL_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                        SINGLE_PART "BASE_PROTECTED_VIRTUAL_CONST_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                    )
+                    NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                        NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_VIRTUAL_CONST_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                        SINGLE_PART "BASE_PUBLIC_VIRTUAL_CONST_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                    )
+                endif()
+            endif()
+        endif()
+        if(NOT PARGS_NO_STATIC)
+            if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_CONST)
+                NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                    NAME_AND_PARAMS "${PARGS_PREFIX}PRIVATE_STATIC_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                    SINGLE_PART "BASE_PRIVATE_STATIC_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                )
+                NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                    NAME_AND_PARAMS "${PARGS_PREFIX}PROTECTED_STATIC_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                    SINGLE_PART "BASE_PROTECTED_STATIC_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                )
+                NCPP_RTTIHelper_RObject_CreateNestedMacro(
+                    NAME_AND_PARAMS "${PARGS_PREFIX}PUBLIC_STATIC_FUNCTION${OVERRIDER_NAME_SUFFIX}(${PARGS_PARAMS_STR})"
+                    SINGLE_PART "BASE_PUBLIC_STATIC_FUNCTION(${PARGS_OVERRIDER}, (${PARGS_KEYWORDS}), (${PARGS_IMPLEMENT}), (${PARGS_MEMBER_RETURN_TYPE}), (${PARGS_MEMBER_ARG_TYPES_STR}), ${PARGS_MEMBER_NAME_PARAM} __VA_OPT__(,) __VA_ARGS__)"
+                )
+            endif()
+        endif()
     endif()
 
 endfunction()
