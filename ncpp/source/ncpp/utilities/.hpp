@@ -96,4 +96,6 @@ namespace ncpp {
 
 #include <ncpp/utilities/cpass.hpp>
 
+#include <ncpp/utilities/magic.hpp>
+
 #pragma endregion
