@@ -34,7 +34,7 @@
 
 #include <ncpp/iostream.hpp>
 #include <ncpp/utilities/is_function.hpp>
-#include <ncpp/utilities/pack.hpp>
+#include <ncpp/utilities/pass.hpp>
 
 #include <ncpp/containers/.hpp>
 
@@ -69,7 +69,7 @@ namespace ncpp {
 
 	namespace rtti {
 
-#define NCPP_PACK(...) ncpp::utilities::TF_pack<__VA_ARGS__>
+#define NCPP_PACK(...) ncpp::containers::TF_pack<__VA_ARGS__>
 
 
 

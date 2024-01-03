@@ -1,7 +1,7 @@
 #pragma once
 
 /**
- *  @file ncpp/utilities/pack.hpp
+ *  @file ncpp/containers/pack.hpp
  *  @brief Implements pack.
  */
 
@@ -36,6 +36,9 @@
 #include <ncpp/utilities/first_template_arg.hpp>
 #include <ncpp/utilities/nth_template_arg.hpp>
 #include <ncpp/utilities/sizeof.hpp>
+#include <ncpp/utilities/pass.hpp>
+
+#include <ncpp/containers/binding_helper.hpp>
 #include <ncpp/containers/view.hpp>
 
 #pragma endregion
@@ -58,7 +61,7 @@
 
 namespace ncpp {
 
-    namespace utilities {
+    namespace containers {
 
 
 
@@ -79,229 +82,84 @@ namespace ncpp {
         namespace internal {
 
             template<sz element_count__, typename... F__>
-            struct TF_large_pack_implement {
+            struct TF_large_pack_implement : public eastl::tuple<F__...> { };
 
-                eastl::tuple<F__...> tuple = {};
+#define NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(Index, Name) \
+            NCPP_FORCE_INLINE utilities::TF_nth_template_arg<Index, F__...>& Name() {\
+                \
+                return eastl::get<Index>((eastl::tuple<F__...>&)*this);\
+            }\
+            NCPP_FORCE_INLINE utilities::TF_pass<utilities::TF_nth_template_arg<Index, F__...>> Name() const {\
+                \
+                return eastl::get<Index>((const eastl::tuple<F__...>&)*this);\
+            }
 
-                static_assert(element_count__ > 1, "element count must be greater than 1");
-
+            template<typename... F__>
+            struct TF_large_pack_implement<1, F__...> : public eastl::tuple<F__...> {
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(0, first);
             };
 
             template<typename... F__>
-            struct TF_large_pack_implement<2, F__...> {
-
-                union {
-
-                    eastl::tuple<F__...> tuple = {};
-
-                    struct {
-
-                        TF_nth_template_arg<0, F__...> first;
-                        TF_nth_template_arg<1, F__...> second;
-
-                    };
-
-                    struct {
-
-                        TF_nth_template_arg<0, F__...> item_0;
-                        TF_nth_template_arg<1, F__...> item_1;
-
-                    };
-
-                };
-
+            struct TF_large_pack_implement<2, F__...> : public eastl::tuple<F__...> {
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(0, first);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(1, second);
             };
 
             template<typename... F__>
-            struct TF_large_pack_implement<3, F__...> {
-
-                union {
-
-                    eastl::tuple<F__...> tuple = {};
-
-                    struct {
-
-                        TF_nth_template_arg<0, F__...> first;
-                        TF_nth_template_arg<1, F__...> second;
-                        TF_nth_template_arg<2, F__...> third;
-
-                    };
-
-                    struct {
-
-                        TF_nth_template_arg<0, F__...> item_0;
-                        TF_nth_template_arg<1, F__...> item_1;
-                        TF_nth_template_arg<2, F__...> item_2;
-
-                    };
-
-                };
-
+            struct TF_large_pack_implement<3, F__...> : public eastl::tuple<F__...> {
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(0, first);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(1, second);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(2, third);
             };
 
             template<typename... F__>
-            struct TF_large_pack_implement<4, F__...> {
-
-                union {
-
-                    eastl::tuple<F__...> tuple = {};
-
-                    struct {
-
-                        TF_nth_template_arg<0, F__...> first;
-                        TF_nth_template_arg<1, F__...> second;
-                        TF_nth_template_arg<2, F__...> third;
-                        TF_nth_template_arg<3, F__...> fourth;
-
-                    };
-
-                    struct {
-
-                        TF_nth_template_arg<0, F__...> item_0;
-                        TF_nth_template_arg<1, F__...> item_1;
-                        TF_nth_template_arg<2, F__...> item_2;
-                        TF_nth_template_arg<3, F__...> item_3;
-
-                    };
-
-                };
-
+            struct TF_large_pack_implement<4, F__...> : public eastl::tuple<F__...> {
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(0, first);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(1, second);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(2, third);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(3, fourth);
             };
 
             template<typename... F__>
-            struct TF_large_pack_implement<5, F__...> {
-
-                union {
-
-                    eastl::tuple<F__...> tuple = {};
-
-                    struct {
-
-                        TF_nth_template_arg<0, F__...> first;
-                        TF_nth_template_arg<1, F__...> second;
-                        TF_nth_template_arg<2, F__...> third;
-                        TF_nth_template_arg<3, F__...> fourth;
-                        TF_nth_template_arg<4, F__...> fifth;
-
-                    };
-
-                    struct {
-
-                        TF_nth_template_arg<0, F__...> item_0;
-                        TF_nth_template_arg<1, F__...> item_1;
-                        TF_nth_template_arg<2, F__...> item_2;
-                        TF_nth_template_arg<3, F__...> item_3;
-                        TF_nth_template_arg<4, F__...> item_4;
-
-                    };
-
-                };
-
+            struct TF_large_pack_implement<5, F__...> : public eastl::tuple<F__...> {
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(0, first);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(1, second);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(2, third);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(3, fourth);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(4, fifth);
             };
 
             template<typename... F__>
-            struct TF_large_pack_implement<6, F__...> {
-
-                union {
-
-                    eastl::tuple<F__...> tuple = {};
-
-                    struct {
-
-                        TF_nth_template_arg<0, F__...> first;
-                        TF_nth_template_arg<1, F__...> second;
-                        TF_nth_template_arg<2, F__...> third;
-                        TF_nth_template_arg<3, F__...> fourth;
-                        TF_nth_template_arg<4, F__...> fifth;
-                        TF_nth_template_arg<5, F__...> sixth;
-
-                    };
-
-                    struct {
-
-                        TF_nth_template_arg<0, F__...> item_0;
-                        TF_nth_template_arg<1, F__...> item_1;
-                        TF_nth_template_arg<2, F__...> item_2;
-                        TF_nth_template_arg<3, F__...> item_3;
-                        TF_nth_template_arg<4, F__...> item_4;
-                        TF_nth_template_arg<5, F__...> item_5;
-
-                    };
-
-                };
-
+            struct TF_large_pack_implement<6, F__...> : public eastl::tuple<F__...> {
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(0, first);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(1, second);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(2, third);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(3, fourth);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(4, fifth);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(5, sixth);
             };
 
             template<typename... F__>
-            struct TF_large_pack_implement<7, F__...> {
-
-                union {
-
-                    eastl::tuple<F__...> tuple = {};
-
-                    struct {
-
-                        TF_nth_template_arg<0, F__...> first;
-                        TF_nth_template_arg<1, F__...> second;
-                        TF_nth_template_arg<2, F__...> third;
-                        TF_nth_template_arg<3, F__...> fourth;
-                        TF_nth_template_arg<4, F__...> fifth;
-                        TF_nth_template_arg<5, F__...> sixth;
-                        TF_nth_template_arg<6, F__...> seventh;
-
-                    };
-
-                    struct {
-
-                        TF_nth_template_arg<0, F__...> item_0;
-                        TF_nth_template_arg<1, F__...> item_1;
-                        TF_nth_template_arg<2, F__...> item_2;
-                        TF_nth_template_arg<3, F__...> item_3;
-                        TF_nth_template_arg<4, F__...> item_4;
-                        TF_nth_template_arg<5, F__...> item_5;
-                        TF_nth_template_arg<6, F__...> item_6;
-
-                    };
-
-                };
-
+            struct TF_large_pack_implement<7, F__...> : public eastl::tuple<F__...> {
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(0, first);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(1, second);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(2, third);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(3, fourth);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(4, fifth);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(5, sixth);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(6, seventh);
             };
 
             template<typename... F__>
-            struct TF_large_pack_implement<8, F__...> {
-
-                union {
-
-                    eastl::tuple<F__...> tuple = {};
-
-                    struct {
-
-                        TF_nth_template_arg<0, F__...> first;
-                        TF_nth_template_arg<1, F__...> second;
-                        TF_nth_template_arg<2, F__...> third;
-                        TF_nth_template_arg<3, F__...> fourth;
-                        TF_nth_template_arg<4, F__...> fifth;
-                        TF_nth_template_arg<5, F__...> sixth;
-                        TF_nth_template_arg<6, F__...> seventh;
-                        TF_nth_template_arg<7, F__...> eighth;
-
-                    };
-
-                    struct {
-
-                        TF_nth_template_arg<0, F__...> item_0;
-                        TF_nth_template_arg<1, F__...> item_1;
-                        TF_nth_template_arg<2, F__...> item_2;
-                        TF_nth_template_arg<3, F__...> item_3;
-                        TF_nth_template_arg<4, F__...> item_4;
-                        TF_nth_template_arg<5, F__...> item_5;
-                        TF_nth_template_arg<6, F__...> item_6;
-                        TF_nth_template_arg<7, F__...> item_7;
-
-                    };
-
-                };
-
+            struct TF_large_pack_implement<8, F__...> : public eastl::tuple<F__...> {
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(0, first);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(1, second);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(2, third);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(3, fourth);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(4, fifth);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(5, sixth);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(6, seventh);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(7, eighth);
             };
 
         }
@@ -313,10 +171,23 @@ namespace ncpp {
 
 
 
+        namespace internal {
+
+            template<typename F_new_allocator__, typename... F__>
+            struct TF_bind_pack_allocator_helper {
+
+                using F = TF_large_pack<TF_bind_container_allocator<F__, F_new_allocator__>...>;
+
+            };
+
+        }
+
+
+
         template<typename... F__>
-        using TF_pack = TF_nth_template_arg<
+        using TF_pack = utilities::TF_nth_template_arg<
             (sizeof...(F__) > 1),
-            TF_first_template_arg<F__...>,
+            utilities::TF_first_template_arg<F__...>,
             TF_large_pack<F__...>
         >;
 
@@ -382,19 +253,19 @@ namespace ncpp {
 
                 static NCPP_FORCE_INLINE F& get(F_pack& pack) noexcept {
 
-                    return eastl::get<index__>(std::forward<F_pack&>(pack.tuple));
+                    return eastl::get<index__>(std::forward<F_pack&>(pack));
                 }
                 static NCPP_FORCE_INLINE F&& get(F_pack&& pack) noexcept {
 
-                    return eastl::get<index__>(std::forward<F_pack>(pack.tuple));
+                    return eastl::get<index__>(std::forward<F_pack>(pack));
                 }
                 static NCPP_FORCE_INLINE const F& get(const F_pack& pack) noexcept {
 
-                    return eastl::get<index__>(std::forward<const F_pack&>(pack.tuple));
+                    return eastl::get<index__>(std::forward<const F_pack&>(pack));
                 }
                 static NCPP_FORCE_INLINE const F&& get(const F_pack&& pack) noexcept {
 
-                    return eastl::get<index__>(std::forward<const F_pack>(pack.tuple));
+                    return eastl::get<index__>(std::forward<const F_pack>(pack));
                 }
 
             };
@@ -445,6 +316,23 @@ namespace ncpp {
             return internal::TF_unpack_helper<index__, std::remove_const_t<std::remove_reference_t<F_passed_pack__>>>::get(std::forward<F_passed_pack__>(pack));
         }
 
+
+
+        template<typename... F__>
+        using TG_pack = TF_pack<F__...>;
+        template<typename... F__>
+        using TEP_pack = TF_pack<F__...>;
+
+        template<typename... F__>
+        using TV_pack = TF_view<TG_pack<F__...>>;
+
     }
 
 }
+
+NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
+    NCPP_MA(ncpp::containers::TF_large_pack<F__...>),
+    NCPP_MA(void),
+    NCPP_MA(typename ncpp::containers::internal::TF_bind_pack_allocator_helper<F_new_allocator__, F__...>::F),
+    typename... F__
+);
