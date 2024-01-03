@@ -244,6 +244,8 @@ void log_type_info(A::F_robject_type_info* type_info_p){
     
 }
 
+
+
 int main() {
 
 	A a;
