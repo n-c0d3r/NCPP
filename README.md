@@ -6,23 +6,24 @@ NCoder's Game Engine Learning Aimed C++ Library.
 ## Features
 + Memory management:
   + Incremental chunk allocator
-  + Smart chunk allocator
+  + **Smart chunk allocator**
     + **⚠️ Warning**: `not avaiable on NCPP Lite Distribution`
   + Reference allocator
-  + Powerful allocator base class
+  + **Powerful allocator base class**
 + Containers:
   + EASTL containers (typedefs)
-  + Ring buffer (Both concurrent and non-concurrent versions)
+  + Ring buffer (both concurrent and non-concurrent versions)
   + Hash table (like Unreal Engine's one)
-  + Container view (constant container reference)
+  + **Container view** (constant container reference)
 + Logging:
-  + string
-  + vector
-  + array
-  + initialier_list
-  + convenient coloring
+  + String
+  + Vector
+  + Array
+  + Initialier_list
+  + **Convenient coloring**
   + ...
 + Utilities:
+  + **Magic syntax** (F_returns...)(F_arguments...)
   + Nth template argument getter
   + Function traits
   + Is derived from checker
@@ -33,7 +34,7 @@ NCoder's Game Engine Learning Aimed C++ Library.
 + RTTI (Runtime-Type Information):
   + Type flag
   + Subtype
-  + Reflection
+  + **Reflection**
     + **⚠️ Warning**: `not avaiable on NCPP Lite Distribution`
     + Easy to use
     + No memory cost on reflected object
