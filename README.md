@@ -24,7 +24,8 @@ NCoder's Game Engine Learning Aimed C++ Library.
   + ...
 + Utilities:
   + **Magic syntax** (F_returns...)(F_arguments...)
-  + Nth template argument getter
+  + **Constant pass** (optimized constant variable passing)
+  + N-th template argument getter
   + Function traits
   + Is derived from checker
   + Is streamable
@@ -40,7 +41,7 @@ NCoder's Game Engine Learning Aimed C++ Library.
     + No memory cost on reflected object
     + Metadata supports 
     + Fast compilation
-    + Highly customizable
+    + Flexible and highly customizable
 
 ---
 
