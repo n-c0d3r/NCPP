@@ -44,6 +44,10 @@ class TD {
         PUBLIC(
             (F__)(F__),
             dd2
+        ),
+        PUBLIC_STATIC(
+            (F__),
+            dd3
         )
     );
 
@@ -54,6 +58,8 @@ NCPP_MAGIC((F__)(F__), TD<F__>::dd2) {
 
     return {};
 }
+template<typename F__>
+NCPP_MAGIC((F__), TD<F__>::dd3);
 
 
 
