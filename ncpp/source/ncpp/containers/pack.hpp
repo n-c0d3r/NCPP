@@ -126,13 +126,6 @@ namespace ncpp {
 
 
 
-            template<sz element_count__, typename... F__>
-            struct TF_large_pack_implement {
-                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_TUPLE_INTERNAL();
-            };
-
-
-
 #define NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(Index, Name) \
             NCPP_FORCE_INLINE utilities::TF_nth_template_arg<Index, F__...>& Name() {\
                 \
@@ -142,6 +135,26 @@ namespace ncpp {
                 \
                 return eastl::get<Index>((const eastl::tuple<F__...>&)*this);\
             }
+
+
+
+            template<sz element_count__, typename... F__>
+            struct TF_large_pack_implement {
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_TUPLE_INTERNAL();
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(0, first);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(1, second);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(2, third);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(3, fourth);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(4, fifth);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(5, sixth);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(6, seventh);
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(7, eighth);
+            };
+
+            template<typename... F__>
+            struct TF_large_pack_implement<0, F__...> {
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_TUPLE_INTERNAL();
+            };
 
             template<typename... F__>
             struct TF_large_pack_implement<1, F__...> {
@@ -219,7 +232,7 @@ namespace ncpp {
                 NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(7, eighth);
             };
 
-        }
+        };
 
 
 
@@ -236,17 +249,36 @@ namespace ncpp {
                 using F = TF_large_pack<TF_bind_container_allocator<F__, F_new_allocator__>...>;
 
             };
+            template<typename F_new_allocator__>
+            struct TF_bind_pack_allocator_helper<F_new_allocator__> {
+
+                using F = void;
+
+            };
+
+            template<typename... F__>
+            struct TF_pack_helper {
+
+                using F = utilities::TF_nth_template_arg<
+                    (sizeof...(F__) > 1),
+                    utilities::TF_first_template_arg<F__...>,
+                    TF_large_pack<F__...>
+                >;;
+
+            };
+            template<>
+            struct TF_pack_helper<> {
+
+                using F = void;
+
+            };
 
         }
 
 
 
         template<typename... F__>
-        using TF_pack = utilities::TF_nth_template_arg<
-            (sizeof...(F__) > 1),
-            utilities::TF_first_template_arg<F__...>,
-            TF_large_pack<F__...>
-        >;
+        using TF_pack = typename internal::TF_pack_helper<F__...>::F;
 
 
 

@@ -82,7 +82,7 @@ class A : public B, public C, public TD<i32> {
             i
         ),
 		PUBLIC(
-            (void)(),
+            ()(),
             foo
         ),
                       
@@ -91,7 +91,7 @@ class A : public B, public C, public TD<i32> {
             si
         ),
         PUBLIC_STATIC(
-            (void)(int, int, TF_vector<int, F_default_allocator>),
+            ()(int, int, TF_vector<int, F_default_allocator>),
             foo2
         ),
 
@@ -105,7 +105,7 @@ class A : public B, public C, public TD<i32> {
             i32_b8_tuple
         ),
         PUBLIC(
-            (i32, b8)(f32),
+            (i32, b8)(f32, f64),
             i32_b8_tuple_foo
         )
 	);
@@ -130,7 +130,7 @@ constexpr i32 A::i32_constexpr(){
     return 3;
 }
 
-TF_pack<i32, b8> A::i32_b8_tuple_foo(f32) {
+TF_pack<i32, b8> A::i32_b8_tuple_foo(f32, f64) {
 
     return {};
 }
