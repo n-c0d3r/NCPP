@@ -81,8 +81,55 @@ namespace ncpp {
 
         namespace internal {
 
+            template<class F_tuple__, typename... F_arguments__>
+            concept T_is_tuple_convertible = requires(F_arguments__&&... args) {
+
+                F_tuple__(std::forward<F_arguments__>(args)...);
+
+            };
+
+#define NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_TUPLE_INTERNAL() \
+            using F_tuple = eastl::tuple<F__...>;         \
+            F_tuple tuple;                                 \
+                                                                \
+                                                                \
+                                                                \
+            NCPP_FORCE_INLINE TF_large_pack_implement() : tuple() { } \
+                                                                \
+            NCPP_FORCE_INLINE TF_large_pack_implement(const TF_large_pack_implement& x) : tuple(x.tuple) { }\
+            NCPP_FORCE_INLINE TF_large_pack_implement(TF_large_pack_implement&& x) : tuple(std::forward<F_tuple>(x.tuple)) { }\
+                                                                \
+            NCPP_FORCE_INLINE TF_large_pack_implement(const F_tuple& x) : tuple(x) { }\
+            NCPP_FORCE_INLINE TF_large_pack_implement(F_tuple&& x) : tuple(std::forward<F_tuple>(x)) { }\
+                                                                \
+            template<typename... F_arguments__>                 \
+            requires T_is_tuple_convertible<F_tuple, F_arguments__...>            \
+            NCPP_FORCE_INLINE TF_large_pack_implement(F_arguments__&&... args) : tuple(std::forward<F_arguments__>(args)...) { }\
+                                                                \
+                                                                \
+                                                                \
+            NCPP_FORCE_INLINE TF_large_pack_implement& operator = (const TF_large_pack_implement& x) { \
+                tuple = x.tuple; \
+                return *this;\
+            }\
+            NCPP_FORCE_INLINE TF_large_pack_implement& operator = (TF_large_pack_implement&& x) { \
+                tuple = std::forward<F_tuple>(x.tuple); \
+                return *this;\
+            }\
+                                                                \
+                                                                \
+                                                                \
+            NCPP_FORCE_INLINE operator F_tuple () { return tuple; }\
+            NCPP_FORCE_INLINE operator utilities::TF_pass<F_tuple> () const { return tuple; }
+
+
+
             template<sz element_count__, typename... F__>
-            struct TF_large_pack_implement : public eastl::tuple<F__...> { };
+            struct TF_large_pack_implement {
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_TUPLE_INTERNAL();
+            };
+
+
 
 #define NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(Index, Name) \
             NCPP_FORCE_INLINE utilities::TF_nth_template_arg<Index, F__...>& Name() {\
@@ -95,25 +142,29 @@ namespace ncpp {
             }
 
             template<typename... F__>
-            struct TF_large_pack_implement<1, F__...> : public eastl::tuple<F__...> {
+            struct TF_large_pack_implement<1, F__...> {
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_TUPLE_INTERNAL();
                 NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(0, first);
             };
 
             template<typename... F__>
-            struct TF_large_pack_implement<2, F__...> : public eastl::tuple<F__...> {
+            struct TF_large_pack_implement<2, F__...> {
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_TUPLE_INTERNAL();
                 NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(0, first);
                 NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(1, second);
             };
 
             template<typename... F__>
-            struct TF_large_pack_implement<3, F__...> : public eastl::tuple<F__...> {
+            struct TF_large_pack_implement<3, F__...> {
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_TUPLE_INTERNAL();
                 NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(0, first);
                 NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(1, second);
                 NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(2, third);
             };
 
             template<typename... F__>
-            struct TF_large_pack_implement<4, F__...> : public eastl::tuple<F__...> {
+            struct TF_large_pack_implement<4, F__...> {
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_TUPLE_INTERNAL();
                 NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(0, first);
                 NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(1, second);
                 NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(2, third);
@@ -121,7 +172,8 @@ namespace ncpp {
             };
 
             template<typename... F__>
-            struct TF_large_pack_implement<5, F__...> : public eastl::tuple<F__...> {
+            struct TF_large_pack_implement<5, F__...> {
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_TUPLE_INTERNAL();
                 NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(0, first);
                 NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(1, second);
                 NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(2, third);
@@ -130,7 +182,8 @@ namespace ncpp {
             };
 
             template<typename... F__>
-            struct TF_large_pack_implement<6, F__...> : public eastl::tuple<F__...> {
+            struct TF_large_pack_implement<6, F__...> {
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_TUPLE_INTERNAL();
                 NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(0, first);
                 NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(1, second);
                 NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(2, third);
@@ -140,7 +193,8 @@ namespace ncpp {
             };
 
             template<typename... F__>
-            struct TF_large_pack_implement<7, F__...> : public eastl::tuple<F__...> {
+            struct TF_large_pack_implement<7, F__...> {
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_TUPLE_INTERNAL();
                 NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(0, first);
                 NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(1, second);
                 NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(2, third);
@@ -151,7 +205,8 @@ namespace ncpp {
             };
 
             template<typename... F__>
-            struct TF_large_pack_implement<8, F__...> : public eastl::tuple<F__...> {
+            struct TF_large_pack_implement<8, F__...> {
+                NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_TUPLE_INTERNAL();
                 NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(0, first);
                 NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(1, second);
                 NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(2, third);

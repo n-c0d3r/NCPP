@@ -132,7 +132,7 @@ constexpr i32 A::i32_constexpr(){
 
 TF_pack<i32, b8> A::i32_b8_tuple_foo(f32) {
 
-    return {};
+    return { };
 }
 
 
