@@ -130,7 +130,10 @@ constexpr i32 A::i32_constexpr(){
     return 3;
 }
 
+TF_pack<i32, b8> A::i32_b8_tuple_foo(f32) {
 
+    return {};
+}
 
 struct F_customm_reflector {
     
