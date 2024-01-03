@@ -59,21 +59,45 @@ namespace ncpp {
 
     namespace utilities {
 
+        namespace internal {
+
+            template<typename F__, bool is_always_mutable__ = false>
+            struct TF_cpass_helper {
+
+                using F = TF_nth_template_arg<
+                    (
+                        (T_sizeof<F__> > T_sizeof<void *>)
+                        + !std::is_same_v<containers::TF_container_allocator<F__>, void>
+                    ),
+                    F__,
+                    const F__ &,
+                    containers::TF_view<F__, is_always_mutable__>
+                >;
+
+            };
+
+            template<typename F_element__, sz size__, bool is_always_mutable__>
+            struct TF_cpass_helper<F_element__[size__], is_always_mutable__> {
+
+                using F = const F_element__*;
+
+            };
+
+        }
+
         template<typename F__, bool is_always_mutable__ = false>
-        using TF_cpass = TF_nth_template_arg<
-            (
-                (T_sizeof<F__> > T_sizeof<void*>)
-                + !std::is_same_v<containers::TF_container_allocator<F__>, void>
-            ),
-            F__,
-            const F__&,
-            containers::TF_view<F__, is_always_mutable__>
-        >;
+        using TF_cpass = typename internal::TF_cpass_helper<F__, is_always_mutable__>::F;
 
 
 
         template<typename F__, bool is_always_mutable__ = false>
         NCPP_FORCE_INLINE TF_cpass<F__, is_always_mutable__> T_cpass(const F__& x) noexcept {
+
+            return x;
+        }
+
+        template<typename F_item__, sz size__, bool is_always_mutable__ = false>
+        NCPP_FORCE_INLINE TF_cpass<F_item__[size__], is_always_mutable__> T_cpass(F_item__ x[size__]) noexcept {
 
             return x;
         }
