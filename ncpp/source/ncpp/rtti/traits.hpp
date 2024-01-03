@@ -187,16 +187,33 @@ namespace ncpp {
 			}
             
             
-            
-			template<typename F_reflect_flag__>
-			static auto TF_safe_custom_params_test_internal(int)
-                -> decltype(std::declval<F_reflect_flag__&>() << std::declval<F_user_reflect_custom_params_flag>());
-			template<typename>
-			static auto TF_safe_custom_params_test_internal(...)
-                -> void;
+
+        private:
+            template<b8 is_has_custom_params, typename F_reflect_flag__>
+            struct TF_safe_custom_params_helper_internal;
+
+            template<typename F_reflect_flag__>
+            struct TF_safe_custom_params_helper_internal<false, F_reflect_flag__> {
+
+                using F = void;
+
+            };
+            template<typename F_reflect_flag__>
+            struct TF_safe_custom_params_helper_internal<true, F_reflect_flag__> {
+
+                using F_implement_info = NCPP_RTTI_FLAG_IMPLEMENT_INFO(F_reflect_flag__, F_user_reflect_custom_params_flag);
+                using F = typename F_implement_info::F_custom_params;
+
+            };
+        public:
+
+
 
 			template<typename F_reflect_flag__>
-			using TF_safe_custom_params = decltype(TF_safe_custom_params_test_internal<F_reflect_flag__>(0));
+			using TF_safe_custom_params = typename TF_safe_custom_params_helper_internal<
+                NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, F_user_reflect_custom_params_flag),
+                F_reflect_flag__
+            >::F;
 
 
 

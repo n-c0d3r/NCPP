@@ -238,7 +238,7 @@ public:
     }
     
 public:
-    NCPP_ROBJECT_DISABLE_DEFAULT_REFLECT(F_customm_reflector);
+    NCPP_ROBJECT_DISABLE_DEFAULT_REFLECT();
     
 };
 

@@ -89,10 +89,10 @@ namespace ncpp {
         template<class F_robject__, NCPP_RTTI_SPECIFIC_TARGS()>
 		NCPP_RTTI_CREATE_FLAG(TF_user_post_reflect_object_flag);
     
-#define NCPP_ROBJECT_DISABLE_DEFAULT_REFLECT(ReflectFlagType) \
-            NCPP_RTTI_IMPLEMENT_FLAG(ReflectFlagType, ncpp::rtti::F_disable_reflect_robject_member_info);\
-            NCPP_RTTI_IMPLEMENT_FLAG(ReflectFlagType, ncpp::rtti::F_disable_reflect_robject_type_info);\
-            NCPP_RTTI_IMPLEMENT_FLAG(ReflectFlagType, ncpp::rtti::F_disable_reflect_robject_metadata);
+#define NCPP_ROBJECT_DISABLE_DEFAULT_REFLECT() \
+            NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_disable_reflect_robject_member_info);\
+            NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_disable_reflect_robject_type_info);\
+            NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_disable_reflect_robject_metadata);
                 
 	}
 

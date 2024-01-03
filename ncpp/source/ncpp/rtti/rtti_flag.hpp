@@ -88,9 +88,13 @@ namespace ncpp {
             template<class F__, typename F_flag__>
             concept T_is_has_flag = requires {
 
-                requires (F__::template TF___ncpp_rtti_flag_implement___<F_flag__>::value == true);
+                requires (F__::template TF___ncpp_rtti_flag_implement_info___<F_flag__>::value == true);
 
             };
+
+            template<typename F__, typename F_flag__>
+            requires T_is_has_flag<F__, F_flag__>
+            using TF_rtti_flag_implement_info = F__::template TF___ncpp_rtti_flag_implement_info___<F_flag__>;
 
         };
 
@@ -98,14 +102,21 @@ namespace ncpp {
 
 #define NCPP_RTTI_CREATE_FLAG(Name) struct Name {};
 
-#define NCPP_RTTI_IMPLEMENT_FLAG(TypeName, Name,...) NCPP_PUBLIC_KEYWORD \
-            template<typename> struct TF___ncpp_rtti_flag_implement___;\
-            template<__VA_ARGS__> struct TF___ncpp_rtti_flag_implement___<Name> { static constexpr ncpp::b8 value = true; };
+#define NCPP_RTTI_IMPLEMENT_FLAG(Name,...) NCPP_PUBLIC_KEYWORD \
+            template<typename> struct TF___ncpp_rtti_flag_implement_info___;\
+            template<__VA_ARGS__> struct TF___ncpp_rtti_flag_implement_info___<Name> { static constexpr ncpp::b8 value = true; };
+
+#define NCPP_RTTI_IMPLEMENT_FLAG_WITH_INNER(Name, Inner,...) NCPP_PUBLIC_KEYWORD \
+            template<typename> struct TF___ncpp_rtti_flag_implement_info___;\
+            template<__VA_ARGS__> struct TF___ncpp_rtti_flag_implement_info___<Name> { static constexpr ncpp::b8 value = true; Inner; };
 
 #define NCPP_RTTI_REPRESENT_IMPLEMENT(TypeName) ncpp::rtti::internal::TF_rtti_flag_represent_implement<TypeName>
 #define NCPP_RTTI_REPRESENT(TypeName) ncpp::rtti::internal::TF_rtti_flag_represent<TypeName>
 #define NCPP_RTTI_IMPLEMENT(TypeName) ncpp::rtti::internal::TF_rtti_flag_implement<TypeName>
+
 #define NCPP_RTTI_IS_HAS_FLAG(TypeName, Name) ncpp::rtti::internal::T_is_has_flag<NCPP_RTTI_REPRESENT_IMPLEMENT(TypeName), Name>
+
+#define NCPP_RTTI_FLAG_IMPLEMENT_INFO(TypeName, Name) ncpp::rtti::internal::TF_rtti_flag_implement_info<NCPP_RTTI_REPRESENT_IMPLEMENT(TypeName), Name>
 
 }
 
