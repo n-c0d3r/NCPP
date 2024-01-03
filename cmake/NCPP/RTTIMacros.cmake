@@ -102,7 +102,7 @@ NCPP_RTTIHelper_RObject_CreateMemberMacro(
     OVERRIDER FORCE_INLINE
 
     MEMBER_NAME "GetterName"
-    MEMBER_RETURN_TYPE "ncpp::utilities::TF_pass<decltype(MemberName)>"
+    MEMBER_RETURN_TYPE "ncpp::utilities::TF_cpass<decltype(MemberName)>"
 
     FUNCTION_ONLY
 
@@ -115,7 +115,7 @@ NCPP_RTTIHelper_RObject_CreateMemberMacro(
     OVERRIDER FORCE_INLINE
 
     MEMBER_NAME "GetterName"
-    MEMBER_RETURN_TYPE "ncpp::utilities::TF_pass<decltype(MemberName)>"
+    MEMBER_RETURN_TYPE "ncpp::utilities::TF_cpass<decltype(MemberName)>"
 
     FUNCTION_ONLY
 
@@ -135,7 +135,7 @@ NCPP_RTTIHelper_RObject_CreateMemberMacro(
 
     MEMBER_NAME "SetterName"
     MEMBER_RETURN_TYPE "void"
-    MEMBER_ARG_TYPES "ncpp::utilities::TF_pass<decltype(MemberName)> value"
+    MEMBER_ARG_TYPES "ncpp::utilities::TF_cpass<decltype(MemberName)> value"
 
     FUNCTION_ONLY
 
@@ -151,7 +151,7 @@ NCPP_RTTIHelper_RObject_CreateMemberMacro(
 
     MEMBER_NAME "SetterName"
     MEMBER_RETURN_TYPE "void"
-    MEMBER_ARG_TYPES "ncpp::utilities::TF_pass<decltype(MemberName)> value"
+    MEMBER_ARG_TYPES "ncpp::utilities::TF_cpass<decltype(MemberName)> value"
 
     FUNCTION_ONLY
 

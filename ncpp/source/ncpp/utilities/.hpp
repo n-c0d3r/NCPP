@@ -94,6 +94,6 @@ namespace ncpp {
 
 #include <ncpp/utilities/safe_initializer_list.hpp>
 
-#include <ncpp/utilities/pass.hpp>
+#include <ncpp/utilities/cpass.hpp>
 
 #pragma endregion

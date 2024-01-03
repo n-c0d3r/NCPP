@@ -34,7 +34,7 @@
 
 #include <ncpp/iostream.hpp>
 #include <ncpp/utilities/is_function.hpp>
-#include <ncpp/utilities/pass.hpp>
+#include <ncpp/utilities/cpass.hpp>
 
 #include <ncpp/containers/.hpp>
 

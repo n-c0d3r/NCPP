@@ -1,8 +1,8 @@
 #pragma once
 
 /**
- *  @file ncpp/utilities/pass.hpp
- *  @brief Implements pass.
+ *  @file ncpp/utilities/cpass.hpp
+ *  @brief Implements cpass.
  */
 
 
@@ -35,6 +35,7 @@
 
 #include <ncpp/utilities/sizeof.hpp>
 #include <ncpp/utilities/nth_template_arg.hpp>
+#include <ncpp/containers/view.hpp>
 
 #pragma endregion
 
@@ -58,12 +59,24 @@ namespace ncpp {
 
     namespace utilities {
 
-        template<typename F__>
-        using TF_pass = TF_nth_template_arg<
-            (T_sizeof<F__> > T_sizeof<const F__&>),
+        template<typename F__, bool is_always_mutable__ = false>
+        using TF_cpass = TF_nth_template_arg<
+            (
+                (T_sizeof<F__> > T_sizeof<void*>)
+                + !std::is_same_v<containers::TF_container_allocator<F__>, void>
+            ),
             F__,
-            const F__&
+            const F__&,
+            containers::TF_view<F__, is_always_mutable__>
         >;
+
+
+
+        template<typename F__, bool is_always_mutable__ = false>
+        NCPP_FORCE_INLINE TF_cpass<F__, is_always_mutable__> T_cpass(const F__& x) noexcept {
+
+            return x;
+        }
 
     }
 

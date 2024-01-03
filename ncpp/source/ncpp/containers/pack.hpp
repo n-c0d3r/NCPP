@@ -36,7 +36,7 @@
 #include <ncpp/utilities/first_template_arg.hpp>
 #include <ncpp/utilities/nth_template_arg.hpp>
 #include <ncpp/utilities/sizeof.hpp>
-#include <ncpp/utilities/pass.hpp>
+#include <ncpp/utilities/cpass.hpp>
 
 #include <ncpp/containers/binding_helper.hpp>
 #include <ncpp/containers/view.hpp>
@@ -122,7 +122,7 @@ namespace ncpp {
                                                                 \
                                                                 \
             NCPP_FORCE_INLINE operator F_tuple () { return tuple; }\
-            NCPP_FORCE_INLINE operator utilities::TF_pass<F_tuple> () const { return tuple; }
+            NCPP_FORCE_INLINE operator utilities::TF_cpass<F_tuple> () const { return tuple; }
 
 
 
@@ -138,7 +138,7 @@ namespace ncpp {
                 \
                 return eastl::get<Index>((eastl::tuple<F__...>&)*this);\
             }\
-            NCPP_FORCE_INLINE utilities::TF_pass<utilities::TF_nth_template_arg<Index, F__...>> Name() const {\
+            NCPP_FORCE_INLINE utilities::TF_cpass<utilities::TF_nth_template_arg<Index, F__...>> Name() const {\
                 \
                 return eastl::get<Index>((const eastl::tuple<F__...>&)*this);\
             }
