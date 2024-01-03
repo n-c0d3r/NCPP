@@ -23,7 +23,7 @@ NCoder's Game Engine Learning Aimed C++ Library.
   + **Convenient coloring**
   + ...
 + Utilities:
-  + **Magic syntax** (F_returns...)(F_arguments...)
+  + **Magic type syntax** for both variables and functions: `(F_returns...)(F_arguments...)`
   + **Constant pass** (optimized constant variable passing)
   + N-th template argument getter
   + Function traits
