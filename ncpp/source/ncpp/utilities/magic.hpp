@@ -73,6 +73,8 @@ namespace ncpp::utilities::internal {
 
 }
 
+#define NCPP_MAGIC_EXPAND(MagicType) NCPP_EXPAND(NCPP_MA MagicType)
+
 #define NCPP_MAGIC_TYPE_CAST_FIRST_PART(MagicType) ncpp::utilities::internal::TF_magic_type_first_part<NCPP_EXPAND(NCPP_PACK MagicType)>
 #define NCPP_MAGIC_TYPE_CAST_SECOND_PART(MagicType) NCPP_EXPAND(NCPP_MA_IGNORE MagicType)
 
