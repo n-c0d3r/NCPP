@@ -78,25 +78,12 @@ namespace ncpp {
 
         namespace internal {
 
-            template<sz count__, typename... F__>
+            template<sz element_count__, typename... F__>
             struct TF_large_pack_implement {
 
                 eastl::tuple<F__...> tuple = {};
 
-            };
-
-            template<typename... F__>
-            struct TF_large_pack_implement<1, F__...> {
-
-                union {
-
-                    eastl::tuple<F__...> tuple = {};
-
-                    TF_nth_template_arg<0, F__...> first;
-
-                    TF_nth_template_arg<0, F__...> item_0;
-
-                };
+                static_assert(element_count__ > 1, "element count must be greater than 1");
 
             };
 
