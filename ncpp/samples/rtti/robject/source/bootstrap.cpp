@@ -40,10 +40,22 @@ class TD {
         PUBLIC(
             (i32),
             dd
+        ),
+        PUBLIC(
+            (F__)(F__),
+            dd2
         )
     );
 
 };
+
+template<typename F__>
+NCPP_MAGIC((F__)(F__), TD<F__>::dd2) {
+
+    return {};
+}
+
+
 
 #define BLOG_THIS void log_this() { std::cout << T_type_fullname<F_this>() << std::endl; }
 #define RLOG_THIS std::cout << "Reflecting" << std::endl;

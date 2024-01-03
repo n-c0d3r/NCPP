@@ -35,8 +35,6 @@ NCPP_RTTIHelper_RObject_CreateMemberOverrider(
     BODY ";"
 
     KEYWORDS "inline"
-
-    FUNCTION_ONLY
 )
 NCPP_RTTIHelper_RObject_CreateMemberOverrider(
     NAME "FORCE_INLINE"
@@ -45,8 +43,6 @@ NCPP_RTTIHelper_RObject_CreateMemberOverrider(
     BODY ";"
 
     KEYWORDS "NCPP_FORCE_INLINE"
-
-    FUNCTION_ONLY
 )
 NCPP_RTTIHelper_RObject_CreateMemberOverrider(
     NAME "CONSTEXPR"
@@ -102,9 +98,7 @@ NCPP_RTTIHelper_RObject_CreateMemberMacro(
     OVERRIDER FORCE_INLINE
 
     MEMBER_NAME "GetterName"
-    MEMBER_RETURN_TYPE "ncpp::utilities::TF_cpass<decltype(MemberName)>"
-
-    FUNCTION_ONLY
+    MEMBER_TYPE "(ncpp::utilities::TF_cpass<decltype(MemberName)>)()"
 
     IMPLEMENT "{ return MemberName\\\; }"
 )
@@ -115,9 +109,7 @@ NCPP_RTTIHelper_RObject_CreateMemberMacro(
     OVERRIDER FORCE_INLINE
 
     MEMBER_NAME "GetterName"
-    MEMBER_RETURN_TYPE "ncpp::utilities::TF_cpass<decltype(MemberName)>"
-
-    FUNCTION_ONLY
+    MEMBER_TYPE "(ncpp::utilities::TF_cpass<decltype(MemberName)>)()"
 
     IMPLEMENT "noexcept { return MemberName\\\; }"
 )
@@ -134,10 +126,7 @@ NCPP_RTTIHelper_RObject_CreateMemberMacro(
     OVERRIDER FORCE_INLINE
 
     MEMBER_NAME "SetterName"
-    MEMBER_RETURN_TYPE "void"
-    MEMBER_ARG_TYPES "ncpp::utilities::TF_cpass<decltype(MemberName)> value"
-
-    FUNCTION_ONLY
+    MEMBER_TYPE "()(ncpp::utilities::TF_cpass<decltype(MemberName)> value)"
 
     IMPLEMENT "{ MemberName = value\\\; }"
 
@@ -150,10 +139,7 @@ NCPP_RTTIHelper_RObject_CreateMemberMacro(
     OVERRIDER FORCE_INLINE
 
     MEMBER_NAME "SetterName"
-    MEMBER_RETURN_TYPE "void"
-    MEMBER_ARG_TYPES "ncpp::utilities::TF_cpass<decltype(MemberName)> value"
-
-    FUNCTION_ONLY
+    MEMBER_TYPE "()(ncpp::utilities::TF_cpass<decltype(MemberName)> value)"
 
     IMPLEMENT "noexcept { MemberName = value\\\; }"
 
