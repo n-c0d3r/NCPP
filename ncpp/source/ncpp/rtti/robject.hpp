@@ -450,7 +450,7 @@ namespace ncpp {
 #define NCPP_ROBJECT_BODY_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName,...) \
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);\
 			NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, false, false);\
-			NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC_TYPE_CAST_FIRST_PART(MemberType) MemberName NCPP_MAGIC_TYPE_CAST_SECOND_PART(MemberType) NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement)
+			NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberType, MemberName) NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement)
 
 #define NCPP_ROBJECT_BODY_BASE_PRIVATE(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
 #define NCPP_ROBJECT_BODY_BASE_PROTECTED(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
@@ -463,7 +463,7 @@ namespace ncpp {
 #define NCPP_ROBJECT_BODY_MEMBER_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...)\
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);\
 			NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, false, true);\
-			NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC_TYPE_CAST_FIRST_PART(MemberType) MemberName NCPP_MAGIC_TYPE_CAST_SECOND_PART(MemberType) const NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement)
+			NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberType, MemberName) const NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement)
 
 #define NCPP_ROBJECT_BODY_BASE_PRIVATE_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_CONST(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
 #define NCPP_ROBJECT_BODY_BASE_PROTECTED_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_CONST(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
@@ -476,7 +476,7 @@ namespace ncpp {
 #define NCPP_ROBJECT_BODY_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName,...) \
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);\
 			NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, true, false);\
-			NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) virtual NCPP_MAGIC_TYPE_CAST_FIRST_PART(MemberType) MemberName NCPP_MAGIC_TYPE_CAST_SECOND_PART(MemberType) NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement)
+			NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) virtual NCPP_MAGIC(MemberType, MemberName) NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement)
 
 #define NCPP_ROBJECT_BODY_BASE_PRIVATE_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
 #define NCPP_ROBJECT_BODY_BASE_PROTECTED_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
@@ -494,7 +494,7 @@ namespace ncpp {
 				return ((F_this*)this)->MemberName(std::forward<decltype(args)>(args)...);\
 				\
 			};\
-			NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) virtual NCPP_MAGIC_TYPE_CAST_FIRST_PART(MemberType) MemberName NCPP_MAGIC_TYPE_CAST_SECOND_PART(MemberType) const NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement)
+			NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) virtual NCPP_MAGIC(MemberType, MemberName) const NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement)
 
 #define NCPP_ROBJECT_BODY_BASE_PRIVATE_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
 #define NCPP_ROBJECT_BODY_BASE_PROTECTED_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
@@ -586,7 +586,7 @@ namespace ncpp {
 #define NCPP_ROBJECT_BODY_STATIC_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName,...) \
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);\
 			NCPP_ROBJECT_BODY_STATIC_MEMBER_STATIC_INFO(MemberType, MemberName);\
-			static NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC_TYPE_CAST_FIRST_PART(MemberType) MemberName NCPP_MAGIC_TYPE_CAST_SECOND_PART(MemberType) NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement)
+			static NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberType, MemberName) NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement)
 
 #define NCPP_ROBJECT_BODY_BASE_PRIVATE_STATIC(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_STATIC_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
 #define NCPP_ROBJECT_BODY_BASE_PROTECTED_STATIC(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_STATIC_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
