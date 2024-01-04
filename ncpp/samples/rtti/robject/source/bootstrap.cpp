@@ -165,15 +165,15 @@ NCPP_MAGIC((i32, b8)(f32, f64), A::i32_b8_tuple_foo) {
 
 struct F_customm_reflector {
 
-public:
-    struct F_user_reflect_custom_params {
+    struct F_params {
 
         G_string message;
 
     };
-    NCPP_ROBJECT_USER_REFLECT_CUSTOM_PARAMS(F_customm_reflector, F_user_reflect_custom_params);
+    NCPP_ROBJECT_USER_REFLECT_CUSTOM_PARAMS(F_params);
 
-public:
+
+
     NCPP_ROBJECT_USER_PRE_REFLECT_MEMBER(
         F_customm_reflector
     ) {
@@ -281,7 +281,7 @@ int main() {
 	A::F_robject_type_info* type_info_p = A::F_rtti_traits::template T_safe_reflect<A>(&rcontainer, &a);
     log_type_info(type_info_p);
 
-    F_customm_reflector::F_user_reflect_custom_params user_reflect_custom_params = {
+    F_customm_reflector::F_params user_reflect_custom_params = {
 
         "(user reflect custom params)"
 

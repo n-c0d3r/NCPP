@@ -70,7 +70,7 @@ namespace ncpp {
 
 	namespace rtti {
 
-#define NCPP_ROBJECT_USER_REFLECT_CUSTOM_PARAMS(CustomReflector, CustomParamsType) \
+#define NCPP_ROBJECT_USER_REFLECT_CUSTOM_PARAMS(CustomParamsType) \
             NCPP_RTTI_IMPLEMENT_FLAG_WITH_INNER(ncpp::rtti::F_user_reflect_custom_params_flag, NCPP_MA(using F_custom_params = CustomParamsType;));
 
 
