@@ -272,6 +272,16 @@ void log_type_info(A::F_robject_type_info* type_info_p){
 
 
 
+class Singleton : public TI_singleton<Singleton> {
+
+
+
+};
+
+NCPP_DEFINE_SINGLETON(Singleton);
+
+
+
 int main() {
 
 	A a;
@@ -287,6 +297,8 @@ int main() {
 
     };
     A::T_static_reflect<F_customm_reflector>(&rcontainer, &user_reflect_custom_params);
+
+    Singleton::instance();
 
 	pause_console();
 

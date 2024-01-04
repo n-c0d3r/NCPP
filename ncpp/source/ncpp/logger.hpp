@@ -1,7 +1,7 @@
 #pragma once
 
-/** @file ncpp/log.hpp
-*	@brief Implement logging functionalities.
+/** @file ncpp/logger.hpp
+*	@brief Implement logger.
 */
 
 
@@ -28,16 +28,6 @@
 
 #include <ncpp/prerequisites.hpp>
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#include <ncpp/logger.hpp>
-
-#include <ncpp/colorized_log.hpp>
-#include <ncpp/eastl_container_log.hpp>
-#include <ncpp/alloc_debug_info_log.hpp>
-
 #pragma endregion
 
 
@@ -58,10 +48,21 @@
 
 namespace ncpp {
 
+    template<typename F_char__ = char>
+    class TF_logger {
 
+    public:
+        TF_logger() {
+        }
+        ~TF_logger() {
+        }
+
+    };
+
+
+
+    using F_logger = TF_logger<>;
+    using F_wlogger = TF_logger<wchar_t>;
 
 }
 
-
-
-#define NCPP_LOG(...)

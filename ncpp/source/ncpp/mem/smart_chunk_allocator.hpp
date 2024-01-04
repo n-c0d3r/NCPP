@@ -419,10 +419,10 @@ namespace ncpp {
 		 * Then it deallocates that chunk.
 		 */
 		template<class F_options__>
-		class TF_smart_chunk_allocator : public TI_allocator<TF_smart_chunk_allocator<F_options__>, true> {
+		class TF_smart_chunk_allocator : public TB_allocator<TF_smart_chunk_allocator<F_options__>, true> {
 
 		private:
-			using F_base = TI_allocator<TF_smart_chunk_allocator<F_options__>, true>;
+			using F_base = TB_allocator<TF_smart_chunk_allocator<F_options__>, true>;
 
 
 

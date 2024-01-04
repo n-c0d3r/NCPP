@@ -59,18 +59,18 @@ namespace ncpp {
 		/**
 		 *	An allocator using malloc and free.
 		 */
-		class F_crt_allocator : public TI_allocator<F_crt_allocator, false, true> {
+		class F_crt_allocator : public TB_allocator<F_crt_allocator, false, true> {
 
 		public:
 			NCPP_FORCE_INLINE F_crt_allocator(const char* name = 0) :
-				TI_allocator(name)
+                    TB_allocator(name)
 			{
 
 
 
 			}
 			NCPP_FORCE_INLINE F_crt_allocator(const F_crt_allocator& x) :
-				TI_allocator()
+                    TB_allocator()
 			{
 
 

@@ -126,10 +126,10 @@ namespace ncpp {
 		 *	Base allocator class.
 		 */
 		template<class F_allocator__, b8 enable_manual_alignment__ = false, b8 auto_count_non_default_allocations__ = false>
-		class TI_allocator {
+		class TB_allocator {
 
 		private:
-			using F_this = TI_allocator<F_allocator__, enable_manual_alignment__>;
+			using F_this = TB_allocator<F_allocator__, enable_manual_alignment__>;
 
 
 
@@ -184,7 +184,7 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 
 
 		protected:
-			inline TI_allocator(const char* name = 0)
+			inline TB_allocator(const char* name = 0)
 			{
 
 #ifdef NCPP_ENABLE_ALLOCATOR_NAME
@@ -192,7 +192,7 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 #endif
 
 			}
-			inline TI_allocator(const TI_allocator& x)
+			inline TB_allocator(const TB_allocator& x)
 			{
 
 #ifdef NCPP_ENABLE_ALLOCATOR_NAME
@@ -200,7 +200,7 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 #endif
 
 			}
-			inline TI_allocator(const TI_allocator& x, const char* name)
+			inline TB_allocator(const TB_allocator& x, const char* name)
 			{
 
 #if NCPP_ENABLE_ALLOCATOR_NAME
@@ -209,7 +209,7 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 
 			}
 
-			inline TI_allocator& operator=(const TI_allocator& x) {
+			inline TB_allocator& operator=(const TB_allocator& x) {
 
 #if NCPP_ENABLE_ALLOCATOR_NAME
 				name_ = x.name_;
@@ -221,7 +221,7 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 
 
         public:
-            NCPP_FORCE_INLINE b8 operator==(const TI_allocator& x) noexcept {
+            NCPP_FORCE_INLINE b8 operator==(const TB_allocator& x) noexcept {
 
                 return (this == &x);
             }
@@ -499,7 +499,7 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 			 */
 			NCPP_FORCE_INLINE void* default_allocate(sz n, int flags = 0) {
 
-				return T_allocate_internal<TI_allocator, true>(n, flags);
+				return T_allocate_internal<TB_allocator, true>(n, flags);
 			}
 			/**
 			 *	Allocates aligned memory with default new_mem(sz) function
@@ -508,11 +508,11 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 
 				if(alignment <= EASTL_ALLOCATOR_MIN_ALIGNMENT){
 
-					return T_allocate_internal<TI_allocator, true>(n, flags);
+					return T_allocate_internal<TB_allocator, true>(n, flags);
 				}
 				else{
 
-					return T_aligned_allocate_internal<TI_allocator, true>(n, alignment, alignment_offset, flags);
+					return T_aligned_allocate_internal<TB_allocator, true>(n, alignment, alignment_offset, flags);
 				}
 
 				return 0;
@@ -522,7 +522,7 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 			 */
 			void default_deallocate(void* p, sz n = 1) {
 
-				T_deallocate_internal<TI_allocator, true>(p, n);
+				T_deallocate_internal<TB_allocator, true>(p, n);
 			}
 
 

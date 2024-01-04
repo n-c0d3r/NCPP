@@ -59,7 +59,7 @@ namespace ncpp {
 		/**
 		 *	An allocator that never allocates any data.
 		 */
-		class F_dummy_allocator : public TI_allocator<F_dummy_allocator> {
+		class F_dummy_allocator : public TB_allocator<F_dummy_allocator> {
 
 		private:
 			static u8 memory_block_s[1024];
@@ -68,7 +68,7 @@ namespace ncpp {
 
 		public:
 			NCPP_FORCE_INLINE F_dummy_allocator(const char* name = 0) :
-				TI_allocator(name)
+                    TB_allocator(name)
 			{
 
 
