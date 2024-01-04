@@ -48,6 +48,10 @@ class TD {
         PUBLIC_STATIC(
             (F__),
             dd3
+        ),
+        PUBLIC_STATIC(
+            (F__)[4],
+            dd4
         )
     );
 
@@ -58,13 +62,18 @@ NCPP_MAGIC((F__)(F__), TD<F__>::dd2) {
 
     return {};
 }
+
 template<typename F__>
 NCPP_MAGIC((F__), TD<F__>::dd3);
+template<typename F__>
+NCPP_MAGIC((F__)[4], TD<F__>::dd4);
 
 
 
 #define BLOG_THIS void log_this() { std::cout << T_type_fullname<F_this>() << std::endl; }
 #define RLOG_THIS std::cout << "Reflecting" << std::endl;
+
+
  
 class A : public B, public C, public TD<i32> {
 
@@ -130,28 +139,29 @@ class A : public B, public C, public TD<i32> {
 
 };
 
-void A::foo() {
 
 
+NCPP_MAGIC(()(), A::foo) {
     
 }
 
-i32 A::si = 4;
-i32 A::private_static_i_ = 6;
-void A::foo2(int, int, TF_vector<int, F_default_allocator>) {
-
-
+NCPP_MAGIC((i32), A::si) = 4;
+NCPP_MAGIC((i32), A::private_static_i_) = 6;
+NCPP_MAGIC(()(int, int, TF_vector<int, F_default_allocator>), A::foo2) {
 
 }
-constexpr i32 A::i32_constexpr(){
+
+constexpr NCPP_MAGIC((i32)(), A::i32_constexpr) {
 
     return 3;
 }
 
-TF_pack<i32, b8> A::i32_b8_tuple_foo(f32, f64) {
+NCPP_MAGIC((i32, b8)(f32, f64), A::i32_b8_tuple_foo) {
 
     return {};
 }
+
+
 
 struct F_customm_reflector {
     

@@ -67,6 +67,12 @@ namespace ncpp::utilities::internal {
         using F = F_return__;
 
     };
+    template<typename F_array__, auto array_arg__>
+    struct TF_magic_type_first_part_helper<F_array__[array_arg__]> {
+
+        using F = F_array__;
+
+    };
 
     template<typename... F__>
     using TF_magic_type_first_part = typename TF_magic_type_first_part_helper<F__...>::F;
