@@ -63,7 +63,7 @@ namespace ncpp {
 		 *
 		 * It only deallocates chunks when reset or clear function is called.
 		 */
-		class F_incremental_chunk_allocator : public TB_allocator<F_incremental_chunk_allocator, true> {
+		class F_incremental_chunk_allocator : public TA_allocator<F_incremental_chunk_allocator, true> {
 
 
 
@@ -115,7 +115,7 @@ namespace ncpp {
 		public:
 			// Default chunk capacity is 2MiB
 			inline F_incremental_chunk_allocator(sz chunk_capacity = 2097152, u16 min_chunk_count = 0, const char* name = 0) :
-                    TB_allocator(name),
+                    TA_allocator(name),
                     chunk_capacity_(chunk_capacity),
                     min_chunk_count_(min_chunk_count),
                     current_usage_(chunk_capacity)

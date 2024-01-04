@@ -76,12 +76,12 @@ namespace ncpp {
 		 *	@param <F_target_allocator__> the target allocator to use.
 		 */
 		template<typename F_target_allocator__ = F_default_allocator, class F_config__ = TF_default_reference_allocator_config<F_target_allocator__>>
-		class TF_reference_allocator : public TB_allocator<TF_reference_allocator<F_target_allocator__>> {
+		class TF_reference_allocator : public TA_allocator<TF_reference_allocator<F_target_allocator__>> {
 
 		public:
 			using F_target_allocator = F_target_allocator__;
 			using F_config = F_config__;
-			using F_base = TB_allocator<TF_reference_allocator<F_target_allocator__>>;
+			using F_base = TA_allocator<TF_reference_allocator<F_target_allocator__>>;
 
 
 
@@ -105,7 +105,7 @@ namespace ncpp {
 
 		public:
             NCPP_FORCE_INLINE TF_reference_allocator(const char* name = 0) :
-                    TB_allocator<TF_reference_allocator<F_target_allocator__>>(name),
+                    TA_allocator<TF_reference_allocator<F_target_allocator__>>(name),
                     target_allocator_p_(default_p())
 			{
 
@@ -113,7 +113,7 @@ namespace ncpp {
 
 			}
             NCPP_FORCE_INLINE TF_reference_allocator(F_target_allocator& target_allocator, const char* name = 0) :
-                    TB_allocator<TF_reference_allocator<F_target_allocator__>>(name),
+                    TA_allocator<TF_reference_allocator<F_target_allocator__>>(name),
                     target_allocator_p_(&target_allocator)
 			{
 
