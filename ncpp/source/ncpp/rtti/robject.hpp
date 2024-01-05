@@ -286,6 +286,34 @@ namespace ncpp {
 
 
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+#define NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberType, MemberName, IsVirtualFunction, IsConstFunction, LowKeywords, LowImplement) \
+            struct F_##MemberName##___member_##IsVirtualFunction##_##IsConstFunction##___ { LowKeywords NCPP_MAGIC(MemberType, member) LowImplement; };\
+            struct F_##MemberName##___member_##IsVirtualFunction##_##IsConstFunction##___;
+
+#define NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE(MemberName, IsVirtualFunction, IsConstFunction) ncpp::utilities::TF_smart_cast_member<decltype(&F_##MemberName##___member_##IsVirtualFunction##_##IsConstFunction##___::member)>
+
+#define NCPP_ROBJECT_DECLARE_STATIC_MEMBER_TYPE_WRAPPER(MemberType, MemberName) \
+            struct F_##MemberName##___member_static___ { NCPP_MAGIC(MemberType, member); };\
+            struct F_##MemberName##___member_static___;
+
+#define NCPP_ROBJECT_WRAPPER_TO_STATIC_MEMBER_TYPE(MemberName) ncpp::utilities::TF_smart_cast_member<decltype(&F_##MemberName##___member_static___::member)>
+
+
+
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -457,7 +485,7 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 #define NCPP_ROBJECT_BODY_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName,...) \
-            static inline NCPP_MAGIC(MemberType, MemberName##___ncpp_member_false_false___);                                                 \
+            NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberType, MemberName, false, false,,);                                                 \
 			NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberType, MemberName) NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement);\
             NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, false, false);\
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);
@@ -471,7 +499,7 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 #define NCPP_ROBJECT_BODY_MEMBER_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) \
-            static inline NCPP_MAGIC(MemberType, MemberName##___ncpp_member_false_true___);                                                 \
+            NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberType, MemberName, false, true,,);                                                 \
 			NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberType, MemberName) const NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement);\
             NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, false, true);\
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);
@@ -485,7 +513,7 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 #define NCPP_ROBJECT_BODY_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName,...) \
-            static inline NCPP_MAGIC(MemberType, MemberName##___ncpp_member_true_false___);                                                 \
+            NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberType, MemberName, true, false, virtual,);                                                 \
 			virtual NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberType, MemberName) NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement);\
             NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, true, false);\
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);
@@ -499,7 +527,7 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 #define NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...)\
-            static inline NCPP_MAGIC(MemberType, MemberName##___ncpp_member_true_true___);                                                 \
+            NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberType, MemberName, true, true, virtual,);                                                 \
 			virtual NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberType, MemberName) const NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement);\
             NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, true, true);\
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);
@@ -522,7 +550,7 @@ namespace ncpp {
 				\
 			NCPP_PUBLIC_KEYWORD\
 				\
-				using F_member = ncpp::utilities::TF_smart_cast_member<decltype(&F_this::MemberName##___ncpp_member_static___)>;\
+				using F_member = NCPP_ROBJECT_WRAPPER_TO_STATIC_MEMBER_TYPE(MemberName);\
 				\
 				static NCPP_FORCE_INLINE auto* member_p(){ return &F_this::MemberName; }\
 				\
@@ -555,7 +583,7 @@ namespace ncpp {
 				\
 			NCPP_PUBLIC_KEYWORD\
 				\
-				using F_member = ncpp::utilities::TF_smart_cast_member<decltype(&F_this::MemberName##___ncpp_member_static___)>;\
+				using F_member = NCPP_ROBJECT_WRAPPER_TO_STATIC_MEMBER_TYPE(MemberName);\
 				\
 				static NCPP_FORCE_INLINE auto* member_p(){ return &F_this::MemberName; }\
 				\
@@ -592,7 +620,7 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 #define NCPP_ROBJECT_BODY_STATIC_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName,...) \
-            static inline NCPP_MAGIC(MemberType, MemberName##___ncpp_member_static___);                                                 \
+            NCPP_ROBJECT_DECLARE_STATIC_MEMBER_TYPE_WRAPPER(MemberType, MemberName);                                                 \
 			static NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberType, MemberName) NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement);\
 			NCPP_ROBJECT_BODY_STATIC_MEMBER_STATIC_INFO(MemberType, MemberName);\
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);
@@ -672,12 +700,12 @@ namespace ncpp {
 #define NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName, IsVirtualFunction, IsConstFunction,...) \
 			robject_member_info_p = ncpp::rtti::T_reflect_object_member<\
 				F_this, \
-				ncpp::utilities::TF_smart_cast_member<decltype(&F_this::MemberName##___ncpp_member_##IsVirtualFunction##_##IsConstFunction##___)>, \
+				NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE(MemberName, IsVirtualFunction, IsConstFunction), \
 				TF_##MemberName##___ncpp_static_info___<                                                             \
                     F_this,                                                                              \
-                    ncpp::utilities::TF_smart_cast_member<decltype(&F_this::MemberName##___ncpp_member_##IsVirtualFunction##_##IsConstFunction##___)>, \
+                    NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE(MemberName, IsVirtualFunction, IsConstFunction), \
                     ncpp::utilities::T_is_function<                                                      \
-                        ncpp::utilities::TF_smart_cast_member<decltype(&F_this::MemberName##___ncpp_member_##IsVirtualFunction##_##IsConstFunction##___)> \
+                        NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE(MemberName, IsVirtualFunction, IsConstFunction) \
                     >, \
                     IsVirtualFunction,                                                               \
                     IsConstFunction                                                                  \
@@ -694,12 +722,12 @@ namespace ncpp {
 #define NCPP_ROBJECT_REFLECT_STATIC_MEMBER_INFO(MemberType, MemberName,...) \
 			robject_member_info_p = ncpp::rtti::T_reflect_object_member<\
 				F_this, \
-				ncpp::utilities::TF_smart_cast_member<decltype(&F_this::MemberName##___ncpp_member_static___)>, \
+				NCPP_ROBJECT_WRAPPER_TO_STATIC_MEMBER_TYPE(MemberName), \
 				TF_##MemberName##___ncpp_static_info___<                                \
                     F_this,                                                 \
-                    ncpp::utilities::TF_smart_cast_member<decltype(&F_this::MemberName##___ncpp_member_static___)>, \
+                    NCPP_ROBJECT_WRAPPER_TO_STATIC_MEMBER_TYPE(MemberName), \
                     ncpp::utilities::T_is_function<                         \
-                        ncpp::utilities::TF_smart_cast_member<decltype(&F_this::MemberName##___ncpp_member_static___)> \
+                        NCPP_ROBJECT_WRAPPER_TO_STATIC_MEMBER_TYPE(MemberName) \
                     >                                                   \
                 >, \
 				NCPP_RTTI_PASS_SPECIFIC_USING()\
@@ -721,7 +749,7 @@ namespace ncpp {
 #define NCPP_ROBJECT_REFLECT_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName,...) \
 			{\
 				\
-				using F_member = ncpp::utilities::TF_smart_cast_member<decltype(&F_this::MemberName##___ncpp_member_false_false___)>;\
+				using F_member = NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE(MemberName, false, false);\
                 using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, F_member, ncpp::utilities::T_is_function<F_member>, false, false>;\
 				\
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
@@ -752,7 +780,7 @@ namespace ncpp {
 #define NCPP_ROBJECT_REFLECT_MEMBER_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) \
 			{\
 				\
-				using F_member = ncpp::utilities::TF_smart_cast_member<decltype(&F_this::MemberName##___ncpp_member_false_true___)>;\
+				using F_member = NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE(MemberName, false, true);\
                 using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, F_member, ncpp::utilities::T_is_function<F_member>, false, true>;\
 				\
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
@@ -783,7 +811,7 @@ namespace ncpp {
 #define NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName,...) \
 			{\
 				\
-				using F_member = ncpp::utilities::TF_smart_cast_member<decltype(&F_this::MemberName##___ncpp_member_true_false___)>;\
+				using F_member = NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE(MemberName, true, false);\
                 using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, F_member, ncpp::utilities::T_is_function<F_member>, true, false>;\
 				\
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
@@ -805,7 +833,7 @@ namespace ncpp {
 
 #define NCPP_ROBJECT_REFLECT_BASE_PRIVATE_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
 #define NCPP_ROBJECT_REFLECT_BASE_PROTECTED_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_REFLECT_BASE_PUBLIC_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_BASE_PUBLIC_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName,...) //NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -814,7 +842,7 @@ namespace ncpp {
 #define NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) \
 			{\
 				\
-				using F_member = ncpp::utilities::TF_smart_cast_member<decltype(&F_this::MemberName##___ncpp_member_true_true___)>;\
+				using F_member = NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE(MemberName, true, true);\
                 using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, F_member, ncpp::utilities::T_is_function<F_member>, true, true>;\
 				\
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
@@ -845,7 +873,7 @@ namespace ncpp {
 #define NCPP_ROBJECT_REFLECT_STATIC_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName,...) \
 			{\
 				\
-				using F_member = ncpp::utilities::TF_smart_cast_member<decltype(&F_this::MemberName##___ncpp_member_static___)>;\
+				using F_member = NCPP_ROBJECT_WRAPPER_TO_STATIC_MEMBER_TYPE(MemberName);\
                 using F_member_static_info = TF_##MemberName##___ncpp_static_info___<F_this, F_member, ncpp::utilities::T_is_function<F_member>>;\
 				\
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\

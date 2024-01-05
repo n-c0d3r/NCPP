@@ -66,4 +66,4 @@
 
 #define NCPP_MAGIC_SECOND_PART(MagicType) NCPP_EXPAND(NCPP_MA_IGNORE MagicType)
 
-#define NCPP_MAGIC(MagicType, Name) NCPP_MAGIC_FIRST_TYPE(MagicType) Name NCPP_MAGIC_SECOND_PART(MagicType)
+#define NCPP_MAGIC(MagicType, ...) NCPP_MAGIC_FIRST_TYPE(MagicType) __VA_ARGS__ NCPP_MAGIC_SECOND_PART(MagicType)
