@@ -79,9 +79,21 @@ namespace ncpp {
 
 
 
+        private:
+            template<sz index__>
+            struct TF_at_internal {
+
+                static_assert((index__ < count), "out of bound");
+
+                using F = TF_nth_template_arg<index__, F_args__...>;
+
+            };
+
+
+
         public:
             template<sz index__>
-            using F_at = TF_nth_template_arg<index__, F_args__...>;
+            using F_at = typename TF_at_internal<index__>::F;
 
             template<typename F__>
             using TF_combine = typename TF_combine_helper_internal<F__>::F;
@@ -117,6 +129,8 @@ namespace ncpp {
 
             };
 
+
+
         private:
             template<sz index__>
             struct TF_remove_tails_helper_internal {
@@ -150,6 +164,24 @@ namespace ncpp {
 
             template<sz count__>
             using TF_remove_tails = typename TF_remove_tails_internal<count__>::F;
+
+
+
+        private:
+            template<sz index__, sz count__>
+            struct TF_slice_internal {
+
+                static_assert((index__ < count) && ((index__ + count__) <= count), "out of bound");
+
+                using F = TF_remove_heads<index__>::template TF_remove_tails<count - (index__ + count__)>;
+
+            };
+
+
+
+        public:
+            template<sz index__, sz count__>
+            using TF_slice = typename TF_slice_internal<index__, count__>::F;
 
         };
 
