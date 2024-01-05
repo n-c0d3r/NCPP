@@ -92,24 +92,28 @@ namespace ncpp {
 
 
         private:
-            template<sz count__, typename F_first_arg__, typename... F_args__>
-            struct TF_remove_heads_helper_internal {
-
-                using F = TF_template_arg_list<F_args__...>;
-
-            };
-            template<typename... F_args__>
-            struct TF_remove_heads_helper_internal<0, F_args__...> {
-
-                using F = TF_template_arg_list<F_args__...>;
-
-            };
             template<sz count__>
             struct TF_remove_heads_internal {
 
                 static_assert((count__ <= count), "head remove count must be <= size of list");
 
-                using F = typename TF_remove_heads_helper_internal<count__, F_args__...>::F;
+                template<sz index__>
+                struct TF_remove_heads_helper_internal {
+
+                    using F_element = TF_nth_template_arg<count__ + index__ - 1, F_args__...>;
+                    using F = typename TF_remove_heads_helper_internal<index__ - 1>::F::template TF_extends<
+                            F_element
+                    >;
+
+                };
+                template<>
+                struct TF_remove_heads_helper_internal<0> {
+
+                    using F = TF_template_arg_list<>;
+
+                };
+
+                using F = typename TF_remove_heads_helper_internal<count - count__>::F;
 
             };
 
