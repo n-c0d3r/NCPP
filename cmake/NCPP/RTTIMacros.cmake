@@ -53,6 +53,7 @@ NCPP_RTTIHelper_RObject_CreateMemberOverrider(
     KEYWORDS "constexpr"
 
     NO_VIRTUAL
+    NO_ABSTRACT
     NO_CONST
 )
 
@@ -101,6 +102,8 @@ NCPP_RTTIHelper_RObject_CreateMemberMacro(
     MEMBER_TYPE "(ncpp::utilities::TF_cpass<decltype(MemberName)>)()"
 
     IMPLEMENT "{ return MemberName\\\; }"
+
+    NO_ABSTRACT
 )
 NCPP_RTTIHelper_RObject_CreateMemberMacro(
     NAME "GETTER_NOEXCEPT"
@@ -112,6 +115,8 @@ NCPP_RTTIHelper_RObject_CreateMemberMacro(
     MEMBER_TYPE "(ncpp::utilities::TF_cpass<decltype(MemberName)>)()"
 
     IMPLEMENT "noexcept { return MemberName\\\; }"
+
+    NO_ABSTRACT
 )
 
 
@@ -131,6 +136,7 @@ NCPP_RTTIHelper_RObject_CreateMemberMacro(
     IMPLEMENT "{ MemberName = value\\\; }"
 
     NO_CONST
+    NO_ABSTRACT
 )
 NCPP_RTTIHelper_RObject_CreateMemberMacro(
     NAME "SETTER_NOEXCEPT"
@@ -144,6 +150,7 @@ NCPP_RTTIHelper_RObject_CreateMemberMacro(
     IMPLEMENT "noexcept { MemberName = value\\\; }"
 
     NO_CONST
+    NO_ABSTRACT
 )
 
 

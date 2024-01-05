@@ -13,6 +13,11 @@ class B {
         PUBLIC(
             (i32) = 4,
             i
+        ),
+
+        PUBLIC_ABSTRACT(
+            ()(),
+            abstract_func
         )
     );
 
@@ -134,6 +139,11 @@ class A : public B, public C, public TD<i32> {
         PUBLIC(
             (i32, b8)(f32, f64),
             i32_b8_tuple_foo
+        ),
+
+        PUBLIC(
+            ()(),
+            abstract_func
         )
 	);
 
@@ -159,6 +169,10 @@ constexpr NCPP_MAGIC((i32)(), A::i32_constexpr) {
 NCPP_MAGIC((i32, b8)(f32, f64), A::i32_b8_tuple_foo) {
 
     return {};
+}
+
+NCPP_MAGIC(()(), A::abstract_func) {
+
 }
 
 
