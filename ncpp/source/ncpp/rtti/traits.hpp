@@ -217,6 +217,34 @@ namespace ncpp {
 
 
 
+        private:
+            template<b8 is_robject, typename F_robject__>
+            struct TF_safe_robject_static_infos_helper_internal;
+
+            template<typename F_robject__>
+            struct TF_safe_robject_static_infos_helper_internal<false, F_robject__> {
+
+                using F = utilities::TF_template_arg_list<>;
+
+            };
+            template<typename F_robject__>
+            struct TF_safe_robject_static_infos_helper_internal<true, F_robject__> {
+
+                using F = typename F_robject__::F_static_infos;
+
+            };
+        public:
+
+
+
+            template<typename F_robject__>
+            using TF_safe_robject_static_infos = typename TF_safe_custom_params_helper_internal<
+                NCPP_RTTI_IS_HAS_FLAG(F_robject__, F_robject_flag),
+                    F_robject__
+            >::F;
+
+
+
 			template<
 				class F_robject__,
                 b8 enable_virtual_reflect__ = true,
