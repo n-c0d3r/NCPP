@@ -198,7 +198,7 @@ struct F_customm_reflector {
             << T_cout_value(F_member_static_info__::static_get())
             << ")"
             << " (accessibility: "
-            << (u32)F_member_static_info__::accessibility()
+            << T_cout_value((u32)F_member_static_info__::accessibility())
             << ")"
             << " "
             << custom_params_p->message
@@ -215,7 +215,7 @@ struct F_customm_reflector {
             << T_cout_value(F_member_static_info__::static_get())
             << ")"
             << " (accessibility: "
-            << (u32)F_member_static_info__::accessibility()
+            << T_cout_value((u32)F_member_static_info__::accessibility())
             << ")"
             << " "
             << custom_params_p->message

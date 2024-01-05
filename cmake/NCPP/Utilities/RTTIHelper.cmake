@@ -55,7 +55,6 @@ function(NCPP_RTTIHelper_RObject_CreateMemberOverrider)
         PARAM_NAMES "MemberType" "MemberName"
         BODY ${PARGS_BODY}
     )
-
     NCPP_MacroHelper_CreateFunctionMacro(
         NAME NCPP_ROBJECT_MEMBER_REFLECT_OVERRIDER_${PARGS_NAME}
         OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
@@ -63,12 +62,13 @@ function(NCPP_RTTIHelper_RObject_CreateMemberOverrider)
         BODY ${PARGS_REFLECT}
     )
 
+
+
     NCPP_MacroHelper_CreateFunctionMacro(
         NAME NCPP_ROBJECT_MEMBER_OVERRIDER_KEYWORDS_${PARGS_NAME}
         OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
         BODY "${PARGS_KEYWORDS}"
     )
-
     NCPP_MacroHelper_CreateFunctionMacro(
         NAME NCPP_ROBJECT_MEMBER_OVERRIDER_IMPLEMENT_${PARGS_NAME}
         OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
@@ -178,6 +178,50 @@ function(NCPP_RTTIHelper_RObject_CreateMemberOverrider)
         endif()
     endif()
 
+    if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_ABSTRACT AND NOT PARGS_MUST_CONST AND NOT PARGS_MUST_STATIC)
+        NCPP_MacroHelper_CreateFunctionMacro(
+            NAME NCPP_ROBJECT_STATIC_INFOS_${PARGS_PREFIX}PRIVATE${OVERRIDER_NAME_SUFFIX}
+            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+            PARAM_NAMES "MemberType" "MemberName" "..."
+            BODY "NCPP_EXPAND(NCPP_ROBJECT_STATIC_INFOS_BASE_PRIVATE(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+        )
+        NCPP_MacroHelper_CreateFunctionMacro(
+            NAME NCPP_ROBJECT_STATIC_INFOS_${PARGS_PREFIX}PROTECTED${OVERRIDER_NAME_SUFFIX}
+            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+            PARAM_NAMES "MemberType" "MemberName" "..."
+            BODY "NCPP_EXPAND(NCPP_ROBJECT_STATIC_INFOS_BASE_PROTECTED(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+        )
+        NCPP_MacroHelper_CreateFunctionMacro(
+            NAME NCPP_ROBJECT_STATIC_INFOS_${PARGS_PREFIX}PUBLIC${OVERRIDER_NAME_SUFFIX}
+            OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+            PARAM_NAMES "MemberType" "MemberName" "..."
+            BODY "NCPP_EXPAND(NCPP_ROBJECT_STATIC_INFOS_BASE_PUBLIC(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+        )
+    endif()
+
+    if(NOT PARGS_NO_CONST)
+        if(NOT PARGS_MUST_VIRTUAL AND NOT PARGS_MUST_ABSTRACT AND NOT PARGS_MUST_STATIC)
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_STATIC_INFOS_${PARGS_PREFIX}PRIVATE_CONST${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_STATIC_INFOS_BASE_PRIVATE_CONST(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_STATIC_INFOS_${PARGS_PREFIX}PROTECTED_CONST${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_STATIC_INFOS_BASE_PROTECTED_CONST(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_STATIC_INFOS_${PARGS_PREFIX}PUBLIC_CONST${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_STATIC_INFOS_BASE_PUBLIC_CONST(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+        endif()
+    endif()
+
 
 
     # virtual
@@ -220,6 +264,25 @@ function(NCPP_RTTIHelper_RObject_CreateMemberOverrider)
                 PARAM_NAMES "MemberType" "MemberName" "..."
                 BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_VIRTUAL(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
             )
+
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_STATIC_INFOS_${PARGS_PREFIX}PRIVATE_VIRTUAL${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_STATIC_INFOS_BASE_PRIVATE_VIRTUAL(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_STATIC_INFOS_${PARGS_PREFIX}PROTECTED_VIRTUAL${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_STATIC_INFOS_BASE_PROTECTED_VIRTUAL(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_STATIC_INFOS_${PARGS_PREFIX}PUBLIC_VIRTUAL${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_STATIC_INFOS_BASE_PUBLIC_VIRTUAL(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
         endif()
 
         if(NOT PARGS_NO_CONST)
@@ -260,6 +323,25 @@ function(NCPP_RTTIHelper_RObject_CreateMemberOverrider)
                     OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
                     PARAM_NAMES "MemberType" "MemberName" "..."
                     BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_VIRTUAL_CONST(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_STATIC_INFOS_${PARGS_PREFIX}PRIVATE_VIRTUAL_CONST${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberType" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_STATIC_INFOS_BASE_PRIVATE_VIRTUAL_CONST(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_STATIC_INFOS_${PARGS_PREFIX}PROTECTED_VIRTUAL_CONST${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberType" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_STATIC_INFOS_BASE_PROTECTED_VIRTUAL_CONST(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_STATIC_INFOS_${PARGS_PREFIX}PUBLIC_VIRTUAL_CONST${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberType" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_STATIC_INFOS_BASE_PUBLIC_VIRTUAL_CONST(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
                 )
             endif()
         endif()
@@ -307,6 +389,25 @@ function(NCPP_RTTIHelper_RObject_CreateMemberOverrider)
                 PARAM_NAMES "MemberType" "MemberName" "..."
                 BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_ABSTRACT(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
             )
+
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_STATIC_INFOS_${PARGS_PREFIX}PRIVATE_ABSTRACT${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_STATIC_INFOS_BASE_PRIVATE_ABSTRACT(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_STATIC_INFOS_${PARGS_PREFIX}PROTECTED_ABSTRACT${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_STATIC_INFOS_BASE_PROTECTED_ABSTRACT(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_STATIC_INFOS_${PARGS_PREFIX}PUBLIC_ABSTRACT${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_STATIC_INFOS_BASE_PUBLIC_ABSTRACT(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
         endif()
 
         if(NOT PARGS_NO_CONST)
@@ -347,6 +448,25 @@ function(NCPP_RTTIHelper_RObject_CreateMemberOverrider)
                     OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
                     PARAM_NAMES "MemberType" "MemberName" "..."
                     BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_ABSTRACT_CONST(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_STATIC_INFOS_${PARGS_PREFIX}PRIVATE_ABSTRACT_CONST${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberType" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_STATIC_INFOS_BASE_PRIVATE_ABSTRACT_CONST(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_STATIC_INFOS_${PARGS_PREFIX}PROTECTED_ABSTRACT_CONST${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberType" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_STATIC_INFOS_BASE_PROTECTED_ABSTRACT_CONST(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+                )
+                NCPP_MacroHelper_CreateFunctionMacro(
+                    NAME NCPP_ROBJECT_STATIC_INFOS_${PARGS_PREFIX}PUBLIC_ABSTRACT_CONST${OVERRIDER_NAME_SUFFIX}
+                    OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                    PARAM_NAMES "MemberType" "MemberName" "..."
+                    BODY "NCPP_EXPAND(NCPP_ROBJECT_STATIC_INFOS_BASE_PUBLIC_ABSTRACT_CONST(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
                 )
             endif()
         endif()
@@ -394,6 +514,25 @@ function(NCPP_RTTIHelper_RObject_CreateMemberOverrider)
                 PARAM_NAMES "MemberType" "MemberName" "..."
                 BODY "NCPP_EXPAND(NCPP_ROBJECT_REFLECT_BASE_PUBLIC_STATIC(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
             )
+
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_STATIC_INFOS_${PARGS_PREFIX}PRIVATE_STATIC${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_STATIC_INFOS_BASE_PRIVATE_STATIC(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_STATIC_INFOS_${PARGS_PREFIX}PROTECTED_STATIC${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_STATIC_INFOS_BASE_PROTECTED_STATIC(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
+            NCPP_MacroHelper_CreateFunctionMacro(
+                NAME NCPP_ROBJECT_STATIC_INFOS_${PARGS_PREFIX}PUBLIC_STATIC${OVERRIDER_NAME_SUFFIX}
+                OUTPUT_FILE "${NCPP_RTTI_MACROS_FILE}"
+                PARAM_NAMES "MemberType" "MemberName" "..."
+                BODY "NCPP_EXPAND(NCPP_ROBJECT_STATIC_INFOS_BASE_PUBLIC_STATIC(${PARGS_NAME}, (), (), MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))"
+            )
         endif()
     endif()
 
@@ -406,7 +545,7 @@ function(NCPP_RTTIHelper_RObject_CreateLowLevelMacro)
     cmake_parse_arguments(
         PARGS
         ""
-        "NAME_AND_PARAMS;REFLECT;BODY"
+        "NAME_AND_PARAMS;REFLECT;BODY;STATIC_INFOS"
         "INCLUDES"
         ${ARGN}
     )
@@ -424,7 +563,8 @@ function(NCPP_RTTIHelper_RObject_CreateLowLevelMacro)
     endif()
     
     file(APPEND "${NCPP_RTTI_MACROS_FILE}" "\n #define NCPP_ROBJECT_BODY_${PARGS_NAME_AND_PARAMS} ${PARGS_BODY} \n")
-    file(APPEND "${NCPP_RTTI_MACROS_FILE}" "\n #define NCPP_ROBJECT_REFLECT_${PARGS_NAME_AND_PARAMS} ${PARGS_REFLECT} \n")
+    file(APPEND "${NCPP_RTTI_MACROS_FILE}" "#define NCPP_ROBJECT_REFLECT_${PARGS_NAME_AND_PARAMS} ${PARGS_REFLECT} \n")
+    file(APPEND "${NCPP_RTTI_MACROS_FILE}" "#define NCPP_ROBJECT_STATIC_INFOS_${PARGS_NAME_AND_PARAMS} ${PARGS_STATIC_INFOS} \n")
 
 endfunction()
 
@@ -456,14 +596,17 @@ function(NCPP_RTTIHelper_RObject_CreateHighLevelMacro)
 
     set(REFLECT "")
     set(BODY "")
+    set(STATIC_INFOS "")
 
     if(PARGS_SINGLE_PART)
         set(REFLECT "${REFLECT} NCPP_EXPAND(NCPP_ROBJECT_REFLECT_${PARGS_SINGLE_PART})\\\;")
         set(BODY "${BODY} NCPP_EXPAND(NCPP_ROBJECT_BODY_${PARGS_SINGLE_PART})\\\;")
+        set(STATIC_INFOS "${STATIC_INFOS} NCPP_EXPAND(NCPP_ROBJECT_STATIC_INFOS_${PARGS_SINGLE_PART})")
     else()
         foreach(part ${PARGS_PARTS})
             set(REFLECT "${REFLECT} NCPP_EXPAND(NCPP_ROBJECT_REFLECT_${part})\\\;")
             set(BODY "${BODY} NCPP_EXPAND(NCPP_ROBJECT_BODY_${part})\\\;")
+            set(STATIC_INFOS "${STATIC_INFOS} NCPP_EXPAND(NCPP_ROBJECT_STATIC_INFOS_${part})")
         endforeach()
     endif()
 
@@ -471,6 +614,7 @@ function(NCPP_RTTIHelper_RObject_CreateHighLevelMacro)
         NAME_AND_PARAMS "${PARGS_NAME_AND_PARAMS}"
         REFLECT "${REFLECT};"
         BODY "${BODY};"
+        STATIC_INFOS "${STATIC_INFOS}"
     )
 
 endfunction()
