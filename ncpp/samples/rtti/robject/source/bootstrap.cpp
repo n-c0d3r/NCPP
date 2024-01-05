@@ -296,6 +296,11 @@ int main() {
 
 	A a;
 
+    using F1 = TF_template_arg_list<i32, b8, f32>;
+    using F2 = F1::template TF_remove_tails<3>;
+
+    cout << T_type_fullname<F2>() << std::endl;
+
 	A::F_rcontainer rcontainer;
 
 	A::F_robject_type_info* type_info_p = A::F_rtti_traits::template T_safe_reflect<A>(&rcontainer, &a);

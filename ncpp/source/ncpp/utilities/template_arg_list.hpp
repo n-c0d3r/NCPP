@@ -60,20 +60,92 @@ namespace ncpp {
         template<typename... F_args__>
         struct TF_template_arg_list {
 
+        public:
             static constexpr u16 count = sizeof...(F_args__);
+            static constexpr b8 is_empty = (count == 0);
 
+
+
+        private:
+            template<class F__>
+            struct TF_combine_helper_internal;
+
+            template<typename... F_args2__>
+            struct TF_combine_helper_internal<TF_template_arg_list<F_args2__...>>{
+
+                using F = TF_template_arg_list<F_args__..., F_args2__...>;
+
+            };
+
+
+
+        public:
             template<sz index__>
-            using F_get = TF_nth_template_arg<index__, F_args__...>;
+            using F_at = TF_nth_template_arg<index__, F_args__...>;
 
-        };
+            template<typename F__>
+            using TF_combine = typename TF_combine_helper_internal<F__>::F;
 
-        template<>
-        struct TF_template_arg_list<> {
+            template<typename... F_args2__>
+            using TF_extends = TF_combine<TF_template_arg_list<F_args2__...>>;
 
-            static constexpr u16 count = 0;
 
+
+        private:
+            template<sz count__, typename F_first_arg__, typename... F_args__>
+            struct TF_remove_heads_helper_internal {
+
+                using F = TF_template_arg_list<F_args__...>;
+
+            };
+            template<typename... F_args__>
+            struct TF_remove_heads_helper_internal<0, F_args__...> {
+
+                using F = TF_template_arg_list<F_args__...>;
+
+            };
+            template<sz count__>
+            struct TF_remove_heads_internal {
+
+                static_assert((count__ <= count), "head remove count must be <= size of list");
+
+                using F = typename TF_remove_heads_helper_internal<count__, F_args__...>::F;
+
+            };
+
+        private:
             template<sz index__>
-            using F_get = void;
+            struct TF_remove_tails_helper_internal {
+
+                using F_element = TF_nth_template_arg<index__ - 1, F_args__...>;
+                using F = typename TF_remove_tails_helper_internal<index__ - 1>::F::template TF_extends<
+                    F_element
+                >;
+
+            };
+            template<>
+            struct TF_remove_tails_helper_internal<0> {
+
+                using F = TF_template_arg_list<>;
+
+            };
+            template<sz count__>
+            struct TF_remove_tails_internal {
+
+                static_assert((count__ <= count), "tail remove count must be <= size of list");
+
+                using F = typename TF_remove_tails_helper_internal<count - count__>::F;
+
+            };
+
+
+
+        public:
+            template<sz count__>
+            using TF_remove_heads = typename TF_remove_heads_internal<count__>::F;
+
+            template<sz count__>
+            using TF_remove_tails = typename TF_remove_tails_internal<count__>::F;
 
         };
 
