@@ -301,14 +301,16 @@ namespace ncpp {
 
 
 #define NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberType, MemberName, IsVirtualFunction, IsConstFunction, LowKeywords, LowImplement) \
-            struct F_##MemberName##___member_##IsVirtualFunction##_##IsConstFunction##___ { LowKeywords NCPP_MAGIC(MemberType, member) LowImplement; };\
-            struct F_##MemberName##___member_##IsVirtualFunction##_##IsConstFunction##___;
+            struct F_##MemberName##___member_##IsVirtualFunction##_##IsConstFunction##___;\
+            friend struct F_##MemberName##___member_##IsVirtualFunction##_##IsConstFunction##___;\
+            struct F_##MemberName##___member_##IsVirtualFunction##_##IsConstFunction##___ { LowKeywords NCPP_MAGIC(MemberType, member) LowImplement; };
 
 #define NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE(MemberName, IsVirtualFunction, IsConstFunction) ncpp::utilities::TF_smart_cast_member<decltype(&F_##MemberName##___member_##IsVirtualFunction##_##IsConstFunction##___::member)>
 
 #define NCPP_ROBJECT_DECLARE_STATIC_MEMBER_TYPE_WRAPPER(MemberType, MemberName) \
-            struct F_##MemberName##___member_static___ { NCPP_MAGIC(MemberType, member); };\
-            struct F_##MemberName##___member_static___;
+            struct F_##MemberName##___member_static___;\
+            friend struct F_##MemberName##___member_static___;\
+            struct F_##MemberName##___member_static___ { NCPP_MAGIC(MemberType, member); };
 
 #define NCPP_ROBJECT_WRAPPER_TO_STATIC_MEMBER_TYPE(MemberName) ncpp::utilities::TF_smart_cast_member<decltype(&F_##MemberName##___member_static___::member)>
 
@@ -999,26 +1001,13 @@ namespace ncpp {
 					void* custom_params_p = 0\
 				){\
 					return T_static_reflect<void>(rcontainer_p, custom_params_p);\
-				}\
-				\
-				\
-				\
-			NCPP_PUBLIC_KEYWORD\
-				static constexpr ncpp::b8 is_virtual = NCPP_RTTI_IS_HAS_FLAG(F_this, ncpp::rtti::F_robject_virtual_flag);\
+				}
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_RCLASS(RTTIOptions, ObjectRepresentTypeName, ObjectImplementTypeName,...) NCPP_EXPAND(NCPP_ROBJECT(RTTIOptions, NCPP_MA(ObjectRepresentTypeName), NCPP_MA(ObjectImplementTypeName), VIRTUAL __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_RSTRUCT(RTTIOptions, ObjectRepresentTypeName, ObjectImplementTypeName,...) NCPP_EXPAND(NCPP_ROBJECT(RTTIOptions, NCPP_MA(ObjectRepresentTypeName), NCPP_MA(ObjectImplementTypeName) __VA_OPT__(,) __VA_ARGS__))
-
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-
-#define NCPP_BASIC_RCLASS(ObjectTypeName,...) NCPP_EXPAND(NCPP_ROBJECT(ncpp::rtti::F_default_options, NCPP_MA(ObjectTypeName), NCPP_MA(ObjectTypeName), VIRTUAL __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_BASIC_RSTRUCT(ObjectTypeName,...) NCPP_EXPAND(NCPP_ROBJECT(ncpp::rtti::F_default_options, NCPP_MA(ObjectTypeName), NCPP_MA(ObjectTypeName), __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_BASIC_ROBJECT(ObjectTypeName,...) NCPP_EXPAND(NCPP_ROBJECT(ncpp::rtti::F_default_options, NCPP_MA(ObjectTypeName), NCPP_MA(ObjectTypeName) __VA_OPT__(,) __VA_ARGS__))
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////

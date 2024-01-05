@@ -7,21 +7,20 @@ using namespace ncpp;
 
 class B {
 
-    NCPP_BASIC_RCLASS(
+    NCPP_BASIC_ROBJECT(
         B,
 
         PUBLIC(
             (i32) = 4,
             i
         )
-
     );
 
 };
 
 class C {
 
-    NCPP_BASIC_RCLASS(
+    NCPP_BASIC_ROBJECT(
         C,
 
         PUBLIC(
@@ -35,7 +34,7 @@ class C {
 template<typename F__>
 class TD {
 
-    NCPP_BASIC_RCLASS(
+    NCPP_BASIC_ROBJECT(
         TD<F__>,
 
         PUBLIC(
@@ -78,7 +77,7 @@ NCPP_MAGIC((F__)[4], TD<F__>::dd4);
 
 class A : public B, public C, public TD<i32> {
 
-	NCPP_BASIC_RCLASS(
+	NCPP_BASIC_ROBJECT(
 		A,
 
         EXTENDS(B),
