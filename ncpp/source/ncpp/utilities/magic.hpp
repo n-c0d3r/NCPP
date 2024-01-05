@@ -53,35 +53,17 @@
 
 
 
-namespace ncpp::utilities::internal {
-
-    template<typename... F__>
-    struct TF_magic_type_first_part_helper {
-
-        using F = containers::TF_pack<F__...>;
-
-    };
-    template<typename F_return__, typename... F_args__>
-    struct TF_magic_type_first_part_helper<F_return__(F_args__...)> {
-
-        using F = F_return__;
-
-    };
-    template<typename F_array__, auto array_arg__>
-    struct TF_magic_type_first_part_helper<F_array__[array_arg__]> {
-
-        using F = F_array__;
-
-    };
-
-    template<typename... F__>
-    using TF_magic_type_first_part = typename TF_magic_type_first_part_helper<F__...>::F;
-
-}
-
 #define NCPP_MAGIC_EXPAND(MagicType) NCPP_EXPAND(NCPP_MA MagicType)
 
-#define NCPP_MAGIC_TYPE_CAST_FIRST_PART(MagicType) ncpp::utilities::internal::TF_magic_type_first_part<NCPP_EXPAND(NCPP_PACK MagicType)>
-#define NCPP_MAGIC_TYPE_CAST_SECOND_PART(MagicType) NCPP_EXPAND(NCPP_MA_IGNORE MagicType)
+#define NCPP_MAGIC_FIRST_PART___LET_FIRST_PART___EXPAND___INTERNAL(FirstPart,...) NCPP_EXPAND(NCPP_MA FirstPart)
+#define NCPP_MAGIC_FIRST_PART___LET_FIRST_PART___INTERNAL(Expanded) NCPP_EXPAND(NCPP_MAGIC_FIRST_PART___LET_FIRST_PART___EXPAND___INTERNAL(Expanded))
+#define NCPP_MAGIC_FIRST_PART___SEPARATE_PARTS___EXPAND___INTERNAL(...) (__VA_ARGS__),
+#define NCPP_MAGIC_FIRST_PART___SEPARATE_PARTS___INTERNAL(MagicType) NCPP_EXPAND(NCPP_MAGIC_FIRST_PART___SEPARATE_PARTS___EXPAND___INTERNAL MagicType)
 
-#define NCPP_MAGIC(MagicType, ...) NCPP_MAGIC_TYPE_CAST_FIRST_PART(MagicType) __VA_ARGS__ NCPP_MAGIC_TYPE_CAST_SECOND_PART(MagicType)
+#define NCPP_MAGIC_FIRST_PART(MagicType) NCPP_MAGIC_FIRST_PART___LET_FIRST_PART___INTERNAL(NCPP_MAGIC_FIRST_PART___SEPARATE_PARTS___INTERNAL(MagicType))
+
+#define NCPP_MAGIC_FIRST_TYPE(MagicType) ncpp::containers::TF_pack<NCPP_MAGIC_FIRST_PART(MagicType)>
+
+#define NCPP_MAGIC_SECOND_PART(MagicType) NCPP_EXPAND(NCPP_MA_IGNORE MagicType)
+
+#define NCPP_MAGIC(MagicType, Name) NCPP_MAGIC_FIRST_TYPE(MagicType) Name NCPP_MAGIC_SECOND_PART(MagicType)

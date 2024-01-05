@@ -11,7 +11,7 @@ class B {
         B,
 
         PUBLIC(
-            (i32),
+            (i32) = 4,
             i
         )
     );
