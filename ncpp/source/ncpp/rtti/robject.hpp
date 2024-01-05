@@ -346,7 +346,15 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_BODY_BASE(BaseName)
+#define NCPP_ROBJECT_BODY_BASE(...) \
+            template<typename F_robject__, typename F_base__>\
+			struct TF_base___ncpp_static_info___;                                                       \
+            template<typename F_robject__, typename F_base__>\
+			friend struct TF_base___ncpp_static_info___;\
+			template<typename F_robject__>\
+			struct TF_base___ncpp_static_info___<F_robject__, __VA_ARGS__>{ \
+                                             \
+            };
 
 #define NCPP_ROBJECT_BODY_EXTENDS(...) NCPP_ROBJECT_BODY_BASE(__VA_ARGS__)
 
@@ -369,12 +377,12 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 #define NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, IsVirtualFunction, IsConstFunction) \
-			template<typename object_type__, typename member_type__, bool is_function__, bool is_virtual__, bool is_const__>\
+			template<typename F_robject__, typename F_member__, bool is_function__, bool is_virtual__, bool is_const__>\
 			struct TF_##MemberName##___ncpp_static_info___;                                                       \
-            template<typename object_type__, typename member_type__, bool is_function__, bool is_virtual__, bool is_const__>\
+            template<typename F_robject__, typename F_member__, bool is_function__, bool is_virtual__, bool is_const__>\
 			friend struct TF_##MemberName##___ncpp_static_info___;\
-			template<typename object_type__, typename member_type__>\
-			struct TF_##MemberName##___ncpp_static_info___<object_type__, member_type__, false, IsVirtualFunction, IsConstFunction>{\
+			template<typename F_robject__, typename F_member__>\
+			struct TF_##MemberName##___ncpp_static_info___<F_robject__, F_member__, false, IsVirtualFunction, IsConstFunction>{\
 				\
 			NCPP_PUBLIC_KEYWORD\
 				\
@@ -394,7 +402,7 @@ namespace ncpp {
                 static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(NCPP_WRAPPED_ARGS_TO_CSTR(MemberType), ""); }\
 				static constexpr ncpp::u64 id() { return utilities::T_type_hash_code<TF_##MemberName##___ncpp_static_info___>; }\
 				\
-				static constexpr ncpp::sz offset() { return (ncpp::sz)reinterpret_cast<ncpp::sz>(&(reinterpret_cast<object_type__*>(0)->MemberName)); }\
+				static constexpr ncpp::sz offset() { return (ncpp::sz)reinterpret_cast<ncpp::sz>(&(reinterpret_cast<F_robject__*>(0)->MemberName)); }\
                 static constexpr ncpp::u16 size() { return (ncpp::u16)ncpp::utilities::T_sizeof<NCPP_EXPAND(NCPP_PACK MemberType)>; }\
 				\
 				static constexpr bool is_static() { return false; }\
@@ -406,8 +414,8 @@ namespace ncpp {
 				\
 			};\
 			\
-            template<typename object_type__, typename return_type__, typename... arg_types__>\
-			struct TF_##MemberName##___ncpp_static_info___<object_type__, return_type__(arg_types__...), true, IsVirtualFunction, IsConstFunction>{\
+            template<typename F_robject__, typename return_type__, typename... arg_types__>\
+			struct TF_##MemberName##___ncpp_static_info___<F_robject__, return_type__(arg_types__...), true, IsVirtualFunction, IsConstFunction>{\
 				\
 			NCPP_PUBLIC_KEYWORD\
 				\
@@ -505,12 +513,12 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 #define NCPP_ROBJECT_BODY_STATIC_MEMBER_STATIC_INFO(MemberType, MemberName) \
-			template<typename object_type__, typename member_type__, bool is_function__>\
+			template<typename F_robject__, typename F_member__, bool is_function__>\
 			struct TF_##MemberName##___ncpp_static_info___;\
-			template<typename object_type__, typename member_type__, bool is_function__>\
+			template<typename F_robject__, typename F_member__, bool is_function__>\
 			friend struct TF_##MemberName##___ncpp_static_info___;\
-			template<typename object_type__, typename member_type__>\
-			struct TF_##MemberName##___ncpp_static_info___<object_type__, member_type__, false>{\
+			template<typename F_robject__, typename F_member__>\
+			struct TF_##MemberName##___ncpp_static_info___<F_robject__, F_member__, false>{\
 				\
 			NCPP_PUBLIC_KEYWORD\
 				\
@@ -542,8 +550,8 @@ namespace ncpp {
 				\
 			};\
 			\
-			template<typename object_type__, typename return_type__, typename... arg_types__>\
-			struct TF_##MemberName##___ncpp_static_info___<object_type__, return_type__(arg_types__...), true>{\
+			template<typename F_robject__, typename return_type__, typename... arg_types__>\
+			struct TF_##MemberName##___ncpp_static_info___<F_robject__, return_type__(arg_types__...), true>{\
 				\
 			NCPP_PUBLIC_KEYWORD\
 				\
@@ -626,14 +634,15 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_REFLECT_BASE(BaseName) \
+#define NCPP_ROBJECT_REFLECT_BASE(...) \
 			{\
 				\
-				using F_base = BaseName;\
+				using F_base = __VA_ARGS__;\
+				using F_base_static_info = TF_base___ncpp_static_info___<F_this, __VA_ARGS__>;\
 				\
 				NCPP_ROBJECT_CALL_USER_PRE_REFLECT_BASE();\
                 \
-                F_robject_type_info* base_info_p = F_rtti_traits::template T_safe_reflect<BaseName, false, F_reflect_flag__>(\
+                F_robject_type_info* base_info_p = F_rtti_traits::template T_safe_reflect<__VA_ARGS__, false, F_reflect_flag__>(\
                     rcontainer_p,\
                     0,\
                     custom_params_p\
