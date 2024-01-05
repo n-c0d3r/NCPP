@@ -194,8 +194,11 @@ struct F_customm_reflector {
 
         cout << "user pre reflect member: "
             << T_cout_value(F_member_static_info__::name())
-            << " ("
+            << " (static pointer: "
             << T_cout_value(F_member_static_info__::static_get())
+            << ")"
+            << " (accessibility: "
+            << (u32)F_member_static_info__::accessibility()
             << ")"
             << " "
             << custom_params_p->message
@@ -208,8 +211,11 @@ struct F_customm_reflector {
 
         cout << "user post reflect member: "
             << T_cout_value(F_member_static_info__::name())
-            << " ("
+            << " (static pointer: "
             << T_cout_value(F_member_static_info__::static_get())
+            << ")"
+            << " (accessibility: "
+            << (u32)F_member_static_info__::accessibility()
             << ")"
             << " "
             << custom_params_p->message
