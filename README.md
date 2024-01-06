@@ -38,7 +38,7 @@ NCoder's Game Engine Learning Aimed C++ Library.
   + **Reflection**
     + **⚠️ Warning**: `not avaiable on NCPP Lite Distribution`
     + Easy to use
-    + No memory cost on reflected object
+    + No additional memory cost on reflected object
     + Metadata supports 
     + Fast compilation
     + Flexible and highly customizable
