@@ -57,6 +57,49 @@ namespace ncpp {
 
     namespace utilities {
 
+
+
+        template<typename... F_args__>
+        struct TF_template_arg_list;
+
+
+
+        namespace internal {
+
+            template<typename F__, template<typename F__> class TF_filter_semantics__>
+            concept T_filter_single = requires {
+
+                requires TF_filter_semantics__<F__>::value;
+
+            };
+
+            template<b8 is_valid__, typename F__, template<typename F__> class TF_filter_semantics__>
+            struct TF_safe_filter_single_helper;
+
+            template<typename F__, template<typename F__> class TF_filter_semantics__>
+            struct TF_safe_filter_single_helper<false, F__, TF_filter_semantics__> {
+
+                using F = void;
+
+            };
+            template<typename F__, template<typename F__> class TF_filter_semantics__>
+            struct TF_safe_filter_single_helper<true, F__, TF_filter_semantics__> {
+
+                using F = F__;
+
+            };
+
+            template<typename F__, template<typename F__> class TF_filter_semantics__>
+            using TF_safe_filter_single = typename TF_safe_filter_single_helper<
+                T_filter_single<F__, TF_filter_semantics__>,
+                F__,
+                TF_filter_semantics__
+            >::F;
+
+        }
+
+
+
         template<typename... F_args__>
         struct TF_template_arg_list {
 
@@ -126,7 +169,37 @@ namespace ncpp {
 
         public:
             template<sz index__, sz count__>
-            using TF_slice = typename TF_slice_internal<index__, count__>::F;
+            using TF_slice = typename TF_slice_internal<index__, count__>::F;;
+
+
+
+        private:
+            template<i32 index__, template<typename F__> class TF_filter_semantics__>
+            struct TF_filter_helper_internal {
+
+                using F_current_arg = TF_nth_template_arg<index__, F_args__...>;
+                using F_prev_list = typename TF_filter_helper_internal<index__ - 1, TF_filter_semantics__>::F;
+
+                using F = F_prev_list::template TF_combine<
+                    TF_nth_template_arg<
+                        internal::T_filter_single<F_current_arg, TF_filter_semantics__>,
+                        TF_template_arg_list<>,
+                        TF_template_arg_list<internal::TF_safe_filter_single<F_current_arg, TF_filter_semantics__>>
+                    >
+                >;
+
+            };
+
+            template<template<typename F__> class TF_filter_semantics__>
+            struct TF_filter_helper_internal<-1, TF_filter_semantics__> {
+
+                using F = TF_template_arg_list<>;
+
+            };
+
+        public:
+            template<template<typename F__> class TF_filter_semantics__>
+            using TF_filter = typename TF_filter_helper_internal<count - 1, TF_filter_semantics__>::F;
 
         };
 

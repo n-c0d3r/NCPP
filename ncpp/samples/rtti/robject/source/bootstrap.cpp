@@ -290,9 +290,28 @@ void log_type_info(A::F_robject_type_info* type_info_p){
 
 }
 
+template<typename F__>
+struct TF_is_base_static_info {
 
+    static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_robject_base_static_info_flag);
+
+};
+template<typename F__>
+struct TF_is_member_static_info {
+
+    static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_robject_member_static_info_flag);
+
+};
 
 int main() {
+
+    using F_static_infos = typename A::F_static_infos;
+    using F_base_static_infos = F_static_infos::template TF_filter<TF_is_base_static_info>;
+    using F_member_static_infos = F_static_infos::template TF_filter<TF_is_member_static_info>;
+
+    cout << "Static infos: " << T_type_fullname<F_static_infos>() << std::endl << std::endl;
+    cout << "Base static infos: " << T_type_fullname<F_base_static_infos>() << std::endl << std::endl;
+    cout << "Member static infos: " << T_type_fullname<F_member_static_infos>() << std::endl << std::endl;
 
 	A a;
 
