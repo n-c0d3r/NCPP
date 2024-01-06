@@ -33,8 +33,7 @@
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
-#include <ncpp/utilities/first_template_arg.hpp>
-#include <ncpp/utilities/nth_template_arg.hpp>
+#include <ncpp/utilities/template_arg_list.hpp>
 #include <ncpp/utilities/sizeof.hpp>
 #include <ncpp/utilities/cpass.hpp>
 
@@ -414,6 +413,19 @@ namespace ncpp {
 
         template<typename... F__>
         using TV_pack = TF_view<TG_pack<F__...>>;
+
+    };
+
+
+
+    namespace utilities {
+
+        template<typename... F__>
+        struct TF_to_template_arg_list<containers::TF_large_pack<F__...>> {
+
+            using F = TF_template_arg_list<F__...>;
+
+        };
 
     }
 

@@ -34,6 +34,8 @@
 ////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/utilities/nth_template_arg.hpp>
+#include <ncpp/utilities/first_template_arg.hpp>
+#include <ncpp/utilities/last_template_arg.hpp>
 
 #pragma endregion
 
@@ -214,6 +216,15 @@ namespace ncpp {
         public:
             template<template<typename F_in__> class TF_update_semantics__>
             using TF_update = TF_template_arg_list<typename TF_update_semantics__<F_args__>::F...>;
+
+        };
+
+
+
+        template<typename F__>
+        struct TF_to_template_arg_list {
+
+            using F = TF_template_arg_list<F__>;
 
         };
 

@@ -42,6 +42,7 @@
 #include <ncpp/utilities/iterator.hpp>
 #include <ncpp/utilities/sizeof.hpp>
 #include <ncpp/utilities/nth_template_arg.hpp>
+#include <ncpp/utilities/template_arg_list.hpp>
 #include <ncpp/utilities/no_constructor.hpp>
 #include <ncpp/utilities/is_streamable.hpp>
 #include <ncpp/iostream.hpp>
@@ -646,6 +647,19 @@ namespace ncpp {
 
             return container;
         }
+
+    }
+
+
+
+    namespace utilities {
+
+        template<typename... F__>
+        struct TF_to_template_arg_list<containers::TF_large_view<F__...>> {
+
+            using F = TF_template_arg_list<F__...>;
+
+        };
 
     }
 
