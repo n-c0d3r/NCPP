@@ -73,29 +73,6 @@ namespace ncpp {
 
             };
 
-            template<b8 is_valid__, typename F__, template<typename F_in__> class TF_filter_semantics__>
-            struct TF_safe_filter_single_helper;
-
-            template<typename F__, template<typename F_in__> class TF_filter_semantics__>
-            struct TF_safe_filter_single_helper<false, F__, TF_filter_semantics__> {
-
-                using F = void;
-
-            };
-            template<typename F__, template<typename F_in__> class TF_filter_semantics__>
-            struct TF_safe_filter_single_helper<true, F__, TF_filter_semantics__> {
-
-                using F = F__;
-
-            };
-
-            template<typename F__, template<typename F_in__> class TF_filter_semantics__>
-            using TF_safe_filter_single = typename TF_safe_filter_single_helper<
-                T_filter_single<F__, TF_filter_semantics__>,
-                F__,
-                TF_filter_semantics__
-            >::F;
-
         }
 
 
@@ -184,7 +161,7 @@ namespace ncpp {
                     TF_nth_template_arg<
                         internal::T_filter_single<F_current_arg, TF_filter_semantics__>,
                         TF_template_arg_list<>,
-                        TF_template_arg_list<internal::TF_safe_filter_single<F_current_arg, TF_filter_semantics__>>
+                        TF_template_arg_list<F_current_arg>
                     >
                 >;
 
