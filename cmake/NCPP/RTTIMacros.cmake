@@ -11,6 +11,7 @@ include(NCPP/Utilities/RTTIHelper)
 #   Setup NCPP_RTTI_MACROS_FILE
 #####################################################################################
 file(WRITE ${NCPP_RTTI_MACROS_FILE} "\n
+    #pragma once
     #include <ncpp/prerequisites.hpp>\n
 "
 )

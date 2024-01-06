@@ -103,67 +103,12 @@ namespace ncpp {
 
 
 
-        private:
-            template<sz count__>
-            struct TF_remove_heads_internal {
-
-                static_assert((count__ <= count), "head remove count must be <= size of list");
-
-                template<sz index__>
-                struct TF_remove_heads_helper_internal {
-
-                    using F_element = TF_nth_template_arg<count__ + index__ - 1, F_args__...>;
-                    using F = typename TF_remove_heads_helper_internal<index__ - 1>::F::template TF_extends<
-                            F_element
-                    >;
-
-                };
-                template<>
-                struct TF_remove_heads_helper_internal<0> {
-
-                    using F = TF_template_arg_list<>;
-
-                };
-
-                using F = typename TF_remove_heads_helper_internal<count - count__>::F;
-
-            };
-
-
-
-        private:
-            template<sz index__>
-            struct TF_remove_tails_helper_internal {
-
-                using F_element = TF_nth_template_arg<index__ - 1, F_args__...>;
-                using F = typename TF_remove_tails_helper_internal<index__ - 1>::F::template TF_extends<
-                    F_element
-                >;
-
-            };
-            template<>
-            struct TF_remove_tails_helper_internal<0> {
-
-                using F = TF_template_arg_list<>;
-
-            };
-            template<sz count__>
-            struct TF_remove_tails_internal {
-
-                static_assert((count__ <= count), "tail remove count must be <= size of list");
-
-                using F = typename TF_remove_tails_helper_internal<count - count__>::F;
-
-            };
-
-
-
         public:
             template<sz count__>
-            using TF_remove_heads = typename TF_remove_heads_internal<count__>::F;
+            using TF_remove_heads = TF_remove_head_template_args<count__, F_args__...>;
 
             template<sz count__>
-            using TF_remove_tails = typename TF_remove_tails_internal<count__>::F;
+            using TF_remove_tails = TF_remove_tail_template_args<count__, F_args__...>;
 
 
 
