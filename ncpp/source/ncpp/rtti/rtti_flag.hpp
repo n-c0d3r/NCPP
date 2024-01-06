@@ -114,7 +114,7 @@ namespace ncpp {
 #define NCPP_RTTI_REPRESENT(TypeName) ncpp::rtti::internal::TF_rtti_flag_represent<TypeName>
 #define NCPP_RTTI_IMPLEMENT(TypeName) ncpp::rtti::internal::TF_rtti_flag_implement<TypeName>
 
-#define NCPP_RTTI_IS_HAS_FLAG(TypeName, Name) ncpp::rtti::internal::T_is_has_flag<NCPP_RTTI_REPRESENT_IMPLEMENT(TypeName), Name>
+#define NCPP_RTTI_IS_HAS_FLAG(TypeName, Name) (ncpp::rtti::internal::T_is_has_flag<NCPP_RTTI_REPRESENT(TypeName), Name> || ncpp::rtti::internal::T_is_has_flag<NCPP_RTTI_IMPLEMENT(TypeName), Name>)
 
 #define NCPP_RTTI_FLAG_IMPLEMENT_INFO(TypeName, Name) ncpp::rtti::internal::TF_rtti_flag_implement_info<NCPP_RTTI_REPRESENT_IMPLEMENT(TypeName), Name>
 
@@ -126,7 +126,7 @@ namespace ncpp {
 
 #define NCPP_RTTI_FLAG_BIND_REPRESENT(Represent, Implement,...) \
             template<__VA_ARGS__>\
-            struct ::ncpp::rtti::internal::TF_rtti_flag_represent_helper<Implement> {  \
+            struct ::ncpp::rtti::internal::TF_rtti_flag_represent_implement_helper<Implement> {  \
                                                                   \
                 struct F: public Represent, Implement {                                        \
                                                                   \
@@ -136,7 +136,7 @@ namespace ncpp {
                                                                   \
             }; \
             template<__VA_ARGS__>\
-            struct ::ncpp::rtti::internal::TF_rtti_flag_represent_helper<Represent> {  \
+            struct ::ncpp::rtti::internal::TF_rtti_flag_represent_implement_helper<Represent> {  \
                                                                   \
                 struct F: public Represent, Implement {                                        \
                                                                   \
