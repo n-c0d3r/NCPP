@@ -1261,8 +1261,8 @@ namespace ncpp {
 				\
 			NCPP_PUBLIC_KEYWORD\
 				using F_static_infos = ncpp::utilities::TF_template_arg_list<void NCPP_EXPAND(NCPP_FOR_EACH(NCPP_ROBJECT_STATIC_INFOS_STEP __VA_OPT__(,) __VA_ARGS__))>::template TF_remove_heads<1>;\
-                using F_base_static_infos = F_static_infos::template TF_filter<ncpp::rtti::TA_sinfo_base_filter>;                                                                       \
-                using F_member_static_infos = F_static_infos::template TF_filter<ncpp::rtti::TA_sinfo_member_filter>;                                                                       \
+                using F_base_static_infos = F_static_infos::template TF_filter<ncpp::rtti::TL_sinfo_base>;                                                                       \
+                using F_member_static_infos = F_static_infos::template TF_filter<ncpp::rtti::TL_sinfo_member>;                                                                       \
 				\
 				\
 				\

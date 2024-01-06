@@ -118,7 +118,7 @@ namespace ncpp {
 
 
         template<typename F__>
-        struct TA_sinfo_filter {
+        struct TL_sinfo {
 
             static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag);
 
@@ -127,14 +127,14 @@ namespace ncpp {
 
 
         template<typename F__>
-        struct TA_sinfo_base_filter {
+        struct TL_sinfo_base {
 
             static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag) && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_base_flag);
 
         };
 
         template<typename F__>
-        struct TA_sinfo_member_filter {
+        struct TL_sinfo_member {
 
             static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag) && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_member_flag);
 
@@ -143,7 +143,7 @@ namespace ncpp {
 
 
         template<typename F__>
-        struct TA_sinfo_static_filter {
+        struct TL_sinfo_static {
 
             static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag) && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_static_flag);
 
@@ -152,21 +152,21 @@ namespace ncpp {
 
 
         template<typename F__>
-        struct TA_sinfo_virtual_filter {
+        struct TL_sinfo_virtual {
 
             static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag) && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_virtual_flag);
 
         };
 
         template<typename F__>
-        struct TA_sinfo_abstract_filter {
+        struct TL_sinfo_abstract {
 
             static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag) && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_abstract_flag);
 
         };
 
         template<typename F__>
-        struct TA_sinfo_const_filter {
+        struct TL_sinfo_const {
 
             static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag) && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_const_flag);
 
@@ -175,14 +175,14 @@ namespace ncpp {
 
 
         template<typename F__>
-        struct TA_sinfo_variable_filter {
+        struct TL_sinfo_variable {
 
             static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag) && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_variable_flag);
 
         };
 
         template<typename F__>
-        struct TA_sinfo_function_filter {
+        struct TL_sinfo_function {
 
             static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag) && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_function_flag);
 
@@ -191,21 +191,21 @@ namespace ncpp {
 
 
         template<typename F__>
-        struct TA_sinfo_private_filter {
+        struct TL_sinfo_private {
 
             static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag) && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_private_flag);
 
         };
 
         template<typename F__>
-        struct TA_sinfo_protected_filter {
+        struct TL_sinfo_protected {
 
             static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag) && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_protected_flag);
 
         };
 
         template<typename F__>
-        struct TA_sinfo_public_filter {
+        struct TL_sinfo_public {
 
             static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag) && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_public_flag);
 
