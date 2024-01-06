@@ -209,6 +209,12 @@ namespace ncpp {
             template<template<typename F_in__> class TF_filter_semantics__>
             using TF_filter = typename TF_filter_helper_internal<count - 1, TF_filter_semantics__>::F;
 
+
+
+        public:
+            template<template<typename F_in__> class TF_update_semantics__>
+            using TF_update = TF_template_arg_list<typename TF_update_semantics__<F_args__>::F...>;
+
         };
 
     }
