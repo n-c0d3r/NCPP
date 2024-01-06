@@ -1,5 +1,5 @@
 
-message(STATUS "<NCPP::PrerequisiteMacros> Start building prerequisite macro")
+message(STATUS "<NCPP::PrerequisiteMacros> Start generating prerequisite macro")
 
 
 
@@ -125,4 +125,4 @@ NCPP_PrerequisiteMacros_Create_FOR_EACH(63)
 
 
 
-message(STATUS "<NCPP::PrerequisiteMacros> Build prerequisite macro done")
+message(STATUS "<NCPP::PrerequisiteMacros> Generate prerequisite macro done")

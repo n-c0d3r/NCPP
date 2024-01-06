@@ -20,6 +20,7 @@ include(NCPP/Utilities/SetGlobal)
 include(NCPP/Utilities/SIMDCompilerFlags)
 
 include(NCPP/PrerequisiteMacros)
+include(NCPP/TemplateTricks)
 
 if(NOT NCPP_LITE)
     include(NCPP/RTTIMacros)

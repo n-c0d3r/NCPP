@@ -425,7 +425,8 @@ namespace ncpp {
 			friend struct TF_base___ncpp_static_info___;\
 			template<typename F_robject__>\
 			struct TF_base___ncpp_static_info___<F_robject__, __VA_ARGS__>{ \
-                                             \
+                using F_base = __VA_ARGS__;                  \
+                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_robject_base_static_info_flag);                    \
             };
 
 #define NCPP_ROBJECT_BODY_EXTENDS(...) NCPP_ROBJECT_BODY_BASE(__VA_ARGS__)
@@ -485,6 +486,8 @@ namespace ncpp {
                                                                                                                         \
 				static constexpr ncpp::rtti::E_accessibility accessibility() { return Accessibility; }\
 				\
+                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_robject_member_static_info_flag);                                  \
+                                                                                                                        \
 			};\
 			\
             template<typename F_robject__, typename return_type__, typename... arg_types__>\
@@ -523,6 +526,8 @@ namespace ncpp {
                 static constexpr ncpp::b8 is_const_function() { return IsConstFunction; }\
                                                                                                                         \
 				static constexpr ncpp::rtti::E_accessibility accessibility() { return Accessibility; }\
+				\
+                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_robject_member_static_info_flag);\
 				\
 			};
 
@@ -656,6 +661,8 @@ namespace ncpp {
                                                                                                                         \
 				static constexpr ncpp::rtti::E_accessibility accessibility() { return Accessibility; }\
 				\
+                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_robject_member_static_info_flag);                                  \
+				\
 			};\
 			\
 			template<typename F_robject__, typename return_type__, typename... arg_types__>\
@@ -694,6 +701,8 @@ namespace ncpp {
                 static constexpr ncpp::b8 is_const_function() { return false; }\
                                                                                                                         \
 				static constexpr ncpp::rtti::E_accessibility accessibility() { return Accessibility; }\
+				\
+                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_robject_member_static_info_flag);                                  \
 				\
 			};
 
