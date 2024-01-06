@@ -220,7 +220,7 @@ namespace ncpp {
 		template<
 			class F_robject__,
 			typename F_member__,
-			class F_member_static_info__,
+			class F_member_sinfo__,
 
 			NCPP_RTTI_SPECIFIC_TARGS()
 		>
@@ -228,7 +228,7 @@ namespace ncpp {
 			F_robject_type_info__* robject_type_info_p
 		) {
 
-			F_robject_member_info__* member_info_p = robject_type_info_p->member_info(utilities::T_type_hash_code<F_member_static_info__>);
+			F_robject_member_info__* member_info_p = robject_type_info_p->member_info(utilities::T_type_hash_code<F_member_sinfo__>);
 
 			if (member_info_p)
 				return member_info_p;
@@ -237,14 +237,14 @@ namespace ncpp {
 				&(robject_type_info_p->rcontainer_p()->allocator()),
 				F_robject_member_info__(
 
-					utilities::T_type_hash_code<F_member_static_info__>,
-					F_member_static_info__::address() | F_member_static_info__::offset(),
-					F_member_static_info__::name(),
-					F_member_static_info__::id(),
-					F_member_static_info__::size(),
-                    F_member_static_info__::is_virtual_function(),
-                    F_member_static_info__::is_const_function(),
-                    F_member_static_info__::is_static(),
+					utilities::T_type_hash_code<F_member_sinfo__>,
+					F_member_sinfo__::address() | F_member_sinfo__::offset(),
+					F_member_sinfo__::name(),
+					F_member_sinfo__::id(),
+					F_member_sinfo__::size(),
+                    F_member_sinfo__::is_virtual_function(),
+                    F_member_sinfo__::is_const_function(),
+                    F_member_sinfo__::is_static(),
                                         
                     robject_type_info_p,
 

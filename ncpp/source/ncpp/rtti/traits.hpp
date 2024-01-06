@@ -219,18 +219,18 @@ namespace ncpp {
 
         private:
             template<b8 is_robject, typename F_robject__>
-            struct TF_safe_robject_static_infos_helper_internal;
+            struct TF_safe_robject_sinfos_helper_internal;
 
             template<typename F_robject__>
-            struct TF_safe_robject_static_infos_helper_internal<false, F_robject__> {
+            struct TF_safe_robject_sinfos_helper_internal<false, F_robject__> {
 
                 using F = utilities::TF_template_arg_list<>;
 
             };
             template<typename F_robject__>
-            struct TF_safe_robject_static_infos_helper_internal<true, F_robject__> {
+            struct TF_safe_robject_sinfos_helper_internal<true, F_robject__> {
 
-                using F = typename F_robject__::F_static_infos;
+                using F = typename F_robject__::F_sinfos;
 
             };
         public:
@@ -238,7 +238,7 @@ namespace ncpp {
 
 
             template<typename F_robject__>
-            using TF_safe_robject_static_infos = typename TF_safe_custom_params_helper_internal<
+            using TF_safe_robject_sinfos = typename TF_safe_custom_params_helper_internal<
                 NCPP_RTTI_IS_HAS_FLAG(F_robject__, F_robject_flag),
                     F_robject__
             >::F;
@@ -299,8 +299,8 @@ namespace ncpp {
                 class F_reflect_flag__,
                 class F_robject__,
                 typename F_member__,
-                class F_member_static_info__,
-				typename F_user_pre_reflect_member_flag__ = TF_user_pre_reflect_member_flag<F_robject__, F_member__, F_member_static_info__, NCPP_RTTI_PASS_SPECIFIC_USING()>,
+                class F_member_sinfo__,
+				typename F_user_pre_reflect_member_flag__ = TF_user_pre_reflect_member_flag<F_robject__, F_member__, F_member_sinfo__, NCPP_RTTI_PASS_SPECIFIC_USING()>,
 				std::enable_if_t<
 					NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, F_user_pre_reflect_member_flag__),
 					i32
@@ -316,7 +316,7 @@ namespace ncpp {
 				F_reflect_flag__::template T_user_pre_reflect_member<
                     F_robject__,
                     F_member__,
-                    F_member_static_info__,
+                    F_member_sinfo__,
                     NCPP_RTTI_PASS_SPECIFIC_USING()
                 >(
                     rcontainer_p,
@@ -329,8 +329,8 @@ namespace ncpp {
                 class F_reflect_flag__,
                 class F_robject__,
                 typename F_member__,
-                class F_member_static_info__,
-				typename F_user_pre_reflect_member_flag__ = TF_user_pre_reflect_member_flag<F_robject__, F_member__, F_member_static_info__, NCPP_RTTI_PASS_SPECIFIC_USING()>,
+                class F_member_sinfo__,
+				typename F_user_pre_reflect_member_flag__ = TF_user_pre_reflect_member_flag<F_robject__, F_member__, F_member_sinfo__, NCPP_RTTI_PASS_SPECIFIC_USING()>,
 				std::enable_if_t<
             		!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, F_user_pre_reflect_member_flag__),
 					i32
@@ -352,8 +352,8 @@ namespace ncpp {
                 class F_reflect_flag__,
                 class F_robject__,
                 typename F_member__,
-                class F_member_static_info__,
-				typename F_user_post_reflect_member_flag__ = TF_user_post_reflect_member_flag<F_robject__, F_member__, F_member_static_info__, NCPP_RTTI_PASS_SPECIFIC_USING()>,
+                class F_member_sinfo__,
+				typename F_user_post_reflect_member_flag__ = TF_user_post_reflect_member_flag<F_robject__, F_member__, F_member_sinfo__, NCPP_RTTI_PASS_SPECIFIC_USING()>,
 				std::enable_if_t<
 					NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, F_user_post_reflect_member_flag__),
 					i32
@@ -369,7 +369,7 @@ namespace ncpp {
 				F_reflect_flag__::template T_user_post_reflect_member<
                     F_robject__,
                     F_member__,
-                    F_member_static_info__,
+                    F_member_sinfo__,
                     NCPP_RTTI_PASS_SPECIFIC_USING()
                 >(
                     rcontainer_p,
@@ -382,8 +382,8 @@ namespace ncpp {
                 class F_reflect_flag__,
                 class F_robject__,
                 typename F_member__,
-                class F_member_static_info__,
-				typename F_user_post_reflect_member_flag__ = TF_user_post_reflect_member_flag<F_robject__, F_member__, F_member_static_info__, NCPP_RTTI_PASS_SPECIFIC_USING()>,
+                class F_member_sinfo__,
+				typename F_user_post_reflect_member_flag__ = TF_user_post_reflect_member_flag<F_robject__, F_member__, F_member_sinfo__, NCPP_RTTI_PASS_SPECIFIC_USING()>,
 				std::enable_if_t<
             		!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, F_user_post_reflect_member_flag__),
 					i32

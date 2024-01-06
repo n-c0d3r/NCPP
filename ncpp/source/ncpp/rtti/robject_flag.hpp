@@ -75,9 +75,9 @@ namespace ncpp {
 
 		NCPP_RTTI_CREATE_FLAG(F_user_reflect_custom_params_flag);
 
-		template<class F_robject__, typename F_member__, class F_member_static_info__, NCPP_RTTI_SPECIFIC_TARGS()>
+		template<class F_robject__, typename F_member__, class F_member_sinfo__, NCPP_RTTI_SPECIFIC_TARGS()>
 		NCPP_RTTI_CREATE_FLAG(TF_user_pre_reflect_member_flag);
-		template<class F_robject__, typename F_member__, class F_member_static_info__, NCPP_RTTI_SPECIFIC_TARGS()>
+		template<class F_robject__, typename F_member__, class F_member_sinfo__, NCPP_RTTI_SPECIFIC_TARGS()>
 		NCPP_RTTI_CREATE_FLAG(TF_user_post_reflect_member_flag);
     
         template<class F_robject__, class F_base__, NCPP_RTTI_SPECIFIC_TARGS()>

@@ -193,12 +193,12 @@ struct F_customm_reflector {
     ) {
 
         cout << "user pre reflect member: "
-            << T_cout_value(F_member_static_info__::name())
+            << T_cout_value(F_member_sinfo__::name())
             << " (static pointer: "
-            << T_cout_value(F_member_static_info__::static_get())
+            << T_cout_value(F_member_sinfo__::static_get())
             << ")"
             << " (accessibility: "
-            << T_cout_value((u32)F_member_static_info__::accessibility())
+            << T_cout_value((u32)F_member_sinfo__::accessibility())
             << ")"
             << " "
             << custom_params_p->message
@@ -210,12 +210,12 @@ struct F_customm_reflector {
     ) {
 
         cout << "user post reflect member: "
-            << T_cout_value(F_member_static_info__::name())
+            << T_cout_value(F_member_sinfo__::name())
             << " (static pointer: "
-            << T_cout_value(F_member_static_info__::static_get())
+            << T_cout_value(F_member_sinfo__::static_get())
             << ")"
             << " (accessibility: "
-            << T_cout_value((u32)F_member_static_info__::accessibility())
+            << T_cout_value((u32)F_member_sinfo__::accessibility())
             << ")"
             << " "
             << custom_params_p->message
@@ -294,9 +294,9 @@ void log_type_info(A::F_robject_type_info* type_info_p){
 
 int main() {
 
-    cout << "Static infos: " << T_type_fullname<typename A::F_static_infos>() << std::endl << std::endl;
-    cout << "Base static infos: " << T_type_fullname<typename A::F_base_static_infos>() << std::endl << std::endl;
-    cout << "Member static infos: " << T_type_fullname<typename A::F_member_static_infos>() << std::endl << std::endl;
+    cout << "A's sinfos: " << T_type_fullname<typename A::F_sinfos>() << std::endl << std::endl;
+    cout << "A's base sinfos: " << T_type_fullname<typename A::F_base_sinfos>() << std::endl << std::endl;
+    cout << "A's member sinfos: " << T_type_fullname<typename A::F_member_sinfos>() << std::endl << std::endl;
 
 
 
