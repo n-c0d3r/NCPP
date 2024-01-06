@@ -709,7 +709,7 @@ namespace ncpp {
                 \
                 NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_sinfo_member_flag);                 \
                 \
-                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_sinfo_function_flag);               \
+                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_sinfo_variable_flag);               \
                 \
                 NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_sinfo_static_flag);                 \
                 \
@@ -767,7 +767,7 @@ namespace ncpp {
                 \
                 NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_sinfo_member_flag);                 \
                 \
-                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_sinfo_variable_flag);               \
+                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_sinfo_function_flag);               \
                 \
                 NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_sinfo_static_flag);                 \
                 \

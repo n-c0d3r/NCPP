@@ -212,6 +212,30 @@ namespace ncpp {
 
             };
 
+
+
+            template<typename... F__>
+            struct TF_template_arg_list_first {
+
+                using F_first = TF_nth_template_arg<0, F__...>;
+
+            };
+            template<>
+            struct TF_template_arg_list_first<> {
+
+            };
+
+            template<typename... F__>
+            struct TF_template_arg_list_last {
+
+                using F_last = TF_nth_template_arg<(sizeof...(F__) - 1), F__...>;
+
+            };
+            template<>
+            struct TF_template_arg_list_last<> {
+
+            };
+
         }
 
 
@@ -231,7 +255,10 @@ namespace ncpp {
 
 
         template<typename... F_args__>
-        struct TF_template_arg_list {
+        struct TF_template_arg_list :
+            public internal::TF_template_arg_list_first<F_args__...>,
+            public internal::TF_template_arg_list_last<F_args__...>
+        {
 
         public:
             using F_this = TF_template_arg_list<F_args__...>;
@@ -303,12 +330,32 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         private:
-            template<sz index__, sz count__>
+            template<i32 begin__, i32 end__>
             struct TF_slice_internal {
 
-                static_assert((index__ < count) && ((index__ + count__) <= count), "out of bound");
+                static_assert(
+                    (
+                        (begin__ <= count)
+                        && (begin__ >= 0)
+                        && (end__ <= count)
+                        && (end__ >= 0)
+                        && (begin__ <= end__)
+                    ),
+                    "out of bound"
+                );
 
-                using F = TF_remove_heads<index__>::template TF_remove_tails<count - (index__ + count__)>;
+                using F = TF_remove_heads<begin__>::template TF_remove_tails<count - end__>;
+
+            };
+            template<i32 begin__, i32 end__>
+            struct TF_try_slice_internal {
+
+                static constexpr i32 clamped_begin = (begin__ <= count) ? begin__ : (count - 1);
+                static constexpr i32 clamped_begin2 = (clamped_begin >= 0) ? clamped_begin : 0;
+                static constexpr i32 clamped_end = (end__ <= count) ? end__ : (count - 1);
+                static constexpr i32 clamped_end2 = (clamped_end >= clamped_begin2) ? clamped_end : clamped_begin2;
+
+                using F = TF_remove_heads<clamped_begin2>::template TF_remove_tails<count - clamped_end2>;
 
             };
 
@@ -317,8 +364,15 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
-            template<sz index__, sz count__>
-            using TF_slice = typename TF_slice_internal<index__, count__>::F;
+            template<i32 begin__, i32 end__>
+            using TF_slice = typename TF_slice_internal<begin__, end__>::F;
+            template<i32 begin__, i32 end__>
+            using TF_try_slice = typename TF_try_slice_internal<begin__, end__>::F;
+
+            template<i32 begin__, i32 end__>
+            using TF_invert_slice = typename TF_slice_internal<count - end__ - 1, count - begin__ - 1>::F;
+            template<i32 begin__, i32 end__>
+            using TF_try_invert_slice = typename TF_try_slice_internal<count - end__ - 1, count - begin__ - 1>::F;
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -390,6 +444,9 @@ namespace ncpp {
                 TF_multiple_filter_semantics__...
             >::F;
 
+            template<template<typename F_in__> class... TF_multiple_filter_semantics__>
+            using TF_find = TF_filter<TF_multiple_filter_semantics__...>::template TF_try_slice<0, 1>;
+
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -459,6 +516,9 @@ namespace ncpp {
                 F_this,
                 TF_multiple_invert_filter_semantics__...
             >::F;
+
+            template<template<typename F_in__> class... TF_multiple_filter_semantics__>
+            using TF_invert_find = TF_invert_filter<TF_multiple_filter_semantics__...>::template TF_try_slice<0, 1>;
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
