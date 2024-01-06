@@ -534,6 +534,14 @@ namespace ncpp {
             template<template<typename F_in__> class TF_update_semantics__>
             using TF_update = TF_template_arg_list<typename TF_update_semantics__<F_args__>::F...>;
 
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+
+        public:
+            template<template<typename...> class TF__>
+            using TF_apply = TF__<F_args__...>;
+
         };
 
 
