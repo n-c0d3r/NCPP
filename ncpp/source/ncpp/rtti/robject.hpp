@@ -304,18 +304,18 @@ namespace ncpp {
 
 
 #define NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberType, MemberName, IsVirtualFunction, IsConstFunction, LowKeywords, LowImplement) \
-            struct F_##MemberName##___member_##IsVirtualFunction##_##IsConstFunction##___;\
-            friend struct F_##MemberName##___member_##IsVirtualFunction##_##IsConstFunction##___;\
-            struct F_##MemberName##___member_##IsVirtualFunction##_##IsConstFunction##___ { LowKeywords NCPP_MAGIC(MemberType, member) LowImplement; };
+            struct F_##MemberName##___ncpp_member_##IsVirtualFunction##_##IsConstFunction##___;\
+            friend struct F_##MemberName##___ncpp_member_##IsVirtualFunction##_##IsConstFunction##___;\
+            struct F_##MemberName##___ncpp_member_##IsVirtualFunction##_##IsConstFunction##___ { LowKeywords NCPP_MAGIC(MemberType, member) LowImplement; };
 
-#define NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE(MemberName, IsVirtualFunction, IsConstFunction) ncpp::utilities::TF_smart_cast_member<decltype(&F_##MemberName##___member_##IsVirtualFunction##_##IsConstFunction##___::member)>
+#define NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE(MemberName, IsVirtualFunction, IsConstFunction) ncpp::utilities::TF_smart_cast_member<decltype(&F_##MemberName##___ncpp_member_##IsVirtualFunction##_##IsConstFunction##___::member)>
 
 #define NCPP_ROBJECT_DECLARE_STATIC_MEMBER_TYPE_WRAPPER(MemberType, MemberName) \
-            struct F_##MemberName##___member_static___;\
-            friend struct F_##MemberName##___member_static___;\
-            struct F_##MemberName##___member_static___ { NCPP_MAGIC(MemberType, member); };
+            struct F_##MemberName##___ncpp_member_static___;\
+            friend struct F_##MemberName##___ncpp_member_static___;\
+            struct F_##MemberName##___ncpp_member_static___ { NCPP_MAGIC(MemberType, member); };
 
-#define NCPP_ROBJECT_WRAPPER_TO_STATIC_MEMBER_TYPE(MemberName) ncpp::utilities::TF_smart_cast_member<decltype(&F_##MemberName##___member_static___::member)>
+#define NCPP_ROBJECT_WRAPPER_TO_STATIC_MEMBER_TYPE(MemberName) ncpp::utilities::TF_smart_cast_member<decltype(&F_##MemberName##___ncpp_member_static___::member)>
 
 
 
