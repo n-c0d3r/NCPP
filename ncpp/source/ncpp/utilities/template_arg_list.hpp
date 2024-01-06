@@ -447,6 +447,9 @@ namespace ncpp {
             template<template<typename F_in__> class... TF_multiple_filter_semantics__>
             using TF_find = TF_filter<TF_multiple_filter_semantics__...>::template TF_try_slice<0, 1>;
 
+            template<template<typename F_in__> class... TF_multiple_filter_semantics__>
+            using TF_find_last = TF_filter<TF_multiple_filter_semantics__...>::template TF_try_invert_slice<0, 1>;
+
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -519,6 +522,9 @@ namespace ncpp {
 
             template<template<typename F_in__> class... TF_multiple_filter_semantics__>
             using TF_invert_find = TF_invert_filter<TF_multiple_filter_semantics__...>::template TF_try_slice<0, 1>;
+
+            template<template<typename F_in__> class... TF_multiple_filter_semantics__>
+            using TF_invert_find_last = TF_invert_filter<TF_multiple_filter_semantics__...>::template TF_try_invert_slice<0, 1>;
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
