@@ -144,7 +144,7 @@ namespace ncpp {
 
         public:
             template<sz index__>
-            using F_at = typename TF_at_internal<index__>::F;
+            using TF_at = typename TF_at_internal<index__>::F;
 
             template<typename F__>
             using TF_combine = typename TF_combine_helper_internal<F__>::F;
@@ -185,7 +185,7 @@ namespace ncpp {
             template<i32 index__, template<typename F_in__> class TF_filter_semantics__>
             struct TF_filter_helper_internal {
 
-                using F_current_arg = TF_nth_template_arg<index__, F_args__...>;
+                using F_current_arg = TF_at<index__>;
                 using F_prev_list = typename TF_filter_helper_internal<index__ - 1, TF_filter_semantics__>::F;
 
                 using F = F_prev_list::template TF_combine<
