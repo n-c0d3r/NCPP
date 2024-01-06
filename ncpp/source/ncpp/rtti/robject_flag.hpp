@@ -69,9 +69,6 @@ namespace ncpp {
 		NCPP_RTTI_CREATE_FLAG(F_robject_virtual_flag);
 		NCPP_RTTI_CREATE_FLAG(F_robject_has_base_flag);
 
-		NCPP_RTTI_CREATE_FLAG(F_robject_base_static_info_flag);
-		NCPP_RTTI_CREATE_FLAG(F_robject_member_static_info_flag);
-
         NCPP_RTTI_CREATE_FLAG(F_disable_reflect_robject_type_info);
         NCPP_RTTI_CREATE_FLAG(F_disable_reflect_robject_member_info);
         NCPP_RTTI_CREATE_FLAG(F_disable_reflect_robject_metadata);
@@ -97,6 +94,122 @@ namespace ncpp {
             NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_disable_reflect_robject_member_info);\
             NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_disable_reflect_robject_type_info);\
             NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_disable_reflect_robject_metadata);
+
+
+
+        NCPP_RTTI_CREATE_FLAG(F_sinfo_flag);
+
+        NCPP_RTTI_CREATE_FLAG(F_sinfo_base_flag);
+        NCPP_RTTI_CREATE_FLAG(F_sinfo_member_flag);
+
+        NCPP_RTTI_CREATE_FLAG(F_sinfo_static_flag);
+
+        NCPP_RTTI_CREATE_FLAG(F_sinfo_virtual_flag);
+        NCPP_RTTI_CREATE_FLAG(F_sinfo_abstract_flag);
+        NCPP_RTTI_CREATE_FLAG(F_sinfo_const_flag);
+
+        NCPP_RTTI_CREATE_FLAG(F_sinfo_function_flag);
+        NCPP_RTTI_CREATE_FLAG(F_sinfo_variable_flag);
+
+        NCPP_RTTI_CREATE_FLAG(F_sinfo_private_flag);
+        NCPP_RTTI_CREATE_FLAG(F_sinfo_protected_flag);
+        NCPP_RTTI_CREATE_FLAG(F_sinfo_public_flag);
+
+
+
+        template<typename F__>
+        struct TA_sinfo_filter {
+
+            static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag);
+
+        };
+
+
+
+        template<typename F__>
+        struct TA_sinfo_base_filter {
+
+            static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag) && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_base_flag);
+
+        };
+
+        template<typename F__>
+        struct TA_sinfo_member_filter {
+
+            static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag) && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_member_flag);
+
+        };
+
+
+
+        template<typename F__>
+        struct TA_sinfo_static_filter {
+
+            static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag) && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_static_flag);
+
+        };
+
+
+
+        template<typename F__>
+        struct TA_sinfo_virtual_filter {
+
+            static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag) && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_virtual_flag);
+
+        };
+
+        template<typename F__>
+        struct TA_sinfo_abstract_filter {
+
+            static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag) && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_abstract_flag);
+
+        };
+
+        template<typename F__>
+        struct TA_sinfo_const_filter {
+
+            static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag) && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_const_flag);
+
+        };
+
+
+
+        template<typename F__>
+        struct TA_sinfo_variable_filter {
+
+            static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag) && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_variable_flag);
+
+        };
+
+        template<typename F__>
+        struct TA_sinfo_function_filter {
+
+            static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag) && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_function_flag);
+
+        };
+
+
+
+        template<typename F__>
+        struct TA_sinfo_private_filter {
+
+            static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag) && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_private_flag);
+
+        };
+
+        template<typename F__>
+        struct TA_sinfo_protected_filter {
+
+            static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag) && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_protected_flag);
+
+        };
+
+        template<typename F__>
+        struct TA_sinfo_public_filter {
+
+            static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag) && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_public_flag);
+
+        };
                 
 	}
 

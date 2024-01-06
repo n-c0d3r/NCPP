@@ -106,12 +106,97 @@ namespace ncpp {
                 TF_filter_semantics__
             >::F;
 
+
+
+            template<b8 is_valid__, typename F__, template<typename F_in__> class TF_filter_semantics__>
+            struct TF_invert_filter_helper;
+
+            template<typename F__, template<typename F_in__> class TF_filter_semantics__>
+            struct TF_invert_filter_helper<false, F__, TF_filter_semantics__> {
+
+                using F = F__;
+
+            };
+            template<typename F__, template<typename F_in__> class TF_filter_semantics__>
+            struct TF_invert_filter_helper<true, F__, TF_filter_semantics__> {
+
+                using F = F__;
+
+            };
+
+        }
+
+
+
+        namespace internal {
+
+            template<typename F__, template<typename F_in__> class TF_invert_filter_semantics__>
+            concept T_invert_filter_single = requires {
+
+                requires (!TF_invert_filter_semantics__<F__>::value);
+
+            };
+
+            template<typename F__, template<typename F_in__> class TF_invert_filter_semantics__>
+            concept T_invert_filter_single_and_has_custom_type = requires {
+
+                requires T_invert_filter_single<F__, TF_invert_filter_semantics__>;
+                typename TF_invert_filter_semantics__<F__>::F;
+
+            };
+
+            template<b8 is_valid__, typename F__, template<typename F_in__> class TF_invert_filter_semantics__>
+            struct TF_safe_invert_filter_single_helper;
+
+            template<typename F__, template<typename F_in__> class TF_invert_filter_semantics__>
+            struct TF_safe_invert_filter_single_helper<false, F__, TF_invert_filter_semantics__> {
+
+                using F = F__;
+
+            };
+            template<typename F__, template<typename F_in__> class TF_invert_filter_semantics__>
+            struct TF_safe_invert_filter_single_helper<true, F__, TF_invert_filter_semantics__> {
+
+                using F = typename TF_invert_filter_semantics__<F__>::F;
+
+            };
+
+            template<typename F__, template<typename F_in__> class TF_invert_filter_semantics__>
+            using TF_safe_invert_filter_single = typename TF_safe_invert_filter_single_helper<
+                T_invert_filter_single_and_has_custom_type<F__, TF_invert_filter_semantics__>,
+                F__,
+                TF_invert_filter_semantics__
+            >::F;
+
+
+
+            template<b8 is_valid__, typename F__, template<typename F_in__> class TF_invert_filter_semantics__>
+            struct TF_invert_invert_filter_helper;
+
+            template<typename F__, template<typename F_in__> class TF_invert_filter_semantics__>
+            struct TF_invert_invert_filter_helper<false, F__, TF_invert_filter_semantics__> {
+
+                using F = F__;
+
+            };
+            template<typename F__, template<typename F_in__> class TF_invert_filter_semantics__>
+            struct TF_invert_invert_filter_helper<true, F__, TF_invert_filter_semantics__> {
+
+                using F = F__;
+
+            };
+
         }
 
 
 
         template<typename... F_args__>
         struct TF_template_arg_list {
+
+        public:
+            using F_this = TF_template_arg_list<F_args__...>;
+
+
 
         public:
             static constexpr u16 count = sizeof...(F_args__);
@@ -179,7 +264,7 @@ namespace ncpp {
 
         public:
             template<sz index__, sz count__>
-            using TF_slice = typename TF_slice_internal<index__, count__>::F;;
+            using TF_slice = typename TF_slice_internal<index__, count__>::F;
 
 
 
@@ -207,9 +292,107 @@ namespace ncpp {
 
             };
 
-        public:
             template<template<typename F_in__> class TF_filter_semantics__>
-            using TF_filter = typename TF_filter_helper_internal<count - 1, TF_filter_semantics__>::F;
+            using TF_filter_single_internal = typename TF_filter_helper_internal<count - 1, TF_filter_semantics__>::F;
+
+            template<typename F_list__, template<typename F_in__> class... TF_multiple_filter_semantics__>
+            struct TF_filter_multiple_semantics_helper_internal;
+            template<typename F_list__>
+            struct TF_filter_multiple_semantics_helper_internal<F_list__> {
+
+                using F = F_list__;
+
+            };
+            template<
+                typename F_list__,
+                template<typename F_in__> class TF_first_filter_semantics__,
+                template<typename F_in__> class... TF_rest_multiple_filter_semantics__
+            >
+            struct TF_filter_multiple_semantics_helper_internal<
+                F_list__,
+                TF_first_filter_semantics__,
+                TF_rest_multiple_filter_semantics__...
+            >
+            {
+
+                using F_filted_list = F_list__::template TF_filter_single_internal<TF_first_filter_semantics__>;
+                using F = typename TF_filter_multiple_semantics_helper_internal<
+                    F_filted_list,
+                    TF_rest_multiple_filter_semantics__...
+                >::F;
+
+            };
+
+        public:
+            template<template<typename F_in__> class... TF_multiple_filter_semantics__>
+            using TF_filter = typename TF_filter_multiple_semantics_helper_internal<
+                F_this,
+                TF_multiple_filter_semantics__...
+            >::F;
+
+
+
+        private:
+            template<i32 index__, template<typename F_in__> class TF_invert_filter_semantics__>
+            struct TF_invert_filter_helper_internal {
+
+                using F_current_arg = TF_at<index__>;
+                using F_prev_list = typename TF_invert_filter_helper_internal<index__ - 1, TF_invert_filter_semantics__>::F;
+
+                using F = F_prev_list::template TF_combine<
+                    TF_nth_template_arg<
+                        internal::T_invert_filter_single<F_current_arg, TF_invert_filter_semantics__>,
+                        TF_template_arg_list<>,
+                        TF_template_arg_list<internal::TF_safe_invert_filter_single<F_current_arg, TF_invert_filter_semantics__>>
+                    >
+                >;
+
+            };
+
+            template<template<typename F_in__> class TF_invert_filter_semantics__>
+            struct TF_invert_filter_helper_internal<-1, TF_invert_filter_semantics__> {
+
+                using F = TF_template_arg_list<>;
+
+            };
+
+            template<template<typename F_in__> class TF_invert_filter_semantics__>
+            using TF_invert_filter_single_internal = typename TF_invert_filter_helper_internal<count - 1, TF_invert_filter_semantics__>::F;
+
+            template<typename F_list__, template<typename F_in__> class... TF_multiple_invert_filter_semantics__>
+            struct TF_invert_filter_multiple_semantics_helper_internal;
+            template<typename F_list__>
+            struct TF_invert_filter_multiple_semantics_helper_internal<F_list__> {
+
+                using F = F_list__;
+
+            };
+            template<
+                typename F_list__,
+                template<typename F_in__> class TF_first_invert_filter_semantics__,
+                template<typename F_in__> class... TF_rest_multiple_invert_filter_semantics__
+            >
+            struct TF_invert_filter_multiple_semantics_helper_internal<
+                F_list__,
+                TF_first_invert_filter_semantics__,
+                TF_rest_multiple_invert_filter_semantics__...
+            >
+            {
+
+                using F_filted_list = F_list__::template TF_invert_filter_single_internal<TF_first_invert_filter_semantics__>;
+                using F = typename TF_invert_filter_multiple_semantics_helper_internal<
+                    F_filted_list,
+                    TF_rest_multiple_invert_filter_semantics__...
+                >::F;
+
+            };
+
+        public:
+            template<template<typename F_in__> class... TF_multiple_invert_filter_semantics__>
+            using TF_invert_filter = typename TF_invert_filter_multiple_semantics_helper_internal<
+                F_this,
+                TF_multiple_invert_filter_semantics__...
+            >::F;
 
 
 

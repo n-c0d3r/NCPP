@@ -38,6 +38,7 @@
 #include <ncpp/utilities/magic.hpp>
 #include <ncpp/utilities/smart_cast_member.hpp>
 #include <ncpp/utilities/template_arg_list.hpp>
+#include <ncpp/utilities/try_class.hpp>
 
 #include <ncpp/containers/.hpp>
 
@@ -72,39 +73,6 @@
 namespace ncpp {
 
 	namespace rtti {
-
-        namespace internal {
-
-            template<typename F__>
-            struct TF_base_static_info_filter_semantic {
-
-                static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_robject_base_static_info_flag);
-
-            };
-            template<typename F__>
-            struct TF_member_static_info_filter_semantic {
-
-                static constexpr b8 value = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_robject_member_static_info_flag);
-
-            };
-
-        }
-
-
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 #define NCPP_ROBJECT_USER_REFLECT_CUSTOM_PARAMS(CustomParamsType) \
             NCPP_RTTI_IMPLEMENT_FLAG_WITH_INNER(ncpp::rtti::F_user_reflect_custom_params_flag, NCPP_MA(using F_custom_params = CustomParamsType;));
@@ -457,9 +425,11 @@ namespace ncpp {
             template<typename F_robject__, typename F_base__>\
 			friend struct TF_base___ncpp_static_info___;\
 			template<typename F_robject__>\
-			struct TF_base___ncpp_static_info___<F_robject__, __VA_ARGS__>{ \
+			struct TF_base___ncpp_static_info___<F_robject__, __VA_ARGS__>                            \
+            { \
                 using F_base = __VA_ARGS__;                  \
-                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_robject_base_static_info_flag);                    \
+                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_sinfo_flag);                        \
+                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_sinfo_base_flag);                        \
             };
 
 #define NCPP_ROBJECT_BODY_EXTENDS(...) NCPP_ROBJECT_BODY_BASE(__VA_ARGS__)
@@ -481,7 +451,7 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, IsVirtualFunction, IsConstFunction, Accessibility) \
+#define NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, IsVirtualFunction, IsConstFunction, IsAbstractFunction, Accessibility) \
 			template<typename F_robject__, typename F_member__, bool is_function__, bool is_virtual__, bool is_const__>\
 			struct TF_##MemberName##___ncpp_static_info___;                                                       \
             template<typename F_robject__, typename F_member__, bool is_function__, bool is_virtual__, bool is_const__>\
@@ -515,11 +485,26 @@ namespace ncpp {
                 \
                 static constexpr ncpp::b8 is_function() { return false; }\
                 static constexpr ncpp::b8 is_virtual_function() { return false; }\
+                static constexpr ncpp::b8 is_abstract_function() { return false; }\
 				static constexpr ncpp::b8 is_const_function() { return false; }                                                     \
                                                                                                                         \
 				static constexpr ncpp::rtti::E_accessibility accessibility() { return Accessibility; }\
 				\
-                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_robject_member_static_info_flag);                                  \
+                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_sinfo_flag);                                                                         \
+                \
+                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_sinfo_member_flag);                                                                  \
+                \
+                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_sinfo_variable_flag);                                                                \
+                \
+                NCPP_RTTI_IMPLEMENT_FLAG(                                                                                                   \
+                    NCPP_MA(ncpp::utilities::TF_try_class<Accessibility == ncpp::rtti::E_accessibility::PRIVATE, ncpp::rtti::F_sinfo_private_flag>)                                      \
+                );                                  \
+                NCPP_RTTI_IMPLEMENT_FLAG(                                                                                                   \
+                    NCPP_MA(ncpp::utilities::TF_try_class<Accessibility == ncpp::rtti::E_accessibility::PROTECTED, ncpp::rtti::F_sinfo_protected_flag>)                                      \
+                );                                  \
+                NCPP_RTTI_IMPLEMENT_FLAG(                                                                                                   \
+                    NCPP_MA(ncpp::utilities::TF_try_class<Accessibility == ncpp::rtti::E_accessibility::PUBLIC, ncpp::rtti::F_sinfo_public_flag>)                                      \
+                );                                  \
                                                                                                                         \
 			};\
 			\
@@ -556,11 +541,36 @@ namespace ncpp {
                 \
                 static constexpr ncpp::b8 is_function() { return true; }\
                 static constexpr ncpp::b8 is_virtual_function() { return IsVirtualFunction; }\
+                static constexpr ncpp::b8 is_abstract_function() { return IsAbstractFunction; }\
                 static constexpr ncpp::b8 is_const_function() { return IsConstFunction; }\
                                                                                                                         \
 				static constexpr ncpp::rtti::E_accessibility accessibility() { return Accessibility; }\
 				\
-                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_robject_member_static_info_flag);\
+                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_sinfo_flag);                                                                         \
+                                                                                                                                            \
+                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_sinfo_member_flag);                                                                  \
+                                                                                                                                            \
+                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_sinfo_function_flag);                                                                \
+                                                                                                                                            \
+                NCPP_RTTI_IMPLEMENT_FLAG(                                                                                                   \
+                    NCPP_MA(ncpp::utilities::TF_try_class<Accessibility == ncpp::rtti::E_accessibility::PRIVATE, ncpp::rtti::F_sinfo_private_flag>)                                      \
+                );                                  \
+                NCPP_RTTI_IMPLEMENT_FLAG(                                                                                                   \
+                    NCPP_MA(ncpp::utilities::TF_try_class<Accessibility == ncpp::rtti::E_accessibility::PROTECTED, ncpp::rtti::F_sinfo_protected_flag>)                                      \
+                );                                  \
+                NCPP_RTTI_IMPLEMENT_FLAG(                                                                                                   \
+                    NCPP_MA(ncpp::utilities::TF_try_class<Accessibility == ncpp::rtti::E_accessibility::PUBLIC, ncpp::rtti::F_sinfo_public_flag>)                                      \
+                );                                                                                                                          \
+                                                                                                                                            \
+                NCPP_RTTI_IMPLEMENT_FLAG(                                                                                                   \
+                    NCPP_MA(ncpp::utilities::TF_try_class<IsVirtualFunction, ncpp::rtti::F_sinfo_virtual_flag>)                                      \
+                );                                  \
+                NCPP_RTTI_IMPLEMENT_FLAG(                                                                                                   \
+                    NCPP_MA(ncpp::utilities::TF_try_class<IsConstFunction, ncpp::rtti::F_sinfo_const_flag>)                                          \
+                );                                  \
+                NCPP_RTTI_IMPLEMENT_FLAG(                                                                                                   \
+                    NCPP_MA(ncpp::utilities::TF_try_class<IsAbstractFunction, ncpp::rtti::F_sinfo_abstract_flag>)                                          \
+                );                                  \
 				\
 			};
 
@@ -571,7 +581,7 @@ namespace ncpp {
 #define NCPP_ROBJECT_BODY_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName, Accessibility,...) \
             NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberType, MemberName, false, false,,);                                                 \
 			NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberType, MemberName) NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement);\
-            NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, false, false, Accessibility);\
+            NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, false, false, false, Accessibility);\
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);
 
 #define NCPP_ROBJECT_BODY_BASE_PRIVATE(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PRIVATE __VA_OPT__(,) __VA_ARGS__))
@@ -585,7 +595,7 @@ namespace ncpp {
 #define NCPP_ROBJECT_BODY_MEMBER_CONST(Overrider, Keywords, Implement, MemberType, MemberName, Accessibility,...) \
             NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberType, MemberName, false, true,,);                                                 \
 			NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberType, MemberName) const NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement);\
-            NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, false, true, Accessibility);\
+            NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, false, true, false, Accessibility);\
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);
 
 #define NCPP_ROBJECT_BODY_BASE_PRIVATE_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_CONST(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PRIVATE __VA_OPT__(,) __VA_ARGS__))
@@ -599,7 +609,7 @@ namespace ncpp {
 #define NCPP_ROBJECT_BODY_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName, Accessibility,...) \
             NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberType, MemberName, true, false, virtual,);                                                 \
 			virtual NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberType, MemberName) NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement);\
-            NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, true, false, Accessibility);\
+            NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, true, false, false, Accessibility);\
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);
 
 #define NCPP_ROBJECT_BODY_BASE_PRIVATE_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PRIVATE __VA_OPT__(,) __VA_ARGS__))
@@ -613,7 +623,7 @@ namespace ncpp {
 #define NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName, Accessibility,...)\
             NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberType, MemberName, true, true, virtual,);                                                 \
 			virtual NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberType, MemberName) const NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement);\
-            NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, true, true, Accessibility);\
+            NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, true, true, false, Accessibility);\
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);
 
 #define NCPP_ROBJECT_BODY_BASE_PRIVATE_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PRIVATE __VA_OPT__(,) __VA_ARGS__))
@@ -627,7 +637,7 @@ namespace ncpp {
 #define NCPP_ROBJECT_BODY_MEMBER_ABSTRACT(Overrider, Keywords, Implement, MemberType, MemberName, Accessibility,...) \
             NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberType, MemberName, true, false, virtual,);                                                 \
 			virtual NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberType, MemberName) NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement) = 0;\
-            NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, true, false, Accessibility);\
+            NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, true, false, true, Accessibility);\
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);
 
         ////////////////////////////////////////////////////////////////////////////////////
@@ -645,7 +655,7 @@ namespace ncpp {
 #define NCPP_ROBJECT_BODY_MEMBER_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberType, MemberName, Accessibility,...)\
             NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberType, MemberName, true, true, virtual,);                                                 \
 			virtual NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberType, MemberName) const NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement) = 0;\
-            NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, true, true, Accessibility);\
+            NCPP_ROBJECT_BODY_MEMBER_STATIC_INFO(MemberType, MemberName, true, true, true, Accessibility);\
 			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);
 
 #define NCPP_ROBJECT_BODY_BASE_PRIVATE_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PRIVATE __VA_OPT__(,) __VA_ARGS__))
@@ -690,11 +700,28 @@ namespace ncpp {
                 \
                 static constexpr ncpp::b8 is_function() { return false; }\
                 static constexpr ncpp::b8 is_virtual_function() { return false; }\
+                static constexpr ncpp::b8 is_abstract_function() { return false; }\
 				static constexpr ncpp::b8 is_const_function() { return false; }\
                                                                                                                         \
 				static constexpr ncpp::rtti::E_accessibility accessibility() { return Accessibility; }\
 				\
-                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_robject_member_static_info_flag);                                  \
+                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_sinfo_flag);                        \
+                \
+                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_sinfo_member_flag);                 \
+                \
+                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_sinfo_function_flag);               \
+                \
+                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_sinfo_static_flag);                 \
+                \
+                NCPP_RTTI_IMPLEMENT_FLAG(                                                                                                   \
+                    NCPP_MA(ncpp::utilities::TF_try_class<Accessibility == ncpp::rtti::E_accessibility::PRIVATE, ncpp::rtti::F_sinfo_private_flag>)                                      \
+                );                                  \
+                NCPP_RTTI_IMPLEMENT_FLAG(                                                                                                   \
+                    NCPP_MA(ncpp::utilities::TF_try_class<Accessibility == ncpp::rtti::E_accessibility::PROTECTED, ncpp::rtti::F_sinfo_protected_flag>)                                      \
+                );                                  \
+                NCPP_RTTI_IMPLEMENT_FLAG(                                                                                                   \
+                    NCPP_MA(ncpp::utilities::TF_try_class<Accessibility == ncpp::rtti::E_accessibility::PUBLIC, ncpp::rtti::F_sinfo_public_flag>)                                      \
+                );                                  \
 				\
 			};\
 			\
@@ -731,11 +758,28 @@ namespace ncpp {
                 \
                 static constexpr ncpp::b8 is_function() { return true; }\
                 static constexpr ncpp::b8 is_virtual_function() { return false; }\
+                static constexpr ncpp::b8 is_abstract_function() { return false; }\
                 static constexpr ncpp::b8 is_const_function() { return false; }\
                                                                                                                         \
 				static constexpr ncpp::rtti::E_accessibility accessibility() { return Accessibility; }\
 				\
-                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_robject_member_static_info_flag);                                  \
+                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_sinfo_flag);                        \
+                \
+                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_sinfo_member_flag);                 \
+                \
+                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_sinfo_variable_flag);               \
+                \
+                NCPP_RTTI_IMPLEMENT_FLAG(ncpp::rtti::F_sinfo_static_flag);                 \
+                \
+                NCPP_RTTI_IMPLEMENT_FLAG(                                                                                                   \
+                    NCPP_MA(ncpp::utilities::TF_try_class<Accessibility == ncpp::rtti::E_accessibility::PRIVATE, ncpp::rtti::F_sinfo_private_flag>)                                      \
+                );                                  \
+                NCPP_RTTI_IMPLEMENT_FLAG(                                                                                                   \
+                    NCPP_MA(ncpp::utilities::TF_try_class<Accessibility == ncpp::rtti::E_accessibility::PROTECTED, ncpp::rtti::F_sinfo_protected_flag>)                                      \
+                );                                  \
+                NCPP_RTTI_IMPLEMENT_FLAG(                                                                                                   \
+                    NCPP_MA(ncpp::utilities::TF_try_class<Accessibility == ncpp::rtti::E_accessibility::PUBLIC, ncpp::rtti::F_sinfo_public_flag>)                                      \
+                );                                  \
 				\
 			};
 
@@ -1217,8 +1261,8 @@ namespace ncpp {
 				\
 			NCPP_PUBLIC_KEYWORD\
 				using F_static_infos = ncpp::utilities::TF_template_arg_list<void NCPP_EXPAND(NCPP_FOR_EACH(NCPP_ROBJECT_STATIC_INFOS_STEP __VA_OPT__(,) __VA_ARGS__))>::template TF_remove_heads<1>;\
-                using F_base_static_infos = F_static_infos::template TF_filter<ncpp::rtti::internal::TF_base_static_info_filter_semantic>;                                                                       \
-                using F_member_static_infos = F_static_infos::template TF_filter<ncpp::rtti::internal::TF_member_static_info_filter_semantic>;                                                                       \
+                using F_base_static_infos = F_static_infos::template TF_filter<ncpp::rtti::TA_sinfo_base_filter>;                                                                       \
+                using F_member_static_infos = F_static_infos::template TF_filter<ncpp::rtti::TA_sinfo_member_filter>;                                                                       \
 				\
 				\
 				\
