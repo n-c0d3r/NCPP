@@ -89,7 +89,7 @@ namespace ncpp {
 
 #define NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(ContainerType, AllocatorType, NewAllocatorContainerType, ...) \
     template<__VA_ARGS__>\
-    struct ::ncpp::containers::internal::TF_allocator_binding_helper<ContainerType> {\
+    struct ncpp::containers::internal::TF_allocator_binding_helper<ContainerType> {\
         \
         using F_container = ContainerType;\
         \
