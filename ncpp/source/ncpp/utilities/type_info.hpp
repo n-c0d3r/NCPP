@@ -194,27 +194,24 @@ namespace ncpp {
                 return value;
             }
 
-        }
 
 
-
+            template<typename F__, typename F_char__ = char>
 #ifdef NCPP_RTTI_SECURED_NAME
-        template<typename F__, typename F_char__ = char>
-        NCPP_FORCE_INLINE const F_char__* T_type_fullname() {
-
-            static std::basic_string<F_char__> value = ((F_char__)'_') + (std::basic_stringstream<F_char__>() << T_type_hash_code<F__>).str();
-
-            return value.c_str();
-        }
+            static std::basic_string<F_char__> T_type_fullname_static_value = ((F_char__)'_') + (std::basic_stringstream<F_char__>() << T_type_hash_code<F__>).str();
 #else
+            static std::basic_string<F_char__> T_type_fullname_static_value = (std::basic_stringstream<F_char__>() << internal::type_name<F__>()).str();
+#endif
+
+        }
+
+
+
         template<typename F__, typename F_char__ = char>
         NCPP_FORCE_INLINE const F_char__* T_type_fullname() {
 
-            static std::basic_string<F_char__> value = (std::basic_stringstream<F_char__>() << internal::type_name<F__>()).str();
-
-            return value.c_str();
+            return internal::T_type_fullname_static_value<F__, F_char__>.c_str();
         }
-#endif
 
     }
 
