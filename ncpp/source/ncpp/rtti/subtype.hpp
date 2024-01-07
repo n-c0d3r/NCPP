@@ -93,7 +93,7 @@ namespace ncpp {
         };
 
         template<typename F__, class F_subtype_data__ = F_subtype_data>
-        static inline F_subtype_data__ T_default_subtype_data = F_subtype_data__::template T_default<F__>();
+        static F_subtype_data__ T_default_subtype_data = F_subtype_data__::template T_default<F__>();
 
 
 
