@@ -1,8 +1,8 @@
 #pragma once
 
 /**
- *  @file ncpp/utilities/no_deduct.hpp
- *  @brief Implements no_deduct.
+ *  @file ncpp/utilities/first_template_varg.hpp
+ *  @brief Implements first_template_varg_t.
  */
 
 
@@ -33,9 +33,9 @@
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
-#include <ncpp/utilities/first_template_targ.hpp>
+#include <ncpp/utilities/nth_template_varg.hpp>
 
-#pragma endregion
+#pragma endregion 
 
 
 
@@ -73,8 +73,12 @@ namespace ncpp {
 
 
 
-        template<typename F__>
-        using TF_no_deduct = TF_first_template_targ<F__>;
+        /**
+         *  Finds out the first template argument.
+         *  @param <args__...> template argument list.
+         */
+        template<auto... args__>
+        static constexpr auto T_first_template_varg = T_nth_template_varg<0, args__...>;
 
     }
 

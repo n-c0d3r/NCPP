@@ -34,7 +34,7 @@
 
 #include <ncpp/iostream.hpp>
 #include <ncpp/utilities/is_function.hpp>
-#include <ncpp/utilities/template_arg_list.hpp>
+#include <ncpp/utilities/template_targ_list.hpp>
 #include <ncpp/utilities/function_traits.hpp>
 
 #pragma endregion
@@ -105,7 +105,7 @@ namespace ncpp {
 #define NCPP_RTTI_CREATE_FLAG(Name) struct Name {};
 
 #define NCPP_RTTI_IMPLEMENT_FLAG(Name,...) NCPP_PUBLIC_KEYWORD \
-            static inline ncpp::utilities::TF_template_arg_list<__VA_ARGS__> ___ncpp_rtti_flag_implement_info___(Name) { return {}; }
+            static inline ncpp::utilities::TF_template_targ_list<__VA_ARGS__> ___ncpp_rtti_flag_implement_info___(Name) { return {}; }
 
 #define NCPP_RTTI_REPRESENT_IMPLEMENT(TypeName) ncpp::rtti::internal::TF_rtti_flag_represent_implement<TypeName>
 #define NCPP_RTTI_REPRESENT(TypeName) ncpp::rtti::internal::TF_rtti_flag_represent<TypeName>

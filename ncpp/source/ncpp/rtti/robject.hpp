@@ -37,7 +37,7 @@
 #include <ncpp/utilities/cpass.hpp>
 #include <ncpp/utilities/magic.hpp>
 #include <ncpp/utilities/smart_cast_member.hpp>
-#include <ncpp/utilities/template_arg_list.hpp>
+#include <ncpp/utilities/template_targ_list.hpp>
 #include <ncpp/utilities/try_class.hpp>
 
 #include <ncpp/containers/.hpp>
@@ -346,8 +346,8 @@ namespace ncpp {
 
 
 
-#define NCPP_ROBJECT_WRAP_TYPE(Type) ncpp::utilities::TF_first_template_arg<Type>
-#define NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(Type) ncpp::utilities::TF_nth_template_arg<ncpp::utilities::T_is_function<Type>, Type, NCPP_ROBJECT_WRAP_TYPE(Type)*>
+#define NCPP_ROBJECT_WRAP_TYPE(Type) ncpp::utilities::TF_first_template_targ<Type>
+#define NCPP_ROBJECT_SAFE_FUNC_WRAP_TYPE(Type) ncpp::utilities::TF_nth_template_targ<ncpp::utilities::T_is_function<Type>, Type, NCPP_ROBJECT_WRAP_TYPE(Type)*>
 
 
 
@@ -1312,7 +1312,7 @@ namespace ncpp {
 				\
 				\
 			NCPP_PUBLIC_KEYWORD\
-				using F_sinfos = ncpp::utilities::TF_template_arg_list<void NCPP_EXPAND(NCPP_FOR_EACH(NCPP_ROBJECT_SINFOS_STEP __VA_OPT__(,) __VA_ARGS__))>::template TF_remove_heads<1>;\
+				using F_sinfos = ncpp::utilities::TF_template_targ_list<void NCPP_EXPAND(NCPP_FOR_EACH(NCPP_ROBJECT_SINFOS_STEP __VA_OPT__(,) __VA_ARGS__))>::template TF_remove_heads<1>;\
                 using F_base_sinfos = F_sinfos::template TF_filter<ncpp::rtti::TL_sinfo_base>;                                                                       \
                 using F_member_sinfos = F_sinfos::template TF_filter<ncpp::rtti::TL_sinfo_member>;                                                                       \
 				\

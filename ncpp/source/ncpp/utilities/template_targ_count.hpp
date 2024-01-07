@@ -1,8 +1,8 @@
 #pragma once
 
 /**
- *  @file ncpp/utilities/no_deduct.hpp
- *  @brief Implements no_deduct.
+ *  @file ncpp/utilities/template_targ_count.hpp
+ *  @brief Implements template_targ_count.
  */
 
 
@@ -28,12 +28,6 @@
 ////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/prerequisites.hpp>
-
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-
-#include <ncpp/utilities/first_template_targ.hpp>
 
 #pragma endregion
 
@@ -73,8 +67,12 @@ namespace ncpp {
 
 
 
-        template<typename F__>
-        using TF_no_deduct = TF_first_template_targ<F__>;
+        /**
+         *  Returns the template argument count.
+         *  @param <F_args__...> template argument list.
+         */
+        template<typename... F_args__>
+        static constexpr u16 T_template_targ_count = sizeof...(F_args__);
 
     }
 

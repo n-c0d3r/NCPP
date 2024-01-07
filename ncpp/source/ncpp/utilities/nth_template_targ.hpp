@@ -1,8 +1,8 @@
 #pragma once
 
 /**
- *  @file ncpp/utilities/nth_template_arg.hpp
- *  @brief Implements nth_template_arg.
+ *  @file ncpp/utilities/nth_template_targ.hpp
+ *  @brief Implements nth_template_targ.
  */
 
 

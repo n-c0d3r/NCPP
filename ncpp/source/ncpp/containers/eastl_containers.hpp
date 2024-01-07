@@ -32,7 +32,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <ncpp/utilities/template_arg_list.hpp>
+#include <ncpp/utilities/template_targ_list.hpp>
 
 #include <ncpp/mem/default_allocator.hpp>
 #include <ncpp/mem/general_allocator.hpp>
@@ -710,9 +710,9 @@ namespace ncpp {
         //  tuple to template arg list
         ////////////////////////////////////////////////////////////////////////////////////
         template<typename... F__>
-        struct TF_to_template_arg_list<containers::TF_tuple<F__...>> {
+        struct TF_to_template_targ_list<containers::TF_tuple<F__...>> {
 
-            using F = TF_template_arg_list<F__...>;
+            using F = TF_template_targ_list<F__...>;
 
         };
 

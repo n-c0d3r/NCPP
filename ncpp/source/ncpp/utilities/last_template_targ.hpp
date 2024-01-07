@@ -1,8 +1,8 @@
 #pragma once
 
 /**
- *  @file ncpp/utilities/no_deduct.hpp
- *  @brief Implements no_deduct.
+ *  @file ncpp/utilities/last_template_targ.hpp
+ *  @brief Implements last_template_targ_t.
  */
 
 
@@ -33,7 +33,7 @@
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
-#include <ncpp/utilities/first_template_targ.hpp>
+#include <ncpp/utilities/nth_template_targ.hpp>
 
 #pragma endregion
 
@@ -73,8 +73,12 @@ namespace ncpp {
 
 
 
-        template<typename F__>
-        using TF_no_deduct = TF_first_template_targ<F__>;
+        /**
+         *  Finds out the last template argument.
+         *  @param <F_args__...> template argument list.
+         */
+        template<typename... F_args__>
+        using TF_last_template_targ = TF_nth_template_targ<sizeof...(F_args__) - 1, F_args__...>;
 
     }
 

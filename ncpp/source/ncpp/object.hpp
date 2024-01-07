@@ -90,7 +90,7 @@ namespace ncpp {
         new(                                                 \
             ncpp::internal::T_allocate_object<                         \
                 ObjectType,                                  \
-                ncpp::utilities::TF_nth_template_arg_t<      \
+                ncpp::utilities::TF_nth_template_targ_t<      \
                     !std::is_same_v<decltype(AllocatorPointer), int>, \
                     ncpp::mem::F_object_allocator,           \
                     std::remove_pointer_t<decltype(AllocatorPointer)>  \
@@ -104,7 +104,7 @@ namespace ncpp {
         ncpp::internal::T_deconstruct_object<std::remove_pointer_t<decltype(ObjectPointer)>>(ObjectPointer);        \
         ncpp::internal::T_deallocate_object<                         \
             std::remove_pointer_t<decltype(ObjectPointer)>,                                  \
-            ncpp::utilities::TF_nth_template_arg_t<      \
+            ncpp::utilities::TF_nth_template_targ_t<      \
                 !std::is_same_v<decltype(AllocatorPointer), int>, \
                 ncpp::mem::F_object_allocator,           \
                 std::remove_pointer_t<decltype(AllocatorPointer)>  \

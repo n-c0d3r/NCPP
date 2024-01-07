@@ -224,7 +224,7 @@ namespace ncpp {
             template<typename F_robject__>
             struct TF_safe_robject_sinfos_helper_internal<false, F_robject__> {
 
-                using F = utilities::TF_template_arg_list<>;
+                using F = utilities::TF_template_targ_list<>;
 
             };
             template<typename F_robject__>

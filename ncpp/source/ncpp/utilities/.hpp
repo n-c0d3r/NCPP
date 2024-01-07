@@ -54,11 +54,17 @@ namespace ncpp {
 
 #include <ncpp/template_tricks.hpp>
 
-#include <ncpp/utilities/nth_template_arg.hpp>
-#include <ncpp/utilities/first_template_arg.hpp>
-#include <ncpp/utilities/last_template_arg.hpp>
-#include <ncpp/utilities/template_arg_count.hpp>
-#include <ncpp/utilities/template_arg_list.hpp>
+#include <ncpp/utilities/nth_template_targ.hpp>
+#include <ncpp/utilities/first_template_targ.hpp>
+#include <ncpp/utilities/last_template_targ.hpp>
+#include <ncpp/utilities/template_targ_count.hpp>
+#include <ncpp/utilities/template_targ_list.hpp>
+
+#include <ncpp/utilities/nth_template_varg.hpp>
+#include <ncpp/utilities/first_template_varg.hpp>
+#include <ncpp/utilities/last_template_varg.hpp>
+#include <ncpp/utilities/template_varg_count.hpp>
+#include <ncpp/utilities/template_varg_list.hpp>
 
 #include <ncpp/utilities/no_deduct.hpp>
 

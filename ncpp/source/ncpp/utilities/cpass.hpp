@@ -34,7 +34,7 @@
 ////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/utilities/sizeof.hpp>
-#include <ncpp/utilities/nth_template_arg.hpp>
+#include <ncpp/utilities/nth_template_targ.hpp>
 #include <ncpp/containers/view.hpp>
 
 #pragma endregion
@@ -64,7 +64,7 @@ namespace ncpp {
             template<typename F__, bool is_always_mutable__ = false>
             struct TF_cpass_helper {
 
-                using F = TF_nth_template_arg<
+                using F = TF_nth_template_targ<
                     (
                         (T_sizeof<F__> > T_sizeof<void *>)
                         + !std::is_same_v<containers::TF_container_allocator<F__>, void>

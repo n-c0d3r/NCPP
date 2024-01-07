@@ -33,7 +33,7 @@
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
-#include <ncpp/utilities/template_arg_list.hpp>
+#include <ncpp/utilities/template_targ_list.hpp>
 #include <ncpp/utilities/sizeof.hpp>
 #include <ncpp/utilities/cpass.hpp>
 
@@ -126,11 +126,11 @@ namespace ncpp {
 
 
 #define NCPP_CONTAINERS_PACK_DEFINE_LARGE_PACK_ELEMENT_GETTER_INTERNAL(Index, Name) \
-            NCPP_FORCE_INLINE utilities::TF_nth_template_arg<Index, F__...>& Name() {\
+            NCPP_FORCE_INLINE utilities::TF_nth_template_targ<Index, F__...>& Name() {\
                 \
                 return eastl::get<Index>((eastl::tuple<F__...>&)*this);\
             }\
-            NCPP_FORCE_INLINE utilities::TF_cpass<utilities::TF_nth_template_arg<Index, F__...>> Name() const {\
+            NCPP_FORCE_INLINE utilities::TF_cpass<utilities::TF_nth_template_targ<Index, F__...>> Name() const {\
                 \
                 return eastl::get<Index>((const eastl::tuple<F__...>&)*this);\
             }
@@ -258,9 +258,9 @@ namespace ncpp {
             template<typename... F__>
             struct TF_pack_helper {
 
-                using F = utilities::TF_nth_template_arg<
+                using F = utilities::TF_nth_template_targ<
                     (sizeof...(F__) > 1),
-                    utilities::TF_first_template_arg<F__...>,
+                    utilities::TF_first_template_targ<F__...>,
                     TF_large_pack<F__...>
                 >;;
 
@@ -421,9 +421,9 @@ namespace ncpp {
     namespace utilities {
 
         template<typename... F__>
-        struct TF_to_template_arg_list<containers::TF_large_pack<F__...>> {
+        struct TF_to_template_targ_list<containers::TF_large_pack<F__...>> {
 
-            using F = TF_template_arg_list<F__...>;
+            using F = TF_template_targ_list<F__...>;
 
         };
 
