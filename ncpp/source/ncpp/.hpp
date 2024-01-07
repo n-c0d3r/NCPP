@@ -108,22 +108,22 @@ namespace ncpp {
 
 #ifdef _MSC_VER
 #define NCPP_ENTRY_POINT(...) \
-    extern ncpp::i32 abstract_main___ncpp_internal___(ncpp::containers::TV_vector<ncpp::containers::G_wstring> args);                          \
+    extern ncpp::i32 ___abstract_main___ncpp_internal___(ncpp::containers::TV_vector<ncpp::containers::G_wstring> args);                          \
     int wmain(int argc, wchar_t* argv[]) {\
         ncpp::containers::TG_vector<ncpp::containers::G_wstring> args(argc); \
         for(ncpp::i32 i = 0; i < argc; ++i)                                 \
-            args[i] = ncpp::containers::to_wstring(argv[i]);   \
-        abstract_main___ncpp_internal___(args);\
+            args[i] = ncpp::containers::G_to_wstring(argv[i]);   \
+        ___abstract_main___ncpp_internal___(args);\
     }\
-    ncpp::i32 abstract_main___ncpp_internal___(ncpp::containers::TV_vector<ncpp::containers::G_wstring> __VA_ARGS__)
+    ncpp::i32 ___abstract_main___ncpp_internal___(ncpp::containers::TV_vector<ncpp::containers::G_wstring> __VA_ARGS__)
 #elif defined(__GNUC__) || defined(__clang__)
 #define NCPP_ENTRY_POINT(...) \
-    extern ncpp::i32 abstract_main___ncpp_internal___(ncpp::containers::TV_vector<ncpp::containers::G_wstring> args);                          \
+    extern ncpp::i32 ___abstract_main___ncpp_internal___(ncpp::containers::TV_vector<ncpp::containers::G_wstring> args);                          \
     int main(int argc, char* argv[]) {\
         ncpp::containers::TG_vector<ncpp::containers::G_wstring> args(argc); \
         for(ncpp::i32 i = 0; i < argc; ++i)                                 \
-            args[i] = ncpp::containers::to_wstring(argv[i]);   \
-        abstract_main___ncpp_internal___(args);\
+            args[i] = ncpp::containers::G_to_wstring(argv[i]);   \
+        ___abstract_main___ncpp_internal___(args);\
     }\
-    ncpp::i32 abstract_main___ncpp_internal___(ncpp::containers::TV_vector<ncpp::containers::G_wstring> __VA_ARGS__)
+    ncpp::i32 ___abstract_main___ncpp_internal___(ncpp::containers::TV_vector<ncpp::containers::G_wstring> __VA_ARGS__)
 #endif

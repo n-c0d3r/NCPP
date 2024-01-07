@@ -94,7 +94,7 @@ namespace ncpp {
 
         namespace internal {
 
-            struct F___ncpp_large_view_flag___ {};
+            struct F_large_view_flag {};
 
 
 
@@ -136,7 +136,7 @@ namespace ncpp {
         template<typename F__>
         concept T_is_large_view = requires {
 
-            typename std::remove_const_t<std::remove_reference_t<F__>>::F___ncpp_large_view_flag___;
+            typename std::remove_const_t<std::remove_reference_t<F__>>::F_large_view_flag;
 
         };
         template<typename F__>
@@ -185,7 +185,7 @@ namespace ncpp {
             using F_container = F_container__;
             using F_allocator = TF_container_allocator<F_container__>;
 
-            using F___ncpp_large_view_flag___ = containers::internal::F___ncpp_large_view_flag___;
+            using F_large_view_flag = containers::internal::F_large_view_flag;
 
 
 
