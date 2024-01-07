@@ -134,4 +134,4 @@ namespace ncpp {
 
 #define NCPP_DEFINE_SINGLETON(...) \
             template<>\
-            __VA_ARGS__* TI_singleton<__VA_ARGS__>::instance_ps = 0
+            __VA_ARGS__* ncpp::utilities::TI_singleton<__VA_ARGS__>::instance_ps = 0
