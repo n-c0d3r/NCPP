@@ -17,3 +17,5 @@ gitignores
 .DS_Store
 
 .vscode
+
+.idea

@@ -427,8 +427,8 @@ struct NCPP_PP_CAT(NCPP_STATIC_WARNING,__LINE__) { \
 #define NCPP_DISABLE_ALL_WARNINGS_POP  _Pragma("clang diagnostic pop")
 #elif defined(__GNUC__)
 // For GCC
-#define NCPP_DISABLE_ALL_WARNINGS_PUSH _Pragma("GCC diagnostic push") _Pragma("GCC diagnostic ignored \"-Wall\"") _Pragma("GCC diagnostic ignored \"-Wextra\"")
-#define NCPP_DISABLE_ALL_WARNINGS_POP  _Pragma("GCC diagnostic pop")
+#define NCPP_DISABLE_ALL_WARNINGS_PUSH //_Pragma("GCC diagnostic push") _Pragma("GCC diagnostic ignored \"-Wall\"") _Pragma("GCC diagnostic ignored \"-Wextra\"")
+#define NCPP_DISABLE_ALL_WARNINGS_POP  //_Pragma("GCC diagnostic pop")
 #else
     #define NCPP_DISABLE_ALL_WARNINGS_PUSH
     #define NCPP_DISABLE_ALL_WARNINGS_POP
