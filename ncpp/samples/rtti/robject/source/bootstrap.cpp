@@ -137,8 +137,8 @@ class A : public B, public C, public TD<i32> {
         ),
 
         PUBLIC(
-            (i32, b8),
-            i32_b8_tuple
+            (i32, b8, F_string),
+            i32_b8_string_tuple
         ),
         PUBLIC(
             (i32, b8)(f32, f64),
