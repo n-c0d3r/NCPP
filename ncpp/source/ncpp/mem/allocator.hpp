@@ -244,8 +244,10 @@ NCPP_DISABLE_ALL_WARNINGS_POP
                     const char* name = 0;
 
 NCPP_DISABLE_ALL_WARNINGS_PUSH
+#if !defined(__GNUC__) || defined(__clang__)
                     if(this)
                         name = name_;
+#endif
 NCPP_DISABLE_ALL_WARNINGS_POP
 
 					F_alloc_debug_info debug_info = {
@@ -293,8 +295,10 @@ NCPP_DISABLE_ALL_WARNINGS_POP
                     const char* name = 0;
 
 NCPP_DISABLE_ALL_WARNINGS_PUSH
+#if !defined(__GNUC__) || defined(__clang__)
                     if(this)
                         name = name_;
+#endif
 NCPP_DISABLE_ALL_WARNINGS_POP
 
                     F_alloc_debug_info debug_info = {
@@ -360,8 +364,10 @@ NCPP_DISABLE_ALL_WARNINGS_POP
                     const char* name = 0;
 
 NCPP_DISABLE_ALL_WARNINGS_PUSH
+#if !defined(__GNUC__) || defined(__clang__)
                     if(this)
                         name = name_;
+#endif
 NCPP_DISABLE_ALL_WARNINGS_POP
 
                     F_alloc_debug_info debug_info = {
@@ -409,8 +415,10 @@ NCPP_DISABLE_ALL_WARNINGS_POP
                     const char* name = 0;
 
 NCPP_DISABLE_ALL_WARNINGS_PUSH
+#if !defined(__GNUC__) || defined(__clang__)
                     if(this)
                         name = name_;
+#endif
 NCPP_DISABLE_ALL_WARNINGS_POP
 
                     F_alloc_debug_info debug_info = {
