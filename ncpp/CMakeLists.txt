@@ -21,7 +21,6 @@ include(NCPP/Utilities/SIMDCompilerFlags)
 
 include(NCPP/PrerequisiteMacros)
 include(NCPP/TemplateTricks)
-include(NCPP/MagicMacros)
 
 if(NOT NCPP_LITE)
     include(NCPP/RTTIMacros)
