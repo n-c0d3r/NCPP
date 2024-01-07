@@ -59,6 +59,7 @@ namespace ncpp {
 #include <ncpp/utilities/last_template_targ.hpp>
 #include <ncpp/utilities/template_targ_count.hpp>
 #include <ncpp/utilities/template_targ_list.hpp>
+#include <ncpp/utilities/template_targ_tree.hpp>
 
 #include <ncpp/utilities/nth_template_varg.hpp>
 #include <ncpp/utilities/first_template_varg.hpp>

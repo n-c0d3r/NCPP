@@ -428,9 +428,9 @@ namespace ncpp {
             >
             {
 
-                using F_filted_list = F_list__::template TF_filter_single_internal_varg<TF_first_filter_semantics__>;
+                using F_filtered_list = F_list__::template TF_filter_single_internal_varg<TF_first_filter_semantics__>;
                 using F = typename TF_filter_multiple_semantics_helper_internal_varg<
-                    F_filted_list,
+                    F_filtered_list,
                     TF_rest_multiple_filter_semantics__...
                 >::F;
 
@@ -504,9 +504,9 @@ namespace ncpp {
             >
             {
 
-                using F_filted_list = F_list__::template TF_invert_filter_single_internal_varg<TF_first_invert_filter_semantics__>;
+                using F_filtered_list = F_list__::template TF_invert_filter_single_internal_varg<TF_first_invert_filter_semantics__>;
                 using F = typename TF_invert_filter_multiple_semantics_helper_internal_varg<
-                    F_filted_list,
+                    F_filtered_list,
                     TF_rest_multiple_invert_filter_semantics__...
                 >::F;
 
