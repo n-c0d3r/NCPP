@@ -69,7 +69,7 @@ NCPP_MAGIC((F__)(F__), TD<F__>::dd2) {
 }
 
 template<typename F__>
-NCPP_MAGIC((F__), TD<F__>::dd3);
+NCPP_MAGIC((F__), TD<F__>::dd3) = 12;
 template<typename F__>
 NCPP_MAGIC((F__)[4], TD<F__>::dd4);
 
@@ -194,7 +194,7 @@ struct F_customm_reflector {
 
         cout << "user pre reflect member: "
             << T_cout_value(F_member_sinfo__::name())
-            << " (static pointer: "
+            << " (static value: "
             << T_cout_value(F_member_sinfo__::static_get())
             << ")"
             << " (accessibility: "
@@ -211,7 +211,7 @@ struct F_customm_reflector {
 
         cout << "user post reflect member: "
             << T_cout_value(F_member_sinfo__::name())
-            << " (static pointer: "
+            << " (static value: "
             << T_cout_value(F_member_sinfo__::static_get())
             << ")"
             << " (accessibility: "
