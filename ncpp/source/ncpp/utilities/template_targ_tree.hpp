@@ -80,6 +80,15 @@ namespace ncpp {
             template<template<typename F_in__> class... TF_multiple_filter_semantics__>
             using TF_filter = F_this;
 
+            template<template<typename F_in__> class... TF_multiple_filter_semantics__>
+            using TF_filter_self = F_this;
+
+            template<template<typename F_in__> class... TF_multiple_invert_filter_semantics__>
+            using TF_invert_filter = F_this;
+
+            template<template<typename F_in__> class... TF_multiple_invert_filter_semantics__>
+            using TF_invert_filter_self = F_this;
+
         };
 
 
@@ -162,6 +171,134 @@ namespace ncpp {
                 F_this,
                 TF_multiple_filter_semantics__...
             >::F;
+
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+
+        private:
+            template<template<typename F_in__> class... TF_multiple_filter_semantics__>
+            struct TF_filter_self_multiple_semantics_helper_internal_targ
+            {
+
+                using F_filtered_arg_list = TF_template_targ_list<F_arg>::template TF_filter<TF_multiple_filter_semantics__...>;
+
+                using F_filtered_list = F_filtered_arg_list::template TF_combine<F_childs>;
+
+                using F_filtered_tree = F_filtered_list::template TF_apply<TF_template_targ_tree>;
+
+                using F = TF_nth_template_targ<
+                    (F_filtered_arg_list::count == 1),
+                    TF_template_targ_tree<>,
+                    F_filtered_tree
+                >;
+
+            };
+
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+
+        public:
+            template<template<typename F_in__> class... TF_multiple_filter_semantics__>
+            using TF_filter_self = typename TF_filter_self_multiple_semantics_helper_internal_targ<TF_multiple_filter_semantics__...>::F;
+
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+
+        private:
+            template<typename F_tree__, template<typename F_in__> class... TF_multiple_invert_filter_semantics__>
+            struct TF_invert_filter_multiple_semantics_helper_internal_targ;
+            template<typename F_tree__>
+            struct TF_invert_filter_multiple_semantics_helper_internal_targ<F_tree__> {
+
+                using F = F_tree__;
+
+            };
+            template<
+                typename F_tree__,
+                template<typename F_in__> class TF_first_invert_filter_semantics__,
+                template<typename F_in__> class... TF_rest_multiple_invert_filter_semantics__
+            >
+            struct TF_invert_filter_multiple_semantics_helper_internal_targ<
+                F_tree__,
+                TF_first_invert_filter_semantics__,
+                TF_rest_multiple_invert_filter_semantics__...
+            >
+            {
+
+                template<typename F_child__>
+                struct TL_valid_child {
+
+                    static constexpr b8 is_valid = F_child__::is_valid;
+
+                };
+
+                template<typename F_child__>
+                using TF_invert_filter_child = F_child__::template TF_invert_filter<TF_first_invert_filter_semantics__>;
+
+                using F_invert_filtered_arg_list = TF_template_targ_list<F_arg>::template TF_invert_filter<TF_first_invert_filter_semantics__>;
+                using F_invert_filtered_child_list = TF_template_targ_list<TF_invert_filter_child<F_childs__>...>::template TF_invert_filter<TL_valid_child>;
+
+                using F_invert_filtered_list = F_invert_filtered_arg_list::template TF_combine<F_invert_filtered_child_list>;
+
+                using F_valid_invert_filtered_tree = F_invert_filtered_list::template TF_apply<TF_template_targ_tree>;
+
+                using F_invert_filtered_tree = TF_nth_template_targ<
+                    (F_invert_filtered_arg_list::count == 1),
+                    TF_template_targ_tree<>,
+                    F_valid_invert_filtered_tree
+                >;
+
+                using F = typename TF_invert_filter_multiple_semantics_helper_internal_targ<
+                    F_invert_filtered_tree,
+                    TF_rest_multiple_invert_filter_semantics__...
+                >::F;
+
+            };
+
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+
+        public:
+            template<template<typename F_in__> class... TF_multiple_invert_filter_semantics__>
+            using TF_invert_filter = typename TF_invert_filter_multiple_semantics_helper_internal_targ<
+                F_this,
+                TF_multiple_invert_filter_semantics__...
+            >::F;
+
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+
+        private:
+            template<template<typename F_in__> class... TF_multiple_invert_filter_semantics__>
+            struct TF_invert_filter_self_multiple_semantics_helper_internal_targ
+            {
+
+                using F_invert_filtered_arg_list = TF_template_targ_list<F_arg>::template TF_invert_filter<TF_multiple_invert_filter_semantics__...>;
+
+                using F_invert_filtered_list = F_invert_filtered_arg_list::template TF_combine<F_childs>;
+
+                using F_invert_filtered_tree = F_invert_filtered_list::template TF_apply<TF_template_targ_tree>;
+
+                using F = TF_nth_template_targ<
+                    (F_invert_filtered_arg_list::count == 1),
+                    TF_template_targ_tree<>,
+                    F_invert_filtered_tree
+                >;
+
+            };
+
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+
+        public:
+            template<template<typename F_in__> class... TF_multiple_invert_filter_semantics__>
+            using TF_invert_filter_self = typename TF_invert_filter_self_multiple_semantics_helper_internal_targ<TF_multiple_invert_filter_semantics__...>::F;
 
         };
 
