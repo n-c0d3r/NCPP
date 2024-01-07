@@ -34,6 +34,7 @@
 ////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/containers/pack.hpp>
+#include <ncpp/magic_macros.hpp>
 
 #pragma endregion
 
@@ -50,6 +51,22 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+#define NCPP_MAGIC_PARSE_NAME___SEPARATE_PARTS___EXPAND___INTERNAL(...) __VA_ARGS__,
+#define NCPP_MAGIC_PARSE_NAME___SEPARATE_PARTS___INTERNAL(MagicName) NCPP_EXPAND(NCPP_MAGIC_PARSE_NAME___SEPARATE_PARTS___EXPAND___INTERNAL MagicName)
+#define NCPP_MAGIC_PARSE_NAME___LET_FIRST_PART___EXPAND___INTERNAL(FirstPart, SecondPart,...) SecondPart
+#define NCPP_MAGIC_PARSE_NAME___LET_FIRST_PART___INTERNAL(...) NCPP_EXPAND(NCPP_MAGIC_PARSE_NAME___LET_FIRST_PART___EXPAND___INTERNAL(__VA_ARGS__))
+
+#define NCPP_MAGIC_PARSE_NAME(MagicName) NCPP_MAGIC_PARSE_NAME___LET_FIRST_PART___INTERNAL(NCPP_MAGIC_PARSE_NAME___SEPARATE_PARTS___INTERNAL(MagicName), MagicName)
+
+#define NCPP_MAGIC_NAME___SEPARATE_PARTS___EXPAND___INTERNAL(...) __VA_ARGS__,
+#define NCPP_MAGIC_NAME___SEPARATE_PARTS___INTERNAL(MagicName) NCPP_EXPAND(NCPP_MAGIC_NAME___SEPARATE_PARTS___EXPAND___INTERNAL MagicName)
+#define NCPP_MAGIC_NAME___LET_FIRST_PART___EXPAND___INTERNAL(FirstPart, SecondPart,...) __VA_OPT__(FirstPart)SecondPart
+#define NCPP_MAGIC_NAME___LET_FIRST_PART___INTERNAL(...) NCPP_EXPAND(NCPP_MAGIC_NAME___LET_FIRST_PART___EXPAND___INTERNAL(__VA_ARGS__))
+
+#define NCPP_MAGIC_NAME(MagicName) NCPP_MAGIC_NAME___LET_FIRST_PART___INTERNAL(NCPP_MAGIC_NAME___SEPARATE_PARTS___INTERNAL(MagicName), MagicName)
 
 
 

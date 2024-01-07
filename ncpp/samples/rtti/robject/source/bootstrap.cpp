@@ -111,7 +111,7 @@ class A : public B, public C, public TD<i32> {
 
 		PUBLIC(
             (i32),
-            i
+             i
         ),
 		PUBLIC(
             ()(),

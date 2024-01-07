@@ -303,19 +303,19 @@ namespace ncpp {
 
 
 
-#define NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberType, MemberName, IsVirtualFunction, IsConstFunction, LowKeywords, LowImplement) \
+#define NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberMagicType, MemberMagicName, MemberName, IsVirtualFunction, IsConstFunction, LowKeywords, LowImplement) \
             struct ___F_##MemberName##___ncpp_member_##IsVirtualFunction##_##IsConstFunction##___;\
             friend struct ___F_##MemberName##___ncpp_member_##IsVirtualFunction##_##IsConstFunction##___;\
-            struct ___F_##MemberName##___ncpp_member_##IsVirtualFunction##_##IsConstFunction##___ { LowKeywords NCPP_MAGIC(MemberType, member) LowImplement; };
+            struct ___F_##MemberName##___ncpp_member_##IsVirtualFunction##_##IsConstFunction##___ { LowKeywords NCPP_MAGIC(MemberMagicType, (MemberMagicName)) LowImplement; };
 
-#define NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE(MemberName, IsVirtualFunction, IsConstFunction) ncpp::utilities::TF_smart_cast_member<decltype(&___F_##MemberName##___ncpp_member_##IsVirtualFunction##_##IsConstFunction##___::member)>
+#define NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE(MemberName, IsVirtualFunction, IsConstFunction) ncpp::utilities::TF_smart_cast_member<decltype(&___F_##MemberName##___ncpp_member_##IsVirtualFunction##_##IsConstFunction##___::MemberName)>
 
-#define NCPP_ROBJECT_DECLARE_STATIC_MEMBER_TYPE_WRAPPER(MemberType, MemberName) \
+#define NCPP_ROBJECT_DECLARE_STATIC_MEMBER_TYPE_WRAPPER(MemberMagicType, MemberMagicName, MemberName) \
             struct ___F_##MemberName##___ncpp_member_static___;\
             friend struct ___F_##MemberName##___ncpp_member_static___;\
-            struct ___F_##MemberName##___ncpp_member_static___ { NCPP_MAGIC(MemberType, member); };
+            struct ___F_##MemberName##___ncpp_member_static___ { NCPP_MAGIC(MemberMagicType, (MemberMagicName)); };
 
-#define NCPP_ROBJECT_WRAPPER_TO_STATIC_MEMBER_TYPE(MemberName) ncpp::utilities::TF_smart_cast_member<decltype(&___F_##MemberName##___ncpp_member_static___::member)>
+#define NCPP_ROBJECT_WRAPPER_TO_STATIC_MEMBER_TYPE(MemberName) ncpp::utilities::TF_smart_cast_member<decltype(&___F_##MemberName##___ncpp_member_static___::MemberName)>
 
 
 
@@ -354,11 +354,11 @@ namespace ncpp {
 
 
 
-#define NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_ROBJECT_MEMBER_BODY_OVERRIDER_##Overrider)(MemberType, MemberName);
-#define NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_ROBJECT_MEMBER_REFLECT_OVERRIDER_##Overrider)(MemberType, MemberName);
+#define NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName) NCPP_EXPAND(NCPP_ROBJECT_MEMBER_BODY_OVERRIDER_##Overrider)(MemberMagicType, MemberMagicName, MemberTypeParams, MemberName);
+#define NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName) NCPP_EXPAND(NCPP_ROBJECT_MEMBER_REFLECT_OVERRIDER_##Overrider)(MemberMagicType, MemberMagicName, MemberTypeParams, MemberName);
 
 #define NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_ROBJECT_MEMBER_OVERRIDER_KEYWORDS_##Overrider)()
-#define NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_ROBJECT_MEMBER_OVERRIDER_IMPLEMENT_##Overrider)(MemberType, MemberName)
+#define NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName) NCPP_EXPAND(NCPP_ROBJECT_MEMBER_OVERRIDER_IMPLEMENT_##Overrider)(MemberMagicType, MemberMagicName, MemberTypeParams, MemberName)
 
 
 
@@ -451,7 +451,7 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_BODY_MEMBER_SINFO(MemberType, MemberName, IsVirtualFunction, IsConstFunction, IsAbstractFunction, Accessibility) \
+#define NCPP_ROBJECT_BODY_MEMBER_SINFO(MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, IsVirtualFunction, IsConstFunction, IsAbstractFunction, Accessibility) \
 			template<typename F_robject__, typename F_member__, bool is_function__, bool is_virtual__, bool is_const__>\
 			struct ___TF_##MemberName##___ncpp_sinfo___;                                                       \
             template<typename F_robject__, typename F_member__, bool is_function__, bool is_virtual__, bool is_const__>\
@@ -474,7 +474,7 @@ namespace ncpp {
 					if constexpr (ncpp::rtti::secured_name) return ncpp::containers::T_to_string<char, typename F_rtti_traits::F_allocator>(id());\
 					else return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, ""); \
 				}\
-                static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
+                static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberMagicType, ""); }\
 				static constexpr ncpp::u64 id() { return utilities::T_type_hash_code<___TF_##MemberName##___ncpp_sinfo___>; }\
 				\
 				static constexpr ncpp::sz offset() { return (ncpp::sz)reinterpret_cast<ncpp::sz>(&(reinterpret_cast<F_robject__*>(0)->MemberName)); }\
@@ -530,7 +530,7 @@ namespace ncpp {
 					if constexpr (ncpp::rtti::secured_name) return ncpp::containers::T_to_string<char, typename F_rtti_traits::F_allocator>(id());\
 					else return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, ""); \
 				}\
-                static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
+                static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberMagicType, ""); }\
 				static constexpr ncpp::u64 id() { return utilities::T_type_hash_code<___TF_##MemberName##___ncpp_sinfo___>; }\
 				\
 				static constexpr ncpp::sz offset() { return 0; }\
@@ -578,95 +578,127 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_BODY_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName, Accessibility,...) \
-            NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberType, MemberName, false, false,,);                                                 \
-			NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberType, MemberName) NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement);\
-            NCPP_ROBJECT_BODY_MEMBER_SINFO(MemberType, MemberName, false, false, false, Accessibility);\
-			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);
+#define NCPP_ROBJECT_BODY_MEMBER_IMPL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, Accessibility,...) \
+            NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberMagicType, MemberMagicName, MemberName, false, false,,);                                                 \
+			NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberMagicType, (MemberMagicName)) NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName) NCPP_EXPAND(NCPP_MA Implement);\
+            NCPP_ROBJECT_BODY_MEMBER_SINFO(MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, false, false, false, Accessibility);\
+			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName);
 
-#define NCPP_ROBJECT_BODY_BASE_PRIVATE(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PRIVATE __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_BODY_BASE_PROTECTED(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PROTECTED __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_BODY_BASE_PUBLIC(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PUBLIC_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PUBLIC __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_MEMBER_IMPL2(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, Accessibility,...) \
+            NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_IMPL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, Accessibility __VA_OPT__(,) __VA_ARGS__))
 
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
+#define NCPP_ROBJECT_BODY_MEMBER(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberName, Accessibility,...) \
+            NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_IMPL2(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, (NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE (MemberName, false, false)), MemberName, Accessibility __VA_OPT__(,) __VA_ARGS__))
 
-#define NCPP_ROBJECT_BODY_MEMBER_CONST(Overrider, Keywords, Implement, MemberType, MemberName, Accessibility,...) \
-            NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberType, MemberName, false, true,,);                                                 \
-			NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberType, MemberName) const NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement);\
-            NCPP_ROBJECT_BODY_MEMBER_SINFO(MemberType, MemberName, false, true, false, Accessibility);\
-			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);
-
-#define NCPP_ROBJECT_BODY_BASE_PRIVATE_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_CONST(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PRIVATE __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_BODY_BASE_PROTECTED_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_CONST(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PROTECTED __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_BODY_BASE_PUBLIC_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PUBLIC_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_CONST(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PUBLIC __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PRIVATE(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName), ncpp::rtti::E_accessibility::PRIVATE __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PROTECTED(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName), ncpp::rtti::E_accessibility::PROTECTED __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PUBLIC(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_PUBLIC_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName), ncpp::rtti::E_accessibility::PUBLIC __VA_OPT__(,) __VA_ARGS__))
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_BODY_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName, Accessibility,...) \
-            NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberType, MemberName, true, false, virtual,);                                                 \
-			virtual NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberType, MemberName) NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement);\
-            NCPP_ROBJECT_BODY_MEMBER_SINFO(MemberType, MemberName, true, false, false, Accessibility);\
-			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);
+#define NCPP_ROBJECT_BODY_MEMBER_CONST_IMPL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, Accessibility,...) \
+            NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberMagicType, MemberMagicName, MemberName, false, true,,);                                                 \
+			NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberMagicType, (MemberMagicName)) const NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName) NCPP_EXPAND(NCPP_MA Implement);\
+            NCPP_ROBJECT_BODY_MEMBER_SINFO(MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, false, true, false, Accessibility);\
+			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName);
 
-#define NCPP_ROBJECT_BODY_BASE_PRIVATE_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PRIVATE __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_BODY_BASE_PROTECTED_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PROTECTED __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_BODY_BASE_PUBLIC_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PUBLIC_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PUBLIC __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_MEMBER_CONST_IMPL2(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, Accessibility,...) \
+            NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_CONST_IMPL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, Accessibility __VA_OPT__(,) __VA_ARGS__))
+
+#define NCPP_ROBJECT_BODY_MEMBER_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberName, Accessibility,...) \
+            NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_CONST_IMPL2(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, (NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE (MemberName, false, true)), MemberName, Accessibility __VA_OPT__(,) __VA_ARGS__))
+
+#define NCPP_ROBJECT_BODY_BASE_PRIVATE_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_CONST(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName), ncpp::rtti::E_accessibility::PRIVATE __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PROTECTED_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_CONST(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName), ncpp::rtti::E_accessibility::PROTECTED __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PUBLIC_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_PUBLIC_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_CONST(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName), ncpp::rtti::E_accessibility::PUBLIC __VA_OPT__(,) __VA_ARGS__))
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName, Accessibility,...)\
-            NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberType, MemberName, true, true, virtual,);                                                 \
-			virtual NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberType, MemberName) const NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement);\
-            NCPP_ROBJECT_BODY_MEMBER_SINFO(MemberType, MemberName, true, true, false, Accessibility);\
-			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);
+#define NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_IMPL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, Accessibility,...) \
+            NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberMagicType, MemberMagicName, MemberName, true, false,,);                                                 \
+			virtual NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberMagicType, (MemberMagicName)) NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName) NCPP_EXPAND(NCPP_MA Implement);\
+            NCPP_ROBJECT_BODY_MEMBER_SINFO(MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, true, false, false, Accessibility);\
+			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName);
 
-#define NCPP_ROBJECT_BODY_BASE_PRIVATE_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PRIVATE __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_BODY_BASE_PROTECTED_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PROTECTED __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_BODY_BASE_PUBLIC_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PUBLIC_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PUBLIC __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_IMPL2(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, Accessibility,...) \
+            NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_IMPL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, Accessibility __VA_OPT__(,) __VA_ARGS__))
+
+#define NCPP_ROBJECT_BODY_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberName, Accessibility,...) \
+            NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_IMPL2(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, (NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE (MemberName, true, false)), MemberName, Accessibility __VA_OPT__(,) __VA_ARGS__))
+
+#define NCPP_ROBJECT_BODY_BASE_PRIVATE_VIRTUAL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName), ncpp::rtti::E_accessibility::PRIVATE __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PROTECTED_VIRTUAL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName), ncpp::rtti::E_accessibility::PROTECTED __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PUBLIC_VIRTUAL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_PUBLIC_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName), ncpp::rtti::E_accessibility::PUBLIC __VA_OPT__(,) __VA_ARGS__))
+
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+
+#define NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_CONST_IMPL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, Accessibility,...) \
+            NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberMagicType, MemberMagicName, MemberName, true, true,,);                                                 \
+			virtual NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberMagicType, (MemberMagicName)) const NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName) NCPP_EXPAND(NCPP_MA Implement);\
+            NCPP_ROBJECT_BODY_MEMBER_SINFO(MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, true, true, false, Accessibility);\
+			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName);
+
+#define NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_CONST_IMPL2(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, Accessibility,...) \
+            NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_CONST_IMPL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, Accessibility __VA_OPT__(,) __VA_ARGS__))
+
+#define NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberName, Accessibility,...) \
+            NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_CONST_IMPL2(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, (NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE (MemberName, true, true)), MemberName, Accessibility __VA_OPT__(,) __VA_ARGS__))
+
+#define NCPP_ROBJECT_BODY_BASE_PRIVATE_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName), ncpp::rtti::E_accessibility::PRIVATE __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PROTECTED_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName), ncpp::rtti::E_accessibility::PROTECTED __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PUBLIC_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_PUBLIC_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName), ncpp::rtti::E_accessibility::PUBLIC __VA_OPT__(,) __VA_ARGS__))
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_BODY_MEMBER_ABSTRACT(Overrider, Keywords, Implement, MemberType, MemberName, Accessibility,...) \
-            NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberType, MemberName, true, false, virtual,);                                                 \
-			virtual NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberType, MemberName) NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement) = 0;\
-            NCPP_ROBJECT_BODY_MEMBER_SINFO(MemberType, MemberName, true, false, true, Accessibility);\
-			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);
+#define NCPP_ROBJECT_BODY_MEMBER_ABSTRACT_IMPL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, Accessibility,...) \
+            NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberMagicType, MemberMagicName, MemberName, true, false,,);                                                 \
+			virtual NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberMagicType, (MemberMagicName)) NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName) NCPP_EXPAND(NCPP_MA Implement) = 0;\
+            NCPP_ROBJECT_BODY_MEMBER_SINFO(MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, true, false, true, Accessibility);\
+			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName);
+
+#define NCPP_ROBJECT_BODY_MEMBER_ABSTRACT_IMPL2(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, Accessibility,...) \
+            NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_ABSTRACT_IMPL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, Accessibility __VA_OPT__(,) __VA_ARGS__))
+
+#define NCPP_ROBJECT_BODY_MEMBER_ABSTRACT(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberName, Accessibility,...) \
+            NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_ABSTRACT_IMPL2(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, (NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE (MemberName, true, false)), MemberName, Accessibility __VA_OPT__(,) __VA_ARGS__))
+
+#define NCPP_ROBJECT_BODY_BASE_PRIVATE_ABSTRACT(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_ABSTRACT(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName), ncpp::rtti::E_accessibility::PRIVATE __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PROTECTED_ABSTRACT(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_ABSTRACT(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName), ncpp::rtti::E_accessibility::PROTECTED __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PUBLIC_ABSTRACT(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_PUBLIC_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_ABSTRACT(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName), ncpp::rtti::E_accessibility::PUBLIC __VA_OPT__(,) __VA_ARGS__))
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_BODY_BASE_PRIVATE_ABSTRACT(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_ABSTRACT(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PRIVATE __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_BODY_BASE_PROTECTED_ABSTRACT(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_ABSTRACT(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PROTECTED __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_BODY_BASE_PUBLIC_ABSTRACT(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PUBLIC_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_ABSTRACT(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PUBLIC __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_MEMBER_ABSTRACT_CONST_IMPL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, Accessibility,...) \
+            NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberMagicType, MemberMagicName, MemberName, true, true,,);                                                 \
+			virtual NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberMagicType, (MemberMagicName)) const NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName) NCPP_EXPAND(NCPP_MA Implement) = 0;\
+            NCPP_ROBJECT_BODY_MEMBER_SINFO(MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, true, false, true, Accessibility);\
+			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName);
 
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
+#define NCPP_ROBJECT_BODY_MEMBER_ABSTRACT_CONST_IMPL2(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, Accessibility,...) \
+            NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_ABSTRACT_CONST_IMPL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, Accessibility __VA_OPT__(,) __VA_ARGS__))
 
-#define NCPP_ROBJECT_BODY_MEMBER_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberType, MemberName, Accessibility,...)\
-            NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberType, MemberName, true, true, virtual,);                                                 \
-			virtual NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberType, MemberName) const NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement) = 0;\
-            NCPP_ROBJECT_BODY_MEMBER_SINFO(MemberType, MemberName, true, true, true, Accessibility);\
-			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);
+#define NCPP_ROBJECT_BODY_MEMBER_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberName, Accessibility,...) \
+            NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_ABSTRACT_CONST_IMPL2(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, (NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE (MemberName, true, true)), MemberName, Accessibility __VA_OPT__(,) __VA_ARGS__))
 
-#define NCPP_ROBJECT_BODY_BASE_PRIVATE_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PRIVATE __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_BODY_BASE_PROTECTED_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PROTECTED __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_BODY_BASE_PUBLIC_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PUBLIC_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PUBLIC __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PRIVATE_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName), ncpp::rtti::E_accessibility::PRIVATE __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PROTECTED_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName), ncpp::rtti::E_accessibility::PROTECTED __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PUBLIC_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_PUBLIC_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_MEMBER_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName), ncpp::rtti::E_accessibility::PUBLIC __VA_OPT__(,) __VA_ARGS__))
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_BODY_STATIC_MEMBER_SINFO(MemberType, MemberName, Accessibility) \
+#define NCPP_ROBJECT_BODY_STATIC_MEMBER_SINFO(MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, Accessibility) \
 			template<typename F_robject__, typename F_member__, bool is_function__>\
 			struct ___TF_##MemberName##___ncpp_sinfo___;\
 			template<typename F_robject__, typename F_member__, bool is_function__>\
@@ -676,7 +708,7 @@ namespace ncpp {
 				\
 			NCPP_PUBLIC_KEYWORD\
 				\
-				using F_member = NCPP_ROBJECT_WRAPPER_TO_STATIC_MEMBER_TYPE(MemberName);\
+				using F_member = NCPP_EXPAND_PARAMS(MemberTypeParams);\
 				\
 				static NCPP_FORCE_INLINE auto* member_p(){ return &F_this::MemberName; }\
 				\
@@ -689,7 +721,7 @@ namespace ncpp {
 					if constexpr (ncpp::rtti::secured_name) return ncpp::containers::T_to_string<char, typename F_rtti_traits::F_allocator>(id());\
 					else return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, ""); \
 				}\
-                static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
+                static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberMagicType, ""); }\
 				static constexpr ncpp::u64 id() { return utilities::T_type_hash_code<___TF_##MemberName##___ncpp_sinfo___>; }\
 				\
 				static constexpr ncpp::sz offset() { return 0; }\
@@ -730,7 +762,7 @@ namespace ncpp {
 				\
 			NCPP_PUBLIC_KEYWORD\
 				\
-				using F_member = NCPP_ROBJECT_WRAPPER_TO_STATIC_MEMBER_TYPE(MemberName);\
+				using F_member = NCPP_EXPAND_PARAMS(MemberTypeParams);\
 				\
 				static NCPP_FORCE_INLINE auto* member_p(){ return &F_this::MemberName; }\
 				\
@@ -747,7 +779,7 @@ namespace ncpp {
 					if constexpr (ncpp::rtti::secured_name) return ncpp::containers::T_to_string<char, typename F_rtti_traits::F_allocator>(id());\
 					else return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, ""); \
 				}\
-                static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberType, ""); }\
+                static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberMagicType, ""); }\
 				static constexpr ncpp::u64 id() { return utilities::T_type_hash_code<___TF_##MemberName##___ncpp_sinfo___>; }\
 				\
 				static constexpr ncpp::sz offset() { return 0; }\
@@ -787,15 +819,21 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_BODY_STATIC_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName, Accessibility,...) \
-            NCPP_ROBJECT_DECLARE_STATIC_MEMBER_TYPE_WRAPPER(MemberType, MemberName);                                                 \
-			static NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberType, MemberName) NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberType, MemberName) NCPP_EXPAND(NCPP_MA Implement);\
-			NCPP_ROBJECT_BODY_STATIC_MEMBER_SINFO(MemberType, MemberName, Accessibility);\
-			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberType, MemberName);
+#define NCPP_ROBJECT_BODY_STATIC_MEMBER_IMPL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, Accessibility,...) \
+            NCPP_ROBJECT_DECLARE_STATIC_MEMBER_TYPE_WRAPPER(MemberMagicType, MemberMagicName, MemberName);                                                 \
+			static NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_KEYWORDS(Overrider) NCPP_EXPAND(NCPP_MA Keywords) NCPP_MAGIC(MemberMagicType, (MemberMagicName)) NCPP_ROBJECT_APPLY_MEMBER_OVERRIDER_IMPLEMENT(Overrider, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName) NCPP_EXPAND(NCPP_MA Implement);\
+			NCPP_ROBJECT_BODY_STATIC_MEMBER_SINFO(MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, Accessibility);\
+			NCPP_ROBJECT_APPLY_MEMBER_BODY_OVERRIDER(Overrider, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName);
 
-#define NCPP_ROBJECT_BODY_BASE_PRIVATE_STATIC(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_STATIC_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PRIVATE __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_BODY_BASE_PROTECTED_STATIC(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_STATIC_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PROTECTED __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_BODY_BASE_PUBLIC_STATIC(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_PUBLIC_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_STATIC_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName, ncpp::rtti::E_accessibility::PUBLIC __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_STATIC_MEMBER_IMPL2(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, Accessibility,...) \
+            NCPP_EXPAND(NCPP_ROBJECT_BODY_STATIC_MEMBER_IMPL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName, Accessibility __VA_OPT__(,) __VA_ARGS__))
+
+#define NCPP_ROBJECT_BODY_STATIC_MEMBER(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberName, Accessibility,...) \
+            NCPP_EXPAND(NCPP_ROBJECT_BODY_STATIC_MEMBER_IMPL2(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, (NCPP_ROBJECT_WRAPPER_TO_STATIC_MEMBER_TYPE (MemberName)), MemberName, Accessibility __VA_OPT__(,) __VA_ARGS__))
+
+#define NCPP_ROBJECT_BODY_BASE_PRIVATE_STATIC(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_PRIVATE_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_STATIC_MEMBER(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName), ncpp::rtti::E_accessibility::PRIVATE __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PROTECTED_STATIC(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_PROTECTED_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_STATIC_MEMBER(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName), ncpp::rtti::E_accessibility::PROTECTED __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_BODY_BASE_PUBLIC_STATIC(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_PUBLIC_KEYWORD NCPP_EXPAND(NCPP_ROBJECT_BODY_STATIC_MEMBER(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName), ncpp::rtti::E_accessibility::PUBLIC __VA_OPT__(,) __VA_ARGS__))
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
@@ -882,7 +920,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName, IsVirtualFunction, IsConstFunction,...) \
+#define NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberMagicType, MemberName, IsVirtualFunction, IsConstFunction,...) \
 			robject_member_info_p = ncpp::rtti::T_reflect_object_member<\
 				F_this, \
 				NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE(MemberName, IsVirtualFunction, IsConstFunction), \
@@ -896,7 +934,7 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_REFLECT_STATIC_MEMBER_INFO(MemberType, MemberName,...) \
+#define NCPP_ROBJECT_REFLECT_STATIC_MEMBER_INFO(MemberMagicType, MemberName,...) \
 			robject_member_info_p = ncpp::rtti::T_reflect_object_member<\
 				F_this, \
 				NCPP_ROBJECT_WRAPPER_TO_STATIC_MEMBER_TYPE(MemberName), \
@@ -910,179 +948,209 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName,...) \
+#define NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberMagicType, MemberName,...) \
 			__VA_ARGS__;
 
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_REFLECT_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName,...) \
+#define NCPP_ROBJECT_REFLECT_MEMBER_IMPL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName,...) \
 			{\
 				\
-				using F_member = NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE(MemberName, false, false);\
+				using F_member = NCPP_EXPAND_PARAMS(MemberTypeParams);\
                 using F_member_sinfo = ___TF_##MemberName##___ncpp_sinfo___<F_this, F_member, ncpp::utilities::T_is_function<F_member>, false, false>;\
 				\
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
-					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName, false, false __VA_OPT__(,) __VA_ARGS__)) };\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberMagicType, MemberName, false, false __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_PRE_REFLECT_MEMBER();\
 				\
-				NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberType, MemberName);\
+				NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName);\
 				\
 				if constexpr (\
 					!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata)\
 					&& !NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info)\
 				)\
-					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberMagicType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_POST_REFLECT_MEMBER();\
 				\
 			}
 
-#define NCPP_ROBJECT_REFLECT_BASE_PRIVATE(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_REFLECT_BASE_PROTECTED(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_REFLECT_BASE_PUBLIC(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_MEMBER_IMPL2(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName,...) \
+            NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_IMPL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName __VA_OPT__(,) __VA_ARGS__))
+
+#define NCPP_ROBJECT_REFLECT_MEMBER(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberName,...) \
+            NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_IMPL2(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, (NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE (MemberName, false, false)), MemberName __VA_OPT__(,) __VA_ARGS__))
+
+#define NCPP_ROBJECT_REFLECT_BASE_PRIVATE(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName) __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_BASE_PROTECTED(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName) __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_BASE_PUBLIC(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName) __VA_OPT__(,) __VA_ARGS__))
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_REFLECT_MEMBER_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) \
+#define NCPP_ROBJECT_REFLECT_MEMBER_CONST_IMPL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName,...) \
 			{\
 				\
-				using F_member = NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE(MemberName, false, true);\
+				using F_member = NCPP_EXPAND_PARAMS(MemberTypeParams);\
                 using F_member_sinfo = ___TF_##MemberName##___ncpp_sinfo___<F_this, F_member, ncpp::utilities::T_is_function<F_member>, false, true>;\
 				\
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
-					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName, false, true __VA_OPT__(,) __VA_ARGS__)) };\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberMagicType, MemberName, false, true __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_PRE_REFLECT_MEMBER();\
 				\
-				NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberType, MemberName);\
+				NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName);\
 				\
 				if constexpr (\
 					!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata)\
 					&& !NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info)\
 				)\
-					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberMagicType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_POST_REFLECT_MEMBER();\
 				\
 			}
 
-#define NCPP_ROBJECT_REFLECT_BASE_PRIVATE_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_CONST(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_REFLECT_BASE_PROTECTED_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_CONST(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_REFLECT_BASE_PUBLIC_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_CONST(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_MEMBER_CONST_IMPL2(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName,...) \
+            NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_CONST_IMPL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName __VA_OPT__(,) __VA_ARGS__))
+
+#define NCPP_ROBJECT_REFLECT_MEMBER_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberName,...) \
+            NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_CONST_IMPL2(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, (NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE (MemberName, false, true)), MemberName __VA_OPT__(,) __VA_ARGS__))
+
+#define NCPP_ROBJECT_REFLECT_BASE_PRIVATE_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_CONST(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName) __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_BASE_PROTECTED_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_CONST(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName) __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_BASE_PUBLIC_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_CONST(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName) __VA_OPT__(,) __VA_ARGS__))
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName,...) \
+#define NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_IMPL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName,...) \
 			{\
 				\
-				using F_member = NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE(MemberName, true, false);\
+				using F_member = NCPP_EXPAND_PARAMS(MemberTypeParams);\
                 using F_member_sinfo = ___TF_##MemberName##___ncpp_sinfo___<F_this, F_member, ncpp::utilities::T_is_function<F_member>, true, false>;\
 				\
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
-					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName, true, false __VA_OPT__(,) __VA_ARGS__)) };\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberMagicType, MemberName, true, false __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_PRE_REFLECT_MEMBER();\
 				\
-				NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberType, MemberName);\
+				NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName);\
 				\
 				if constexpr (\
 					!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata)\
 					&& !NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info)\
 				)\
-					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberMagicType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_POST_REFLECT_MEMBER();\
 				\
 			}
 
-#define NCPP_ROBJECT_REFLECT_BASE_PRIVATE_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_REFLECT_BASE_PROTECTED_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_REFLECT_BASE_PUBLIC_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_IMPL2(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName,...) \
+            NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_IMPL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName __VA_OPT__(,) __VA_ARGS__))
+
+#define NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberName,...) \
+            NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_IMPL2(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, (NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE (MemberName, true, false)), MemberName __VA_OPT__(,) __VA_ARGS__))
+
+#define NCPP_ROBJECT_REFLECT_BASE_PRIVATE_VIRTUAL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName) __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_BASE_PROTECTED_VIRTUAL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName) __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_BASE_PUBLIC_VIRTUAL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName) __VA_OPT__(,) __VA_ARGS__))
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_REFLECT_BASE_PRIVATE_ABSTRACT(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_REFLECT_BASE_PROTECTED_ABSTRACT(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_REFLECT_BASE_PUBLIC_ABSTRACT(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_BASE_PRIVATE_ABSTRACT(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName) __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_BASE_PROTECTED_ABSTRACT(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName) __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_BASE_PUBLIC_ABSTRACT(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName) __VA_OPT__(,) __VA_ARGS__))
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) \
+#define NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST_IMPL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName,...) \
 			{\
 				\
-				using F_member = NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE(MemberName, true, true);\
+				using F_member = NCPP_EXPAND_PARAMS(MemberTypeParams);\
                 using F_member_sinfo = ___TF_##MemberName##___ncpp_sinfo___<F_this, F_member, ncpp::utilities::T_is_function<F_member>, true, true>;\
 				\
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
-					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberType, MemberName, true, true __VA_OPT__(,) __VA_ARGS__)) };\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_INFO(MemberMagicType, MemberName, true, true __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_PRE_REFLECT_MEMBER();\
 				\
-				NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberType, MemberName);\
+				NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName);\
 				\
 				if constexpr (\
 					!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata)\
 					&& !NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info)\
 				)\
-					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberMagicType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_POST_REFLECT_MEMBER();\
 				\
 			}
 
-#define NCPP_ROBJECT_REFLECT_BASE_PRIVATE_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_REFLECT_BASE_PROTECTED_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_REFLECT_BASE_PUBLIC_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST_IMPL2(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName,...) \
+            NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST_IMPL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName __VA_OPT__(,) __VA_ARGS__))
+
+#define NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberName,...) \
+            NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST_IMPL2(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, (NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE (MemberName, true, true)), MemberName __VA_OPT__(,) __VA_ARGS__))
+
+#define NCPP_ROBJECT_REFLECT_BASE_PRIVATE_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName) __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_BASE_PROTECTED_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName) __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_BASE_PUBLIC_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName) __VA_OPT__(,) __VA_ARGS__))
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_REFLECT_BASE_PRIVATE_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_REFLECT_BASE_PROTECTED_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_REFLECT_BASE_PUBLIC_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_BASE_PRIVATE_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName) __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_BASE_PROTECTED_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName) __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_BASE_PUBLIC_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName) __VA_OPT__(,) __VA_ARGS__))
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_REFLECT_STATIC_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName,...) \
+#define NCPP_ROBJECT_REFLECT_STATIC_MEMBER_IMPL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName,...) \
 			{\
 				\
-				using F_member = NCPP_ROBJECT_WRAPPER_TO_STATIC_MEMBER_TYPE(MemberName);\
+				using F_member = NCPP_EXPAND_PARAMS(MemberTypeParams);\
                 using F_member_sinfo = ___TF_##MemberName##___ncpp_sinfo___<F_this, F_member, ncpp::utilities::T_is_function<F_member>>;\
 				\
 				if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info))\
-					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_STATIC_MEMBER_INFO(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_STATIC_MEMBER_INFO(MemberMagicType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_PRE_REFLECT_MEMBER();\
 				\
-				NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberType, MemberName);\
+				NCPP_ROBJECT_APPLY_MEMBER_REFLECT_OVERRIDER(Overrider, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName);\
 				\
 				if constexpr (\
 					!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata)\
 					&& !NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info)\
 				)\
-					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
+					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberMagicType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
 				\
 				NCPP_ROBJECT_CALL_USER_POST_REFLECT_MEMBER();\
 				\
 			}
 
-#define NCPP_ROBJECT_REFLECT_BASE_PRIVATE_STATIC(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_STATIC_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_REFLECT_BASE_PROTECTED_STATIC(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_STATIC_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_ROBJECT_REFLECT_BASE_PUBLIC_STATIC(Overrider, Keywords, Implement, MemberType, MemberName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_STATIC_MEMBER(Overrider, Keywords, Implement, MemberType, MemberName __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_STATIC_MEMBER_IMPL2(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName,...) \
+            NCPP_EXPAND(NCPP_ROBJECT_REFLECT_STATIC_MEMBER_IMPL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberTypeParams, MemberName __VA_OPT__(,) __VA_ARGS__))
+
+#define NCPP_ROBJECT_REFLECT_STATIC_MEMBER(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, MemberName,...) \
+            NCPP_EXPAND(NCPP_ROBJECT_REFLECT_STATIC_MEMBER_IMPL2(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName, (NCPP_ROBJECT_WRAPPER_TO_STATIC_MEMBER_TYPE (MemberName)), MemberName __VA_OPT__(,) __VA_ARGS__))
+
+#define NCPP_ROBJECT_REFLECT_BASE_PRIVATE_STATIC(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_STATIC_MEMBER(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName) __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_BASE_PROTECTED_STATIC(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_STATIC_MEMBER(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName) __VA_OPT__(,) __VA_ARGS__))
+#define NCPP_ROBJECT_REFLECT_BASE_PUBLIC_STATIC(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) NCPP_EXPAND(NCPP_ROBJECT_REFLECT_STATIC_MEMBER(Overrider, Keywords, Implement, MemberMagicType, NCPP_MAGIC_NAME(MemberMagicName), NCPP_MAGIC_PARSE_NAME(MemberMagicName) __VA_OPT__(,) __VA_ARGS__))
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -1133,57 +1201,71 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_SINFOS_BASE_PRIVATE(Overrider, Keywords, Implement, MemberType, MemberName,...) , NCPP_ROBJECT_MEMBER_SINFO(MemberName, false, false)
-#define NCPP_ROBJECT_SINFOS_BASE_PROTECTED(Overrider, Keywords, Implement, MemberType, MemberName,...) , NCPP_ROBJECT_MEMBER_SINFO(MemberName, false, false)
-#define NCPP_ROBJECT_SINFOS_BASE_PUBLIC(Overrider, Keywords, Implement, MemberType, MemberName,...) , NCPP_ROBJECT_MEMBER_SINFO(MemberName, false, false)
+#define NCPP_ROBJECT_SINFOS_PASS_MEMBER(MemberName, IsVirtualFunction, IsConstFunction) \
+            NCPP_EXPAND(NCPP_ROBJECT_MEMBER_SINFO(MemberName, IsVirtualFunction, IsConstFunction))
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_SINFOS_BASE_PRIVATE_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) , NCPP_ROBJECT_MEMBER_SINFO(MemberName, false, true)
-#define NCPP_ROBJECT_SINFOS_BASE_PROTECTED_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) , NCPP_ROBJECT_MEMBER_SINFO(MemberName, false, true)
-#define NCPP_ROBJECT_SINFOS_BASE_PUBLIC_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) , NCPP_ROBJECT_MEMBER_SINFO(MemberName, false, true)
+#define NCPP_ROBJECT_SINFOS_BASE_PRIVATE(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) , NCPP_ROBJECT_SINFOS_PASS_MEMBER(NCPP_MAGIC_PARSE_NAME(MemberMagicName), false, false)
+#define NCPP_ROBJECT_SINFOS_BASE_PROTECTED(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) , NCPP_ROBJECT_SINFOS_PASS_MEMBER(NCPP_MAGIC_PARSE_NAME(MemberMagicName), false, false)
+#define NCPP_ROBJECT_SINFOS_BASE_PUBLIC(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) , NCPP_ROBJECT_SINFOS_PASS_MEMBER(NCPP_MAGIC_PARSE_NAME(MemberMagicName), false, false)
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_SINFOS_BASE_PRIVATE_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName,...) , NCPP_ROBJECT_MEMBER_SINFO(MemberName, true, false)
-#define NCPP_ROBJECT_SINFOS_BASE_PROTECTED_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName,...) , NCPP_ROBJECT_MEMBER_SINFO(MemberName, true, false)
-#define NCPP_ROBJECT_SINFOS_BASE_PUBLIC_VIRTUAL(Overrider, Keywords, Implement, MemberType, MemberName,...) , NCPP_ROBJECT_MEMBER_SINFO(MemberName, true, false)
+#define NCPP_ROBJECT_SINFOS_BASE_PRIVATE_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) , NCPP_ROBJECT_SINFOS_PASS_MEMBER(NCPP_MAGIC_PARSE_NAME(MemberMagicName), false, true)
+#define NCPP_ROBJECT_SINFOS_BASE_PROTECTED_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) , NCPP_ROBJECT_SINFOS_PASS_MEMBER(NCPP_MAGIC_PARSE_NAME(MemberMagicName), false, true)
+#define NCPP_ROBJECT_SINFOS_BASE_PUBLIC_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) , NCPP_ROBJECT_SINFOS_PASS_MEMBER(NCPP_MAGIC_PARSE_NAME(MemberMagicName), false, true)
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_SINFOS_BASE_PRIVATE_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) , NCPP_ROBJECT_MEMBER_SINFO(MemberName, true, true)
-#define NCPP_ROBJECT_SINFOS_BASE_PROTECTED_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) , NCPP_ROBJECT_MEMBER_SINFO(MemberName, true, true)
-#define NCPP_ROBJECT_SINFOS_BASE_PUBLIC_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) , NCPP_ROBJECT_MEMBER_SINFO(MemberName, true, true)
+#define NCPP_ROBJECT_SINFOS_BASE_PRIVATE_VIRTUAL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) , NCPP_ROBJECT_SINFOS_PASS_MEMBER(NCPP_MAGIC_PARSE_NAME(MemberMagicName), true, false)
+#define NCPP_ROBJECT_SINFOS_BASE_PROTECTED_VIRTUAL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) , NCPP_ROBJECT_SINFOS_PASS_MEMBER(NCPP_MAGIC_PARSE_NAME(MemberMagicName), true, false)
+#define NCPP_ROBJECT_SINFOS_BASE_PUBLIC_VIRTUAL(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) , NCPP_ROBJECT_SINFOS_PASS_MEMBER(NCPP_MAGIC_PARSE_NAME(MemberMagicName), true, false)
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_SINFOS_BASE_PRIVATE_ABSTRACT(Overrider, Keywords, Implement, MemberType, MemberName,...) , NCPP_ROBJECT_MEMBER_SINFO(MemberName, true, false)
-#define NCPP_ROBJECT_SINFOS_BASE_PROTECTED_ABSTRACT(Overrider, Keywords, Implement, MemberType, MemberName,...) , NCPP_ROBJECT_MEMBER_SINFO(MemberName, true, false)
-#define NCPP_ROBJECT_SINFOS_BASE_PUBLIC_ABSTRACT(Overrider, Keywords, Implement, MemberType, MemberName,...) , NCPP_ROBJECT_MEMBER_SINFO(MemberName, true, false)
+#define NCPP_ROBJECT_SINFOS_BASE_PRIVATE_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) , NCPP_ROBJECT_SINFOS_PASS_MEMBER(NCPP_MAGIC_PARSE_NAME(MemberMagicName), true, true)
+#define NCPP_ROBJECT_SINFOS_BASE_PROTECTED_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) , NCPP_ROBJECT_SINFOS_PASS_MEMBER(NCPP_MAGIC_PARSE_NAME(MemberMagicName), true, true)
+#define NCPP_ROBJECT_SINFOS_BASE_PUBLIC_VIRTUAL_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) , NCPP_ROBJECT_SINFOS_PASS_MEMBER(NCPP_MAGIC_PARSE_NAME(MemberMagicName), true, true)
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_SINFOS_BASE_PRIVATE_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) , NCPP_ROBJECT_MEMBER_SINFO(MemberName, true, true)
-#define NCPP_ROBJECT_SINFOS_BASE_PROTECTED_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) , NCPP_ROBJECT_MEMBER_SINFO(MemberName, true, true)
-#define NCPP_ROBJECT_SINFOS_BASE_PUBLIC_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberType, MemberName,...) , NCPP_ROBJECT_MEMBER_SINFO(MemberName, true, true)
+#define NCPP_ROBJECT_SINFOS_BASE_PRIVATE_ABSTRACT(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) , NCPP_ROBJECT_SINFOS_PASS_MEMBER(NCPP_MAGIC_PARSE_NAME(MemberMagicName), true, false)
+#define NCPP_ROBJECT_SINFOS_BASE_PROTECTED_ABSTRACT(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) , NCPP_ROBJECT_SINFOS_PASS_MEMBER(NCPP_MAGIC_PARSE_NAME(MemberMagicName), true, false)
+#define NCPP_ROBJECT_SINFOS_BASE_PUBLIC_ABSTRACT(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) , NCPP_ROBJECT_SINFOS_PASS_MEMBER(NCPP_MAGIC_PARSE_NAME(MemberMagicName), true, false)
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_ROBJECT_SINFOS_BASE_PRIVATE_STATIC(Overrider, Keywords, Implement, MemberType, MemberName,...) , NCPP_ROBJECT_STATIC_MEMBER_SINFO(MemberName)
-#define NCPP_ROBJECT_SINFOS_BASE_PROTECTED_STATIC(Overrider, Keywords, Implement, MemberType, MemberName,...) , NCPP_ROBJECT_STATIC_MEMBER_SINFO(MemberName)
-#define NCPP_ROBJECT_SINFOS_BASE_PUBLIC_STATIC(Overrider, Keywords, Implement, MemberType, MemberName,...) , NCPP_ROBJECT_STATIC_MEMBER_SINFO(MemberName)
+#define NCPP_ROBJECT_SINFOS_BASE_PRIVATE_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) , NCPP_ROBJECT_SINFOS_PASS_MEMBER(NCPP_MAGIC_PARSE_NAME(MemberMagicName), true, true)
+#define NCPP_ROBJECT_SINFOS_BASE_PROTECTED_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) , NCPP_ROBJECT_SINFOS_PASS_MEMBER(NCPP_MAGIC_PARSE_NAME(MemberMagicName), true, true)
+#define NCPP_ROBJECT_SINFOS_BASE_PUBLIC_ABSTRACT_CONST(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) , NCPP_ROBJECT_SINFOS_PASS_MEMBER(NCPP_MAGIC_PARSE_NAME(MemberMagicName), true, true)
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+#define NCPP_ROBJECT_SINFOS_PASS_STATIC_MEMBER(MemberName) \
+            NCPP_EXPAND(NCPP_ROBJECT_STATIC_MEMBER_SINFO(MemberName))
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+#define NCPP_ROBJECT_SINFOS_BASE_PRIVATE_STATIC(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) , NCPP_ROBJECT_SINFOS_PASS_STATIC_MEMBER(NCPP_MAGIC_PARSE_NAME(MemberMagicName))
+#define NCPP_ROBJECT_SINFOS_BASE_PROTECTED_STATIC(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) , NCPP_ROBJECT_SINFOS_PASS_STATIC_MEMBER(NCPP_MAGIC_PARSE_NAME(MemberMagicName))
+#define NCPP_ROBJECT_SINFOS_BASE_PUBLIC_STATIC(Overrider, Keywords, Implement, MemberMagicType, MemberMagicName,...) , NCPP_ROBJECT_SINFOS_PASS_STATIC_MEMBER(NCPP_MAGIC_PARSE_NAME(MemberMagicName))
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
