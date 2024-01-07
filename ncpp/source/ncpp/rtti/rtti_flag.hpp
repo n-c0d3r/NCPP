@@ -34,6 +34,8 @@
 
 #include <ncpp/iostream.hpp>
 #include <ncpp/utilities/is_function.hpp>
+#include <ncpp/utilities/template_arg_list.hpp>
+#include <ncpp/utilities/function_traits.hpp>
 
 #pragma endregion
 
@@ -88,13 +90,13 @@ namespace ncpp {
             template<class F__, typename F_flag__>
             concept T_is_has_flag = requires {
 
-                requires (F__::template ___TF___ncpp_rtti_flag_implement_info___<F_flag__>::value == true);
+                F__::___ncpp_rtti_flag_implement_info___(std::declval<F_flag__>());
 
             };
 
             template<typename F__, typename F_flag__>
             requires T_is_has_flag<F__, F_flag__>
-            using TF_rtti_flag_implement_info = F__::template ___TF___ncpp_rtti_flag_implement_info___<F_flag__>;
+            using TF_rtti_flag_implement_info = decltype(F__::___ncpp_rtti_flag_implement_info___(std::declval<F_flag__>()));
 
         };
 
@@ -103,12 +105,7 @@ namespace ncpp {
 #define NCPP_RTTI_CREATE_FLAG(Name) struct Name {};
 
 #define NCPP_RTTI_IMPLEMENT_FLAG(Name,...) NCPP_PUBLIC_KEYWORD \
-            template<typename> struct ___TF___ncpp_rtti_flag_implement_info___;\
-            template<__VA_ARGS__> struct ___TF___ncpp_rtti_flag_implement_info___<Name> { static constexpr ncpp::b8 value = true; };
-
-#define NCPP_RTTI_IMPLEMENT_FLAG_WITH_INNER(Name, Inner,...) NCPP_PUBLIC_KEYWORD \
-            template<typename> struct ___TF___ncpp_rtti_flag_implement_info___;\
-            template<__VA_ARGS__> struct ___TF___ncpp_rtti_flag_implement_info___<Name> { static constexpr ncpp::b8 value = true; Inner; };
+            static inline ncpp::utilities::TF_template_arg_list<__VA_ARGS__> ___ncpp_rtti_flag_implement_info___(Name) { return {}; }
 
 #define NCPP_RTTI_REPRESENT_IMPLEMENT(TypeName) ncpp::rtti::internal::TF_rtti_flag_represent_implement<TypeName>
 #define NCPP_RTTI_REPRESENT(TypeName) ncpp::rtti::internal::TF_rtti_flag_represent<TypeName>

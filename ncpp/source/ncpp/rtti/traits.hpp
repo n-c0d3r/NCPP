@@ -202,7 +202,7 @@ namespace ncpp {
             struct TF_safe_custom_params_helper_internal<true, F_reflect_flag__> {
 
                 using F_implement_info = NCPP_RTTI_FLAG_IMPLEMENT_INFO(F_reflect_flag__, F_user_reflect_custom_params_flag);
-                using F = typename F_implement_info::F_custom_params;
+                using F = F_implement_info::template TF_at<0>;
 
             };
         public:
