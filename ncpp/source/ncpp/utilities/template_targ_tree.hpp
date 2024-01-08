@@ -83,6 +83,9 @@ namespace ncpp {
         template<typename F__>
         concept T_is_template_targ_tree = internal::TF_is_template_targ_tree_helper<F__>::value;
 
+        template<typename F__>
+        concept T_not_template_targ_tree = !internal::TF_is_template_targ_tree_helper<F__>::value;
+
 
 
         template<typename F__>
@@ -113,6 +116,7 @@ namespace ncpp {
 
         public:
             using F_normalized = F_this;
+            using F_flatten = TF_template_targ_list<>;
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -135,7 +139,20 @@ namespace ncpp {
 
 
 
-        template<typename F_arg__, typename... F_childs__>
+        template<typename F_arg__, typename F_first_child__, typename... F_rest_childs__>
+        requires(TF_template_targ_list<F_first_child__, F_rest_childs__...>::template TF_invert_filter<TL_template_targ_tree>::count != 0)
+        struct TF_template_targ_tree<F_arg__, F_first_child__, F_rest_childs__...> {
+
+            static_assert(
+                TF_template_targ_list<F_first_child__, F_rest_childs__...>::template TF_invert_filter<TL_template_targ_tree>::count == 0,
+                "invalid template targ childs"
+            );
+
+        };
+
+
+
+        template<typename F_arg__, T_is_template_targ_tree... F_childs__>
         struct TF_template_targ_tree<F_arg__, F_childs__...>
         {
 
@@ -153,15 +170,6 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
 
-            static_assert(
-                F_childs::template TF_invert_filter<TL_template_targ_tree>::count == 0,
-                "invalid template targ childs"
-            );
-
-            ////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////
-
         private:
             struct F_normalized_helper_internal_targ
             {
@@ -174,7 +182,7 @@ namespace ncpp {
                 };
 
                 using F_filtered_arg_list = TF_template_targ_list<F_arg>;
-                using F_filtered_child_list = TF_template_targ_list<F_childs__...>::template TF_filter<TL_valid_child>;
+                using F_filtered_child_list = F_childs::template TF_filter<TL_valid_child>;
 
                 using F_filtered_list = F_filtered_arg_list::template TF_combine<F_filtered_child_list>;
 
@@ -188,6 +196,31 @@ namespace ncpp {
 
         public:
             using F_normalized = typename F_normalized_helper_internal_targ::F;
+
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+
+        private:
+            struct F_flatten_helper_internal_targ
+            {
+
+                template<typename F_child__>
+                using TF_expand_child = typename F_child__::F_flatten;
+
+                using F_filtered_arg_list = TF_template_targ_list<F_arg>;
+                using F_filtered_list = F_filtered_arg_list::template TF_join<TF_expand_child<F_childs__>...>;
+
+                using F = F_filtered_list;
+
+            };
+
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+
+        public:
+            using F_flatten = typename F_flatten_helper_internal_targ::F;
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
