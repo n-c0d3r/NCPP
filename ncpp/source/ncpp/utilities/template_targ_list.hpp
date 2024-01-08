@@ -301,6 +301,16 @@ namespace ncpp {
                 using F = TF_nth_template_targ<index__, F_args__...>;
 
             };
+            template<sz index__, typename F_if_fail__, b8 is_valid__>
+            struct TF_try_at_internal_targ {
+
+                using F = TF_nth_template_targ<
+                    is_valid__,
+                    F_if_fail__,
+                    TF_nth_template_targ<is_valid__ ? index__ : 0, F_args__..., void>
+                >;
+
+            };
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -309,6 +319,8 @@ namespace ncpp {
         public:
             template<sz index__>
             using TF_at = typename TF_at_internal_targ<index__>::F;
+            template<sz index__, typename F_if_fail__ = void>
+            using TF_try_at = typename TF_try_at_internal_targ<index__, F_if_fail__, (index__ < count)>::F;
 
             template<typename F__>
             using TF_combine = typename TF_combine_helper_internal_targ<F__>::F;
