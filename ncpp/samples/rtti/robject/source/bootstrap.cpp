@@ -302,7 +302,7 @@ int main() {
     cout << "A's base sinfos: " << T_type_fullname<typename A::F_base_sinfos>() << std::endl << std::endl;
     cout << "A's member sinfos: " << T_type_fullname<typename A::F_member_sinfos>() << std::endl << std::endl;
 
-    NCPP_WARNING(false) << "Hello assertion failure";
+
 
 	A a;
 
