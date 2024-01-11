@@ -244,17 +244,17 @@ namespace ncpp {
 
 
 
-    enum class F_log_color;
+    enum class E_log_color;
     NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
         ncpp::F_ostream& os,
-        F_log_color input
+        E_log_color input
     );
     NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
         ncpp::F_wostream& os,
-        F_log_color input
+        E_log_color input
     );
 
-    enum class F_log_color {
+    enum class E_log_color {
 
         BLACK = 0x0,
         RED = 0x1,
@@ -313,24 +313,24 @@ namespace ncpp {
 
 
 
-    constexpr F_log_color operator | (F_log_color a, F_log_color b) {
+    constexpr E_log_color operator | (E_log_color a, E_log_color b) {
 
-        return (F_log_color)((((u32)a) | ((u32)b)) & 0x11FF);
+        return (E_log_color)((((u32)a) | ((u32)b)) & 0x11FF);
     }
-    constexpr F_log_color operator & (F_log_color a, F_log_color b) {
+    constexpr E_log_color operator & (E_log_color a, E_log_color b) {
 
-        return (F_log_color)((((u32)a) & ((u32)b)) & 0x11FF);
+        return (E_log_color)((((u32)a) & ((u32)b)) & 0x11FF);
     }
-    constexpr F_log_color operator ~ (F_log_color a) {
+    constexpr E_log_color operator ~ (E_log_color a) {
 
-        return (F_log_color)((~((u32)a)) & 0x11FF);
+        return (E_log_color)((~((u32)a)) & 0x11FF);
     }
 
 
 
     NCPP_FORCE_INLINE ncpp::F_ostream& operator << (
         ncpp::F_ostream& os,
-        F_log_color input
+        E_log_color input
     ){
 
         if(&os != &cout)
@@ -338,107 +338,107 @@ namespace ncpp {
 
         switch (input) {
 
-            case F_log_color::RESET:
+            case E_log_color::RESET:
                 os << NCPP_RESET_CONSOLE_COLOR;
                 break;
 
-            case (F_log_color::FOREGROUND | F_log_color::DARK | F_log_color::BLACK):
+            case (E_log_color::FOREGROUND | E_log_color::DARK | E_log_color::BLACK):
                 os << NCPP_FOREGROUND_BLACK;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::DARK | F_log_color::RED):
+            case (E_log_color::FOREGROUND | E_log_color::DARK | E_log_color::RED):
                 os << NCPP_FOREGROUND_RED;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::DARK | F_log_color::GREEN):
+            case (E_log_color::FOREGROUND | E_log_color::DARK | E_log_color::GREEN):
                 os << NCPP_FOREGROUND_GREEN;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::DARK | F_log_color::YELLOW):
+            case (E_log_color::FOREGROUND | E_log_color::DARK | E_log_color::YELLOW):
                 os << NCPP_FOREGROUND_YELLOW;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::DARK | F_log_color::BLUE):
+            case (E_log_color::FOREGROUND | E_log_color::DARK | E_log_color::BLUE):
                 os << NCPP_FOREGROUND_BLUE;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::DARK | F_log_color::MAGNETA):
+            case (E_log_color::FOREGROUND | E_log_color::DARK | E_log_color::MAGNETA):
                 os << NCPP_FOREGROUND_MAGNETA;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::DARK | F_log_color::CYAN):
+            case (E_log_color::FOREGROUND | E_log_color::DARK | E_log_color::CYAN):
                 os << NCPP_FOREGROUND_CYAN;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::DARK | F_log_color::WHITE):
+            case (E_log_color::FOREGROUND | E_log_color::DARK | E_log_color::WHITE):
                 os << NCPP_FOREGROUND_WHITE;
                 break;
 
-            case (F_log_color::FOREGROUND | F_log_color::BRIGHT | F_log_color::BLACK):
+            case (E_log_color::FOREGROUND | E_log_color::BRIGHT | E_log_color::BLACK):
                 os << NCPP_FOREGROUND_BRIGHT_BLACK;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::BRIGHT | F_log_color::RED):
+            case (E_log_color::FOREGROUND | E_log_color::BRIGHT | E_log_color::RED):
                 os << NCPP_FOREGROUND_BRIGHT_RED;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::BRIGHT | F_log_color::GREEN):
+            case (E_log_color::FOREGROUND | E_log_color::BRIGHT | E_log_color::GREEN):
                 os << NCPP_FOREGROUND_BRIGHT_GREEN;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::BRIGHT | F_log_color::YELLOW):
+            case (E_log_color::FOREGROUND | E_log_color::BRIGHT | E_log_color::YELLOW):
                 os << NCPP_FOREGROUND_BRIGHT_YELLOW;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::BRIGHT | F_log_color::BLUE):
+            case (E_log_color::FOREGROUND | E_log_color::BRIGHT | E_log_color::BLUE):
                 os << NCPP_FOREGROUND_BRIGHT_BLUE;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::BRIGHT | F_log_color::MAGNETA):
+            case (E_log_color::FOREGROUND | E_log_color::BRIGHT | E_log_color::MAGNETA):
                 os << NCPP_FOREGROUND_BRIGHT_MAGNETA;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::BRIGHT | F_log_color::CYAN):
+            case (E_log_color::FOREGROUND | E_log_color::BRIGHT | E_log_color::CYAN):
                 os << NCPP_FOREGROUND_BRIGHT_CYAN;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::BRIGHT | F_log_color::WHITE):
+            case (E_log_color::FOREGROUND | E_log_color::BRIGHT | E_log_color::WHITE):
                 os << NCPP_FOREGROUND_BRIGHT_WHITE;
                 break;
 
-            case (F_log_color::BACKGROUND | F_log_color::DARK | F_log_color::BLACK):
+            case (E_log_color::BACKGROUND | E_log_color::DARK | E_log_color::BLACK):
                 os << NCPP_BACKGROUND_BLACK;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::DARK | F_log_color::RED):
+            case (E_log_color::BACKGROUND | E_log_color::DARK | E_log_color::RED):
                 os << NCPP_BACKGROUND_RED;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::DARK | F_log_color::GREEN):
+            case (E_log_color::BACKGROUND | E_log_color::DARK | E_log_color::GREEN):
                 os << NCPP_BACKGROUND_GREEN;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::DARK | F_log_color::YELLOW):
+            case (E_log_color::BACKGROUND | E_log_color::DARK | E_log_color::YELLOW):
                 os << NCPP_BACKGROUND_YELLOW;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::DARK | F_log_color::BLUE):
+            case (E_log_color::BACKGROUND | E_log_color::DARK | E_log_color::BLUE):
                 os << NCPP_BACKGROUND_BLUE;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::DARK | F_log_color::MAGNETA):
+            case (E_log_color::BACKGROUND | E_log_color::DARK | E_log_color::MAGNETA):
                 os << NCPP_BACKGROUND_MAGNETA;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::DARK | F_log_color::CYAN):
+            case (E_log_color::BACKGROUND | E_log_color::DARK | E_log_color::CYAN):
                 os << NCPP_BACKGROUND_CYAN;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::DARK | F_log_color::WHITE):
+            case (E_log_color::BACKGROUND | E_log_color::DARK | E_log_color::WHITE):
                 os << NCPP_BACKGROUND_WHITE;
                 break;
 
-            case (F_log_color::BACKGROUND | F_log_color::BRIGHT | F_log_color::BLACK):
+            case (E_log_color::BACKGROUND | E_log_color::BRIGHT | E_log_color::BLACK):
                 os << NCPP_BACKGROUND_BRIGHT_BLACK;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::BRIGHT | F_log_color::RED):
+            case (E_log_color::BACKGROUND | E_log_color::BRIGHT | E_log_color::RED):
                 os << NCPP_BACKGROUND_BRIGHT_RED;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::BRIGHT | F_log_color::GREEN):
+            case (E_log_color::BACKGROUND | E_log_color::BRIGHT | E_log_color::GREEN):
                 os << NCPP_BACKGROUND_BRIGHT_GREEN;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::BRIGHT | F_log_color::YELLOW):
+            case (E_log_color::BACKGROUND | E_log_color::BRIGHT | E_log_color::YELLOW):
                 os << NCPP_BACKGROUND_BRIGHT_YELLOW;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::BRIGHT | F_log_color::BLUE):
+            case (E_log_color::BACKGROUND | E_log_color::BRIGHT | E_log_color::BLUE):
                 os << NCPP_BACKGROUND_BRIGHT_BLUE;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::BRIGHT | F_log_color::MAGNETA):
+            case (E_log_color::BACKGROUND | E_log_color::BRIGHT | E_log_color::MAGNETA):
                 os << NCPP_BACKGROUND_BRIGHT_MAGNETA;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::BRIGHT | F_log_color::CYAN):
+            case (E_log_color::BACKGROUND | E_log_color::BRIGHT | E_log_color::CYAN):
                 os << NCPP_BACKGROUND_BRIGHT_CYAN;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::BRIGHT | F_log_color::WHITE):
+            case (E_log_color::BACKGROUND | E_log_color::BRIGHT | E_log_color::WHITE):
                 os << NCPP_BACKGROUND_BRIGHT_WHITE;
                 break;
 
@@ -448,7 +448,7 @@ namespace ncpp {
     }
     NCPP_FORCE_INLINE ncpp::F_wostream& operator << (
         ncpp::F_wostream& os,
-        F_log_color input
+        E_log_color input
     ){
 
         if(&os != &wcout)
@@ -456,107 +456,107 @@ namespace ncpp {
 
         switch (input) {
 
-            case F_log_color::RESET:
+            case E_log_color::RESET:
                 os << NCPP_RESET_CONSOLE_COLOR_TEXT;
                 break;
 
-            case (F_log_color::FOREGROUND | F_log_color::DARK | F_log_color::BLACK):
+            case (E_log_color::FOREGROUND | E_log_color::DARK | E_log_color::BLACK):
                 os << NCPP_FOREGROUND_BLACK_TEXT;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::DARK | F_log_color::RED):
+            case (E_log_color::FOREGROUND | E_log_color::DARK | E_log_color::RED):
                 os << NCPP_FOREGROUND_RED_TEXT;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::DARK | F_log_color::GREEN):
+            case (E_log_color::FOREGROUND | E_log_color::DARK | E_log_color::GREEN):
                 os << NCPP_FOREGROUND_GREEN_TEXT;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::DARK | F_log_color::YELLOW):
+            case (E_log_color::FOREGROUND | E_log_color::DARK | E_log_color::YELLOW):
                 os << NCPP_FOREGROUND_YELLOW_TEXT;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::DARK | F_log_color::BLUE):
+            case (E_log_color::FOREGROUND | E_log_color::DARK | E_log_color::BLUE):
                 os << NCPP_FOREGROUND_BLUE_TEXT;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::DARK | F_log_color::MAGNETA):
+            case (E_log_color::FOREGROUND | E_log_color::DARK | E_log_color::MAGNETA):
                 os << NCPP_FOREGROUND_MAGNETA_TEXT;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::DARK | F_log_color::CYAN):
+            case (E_log_color::FOREGROUND | E_log_color::DARK | E_log_color::CYAN):
                 os << NCPP_FOREGROUND_CYAN_TEXT;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::DARK | F_log_color::WHITE):
+            case (E_log_color::FOREGROUND | E_log_color::DARK | E_log_color::WHITE):
                 os << NCPP_FOREGROUND_WHITE_TEXT;
                 break;
 
-            case (F_log_color::FOREGROUND | F_log_color::BRIGHT | F_log_color::BLACK):
+            case (E_log_color::FOREGROUND | E_log_color::BRIGHT | E_log_color::BLACK):
                 os << NCPP_FOREGROUND_BRIGHT_BLACK_TEXT;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::BRIGHT | F_log_color::RED):
+            case (E_log_color::FOREGROUND | E_log_color::BRIGHT | E_log_color::RED):
                 os << NCPP_FOREGROUND_BRIGHT_RED_TEXT;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::BRIGHT | F_log_color::GREEN):
+            case (E_log_color::FOREGROUND | E_log_color::BRIGHT | E_log_color::GREEN):
                 os << NCPP_FOREGROUND_BRIGHT_GREEN_TEXT;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::BRIGHT | F_log_color::YELLOW):
+            case (E_log_color::FOREGROUND | E_log_color::BRIGHT | E_log_color::YELLOW):
                 os << NCPP_FOREGROUND_BRIGHT_YELLOW_TEXT;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::BRIGHT | F_log_color::BLUE):
+            case (E_log_color::FOREGROUND | E_log_color::BRIGHT | E_log_color::BLUE):
                 os << NCPP_FOREGROUND_BRIGHT_BLUE_TEXT;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::BRIGHT | F_log_color::MAGNETA):
+            case (E_log_color::FOREGROUND | E_log_color::BRIGHT | E_log_color::MAGNETA):
                 os << NCPP_FOREGROUND_BRIGHT_MAGNETA_TEXT;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::BRIGHT | F_log_color::CYAN):
+            case (E_log_color::FOREGROUND | E_log_color::BRIGHT | E_log_color::CYAN):
                 os << NCPP_FOREGROUND_BRIGHT_CYAN_TEXT;
                 break;
-            case (F_log_color::FOREGROUND | F_log_color::BRIGHT | F_log_color::WHITE):
+            case (E_log_color::FOREGROUND | E_log_color::BRIGHT | E_log_color::WHITE):
                 os << NCPP_FOREGROUND_BRIGHT_WHITE_TEXT;
                 break;
 
-            case (F_log_color::BACKGROUND | F_log_color::DARK | F_log_color::BLACK):
+            case (E_log_color::BACKGROUND | E_log_color::DARK | E_log_color::BLACK):
                 os << NCPP_BACKGROUND_BLACK_TEXT;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::DARK | F_log_color::RED):
+            case (E_log_color::BACKGROUND | E_log_color::DARK | E_log_color::RED):
                 os << NCPP_BACKGROUND_RED_TEXT;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::DARK | F_log_color::GREEN):
+            case (E_log_color::BACKGROUND | E_log_color::DARK | E_log_color::GREEN):
                 os << NCPP_BACKGROUND_GREEN_TEXT;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::DARK | F_log_color::YELLOW):
+            case (E_log_color::BACKGROUND | E_log_color::DARK | E_log_color::YELLOW):
                 os << NCPP_BACKGROUND_YELLOW_TEXT;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::DARK | F_log_color::BLUE):
+            case (E_log_color::BACKGROUND | E_log_color::DARK | E_log_color::BLUE):
                 os << NCPP_BACKGROUND_BLUE_TEXT;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::DARK | F_log_color::MAGNETA):
+            case (E_log_color::BACKGROUND | E_log_color::DARK | E_log_color::MAGNETA):
                 os << NCPP_BACKGROUND_MAGNETA_TEXT;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::DARK | F_log_color::CYAN):
+            case (E_log_color::BACKGROUND | E_log_color::DARK | E_log_color::CYAN):
                 os << NCPP_BACKGROUND_CYAN_TEXT;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::DARK | F_log_color::WHITE):
+            case (E_log_color::BACKGROUND | E_log_color::DARK | E_log_color::WHITE):
                 os << NCPP_BACKGROUND_WHITE_TEXT;
                 break;
 
-            case (F_log_color::BACKGROUND | F_log_color::BRIGHT | F_log_color::BLACK):
+            case (E_log_color::BACKGROUND | E_log_color::BRIGHT | E_log_color::BLACK):
                 os << NCPP_BACKGROUND_BRIGHT_BLACK_TEXT;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::BRIGHT | F_log_color::RED):
+            case (E_log_color::BACKGROUND | E_log_color::BRIGHT | E_log_color::RED):
                 os << NCPP_BACKGROUND_BRIGHT_RED_TEXT;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::BRIGHT | F_log_color::GREEN):
+            case (E_log_color::BACKGROUND | E_log_color::BRIGHT | E_log_color::GREEN):
                 os << NCPP_BACKGROUND_BRIGHT_GREEN_TEXT;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::BRIGHT | F_log_color::YELLOW):
+            case (E_log_color::BACKGROUND | E_log_color::BRIGHT | E_log_color::YELLOW):
                 os << NCPP_BACKGROUND_BRIGHT_YELLOW_TEXT;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::BRIGHT | F_log_color::BLUE):
+            case (E_log_color::BACKGROUND | E_log_color::BRIGHT | E_log_color::BLUE):
                 os << NCPP_BACKGROUND_BRIGHT_BLUE_TEXT;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::BRIGHT | F_log_color::MAGNETA):
+            case (E_log_color::BACKGROUND | E_log_color::BRIGHT | E_log_color::MAGNETA):
                 os << NCPP_BACKGROUND_BRIGHT_MAGNETA_TEXT;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::BRIGHT | F_log_color::CYAN):
+            case (E_log_color::BACKGROUND | E_log_color::BRIGHT | E_log_color::CYAN):
                 os << NCPP_BACKGROUND_BRIGHT_CYAN_TEXT;
                 break;
-            case (F_log_color::BACKGROUND | F_log_color::BRIGHT | F_log_color::WHITE):
+            case (E_log_color::BACKGROUND | E_log_color::BRIGHT | E_log_color::WHITE):
                 os << NCPP_BACKGROUND_BRIGHT_WHITE_TEXT;
                 break;
 

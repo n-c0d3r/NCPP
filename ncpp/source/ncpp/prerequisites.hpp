@@ -371,13 +371,20 @@ struct NCPP_PP_CAT(NCPP_STATIC_WARNING,__LINE__) { \
 ////////////////////////////////////////////////////////////////////////////////////
 
 namespace ncpp::internal {
+    void log_warning_failed_connector();
+    void log_warning_failed_at(const char* file, int line);
     struct F_warning_tail_logger {
 
         NCPP_FORCE_INLINE ~F_warning_tail_logger(){
             std::cout << std::endl;
         }
         template<typename F_arg__>
-        NCPP_FORCE_INLINE std::ostream& operator << (F_arg__&& arg) { return (std::cout << std::forward<F_arg__>(arg)); }
+        NCPP_FORCE_INLINE std::ostream& operator << (F_arg__&& arg) {
+
+            log_warning_failed_connector();
+
+            return (std::cout << std::forward<F_arg__>(arg));
+        }
 
     };
 }
@@ -388,7 +395,7 @@ namespace ncpp::internal {
                 (         \
                     [&]() -> ncpp::internal::F_warning_tail_logger { \
                           \
-                        std::cout << "Warning " << "(" << NCPP_FILE << " at line " << NCPP_LINE << "): "; \
+                        ncpp::internal::log_warning_failed_at(NCPP_FILE, NCPP_LINE); \
                           \
                         return {};  \
                     }         \
@@ -399,7 +406,7 @@ namespace ncpp::internal {
                 (         \
                     [&]() -> ncpp::internal::F_warning_tail_logger { \
                           \
-                        std::cout << "Warning " << "(" << NCPP_FILE << " at line " << NCPP_LINE << "): "; \
+                        ncpp::internal::log_warning_failed_at(NCPP_FILE, NCPP_LINE); \
                           \
                         return {};  \
                     }         \
@@ -421,13 +428,22 @@ namespace ncpp::internal {
 ////////////////////////////////////////////////////////////////////////////////////
 
 namespace ncpp::internal {
+    void log_assertion_failed_connector();
+    void log_assertion_failed_at(const char* file, int line);
     struct F_assert_tail_logger {
 
         NCPP_FORCE_INLINE ~F_assert_tail_logger(){
             std::cout << std::endl;
+            pause_console();
+            exit(1);
         }
         template<typename F_arg__>
-        NCPP_FORCE_INLINE std::ostream& operator << (F_arg__&& arg) { return (std::cout << std::forward<F_arg__>(arg)); }
+        NCPP_FORCE_INLINE std::ostream& operator << (F_arg__&& arg) {
+
+            log_assertion_failed_connector();
+
+            return (std::cout << std::forward<F_arg__>(arg));
+        }
 
     };
 }
@@ -438,7 +454,7 @@ namespace ncpp::internal {
                 (         \
                     [&]() -> ncpp::internal::F_assert_tail_logger { \
                           \
-                        std::cout << "Assertion failed " << "(" << NCPP_FILE << " at line " << NCPP_LINE << "): "; \
+                        ncpp::internal::log_assertion_failed_at(NCPP_FILE, NCPP_LINE); \
                           \
                         return {};  \
                     }         \
@@ -449,7 +465,7 @@ namespace ncpp::internal {
                 (         \
                     [&]() -> ncpp::internal::F_assert_tail_logger { \
                           \
-                        std::cout << "Assertion failed " << "(" << NCPP_FILE << " at line " << NCPP_LINE << "): "; \
+                        ncpp::internal::log_assertion_failed_at(NCPP_FILE, NCPP_LINE); \
                           \
                         return {};  \
                     }         \
