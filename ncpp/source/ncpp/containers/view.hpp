@@ -168,7 +168,7 @@ namespace ncpp {
 
             ~F_large_view_owner_counter(){
 
-                assert((m.load(eastl::memory_order_acquire) == 0) && "all larges to the owned container have to be unlarged before the view owner counter is destroyed");
+                NCPP_ASSERT((m.load(eastl::memory_order_acquire) == 0) && "all larges to the owned container have to be unlarged before the view owner counter is destroyed");
 
             }
 
@@ -581,7 +581,7 @@ namespace ncpp {
 
                     owner_counter_p_ = other_view.owner_counter_p();
 
-                    assert(
+                    NCPP_ASSERT(
                         ([&]()->b8{ owner_counter_p_->m.fetch_add(1, eastl::memory_order_acq_rel); return true;})()
                         && "all larges to the owned container have to be unlarged before the view owner counter is destroyed"
                     );
@@ -593,7 +593,7 @@ namespace ncpp {
 
                 if(owner_counter_p_) {
 
-                    assert(
+                    NCPP_ASSERT(
                         ([this]()->b8{ owner_counter_p_->m.fetch_sub(1, eastl::memory_order_acq_rel); return true;})()
                         && "all larges to the owned container have to be unlarged before the view owner counter is destroyed"
                     );

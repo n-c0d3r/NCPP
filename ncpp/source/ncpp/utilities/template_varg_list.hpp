@@ -297,7 +297,7 @@ namespace ncpp {
             template<sz index__>
             struct TF_at_internal_varg {
 
-                static_assert((index__ < count), "out of bound");
+                NCPP_STATIC_ASSERT((index__ < count), "out of bound");
 
                 static constexpr auto value = T_nth_template_varg<index__, args__...>;
 
@@ -336,7 +336,7 @@ namespace ncpp {
             template<i32 begin__, i32 end__>
             struct TF_slice_internal_varg {
 
-                static_assert(
+                NCPP_STATIC_ASSERT(
                     (
                         (begin__ <= count)
                         && (begin__ >= 0)

@@ -172,7 +172,7 @@ namespace ncpp {
 
 			NCPP_FORCE_INLINE F_item pop() {
 
-				assert(size() > 0 && "ring buffer is empty");
+				NCPP_ASSERT(size() > 0 && "ring buffer is empty");
 
 				return std::move(item_vector_[(begin_index_++) % capacity_]);
 			}

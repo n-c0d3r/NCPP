@@ -162,7 +162,7 @@ namespace ncpp {
                 
                 static NCPP_FORCE_INLINE F__& invoke(void* object_p, const TF_robject_member_info& member_info) {
                     
-                    assert((utilities::T_type_hash_code<F__> == member_info.subtype().data().hash_code) && "invalid F__");
+                    NCPP_ASSERT((utilities::T_type_hash_code<F__> == member_info.subtype().data().hash_code) && "invalid F__");
                     
                     return *reinterpret_cast<F__*>(reinterpret_cast<sz>(object_p) + member_info.offset_);
                 }
@@ -178,8 +178,8 @@ namespace ncpp {
             public:
                 static NCPP_FORCE_INLINE F_invoke* invoke(void* object_p, const TF_robject_member_info& member_info) {
                     
-                    assert((utilities::T_type_hash_code<F> == member_info.subtype().data().hash_code) && "invalid F__");
-                    assert(!member_info.is_static_ || (member_info.is_static_ && !object_p) && "object_p must be zero if member is static");
+                    NCPP_ASSERT((utilities::T_type_hash_code<F> == member_info.subtype().data().hash_code) && "invalid F__");
+                    NCPP_ASSERT(!member_info.is_static_ || (member_info.is_static_ && !object_p) && "object_p must be zero if member is static");
                     
                     return reinterpret_cast<F_invoke*>(member_info.offset_);
                 }
@@ -207,7 +207,7 @@ namespace ncpp {
             template<typename F__, std::enable_if_t<!utilities::T_is_function<F__>, i32> = 0>
             NCPP_FORCE_INLINE void T_invoke(void* object_p = 0) const {
                 
-                static_assert(utilities::T_is_function<F__> && "cant invoke non function type");
+                NCPP_STATIC_ASSERT(utilities::T_is_function<F__> && "cant invoke non function type");
             }
             template<typename F__, typename... F_args__, std::enable_if_t<utilities::T_is_function<F__>, i32> = 0>
             NCPP_FORCE_INLINE typename utilities::TF_function_traits<F__>::F_return T_invoke(F_args__... args, void* object_p = 0) const {

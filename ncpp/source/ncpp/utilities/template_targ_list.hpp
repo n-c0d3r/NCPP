@@ -356,7 +356,7 @@ namespace ncpp {
             template<sz index__>
             struct TF_at_internal_targ {
 
-                static_assert((index__ < count), "out of bound");
+                NCPP_STATIC_ASSERT((index__ < count), "out of bound");
 
                 using F = TF_nth_template_targ<index__, F_args__...>;
 
@@ -407,7 +407,7 @@ namespace ncpp {
             template<i32 begin__, i32 end__>
             struct TF_slice_internal_targ {
 
-                static_assert(
+                NCPP_STATIC_ASSERT(
                     (
                         (begin__ <= count)
                         && (begin__ >= 0)

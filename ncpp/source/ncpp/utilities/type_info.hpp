@@ -145,7 +145,7 @@ namespace ncpp {
                 constexpr auto start = function.find(prefix) + prefix.size();
                 constexpr auto end = function.rfind(suffix);
 
-                static_assert(start < end);
+                NCPP_STATIC_ASSERT(start < end);
 
                 constexpr auto name = function.substr(start, (end - start));
                 return substring_as_array(name, std::make_index_sequence<name.size()>{});

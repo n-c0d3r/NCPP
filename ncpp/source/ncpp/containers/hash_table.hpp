@@ -105,8 +105,8 @@ namespace ncpp {
                 index_vector_(allocator)
             {
                 
-				assert(hash_size_ > 0 && "hash size must be greater than zero");
-				assert(utilities::is_power_of_two(static_cast<f32>(hash_size_)) && "hash size must be power of two");
+				NCPP_ASSERT(hash_size_ > 0 && "hash size must be greater than zero");
+				NCPP_ASSERT(utilities::is_power_of_two(static_cast<f32>(hash_size_)) && "hash size must be power of two");
                 
                 if(index_size > 0) {
                     
@@ -198,8 +198,8 @@ namespace ncpp {
                 hash_size_ = hash_size;
                 index_size_ = index_size;
                 
-                assert(hash_size_ > 0 && "hash size must be greater than zero");
-                assert(utilities::is_power_of_two(hash_size_) && "hash size must be power of two");
+                NCPP_ASSERT(hash_size_ > 0 && "hash size must be greater than zero");
+                NCPP_ASSERT(utilities::is_power_of_two(hash_size_) && "hash size must be power of two");
                 
                 if( index_size_ )
                 {
@@ -241,8 +241,8 @@ namespace ncpp {
             }
             NCPP_FORCE_INLINE F_int next(F_int index) const {
                 
-                assert(index < index_size_);
-                assert(index_vector_[index] != index);
+                NCPP_ASSERT(index < index_size_);
+                NCPP_ASSERT(index_vector_[index] != index);
                 return index_vector_[index];
             }
             NCPP_FORCE_INLINE b8 is_valid(F_int index) const {
@@ -262,7 +262,7 @@ namespace ncpp {
 
             }
             inline void add_concurrent(F_int key, F_int index){
-                assert(index < index_size_);
+                NCPP_ASSERT(index < index_size_);
 
                 key &= hash_mask_;
                 index_vector_[index] = EA::Thread::AtomicFetchSwap((i32*)(hash_vector_.data() + key), index);

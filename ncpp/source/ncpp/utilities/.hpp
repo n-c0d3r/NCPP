@@ -90,8 +90,6 @@ namespace ncpp {
 
 #include <ncpp/utilities/sizeof.hpp>
 
-#include <ncpp/utilities/defer.hpp>
-
 #include <ncpp/utilities/key_type.hpp>
 #include <ncpp/utilities/value_type.hpp>
 #include <ncpp/utilities/item_type.hpp>

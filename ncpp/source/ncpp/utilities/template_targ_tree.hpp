@@ -143,7 +143,7 @@ namespace ncpp {
         requires(TF_template_targ_list<F_first_child__, F_rest_childs__...>::template TF_invert_filter<TL_template_targ_tree>::count != 0)
         struct TF_template_targ_tree<F_arg__, F_first_child__, F_rest_childs__...> {
 
-            static_assert(
+            NCPP_STATIC_ASSERT(
                 TF_template_targ_list<F_first_child__, F_rest_childs__...>::template TF_invert_filter<TL_template_targ_tree>::count == 0,
                 "invalid template targ childs"
             );

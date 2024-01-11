@@ -89,7 +89,7 @@ namespace ncpp {
             
 
 		public:
-			static_assert(NCPP_RTTI_IS_HAS_FLAG(F_object, rtti::F_robject_flag), "F_object__ is invalid, require RTTI");
+			NCPP_STATIC_ASSERT(NCPP_RTTI_IS_HAS_FLAG(F_object, rtti::F_robject_flag), "F_object__ is invalid, require RTTI");
 
             
 
