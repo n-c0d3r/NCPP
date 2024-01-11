@@ -330,15 +330,16 @@ namespace ncpp::internal {
 
 }
 
-#define NCPP_DEFER_ADVANCED(Suffix, Captures, ...) auto NCPP_GLUE(___ncpp_defer_##Suffix___, NCPP_GLUE(__at_line_, __LINE__)) = ncpp::internal::T_create_defer( \
+#define NCPP_DEFER_OBJECT_NAME(...) NCPP_GLUE(___ncpp_defer_##__VA_ARGS__, NCPP_GLUE(__at_line_, __LINE__))
+#define NCPP_DEFER_ADVANCED(Suffix, Captures, ...) auto NCPP_DEFER_OBJECT_NAME(Suffix) = ncpp::internal::T_create_defer( \
                 [Captures](){ __VA_ARGS__; }                                                                                                                   \
             );
-#define NCPP_DEFER(...) NCPP_DEFER_ADVANCED(basic, &, __VA_ARGS__);
+#define NCPP_DEFER(...) NCPP_DEFER_ADVANCED(, &, __VA_ARGS__);
 
 
 
 ////////////////////////////////////////////////////////////////////////////////////
-//  NCPP_STATIC_WARNING(Cond, Msg) macro
+//  NCPP_STATIC_WARNING(...) macro
 ////////////////////////////////////////////////////////////////////////////////////
 
 #define NCPP_PP_CAT(x,y) NCPP_PP_CAT1(x,y)
@@ -350,56 +351,109 @@ namespace ncpp {
     {
         struct true_type {};
         struct false_type {};
-        template <int test> struct converter : public true_type {};
-        template <> struct converter<0> : public false_type {};
+        template <int test, auto...> struct converter : public true_type {};
+        template <auto... rest__> struct converter<0, rest__...> : public false_type {};
     }
 
 }
 
-#define NCPP_STATIC_WARNING(cond, ...) \
+#define NCPP_STATIC_WARNING(...) \
 struct NCPP_PP_CAT(NCPP_STATIC_WARNING,__LINE__) { \
-  NCPP_DEPRECATE(void _(::ncpp::internal::NCPP_STATIC_WARNING_helper::false_type const& ) __VA_OPT__(,) __VA_ARGS__) {}; \
+  NCPP_DEPRECATE(void _(::ncpp::internal::NCPP_STATIC_WARNING_helper::false_type const& ) __VA_ARGS__) {}; \
   void _(::ncpp::internal::NCPP_STATIC_WARNING_helper::true_type const& ) {}; \
-  NCPP_PP_CAT(NCPP_STATIC_WARNING,__LINE__)() {_(ncpp::internal::NCPP_STATIC_WARNING_helper::converter<(cond)>());} \
+  NCPP_PP_CAT(NCPP_STATIC_WARNING,__LINE__)() {_(ncpp::internal::NCPP_STATIC_WARNING_helper::converter<__VA_ARGS__>());} \
 }
 
 
 
 ////////////////////////////////////////////////////////////////////////////////////
-//  NCPP_WARNING(Cond, ...) macro
+//  NCPP_WARNING(...) macro
 ////////////////////////////////////////////////////////////////////////////////////
+
+namespace ncpp::internal {
+    struct F_warning_tail_logger {
+
+        NCPP_FORCE_INLINE ~F_warning_tail_logger(){
+            std::cout << std::endl;
+        }
+        template<typename F_arg__>
+        NCPP_FORCE_INLINE std::ostream& operator << (F_arg__&& arg) { return (std::cout << std::forward<F_arg__>(arg)); }
+
+    };
+}
 
 #ifndef NDEBUG
-#define NCPP_WARNING(cond,...) if(!(bool)(cond)) { \
-        NCPP_DEFER(std::cout << std::endl);                                     \
-        std::cout << "Warning " << "(" << NCPP_FILE << " at line " << NCPP_LINE << "): " __VA_OPT__(<<) __VA_ARGS__;\
-    }
+#define NCPP_WARNING(...) \
+            if(!((bool)(__VA_ARGS__))) \
+                (         \
+                    [&]() -> ncpp::internal::F_warning_tail_logger { \
+                          \
+                        std::cout << "Warning " << "(" << NCPP_FILE << " at line " << NCPP_LINE << "): "; \
+                          \
+                        return {};  \
+                    }         \
+                )()
 #else
-#define NCPP_WARNING(cond,...) ;
+#define NCPP_WARNING(...) \
+            if constexpr(false) \
+                (         \
+                    [&]() -> ncpp::internal::F_warning_tail_logger { \
+                          \
+                        std::cout << "Warning " << "(" << NCPP_FILE << " at line " << NCPP_LINE << "): "; \
+                          \
+                        return {};  \
+                    }         \
+                )()
 #endif
 
 
 
 ////////////////////////////////////////////////////////////////////////////////////
-//  NCPP_STATIC_ASSERT(Cond, Msg) macro
+//  NCPP_STATIC_ASSERT(...) macro
 ////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_STATIC_ASSERT(Cond, ...) static_assert(Cond __VA_OPT__(, __VA_ARGS__))
+#define NCPP_STATIC_ASSERT(...) static_assert(__VA_ARGS__)
 
 
 
 ////////////////////////////////////////////////////////////////////////////////////
-//  NCPP_ASSERT(Cond, ...) macro
+//  NCPP_ASSERT(...) macro
 ////////////////////////////////////////////////////////////////////////////////////
+
+namespace ncpp::internal {
+    struct F_assert_tail_logger {
+
+        NCPP_FORCE_INLINE ~F_assert_tail_logger(){
+            std::cout << std::endl;
+        }
+        template<typename F_arg__>
+        NCPP_FORCE_INLINE std::ostream& operator << (F_arg__&& arg) { return (std::cout << std::forward<F_arg__>(arg)); }
+
+    };
+}
 
 #ifndef NDEBUG
-#define NCPP_ASSERT(cond,...) if(!(bool)(cond)) {\
-        NCPP_DEFER(std::cout << std::endl);                                     \
-        std::cout << "Assertion failed " << "(" << NCPP_FILE << " at line " << NCPP_LINE << "): " __VA_OPT__(<<) __VA_ARGS__;\
-        ncpp::pause_console();                                   \
-    }
+#define NCPP_ASSERT(...) \
+            if(!((bool)(__VA_ARGS__))) \
+                (         \
+                    [&]() -> ncpp::internal::F_assert_tail_logger { \
+                          \
+                        std::cout << "Assertion failed " << "(" << NCPP_FILE << " at line " << NCPP_LINE << "): "; \
+                          \
+                        return {};  \
+                    }         \
+                )()
 #else
-#define NCPP_ASSERT(cond,...) ;
+#define NCPP_ASSERT(...) \
+            if constexpr(false) \
+                (         \
+                    [&]() -> ncpp::internal::F_assert_tail_logger { \
+                          \
+                        std::cout << "Assertion failed " << "(" << NCPP_FILE << " at line " << NCPP_LINE << "): "; \
+                          \
+                        return {};  \
+                    }         \
+                )()
 #endif
 
 
