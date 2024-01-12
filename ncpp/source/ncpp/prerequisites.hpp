@@ -459,6 +459,7 @@ namespace ncpp::internal {
         struct F_exception {};
         NCPP_FORCE_INLINE ~F_assert_tail_logger(){
             std::cout << std::endl;
+
             NCPP_DISABLE_ALL_WARNINGS_PUSH
             throw F_exception{};
             NCPP_DISABLE_ALL_WARNINGS_POP
@@ -703,106 +704,114 @@ namespace ncpp {
 
 
     // \cond INTERNAL
-    template<sz bits__>
-    struct TF_uint_internal {
-        using type = void;
-    };
-    template<>
-    struct TF_uint_internal<8> {
-        using type = u8;
-    };
-    template<>
-    struct TF_uint_internal<16> {
-        using type = u16;
-    };
-    template<>
-    struct TF_uint_internal<32> {
-        using type = u32;
-    };
-    template<>
-    struct TF_uint_internal<64> {
-        using type = u64;
-    };
+    namespace internal {
+        template<sz bits__>
+        struct TF_uint {
+            using F = void;
+        };
+        template<>
+        struct TF_uint<1> {
+            using F = u8;
+        };
+        template<>
+        struct TF_uint<2> {
+            using F = u16;
+        };
+        template<>
+        struct TF_uint<4> {
+            using F = u32;
+        };
+        template<>
+        struct TF_uint<8> {
+            using F = u64;
+        };
+    }
     // \endcond
-    template<sz bits>
-    using TF_uint = typename TF_uint_internal<bits>::type;
+    template<sz bytes__>
+    using TF_uint = typename internal::TF_uint<bytes__>::F;
 
     // \cond INTERNAL
-    template<sz bits__>
-    struct TF_int_internal {
-        using type = void;
-    };
-    template<>
-    struct TF_int_internal<8> {
-        using type = i8;
-    };
-    template<>
-    struct TF_int_internal<16> {
-        using type = i16;
-    };
-    template<>
-    struct TF_int_internal<32> {
-        using type = i32;
-    };
-    template<>
-    struct TF_int_internal<64> {
-        using type = i64;
-    };
+    namespace internal {
+        template<sz bits__>
+        struct TF_int {
+            using F = void;
+        };
+        template<>
+        struct TF_int<1> {
+            using F = i8;
+        };
+        template<>
+        struct TF_int<2> {
+            using F = i16;
+        };
+        template<>
+        struct TF_int<4> {
+            using F = i32;
+        };
+        template<>
+        struct TF_int<8> {
+            using F = i64;
+        };
+    }
     // \endcond
-    template<sz bits>
-    using TF_int = typename TF_int_internal<bits>::type;
+    template<sz bytes__>
+    using TF_int = typename internal::TF_int<bytes__>::F;
 
 
 
     // \cond INTERNAL
-    template<sz bits__>
-    struct TF_atomic_uint_internal {
-        using type = void;
-    };
-    template<>
-    struct TF_atomic_uint_internal<8> {
-        using type = u8;
-    };
-    template<>
-    struct TF_atomic_uint_internal<16> {
-        using type = u16;
-    };
-    template<>
-    struct TF_atomic_uint_internal<32> {
-        using type = u32;
-    };
-    template<>
-    struct TF_atomic_uint_internal<64> {
-        using type = u64;
-    };
+    namespace internal {
+        template<sz bits__>
+        struct TF_atomic_uint {
+            using F = void;
+        };
+        template<>
+        struct TF_atomic_uint<1> {
+            using F = u8;
+        };
+        template<>
+        struct TF_atomic_uint<2> {
+            using F = u16;
+        };
+        template<>
+        struct TF_atomic_uint<4> {
+            using F = u32;
+        };
+        template<>
+        struct TF_atomic_uint<8> {
+            using F = u64;
+        };
+    }
     // \endcond
-    template<sz bits>
-    using TF_atomic_uint = typename TF_atomic_uint_internal<bits>::type;
+    template<sz bytes__>
+    using TF_atomic_uint = typename internal::TF_atomic_uint<bytes__>::F;
 
     // \cond INTERNAL
-    template<sz bits__>
-    struct TF_atomic_int_internal {
-        using type = void;
-    };
-    template<>
-    struct TF_atomic_int_internal<8> {
-        using type = i8;
-    };
-    template<>
-    struct TF_atomic_int_internal<16> {
-        using type = i16;
-    };
-    template<>
-    struct TF_atomic_int_internal<32> {
-        using type = i32;
-    };
-    template<>
-    struct TF_atomic_int_internal<64> {
-        using type = i64;
-    };
+    namespace internal {
+        template<sz bytes__>
+        struct TF_atomic_int {
+            using F = void;
+        };
+        template<>
+        struct TF_atomic_int<1> {
+            using F = i8;
+        };
+        template<>
+        struct TF_atomic_int<2> {
+            using F = i16;
+        };
+        template<>
+        struct TF_atomic_int<4> {
+            using F = i32;
+        };
+        template<>
+        struct TF_atomic_int<8> {
+            using F = i64;
+        };
+    }
     // \endcond
-    template<sz bits>
-    using TF_atomic_int = typename TF_atomic_int_internal<bits>::type;
+    template<sz bytes__>
+    using TF_atomic_int = typename internal::TF_atomic_int<bytes__>::F;
 
 #pragma endregion
 
