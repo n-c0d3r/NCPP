@@ -16,7 +16,7 @@ int main() {
 
     const F_alloc_debug_info& p_debug_info = get_alloc_debug_info(p);
 
-    cout << p_debug_info << ncpp::endl;
+    NCPP_INFO() << p_debug_info << std::endl;
 
 	mem::log_memory_stats();
 
@@ -31,7 +31,7 @@ int main() {
 
     const F_alloc_debug_info& aligned_p_debug_info = get_alloc_debug_info(aligned_p);
 
-    cout << aligned_p_debug_info << ncpp::endl;
+    NCPP_INFO() << aligned_p_debug_info << std::endl;
 
 	mem::log_memory_stats();
 

@@ -7,7 +7,8 @@ using namespace ncpp;
 
 NCPP_ENTRY_POINT(args) {
 
-    cout << G_string("Hello ")
+    NCPP_INFO()
+        << G_string("Hello ")
         << E_log_color::V_FOREGROUND_BRIGHT_BLUE
         << G_string("NCPP ")
         << E_log_color::V_FOREGROUND_BRIGHT_CYAN
@@ -15,8 +16,7 @@ NCPP_ENTRY_POINT(args) {
 #ifdef NCPP_LITE
         << T_cout_lowlight(" (LITE)")
 #endif
-        << E_log_color::RESET
-        << ncpp::endl;
+        << E_log_color::RESET;
 
     pause_console();
 

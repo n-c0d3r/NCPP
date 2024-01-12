@@ -17,18 +17,18 @@ int main() {
 
         }
 
-        cout << concurrent_ring_buffer << ncpp::endl;
+        NCPP_INFO() << concurrent_ring_buffer;
 
         for(i32 i = 0; i < 5; ++i) {
 
             i32 value;
             concurrent_ring_buffer.try_pop(value);
 
-            cout << T_cout_value(value) << ncpp::endl;
+            NCPP_INFO() << T_cout_value(value);
 
         }
 
-        cout << concurrent_ring_buffer << ncpp::endl;
+        NCPP_INFO() << concurrent_ring_buffer;
 
 	}
 

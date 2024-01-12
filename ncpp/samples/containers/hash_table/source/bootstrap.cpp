@@ -19,17 +19,17 @@ int main() {
         ht.add(2, 5);
         ht.add(2, 6);
 
-        cout << ht << ncpp::endl;
+        NCPP_INFO() << ht;
         
         for(u32 index = ht.first(1); ht.is_valid(index); index = ht.next(index)){
             
-            std::cout << index << ncpp::endl;
+            NCPP_INFO() << index;
             
         }
         
         for(u32 index = ht.first(2); ht.is_valid(index); index = ht.next(index)){
             
-            std::cout << index << ncpp::endl;
+            NCPP_INFO() << index;
             
         }
 

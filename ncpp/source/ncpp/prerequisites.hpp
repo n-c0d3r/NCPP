@@ -243,42 +243,6 @@ namespace ncpp {
 
 
 
-namespace ncpp {
-
-    struct F_endl {
-        friend std::ostream& operator << (std::ostream& os, F_endl) {
-
-            os << std::endl;
-
-            return os;
-        }
-        friend std::wostream& operator << (std::wostream& os, F_endl) {
-
-            os << std::endl;
-
-            return os;
-        }
-    };
-    inline F_endl endl;
-
-}
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 #pragma region Macros
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -436,14 +400,15 @@ namespace ncpp::internal {
 
         std::ostream& ostream = std::cout;
 
-        struct F_exception {};
-        NCPP_FORCE_INLINE ~F_warning_tail_logger(){
-            ostream << ncpp::endl << ncpp::endl;
+        F_warning_tail_logger(
+            std::ostream& ostream, const char* file_path_p, const char* function_name_p, uint32_t line, const char* condition
+        ) :
+            ostream(ostream)
+        {
+            log_warning_failed_at(ostream, file_path_p, function_name_p, line, condition);
         }
-        template<typename F_arg__>
-        NCPP_FORCE_INLINE std::ostream& operator << (F_arg__&& arg) {
-
-            return (ostream << std::forward<F_arg__>(arg));
+        NCPP_FORCE_INLINE ~F_warning_tail_logger(){
+            ostream << std::endl << std::endl;
         }
 
     };
@@ -452,25 +417,11 @@ namespace ncpp::internal {
 #ifndef NDEBUG
 #define NCPP_WARNING_ADVANCED(OptionalOStream, ...) \
             if(!((bool)(__VA_ARGS__))) \
-                (         \
-                    [&]() -> ncpp::internal::F_warning_tail_logger { \
-                          \
-                        ncpp::internal::log_warning_failed_at(OptionalOStream, NCPP_FILE, NCPP_FUNCTION, NCPP_LINE, #__VA_ARGS__); \
-                          \
-                        return { OptionalOStream };  \
-                    }         \
-                )()
+                ncpp::internal::F_warning_tail_logger{ OptionalOStream, NCPP_FILE, NCPP_FUNCTION, NCPP_LINE, #__VA_ARGS__ }.ostream
 #else
 #define NCPP_WARNING_ADVANCED(OptionalOStream, ...) \
             if constexpr(false) \
-                (         \
-                    [&]() -> ncpp::internal::F_warning_tail_logger { \
-                          \
-                        ncpp::internal::log_warning_failed_at(OptionalOStream, NCPP_FILE, NCPP_FUNCTION, NCPP_LINE, #__VA_ARGS__); \
-                          \
-                        return { OptionalOStream };  \
-                    }         \
-                )()
+                ncpp::internal::F_warning_tail_logger{ OptionalOStream, NCPP_FILE, NCPP_FUNCTION, NCPP_LINE, #__VA_ARGS__ }.ostream
 #endif
 
 #define NCPP_WARNING(...) NCPP_WARNING_ADVANCED(std::cout __VA_OPT__(,) __VA_ARGS__)
@@ -496,17 +447,19 @@ namespace ncpp::internal {
         std::ostream& ostream = std::cout;
 
         struct F_exception {};
+        F_assert_tail_logger(
+            std::ostream& ostream, const char* file_path_p, const char* function_name_p, uint32_t line, const char* condition
+        ) :
+            ostream(ostream)
+        {
+            log_assertion_failed_at(ostream, file_path_p, function_name_p, line, condition);
+        }
         NCPP_FORCE_INLINE ~F_assert_tail_logger(){
-            ostream << ncpp::endl << ncpp::endl;
+            ostream << std::endl << std::endl;
 
             NCPP_DISABLE_ALL_WARNINGS_PUSH
             throw F_exception{};
             NCPP_DISABLE_ALL_WARNINGS_POP
-        }
-        template<typename F_arg__>
-        NCPP_FORCE_INLINE std::ostream& operator << (F_arg__&& arg) {
-
-            return (ostream << std::forward<F_arg__>(arg));
         }
 
     };
@@ -515,28 +468,51 @@ namespace ncpp::internal {
 #ifndef NDEBUG
 #define NCPP_ASSERT_ADVANCED(OptionalOStream, ...) \
             if(!((bool)(__VA_ARGS__))) \
-                (         \
-                    [&]() -> ncpp::internal::F_assert_tail_logger { \
-                          \
-                        ncpp::internal::log_assertion_failed_at(OptionalOStream, NCPP_FILE, NCPP_FUNCTION, NCPP_LINE, #__VA_ARGS__); \
-                          \
-                        return { OptionalOStream };  \
-                    }         \
-                )()
+                ncpp::internal::F_assert_tail_logger{ OptionalOStream, NCPP_FILE, NCPP_FUNCTION, NCPP_LINE, #__VA_ARGS__ }.ostream
 #else
 #define NCPP_ASSERT_ADVANCED(OptionalOStream, ...) \
             if constexpr(false) \
-                (         \
-                    [&]() -> ncpp::internal::F_assert_tail_logger { \
-                          \
-                        ncpp::internal::log_assertion_failed_at(OptionalOStream, NCPP_FILE, NCPP_FUNCTION, NCPP_LINE, #__VA_ARGS__); \
-                          \
-                        return { OptionalOStream };  \
-                    }         \
-                )()
+                ncpp::internal::F_assert_tail_logger{ OptionalOStream, NCPP_FILE, NCPP_FUNCTION, NCPP_LINE, #__VA_ARGS__ }.ostream
 #endif
 
 #define NCPP_ASSERT(...) NCPP_ASSERT_ADVANCED(std::cout __VA_OPT__(,) __VA_ARGS__)
+
+
+
+////////////////////////////////////////////////////////////////////////////////////
+//  NCPP_INFO(...) macro
+////////////////////////////////////////////////////////////////////////////////////
+
+namespace ncpp::internal {
+    void log_info_failed_at(std::ostream& ostream, const char* file_path_p, const char* function_name_p, uint32_t line);
+    struct F_info_tail_logger {
+
+        std::ostream& ostream = std::cout;
+
+        F_info_tail_logger(
+            std::ostream& ostream, const char* file_path_p, const char* function_name_p, uint32_t line
+        ) :
+            ostream(ostream)
+        {
+            log_info_failed_at(ostream, file_path_p, function_name_p, line);
+        }
+        NCPP_FORCE_INLINE ~F_info_tail_logger(){
+            ostream << std::endl << std::endl;
+        }
+
+    };
+}
+
+#ifndef NDEBUG
+#define NCPP_INFO_ADVANCED(OptionalOStream) \
+            ncpp::internal::F_info_tail_logger{ OptionalOStream, NCPP_FILE, NCPP_FUNCTION, NCPP_LINE }.ostream
+#else
+#define NCPP_INFO_ADVANCED(OptionalOStream) \
+            if constexpr(false) \
+                ncpp::internal::F_info_tail_logger{ OptionalOStream, NCPP_FILE, NCPP_FUNCTION, NCPP_LINE }.ostream
+#endif
+
+#define NCPP_INFO() NCPP_INFO_ADVANCED(std::cout)
 
 
 
@@ -893,7 +869,7 @@ namespace ncpp {
 
     NCPP_FORCE_INLINE void pause_console() {
 
-        std::cout << "Press any key to continue..." << ncpp::endl;
+        std::cout << "Press any key to continue..." << std::endl;
         std::cin.get();
 
     }

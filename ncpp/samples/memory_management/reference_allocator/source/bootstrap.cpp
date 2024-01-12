@@ -26,7 +26,7 @@ int main() {
 
             {
 
-                NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_default_reference_allocator::allocate ");
+                NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_default_reference_allocator::allocate");
 
                 for (u32 i = 0; i < allocation_count; ++i) {
 
@@ -40,7 +40,7 @@ int main() {
 
             {
 
-                NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_default_reference_allocator::deallocate ");
+                NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_default_reference_allocator::deallocate");
 
                 for (u32 i = 0; i < allocation_count; ++i) {
 
@@ -58,7 +58,7 @@ int main() {
 
 			{
 
-				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_incremental_chunk_allocator::allocate ");
+				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_incremental_chunk_allocator::allocate");
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
@@ -72,7 +72,7 @@ int main() {
 
 			{
 
-				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_incremental_chunk_allocator::deallocate ");
+				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_incremental_chunk_allocator::deallocate");
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
@@ -90,7 +90,7 @@ int main() {
 
 			{
 
-				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::TF_reference_allocator<ncpp::mem::F_incremental_chunk_allocator>::allocate ");
+				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::TF_reference_allocator<ncpp::mem::F_incremental_chunk_allocator>::allocate");
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
@@ -104,7 +104,7 @@ int main() {
 
 			{
 
-				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::TF_reference_allocator<ncpp::mem::F_incremental_chunk_allocator>::deallocate ");
+				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::TF_reference_allocator<ncpp::mem::F_incremental_chunk_allocator>::deallocate");
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
@@ -122,7 +122,7 @@ int main() {
 
 			{
 
-				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_default_allocator::allocate ");
+				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_default_allocator::allocate");
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
@@ -136,7 +136,7 @@ int main() {
 
 			{
 
-				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_default_allocator::deallocate ");
+				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_default_allocator::deallocate");
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
@@ -154,7 +154,7 @@ int main() {
 
 			{
 
-				NCPP_SCOPED_PROFILER_SAMPLE("eastl::allocator::allocate ");
+				NCPP_SCOPED_PROFILER_SAMPLE("eastl::allocator::allocate");
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
@@ -168,7 +168,7 @@ int main() {
 
 			{
 
-				NCPP_SCOPED_PROFILER_SAMPLE("eastl::allocator::deallocate ");
+				NCPP_SCOPED_PROFILER_SAMPLE("eastl::allocator::deallocate");
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
@@ -186,7 +186,7 @@ int main() {
 
 			{
 
-				NCPP_SCOPED_PROFILER_SAMPLE("malloc ");
+				NCPP_SCOPED_PROFILER_SAMPLE("malloc");
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
@@ -198,7 +198,7 @@ int main() {
 
 			{
 
-				NCPP_SCOPED_PROFILER_SAMPLE("free ");
+				NCPP_SCOPED_PROFILER_SAMPLE("free");
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 

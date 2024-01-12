@@ -319,21 +319,21 @@ namespace ncpp {
 				os << NCPP_FOREGROUND_YELLOW << "hash_table"
 					<< " ";
 
-				os << ncpp::T_cout_lowlight("{") << ncpp::endl;
+				os << ncpp::T_cout_lowlight("{") << std::endl;
 
 				for (F_int j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
 					os << " ";
 
 				}
-        		os << ncpp::T_cout_field_name("hash_size") << ncpp::T_cout_lowlight(" -> ") << ncpp::T_cout_value(input.first.hash_size()) << ncpp::T_cout_lowlight(",") << ncpp::endl;
+        		os << ncpp::T_cout_field_name("hash_size") << ncpp::T_cout_lowlight(" -> ") << ncpp::T_cout_value(input.first.hash_size()) << ncpp::T_cout_lowlight(",") << std::endl;
 
 				for (F_int j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
 					os << " ";
 
 				}
-        		os << ncpp::T_cout_field_name("index_size") << ncpp::T_cout_lowlight(" -> ") << ncpp::T_cout_value(input.first.index_size()) << ncpp::T_cout_lowlight(",") << ncpp::endl;
+        		os << ncpp::T_cout_field_name("index_size") << ncpp::T_cout_lowlight(" -> ") << ncpp::T_cout_value(input.first.index_size()) << ncpp::T_cout_lowlight(",") << std::endl;
 
 				for (F_int j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -355,7 +355,7 @@ namespace ncpp {
 						input.second + 1
 					}
 				);
-				os << ncpp::T_cout_lowlight(",") << ncpp::endl;
+				os << ncpp::T_cout_lowlight(",") << std::endl;
 
 				for (F_int j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -377,7 +377,7 @@ namespace ncpp {
 						input.second + 1
 					}
 				);
-				os << ncpp::endl;
+				os << std::endl;
 
 				for (F_int j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
 
@@ -417,21 +417,21 @@ namespace ncpp {
 				os << NCPP_FOREGROUND_YELLOW_TEXT << L"hash_table"
 					<< L" ";
 
-				os << ncpp::T_cout_lowlight(L"{") << ncpp::endl;
+				os << ncpp::T_cout_lowlight(L"{") << std::endl;
 
 				for (F_int j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
 					os << L" ";
 
 				}
-        		os << ncpp::T_cout_field_name("hash_size") << ncpp::T_cout_lowlight(" -> ") << ncpp::T_cout_value(input.first.hash_size()) << ncpp::T_cout_lowlight(",") << ncpp::endl;
+        		os << ncpp::T_cout_field_name("hash_size") << ncpp::T_cout_lowlight(" -> ") << ncpp::T_cout_value(input.first.hash_size()) << ncpp::T_cout_lowlight(",") << std::endl;
 
 				for (F_int j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
 					os << L" ";
 
 				}
-        		os << ncpp::T_cout_field_name("index_size") << ncpp::T_cout_lowlight(" -> ") << ncpp::T_cout_value(input.first.index_size()) << ncpp::T_cout_lowlight(",") << ncpp::endl;
+        		os << ncpp::T_cout_field_name("index_size") << ncpp::T_cout_lowlight(" -> ") << ncpp::T_cout_value(input.first.index_size()) << ncpp::T_cout_lowlight(",") << std::endl;
 
 				for (F_int j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -453,7 +453,7 @@ namespace ncpp {
 						input.second + 1
 					}
 				);
-				os << ncpp::T_cout_lowlight(",") << ncpp::endl;
+				os << ncpp::T_cout_lowlight(",") << std::endl;
 
 				for (F_int j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -475,7 +475,7 @@ namespace ncpp {
 						input.second + 1
 					}
 				);
-				os << ncpp::endl;
+				os << std::endl;
 
 				for (F_int j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
 

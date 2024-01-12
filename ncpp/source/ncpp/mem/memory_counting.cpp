@@ -14,8 +14,9 @@ namespace ncpp {
 		void log_memory_stats() {
 
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
-			std::cout << "total allocated memory: " << NCPP_TOTAL_ALLOCATED_MEMORY() << " (bytes)" << ncpp::endl;
-			std::cout << "usable allocated memory: " << NCPP_USABLE_ALLOCATED_MEMORY() << " (bytes)" << ncpp::endl;
+			NCPP_INFO()
+                << "total allocated memory: " << NCPP_TOTAL_ALLOCATED_MEMORY() << " (bytes)" << std::endl
+                << "usable allocated memory: " << NCPP_USABLE_ALLOCATED_MEMORY() << " (bytes)" << std::endl;
 #endif
 
 		}

@@ -75,8 +75,8 @@ NCPP_MAGIC((F__)[4], TD<F__>::dd4);
 
 
 
-#define BLOG_THIS void log_this() { std::cout << T_type_fullname<F_this>() << ncpp::endl; }
-#define RLOG_THIS std::cout << "Reflecting" << ncpp::endl;
+#define BLOG_THIS void log_this() { NCPP_INFO() << T_type_fullname<F_this>(); }
+#define RLOG_THIS NCPP_INFO() << "Reflecting";
 
 
 
@@ -196,7 +196,7 @@ struct F_customm_reflector {
         F_customm_reflector
     ) {
 
-        cout << "user pre reflect member: "
+        NCPP_INFO() << "user pre reflect member: "
             << T_cout_value(F_member_sinfo__::name())
             << " (static value: "
             << T_cout_value(F_member_sinfo__::static_get())
@@ -205,15 +205,14 @@ struct F_customm_reflector {
             << T_cout_value((u32)F_member_sinfo__::accessibility())
             << ")"
             << " "
-            << custom_params_p->message
-            << ncpp::endl;
+            << custom_params_p->message;
 
     }
     NCPP_ROBJECT_USER_POST_REFLECT_MEMBER(
         F_customm_reflector
     ) {
 
-        cout << "user post reflect member: "
+        NCPP_INFO() << "user post reflect member: "
             << T_cout_value(F_member_sinfo__::name())
             << " (static value: "
             << T_cout_value(F_member_sinfo__::static_get())
@@ -222,52 +221,47 @@ struct F_customm_reflector {
             << T_cout_value((u32)F_member_sinfo__::accessibility())
             << ")"
             << " "
-            << custom_params_p->message
-            << ncpp::endl;
+            << custom_params_p->message;
 
     }
     NCPP_ROBJECT_USER_PRE_REFLECT_BASE(
         F_customm_reflector
     ) {
 
-        cout << "user pre reflect base: "
+        NCPP_INFO() << "user pre reflect base: "
             << T_cout_value(F_base__::static_type_name())
             << " "
-            << custom_params_p->message
-            << ncpp::endl;
+            << custom_params_p->message;
 
     }
     NCPP_ROBJECT_USER_POST_REFLECT_BASE(
         F_customm_reflector
     ) {
 
-        cout << "user post reflect base: "
+        NCPP_INFO() << "user post reflect base: "
             << T_cout_value(F_base__::static_type_name())
             << " "
-            << custom_params_p->message
-            << ncpp::endl;
+            << custom_params_p->message;
 
     }
     NCPP_ROBJECT_USER_PRE_REFLECT_OBJECT(
         F_customm_reflector
     ) {
 
-        cout << "user pre reflect object: "
+        NCPP_INFO() << "user pre reflect object: "
             << T_cout_value(F_robject__::static_type_name())
             << " "
-            << custom_params_p->message
-            << ncpp::endl;
+            << custom_params_p->message;
 
     }
     NCPP_ROBJECT_USER_POST_REFLECT_OBJECT(
         F_customm_reflector
     ) {
 
-        cout << "user post reflect object: "
+        NCPP_INFO() << "user post reflect object: "
             << T_cout_value(F_robject__::static_type_name())
             << " "
-            << custom_params_p->message
-            << ncpp::endl;
+            << custom_params_p->message;
 
     }
 
@@ -288,7 +282,7 @@ void log_type_info(A::F_robject_type_info* type_info_p){
 
     for(const auto& it : type_info_p->name_to_member_info_p_map()){
 
-        cout << T_cout_value(it.first) << ncpp::endl;
+        NCPP_INFO() << T_cout_value(it.first);
 
     }
 
@@ -298,9 +292,9 @@ void log_type_info(A::F_robject_type_info* type_info_p){
 
 int main() {
 
-    cout << "A's sinfos: " << T_type_fullname<typename A::F_sinfos>() << ncpp::endl << ncpp::endl;
-    cout << "A's base sinfos: " << T_type_fullname<typename A::F_base_sinfos>() << ncpp::endl << ncpp::endl;
-    cout << "A's member sinfos: " << T_type_fullname<typename A::F_member_sinfos>() << ncpp::endl << ncpp::endl;
+    NCPP_INFO() << "A's sinfos: " << T_type_fullname<typename A::F_sinfos>();
+    NCPP_INFO() << "A's base sinfos: " << T_type_fullname<typename A::F_base_sinfos>();
+    NCPP_INFO() << "A's member sinfos: " << T_type_fullname<typename A::F_member_sinfos>();
 
     
 

@@ -7,9 +7,6 @@ using namespace ncpp;
 
 namespace ncpp::internal {
 
-    void log_warning_failed_connector(){
-
-    }
     void log_warning_failed_at(std::ostream& ostream, const char* file_path_p, const char* function_name_p, u32 line, const char* condition){
 
         ostream
@@ -17,25 +14,25 @@ namespace ncpp::internal {
         << E_log_color::V_FOREGROUND_BRIGHT_YELLOW
         << "| WARNING |"
 
-        << endl
+        << std::endl
         << T_cout_lowlight("| ")
 
         << T_cout_field_name("condition") << T_cout_lowlight(" -> ") << condition
 
         << T_cout_lowlight(" |")
-        << endl
+        << std::endl
         << T_cout_lowlight("| ")
 
         << T_cout_field_name("file") << T_cout_lowlight(" -> ") << T_cout_value(file_path_p)
 
         << T_cout_lowlight(" |")
-        << endl
+        << std::endl
         << T_cout_lowlight("| ")
 
         << T_cout_field_name("function") << T_cout_lowlight(" -> ") << T_cout_value(function_name_p)
 
         << T_cout_lowlight(" |")
-        << endl
+        << std::endl
         << T_cout_lowlight("| ")
 
         << T_cout_field_name("line") << T_cout_lowlight(" -> ") << T_cout_value(line)
@@ -44,7 +41,7 @@ namespace ncpp::internal {
 
         << E_log_color::RESET
 
-        << endl;
+        << std::endl;
 
     }
 
@@ -54,9 +51,6 @@ namespace ncpp::internal {
 
 namespace ncpp::internal {
 
-    void log_assertion_failed_connector(){
-
-    }
     void log_assertion_failed_at(std::ostream& ostream, const char* file_path_p, const char* function_name_p, u32 line, const char* condition){
 
         ostream
@@ -64,25 +58,25 @@ namespace ncpp::internal {
         << E_log_color::V_FOREGROUND_BRIGHT_RED
         << "| ASSERTION FAILED |"
 
-        << endl
+        << std::endl
         << T_cout_lowlight("| ")
 
         << T_cout_field_name("condition") << T_cout_lowlight(" -> ") << condition
 
         << T_cout_lowlight(" |")
-        << endl
+        << std::endl
         << T_cout_lowlight("| ")
 
         << T_cout_field_name("file") << T_cout_lowlight(" -> ") << T_cout_value(file_path_p)
 
         << T_cout_lowlight(" |")
-        << endl
+        << std::endl
         << T_cout_lowlight("| ")
 
         << T_cout_field_name("function") << T_cout_lowlight(" -> ") << T_cout_value(function_name_p)
 
         << T_cout_lowlight(" |")
-        << endl
+        << std::endl
         << T_cout_lowlight("| ")
 
         << T_cout_field_name("line") << T_cout_lowlight(" -> ") << T_cout_value(line)
@@ -91,7 +85,45 @@ namespace ncpp::internal {
 
         << E_log_color::RESET
 
-        << endl;
+        << std::endl;
+
+    }
+
+}
+
+
+
+namespace ncpp::internal {
+
+    void log_info_failed_at(std::ostream& ostream, const char* file_path_p, const char* function_name_p, u32 line){
+
+        ostream
+
+        << E_log_color::V_FOREGROUND_BRIGHT_MAGNETA
+        << "| INFO |"
+
+        << std::endl
+        << T_cout_lowlight("| ")
+
+        << T_cout_field_name("file") << T_cout_lowlight(" -> ") << T_cout_value(file_path_p)
+
+        << T_cout_lowlight(" |")
+        << std::endl
+        << T_cout_lowlight("| ")
+
+        << T_cout_field_name("function") << T_cout_lowlight(" -> ") << T_cout_value(function_name_p)
+
+        << T_cout_lowlight(" |")
+        << std::endl
+        << T_cout_lowlight("| ")
+
+        << T_cout_field_name("line") << T_cout_lowlight(" -> ") << T_cout_value(line)
+
+        << T_cout_lowlight(" |")
+
+        << E_log_color::RESET
+
+        << std::endl;
 
     }
 

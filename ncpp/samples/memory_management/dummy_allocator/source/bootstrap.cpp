@@ -17,7 +17,7 @@ int main() {
 
 	{
 
-		NCPP_SCOPED_PROFILER_SAMPLE("Dummy allocator: ");
+		NCPP_SCOPED_PROFILER_SAMPLE("Dummy allocator");
 
 		for (u32 i = 0; i < allocation_count; ++i) {
 
@@ -29,7 +29,7 @@ int main() {
 
 	{
 
-		NCPP_SCOPED_PROFILER_SAMPLE("Default allocator: ");
+		NCPP_SCOPED_PROFILER_SAMPLE("Default allocator");
 
 		for (u32 i = 0; i < allocation_count; ++i) {
 
@@ -41,7 +41,7 @@ int main() {
 
 	{
 
-		NCPP_SCOPED_PROFILER_SAMPLE("EASTL allocator: ");
+		NCPP_SCOPED_PROFILER_SAMPLE("EASTL allocator");
 
 		for (u32 i = 0; i < allocation_count; ++i) {
 
@@ -53,7 +53,7 @@ int main() {
 
 	{
 
-		NCPP_SCOPED_PROFILER_SAMPLE("Malloc: ");
+		NCPP_SCOPED_PROFILER_SAMPLE("Malloc");
 
 		for (u32 i = 0; i < allocation_count; ++i) {
 
