@@ -111,8 +111,10 @@ namespace ncpp {
 
                 ostream
 
+                << std::endl
+
                 << E_log_color::V_FOREGROUND_BRIGHT_BLUE
-                << "| SCOPED PROFILER SAMPLE |"
+                << "| SCOPED PROFILER SAMPLE | " << E_log_color::V_FOREGROUND_BRIGHT_MAGNETA << "END" << E_log_color::V_FOREGROUND_BRIGHT_BLUE << " |"
 
                 << std::endl
                 << T_cout_lowlight("| ")
@@ -160,10 +162,28 @@ namespace ncpp {
             line_(line)
 		{
 
+            ostream
+
+            << E_log_color::V_FOREGROUND_BRIGHT_BLUE
+            << "| SCOPED PROFILER SAMPLE | " << E_log_color::V_FOREGROUND_BRIGHT_YELLOW << "BEGIN" << E_log_color::V_FOREGROUND_BRIGHT_BLUE << " |"
+
+            << std::endl
+            << T_cout_lowlight("| ")
+
+            << content.c_str()
+
+            << T_cout_lowlight(" |")
+
+            << std::endl;
+
 			start_ = eastl::chrono::high_resolution_clock::now();
 
 		}
 		~F_profiler_sample() {
+
+            u64 nanoseconds = eastl::chrono::duration_cast<eastl::chrono::nanoseconds>(
+                eastl::chrono::high_resolution_clock::now() - start_
+            ).count();
 
 			output_function_p_(
                 ostream_,
@@ -171,9 +191,7 @@ namespace ncpp {
                 file_path_p_,
                 function_name_p_,
                 line_,
-				eastl::chrono::duration_cast<eastl::chrono::nanoseconds>(
-					eastl::chrono::high_resolution_clock::now() - start_
-				).count()
+                nanoseconds
 			);
 
 		}

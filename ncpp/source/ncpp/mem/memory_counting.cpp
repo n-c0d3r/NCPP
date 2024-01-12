@@ -16,7 +16,7 @@ namespace ncpp {
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
 			NCPP_INFO()
                 << "total allocated memory: " << NCPP_TOTAL_ALLOCATED_MEMORY() << " (bytes)" << std::endl
-                << "usable allocated memory: " << NCPP_USABLE_ALLOCATED_MEMORY() << " (bytes)" << std::endl;
+                << "usable allocated memory: " << NCPP_USABLE_ALLOCATED_MEMORY() << " (bytes)";
 #endif
 
 		}

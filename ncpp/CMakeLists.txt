@@ -52,9 +52,10 @@ option(NCPP_ENABLE_WEAKLOCK_WARNING "If enabled, weaklock will automatically war
 option(NCPP_ENABLE_SCOPED_PROFILER_SAMPLE "If not enabled, scoped profiler samples will be ignored when compiling" ON)
 
 # ncpp log options
-set(NCPP_TAB_SIZE 4 CACHE STRING "Tab Size")
-set(NCPP_MAX_TAB_COUNT 8 CACHE STRING "Max Tab Count")
+set(NCPP_TAB_SIZE 4 CACHE STRING "Tab size")
+set(NCPP_MAX_TAB_COUNT 8 CACHE STRING "Max tab count")
 option(NCPP_ENABLE_LOG_COLOR "Enable log color" ON)
+option(NCPP_ENABLE_LOGGING "Enable logging" ON)
 
 # ncpp platform specific instruction extension options
 option(NCPP_ENABLE_SSE "Enable SSE instructions" ON)
