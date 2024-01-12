@@ -28,6 +28,14 @@
 
 #include <ncpp/prerequisites.hpp>
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#include <ncpp/iostream.hpp>
+#include <ncpp/utilities/is_streamable.hpp>
+#include <ncpp/utilities/singleton.hpp>
+
 #pragma endregion
 
 
@@ -52,9 +60,79 @@ namespace ncpp {
     class TF_logger {
 
     public:
-        TF_logger() {
+        using F_char = F_char__;
+        using F_ostream = TF_ostream<F_char__>;
+
+
+
+    private:
+        F_ostream& ostream_;
+
+    public:
+        NCPP_FORCE_INLINE F_ostream& ostream() {
+
+            if(!this)
+                return T_cout<F_char>;
+
+            return ostream_;
+        }
+        NCPP_FORCE_INLINE const F_ostream& ostream() const {
+
+            if(!this)
+                return T_cout<F_char>;
+
+            return ostream_;
+        }
+
+
+
+    public:
+        struct F_wrapper {
+
+            TF_logger<F_char>& logger = T_null_reference<TF_logger<F_char>>();
+
+            NCPP_FORCE_INLINE F_wrapper(const F_char* file_path_p, const F_char* function_name_p, u32 line) :
+                logger(T_null_reference<TF_logger<F_char>>())
+            {
+
+                log_info(file_path_p, function_name_p, line);
+
+            }
+            NCPP_FORCE_INLINE F_wrapper(TF_logger<F_char>& optional_logger, const F_char* file_path_p, const F_char* function_name_p, u32 line) :
+                logger(optional_logger)
+            {
+
+                log_info(file_path_p, function_name_p, line);
+
+            }
+            ~F_wrapper(){
+
+                logger.ostream() << endl << endl;
+            }
+
+            void log_info(const F_char* file_path_p, const F_char* function_name_p, u32 line);
+
+        };
+
+
+
+    public:
+        TF_logger(F_ostream& ostream) :
+            ostream_(ostream)
+        {
         }
         ~TF_logger() {
+        }
+
+
+
+    public:
+        template<typename F__>
+        friend NCPP_FORCE_INLINE TF_logger& operator << (TF_logger& logger, F__&& value) {
+
+            logger.ostream() << std::forward<F__>(value);
+
+            return logger;
         }
 
     };
@@ -66,3 +144,9 @@ namespace ncpp {
 
 }
 
+
+
+#define NCPP_LOG_ADVANCED(...) ncpp::F_logger::F_wrapper(__VA_ARGS__ __VA_OPT__(,) NCPP_FILE, NCPP_FUNCTION, NCPP_LINE).logger
+#define NCPP_WLOG_ADVANCED(...) ncpp::F_wlogger::F_wrapper(__VA_ARGS__ __VA_OPT__(,) L##NCPP_FILE, L##NCPP_FUNCTION, L##NCPP_LINE.logger
+#define NCPP_LOG(...) NCPP_LOG_ADVANCED(__VA_ARGS__)
+#define NCPP_WLOG(...) NCPP_WLOG_ADVANCED(__VA_ARGS__)

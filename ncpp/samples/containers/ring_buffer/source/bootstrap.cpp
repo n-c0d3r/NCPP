@@ -16,15 +16,15 @@ int main() {
 		ring_buffer.push(7);
 		ring_buffer.push(8);
 
-        cout << ring_buffer << std::endl;
+        cout << ring_buffer << ncpp::endl;
 
-		std::cout << ring_buffer.pop() << std::endl;
-		std::cout << ring_buffer.pop() << std::endl;
-		std::cout << ring_buffer.pop() << std::endl;
-		std::cout << ring_buffer.pop() << std::endl;
-		std::cout << ring_buffer.try_pop(T_null_reference<i32>()) << std::endl;
+		std::cout << ring_buffer.pop() << ncpp::endl;
+		std::cout << ring_buffer.pop() << ncpp::endl;
+		std::cout << ring_buffer.pop() << ncpp::endl;
+		std::cout << ring_buffer.pop() << ncpp::endl;
+		std::cout << ring_buffer.try_pop(T_null_reference<i32>()) << ncpp::endl;
 
-        cout << ring_buffer << std::endl;
+        cout << ring_buffer << ncpp::endl;
 
 	}
 

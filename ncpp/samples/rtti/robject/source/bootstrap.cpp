@@ -75,8 +75,8 @@ NCPP_MAGIC((F__)[4], TD<F__>::dd4);
 
 
 
-#define BLOG_THIS void log_this() { std::cout << T_type_fullname<F_this>() << std::endl; }
-#define RLOG_THIS std::cout << "Reflecting" << std::endl;
+#define BLOG_THIS void log_this() { std::cout << T_type_fullname<F_this>() << ncpp::endl; }
+#define RLOG_THIS std::cout << "Reflecting" << ncpp::endl;
 
 
 
@@ -206,7 +206,7 @@ struct F_customm_reflector {
             << ")"
             << " "
             << custom_params_p->message
-            << std::endl;
+            << ncpp::endl;
 
     }
     NCPP_ROBJECT_USER_POST_REFLECT_MEMBER(
@@ -223,7 +223,7 @@ struct F_customm_reflector {
             << ")"
             << " "
             << custom_params_p->message
-            << std::endl;
+            << ncpp::endl;
 
     }
     NCPP_ROBJECT_USER_PRE_REFLECT_BASE(
@@ -234,7 +234,7 @@ struct F_customm_reflector {
             << T_cout_value(F_base__::static_type_name())
             << " "
             << custom_params_p->message
-            << std::endl;
+            << ncpp::endl;
 
     }
     NCPP_ROBJECT_USER_POST_REFLECT_BASE(
@@ -245,7 +245,7 @@ struct F_customm_reflector {
             << T_cout_value(F_base__::static_type_name())
             << " "
             << custom_params_p->message
-            << std::endl;
+            << ncpp::endl;
 
     }
     NCPP_ROBJECT_USER_PRE_REFLECT_OBJECT(
@@ -256,7 +256,7 @@ struct F_customm_reflector {
             << T_cout_value(F_robject__::static_type_name())
             << " "
             << custom_params_p->message
-            << std::endl;
+            << ncpp::endl;
 
     }
     NCPP_ROBJECT_USER_POST_REFLECT_OBJECT(
@@ -267,7 +267,7 @@ struct F_customm_reflector {
             << T_cout_value(F_robject__::static_type_name())
             << " "
             << custom_params_p->message
-            << std::endl;
+            << ncpp::endl;
 
     }
 
@@ -288,7 +288,7 @@ void log_type_info(A::F_robject_type_info* type_info_p){
 
     for(const auto& it : type_info_p->name_to_member_info_p_map()){
 
-        cout << T_cout_value(it.first) << std::endl;
+        cout << T_cout_value(it.first) << ncpp::endl;
 
     }
 
@@ -298,9 +298,9 @@ void log_type_info(A::F_robject_type_info* type_info_p){
 
 int main() {
 
-    cout << "A's sinfos: " << T_type_fullname<typename A::F_sinfos>() << std::endl << std::endl;
-    cout << "A's base sinfos: " << T_type_fullname<typename A::F_base_sinfos>() << std::endl << std::endl;
-    cout << "A's member sinfos: " << T_type_fullname<typename A::F_member_sinfos>() << std::endl << std::endl;
+    cout << "A's sinfos: " << T_type_fullname<typename A::F_sinfos>() << ncpp::endl << ncpp::endl;
+    cout << "A's base sinfos: " << T_type_fullname<typename A::F_base_sinfos>() << ncpp::endl << ncpp::endl;
+    cout << "A's member sinfos: " << T_type_fullname<typename A::F_member_sinfos>() << ncpp::endl << ncpp::endl;
 
     
 

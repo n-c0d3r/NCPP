@@ -61,7 +61,3 @@ namespace ncpp {
 
 
 }
-
-
-
-#define NCPP_LOG(...)

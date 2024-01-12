@@ -77,7 +77,7 @@ inline ncpp::F_ostream& operator << (ncpp::F_ostream& os, const ncpp::TF_ostream
 
     {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -94,7 +94,7 @@ inline ncpp::F_ostream& operator << (ncpp::F_ostream& os, const ncpp::TF_ostream
 #ifdef NCPP_ENABLE_ALLOCATOR_NAME
     {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -111,7 +111,7 @@ inline ncpp::F_ostream& operator << (ncpp::F_ostream& os, const ncpp::TF_ostream
 
     {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -127,7 +127,7 @@ inline ncpp::F_ostream& operator << (ncpp::F_ostream& os, const ncpp::TF_ostream
 
     {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -143,7 +143,7 @@ inline ncpp::F_ostream& operator << (ncpp::F_ostream& os, const ncpp::TF_ostream
 
     {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -159,7 +159,7 @@ inline ncpp::F_ostream& operator << (ncpp::F_ostream& os, const ncpp::TF_ostream
 
     {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -175,7 +175,7 @@ inline ncpp::F_ostream& operator << (ncpp::F_ostream& os, const ncpp::TF_ostream
 
     {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -191,7 +191,7 @@ inline ncpp::F_ostream& operator << (ncpp::F_ostream& os, const ncpp::TF_ostream
 
     {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -207,7 +207,7 @@ inline ncpp::F_ostream& operator << (ncpp::F_ostream& os, const ncpp::TF_ostream
 
     {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -220,7 +220,7 @@ inline ncpp::F_ostream& operator << (ncpp::F_ostream& os, const ncpp::TF_ostream
 
     }
 
-    os << std::endl;
+    os << ncpp::endl;
 
     for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
 
@@ -256,7 +256,7 @@ inline ncpp::F_wostream& operator << (ncpp::F_wostream& os, const ncpp::TF_ostre
 
     {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -273,7 +273,7 @@ inline ncpp::F_wostream& operator << (ncpp::F_wostream& os, const ncpp::TF_ostre
 #ifdef NCPP_ENABLE_ALLOCATOR_NAME
     {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -290,7 +290,7 @@ inline ncpp::F_wostream& operator << (ncpp::F_wostream& os, const ncpp::TF_ostre
 
     {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -306,7 +306,7 @@ inline ncpp::F_wostream& operator << (ncpp::F_wostream& os, const ncpp::TF_ostre
 
     {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -322,7 +322,7 @@ inline ncpp::F_wostream& operator << (ncpp::F_wostream& os, const ncpp::TF_ostre
 
     {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -338,7 +338,7 @@ inline ncpp::F_wostream& operator << (ncpp::F_wostream& os, const ncpp::TF_ostre
 
     {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -354,7 +354,7 @@ inline ncpp::F_wostream& operator << (ncpp::F_wostream& os, const ncpp::TF_ostre
 
     {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -370,7 +370,7 @@ inline ncpp::F_wostream& operator << (ncpp::F_wostream& os, const ncpp::TF_ostre
 
     {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -386,7 +386,7 @@ inline ncpp::F_wostream& operator << (ncpp::F_wostream& os, const ncpp::TF_ostre
 
     {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -399,7 +399,7 @@ inline ncpp::F_wostream& operator << (ncpp::F_wostream& os, const ncpp::TF_ostre
 
     }
 
-    os << std::endl;
+    os << ncpp::endl;
 
     for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
 

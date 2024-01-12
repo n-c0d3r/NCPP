@@ -176,7 +176,7 @@ ncpp::F_ostream& operator << (
 
     for (ncpp::sz i = 0; i < input.first.size(); ++i) {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -195,7 +195,7 @@ ncpp::F_ostream& operator << (
         }
         else {
 
-            os << std::endl;
+            os << ncpp::endl;
 
         }
 
@@ -259,7 +259,7 @@ ncpp::F_wostream& operator << (
 
     for (ncpp::sz i = 0; i < input.first.size(); ++i) {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -278,7 +278,7 @@ ncpp::F_wostream& operator << (
         }
         else {
 
-            os << std::endl;
+            os << ncpp::endl;
 
         }
 
@@ -360,7 +360,7 @@ ncpp::F_ostream& operator << (
 
     for (ncpp::sz i = 0; i < input.first.size(); ++i) {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -379,7 +379,7 @@ ncpp::F_ostream& operator << (
         }
         else {
 
-            os << std::endl;
+            os << ncpp::endl;
 
         }
 
@@ -447,7 +447,7 @@ ncpp::F_wostream& operator << (
 
     for (ncpp::sz i = 0; i < input.first.size(); ++i) {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -466,7 +466,7 @@ ncpp::F_wostream& operator << (
         }
         else {
 
-            os << std::endl;
+            os << ncpp::endl;
 
         }
 
@@ -548,7 +548,7 @@ ncpp::F_ostream& operator << (
 
     for (ncpp::sz i = 0; i < size__; ++i) {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -567,7 +567,7 @@ ncpp::F_ostream& operator << (
         }
         else {
 
-            os << std::endl;
+            os << ncpp::endl;
 
         }
 
@@ -632,7 +632,7 @@ ncpp::F_wostream& operator << (
 
     for (ncpp::sz i = 0; i < size__; ++i) {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -651,7 +651,7 @@ ncpp::F_wostream& operator << (
         }
         else {
 
-            os << std::endl;
+            os << ncpp::endl;
 
         }
 
@@ -731,7 +731,7 @@ std::ostream& operator << (
 
     for (ncpp::sz i = 0; i < input.first.size(); ++i) {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -750,7 +750,7 @@ std::ostream& operator << (
         }
         else {
 
-            os << std::endl;
+            os << ncpp::endl;
 
         }
 
@@ -812,7 +812,7 @@ std::wostream& operator << (
 
     for (ncpp::sz i = 0; i < input.first.size(); ++i) {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -831,7 +831,7 @@ std::wostream& operator << (
         }
         else {
 
-            os << std::endl;
+            os << ncpp::endl;
 
         }
 
@@ -904,7 +904,7 @@ ncpp::F_ostream& operator << (
 
     for (ncpp::sz i = 0; i < input.first.size(); ++i) {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -923,7 +923,7 @@ ncpp::F_ostream& operator << (
         }
         else {
 
-            os << std::endl;
+            os << ncpp::endl;
 
         }
 
@@ -978,7 +978,7 @@ ncpp::F_wostream& operator << (
 
     for (ncpp::sz i = 0; i < input.first.size(); ++i) {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -997,7 +997,7 @@ ncpp::F_wostream& operator << (
         }
         else {
 
-            os << std::endl;
+            os << ncpp::endl;
 
         }
 
@@ -1064,7 +1064,7 @@ ncpp::F_ostream& operator << (
 
     for (auto i = input.first.begin(); i != input.first.end();) {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -1083,7 +1083,7 @@ ncpp::F_ostream& operator << (
         }
         else {
 
-            os << std::endl;
+            os << ncpp::endl;
 
         }
 
@@ -1134,7 +1134,7 @@ ncpp::F_wostream& operator << (
 
     for (auto i = input.first.begin(); i != input.first.end();) {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -1153,7 +1153,7 @@ ncpp::F_wostream& operator << (
         }
         else {
 
-            os << std::endl;
+            os << ncpp::endl;
 
         }
 
@@ -1220,7 +1220,7 @@ ncpp::F_ostream& operator << (
 
     for (auto i = input.first.begin(); i != input.first.end();) {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -1239,7 +1239,7 @@ ncpp::F_ostream& operator << (
         }
         else {
 
-            os << std::endl;
+            os << ncpp::endl;
 
         }
 
@@ -1290,7 +1290,7 @@ ncpp::F_wostream& operator << (
 
     for (auto i = input.first.begin(); i != input.first.end();) {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -1309,7 +1309,7 @@ ncpp::F_wostream& operator << (
         }
         else {
 
-            os << std::endl;
+            os << ncpp::endl;
 
         }
 
@@ -1376,7 +1376,7 @@ ncpp::F_ostream& operator << (
 
     for (auto i = input.first.begin(); i != input.first.end();) {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -1399,7 +1399,7 @@ ncpp::F_ostream& operator << (
         }
         else {
 
-            os << std::endl;
+            os << ncpp::endl;
 
         }
 
@@ -1450,7 +1450,7 @@ ncpp::F_wostream& operator << (
 
     for (auto i = input.first.begin(); i != input.first.end();) {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -1473,7 +1473,7 @@ ncpp::F_wostream& operator << (
         }
         else {
 
-            os << std::endl;
+            os << ncpp::endl;
 
         }
 
@@ -1540,7 +1540,7 @@ ncpp::F_ostream& operator << (
 
     for (auto i = input.first.begin(); i != input.first.end();) {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -1559,7 +1559,7 @@ ncpp::F_ostream& operator << (
         }
         else {
 
-            os << std::endl;
+            os << ncpp::endl;
 
         }
 
@@ -1610,7 +1610,7 @@ ncpp::F_wostream& operator << (
 
     for (auto i = input.first.begin(); i != input.first.end();) {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -1629,7 +1629,7 @@ ncpp::F_wostream& operator << (
         }
         else {
 
-            os << std::endl;
+            os << ncpp::endl;
 
         }
 
@@ -1696,7 +1696,7 @@ ncpp::F_ostream& operator << (
 
     for (auto i = input.first.begin(); i != input.first.end();) {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -1719,7 +1719,7 @@ ncpp::F_ostream& operator << (
         }
         else {
 
-            os << std::endl;
+            os << ncpp::endl;
 
         }
 
@@ -1770,7 +1770,7 @@ ncpp::F_wostream& operator << (
 
     for (auto i = input.first.begin(); i != input.first.end();) {
 
-        os << std::endl;
+        os << ncpp::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -1793,7 +1793,7 @@ ncpp::F_wostream& operator << (
         }
         else {
 
-            os << std::endl;
+            os << ncpp::endl;
 
         }
 
@@ -1860,7 +1860,7 @@ std::ostream& operator << (
        << ncpp::T_cout_lowlight(")")
        << " ";
 
-    os << ncpp::T_cout_lowlight("{") << std::endl;
+    os << ncpp::T_cout_lowlight("{") << ncpp::endl;
 
     for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -1883,7 +1883,7 @@ std::ostream& operator << (
         }
     );
 
-    os << std::endl;
+    os << ncpp::endl;
 
     for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
 
@@ -1929,7 +1929,7 @@ std::wostream& operator << (
        << ncpp::T_cout_lowlight(")")
        << L" ";
 
-    os << ncpp::T_cout_lowlight(L"{") << std::endl;
+    os << ncpp::T_cout_lowlight(L"{") << ncpp::endl;
 
     for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -1952,7 +1952,7 @@ std::wostream& operator << (
         }
     );
 
-    os << std::endl;
+    os << ncpp::endl;
 
     for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
 
@@ -2014,7 +2014,7 @@ std::ostream& operator << (
        << ncpp::T_cout_lowlight(")")
        << " ";
 
-    os << ncpp::T_cout_lowlight("{") << std::endl;
+    os << ncpp::T_cout_lowlight("{") << ncpp::endl;
 
     for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -2037,7 +2037,7 @@ std::ostream& operator << (
         }
     );
 
-    os << std::endl;
+    os << ncpp::endl;
 
     for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
 
@@ -2083,7 +2083,7 @@ std::wostream& operator << (
        << ncpp::T_cout_lowlight(")")
        << L" ";
 
-    os << ncpp::T_cout_lowlight(L"{") << std::endl;
+    os << ncpp::T_cout_lowlight(L"{") << ncpp::endl;
 
     for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
 
@@ -2106,7 +2106,7 @@ std::wostream& operator << (
         }
     );
 
-    os << std::endl;
+    os << ncpp::endl;
 
     for (ncpp::u32 j = 0; j < (input.second) * NCPP_TAB_SIZE; ++j) {
 
