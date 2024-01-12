@@ -12,17 +12,22 @@ namespace ncpp {
         << E_log_color::V_FOREGROUND_BRIGHT_MAGNETA
         << "| INFO |"
 
-        << T_cout_lowlight(" ")
+        << endl
+        << T_cout_lowlight("| ")
 
-        << T_cout_field_name("file") << T_cout_lowlight(": ") << T_cout_value(file_path_p)
+        << T_cout_field_name("file") << T_cout_lowlight(" -> ") << T_cout_value(file_path_p)
 
-        << T_cout_lowlight(" | ")
+        << T_cout_lowlight(" |")
+        << endl
+        << T_cout_lowlight("| ")
 
-        << T_cout_field_name("function") << T_cout_lowlight(": ") << T_cout_value(function_name_p)
+        << T_cout_field_name("function") << T_cout_lowlight(" -> ") << T_cout_value(function_name_p)
 
-        << T_cout_lowlight(" | ")
+        << T_cout_lowlight(" |")
+        << endl
+        << T_cout_lowlight("| ")
 
-        << T_cout_field_name("line") << T_cout_lowlight(": ") << T_cout_value(line)
+        << T_cout_field_name("line") << T_cout_lowlight(" -> ") << T_cout_value(line)
 
         << T_cout_lowlight(" |")
 

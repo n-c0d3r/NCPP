@@ -7,8 +7,6 @@ using namespace ncpp;
 
 NCPP_ENTRY_POINT(args) {
 
-    F_logger logger(std::cout);
-
     cout << G_string("Hello ")
         << E_log_color::V_FOREGROUND_BRIGHT_BLUE
         << G_string("NCPP ")
