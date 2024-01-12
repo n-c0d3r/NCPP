@@ -206,7 +206,7 @@ namespace ncpp {
 				chunk_size_(chunk_capacity_ + sizeof(F_smart_chunk_header))
 			{
 
-				NCPP_ASSERT(chunk_count && "chunk count is equal to zero, cant create storage");
+				NCPP_ASSERT(chunk_count) << "chunk count is equal to zero, cant create storage";
 
 				init_chunks_internal();
 
@@ -264,7 +264,7 @@ namespace ncpp {
 
 				b8 success = chunk_p_ring_buffer_.try_pop(chunk_p);
 
-				NCPP_ASSERT(success && "unexpected behaviour, ring buffer is empty");
+				NCPP_ASSERT(success) << "unexpected behaviour, ring buffer is empty";
 
 				return chunk_p;
 			}
@@ -333,7 +333,7 @@ namespace ncpp {
 				chunk_capacity_(storage_p->chunk_capacity())
 			{
 
-				NCPP_ASSERT(storage_p_ && "storage is null, cant create adaptor");
+				NCPP_ASSERT(storage_p_) << "storage is null, cant create adaptor";
 
 				setup_default_chunk_pointers_internal();
 
@@ -368,7 +368,7 @@ namespace ncpp {
 
 			inline void push_chunk(F_smart_chunk_header* chunk_p) {
                 
-                NCPP_ASSERT(chunk_p && "cant push nulll chunk");
+                NCPP_ASSERT(chunk_p) << "cant push nulll chunk";
 
 				*chunk_p = F_smart_chunk_header {};
 
@@ -503,7 +503,7 @@ namespace ncpp {
 		private:
 			F_smart_chunk_header* push_new_chunk() {
 
-				NCPP_ASSERT(adaptor_p_ && "adaptor is null, cant push new chunk");
+				NCPP_ASSERT(adaptor_p_) << "adaptor is null, cant push new chunk";
 
 				F_smart_chunk_header* new_chunk_p = adaptor_p_->pop_chunk();
 
@@ -539,7 +539,7 @@ namespace ncpp {
 			}
 			void erase_chunk(F_smart_chunk_header* chunk_p) {
 
-				NCPP_ASSERT(adaptor_p_ && "adaptor is null, cant erase chunk");
+				NCPP_ASSERT(adaptor_p_) << "adaptor is null, cant erase chunk";
 
 				F_smart_chunk_header* prev_chunk_p = chunk_p->pev_p;
 				F_smart_chunk_header* next_chunk_p = chunk_p->next_p;
@@ -572,8 +572,8 @@ namespace ncpp {
 
 				sz actual_size = alignment + alignment_offset + size;
 
-				NCPP_ASSERT((actual_size <= chunk_capacity_) && "allocation size too big");
-				NCPP_ASSERT(adaptor_p_ && "adaptor is null, cant allocate memory");
+				NCPP_ASSERT(actual_size <= chunk_capacity_) << "allocation size too big";
+				NCPP_ASSERT(adaptor_p_) << "adaptor is null, cant allocate memory";
 
 				current_usage_ += actual_size;
 
@@ -610,7 +610,7 @@ namespace ncpp {
 			}
 			NCPP_FORCE_INLINE void delete_mem(void* p) {
 
-				NCPP_ASSERT(adaptor_p_ && "adaptor is null, cant deallocate memory");
+				NCPP_ASSERT(adaptor_p_) << "adaptor is null, cant deallocate memory";
 
 				F_smart_chunk_header* chunk_p = storage_p_->chunk_from_data_p(p);
 

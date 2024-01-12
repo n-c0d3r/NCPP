@@ -100,13 +100,13 @@ namespace ncpp {
             }
             NCPP_FORCE_INLINE void add_base(F_robject_type_info* base_type_info_p) {
                 
-                NCPP_ASSERT(!is_has_base(base_type_info_p) && "this base type info is already added");
+                NCPP_ASSERT(!is_has_base(base_type_info_p)) << "this base type info is already added";
                 
                 base_type_info_p_set_.insert(base_type_info_p);
             }
             NCPP_FORCE_INLINE void remove_base(F_robject_type_info* base_type_info_p) {
                 
-                NCPP_ASSERT(is_has_base(base_type_info_p) && "this base type info is not added");
+                NCPP_ASSERT(is_has_base(base_type_info_p)) << "this base type info is not added";
                 
                 base_type_info_p_set_.erase(base_type_info_p_set_.find(base_type_info_p));
             }

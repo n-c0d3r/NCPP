@@ -115,7 +115,7 @@ namespace ncpp {
         template<typename F_function__, typename F_new_return__>
         struct TF_replace_function_return {
 
-            NCPP_STATIC_ASSERT(T_is_function<F_function__> && "F_function__ is not function type");
+            NCPP_STATIC_ASSERT(T_is_function<F_function__>, "F_function__ is not function type");
 
         };
         // \endcond

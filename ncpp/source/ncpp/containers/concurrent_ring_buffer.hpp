@@ -167,7 +167,7 @@ namespace ncpp {
 
 				writer_lock_.lock();
 
-				NCPP_ASSERT(size() < capacity() && "out of capacity");
+				NCPP_ASSERT(size() < capacity()) << "out of capacity";
 
 				item_vector_[(end_index_.fetch_add(1, eastl::memory_order_release)) % capacity_] = std::forward<F_passed_item__>(item);
 

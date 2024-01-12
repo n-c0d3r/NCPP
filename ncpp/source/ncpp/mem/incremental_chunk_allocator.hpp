@@ -202,7 +202,7 @@ namespace ncpp {
 
 				sz actual_size = alignment + alignment_offset + size;
 
-				NCPP_ASSERT((actual_size <= chunk_capacity_) && "allocation size too big");
+				NCPP_ASSERT(actual_size <= chunk_capacity_) << "allocation size too big";
 
 				current_usage_ += actual_size;
 

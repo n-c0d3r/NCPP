@@ -110,7 +110,7 @@ namespace ncpp {
         protected:
             TI_singleton() {
 
-                NCPP_ASSERT(instance_ps == 0 && "only accept 1 instance at a time!");
+                NCPP_ASSERT(instance_ps == 0) << "only accept 1 instance at a time!";
 
                 instance_ps = (F_instance*)this;
 
