@@ -416,7 +416,7 @@ namespace ncpp::internal {
 
 #ifdef NCPP_ENABLE_WARNING
 #define NCPP_WARNING_ADVANCED(OptionalOStream, ...) \
-            if(!((bool)(__VA_ARGS__))) \
+            if(!((bool)(false __VA_OPT__(||) __VA_ARGS__))) \
                 ncpp::internal::F_warning_tail_logger{ OptionalOStream, NCPP_FILE, NCPP_FUNCTION, NCPP_LINE, #__VA_ARGS__ }.ostream
 #else
 #define NCPP_WARNING_ADVANCED(OptionalOStream, ...) \
@@ -467,7 +467,7 @@ namespace ncpp::internal {
 
 #ifdef NCPP_ENABLE_ASSERT
 #define NCPP_ASSERT_ADVANCED(OptionalOStream, ...) \
-            if(!((bool)(__VA_ARGS__))) \
+            if(!((bool)(false __VA_OPT__(||) __VA_ARGS__))) \
                 ncpp::internal::F_assert_tail_logger{ OptionalOStream, NCPP_FILE, NCPP_FUNCTION, NCPP_LINE, #__VA_ARGS__ }.ostream
 #else
 #define NCPP_ASSERT_ADVANCED(OptionalOStream, ...) \
