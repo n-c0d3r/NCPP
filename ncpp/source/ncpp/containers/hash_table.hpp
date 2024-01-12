@@ -250,11 +250,13 @@ namespace ncpp {
                 return index != ~0u;
             }
             inline void add(F_int key, F_int index){
-                
+
+                NCPP_DISABLE_ALL_WARNINGS_PUSH
                 if( index >= index_size_ )
                 {
                     resize(utilities::round_up_to_power_of_two(static_cast<f32>(index + 1)));
                 }
+                NCPP_DISABLE_ALL_WARNINGS_POP
 
                 key &= hash_mask_;
                 index_vector_[index] = hash_vector_[key];
