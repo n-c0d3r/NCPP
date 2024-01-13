@@ -1,7 +1,7 @@
 #pragma once
 
-/** @file ncpp/pac/spin_lock.hpp
-*	@brief Implement spin_lock
+/** @file ncpp/pac/mrsw_spin_lock.hpp
+*	@brief Implement mrsw_spin_lock
 */
 
 
@@ -33,10 +33,6 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/utilities/.hpp>
-#include <ncpp/pac/srsw_spin_lock.hpp>
-#include <ncpp/pac/mrsw_spin_lock.hpp>
-#include <ncpp/pac/srmw_spin_lock.hpp>
-#include <ncpp/pac/no_lock.hpp>
 
 #pragma endregion
 
@@ -60,24 +56,125 @@ namespace ncpp {
 
     namespace pac {
 
-        template<b8 is_single_read__ = false, b8 is_single_write__ = false>
-        class TF_spin_lock;
+        class F_mrsw_spin_lock {
 
-        template<>
-        class TF_spin_lock<true, true> : public F_srsw_spin_lock {};
-
-        template<>
-        class TF_spin_lock<false, true> : public F_mrsw_spin_lock {};
-
-        template<>
-        class TF_spin_lock<true, false> : public F_srmw_spin_lock {};
-
-        template<>
-        class TF_spin_lock<false, false> : public F_no_lock {};
+        private:
+            au32 counter_;
+            aflag wait_for_writing_flag_;
 
 
 
-        using F_spin_lock = TF_spin_lock<>;
+        public:
+            NCPP_FORCE_INLINE F_mrsw_spin_lock() noexcept :
+                counter_(1),
+                wait_for_writing_flag_(ATOMIC_FLAG_INIT)
+            {
+
+
+
+            }
+            ~F_mrsw_spin_lock() {
+
+
+
+            }
+
+
+
+        public:
+            inline void rlock() noexcept {
+
+                while(wait_for_writing_flag_.test(eastl::memory_order_acquire));
+
+                u32 expected_counter = 1;
+                u32 target_counter = 2;
+
+                while(
+                    !counter_.compare_exchange_weak(
+                        expected_counter,
+                        target_counter,
+                        eastl::memory_order_acq_rel
+                    )
+                ) {
+
+                    if(expected_counter == 0) {
+
+                        expected_counter = 1;
+                        target_counter = 2;
+
+                    }
+                    else
+                        target_counter = expected_counter + 1;
+
+                }
+
+            }
+            inline b8 try_rlock() noexcept {
+
+                if(wait_for_writing_flag_.test(eastl::memory_order_acquire))
+                    return false;
+
+                u32 expected_counter = 1;
+                u32 target_counter = 2;
+
+                while(
+                    !counter_.compare_exchange_weak(
+                        expected_counter,
+                        target_counter,
+                        eastl::memory_order_acq_rel
+                    )
+                )
+                {
+
+                    if(expected_counter == 0) {
+
+                        return false;
+
+                    }
+                    else
+                        target_counter = expected_counter + 1;
+
+                }
+
+                return true;
+            }
+            NCPP_FORCE_INLINE void runlock() noexcept {
+
+                NCPP_ASSERT(counter_.load(eastl::memory_order_acquire) > 1) << "invalid read unlocking";
+
+                counter_.fetch_sub(1, eastl::memory_order_acq_rel);
+
+            }
+            inline void wlock() noexcept {
+
+                while(wait_for_writing_flag_.test_and_set(eastl::memory_order_acq_rel));
+
+                u32 expected_counter = 1;
+
+                while(
+                    !counter_.compare_exchange_weak(
+                        expected_counter,
+                        0,
+                        eastl::memory_order_acq_rel
+                    )
+                ) {
+
+                    expected_counter = 1;
+
+                }
+
+                wait_for_writing_flag_.clear(eastl::memory_order_release);
+
+            }
+            NCPP_FORCE_INLINE void wunlock() noexcept {
+
+                NCPP_ASSERT(counter_.load(eastl::memory_order_acquire) == 0) << "invalid write unlocking";
+
+                counter_.store(1, eastl::memory_order_release);
+
+            }
+
+        };
 
     }
 

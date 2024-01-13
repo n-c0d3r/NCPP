@@ -46,7 +46,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <ncpp/pac/spin_lock.hpp>
+#include <ncpp/pac/srsw_spin_lock.hpp>
 
 #pragma endregion
 
@@ -70,7 +70,7 @@ namespace ncpp {
 
 	namespace containers {
 
-		template<typename F_item__, class F_allocator__ = mem::F_default_allocator, class F_lock__ = pac::F_spin_lock>
+		template<typename F_item__, class F_allocator__ = mem::F_default_allocator, class F_lock__ = pac::F_srsw_spin_lock>
 		class TF_concurrent_ring_buffer {
 
 		public:

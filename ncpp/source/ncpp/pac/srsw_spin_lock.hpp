@@ -1,7 +1,7 @@
 #pragma once
 
-/** @file ncpp/pac/mrsw_lock.hpp
-*	@brief Implement mrsw_lock
+/** @file ncpp/pac/srsw_spin_lock.hpp
+*	@brief Implement srsw_spin_lock
 */
 
 
@@ -54,127 +54,50 @@
 
 namespace ncpp {
 
-    namespace pac
-    {
+    namespace pac {
 
-        class F_mrsw_lock {
-
+        class F_srsw_spin_lock {
+            
         private:
-            au32 counter_;
-            aflag wait_for_writing_flag_;
-
-
-
+            aflag is_locked_;
+            
+            
+            
         public:
-            F_mrsw_lock() :
-                counter_(1),
-                wait_for_writing_flag_(ATOMIC_FLAG_INIT)
+NCPP_DISABLE_ALL_WARNINGS_PUSH
+            NCPP_FORCE_INLINE F_srsw_spin_lock() noexcept :
+                is_locked_(ATOMIC_FLAG_INIT)
+NCPP_DISABLE_ALL_WARNINGS_POP
             {
-
-
-
+                
+                
+                
             }
-            ~F_mrsw_lock(){
-
-
-
+            ~F_srsw_spin_lock() {
+                
+                
+                
             }
-
-
-
+            
+            
+            
         public:
-            inline void rlock() noexcept {
-
-                while(wait_for_writing_flag_.test(eastl::memory_order_acquire));
-
-                u32 expected_counter = 1;
-                u32 target_counter = 2;
-
-                while(
-                    !counter_.compare_exchange_weak(
-                        expected_counter,
-                        target_counter,
-                        eastl::memory_order_acq_rel
-                    )
-                ) {
-
-                    if(expected_counter == 0) {
-
-                        expected_counter = 1;
-                        target_counter = 2;
-
-                    }
-                    else
-                        target_counter = expected_counter + 1;
-
-                }
-
+            NCPP_FORCE_INLINE void lock() noexcept {
+                
+                while(is_locked_.test_and_set(eastl::memory_order_acquire));
+                
             }
-            inline b8 try_rlock() noexcept {
-
-                if(wait_for_writing_flag_.test(eastl::memory_order_acquire))
-                    return false;
-
-                u32 expected_counter = 1;
-                u32 target_counter = 2;
-
-                while(
-                    !counter_.compare_exchange_weak(
-                        expected_counter,
-                        target_counter,
-                        eastl::memory_order_acq_rel
-                    )
-                )
-                {
-
-                    if(expected_counter == 0) {
-
-                        return false;
-
-                    }
-                    else
-                        target_counter = expected_counter + 1;
-
-                }
-
-                return true;
+            NCPP_FORCE_INLINE b8 try_lock() noexcept {
+                
+                return !is_locked_.test_and_set(eastl::memory_order_acquire);
             }
-            NCPP_FORCE_INLINE void runlock() noexcept {
+            NCPP_FORCE_INLINE void unlock() noexcept {
 
-                NCPP_ASSERT(counter_.load(eastl::memory_order_acquire) > 1) << "invalid read unlocking";
-
-                counter_.fetch_sub(1, eastl::memory_order_acq_rel);
-
+                NCPP_ASSERT(is_locked_.test(eastl::memory_order_acquire)) << "srsw_spin lock is not locked";
+                
+                is_locked_.clear(eastl::memory_order_release);
             }
-            inline void wlock() noexcept {
-
-                while(wait_for_writing_flag_.test_and_set(eastl::memory_order_acq_rel));
-
-                u32 expected_counter = 1;
-
-                while(
-                    !counter_.compare_exchange_weak(
-                        expected_counter,
-                        0,
-                        eastl::memory_order_acq_rel
-                    )
-                ) {
-
-                    expected_counter = 1;
-
-                }
-
-                wait_for_writing_flag_.clear(eastl::memory_order_release);
-
-            }
-            NCPP_FORCE_INLINE void wunlock() noexcept {
-
-                NCPP_ASSERT(counter_.load(eastl::memory_order_acquire) == 0) << "invalid write unlocking";
-
-                counter_.store(1, eastl::memory_order_release);
-
-            }
-
+            
         };
 
     }
