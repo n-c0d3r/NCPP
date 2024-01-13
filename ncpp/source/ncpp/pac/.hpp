@@ -59,6 +59,6 @@ namespace ncpp {
 ////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/pac/spin_lock.hpp>
-#include <ncpp/pac/mvsw_lock.hpp>
+#include <ncpp/pac/mrsw_lock.hpp>
 
 #pragma endregion

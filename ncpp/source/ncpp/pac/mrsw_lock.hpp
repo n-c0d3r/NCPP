@@ -1,7 +1,7 @@
 #pragma once
 
-/** @file ncpp/pac/mvsw_lock.hpp
-*	@brief Implement mvsw_lock
+/** @file ncpp/pac/mrsw_lock.hpp
+*	@brief Implement mrsw_lock
 */
 
 
@@ -57,7 +57,7 @@ namespace ncpp {
     namespace pac
     {
 
-        class F_mvsw_lock {
+        class F_mrsw_lock {
 
         private:
             au32 counter_;
@@ -66,7 +66,7 @@ namespace ncpp {
 
 
         public:
-            F_mvsw_lock() :
+            F_mrsw_lock() :
                 counter_(1),
                 wait_for_writing_flag_(ATOMIC_FLAG_INIT)
             {
@@ -74,7 +74,7 @@ namespace ncpp {
 
 
             }
-            ~F_mvsw_lock(){
+            ~F_mrsw_lock(){
 
 
 
@@ -83,7 +83,7 @@ namespace ncpp {
 
 
         public:
-            inline void vlock() noexcept {
+            inline void rlock() noexcept {
 
                 while(wait_for_writing_flag_.test(eastl::memory_order_acquire));
 
@@ -110,7 +110,7 @@ namespace ncpp {
                 }
 
             }
-            inline b8 try_vlock() noexcept {
+            inline b8 try_rlock() noexcept {
 
                 if(wait_for_writing_flag_.test(eastl::memory_order_acquire))
                     return false;
@@ -139,7 +139,7 @@ namespace ncpp {
 
                 return true;
             }
-            NCPP_FORCE_INLINE void vunlock() noexcept {
+            NCPP_FORCE_INLINE void runlock() noexcept {
 
                 NCPP_ASSERT(counter_.load(eastl::memory_order_acquire) > 1) << "invalid read unlocking";
 
