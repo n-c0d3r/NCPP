@@ -1,7 +1,7 @@
 #pragma once
 
-/** @file ncpp/pac/spinlock.hpp
-*	@brief Implement spinlock
+/** @file ncpp/pac/spin_lock.hpp
+*	@brief Implement spin_lock
 */
 
 
@@ -57,7 +57,7 @@ namespace ncpp {
     namespace pac
     {
 
-        class F_spinlock {
+        class F_spin_lock {
             
         private:
             aflag is_locked_;
@@ -66,7 +66,7 @@ namespace ncpp {
             
         public:
 NCPP_DISABLE_ALL_WARNINGS_PUSH
-            F_spinlock() :
+            F_spin_lock() :
                 is_locked_(ATOMIC_FLAG_INIT)
 NCPP_DISABLE_ALL_WARNINGS_POP
             {
@@ -74,7 +74,7 @@ NCPP_DISABLE_ALL_WARNINGS_POP
                 
                 
             }
-            ~F_spinlock(){
+            ~F_spin_lock(){
                 
                 
                 
@@ -83,7 +83,7 @@ NCPP_DISABLE_ALL_WARNINGS_POP
             
             
         public:
-            void lock(){
+            NCPP_FORCE_INLINE void lock(){
                 
                 while(is_locked_.test_and_set(eastl::memory_order_acquire));
                 
@@ -92,7 +92,9 @@ NCPP_DISABLE_ALL_WARNINGS_POP
                 
                 return !is_locked_.test_and_set(eastl::memory_order_acquire);
             }
-            void unlock(){
+            NCPP_FORCE_INLINE void unlock(){
+
+                NCPP_ASSERT(is_locked_.test(eastl::memory_order_acquire)) << "spin lock is not locked";
                 
                 is_locked_.clear(eastl::memory_order_release);
             }
