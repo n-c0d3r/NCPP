@@ -685,56 +685,65 @@ namespace ncpp {
             template<template<typename...> class TF__>
             using TF_apply = TF__<F_args__...>;
 
-//            ////////////////////////////////////////////////////////////////////////////////////
-//            ////////////////////////////////////////////////////////////////////////////////////
-//            ////////////////////////////////////////////////////////////////////////////////////
-//
-//        private:
-//            template<template<typename F_in__, sz index_in__> class... TF_multiple_filter_semantics__>
-//            struct TF_find_index_helper_internal {
-//
-//                template<template<typename F_in__, sz index_in__> class TF_filter_semantics__>
-//                struct TF_make_filter_helper {
-//
-//                    template<typename F__, sz index__>
-//                    struct TL : public TF_filter_semantics__<typename F__::F_element, index__> {
-//
-//                        using F = F__;
-//
-//                    };
-//
-//                };
-//
-//                template<typename F__, sz index__>
-//                struct TL_indexed {
-//
-//                    static constexpr b8 is_valid = true;
-//
-//                    struct F {
-//
-//                        using F_element = F__;
-//                        static constexpr sz index = index__;
-//
-//                    };
-//
-//                };
-//                using F_indexed_list = TF_update<TL_indexed>;
-//
-//
-//
-//                using F_indexed = F_indexed_list::template TF_find<TF_make_filter_helper<TF_multiple_filter_semantics__>::template TL...>;
-//
-////                static constexpr sz index = F_indexed::index;
-//
-//            };
-//
-//            ////////////////////////////////////////////////////////////////////////////////////
-//            ////////////////////////////////////////////////////////////////////////////////////
-//            ////////////////////////////////////////////////////////////////////////////////////
-//
-//        public:
-//            template<template<typename F_in__, sz index_in__> class... TF_multiple_filter_semantics__>
-//            using TF_find_index = typename TF_find_index_helper_internal<TF_multiple_filter_semantics__...>::F_indexed;
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+
+        public:
+            using F_varg_list = internal::TF_targ_list_to_varg_list<F_args__...>;
+
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+
+        private:
+            template<template<typename F_in__, sz index_in__> class... TF_multiple_filter_semantics__>
+            struct TF_find_index_helper_internal {
+
+                template<template<typename F_in__, sz index_in__> class TF_filter_semantics__>
+                struct TF_make_filter_helper {
+
+                    template<typename F__, sz index__>
+                    struct TL : public TF_filter_semantics__<typename F__::F_element, index__> {
+
+                        using F = F__;
+
+                    };
+
+                };
+
+                template<typename F__, sz index__>
+                struct TL_indexed {
+
+                    static constexpr b8 is_valid = true;
+
+                    struct F {
+
+                        using F_element = F__;
+                        static constexpr sz index = index__;
+                        static constexpr sz value = index;
+
+                    };
+
+                };
+                using F_indexed_list = TF_update<TL_indexed>;
+
+
+
+                using F_filtered_vargs = typename F_indexed_list::template TF_filter<TF_make_filter_helper<TF_multiple_filter_semantics__>::template TL...>::F_varg_list;
+
+            };
+
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+
+        public:
+            template<template<typename F_in__, sz index_in__> class... TF_multiple_filter_semantics__>
+            using TF_find_index = TF_find_index_helper_internal<TF_multiple_filter_semantics__...>::F_filtered_vargs::template TF_try_slice<0, 1>;
+
+            template<template<typename F_in__, sz index_in__> class... TF_multiple_filter_semantics__>
+            using TF_invert_find_index = TF_find_index_helper_internal<TF_multiple_filter_semantics__...>::F_filtered_vargs::template TF_try_invert_slice<0, 1>;
 
         };
 

@@ -126,6 +126,92 @@ NCPP_TemplateTricks_CreateTemplate_MakeTArgRange(${NCPP_TEMPLATE_TRICKS_MAX_ARG_
 
 
 #####################################################################################
+#   ToVArgList
+#####################################################################################
+function(NCPP_TemplateTricks_CreateTemplate_ToVArgList MaxArgCount)
+
+    set(fileContent "
+        template<typename...> struct TF_template_targ_list;
+        template<auto...> struct TF_template_varg_list;
+        namespace internal { \n
+
+            template<typename F__>
+            concept T_is_targ_has_value = requires {
+
+                F__::value;
+
+            };
+
+            template<typename F__, b8 is_has_value__>
+            struct TF_safe_targ_value_helper;
+
+            template<typename F__>
+            struct TF_safe_targ_value_helper<F__, true> {
+
+                static constexpr auto value = F__::value;
+
+            };
+            template<typename F__>
+            struct TF_safe_targ_value_helper<F__, false> {
+
+                static constexpr auto value = 0;
+
+            };
+
+            template<typename F__>
+            static constexpr auto T_safe_targ_value = TF_safe_targ_value_helper<F__, T_is_targ_has_value<F__>>::value;
+
+
+    ")
+
+    set(fileContent "${fileContent} template<sz count__, typename...> struct TF_targ_list_to_varg_list_helper; \n")
+
+    MATH(EXPR maxIndex "${MaxArgCount} - 1")
+
+    set(template_targs "")
+    set(pass_template_targs "")
+    set(pass_template_targ_values "")
+
+    foreach(index RANGE 0 ${maxIndex})
+
+        set(comma "")
+
+        if(NOT index EQUAL 0)
+            set(comma ",")
+        endif()
+
+        set(fileContent "${fileContent} template<${template_targs}>
+            struct TF_targ_list_to_varg_list_helper<${index} ${comma} ${pass_template_targs}> { using F = ncpp::utilities::TF_template_varg_list<${pass_template_targ_values}>; };
+        ")
+
+        if(NOT index EQUAL 0)
+            set(template_targs "${template_targs},")
+            set(pass_template_targs "${pass_template_targs},")
+            set(pass_template_targ_values "${pass_template_targ_values},")
+        endif()
+
+        set(template_targs "${template_targs} typename arg_${index}__")
+        set(pass_template_targs "${pass_template_targs} arg_${index}__")
+        set(pass_template_targ_values "${pass_template_targ_values} T_safe_targ_value<arg_${index}__>")
+
+    endforeach()
+
+    set(fileContent "${fileContent}
+        template<typename... F_args__>
+        using TF_targ_list_to_varg_list = typename internal::TF_targ_list_to_varg_list_helper<sizeof...(F_args__), F_args__...>::F;
+        }
+         \n
+    ")
+
+    file(APPEND ${NCPP_TEMPLATE_TRICKS_FILE} "${fileContent}")
+
+endfunction()
+
+NCPP_TemplateTricks_CreateTemplate_ToVArgList(${NCPP_TEMPLATE_TRICKS_MAX_ARG_COUNT})
+
+
+
+#####################################################################################
 #   Remove head template type args
 #####################################################################################
 function(NCPP_TemplateTricks_CreateTemplate_RemoveHeadTemplateTArgs MaxArgCount)
