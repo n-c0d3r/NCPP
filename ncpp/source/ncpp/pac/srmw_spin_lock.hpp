@@ -174,6 +174,17 @@ namespace ncpp {
 
             }
 
+
+
+            NCPP_FORCE_INLINE void lock() noexcept {
+
+                rlock();
+            }
+            NCPP_FORCE_INLINE void unlock() noexcept {
+
+                runlock();
+            }
+
         };
 
     }

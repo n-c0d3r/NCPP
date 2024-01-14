@@ -67,7 +67,37 @@ namespace ncpp {
             NCPP_FORCE_INLINE void lock() noexcept {
 
             }
+            constexpr b8 try_lock() {
+
+                return true;
+            }
             NCPP_FORCE_INLINE void unlock() noexcept {
+
+            }
+
+
+
+            NCPP_FORCE_INLINE void rlock() noexcept {
+
+            }
+            constexpr b8 try_rlock() {
+
+                return true;
+            }
+            NCPP_FORCE_INLINE void runlock() noexcept {
+
+            }
+
+
+
+            NCPP_FORCE_INLINE void wlock() noexcept {
+
+            }
+            constexpr b8 try_wlock() {
+
+                return true;
+            }
+            NCPP_FORCE_INLINE void wunlock() noexcept {
 
             }
 

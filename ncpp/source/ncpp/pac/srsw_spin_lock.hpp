@@ -97,6 +97,36 @@ NCPP_DISABLE_ALL_WARNINGS_POP
                 
                 is_locked_.clear(eastl::memory_order_release);
             }
+
+
+
+            NCPP_FORCE_INLINE void rlock() noexcept {
+
+                unlock();
+            }
+            NCPP_FORCE_INLINE b8 try_rlock() noexcept {
+
+                return try_lock();
+            }
+            NCPP_FORCE_INLINE void runlock() noexcept {
+
+                unlock();
+            }
+
+
+
+            NCPP_FORCE_INLINE void wlock() noexcept {
+
+                unlock();
+            }
+            NCPP_FORCE_INLINE b8 try_wlock() noexcept {
+
+                return try_lock();
+            }
+            NCPP_FORCE_INLINE void wunlock() noexcept {
+
+                unlock();
+            }
             
         };
 
