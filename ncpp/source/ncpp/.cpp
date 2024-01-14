@@ -105,6 +105,12 @@ namespace ncpp::internal {
         << std::endl
         << T_cout_lowlight("| ")
 
+        << E_log_color::V_FOREGROUND_GREEN << "default-char"
+
+        << T_cout_lowlight(" |")
+        << std::endl
+        << T_cout_lowlight("| ")
+
         << T_cout_field_name("file") << T_cout_lowlight(" -> ") << T_cout_value(file_path_p)
 
         << T_cout_lowlight(" |")
@@ -140,6 +146,12 @@ namespace ncpp::internal {
         << E_log_color::V_FOREGROUND_BRIGHT_MAGNETA
         << L"| INFO |"
 
+        << std::endl
+        << T_cout_lowlight(L"| ")
+
+        << E_log_color::V_FOREGROUND_YELLOW << "wide-char"
+
+        << T_cout_lowlight(L" |")
         << std::endl
         << T_cout_lowlight(L"| ")
 

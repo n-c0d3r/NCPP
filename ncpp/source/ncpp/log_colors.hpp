@@ -265,8 +265,8 @@ namespace ncpp {
         CYAN = 0x6,
         WHITE = 0x7,
 
-        BRIGHT = 0x00,
-        DARK = 0x10,
+        DARK = 0x00,
+        BRIGHT = 0x10,
 
         FOREGROUND = 0x000,
         BACKGROUND = 0x100,
