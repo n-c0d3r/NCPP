@@ -480,7 +480,7 @@ namespace ncpp::internal {
 
 
 ////////////////////////////////////////////////////////////////////////////////////
-//  NCPP_INFO(...) macro
+//  NCPP_INFO() macro
 ////////////////////////////////////////////////////////////////////////////////////
 
 namespace ncpp::internal {
@@ -513,6 +513,43 @@ namespace ncpp::internal {
 #endif
 
 #define NCPP_INFO() NCPP_INFO_ADVANCED(std::cout)
+
+
+
+////////////////////////////////////////////////////////////////////////////////////
+//  NCPP_WINFO() macro
+////////////////////////////////////////////////////////////////////////////////////
+
+namespace ncpp::internal {
+    void log_winfo_failed_at(std::wostream& ostream, const wchar_t* file_path_p, const wchar_t* function_name_p, uint32_t line);
+    struct F_winfo_tail_logger {
+
+        std::wostream& ostream = std::wcout;
+
+        F_winfo_tail_logger(
+            std::wostream& ostream, const wchar_t* file_path_p, const wchar_t* function_name_p, uint32_t line
+        ) :
+            ostream(ostream)
+        {
+            log_winfo_failed_at(ostream, file_path_p, function_name_p, line);
+        }
+        NCPP_FORCE_INLINE ~F_winfo_tail_logger(){
+            ostream << std::endl << std::endl;
+        }
+
+    };
+}
+
+#ifdef NCPP_ENABLE_INFO
+#define NCPP_WINFO_ADVANCED(OptionalOStream) \
+            ncpp::internal::F_winfo_tail_logger{ OptionalOStream, NCPP_TEXT(NCPP_FILE), NCPP_TEXT(NCPP_FUNCTION), NCPP_LINE }.ostream
+#else
+#define NCPP_WINFO_ADVANCED(OptionalOStream) \
+            if constexpr(false) \
+                ncpp::internal::F_winfo_tail_logger{ OptionalOStream, NCPP_TEXT(NCPP_FILE), NCPP_TEXT(NCPP_FUNCTION), NCPP_LINE }.ostream
+#endif
+
+#define NCPP_WINFO() NCPP_WINFO_ADVANCED(std::wcout)
 
 
 

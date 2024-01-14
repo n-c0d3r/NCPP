@@ -440,6 +440,42 @@ namespace ncpp {
                 ) {
 
                     if(&os == &cout)
+                        os << NCPP_FOREGROUND_WHITE;
+
+                    ncpp::containers::F_string type_name = ncpp::utilities::T_type_fullname<F__>();
+
+                    if(&os == &cout)
+                        os << ncpp::containers::to_string(
+                            ncpp::containers::T_replace_all(
+                                ncpp::containers::T_replace_all(
+                                    ncpp::containers::T_replace_all(
+                                        type_name,
+                                        ">",
+                                        ncpp::containers::F_string(NCPP_FOREGROUND_BRIGHT_BLACK) + ">" + ncpp::containers::F_string(NCPP_FOREGROUND_WHITE)
+                                    ),
+                                    "<",
+                                    ncpp::containers::F_string(NCPP_FOREGROUND_BRIGHT_BLACK) + "<" + ncpp::containers::F_string(NCPP_FOREGROUND_WHITE)
+                                ),
+                                "::",
+                                ncpp::containers::F_string(NCPP_FOREGROUND_BRIGHT_BLACK) + "::" + ncpp::containers::F_string(NCPP_FOREGROUND_WHITE)
+                            )
+                        ).c_str();
+                    else
+                        os << type_name.c_str();
+
+                    if(&os == &cout)
+                        os << NCPP_FOREGROUND_BRIGHT_MAGNETA;
+
+                    os << "*";
+
+                    if(&os == &cout)
+                        os << NCPP_FOREGROUND_BRIGHT_BLACK;
+
+                    os << " { ";
+
+
+
+                    if(&os == &cout)
                         os << NCPP_FOREGROUND_BLUE;
 
                     os << "0";
@@ -454,6 +490,15 @@ namespace ncpp {
 
                     os << ncpp::containers::T_decimal_to_hex(reinterpret_cast<sz>(input.value)).c_str();
 
+
+
+                    if(&os == &cout)
+                        os << NCPP_FOREGROUND_BRIGHT_BLACK;
+
+                    os << " }";
+
+
+
                     if(&os == &cout)
                         os << NCPP_RESET_CONSOLE_COLOR;
 
@@ -463,6 +508,42 @@ namespace ncpp {
                     ncpp::F_wostream& os,
                     const F& input
                 ) {
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_WHITE_TEXT;
+
+                    ncpp::containers::F_string type_name = ncpp::utilities::T_type_fullname<F__>();
+
+                    if(&os == &wcout)
+                        os << ncpp::containers::to_wstring(
+                            ncpp::containers::T_replace_all(
+                                ncpp::containers::T_replace_all(
+                                    ncpp::containers::T_replace_all(
+                                        type_name,
+                                        ">",
+                                        ncpp::containers::F_string(NCPP_FOREGROUND_BRIGHT_BLACK) + ">" + ncpp::containers::F_string(NCPP_FOREGROUND_WHITE)
+                                    ),
+                                    "<",
+                                    ncpp::containers::F_string(NCPP_FOREGROUND_BRIGHT_BLACK) + "<" + ncpp::containers::F_string(NCPP_FOREGROUND_WHITE)
+                                ),
+                                "::",
+                                ncpp::containers::F_string(NCPP_FOREGROUND_BRIGHT_BLACK) + "::" + ncpp::containers::F_string(NCPP_FOREGROUND_WHITE)
+                            )
+                        ).c_str();
+                    else
+                        os << type_name.c_str();
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_BRIGHT_MAGNETA_TEXT;
+
+                    os << L"*";
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_BRIGHT_BLACK_TEXT;
+
+                    os << L" { ";
+
+
 
                     if(&os == &wcout)
                         os << NCPP_FOREGROUND_BLUE_TEXT;
@@ -478,6 +559,15 @@ namespace ncpp {
                         os << NCPP_FOREGROUND_BRIGHT_BLUE_TEXT;
 
                     os << ncpp::containers::T_decimal_to_hex<ncpp::containers::F_wstring>(reinterpret_cast<sz>(input.value)).c_str();
+
+
+
+                    if(&os == &wcout)
+                        os << NCPP_FOREGROUND_BRIGHT_BLACK_TEXT;
+
+                    os << L" }";
+
+
 
                     if(&os == &wcout)
                         os << NCPP_RESET_CONSOLE_COLOR_TEXT;
