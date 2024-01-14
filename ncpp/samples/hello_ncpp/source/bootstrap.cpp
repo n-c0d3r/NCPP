@@ -8,9 +8,9 @@ using namespace ncpp;
 NCPP_ENTRY_POINT(args) {
 
     NCPP_INFO()
-        << G_string("Hello ")
+        << "Hello "
         << E_log_color::V_FOREGROUND_BRIGHT_BLUE
-        << G_string("NCPP ")
+        << "NCPP "
         << E_log_color::V_FOREGROUND_BRIGHT_CYAN
         << NCPP_VERSION_STR
 #ifdef NCPP_LITE
