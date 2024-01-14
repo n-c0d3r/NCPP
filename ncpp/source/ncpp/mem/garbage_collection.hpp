@@ -59,7 +59,7 @@ namespace ncpp {
 
         NCPP_RTTI_CREATE_FLAG(F_garbage_collectable_flag);
 
-        template<typename F__>
+        template<typename F__, sz index__ = 0>
         struct TL_garbage_collectable {
 
             static constexpr b8 is_valid = NCPP_RTTI_IS_HAS_FLAG(F__, F_garbage_collectable_flag);

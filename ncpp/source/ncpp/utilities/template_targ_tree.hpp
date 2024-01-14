@@ -88,7 +88,7 @@ namespace ncpp {
 
 
 
-        template<typename F__>
+        template<typename F__, sz index__ = 0>
         struct TL_template_targ_tree {
 
             static constexpr b8 is_valid = T_is_template_targ_tree<F__>;
@@ -123,16 +123,16 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
-            template<template<typename F_in__> class... TF_multiple_filter_semantics__>
+            template<template<typename F_in__, sz index_in__> class... TF_multiple_filter_semantics__>
             using TF_filter = F_this;
 
-            template<template<typename F_in__> class... TF_multiple_filter_semantics__>
+            template<template<typename F_in__, sz index_in__> class... TF_multiple_filter_semantics__>
             using TF_filter_childs = F_this;
 
-            template<template<typename F_in__> class... TF_multiple_filter_semantics__>
+            template<template<typename F_in__, sz index_in__> class... TF_multiple_filter_semantics__>
             using TF_invert_filter = F_this;
 
-            template<template<typename F_in__> class... TF_multiple_filter_semantics__>
+            template<template<typename F_in__, sz index_in__> class... TF_multiple_filter_semantics__>
             using TF_invert_filter_childs = F_this;
 
         };
@@ -174,7 +174,7 @@ namespace ncpp {
             struct F_normalized_helper_internal_targ
             {
 
-                template<typename F_child__>
+                template<typename F_child__, sz index__ = 0>
                 struct TL_valid_child {
 
                     static constexpr b8 is_valid = F_child__::is_valid;
@@ -227,7 +227,7 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         private:
-            template<typename F_tree__, template<typename F_in__> class... TF_multiple_filter_semantics__>
+            template<typename F_tree__, template<typename F_in__, sz index_in__> class... TF_multiple_filter_semantics__>
             struct TF_filter_multiple_semantics_helper_internal_targ;
             template<typename F_tree__>
             struct TF_filter_multiple_semantics_helper_internal_targ<F_tree__> {
@@ -237,8 +237,8 @@ namespace ncpp {
             };
             template<
                 typename F_tree__,
-                template<typename F_in__> class TF_first_filter_semantics__,
-                template<typename F_in__> class... TF_rest_multiple_filter_semantics__
+                template<typename F_in__, sz index_in__> class TF_first_filter_semantics__,
+                template<typename F_in__, sz index_in__> class... TF_rest_multiple_filter_semantics__
             >
             struct TF_filter_multiple_semantics_helper_internal_targ<
                 F_tree__,
@@ -269,7 +269,7 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
-            template<template<typename F_in__> class... TF_multiple_filter_semantics__>
+            template<template<typename F_in__, sz index_in__> class... TF_multiple_filter_semantics__>
             using TF_filter = typename TF_filter_multiple_semantics_helper_internal_targ<
                 F_this,
                 TF_multiple_filter_semantics__...
@@ -280,7 +280,7 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         private:
-            template<typename F_tree__, template<typename F_in__> class... TF_multiple_filter_semantics__>
+            template<typename F_tree__, template<typename F_in__, sz index_in__> class... TF_multiple_filter_semantics__>
             struct TF_filter_child_multiple_semantics_helper_internal_targ;
             template<typename F_tree__>
             struct TF_filter_child_multiple_semantics_helper_internal_targ<F_tree__> {
@@ -290,8 +290,8 @@ namespace ncpp {
             };
             template<
                 typename F_tree__,
-                template<typename F_in__> class TF_first_filter_semantics__,
-                template<typename F_in__> class... TF_rest_multiple_filter_semantics__
+                template<typename F_in__, sz index_in__> class TF_first_filter_semantics__,
+                template<typename F_in__, sz index_in__> class... TF_rest_multiple_filter_semantics__
             >
             struct TF_filter_child_multiple_semantics_helper_internal_targ<
                 F_tree__,
@@ -322,7 +322,7 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
-            template<template<typename F_in__> class... TF_multiple_filter_semantics__>
+            template<template<typename F_in__, sz index_in__> class... TF_multiple_filter_semantics__>
             using TF_filter_childs = typename TF_filter_child_multiple_semantics_helper_internal_targ<
                 F_this,
                 TF_multiple_filter_semantics__...
@@ -333,7 +333,7 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         private:
-            template<typename F_tree__, template<typename F_in__> class... TF_multiple_invert_filter_semantics__>
+            template<typename F_tree__, template<typename F_in__, sz index_in__> class... TF_multiple_invert_filter_semantics__>
             struct TF_invert_filter_multiple_semantics_helper_internal_targ;
             template<typename F_tree__>
             struct TF_invert_filter_multiple_semantics_helper_internal_targ<F_tree__> {
@@ -343,8 +343,8 @@ namespace ncpp {
             };
             template<
                 typename F_tree__,
-                template<typename F_in__> class TF_first_invert_filter_semantics__,
-                template<typename F_in__> class... TF_rest_multiple_invert_filter_semantics__
+                template<typename F_in__, sz index_in__> class TF_first_invert_filter_semantics__,
+                template<typename F_in__, sz index_in__> class... TF_rest_multiple_invert_filter_semantics__
             >
             struct TF_invert_filter_multiple_semantics_helper_internal_targ<
                 F_tree__,
@@ -375,7 +375,7 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
-            template<template<typename F_in__> class... TF_multiple_invert_filter_semantics__>
+            template<template<typename F_in__, sz index_in__> class... TF_multiple_invert_filter_semantics__>
             using TF_invert_filter = typename TF_invert_filter_multiple_semantics_helper_internal_targ<
                 F_this,
                 TF_multiple_invert_filter_semantics__...
@@ -386,7 +386,7 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         private:
-            template<typename F_tree__, template<typename F_in__> class... TF_multiple_invert_filter_semantics__>
+            template<typename F_tree__, template<typename F_in__, sz index_in__> class... TF_multiple_invert_filter_semantics__>
             struct TF_invert_filter_child_multiple_semantics_helper_internal_targ;
             template<typename F_tree__>
             struct TF_invert_filter_child_multiple_semantics_helper_internal_targ<F_tree__> {
@@ -396,8 +396,8 @@ namespace ncpp {
             };
             template<
                 typename F_tree__,
-                template<typename F_in__> class TF_first_invert_filter_semantics__,
-                template<typename F_in__> class... TF_rest_multiple_invert_filter_semantics__
+                template<typename F_in__, sz index_in__> class TF_first_invert_filter_semantics__,
+                template<typename F_in__, sz index_in__> class... TF_rest_multiple_invert_filter_semantics__
             >
             struct TF_invert_filter_child_multiple_semantics_helper_internal_targ<
                 F_tree__,
@@ -428,7 +428,7 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
-            template<template<typename F_in__> class... TF_multiple_invert_filter_semantics__>
+            template<template<typename F_in__, sz index_in__> class... TF_multiple_invert_filter_semantics__>
             using TF_invert_filter_childs = typename TF_invert_filter_child_multiple_semantics_helper_internal_targ<
                 F_this,
                 TF_multiple_invert_filter_semantics__...

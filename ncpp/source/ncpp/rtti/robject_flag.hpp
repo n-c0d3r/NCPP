@@ -111,7 +111,7 @@ namespace ncpp {
 
 
 
-        template<typename F__>
+        template<typename F__, sz index__ = 0>
         struct TL_sinfo {
 
             static constexpr b8 is_valid = NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_flag);
@@ -120,14 +120,14 @@ namespace ncpp {
 
 
 
-        template<typename F__>
+        template<typename F__, sz index__ = 0>
         struct TL_sinfo_base {
 
             static constexpr b8 is_valid = TL_sinfo<F__>::is_valid && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_base_flag);
 
         };
 
-        template<typename F__>
+        template<typename F__, sz index__ = 0>
         struct TL_sinfo_member {
 
             static constexpr b8 is_valid = TL_sinfo<F__>::is_valid && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_member_flag);
@@ -136,7 +136,7 @@ namespace ncpp {
 
 
 
-        template<typename F__>
+        template<typename F__, sz index__ = 0>
         struct TL_sinfo_static {
 
             static constexpr b8 is_valid = TL_sinfo<F__>::is_valid && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_static_flag);
@@ -145,21 +145,21 @@ namespace ncpp {
 
 
 
-        template<typename F__>
+        template<typename F__, sz index__ = 0>
         struct TL_sinfo_virtual {
 
             static constexpr b8 is_valid = TL_sinfo<F__>::is_valid && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_virtual_flag);
 
         };
 
-        template<typename F__>
+        template<typename F__, sz index__ = 0>
         struct TL_sinfo_abstract {
 
             static constexpr b8 is_valid = TL_sinfo<F__>::is_valid && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_abstract_flag);
 
         };
 
-        template<typename F__>
+        template<typename F__, sz index__ = 0>
         struct TL_sinfo_const {
 
             static constexpr b8 is_valid = TL_sinfo<F__>::is_valid && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_const_flag);
@@ -168,14 +168,14 @@ namespace ncpp {
 
 
 
-        template<typename F__>
+        template<typename F__, sz index__ = 0>
         struct TL_sinfo_variable {
 
             static constexpr b8 is_valid = TL_sinfo<F__>::is_valid && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_variable_flag);
 
         };
 
-        template<typename F__>
+        template<typename F__, sz index__ = 0>
         struct TL_sinfo_function {
 
             static constexpr b8 is_valid = TL_sinfo<F__>::is_valid && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_function_flag);
@@ -184,21 +184,21 @@ namespace ncpp {
 
 
 
-        template<typename F__>
+        template<typename F__, sz index__ = 0>
         struct TL_sinfo_private {
 
             static constexpr b8 is_valid = TL_sinfo<F__>::is_valid && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_private_flag);
 
         };
 
-        template<typename F__>
+        template<typename F__, sz index__ = 0>
         struct TL_sinfo_protected {
 
             static constexpr b8 is_valid = TL_sinfo<F__>::is_valid && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_protected_flag);
 
         };
 
-        template<typename F__>
+        template<typename F__, sz index__ = 0>
         struct TL_sinfo_public {
 
             static constexpr b8 is_valid = TL_sinfo<F__>::is_valid && NCPP_RTTI_IS_HAS_FLAG(F__, rtti::F_sinfo_public_flag);

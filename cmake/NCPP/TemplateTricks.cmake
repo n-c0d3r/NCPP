@@ -80,6 +80,52 @@ NCPP_TemplateTricks_CreateTemplate_NthTemplateTArg(${NCPP_TEMPLATE_TRICKS_MAX_AR
 
 
 #####################################################################################
+#   MakeTArgRange
+#####################################################################################
+function(NCPP_TemplateTricks_CreateTemplate_MakeTArgRange MaxArgCount)
+
+    set(fileContent "
+        template<typename...> struct TF_template_targ_list;
+        namespace internal { \n
+    ")
+
+    set(fileContent "${fileContent} template<sz index__> struct TF_make_targ_range_helper; \n")
+
+    MATH(EXPR maxIndex "${MaxArgCount} - 1")
+
+    set(targs "")
+
+    foreach(index RANGE 0 ${maxIndex})
+
+        set(fileContent "${fileContent} template<>
+            struct TF_make_targ_range_helper<${index}> { using F = ncpp::utilities::TF_template_targ_list<${targs}>; };
+        ")
+
+        if(NOT index EQUAL 0)
+            set(targs "${targs},")
+        endif()
+
+        set(targs "${targs} void")
+
+    endforeach()
+
+    set(fileContent "${fileContent} } \n")
+
+    set(fileContent "${fileContent}
+        template<sz index__>
+        using TF_make_targ_range = typename internal::TF_make_targ_range_helper<index__>::F;
+         \n
+    ")
+
+    file(APPEND ${NCPP_TEMPLATE_TRICKS_FILE} "${fileContent}")
+
+endfunction()
+
+NCPP_TemplateTricks_CreateTemplate_MakeTArgRange(${NCPP_TEMPLATE_TRICKS_MAX_ARG_COUNT})
+
+
+
+#####################################################################################
 #   Remove head template type args
 #####################################################################################
 function(NCPP_TemplateTricks_CreateTemplate_RemoveHeadTemplateTArgs MaxArgCount)
@@ -245,6 +291,52 @@ function(NCPP_TemplateTricks_CreateTemplate_NthTemplateVArg MaxArgCount)
 endfunction()
 
 NCPP_TemplateTricks_CreateTemplate_NthTemplateVArg(${NCPP_TEMPLATE_TRICKS_MAX_ARG_COUNT})
+
+
+
+#####################################################################################
+#   MakeVArgRange
+#####################################################################################
+function(NCPP_TemplateTricks_CreateTemplate_MakeVArgRange MaxArgCount)
+
+    set(fileContent "
+        template<auto...> struct TF_template_varg_list;
+        namespace internal { \n
+    ")
+
+    set(fileContent "${fileContent} template<sz index__> struct TF_make_varg_range_helper; \n")
+
+    MATH(EXPR maxIndex "${MaxArgCount} - 1")
+
+    set(vargs "")
+
+    foreach(index RANGE 0 ${maxIndex})
+
+        set(fileContent "${fileContent} template<>
+            struct TF_make_varg_range_helper<${index}> { using F = ncpp::utilities::TF_template_varg_list<${vargs}>; };
+        ")
+
+        if(NOT index EQUAL 0)
+            set(vargs "${vargs},")
+        endif()
+
+        set(vargs "${vargs} ${index}")
+
+    endforeach()
+
+    set(fileContent "${fileContent} } \n")
+
+    set(fileContent "${fileContent}
+        template<sz index__>
+        using TF_make_varg_range = typename internal::TF_make_varg_range_helper<index__>::F;
+         \n
+    ")
+
+    file(APPEND ${NCPP_TEMPLATE_TRICKS_FILE} "${fileContent}")
+
+endfunction()
+
+NCPP_TemplateTricks_CreateTemplate_MakeVArgRange(${NCPP_TEMPLATE_TRICKS_MAX_ARG_COUNT})
 
 
 

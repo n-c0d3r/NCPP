@@ -81,57 +81,58 @@ namespace ncpp {
 
         namespace internal_varg {
 
-            template<auto value__, template<auto value_in__> class TF_filter_semantics__>
+            template<auto value__, sz index__, template<auto value_in__, sz index_in__> class TF_filter_semantics__>
             concept T_filter_single = requires {
 
-                requires TF_filter_semantics__<value__>::is_valid;
+                requires TF_filter_semantics__<value__, index__>::is_valid;
 
             };
 
-            template<auto value__, template<auto value_in__> class TF_filter_semantics__>
+            template<auto value__, sz index__, template<auto value_in__, sz index_in__> class TF_filter_semantics__>
             concept T_filter_single_and_has_custom_type = requires {
 
-                requires T_filter_single<value__, TF_filter_semantics__>;
-                TF_filter_semantics__<value__>::value;
+                requires T_filter_single<value__, index__, TF_filter_semantics__>;
+                TF_filter_semantics__<value__, index__>::value;
 
             };
 
-            template<b8 is_valid__, auto value__, template<auto value_in__> class TF_filter_semantics__>
+            template<b8 is_valid__, auto value__, sz index__, template<auto value_in__, sz index_in__> class TF_filter_semantics__>
             struct TF_safe_filter_single_helper;
 
-            template<auto value__, template<auto value_in__> class TF_filter_semantics__>
-            struct TF_safe_filter_single_helper<false, value__, TF_filter_semantics__> {
+            template<auto value__, sz index__, template<auto value_in__, sz index_in__> class TF_filter_semantics__>
+            struct TF_safe_filter_single_helper<false, value__, index__, TF_filter_semantics__> {
 
                 static constexpr auto value = value__;
 
             };
-            template<auto value__, template<auto value_in__> class TF_filter_semantics__>
-            struct TF_safe_filter_single_helper<true, value__, TF_filter_semantics__> {
+            template<auto value__, sz index__, template<auto value_in__, sz index_in__> class TF_filter_semantics__>
+            struct TF_safe_filter_single_helper<true, value__, index__, TF_filter_semantics__> {
 
-                static constexpr auto value = TF_filter_semantics__<value__>::value;
+                static constexpr auto value = TF_filter_semantics__<value__, index__>::value;
 
             };
 
-            template<auto value__, template<auto F_in__> class TF_filter_semantics__>
+            template<auto value__, sz index__, template<auto value_in__, sz index_in__> class TF_filter_semantics__>
             static constexpr auto T_safe_filter_single = TF_safe_filter_single_helper<
-                T_filter_single_and_has_custom_type<value__, TF_filter_semantics__>,
+                T_filter_single_and_has_custom_type<value__, index__, TF_filter_semantics__>,
                 value__,
+                index__,
                 TF_filter_semantics__
             >::value;
 
 
 
-            template<b8 is_valid__, auto value__, template<auto value_in__> class TF_filter_semantics__>
+            template<b8 is_valid__, auto value__, sz index__, template<auto value_in__, sz index_in__> class TF_filter_semantics__>
             struct TF_invert_filter_helper;
 
-            template<auto value__, template<auto value_in__> class TF_filter_semantics__>
-            struct TF_invert_filter_helper<false, value__, TF_filter_semantics__> {
+            template<auto value__, sz index__, template<auto value_in__, sz index_in__> class TF_filter_semantics__>
+            struct TF_invert_filter_helper<false, value__, index__, TF_filter_semantics__> {
 
                 static constexpr auto value = value__;
 
             };
-            template<auto value__, template<auto value_in__> class TF_filter_semantics__>
-            struct TF_invert_filter_helper<true, value__, TF_filter_semantics__> {
+            template<auto value__, sz index__, template<auto value_in__, sz index_in__> class TF_filter_semantics__>
+            struct TF_invert_filter_helper<true, value__, index__, TF_filter_semantics__> {
 
                 static constexpr auto value = value__;
 
@@ -157,57 +158,58 @@ namespace ncpp {
 
         namespace internal_varg {
 
-            template<auto value__, template<auto value_in__> class TF_invert_filter_semantics__>
+            template<auto value__, sz index__, template<auto value_in__, sz index_in__> class TF_invert_filter_semantics__>
             concept T_invert_filter_single = requires {
 
-                requires (!TF_invert_filter_semantics__<value__>::is_valid);
+                requires (!TF_invert_filter_semantics__<value__, index__>::is_valid);
 
             };
 
-            template<auto value__, template<auto value_in__> class TF_invert_filter_semantics__>
+            template<auto value__, sz index__, template<auto value_in__, sz index_in__> class TF_invert_filter_semantics__>
             concept T_invert_filter_single_and_has_custom_type = requires {
 
-                requires T_invert_filter_single<value__, TF_invert_filter_semantics__>;
-                TF_invert_filter_semantics__<value__>::value;
+                requires T_invert_filter_single<value__, index__, TF_invert_filter_semantics__>;
+                TF_invert_filter_semantics__<value__, index__>::value;
 
             };
 
-            template<b8 is_valid__, auto value__, template<auto value_in__> class TF_invert_filter_semantics__>
+            template<b8 is_valid__, auto value__, sz index__, template<auto value_in__, sz index_in__> class TF_invert_filter_semantics__>
             struct TF_safe_invert_filter_single_helper;
 
-            template<auto value__, template<auto value_in__> class TF_invert_filter_semantics__>
-            struct TF_safe_invert_filter_single_helper<false, value__, TF_invert_filter_semantics__> {
+            template<auto value__, sz index__, template<auto value_in__, sz index_in__> class TF_invert_filter_semantics__>
+            struct TF_safe_invert_filter_single_helper<false, value__, index__, TF_invert_filter_semantics__> {
 
                 static constexpr auto value = value__;
 
             };
-            template<auto value__, template<auto value_in__> class TF_invert_filter_semantics__>
-            struct TF_safe_invert_filter_single_helper<true, value__, TF_invert_filter_semantics__> {
+            template<auto value__, sz index__, template<auto value_in__, sz index_in__> class TF_invert_filter_semantics__>
+            struct TF_safe_invert_filter_single_helper<true, value__, index__, TF_invert_filter_semantics__> {
 
-                static constexpr auto value = TF_invert_filter_semantics__<value__>::value;
+                static constexpr auto value = TF_invert_filter_semantics__<value__, index__>::value;
 
             };
 
-            template<auto value__, template<auto value_in__> class TF_invert_filter_semantics__>
+            template<auto value__, sz index__, template<auto value_in__, sz index_in__> class TF_invert_filter_semantics__>
             static constexpr auto T_safe_invert_filter_single = TF_safe_invert_filter_single_helper<
-                T_invert_filter_single_and_has_custom_type<value__, TF_invert_filter_semantics__>,
+                T_invert_filter_single_and_has_custom_type<value__, index__, TF_invert_filter_semantics__>,
                 value__,
+                index__,
                 TF_invert_filter_semantics__
             >::value;
 
 
 
-            template<b8 is_valid__, auto value__, template<auto value_in__> class TF_invert_filter_semantics__>
+            template<b8 is_valid__, auto value__, sz index__, template<auto value_in__, sz index_in__> class TF_invert_filter_semantics__>
             struct TF_invert_invert_filter_helper;
 
-            template<auto value__, template<auto value_in__> class TF_invert_filter_semantics__>
-            struct TF_invert_invert_filter_helper<false, value__, TF_invert_filter_semantics__> {
+            template<auto value__, sz index__, template<auto value_in__, sz index_in__> class TF_invert_filter_semantics__>
+            struct TF_invert_invert_filter_helper<false, value__, index__, TF_invert_filter_semantics__> {
 
                 static constexpr auto value = value__;
 
             };
-            template<auto value__, template<auto value_in__> class TF_invert_filter_semantics__>
-            struct TF_invert_invert_filter_helper<true, value__, TF_invert_filter_semantics__> {
+            template<auto value__, sz index__, template<auto value_in__, sz index_in__> class TF_invert_filter_semantics__>
+            struct TF_invert_invert_filter_helper<true, value__, index__, TF_invert_filter_semantics__> {
 
                 static constexpr auto value = value__;
 
@@ -302,6 +304,16 @@ namespace ncpp {
                 static constexpr auto value = T_nth_template_varg<index__, args__...>;
 
             };
+            template<sz index__, auto if_fail__, b8 is_valid__>
+            struct TF_try_at_internal_targ {
+
+                static constexpr auto value = T_nth_template_varg<
+                    is_valid__,
+                    if_fail__,
+                    T_nth_template_varg<is_valid__ ? index__ : 0, args__..., 0>
+                >;
+
+            };
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
@@ -310,6 +322,11 @@ namespace ncpp {
         public:
             template<sz index__>
             static constexpr auto T_at = TF_at_internal_varg<index__>::value;
+            template<sz index__, auto if_fail__ = 0>
+            static constexpr auto T_try_at = TF_try_at_internal_targ<index__, if_fail__, (index__ < count)>::value;
+
+            static constexpr auto try_first = T_try_at<0>;
+            static constexpr auto try_last = T_try_at<(count != 0) ? (count - 1) : 0>;
 
             template<typename F__>
             using TF_combine = typename TF_combine_helper_internal_varg<F__>::F;
@@ -382,7 +399,7 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         private:
-            template<i32 index__, template<auto value_in__> class TF_filter_semantics__>
+            template<i32 index__, template<auto value_in__, sz index_in__> class TF_filter_semantics__>
             struct TF_filter_helper_internal_varg {
 
                 static constexpr auto value_current_arg = T_at<index__>;
@@ -390,25 +407,25 @@ namespace ncpp {
 
                 using F = F_prev_list::template TF_combine<
                     TF_nth_template_targ<
-                        internal_varg::T_filter_single<value_current_arg, TF_filter_semantics__>,
+                        internal_varg::T_filter_single<value_current_arg, index__, TF_filter_semantics__>,
                         TF_template_varg_list<>,
-                        TF_template_varg_list<internal_varg::T_safe_filter_single<value_current_arg, TF_filter_semantics__>>
+                        TF_template_varg_list<internal_varg::T_safe_filter_single<value_current_arg, index__, TF_filter_semantics__>>
                     >
                 >;
 
             };
 
-            template<template<auto value_in__> class TF_filter_semantics__>
+            template<template<auto value_in__, sz index_in__> class TF_filter_semantics__>
             struct TF_filter_helper_internal_varg<-1, TF_filter_semantics__> {
 
                 using F = TF_template_varg_list<>;
 
             };
 
-            template<template<auto value_in__> class TF_filter_semantics__>
+            template<template<auto value_in__, sz index_in__> class TF_filter_semantics__>
             using TF_filter_single_internal_varg = typename TF_filter_helper_internal_varg<count - 1, TF_filter_semantics__>::F;
 
-            template<typename F_list__, template<auto value_in__> class... TF_multiple_filter_semantics__>
+            template<typename F_list__, template<auto value_in__, sz index_in__> class... TF_multiple_filter_semantics__>
             struct TF_filter_multiple_semantics_helper_internal_varg;
             template<typename F_list__>
             struct TF_filter_multiple_semantics_helper_internal_varg<F_list__> {
@@ -418,8 +435,8 @@ namespace ncpp {
             };
             template<
                 typename F_list__,
-                template<auto value_in__> class TF_first_filter_semantics__,
-                template<auto value_in__> class... TF_rest_multiple_filter_semantics__
+                template<auto value_in__, sz index_in__> class TF_first_filter_semantics__,
+                template<auto value_in__, sz index_in__> class... TF_rest_multiple_filter_semantics__
             >
             struct TF_filter_multiple_semantics_helper_internal_varg<
                 F_list__,
@@ -441,16 +458,16 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
-            template<template<auto value_in__> class... TF_multiple_filter_semantics__>
+            template<template<auto value_in__, sz index_in__> class... TF_multiple_filter_semantics__>
             using TF_filter = typename TF_filter_multiple_semantics_helper_internal_varg<
                 F_this,
                 TF_multiple_filter_semantics__...
             >::F;
 
-            template<template<auto value_in__> class... TF_multiple_filter_semantics__>
+            template<template<auto value_in__, sz index_in__> class... TF_multiple_filter_semantics__>
             using TF_find = TF_filter<TF_multiple_filter_semantics__...>::template TF_try_slice<0, 1>;
 
-            template<template<auto value_in__> class... TF_multiple_filter_semantics__>
+            template<template<auto value_in__, sz index_in__> class... TF_multiple_filter_semantics__>
             using TF_find_last = TF_filter<TF_multiple_filter_semantics__...>::template TF_try_invert_slice<0, 1>;
 
             ////////////////////////////////////////////////////////////////////////////////////
@@ -458,7 +475,7 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         private:
-            template<i32 index__, template<auto value_in__> class TF_invert_filter_semantics__>
+            template<i32 index__, template<auto value_in__, sz index_in__> class TF_invert_filter_semantics__>
             struct TF_invert_filter_helper_internal_varg {
 
                 static constexpr auto value_current_arg = T_at<index__>;
@@ -466,25 +483,25 @@ namespace ncpp {
 
                 using F = F_prev_list::template TF_combine<
                     TF_nth_template_targ<
-                        internal_varg::T_invert_filter_single<value_current_arg, TF_invert_filter_semantics__>,
+                        internal_varg::T_invert_filter_single<value_current_arg, index__, TF_invert_filter_semantics__>,
                         TF_template_varg_list<>,
-                        TF_template_varg_list<internal_varg::T_safe_invert_filter_single<value_current_arg, TF_invert_filter_semantics__>>
+                        TF_template_varg_list<internal_varg::T_safe_invert_filter_single<value_current_arg, index__, TF_invert_filter_semantics__>>
                     >
                 >;
 
             };
 
-            template<template<auto value_in__> class TF_invert_filter_semantics__>
+            template<template<auto value_in__, sz index_in__> class TF_invert_filter_semantics__>
             struct TF_invert_filter_helper_internal_varg<-1, TF_invert_filter_semantics__> {
 
                 using F = TF_template_varg_list<>;
 
             };
 
-            template<template<auto value_in__> class TF_invert_filter_semantics__>
+            template<template<auto value_in__, sz index_in__> class TF_invert_filter_semantics__>
             using TF_invert_filter_single_internal_varg = typename TF_invert_filter_helper_internal_varg<count - 1, TF_invert_filter_semantics__>::F;
 
-            template<typename F_list__, template<auto value_in__> class... TF_multiple_invert_filter_semantics__>
+            template<typename F_list__, template<auto value_in__, sz index_in__> class... TF_multiple_invert_filter_semantics__>
             struct TF_invert_filter_multiple_semantics_helper_internal_varg;
             template<typename F_list__>
             struct TF_invert_filter_multiple_semantics_helper_internal_varg<F_list__> {
@@ -494,8 +511,8 @@ namespace ncpp {
             };
             template<
                 typename F_list__,
-                template<auto value_in__> class TF_first_invert_filter_semantics__,
-                template<auto value_in__> class... TF_rest_multiple_invert_filter_semantics__
+                template<auto value_in__, sz index_in__> class TF_first_invert_filter_semantics__,
+                template<auto value_in__, sz index_in__> class... TF_rest_multiple_invert_filter_semantics__
             >
             struct TF_invert_filter_multiple_semantics_helper_internal_varg<
                 F_list__,
@@ -517,25 +534,42 @@ namespace ncpp {
             ////////////////////////////////////////////////////////////////////////////////////
 
         public:
-            template<template<auto value_in__> class... TF_multiple_invert_filter_semantics__>
+            template<template<auto value_in__, sz index_in__> class... TF_multiple_invert_filter_semantics__>
             using TF_invert_filter = typename TF_invert_filter_multiple_semantics_helper_internal_varg<
                 F_this,
                 TF_multiple_invert_filter_semantics__...
             >::F;
 
-            template<template<auto value_in__> class... TF_multiple_filter_semantics__>
+            template<template<auto value_in__, sz index_in__> class... TF_multiple_filter_semantics__>
             using TF_invert_find = TF_invert_filter<TF_multiple_filter_semantics__...>::template TF_try_slice<0, 1>;
 
-            template<template<auto value_in__> class... TF_multiple_filter_semantics__>
+            template<template<auto value_in__, sz index_in__> class... TF_multiple_filter_semantics__>
             using TF_invert_find_last = TF_invert_filter<TF_multiple_filter_semantics__...>::template TF_try_invert_slice<0, 1>;
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
 
+        private:
+            template<template<auto value_in__, sz index_in__> class TF_update_semantics__>
+            struct TF_make_update_filter {
+
+                template<auto value_in__, sz index_in__>
+                struct TL : public TF_update_semantics__<value_in__, index_in__> {
+
+                    static constexpr b8 is_valid = true;
+
+                };
+
+            };
+
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////
+
         public:
-            template<template<auto value_in__> class TF_update_semantics__>
-            using TF_update = TF_template_varg_list<TF_update_semantics__<args__>::value...>;
+            template<template<auto value_in__, sz index_in__> class TF_update_semantics__>
+            using TF_update = TF_filter<TF_make_update_filter<TF_update_semantics__>::template TL>;
 
             ////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////
