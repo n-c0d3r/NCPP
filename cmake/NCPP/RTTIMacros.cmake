@@ -104,6 +104,8 @@ NCPP_RTTIHelper_RObject_CreateMemberMacro(
 
     IMPLEMENT "{ return MemberName\\\; }"
 
+    METADATA "__VA_OPT__(,) __VA_ARGS__"
+
     NO_ABSTRACT
 )
 NCPP_RTTIHelper_RObject_CreateMemberMacro(
@@ -116,6 +118,8 @@ NCPP_RTTIHelper_RObject_CreateMemberMacro(
     MEMBER_TYPE "(ncpp::utilities::TF_cpass<decltype(MemberName)>)()"
 
     IMPLEMENT "noexcept { return MemberName\\\; }"
+
+    METADATA "__VA_OPT__(,) __VA_ARGS__"
 
     NO_ABSTRACT
 )
@@ -136,6 +140,8 @@ NCPP_RTTIHelper_RObject_CreateMemberMacro(
 
     IMPLEMENT "{ MemberName = value\\\; }"
 
+    METADATA "__VA_OPT__(,) __VA_ARGS__"
+
     NO_CONST
     NO_ABSTRACT
 )
@@ -149,6 +155,8 @@ NCPP_RTTIHelper_RObject_CreateMemberMacro(
     MEMBER_TYPE "()(ncpp::utilities::TF_cpass<decltype(MemberName)> value)"
 
     IMPLEMENT "noexcept { MemberName = value\\\; }"
+
+    METADATA "__VA_OPT__(,) __VA_ARGS__"
 
     NO_CONST
     NO_ABSTRACT
