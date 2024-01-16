@@ -296,7 +296,7 @@ int main() {
     NCPP_INFO() << "A's base sinfos: " << T_type_fullname<typename A::F_base_sinfos>();
     NCPP_INFO() << "A's member sinfos: " << T_type_fullname<typename A::F_member_sinfos>();
 
-    
+
 
 	A a;
 

@@ -271,21 +271,113 @@ namespace ncpp {
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+        namespace internal {
+
+            template<typename F__>
+            struct TF_member_safe_type_wrapper_helper {
+                using F = F__;
+                TF_member_safe_type_wrapper_helper(auto...) {}
+            };
+
+            template<typename F__>
+            struct TF_member_safe_type_parse_helper;
+
+            template<typename F__>
+            struct TF_member_safe_type_parse_helper<TF_member_safe_type_wrapper_helper<F__>> {
+                using F = F__;
+            };
+
+            template<typename F__, sz N__>
+            struct TF_member_safe_type_parse_helper<TF_member_safe_type_wrapper_helper<F__>[N__]> {
+                using F = F__[N__];
+            };
+            template<typename F_return__, typename... F_args__>
+            struct TF_member_safe_type_parse_helper<TF_member_safe_type_wrapper_helper<F_return__>(F_args__...)> {
+                using F = F_return__(F_args__...);
+            };
+
+            template<typename F__, sz N__>
+            struct TF_member_safe_type_parse_helper<TF_member_safe_type_wrapper_helper<F__>(*)[N__]> {
+                using F_data = F__[N__];
+                using F = F_data*;
+            };
+            template<typename F_return__, typename... F_args__>
+            struct TF_member_safe_type_parse_helper<TF_member_safe_type_wrapper_helper<F_return__>(*)(F_args__...)> {
+                using F_data = F_return__(F_args__...);
+                using F = F_data*;
+            };
+
+            template<typename F__, sz N__>
+            struct TF_member_safe_type_parse_helper<TF_member_safe_type_wrapper_helper<F__>(&)[N__]> {
+                using F_data = F__[N__];
+                using F = F_data&;
+            };
+            template<typename F_return__, typename... F_args__>
+            struct TF_member_safe_type_parse_helper<TF_member_safe_type_wrapper_helper<F_return__>(&)(F_args__...)> {
+                using F_data = F_return__(F_args__...);
+                using F = F_data&;
+            };
+
+            template<typename F__, sz N__>
+            struct TF_member_safe_type_parse_helper<TF_member_safe_type_wrapper_helper<F__>(&&)[N__]> {
+                using F_data = F__[N__];
+                using F = F_data&&;
+            };
+            template<typename F_return__, typename... F_args__>
+            struct TF_member_safe_type_parse_helper<TF_member_safe_type_wrapper_helper<F_return__>(&&)(F_args__...)> {
+                using F_data = F_return__(F_args__...);
+                using F = F_data&&;
+            };
+
+            template<typename F__>
+            struct TF_member_safe_type_parse_helper<TF_member_safe_type_wrapper_helper<F__>*> {
+                using F_data = F__;
+                using F = F_data*;
+            };
+            template<typename F__>
+            struct TF_member_safe_type_parse_helper<TF_member_safe_type_wrapper_helper<F__>&> {
+                using F_data = F__;
+                using F = F_data&;
+            };
+            template<typename F__>
+            struct TF_member_safe_type_parse_helper<TF_member_safe_type_wrapper_helper<F__>&&> {
+                using F_data = F__;
+                using F = F_data&&;
+            };
+
+        };
+
 
 
 #define NCPP_ROBJECT_DECLARE_MEMBER_TYPE_WRAPPER(MemberMagicType, MemberMagicName, MemberName, IsVirtualFunction, IsConstFunction, LowKeywords, LowImplement) \
             struct ___F_##MemberName##___ncpp_member_##IsVirtualFunction##_##IsConstFunction##___;\
             friend struct ___F_##MemberName##___ncpp_member_##IsVirtualFunction##_##IsConstFunction##___;\
-            struct ___F_##MemberName##___ncpp_member_##IsVirtualFunction##_##IsConstFunction##___ { LowKeywords NCPP_MAGIC(MemberMagicType, (MemberMagicName)) LowImplement; };
+            struct ___F_##MemberName##___ncpp_member_##IsVirtualFunction##_##IsConstFunction##___ {                                                           \
+                LowKeywords                                                                                                                                   \
+                ncpp::rtti::internal::TF_member_safe_type_wrapper_helper<NCPP_MAGIC_FIRST_TYPE(MemberMagicType)> MemberMagicName NCPP_MAGIC_SECOND_PART(MemberMagicType)\
+                LowImplement;                                                                      \
+            };
 
-#define NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE(MemberName, IsVirtualFunction, IsConstFunction) ncpp::utilities::TF_smart_cast_member<decltype(&___F_##MemberName##___ncpp_member_##IsVirtualFunction##_##IsConstFunction##___::MemberName)>
+#define NCPP_ROBJECT_WRAPPER_TO_MEMBER_TYPE(MemberName, IsVirtualFunction, IsConstFunction) \
+            typename ncpp::rtti::internal::TF_member_safe_type_parse_helper<                                                                                \
+                ncpp::utilities::TF_smart_cast_member<                                          \
+                    decltype(&___F_##MemberName##___ncpp_member_##IsVirtualFunction##_##IsConstFunction##___::MemberName) \
+                >\
+            >::F
 
 #define NCPP_ROBJECT_DECLARE_STATIC_MEMBER_TYPE_WRAPPER(MemberMagicType, MemberMagicName, MemberName) \
             struct ___F_##MemberName##___ncpp_member_static___;\
             friend struct ___F_##MemberName##___ncpp_member_static___;\
-            struct ___F_##MemberName##___ncpp_member_static___ { NCPP_MAGIC(MemberMagicType, (MemberMagicName)); };
+            struct ___F_##MemberName##___ncpp_member_static___ {                                      \
+                ncpp::rtti::internal::TF_member_safe_type_wrapper_helper<NCPP_MAGIC_FIRST_TYPE(MemberMagicType)> MemberMagicName NCPP_MAGIC_SECOND_PART(MemberMagicType);\
+            };
 
-#define NCPP_ROBJECT_WRAPPER_TO_STATIC_MEMBER_TYPE(MemberName) ncpp::utilities::TF_smart_cast_member<decltype(&___F_##MemberName##___ncpp_member_static___::MemberName)>
+#define NCPP_ROBJECT_WRAPPER_TO_STATIC_MEMBER_TYPE(MemberName) \
+            typename ncpp::rtti::internal::TF_member_safe_type_parse_helper<                                                                                \
+                ncpp::utilities::TF_smart_cast_member<         \
+                    decltype(&___F_##MemberName##___ncpp_member_static___::MemberName) \
+                >\
+            >::F
 
 
 
