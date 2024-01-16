@@ -580,7 +580,7 @@ namespace ncpp {
 				\
 				static NCPP_FORCE_INLINE auto* member_p(){ return &F_this::MemberName; }\
 				\
-				static NCPP_FORCE_INLINE auto invoke(arg_types__... args, void* object_p = 0) {\
+				static NCPP_FORCE_INLINE return_type__ invoke(arg_types__... args, void* object_p = 0) {\
 					\
 					return reinterpret_cast<F_this*>(object_p)->MemberName(std::forward<arg_types__>(args)...);\
 					\
@@ -830,7 +830,7 @@ namespace ncpp {
 				\
 				static NCPP_FORCE_INLINE auto* member_p(){ return &F_this::MemberName; }\
 				\
-				static NCPP_FORCE_INLINE auto invoke(arg_types__... args, void* object_p = 0) {\
+				static NCPP_FORCE_INLINE return_type__ invoke(arg_types__... args, void* object_p = 0) {\
 					\
 					return F_this::MemberName(std::forward<arg_types__>(args)...);\
 					\

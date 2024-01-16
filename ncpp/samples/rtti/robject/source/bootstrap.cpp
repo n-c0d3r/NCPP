@@ -5,6 +5,8 @@ using namespace ncpp;
 
 
 
+class ABCDEF;
+
 class B {
 
     NCPP_BASIC_ROBJECT(
@@ -14,6 +16,13 @@ class B {
             (i32&),
             i
         ),
+        PUBLIC_GETTER(get_i, i),
+
+        PUBLIC(
+            (ABCDEF&),
+            test
+        ),
+        PUBLIC_GETTER(get_test, test),
 
         PUBLIC_ABSTRACT(
             ()(),
@@ -24,7 +33,8 @@ class B {
 
 
     B() :
-        i(T_null_reference<i32>())
+        i(T_null_reference<i32>()),
+        test(T_null_reference<ABCDEF>())
     {
 
 
