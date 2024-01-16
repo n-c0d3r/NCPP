@@ -445,7 +445,7 @@ namespace ncpp {
 					else return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, ""); \
 				}\
                 static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberMagicType, ""); }\
-				static constexpr ncpp::u64 id() { return utilities::T_type_hash_code<___TF_##MemberName##___ncpp_sinfo___>; }\
+				static constexpr ncpp::u64 id() { return ncpp::utilities::T_type_hash_code<___TF_##MemberName##___ncpp_sinfo___>; }\
 				\
 				static constexpr ncpp::sz offset() { return (ncpp::sz)reinterpret_cast<ncpp::sz>(&(reinterpret_cast<F_robject__*>(0)->MemberName)); }\
                 static constexpr ncpp::u16 size() { return (ncpp::u16)ncpp::utilities::T_sizeof<F_member>; }\
@@ -501,7 +501,7 @@ namespace ncpp {
 					else return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, ""); \
 				}\
                 static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberMagicType, ""); }\
-				static constexpr ncpp::u64 id() { return utilities::T_type_hash_code<___TF_##MemberName##___ncpp_sinfo___>; }\
+				static constexpr ncpp::u64 id() { return ncpp::utilities::T_type_hash_code<___TF_##MemberName##___ncpp_sinfo___>; }\
 				\
 				static constexpr ncpp::sz offset() { return 0; }\
 				static constexpr ncpp::u16 size() { return 0; }\
@@ -692,7 +692,7 @@ namespace ncpp {
 					else return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, ""); \
 				}\
                 static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberMagicType, ""); }\
-				static constexpr ncpp::u64 id() { return utilities::T_type_hash_code<___TF_##MemberName##___ncpp_sinfo___>; }\
+				static constexpr ncpp::u64 id() { return ncpp::utilities::T_type_hash_code<___TF_##MemberName##___ncpp_sinfo___>; }\
 				\
 				static constexpr ncpp::sz offset() { return 0; }\
                 static constexpr ncpp::u16 size() { return (ncpp::u16)ncpp::utilities::T_sizeof<F_member>; }\
@@ -750,7 +750,7 @@ namespace ncpp {
 					else return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberName, ""); \
 				}\
                 static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberMagicType, ""); }\
-				static constexpr ncpp::u64 id() { return utilities::T_type_hash_code<___TF_##MemberName##___ncpp_sinfo___>; }\
+				static constexpr ncpp::u64 id() { return ncpp::utilities::T_type_hash_code<___TF_##MemberName##___ncpp_sinfo___>; }\
 				\
 				static constexpr ncpp::sz offset() { return 0; }\
 				static constexpr ncpp::u16 size() { return 0; }\
