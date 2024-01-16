@@ -76,6 +76,19 @@ namespace ncpp {
 
             };
 
+            template<typename F__, bool is_always_mutable__>
+            struct TF_cpass_helper<F__&, is_always_mutable__> {
+
+                using F = F__&;
+
+            };
+            template<typename F__, bool is_always_mutable__>
+            struct TF_cpass_helper<const F__&, is_always_mutable__> {
+
+                using F = const F__&;
+
+            };
+
             template<typename F_element__, sz size__, bool is_always_mutable__>
             struct TF_cpass_helper<F_element__[size__], is_always_mutable__> {
 
