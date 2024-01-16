@@ -76,8 +76,8 @@ namespace ncpp {
 		private:
 			u64 hash_code_ = 0;
             union {
-                sz address_ = 0;
-                sz offset_;
+                sz function_address_ = 0;
+                sz variable_getter_address_;
             };
 			containers::TF_string<char, typename F_rtti_traits::F_allocator> name_;
 			sz id_ = 0;
@@ -99,8 +99,8 @@ namespace ncpp {
 
 		public:
 			NCPP_FORCE_INLINE u64 hash_code() const { return hash_code_; }
-            NCPP_FORCE_INLINE sz address() const { return address_; }
-			NCPP_FORCE_INLINE sz offset() const { return offset_; }
+            NCPP_FORCE_INLINE sz function_address() const { return function_address_; }
+			NCPP_FORCE_INLINE sz variable_getter_address() const { return variable_getter_address_; }
 			NCPP_FORCE_INLINE containers::TF_view<containers::TF_string<char, F_allocator>> name() const { return name_; }
 			NCPP_FORCE_INLINE sz id() const { return id_; }
             NCPP_FORCE_INLINE u16 size() const { return size_; }
@@ -119,7 +119,7 @@ namespace ncpp {
 		public:
 			TF_robject_member_info(
 				sz hash_code,
-				sz address_or_offset,
+				sz function_address_or_variable_getter_address,
                 containers::TF_view<containers::TF_string<char, F_allocator>> name,
 				sz id,
 				u16 size,
@@ -131,15 +131,15 @@ namespace ncpp {
 
                 F_subtype subtype
 			) :
-				hash_code_(hash_code),
-				address_(address_or_offset),
-				name_(name),
-				id_(id),
-				size_(size),
+                hash_code_(hash_code),
+                function_address_(function_address_or_variable_getter_address),
+                name_(name),
+                id_(id),
+                size_(size),
                 is_virtual_function_(is_virtual_function),
                 is_const_function_(is_const_function),
                 is_static_(is_static),
-            
+
                 robject_type_info_p_(robject_type_info_p),
 
                 subtype_(subtype)
@@ -159,12 +159,18 @@ namespace ncpp {
             
             template<typename F__>
             struct TF_get_internal {
+
+                typedef F__& F_static_getter();
+                typedef F__& F_non_static_getter(void*);
                 
                 static NCPP_FORCE_INLINE F__& invoke(void* object_p, const TF_robject_member_info& member_info) {
                     
                     NCPP_ASSERT(utilities::T_type_hash_code<F__> == member_info.subtype().data().hash_code) << "invalid F__";
-                    
-                    return *reinterpret_cast<F__*>(reinterpret_cast<sz>(object_p) + member_info.offset_);
+
+                    if(member_info.is_static_)
+                        return ((F_static_getter*)member_info.variable_getter_address_)();
+
+                    return ((F_non_static_getter*)member_info.variable_getter_address_)(object_p);
                 }
                 
             };
@@ -238,7 +244,7 @@ namespace ncpp {
 				F_robject_member_info__(
 
 					utilities::T_type_hash_code<F_member_sinfo__>,
-					F_member_sinfo__::address() | F_member_sinfo__::offset(),
+					F_member_sinfo__::function_address() | F_member_sinfo__::variable_getter_address(),
 					F_member_sinfo__::name(),
 					F_member_sinfo__::id(),
 					F_member_sinfo__::size(),

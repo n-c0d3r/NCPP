@@ -521,7 +521,7 @@ namespace ncpp {
 			template<typename F_robject__, typename F_member__>\
 			struct ___TF_##MemberName##___ncpp_sinfo___<F_robject__, F_member__, false, IsVirtualFunction, IsConstFunction>{\
 				\
-			NCPP_PUBLIC_KEYWORD\
+            NCPP_PUBLIC_KEYWORD\
 				\
 				using F_member = F_member__;\
 				\
@@ -529,7 +529,7 @@ namespace ncpp {
 				\
 				static NCPP_FORCE_INLINE void invoke(void* object_p = 0){}\
 				\
-				static NCPP_FORCE_INLINE ncpp::sz address(){ return 0; }\
+				static NCPP_FORCE_INLINE ncpp::sz function_address(){ return 0; }\
 				\
 				static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> name() { \
 					\
@@ -539,7 +539,8 @@ namespace ncpp {
                 static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberMagicType, ""); }\
 				static constexpr ncpp::u64 id() { return ncpp::utilities::T_type_hash_code<___TF_##MemberName##___ncpp_sinfo___>; }\
 				\
-				static constexpr ncpp::sz offset() { return (ncpp::sz)reinterpret_cast<ncpp::sz>(&(reinterpret_cast<F_robject__*>(0)->MemberName)); }\
+				static NCPP_FORCE_INLINE auto&& variable(F_this* obj) { return obj->MemberName; }\
+				static constexpr ncpp::sz variable_getter_address() { return reinterpret_cast<ncpp::sz>(&variable); }\
                 static constexpr ncpp::u16 size() { return (ncpp::u16)ncpp::utilities::T_sizeof<F_member>; }\
 				\
 				static constexpr bool is_static() { return false; }\
@@ -585,7 +586,7 @@ namespace ncpp {
 					\
 				}\
 				\
-				static NCPP_FORCE_INLINE ncpp::sz address(){ return reinterpret_cast<ncpp::sz>(&invoke); }\
+				static NCPP_FORCE_INLINE ncpp::sz function_address(){ return reinterpret_cast<ncpp::sz>(&invoke); }\
 				\
 				static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> name() { \
 					\
@@ -595,7 +596,7 @@ namespace ncpp {
                 static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberMagicType, ""); }\
 				static constexpr ncpp::u64 id() { return ncpp::utilities::T_type_hash_code<___TF_##MemberName##___ncpp_sinfo___>; }\
 				\
-				static constexpr ncpp::sz offset() { return 0; }\
+				static constexpr ncpp::sz variable_getter_address() { return 0; }\
 				static constexpr ncpp::u16 size() { return 0; }\
 				\
 				static constexpr bool is_static() { return false; }\
@@ -776,7 +777,7 @@ namespace ncpp {
 				\
 				static NCPP_FORCE_INLINE void invoke(void* object_p = 0){}\
 				\
-				static NCPP_FORCE_INLINE ncpp::sz address(){ return reinterpret_cast<ncpp::sz>(&F_this::MemberName); }\
+				static NCPP_FORCE_INLINE ncpp::sz function_address(){ return reinterpret_cast<ncpp::sz>(&F_this::MemberName); }\
 				\
 				static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> name() { \
 					\
@@ -786,11 +787,12 @@ namespace ncpp {
                 static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberMagicType, ""); }\
 				static constexpr ncpp::u64 id() { return ncpp::utilities::T_type_hash_code<___TF_##MemberName##___ncpp_sinfo___>; }\
 				\
-				static constexpr ncpp::sz offset() { return 0; }\
+				static NCPP_FORCE_INLINE auto&& variable() { return F_this::MemberName; }\
+				static constexpr ncpp::sz variable_getter_address() { return reinterpret_cast<ncpp::sz>(&variable); }\
                 static constexpr ncpp::u16 size() { return (ncpp::u16)ncpp::utilities::T_sizeof<F_member>; }\
 				\
 				static constexpr bool is_static() { return true; }\
-				static NCPP_FORCE_INLINE auto& static_get() { return F_this::MemberName; }\
+				static NCPP_FORCE_INLINE auto&& static_get() { return F_this::MemberName; }\
                 \
                 static constexpr ncpp::b8 is_function() { return false; }\
                 static constexpr ncpp::b8 is_virtual_function() { return false; }\
@@ -834,7 +836,7 @@ namespace ncpp {
 					\
 				}\
 				\
-				static NCPP_FORCE_INLINE ncpp::sz address(){ return reinterpret_cast<ncpp::sz>(&invoke); }\
+				static NCPP_FORCE_INLINE ncpp::sz function_address(){ return reinterpret_cast<ncpp::sz>(&invoke); }\
 				\
 				static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> name() { \
 					\
@@ -844,7 +846,7 @@ namespace ncpp {
                 static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> raw_type_name() { return NCPP_PARSE_RTTI_SECURED_NAME_CODE(#MemberMagicType, ""); }\
 				static constexpr ncpp::u64 id() { return ncpp::utilities::T_type_hash_code<___TF_##MemberName##___ncpp_sinfo___>; }\
 				\
-				static constexpr ncpp::sz offset() { return 0; }\
+				static constexpr ncpp::sz variable_getter_address() { return 0; }\
 				static constexpr ncpp::u16 size() { return 0; }\
 				\
 				static constexpr bool is_static() { return true; }\

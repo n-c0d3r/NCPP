@@ -11,7 +11,7 @@ class B {
         B,
 
         PUBLIC(
-            (i32) = 4,
+            (i32&),
             i
         ),
 
@@ -20,6 +20,16 @@ class B {
             abstract_func
         )
     );
+
+
+
+    B() :
+        i(T_null_reference<i32>())
+    {
+
+
+
+    }
 
 };
 
