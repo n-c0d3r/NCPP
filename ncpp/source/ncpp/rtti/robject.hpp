@@ -525,8 +525,6 @@ namespace ncpp {
 				\
 				using F_member = F_member__;\
 				\
-				static NCPP_FORCE_INLINE auto* member_p(){ return &F_this::MemberName; }\
-				\
 				static NCPP_FORCE_INLINE void invoke(void* object_p = 0){}\
 				\
 				static NCPP_FORCE_INLINE ncpp::sz function_address(){ return 0; }\
@@ -577,8 +575,6 @@ namespace ncpp {
 			NCPP_PUBLIC_KEYWORD\
 				\
 				using F_member = return_type__(arg_types__...);\
-				\
-				static NCPP_FORCE_INLINE auto* member_p(){ return &F_this::MemberName; }\
 				\
 				static NCPP_FORCE_INLINE return_type__ invoke(arg_types__... args, void* object_p = 0) {\
 					\
@@ -773,8 +769,6 @@ namespace ncpp {
 				\
 				using F_member = NCPP_EXPAND_PARAMS(MemberTypeParams);\
 				\
-				static NCPP_FORCE_INLINE auto* member_p(){ return &F_this::MemberName; }\
-				\
 				static NCPP_FORCE_INLINE void invoke(void* object_p = 0){}\
 				\
 				static NCPP_FORCE_INLINE ncpp::sz function_address(){ return reinterpret_cast<ncpp::sz>(&F_this::MemberName); }\
@@ -827,8 +821,6 @@ namespace ncpp {
 			NCPP_PUBLIC_KEYWORD\
 				\
 				using F_member = NCPP_EXPAND_PARAMS(MemberTypeParams);\
-				\
-				static NCPP_FORCE_INLINE auto* member_p(){ return &F_this::MemberName; }\
 				\
 				static NCPP_FORCE_INLINE return_type__ invoke(arg_types__... args, void* object_p = 0) {\
 					\
