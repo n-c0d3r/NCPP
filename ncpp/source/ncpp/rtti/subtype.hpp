@@ -72,7 +72,7 @@ namespace ncpp {
             template<typename F__>
             static NCPP_FORCE_INLINE F_subtype_data T_default() noexcept {
 
-                static constexpr u16 alignment = NCPP_ALIGNOF(NCPP_MA(utilities::TF_nth_template_targ<NCPP_MA(std::is_same_v<F__, void> || utilities::T_is_function<F__>), F__, u8>));
+                static constexpr u16 alignment = utilities::T_alignof<F__>;
 
                 return F_subtype_data {
 
