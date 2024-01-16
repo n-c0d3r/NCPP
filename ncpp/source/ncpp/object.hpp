@@ -33,6 +33,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include <ncpp/mem/object_allocator.hpp>
+#include <ncpp/utilities/magic.hpp>
 
 #pragma endregion
 
@@ -86,18 +87,18 @@ namespace ncpp {
 
 
 
-#define NCPP_CREATE(AllocatorPointer, ObjectType, ...) ( \
+#define NCPP_CREATE(AllocatorPointer, ObjectMagicType, ...) ( \
         new(                                                 \
             ncpp::internal::T_allocate_object<                         \
-                ObjectType,                                  \
-                ncpp::utilities::TF_nth_template_targ_t<      \
+                NCPP_MAGIC_EXPAND(ObjectMagicType),                                  \
+                ncpp::utilities::TF_nth_template_targ<      \
                     !std::is_same_v<decltype(AllocatorPointer), int>, \
                     ncpp::mem::F_object_allocator,           \
                     std::remove_pointer_t<decltype(AllocatorPointer)>  \
                 >,                                       \
                 std::is_same_v<decltype(AllocatorPointer), int>\
             >(AllocatorPointer)                               \
-        ) ObjectType { __VA_ARGS__ }      \
+        ) NCPP_MAGIC_EXPAND(ObjectMagicType) { __VA_ARGS__ }      \
     )
 
 #define NCPP_DESTROY(AllocatorPointer, ObjectPointer) {\
