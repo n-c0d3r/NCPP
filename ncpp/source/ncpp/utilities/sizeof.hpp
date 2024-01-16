@@ -93,6 +93,18 @@ namespace ncpp {
                 static constexpr sz value = sizeof(F__);
 
             };
+            template<typename F__>
+            struct TF_sizeof_helper<F__&, false> {
+
+                static constexpr sz value = sizeof(void*);
+
+            };
+            template<typename F__>
+            struct TF_sizeof_helper<const F__&, false> {
+
+                static constexpr sz value = sizeof(void*);
+
+            };
 
         }
 
