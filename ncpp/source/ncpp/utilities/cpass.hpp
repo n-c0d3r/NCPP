@@ -64,10 +64,14 @@ namespace ncpp {
             template<typename F__, bool is_always_mutable__ = false>
             struct TF_cpass_helper {
 
+                static constexpr b8 is_size_over_pointer_size = (T_sizeof<F__> > T_sizeof<void *>);
+                static constexpr b8 is_has_container_allocator = !std::is_same_v<containers::TF_container_allocator<F__>, void>;
+
                 using F = TF_nth_template_targ<
                     (
-                        (T_sizeof<F__> > T_sizeof<void *>)
-                        + !std::is_same_v<containers::TF_container_allocator<F__>, void>
+                        (!is_size_over_pointer_size && !is_has_container_allocator) ? 0 :
+                        (is_has_container_allocator) ? 2 :
+                        1
                     ),
                     F__,
                     const F__ &,

@@ -5,7 +5,30 @@ using namespace ncpp;
 
 
 
+class A {
+
+    NCPP_OBJECT_IMPLEMENT(A);
+
+    i32 i1 = 1;
+    i32 i2 = 2;
+
+};
+class B : public A {
+
+    NCPP_OBJECT_IMPLEMENT(B);
+    NCPP_OBJECT_THREAD_SAFE;
+
+    i32 i3 = 3;
+
+};
+
 NCPP_ENTRY_POINT(args) {
+
+    TU_object_p<A> a_up;
+
+    a_up.T_create_object();
+
+    TW_object_p<A> a_wp = a_up;
 
     NCPP_INFO()
         << "Hello "

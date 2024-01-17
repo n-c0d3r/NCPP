@@ -384,7 +384,7 @@ namespace ncpp {
         template<typename F_item__>
         using TG_concurrent_ring_buffer = TF_concurrent_ring_buffer<F_item__, mem::F_general_allocator>;
         template<typename F_item__>
-        using TEP_concurrent_ring_buffer = TF_concurrent_ring_buffer<F_item__, mem::F_ephemeral_allocator>;
+        using TM_concurrent_ring_buffer = TF_concurrent_ring_buffer<F_item__, mem::F_ephemeral_allocator>;
 
         template<typename F_item__>
         using TV_concurrent_ring_buffer = TF_view<TG_concurrent_ring_buffer<F_item__>>;

@@ -819,19 +819,19 @@ namespace ncpp {
         };
         template<>
         struct TF_atomic_uint<1> {
-            using F = u8;
+            using F = au8;
         };
         template<>
         struct TF_atomic_uint<2> {
-            using F = u16;
+            using F = au16;
         };
         template<>
         struct TF_atomic_uint<4> {
-            using F = u32;
+            using F = au32;
         };
         template<>
         struct TF_atomic_uint<8> {
-            using F = u64;
+            using F = au64;
         };
     }
     // \endcond
@@ -846,19 +846,19 @@ namespace ncpp {
         };
         template<>
         struct TF_atomic_int<1> {
-            using F = i8;
+            using F = ai8;
         };
         template<>
         struct TF_atomic_int<2> {
-            using F = i16;
+            using F = ai16;
         };
         template<>
         struct TF_atomic_int<4> {
-            using F = i32;
+            using F = ai32;
         };
         template<>
         struct TF_atomic_int<8> {
-            using F = i64;
+            using F = ai64;
         };
     }
     // \endcond

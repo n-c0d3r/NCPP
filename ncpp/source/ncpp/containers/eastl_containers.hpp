@@ -78,11 +78,11 @@ namespace ncpp {
         using G_text = G_wstring;
 
         template<typename F_char__ = char>
-        using TEP_string = eastl::basic_string<F_char__, mem::F_ephemeral_allocator>;
-        using EP_string = TEP_string<char>;
-        using EP_wstring = TEP_string<wchar_t>;
-        using EP_name = EP_string;
-        using EP_text = EP_wstring;
+        using TM_string = eastl::basic_string<F_char__, mem::F_ephemeral_allocator>;
+        using M_string = TM_string<char>;
+        using M_wstring = TM_string<wchar_t>;
+        using M_name = M_string;
+        using M_text = M_wstring;
 
         ////////////////////////////////////////////////////////////////////////////////////
         //  to string
@@ -535,21 +535,21 @@ namespace ncpp {
         template<typename F_item__, sz size__>
         using TG_array = TF_array<F_item__, size__>;
         template<typename F_item__, sz size__>
-        using TEP_array = TF_array<F_item__, size__>;
+        using TM_array = TF_array<F_item__, size__>;
 
         template<typename F_item__>
         using TF_span = eastl::span<F_item__>;
         template<typename F_item__>
         using TG_span = TF_span<F_item__>;
         template<typename F_item__>
-        using TEP_span = TF_span<F_item__>;
+        using TM_span = TF_span<F_item__>;
 
         template<typename F_item__>
         using TF_initializer_list = std::initializer_list<F_item__>;
         template<typename F_item__>
         using TG_initializer_list = TF_initializer_list<F_item__>;
         template<typename F_item__>
-        using TEP_initializer_list = TF_initializer_list<F_item__>;
+        using TM_initializer_list = TF_initializer_list<F_item__>;
 
 
 
@@ -561,21 +561,21 @@ namespace ncpp {
         template<typename F_item__>
         using TG_vector = eastl::vector<F_item__, mem::F_general_allocator>;
         template<typename F_item__>
-        using TEP_vector = eastl::vector<F_item__, mem::F_ephemeral_allocator>;
+        using TM_vector = eastl::vector<F_item__, mem::F_ephemeral_allocator>;
 
         template<typename F_item__, typename F_allocator__ = mem::F_default_allocator>
         using TF_list = eastl::list<F_item__, F_allocator__>;
         template<typename F_item__>
         using TG_list = eastl::list<F_item__, mem::F_general_allocator>;
         template<typename F_item__>
-        using TEP_list = eastl::list<F_item__, mem::F_ephemeral_allocator>;
+        using TM_list = eastl::list<F_item__, mem::F_ephemeral_allocator>;
 
         template<typename F_item__, typename F_allocator__ = mem::F_default_allocator, unsigned subarray_size__ = DEQUE_DEFAULT_SUBARRAY_SIZE(F_item__)>
         using TF_deque = eastl::deque<F_item__, F_allocator__, subarray_size__>;
         template<typename F_item__, unsigned subarray_size__ = DEQUE_DEFAULT_SUBARRAY_SIZE(F_item__)>
         using TG_deque = eastl::deque<F_item__, mem::F_general_allocator, subarray_size__>;
         template<typename F_item__, unsigned subarray_size__ = DEQUE_DEFAULT_SUBARRAY_SIZE(F_item__)>
-        using TEP_deque = eastl::deque<F_item__, mem::F_ephemeral_allocator, subarray_size__>;
+        using TM_deque = eastl::deque<F_item__, mem::F_ephemeral_allocator, subarray_size__>;
 
 
 
@@ -632,42 +632,42 @@ namespace ncpp {
         template<typename F_item__, typename F_compare__ = eastl::less<F_item__>>
         using TG_set = eastl::set<F_item__, F_compare__, mem::F_general_allocator>;
         template<typename F_item__, typename F_compare__ = eastl::less<F_item__>>
-        using TEP_set = eastl::set<F_item__, F_compare__, mem::F_ephemeral_allocator>;
+        using TM_set = eastl::set<F_item__, F_compare__, mem::F_ephemeral_allocator>;
 
         template<typename F_key__, typename F_value__, typename F_compare__ = eastl::less<F_key__>, typename F_allocator__ = mem::F_default_allocator>
         using TF_map = eastl::map<F_key__, F_value__, F_compare__, F_allocator__>;
         template<typename F_key__, typename F_value__, typename F_compare__ = eastl::less<F_key__>>
         using TG_map = eastl::map<F_key__, F_value__, F_compare__, mem::F_general_allocator>;
         template<typename F_key__, typename F_value__, typename F_compare__ = eastl::less<F_key__>>
-        using TEP_map = eastl::map<F_key__, F_value__, F_compare__, mem::F_ephemeral_allocator>;
+        using TM_map = eastl::map<F_key__, F_value__, F_compare__, mem::F_ephemeral_allocator>;
 
         template<typename F_item__, typename F_hash__ = TF_hash<F_item__>, typename F_predicate__ = eastl::equal_to<F_item__>, typename F_allocator__ = mem::F_default_allocator>
         using TF_unordered_set = eastl::unordered_set<F_item__, F_hash__, F_predicate__, F_allocator__>;
         template<typename F_item__, typename F_hash__ = TF_hash<F_item__>, typename F_predicate__ = eastl::equal_to<F_item__>>
         using TG_unordered_set = eastl::unordered_set<F_item__, F_hash__, F_predicate__, mem::F_general_allocator>;
         template<typename F_item__, typename F_hash__ = TF_hash<F_item__>, typename F_predicate__ = eastl::equal_to<F_item__>>
-        using TEP_unordered_set = eastl::unordered_set<F_item__, F_hash__, F_predicate__, mem::F_ephemeral_allocator>;
+        using TM_unordered_set = eastl::unordered_set<F_item__, F_hash__, F_predicate__, mem::F_ephemeral_allocator>;
 
         template<typename F_key__, typename F_value__, typename F_hash__ = TF_hash<F_key__>, typename F_predicate__ = eastl::equal_to<F_key__>, typename F_allocator__ = mem::F_default_allocator>
         using TF_unordered_map = eastl::unordered_map<F_key__, F_value__, F_hash__, F_predicate__, F_allocator__>;
         template<typename F_key__, typename F_value__, typename F_hash__ = TF_hash<F_key__>, typename F_predicate__ = eastl::equal_to<F_key__>>
         using TG_unordered_map = eastl::unordered_map<F_key__, F_value__, F_hash__, F_predicate__, mem::F_general_allocator>;
         template<typename F_key__, typename F_value__, typename F_hash__ = TF_hash<F_key__>, typename F_predicate__ = eastl::equal_to<F_key__>>
-        using TEP_unordered_map = eastl::unordered_map<F_key__, F_value__, F_hash__, F_predicate__, mem::F_ephemeral_allocator>;
+        using TM_unordered_map = eastl::unordered_map<F_key__, F_value__, F_hash__, F_predicate__, mem::F_ephemeral_allocator>;
 
         template<typename F_key__, typename F_value__, typename F_compare__ = eastl::less<F_key__>, typename F_allocator__ = mem::F_default_allocator>
         using TF_multimap = eastl::multimap<F_key__, F_value__, F_compare__, F_allocator__>;
         template<typename F_key__, typename F_value__, typename F_compare__ = eastl::less<F_key__>>
         using TG_multimap = eastl::multimap<F_key__, F_value__, F_compare__, mem::F_general_allocator>;
         template<typename F_key__, typename F_value__, typename F_compare__ = eastl::less<F_key__>>
-        using TEP_multimap = eastl::multimap<F_key__, F_value__, F_compare__, mem::F_ephemeral_allocator>;
+        using TM_multimap = eastl::multimap<F_key__, F_value__, F_compare__, mem::F_ephemeral_allocator>;
 
         template<typename F_key__, typename F_value__, typename F_hash__ = TF_hash<F_key__>, typename F_predicate__ = eastl::equal_to<F_key__>, typename F_allocator__ = mem::F_default_allocator>
         using TF_unordered_multimap = eastl::unordered_multimap<F_key__, F_value__, F_hash__, F_predicate__, F_allocator__>;
         template<typename F_key__, typename F_value__, typename F_hash__ = TF_hash<F_key__>, typename F_predicate__ = eastl::equal_to<F_key__>>
         using TG_unordered_multimap = eastl::unordered_multimap<F_key__, F_value__, F_hash__, F_predicate__, mem::F_general_allocator>;
         template<typename F_key__, typename F_value__, typename F_hash__ = TF_hash<F_key__>, typename F_predicate__ = eastl::equal_to<F_key__>>
-        using TEP_unordered_multimap = eastl::unordered_multimap<F_key__, F_value__, F_hash__, F_predicate__, mem::F_ephemeral_allocator>;
+        using TM_unordered_multimap = eastl::unordered_multimap<F_key__, F_value__, F_hash__, F_predicate__, mem::F_ephemeral_allocator>;
 
 
 
@@ -678,15 +678,15 @@ namespace ncpp {
         using TF_queue = eastl::queue<F_item__, F_deque__>;
         template<typename F_item__, typename G_deque__ = TG_deque<F_item__>>
         using TG_queue = eastl::queue<F_item__, G_deque__>;
-        template<typename F_item__, typename EP_deque__ = TEP_deque<F_item__>>
-        using TEP_queue = eastl::queue<F_item__, EP_deque__>;
+        template<typename F_item__, typename M_deque__ = TM_deque<F_item__>>
+        using TM_queue = eastl::queue<F_item__, M_deque__>;
 
         template<typename F_item__, typename F_vector__ = TF_vector<F_item__>>
         using TF_stack = eastl::stack<F_item__, F_vector__>;
         template<typename F_item__, typename G_vector__ = TG_vector<F_item__>>
         using TG_stack = eastl::stack<F_item__, G_vector__>;
-        template<typename F_item__, typename EP_vector__ = TEP_vector<F_item__>>
-        using TEP_stack = eastl::stack<F_item__, EP_vector__>;
+        template<typename F_item__, typename M_vector__ = TM_vector<F_item__>>
+        using TM_stack = eastl::stack<F_item__, M_vector__>;
 
 
 
@@ -698,7 +698,7 @@ namespace ncpp {
         template<typename... F__>
         using TG_tuple = eastl::tuple<F__...>;
         template<typename... F__>
-        using TEP_tuple = eastl::tuple<F__...>;
+        using TM_tuple = eastl::tuple<F__...>;
 
     }
 

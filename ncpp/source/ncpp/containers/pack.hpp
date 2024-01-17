@@ -409,7 +409,7 @@ namespace ncpp {
         template<typename... F__>
         using TG_pack = TF_pack<F__...>;
         template<typename... F__>
-        using TEP_pack = TF_pack<F__...>;
+        using TM_pack = TF_pack<F__...>;
 
         template<typename... F__>
         using TV_pack = TF_view<TG_pack<F__...>>;
