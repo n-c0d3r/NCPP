@@ -1119,6 +1119,18 @@ namespace ncpp {
             reset_no_destroy_internal();
         }
 
+
+
+    public:
+        NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
+
+            return (F_passed_object*)raw_object_p_;
+        }
+        NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
+
+            return *((F_passed_object*)raw_object_p_);
+        }
+
     };
 
 
@@ -1338,6 +1350,18 @@ namespace ncpp {
             return raw_object_p_;
         }
 
+
+
+    public:
+        NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
+
+            return (F_passed_object*)raw_object_p_;
+        }
+        NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
+
+            return *((F_passed_object*)raw_object_p_);
+        }
+
     };
 
 
@@ -1520,6 +1544,18 @@ namespace ncpp {
         explicit NCPP_FORCE_INLINE operator TW_object_p<F_other__> () const noexcept {
 
             return raw_object_p_;
+        }
+
+
+
+    public:
+        NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
+
+            return (F_passed_object*)raw_object_p_;
+        }
+        NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
+
+            return *((F_passed_object*)raw_object_p_);
         }
 
     };
@@ -1809,6 +1845,18 @@ namespace ncpp {
             return { raw_object_p_, object_key_ };
         }
 
+
+
+    public:
+        NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
+
+            return (F_passed_object*)raw_object_p_;
+        }
+        NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
+
+            return *((F_passed_object*)raw_object_p_);
+        }
+
     };
 
 
@@ -2047,6 +2095,18 @@ namespace ncpp {
         explicit NCPP_FORCE_INLINE operator TK_object_p<F_other__> () const noexcept {
 
             return { raw_object_p_ };
+        }
+
+
+
+    public:
+        NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
+
+            return (F_passed_object*)raw_object_p_;
+        }
+        NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
+
+            return *((F_passed_object*)raw_object_p_);
         }
 
     };
