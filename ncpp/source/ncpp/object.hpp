@@ -68,7 +68,7 @@ namespace ncpp {
             friend class ncpp::TF_object_key_subpool;                                        \
                                                     \
             template<ncpp::b8 is_thread_safe__, typename F_allocator__>     \
-            friend class ncpp::TF_object_key_pool;                                        \
+            friend class ncpp::TF_default_object_key_pool;                                        \
                                                     \
             template<ncpp::b8 is_thread_safe__, typename F_allocator__>     \
             friend class ncpp::TF_default_object_storage;                                        \
@@ -191,7 +191,7 @@ namespace ncpp {
     class TF_object_key_subpool;
 
     template<b8 is_thread_safe__, typename F_allocator__>
-    class TF_object_key_pool;
+    class TF_default_object_key_pool;
 
     template<b8 is_thread_safe__, typename F_allocator__>
     class TF_default_object_storage;
@@ -640,10 +640,10 @@ namespace ncpp {
 
 
     template<b8 is_thread_safe__ = false, typename F_allocator__ = mem::F_default_allocator>
-    class TF_object_key_pool;
+    class TF_default_object_key_pool;
 
     template<typename F_allocator__>
-    class TF_object_key_pool<true, F_allocator__> {
+    class TF_default_object_key_pool<true, F_allocator__> {
 
     public:
         NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL;
@@ -672,7 +672,7 @@ namespace ncpp {
 
 
     public:
-        TF_object_key_pool(u32 subpool_count = 1) :
+        TF_default_object_key_pool(u32 subpool_count = 1) :
                 subpool_count_(subpool_count),
                 subpool_vector_(subpool_count)
         {
@@ -727,7 +727,7 @@ namespace ncpp {
     };
 
     template<typename F_allocator__>
-    class TF_object_key_pool<false, F_allocator__> {
+    class TF_default_object_key_pool<false, F_allocator__> {
 
     public:
         NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL;
@@ -752,7 +752,7 @@ namespace ncpp {
 
 
     public:
-        TF_object_key_pool()
+        TF_default_object_key_pool()
         {
 
         }
@@ -782,7 +782,7 @@ namespace ncpp {
 
     };
 
-    using F_object_key_pool = TF_object_key_pool<>;
+    using F_default_object_key_pool = TF_default_object_key_pool<>;
 
 
 
@@ -816,7 +816,7 @@ namespace ncpp {
 
         using F_allocator = F_allocator__;
 
-        using F_key_pool = TF_object_key_pool<is_thread_safe, F_allocator>;
+        using F_key_pool = TF_default_object_key_pool<is_thread_safe, F_allocator>;
 
 
 
@@ -854,7 +854,7 @@ namespace ncpp {
 
         using F_allocator = F_allocator__;
 
-        using F_key_pool = TF_object_key_pool<is_thread_safe, F_allocator>;
+        using F_key_pool = TF_default_object_key_pool<is_thread_safe, F_allocator>;
 
 
 
