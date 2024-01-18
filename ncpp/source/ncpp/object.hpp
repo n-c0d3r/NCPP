@@ -1918,6 +1918,13 @@ namespace ncpp {
             pop_key_internal();
 
         }
+        template<typename... F_args__>
+        NCPP_FORCE_INLINE TU_object_p&& operator()(F_args__&&... args) {
+
+            T_create_object(std::forward<F_args__>(args)...);
+
+            return std::move(*this);
+        }
 
         template<typename... F_args__>
         static NCPP_FORCE_INLINE TU_object_p T_make(F_args__&&... args) {
@@ -2146,6 +2153,13 @@ namespace ncpp {
 
             new ((F_object*)raw_object_p_) F_object(std::forward<F_args__>(args)...);
 
+        }
+        template<typename... F_args__>
+        NCPP_FORCE_INLINE TU_object_p&& operator()(F_args__&&... args) {
+
+            T_create_object(std::forward<F_args__>(args)...);
+
+            return std::move(*this);
         }
 
         template<typename... F_args__>
