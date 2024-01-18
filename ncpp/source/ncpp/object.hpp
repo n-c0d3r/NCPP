@@ -39,6 +39,7 @@
 #include <ncpp/utilities/alignof.hpp>
 #include <ncpp/utilities/singleton.hpp>
 #include <ncpp/utilities/unique_lock.hpp>
+#include <ncpp/utilities/cpass.hpp>
 #include <ncpp/containers/eastl_containers.hpp>
 #include <ncpp/pac/thread_index.hpp>
 #include <ncpp/pac/spin_lock.hpp>
@@ -2051,3 +2052,14 @@ namespace ncpp {
     };
 
 }
+
+
+
+NCPP_BIND_CUSTOM_CPASS(
+    NCPP_MA(ncpp::TU_object_p<F_passed_object__, F_allocator__, is_has_object_key__, F_options__>),
+    NCPP_MA(ncpp::TK_object_p<F_passed_object__, is_has_object_key__, F_options__>),
+    ncpp::T_is_object F_passed_object__,
+    typename F_allocator__,
+    ncpp::b8 is_has_object_key__,
+    class F_options__
+)

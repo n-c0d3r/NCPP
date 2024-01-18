@@ -61,6 +61,13 @@ namespace ncpp {
 
         namespace internal {
 
+            template<typename F__>
+            struct TF_custom_cpass_bind_helper {
+
+                using F = F__;
+
+            };
+
             template<typename F__, bool is_always_mutable__ = false>
             struct TF_cpass_helper {
 
@@ -69,13 +76,15 @@ namespace ncpp {
 
                 using F = TF_nth_template_targ<
                     (
+                        (!std::is_same_v<typename TF_custom_cpass_bind_helper<F__>::F, F__>) ? 3 :
                         (!is_size_over_pointer_size && !is_has_container_allocator) ? 0 :
                         (is_has_container_allocator) ? 2 :
                         1
                     ),
                     F__,
                     const F__ &,
-                    containers::TF_view<F__, is_always_mutable__>
+                    containers::TF_view<F__, is_always_mutable__>,
+                    typename TF_custom_cpass_bind_helper<F__>::F
                 >;
 
             };
@@ -121,4 +130,25 @@ namespace ncpp {
 
     }
 
+}
+
+
+
+#define NCPP_BIND_CUSTOM_CPASS(FromType, ToType, ...)\
+namespace ncpp::utilities::internal {\
+\
+    template<__VA_ARGS__>\
+    struct TF_custom_cpass_bind_helper<FromType> {\
+\
+        using F = ToType;\
+\
+    };\
+\
+    template<__VA_ARGS__>\
+    struct TF_custom_cpass_bind_helper<FromType const> {\
+\
+        using F = ToType;\
+\
+    };\
+    \
 }
