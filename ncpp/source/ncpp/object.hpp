@@ -115,8 +115,6 @@ namespace ncpp {
     template<typename F__>
     concept T_is_object_thread_safe = T_is_object<F__> && NCPP_RTTI_IS_HAS_FLAG(F__, F_object_thread_safe_flag);
 
-    using F_object_id = u32;
-    using F_object_generation = u32;
     struct F_object_key {
 
         union {
@@ -125,8 +123,9 @@ namespace ncpp {
 
             struct {
 
-                F_object_id id;
-                F_object_generation generation;
+                u32 id : 32;
+                u32 generation : 31;
+                u32 is_thread_safe : 1;
 
             };
 
@@ -136,9 +135,10 @@ namespace ncpp {
         NCPP_FORCE_INLINE constexpr F_object_key(u64 value_in) noexcept :
             value(value_in)
         {}
-        NCPP_FORCE_INLINE constexpr F_object_key(u32 id_in, u32 generation_in) noexcept :
+        NCPP_FORCE_INLINE constexpr F_object_key(u32 id_in, u32 generation_in, b8 is_thread_safe_in) noexcept :
             id(id_in),
-            generation(generation_in)
+            generation(generation_in),
+            is_thread_safe(is_thread_safe_in)
         {}
 
 
@@ -152,18 +152,18 @@ namespace ncpp {
 
         NCPP_FORCE_INLINE constexpr b8 is_valid() const noexcept {
 
-            return (value != NCPP_U64_MAX);
+            return (id != NCPP_U32_MAX);
         }
         NCPP_FORCE_INLINE constexpr b8 is_null() const noexcept {
 
-            return (value == NCPP_U64_MAX);
+            return (id == NCPP_U32_MAX);
         }
 
 
 
         NCPP_FORCE_INLINE constexpr void reset() noexcept {
 
-            value = NCPP_U64_MAX;
+            id = NCPP_U32_MAX;
         }
 
     };
@@ -450,10 +450,9 @@ namespace ncpp {
             NCPP_ASSERT(generation != NCPP_U32_MAX) << "invalid generation";
 
             return F_object_key{
-
                 generation_index,
-                generation
-
+                generation,
+                true
             };
         }
         NCPP_FORCE_INLINE void push(F_object_key object_key) noexcept {
@@ -492,11 +491,6 @@ namespace ncpp {
 
 
     private:
-        u32 index_ = 0;
-        u32 object_key_begin_index_ = 0;
-        u32 max_local_generation_count_ = 0;
-        u32 subpool_count_ = 0;
-
         struct F_generation_buffer {
 
             u32* generation_p = 0;
@@ -570,13 +564,6 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE u32 index() const noexcept { return index_; }
-        NCPP_FORCE_INLINE u32 subpool_count() const noexcept { return subpool_count_; }
-        NCPP_FORCE_INLINE u32 max_local_generation_count() const noexcept { return max_local_generation_count_; }
-
-
-
-    public:
         TF_object_key_subpool()
         {
         }
@@ -631,7 +618,8 @@ namespace ncpp {
 
             return F_object_key{
                 generation_index,
-                generation
+                generation,
+                false
             };
         }
         NCPP_FORCE_INLINE void push(F_object_key object_key) noexcept {
@@ -652,7 +640,10 @@ namespace ncpp {
 
 
     template<b8 is_thread_safe__ = false, typename F_allocator__ = mem::F_default_allocator>
-    class TF_object_key_pool {
+    class TF_object_key_pool;
+
+    template<typename F_allocator__>
+    class TF_object_key_pool<true, F_allocator__> {
 
     public:
         NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL;
@@ -660,7 +651,7 @@ namespace ncpp {
 
 
     public:
-        static constexpr b8 is_thread_safe = is_thread_safe__;
+        static constexpr b8 is_thread_safe = true;
 
         using F_allocator = F_allocator__;
 
@@ -682,8 +673,8 @@ namespace ncpp {
 
     public:
         TF_object_key_pool(u32 subpool_count = 1) :
-            subpool_count_(subpool_count),
-            subpool_vector_(subpool_count)
+                subpool_count_(subpool_count),
+                subpool_vector_(subpool_count)
         {
 
             max_local_generation_count_ = (NCPP_U32_MAX / subpool_count);
@@ -735,6 +726,62 @@ namespace ncpp {
 
     };
 
+    template<typename F_allocator__>
+    class TF_object_key_pool<false, F_allocator__> {
+
+    public:
+        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL;
+
+
+
+    public:
+        static constexpr b8 is_thread_safe = false;
+
+        using F_allocator = F_allocator__;
+
+        using F_subpool = TF_object_key_subpool<is_thread_safe>;
+
+
+
+    private:
+        F_subpool subpool_;
+
+    public:
+        NCPP_FORCE_INLINE const F_subpool& subpool() const { return subpool_; }
+
+
+
+    public:
+        TF_object_key_pool()
+        {
+
+        }
+
+
+
+    public:
+        NCPP_FORCE_INLINE F_object_key pop() noexcept {
+
+            return subpool_.pop();
+        }
+        NCPP_FORCE_INLINE void push(F_object_key object_key) noexcept {
+
+            subpool_.push(object_key);
+        }
+
+
+
+    public:
+        NCPP_FORCE_INLINE b8 check(F_object_key object_key) const noexcept {
+
+            if(object_key.is_null())
+                return false;
+
+            return subpool_.check(object_key);
+        }
+
+    };
+
     using F_object_key_pool = TF_object_key_pool<>;
 
 
@@ -754,7 +801,10 @@ namespace ncpp {
 
 
     template<b8 is_thread_safe__ = false, typename F_allocator__ = mem::F_default_allocator>
-    class TF_default_object_storage : public utilities::TI_singleton<TF_default_object_storage<is_thread_safe__, F_allocator__>> {
+    class TF_default_object_storage;
+
+    template<typename F_allocator__>
+    class TF_default_object_storage<true, F_allocator__> : public utilities::TI_singleton<TF_default_object_storage<true, F_allocator__>> {
 
     public:
         NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL;
@@ -762,7 +812,7 @@ namespace ncpp {
 
 
     public:
-        static constexpr b8 is_thread_safe = is_thread_safe__;
+        static constexpr b8 is_thread_safe = true;
 
         using F_allocator = F_allocator__;
 
@@ -782,6 +832,43 @@ namespace ncpp {
     public:
         TF_default_object_storage(u32 subpool_count) :
             key_pool_(subpool_count)
+        {
+
+        }
+        ~TF_default_object_storage(){
+
+        }
+
+    };
+
+    template<typename F_allocator__>
+    class TF_default_object_storage<false, F_allocator__> : public utilities::TI_singleton<TF_default_object_storage<false, F_allocator__>> {
+
+    public:
+        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL;
+
+
+
+    public:
+        static constexpr b8 is_thread_safe = false;
+
+        using F_allocator = F_allocator__;
+
+        using F_key_pool = TF_object_key_pool<is_thread_safe, F_allocator>;
+
+
+
+    private:
+        F_key_pool key_pool_;
+
+    public:
+        NCPP_FORCE_INLINE F_key_pool& key_pool() noexcept { return key_pool_; }
+        NCPP_FORCE_INLINE const F_key_pool& key_pool() const noexcept { return key_pool_; }
+
+
+
+    public:
+        TF_default_object_storage()
         {
 
         }
@@ -1201,7 +1288,10 @@ namespace ncpp {
 
         NCPP_FORCE_INLINE b8 is_valid() const noexcept {
 
-            return object_storage().key_pool().check(object_key_);
+            if(object_key_.is_thread_safe)
+                return F_options::template TF_storage<true>::instance().key_pool().check(object_key_);
+            else
+                return F_options::template TF_storage<false>::instance().key_pool().check(object_key_);
         }
         NCPP_FORCE_INLINE b8 is_null() const noexcept {
 
@@ -1621,7 +1711,10 @@ namespace ncpp {
         }
         NCPP_FORCE_INLINE void push_key_internal() noexcept {
 
-            object_storage().key_pool().push(object_key_);
+            if(object_key_.is_thread_safe)
+                F_options::template TF_storage<true>::instance().key_pool().push(object_key_);
+            else
+                F_options::template TF_storage<false>::instance().key_pool().push(object_key_);
         }
 
 
