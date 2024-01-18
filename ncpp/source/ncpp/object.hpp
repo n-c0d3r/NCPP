@@ -74,9 +74,9 @@ namespace ncpp {
             template<ncpp::b8 is_thread_safe__, typename F_allocator__>     \
             friend class ncpp::TF_default_object_storage;                                        \
                                                     \
-            template<ncpp::T_is_object F_object__, typename F_allocator__, b8 is_has_object_key__, class F_options__>\
+            template<ncpp::T_is_object F_object__, typename F_allocator__, ncpp::b8 is_has_object_key__, class F_options__>\
             friend class ncpp::TU_object_p;\
-            template<ncpp::T_is_object F_object__, b8 is_has_object_key__, class F_options__>\
+            template<ncpp::T_is_object F_object__, ncpp::b8 is_has_object_key__, class F_options__>\
             friend class ncpp::TK_object_p;\
             template<ncpp::T_is_object F_object__>\
             friend class ncpp::TW_object_p;
