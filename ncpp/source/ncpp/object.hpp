@@ -64,11 +64,6 @@
 namespace ncpp {
 
 #define NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL \
-            template<class F_options__>\
-            friend class ncpp::TA_object_memory;               \
-            template<ncpp::b8 enable_counter__, ncpp::T_is_object F_object__, class F_options__>\
-            friend class ncpp::TF_object_memory;               \
-                                                    \
             template<ncpp::b8 is_thread_safe__, typename F_allocator__>     \
             friend class ncpp::TF_object_key_subpool;                                        \
                                                     \
@@ -80,8 +75,6 @@ namespace ncpp {
                                                     \
             template<ncpp::T_is_object F_object__, typename F_allocator__, b8 is_has_object_key__, class F_options__>\
             friend class ncpp::TU_object_p;\
-            template<ncpp::T_is_object F_object__, typename F_allocator__, class F_options__>\
-            friend class ncpp::TS_object_p;\
             template<ncpp::T_is_object F_object__, b8 is_has_object_key__, class F_options__>\
             friend class ncpp::TK_object_p;\
             template<ncpp::T_is_object F_object__>\
@@ -194,9 +187,6 @@ namespace ncpp {
     template<class F_options__>
     class TA_object_memory;
 
-    template<b8 enable_counter__, T_is_object F_object__, class F_options__>
-    class TF_object_memory;
-
     template<b8 is_thread_safe__, typename F_allocator__>
     class TF_object_key_subpool;
 
@@ -212,8 +202,6 @@ namespace ncpp {
     class TK_object_p;
     template<T_is_object F_object__, typename F_allocator__, b8 is_has_object_key__, class F_options__>
     class TU_object_p;
-    template<T_is_object F_object__, typename F_allocator__, class F_options__>
-    class TS_object_p;
 
 
 
@@ -821,111 +809,10 @@ namespace ncpp {
 
 
 
-    template<b8 is_thread_safe__ = false>
-    struct TF_object_counter;
-
-    template<>
-    struct TF_object_counter<true> {
-
-        static constexpr b8 is_thread_safe = true;
-        static constexpr u8 counter_size = 4;
-
-        using F_value = TF_atomic_uint<counter_size>;
-        using F_return_value = TF_uint<counter_size>;
-
-        F_value value = 0;
-
-        NCPP_FORCE_INLINE F_return_value increase() noexcept {
-
-            return value.fetch_add(1, eastl::memory_order_acq_rel);
-        }
-        NCPP_FORCE_INLINE F_return_value decrease() noexcept {
-
-            return value.fetch_sub(1, eastl::memory_order_acq_rel);
-        }
-        NCPP_FORCE_INLINE F_return_value load() const noexcept {
-
-            return value.load(eastl::memory_order_acquire);
-        }
-
-        NCPP_FORCE_INLINE operator F_return_value () const noexcept {
-
-            return load();
-        }
-    };
-
-    template<>
-    struct TF_object_counter<false> {
-
-        static constexpr b8 is_thread_safe = false;
-        static constexpr u8 counter_size = 4;
-
-        using F_value = TF_uint<counter_size>;
-        using F_return_value = TF_uint<counter_size>;
-
-        F_value value = 0;
-
-        NCPP_FORCE_INLINE F_return_value increase() noexcept {
-
-            return value++;
-        }
-        NCPP_FORCE_INLINE F_return_value decrease() noexcept {
-
-            return value--;
-        }
-        NCPP_FORCE_INLINE F_return_value load() const noexcept {
-
-            return value;
-        }
-
-        NCPP_FORCE_INLINE operator F_return_value () const noexcept {
-
-            return load();
-        }
-    };
-
-    using F_object_counter = TF_object_counter<>;
-
-
-
-    template<T_is_object F_object__>
-    NCPP_FORCE_INLINE TF_object_counter<T_is_object_thread_safe<F_object__>> T_object_counter(const F_object__& object) noexcept {
-
-        return *(
-            (TF_object_counter<T_is_object_thread_safe<F_object__>>*)
-            (
-                ((u64*)&object)
-                - 1
-            )
-        );
-    }
-
-
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-    template<
-        b8 is_storage_thread_safe__ = false,
-        typename F_allocator__ = mem::F_default_allocator
-    >
+    template<typename F_allocator__ = mem::F_default_allocator>
     struct TF_default_object_options {
 
-        using F_this = TF_default_object_options<
-            is_storage_thread_safe__,
-            F_allocator__
-        >;
+        using F_this = TF_default_object_options<F_allocator__>;
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -937,182 +824,14 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-        using F_storage = TF_default_object_storage<
-            is_storage_thread_safe__,
-            F_allocator__
-        >;
+        template<b8 is_thread_safe_ = false>
+        using TF_storage = TF_default_object_storage<is_thread_safe_, F_allocator__>;
 
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-
-        template<b8 is_counter_thread_safe__ = false>
-        using TF_counter = TF_object_counter<
-            is_counter_thread_safe__
-        >;
-
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-
-        using A_object_memory = TA_object_memory<F_this>;
-
-        template<b8 enable_counter__, T_is_object F_object__>
-        using TF_object_memory = TF_object_memory<enable_counter__, F_object__, F_this>;
+        using F_storage = TF_storage<>;
 
     };
 
     using F_default_object_options = TF_default_object_options<>;
-
-
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-    template<class F_options__ = F_default_object_options>
-    class TA_object_memory {
-
-    protected:
-        NCPP_FORCE_INLINE TA_object_memory() noexcept = default;
-
-    public:
-        NCPP_FORCE_INLINE ~TA_object_memory() noexcept = default;
-
-    };
-
-
-
-    template<b8 enable_counter__, T_is_object F_object__, class F_options__ = F_default_object_options>
-    class TF_object_memory;
-
-    template<T_is_object F_object__, class F_options__>
-    class NCPP_ALIGN(8) TF_object_memory<true, F_object__, F_options__> :
-        public TA_object_memory<F_options__>
-    {
-
-    public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL;
-
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-
-    public:
-        using F_this = TF_object_memory<true, F_object__, F_options__>;
-
-        using F_object = F_object__;
-        using F_options = F_options__;
-
-        static constexpr b8 is_thread_safe = T_is_object_thread_safe<F_object__>;
-
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-
-    private:
-        F_options::template TF_counter<is_thread_safe> shared_counter_;
-        utilities::TF_mem_wrap<F_object__> object_mem_wrap_;
-
-    public:
-        NCPP_FORCE_INLINE auto shared_counter() const noexcept { return shared_counter_.load(); }
-        NCPP_FORCE_INLINE F_object__* object_p() const noexcept { return (F_object__*)&object_mem_wrap_; }
-        NCPP_FORCE_INLINE F_object__& object() const noexcept { return *object_p(); }
-
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-
-    public:
-        NCPP_FORCE_INLINE TF_object_memory() noexcept = default;
-        NCPP_FORCE_INLINE ~TF_object_memory() noexcept = default;
-
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-
-    public:
-        template<typename... F_args__>
-        NCPP_FORCE_INLINE void T_initialize_object(F_args__&&... args) const {
-
-            new (object_p()) F_object(std::forward<F_args__>(args)...);
-
-        }
-        NCPP_FORCE_INLINE void deinitialize_object() const noexcept {
-
-            object_p()->~F_object();
-
-        }
-
-    };
-
-    template<T_is_object F_object__, class F_options__>
-    class TF_object_memory<false, F_object__, F_options__> :
-        public TA_object_memory<F_options__>
-    {
-
-    public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL;
-
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-
-    public:
-        using F_this = TF_object_memory<false, F_object__, F_options__>;
-
-        using F_object = F_object__;
-        using F_options = F_options__;
-
-        static constexpr b8 is_thread_safe = T_is_object_thread_safe<F_object__>;
-
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-
-    private:
-        utilities::TF_mem_wrap<F_object__> object_mem_wrap_;
-
-    public:
-        NCPP_FORCE_INLINE F_object__* object_p() const noexcept { return (F_object__*)&object_mem_wrap_; }
-        NCPP_FORCE_INLINE F_object__& object() const noexcept { return *object_p(); }
-
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-
-    public:
-        NCPP_FORCE_INLINE TF_object_memory() noexcept = default;
-        NCPP_FORCE_INLINE ~TF_object_memory() noexcept = default;
-
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-
-    public:
-        template<typename... F_args__>
-        NCPP_FORCE_INLINE void T_initialize_object(F_args__&&... args) const {
-
-            new (object_p()) F_object(std::forward<F_args__>(args)...);
-
-        }
-        NCPP_FORCE_INLINE void deinitialize_object() const noexcept {
-
-            object_p()->~F_object();
-
-        }
-
-    };
 
 
 
@@ -1188,22 +907,6 @@ namespace ncpp {
 
     public:
         NCPP_FORCE_INLINE TW_object_p() noexcept = default;
-
-        template<b8 enable_counter__, T_is_object F_other__, class F_options>
-        requires T_is_object_down_castable<F_other__, F_passed_object>
-        NCPP_FORCE_INLINE TW_object_p(const TF_object_memory<enable_counter__, F_other__, F_options>& object_memory) noexcept :
-            raw_object_p_(object_memory.object_p())
-        {
-
-        }
-        template<b8 enable_counter__, T_is_object F_other__, class F_options>
-        requires T_is_object_down_castable<F_other__, F_passed_object>
-        NCPP_FORCE_INLINE TW_object_p& operator = (const TF_object_memory<enable_counter__, F_other__, F_options>& object_memory) noexcept {
-
-            raw_object_p_ = object_memory.object_p();
-
-            return *this;
-        }
 
         NCPP_FORCE_INLINE TW_object_p(const TW_object_p& x) noexcept :
             raw_object_p_(x.raw_object_p_)
@@ -1305,6 +1008,15 @@ namespace ncpp {
             return (raw_object_p_ == 0);
         }
 
+        NCPP_FORCE_INLINE b8 Q_is_valid() const noexcept {
+
+            return (raw_object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 Q_is_null() const noexcept {
+
+            return (raw_object_p_ == 0);
+        }
+
 
 
     private:
@@ -1353,8 +1065,6 @@ namespace ncpp {
 
         using F_options = F_options__;
 
-        using F_object_memory = TF_object_memory<false, F_passed_object, F_options>;
-
         static constexpr b8 is_has_object_key = true;
 
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
@@ -1378,9 +1088,6 @@ namespace ncpp {
     public:
         NCPP_FORCE_INLINE F_passed_object* raw_object_p() const noexcept { return (F_passed_object*)raw_object_p_; }
         NCPP_FORCE_INLINE F_passed_object& object() const noexcept { return *(raw_object_p()); }
-
-        NCPP_FORCE_INLINE F_object_memory* object_memory_p() const noexcept { return (F_object_memory*)raw_object_p_; }
-        NCPP_FORCE_INLINE F_object_memory& object_memory() const noexcept { return *object_memory_p(); }
 
         NCPP_FORCE_INLINE F_object_key object_key() const noexcept { return object_key_; }
 
@@ -1501,6 +1208,15 @@ namespace ncpp {
             return !object_storage().key_pool().check(object_key_);
         }
 
+        NCPP_FORCE_INLINE b8 Q_is_valid() const noexcept {
+
+            return (raw_object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 Q_is_null() const noexcept {
+
+            return (raw_object_p_ == 0);
+        }
+
 
 
     public:
@@ -1546,8 +1262,6 @@ namespace ncpp {
 
         using F_options = F_options__;
 
-        using F_object_memory = TF_object_memory<false, F_passed_object, F_options>;
-
         static constexpr b8 is_has_object_key = false;
 
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
@@ -1570,9 +1284,6 @@ namespace ncpp {
     public:
         NCPP_FORCE_INLINE F_passed_object* raw_object_p() const noexcept { return (F_passed_object*)raw_object_p_; }
         NCPP_FORCE_INLINE F_passed_object& object() const noexcept { return *(raw_object_p()); }
-
-        NCPP_FORCE_INLINE F_object_memory* object_memory_p() const noexcept { return (F_object_memory*)raw_object_p_; }
-        NCPP_FORCE_INLINE F_object_memory& object_memory() const noexcept { return *object_memory_p(); }
 
         NCPP_FORCE_INLINE typename F_options::F_storage& object_storage() const { return F_options::F_storage::instance(); }
 
@@ -1682,6 +1393,15 @@ namespace ncpp {
             return (raw_object_p_ == 0);
         }
 
+        NCPP_FORCE_INLINE b8 Q_is_valid() const noexcept {
+
+            return (raw_object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 Q_is_null() const noexcept {
+
+            return (raw_object_p_ == 0);
+        }
+
 
 
     public:
@@ -1746,8 +1466,6 @@ namespace ncpp {
         using F_allocator = F_allocator__;
         using F_options = F_options__;
 
-        using F_object_memory = TF_object_memory<false, F_passed_object, F_options>;
-
         static constexpr b8 is_has_object_key = true;
 
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
@@ -1761,6 +1479,8 @@ namespace ncpp {
         using W_object_p = TW_object_p<F_passed_object__>;
         using K_object_p = TK_object_p<F_passed_object__, is_has_object_key, F_options>;
 
+        using F_object_storage = F_options::template TF_storage<T_is_object_thread_safe<F_object>>;
+
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -1773,12 +1493,9 @@ namespace ncpp {
         NCPP_FORCE_INLINE F_passed_object* raw_object_p() const noexcept { return (F_passed_object*)raw_object_p_; }
         NCPP_FORCE_INLINE F_passed_object& object() const noexcept { return *(raw_object_p()); }
 
-        NCPP_FORCE_INLINE F_object_memory* object_memory_p() const noexcept { return (F_object_memory*)raw_object_p_; }
-        NCPP_FORCE_INLINE F_object_memory& object_memory() const noexcept { return *object_memory_p(); }
-
         NCPP_FORCE_INLINE F_object_key object_key() const noexcept { return object_key_; }
 
-        NCPP_FORCE_INLINE typename F_options::F_storage& object_storage() const { return F_options::F_storage::instance(); }
+        NCPP_FORCE_INLINE F_object_storage& object_storage() const noexcept { return F_object_storage::instance(); }
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -1865,13 +1582,22 @@ namespace ncpp {
             return (raw_object_p_ == 0);
         }
 
+        NCPP_FORCE_INLINE b8 Q_is_valid() const noexcept {
+
+            return (raw_object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 Q_is_null() const noexcept {
+
+            return (raw_object_p_ == 0);
+        }
+
 
 
     private:
         NCPP_FORCE_INLINE void reset_no_destroy_internal() noexcept {
 
             raw_object_p_ = 0;
-            object_key_ = 0;
+            object_key_.reset();
         }
 
     public:
@@ -2005,8 +1731,6 @@ namespace ncpp {
         using F_allocator = F_allocator__;
         using F_options = F_options__;
 
-        using F_object_memory = TF_object_memory<false, F_passed_object, F_options>;
-
         static constexpr b8 is_has_object_key = false;
 
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
@@ -2020,6 +1744,8 @@ namespace ncpp {
         using W_object_p = TW_object_p<F_passed_object__>;
         using K_object_p = TK_object_p<F_passed_object__, is_has_object_key, F_options>;
 
+        using F_object_storage = F_options::template TF_storage<T_is_object_thread_safe<F_object>>;
+
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2031,10 +1757,7 @@ namespace ncpp {
         NCPP_FORCE_INLINE F_passed_object* raw_object_p() const noexcept { return (F_passed_object*)raw_object_p_; }
         NCPP_FORCE_INLINE F_passed_object& object() const noexcept { return *(raw_object_p()); }
 
-        NCPP_FORCE_INLINE F_object_memory* object_memory_p() const noexcept { return (F_object_memory*)raw_object_p_; }
-        NCPP_FORCE_INLINE F_object_memory& object_memory() const noexcept { return *object_memory_p(); }
-
-        NCPP_FORCE_INLINE typename F_options::F_storage& object_storage() const { return F_options::F_storage::instance(); }
+        NCPP_FORCE_INLINE F_object_storage& object_storage() const noexcept { return F_object_storage::instance(); }
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2112,6 +1835,15 @@ namespace ncpp {
             return (raw_object_p_ != 0);
         }
         NCPP_FORCE_INLINE b8 is_null() const noexcept {
+
+            return (raw_object_p_ == 0);
+        }
+
+        NCPP_FORCE_INLINE b8 Q_is_valid() const noexcept {
+
+            return (raw_object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 Q_is_null() const noexcept {
 
             return (raw_object_p_ == 0);
         }
@@ -2224,33 +1956,5 @@ namespace ncpp {
         }
 
     };
-
-
-
-    template<
-        T_is_object F_passed_object__,
-        typename F_allocator__ = mem::F_object_allocator,
-        b8 is_has_object_key__ = true,
-        class F_options__ = F_default_object_options,
-        typename... F_args__
-    >
-    NCPP_FORCE_INLINE TU_object_p<
-        F_passed_object__,
-        F_allocator__,
-        is_has_object_key__,
-        F_options__
-    > T_make_unique_object(F_args__&&... args) {
-
-        TU_object_p<
-            F_passed_object__,
-            F_allocator__,
-            is_has_object_key__,
-            F_options__
-        > object_p;
-
-        object_p.T_create_object(std::forward<F_args__>(args)...);
-
-        return std::move(object_p);
-    }
 
 }
