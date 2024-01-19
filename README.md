@@ -4,22 +4,6 @@ NCoder's Game Engine Learning Aimed C++ Library.
 ---
 
 ## Features
-+ Object:
-  + **⚠️ Warning**: `not avaiable on NCPP Lite Distribution`
-  + Unique pointer
-  + Shared pointer
-  + Keyed pointer
-  + Weak pointer
-+ RTTI (Runtime-Type Information):
-  + Type flag
-  + Subtype
-  + **Reflection**
-    + **⚠️ Warning**: `not avaiable on NCPP Lite Distribution`
-    + Easy to use
-    + No additional memory cost on reflected object
-    + Metadata supports
-    + Fast compilation
-    + Flexible and highly customizable
 + Memory management:
   + Incremental chunk allocator
   + **Smart chunk allocator**
@@ -38,6 +22,12 @@ NCoder's Game Engine Learning Aimed C++ Library.
   + Initialier_list
   + **Convenient coloring**
   + ...
++ Object:
+    + **⚠️ Warning**: `not avaiable on NCPP Lite Distribution`
+    + **Unique pointer**
+    + **Shared pointer**
+    + **Keyed pointer**
+    + **Weak pointer**
 + Utilities:
   + **Magic type syntax** for both variables and functions: `(F_returns...)(F_arguments...)`
   + **Constant passing** (optimized and flexible constant variable passing)
@@ -48,6 +38,16 @@ NCoder's Game Engine Learning Aimed C++ Library.
   + Singleton
   + Type info
   + ...
++ RTTI (Runtime-Type Information):
+  + Type flag
+  + Subtype
+  + **Reflection**
+    + **⚠️ Warning**: `not avaiable on NCPP Lite Distribution`
+    + Easy to use
+    + No additional memory cost on reflected object
+    + Metadata supports
+    + Fast compilation
+    + Flexible and highly customizable
 
 ---
 
