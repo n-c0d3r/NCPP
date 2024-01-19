@@ -55,8 +55,12 @@ namespace ncpp { }
 
 #include <ncpp/utilities/.hpp>
 #include <ncpp/mem/.hpp>
+
+#ifndef NCPP_LITE
 #include <ncpp/object_deprecated.hpp>
 #include <ncpp/object.hpp>
+#endif
+
 #include <ncpp/iostream.hpp>
 #include <ncpp/pac/.hpp>
 #include <ncpp/containers/.hpp>

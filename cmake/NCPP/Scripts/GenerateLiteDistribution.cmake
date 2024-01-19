@@ -71,6 +71,11 @@ set(FILES_TO_DELETE
     "cmake/NCPP/Utilities/RTTIHelper.cmake"
     "cmake/NCPP/RTTIMacros.cmake"
 
+    # object
+    "ncpp/source/ncpp/object.cpp"
+    "ncpp/source/ncpp/object.hpp"
+    "ncpp/source/ncpp/object_deprecated.hpp"
+
     # mem
     "ncpp/source/ncpp/mem/smart_chunk_allocator.hpp"
     "ncpp/source/ncpp/mem/clusafi_allocator.hpp"
