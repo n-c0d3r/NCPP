@@ -102,9 +102,7 @@ NCPP_MAGIC((F__)[4], TD<F__>::dd4);
 
 class A : public B, public C, public TD<i32> {
 
-	NCPP_BASIC_ROBJECT(
-		A,
-
+    NCPP_QUICK_ROBJECT(
         EXTENDS(B),
         EXTENDS(C),
         EXTENDS(TD<i32>),
@@ -249,7 +247,7 @@ struct F_customm_reflector {
     ) {
 
         NCPP_INFO() << "user pre reflect base: "
-            << T_cout_value(F_base__::static_type_name())
+            << T_cout_value(T_type_fullname<F_base__>())
             << " "
             << custom_params_p->message;
 
@@ -259,7 +257,7 @@ struct F_customm_reflector {
     ) {
 
         NCPP_INFO() << "user post reflect base: "
-            << T_cout_value(F_base__::static_type_name())
+            << T_cout_value(T_type_fullname<F_base__>())
             << " "
             << custom_params_p->message;
 
@@ -269,7 +267,7 @@ struct F_customm_reflector {
     ) {
 
         NCPP_INFO() << "user pre reflect object: "
-            << T_cout_value(F_robject__::static_type_name())
+            << T_cout_value(T_type_fullname<F_robject__>())
             << " "
             << custom_params_p->message;
 
@@ -279,7 +277,7 @@ struct F_customm_reflector {
     ) {
 
         NCPP_INFO() << "user post reflect object: "
-            << T_cout_value(F_robject__::static_type_name())
+            << T_cout_value(T_type_fullname<F_robject__>())
             << " "
             << custom_params_p->message;
 

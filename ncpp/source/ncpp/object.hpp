@@ -64,7 +64,7 @@
 
 namespace ncpp {
 
-#define NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL \
+#define NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL() \
             template<ncpp::b8 is_thread_safe_fr__, typename F_allocator_fr__>     \
             friend class ncpp::TF_object_key_subpool;                                        \
                                                     \
@@ -101,9 +101,9 @@ namespace ncpp {
 
 #define NCPP_OBJECT_IMPLEMENT(...) \
             NCPP_RTTI_IMPLEMENT_FLAG(ncpp::TF_object_flag<__VA_ARGS__>);\
-            NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL
+            NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL()
 
-#define NCPP_OBJECT_THREAD_SAFE \
+#define NCPP_OBJECT_THREAD_SAFE() \
             NCPP_RTTI_IMPLEMENT_FLAG(ncpp::F_object_thread_safe_flag);
 
 
@@ -231,7 +231,7 @@ namespace ncpp {
     class TF_object_key_subpool<true, F_allocator__> {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL;
+        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
 
 
 
@@ -484,7 +484,7 @@ namespace ncpp {
     class TF_object_key_subpool<false, F_allocator__> {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL;
+        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
 
 
 
@@ -651,7 +651,7 @@ namespace ncpp {
     class TF_default_object_key_pool<true, F_allocator__> {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL;
+        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
 
 
 
@@ -735,7 +735,7 @@ namespace ncpp {
     class TF_default_object_key_pool<false, F_allocator__> {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL;
+        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
 
 
 
@@ -812,7 +812,7 @@ namespace ncpp {
     class TF_default_object_storage<true, F_allocator__> : public utilities::TI_singleton<TF_default_object_storage<true, F_allocator__>> {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL;
+        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
 
 
 
@@ -850,7 +850,7 @@ namespace ncpp {
     class TF_default_object_storage<false, F_allocator__> : public utilities::TI_singleton<TF_default_object_storage<false, F_allocator__>> {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL;
+        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
 
 
 
@@ -968,7 +968,7 @@ namespace ncpp {
     class TW_object_p {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL;
+        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
 
         using F_passed_object = F_passed_object__;
         using F_object = std::remove_const_t<F_passed_object__>;
@@ -1162,7 +1162,7 @@ namespace ncpp {
     class TK_object_p<F_passed_object__, true, F_options__> {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL;
+        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
 
         using F_passed_object = F_passed_object__;
         using F_object = std::remove_const_t<F_passed_object__>;
@@ -1374,7 +1374,7 @@ namespace ncpp {
     class TK_object_p<F_passed_object__, false, F_options__> {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL;
+        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
 
         using F_passed_object = F_passed_object__;
         using F_object = std::remove_const_t<F_passed_object__>;
@@ -1589,7 +1589,7 @@ namespace ncpp {
     class TU_object_p<F_passed_object__, F_allocator__, true, F_options__> {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL;
+        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
 
         using F_passed_object = F_passed_object__;
         using F_object = std::remove_const_t<F_passed_object__>;
@@ -1871,7 +1871,7 @@ namespace ncpp {
     class TU_object_p<F_passed_object__, F_allocator__, false, F_options__> {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL;
+        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
 
         using F_passed_object = F_passed_object__;
         using F_object = std::remove_const_t<F_passed_object__>;
@@ -2165,7 +2165,7 @@ namespace ncpp {
     class TS_object_p<F_passed_object__, F_allocator__, true, F_options__> {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL;
+        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
 
         using F_passed_object = F_passed_object__;
         using F_object = std::remove_const_t<F_passed_object__>;
@@ -2514,7 +2514,7 @@ namespace ncpp {
     class TS_object_p<F_passed_object__, F_allocator__, false, F_options__> {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL;
+        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
 
         using F_passed_object = F_passed_object__;
         using F_object = std::remove_const_t<F_passed_object__>;
