@@ -3,9 +3,41 @@
 
 using namespace ncpp;
 
+class A {
 
+    NCPP_OBJECT_IMPLEMENT(A);
+
+};
 
 NCPP_ENTRY_POINT(args) {
+
+    int count = 1000;
+
+    {
+
+        NCPP_SCOPED_PROFILER_SAMPLE("EASTL");
+
+        for(i32 i = 0; i < count; ++i) {
+
+            auto a_p1 = eastl::make_unique<A>();
+            auto a_p2 = eastl::make_unique<A>();
+
+        }
+
+    }
+
+    {
+
+        NCPP_SCOPED_PROFILER_SAMPLE("NCPP");
+
+        for(i32 i = 0; i < count; ++i) {
+
+            auto a_p1 = TU_object_p<A>()();
+            auto a_p2 = TU_object_p<A>()();
+
+        }
+
+    }
 
     NCPP_INFO()
         << "Hello "
