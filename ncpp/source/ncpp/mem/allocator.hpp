@@ -514,7 +514,11 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 			 */
 			void* default_allocate(sz n, sz alignment, sz alignment_offset, int flags = 0) {
 
-				if(alignment <= EASTL_ALLOCATOR_MIN_ALIGNMENT){
+                if (
+                    (alignment <= EASTL_ALLOCATOR_MIN_ALIGNMENT)
+                    && (!alignment_offset)
+                )
+                {
 
 					return T_allocate_internal<TA_allocator, true>(n, flags);
 				}
