@@ -65,22 +65,22 @@
 namespace ncpp {
 
 #define NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL \
-            template<ncpp::b8 is_thread_safe__, typename F_allocator__>     \
+            template<ncpp::b8 is_thread_safe_fr__, typename F_allocator_fr__>     \
             friend class ncpp::TF_object_key_subpool;                                        \
                                                     \
-            template<ncpp::b8 is_thread_safe__, typename F_allocator__>     \
+            template<ncpp::b8 is_thread_safe_fr__, typename F_allocator_fr__>     \
             friend class ncpp::TF_default_object_key_pool;                                        \
                                                     \
-            template<ncpp::b8 is_thread_safe__, typename F_allocator__>     \
+            template<ncpp::b8 is_thread_safe_fr__, typename F_allocator_fr__>     \
             friend class ncpp::TF_default_object_storage;                                        \
                                                     \
-            template<ncpp::T_is_object F_object__>\
+            template<ncpp::T_is_object F_object_fr__>\
             friend class ncpp::TW_object_p;\
-            template<ncpp::T_is_object F_object__, ncpp::b8 is_has_object_key__, class F_options__>\
+            template<ncpp::T_is_object F_object_fr__, ncpp::b8 is_has_object_key_fr__, class F_options_fr__>\
             friend class ncpp::TK_object_p;\
-            template<ncpp::T_is_object F_object__, typename F_allocator__, ncpp::b8 is_has_object_key__, class F_options__>\
+            template<ncpp::T_is_object F_object_fr__, typename F_allocator_fr__, ncpp::b8 is_has_object_key_fr__, class F_options_fr__>\
             friend class ncpp::TU_object_p;\
-            template<ncpp::T_is_object F_object__, typename F_allocator__, ncpp::b8 is_has_object_key__, class F_options__>\
+            template<ncpp::T_is_object F_object_fr__, typename F_allocator_fr__, ncpp::b8 is_has_object_key_fr__, class F_options_fr__>\
             friend class ncpp::TS_object_p;
 
 
@@ -2831,6 +2831,15 @@ namespace ncpp {
 
 NCPP_BIND_CUSTOM_CPASS(
     NCPP_MA(ncpp::TU_object_p<F_passed_object__, F_allocator__, is_has_object_key__, F_options__>),
+    NCPP_MA(ncpp::TK_object_p<F_passed_object__, is_has_object_key__, F_options__>),
+    ncpp::T_is_object F_passed_object__,
+    typename F_allocator__,
+    ncpp::b8 is_has_object_key__,
+    class F_options__
+)
+
+NCPP_BIND_CUSTOM_CPASS(
+    NCPP_MA(ncpp::TS_object_p<F_passed_object__, F_allocator__, is_has_object_key__, F_options__>),
     NCPP_MA(ncpp::TK_object_p<F_passed_object__, is_has_object_key__, F_options__>),
     ncpp::T_is_object F_passed_object__,
     typename F_allocator__,
