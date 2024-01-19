@@ -569,7 +569,11 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 #endif
 				{
 
-					if (alignment <= EASTL_ALLOCATOR_MIN_ALIGNMENT) {
+					if (
+                        (alignment <= EASTL_ALLOCATOR_MIN_ALIGNMENT)
+                        && (!alignment_offset)
+                    )
+                    {
 
 						return T_allocate_internal<F_allocator__, false>(n, flags);
 					}

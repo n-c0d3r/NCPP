@@ -1748,13 +1748,13 @@ namespace ncpp {
             F_allocator allocator;
 
             au32* counter_p = (au32*)allocator.allocate(
-                sizeof(sz) + sizeof(F_object),
+                EASTL_ALLOCATOR_MIN_ALIGNMENT + sizeof(F_object),
                 utilities::T_alignof<F_object>,
-                sizeof(sz),
+                EASTL_ALLOCATOR_MIN_ALIGNMENT,
                 0
             );
 
-            raw_object_p_ = (F_passed_object*)(counter_p + (sizeof(sz) / sizeof(u32)));
+            raw_object_p_ = (F_passed_object*)(counter_p + (EASTL_ALLOCATOR_MIN_ALIGNMENT / sizeof(u32)));
 
             new ((F_object*)raw_object_p_) F_object(std::forward<F_args__>(args)...);
 
@@ -1998,13 +1998,13 @@ namespace ncpp {
             F_allocator allocator;
 
             au32* counter_p = (au32*)allocator.allocate(
-                sizeof(sz) + sizeof(F_object),
+                EASTL_ALLOCATOR_MIN_ALIGNMENT + sizeof(F_object),
                 utilities::T_alignof<F_object>,
-                sizeof(sz),
+                EASTL_ALLOCATOR_MIN_ALIGNMENT,
                 0
             );
 
-            raw_object_p_ = (F_passed_object*)(counter_p + (sizeof(sz) / sizeof(u32)));
+            raw_object_p_ = (F_passed_object*)(counter_p + (EASTL_ALLOCATOR_MIN_ALIGNMENT / sizeof(u32)));
 
             new ((F_object*)raw_object_p_) F_object(std::forward<F_args__>(args)...);
 
@@ -2425,14 +2425,14 @@ namespace ncpp {
             F_allocator allocator;
 
             au32* counter_p = (au32*)allocator.allocate(
-                sizeof(sz) + sizeof(F_object),
+                EASTL_ALLOCATOR_MIN_ALIGNMENT + sizeof(F_object),
                 utilities::T_alignof<F_object>,
-                sizeof(sz),
+                EASTL_ALLOCATOR_MIN_ALIGNMENT,
                 0
             );
             counter_p->store(1, eastl::memory_order_release);
 
-            raw_object_p_ = (F_passed_object*)(counter_p + (sizeof(sz) / sizeof(u32)));
+            raw_object_p_ = (F_passed_object*)(counter_p + (EASTL_ALLOCATOR_MIN_ALIGNMENT / sizeof(u32)));
 
             new ((F_object*)raw_object_p_) F_object(std::forward<F_args__>(args)...);
 
@@ -2783,14 +2783,14 @@ namespace ncpp {
             F_allocator allocator;
 
             au32* counter_p = (au32*)allocator.allocate(
-                sizeof(sz) + sizeof(F_object),
+                EASTL_ALLOCATOR_MIN_ALIGNMENT + sizeof(F_object),
                 utilities::T_alignof<F_object>,
-                sizeof(sz),
+                EASTL_ALLOCATOR_MIN_ALIGNMENT,
                 0
             );
             counter_p->store(1, eastl::memory_order_release);
 
-            raw_object_p_ = (F_passed_object*)(counter_p + (sizeof(sz) / sizeof(u32)));
+            raw_object_p_ = (F_passed_object*)(counter_p + (EASTL_ALLOCATOR_MIN_ALIGNMENT / sizeof(u32)));
 
             new ((F_object*)raw_object_p_) F_object(std::forward<F_args__>(args)...);
 
