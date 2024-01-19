@@ -15,7 +15,7 @@ namespace ncpp {
 
         ((F_object*)raw_object_p_)->~F_object();
 
-        au32* counter_p = ((au32*)raw_object_p_) - 1;
+        au32* counter_p = ((au32*)raw_object_p_) - (sizeof(sz) / sizeof(u32));
 
         allocator.deallocate(counter_p);
 
@@ -28,7 +28,7 @@ namespace ncpp {
 
         ((F_object*)raw_object_p_)->~F_object();
 
-        au32* counter_p = ((au32*)raw_object_p_) - 1;
+        au32* counter_p = ((au32*)raw_object_p_) - (sizeof(sz) / sizeof(u32));
 
         allocator.deallocate(counter_p);
 
@@ -45,7 +45,7 @@ namespace ncpp {
 
         ((F_object*)raw_object_p_)->~F_object();
 
-        au32* counter_p = ((au32*)raw_object_p_) - 1;
+        au32* counter_p = ((au32*)raw_object_p_) - (sizeof(sz) / sizeof(u32));
 
         allocator.deallocate(counter_p);
 
@@ -58,7 +58,7 @@ namespace ncpp {
 
         ((F_object*)raw_object_p_)->~F_object();
 
-        au32* counter_p = ((au32*)raw_object_p_) - 1;
+        au32* counter_p = ((au32*)raw_object_p_) - (sizeof(sz) / sizeof(u32));
 
         allocator.deallocate(counter_p);
 
