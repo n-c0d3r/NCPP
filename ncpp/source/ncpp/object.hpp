@@ -74,12 +74,14 @@ namespace ncpp {
             template<ncpp::b8 is_thread_safe__, typename F_allocator__>     \
             friend class ncpp::TF_default_object_storage;                                        \
                                                     \
-            template<ncpp::T_is_object F_object__, typename F_allocator__, ncpp::b8 is_has_object_key__, class F_options__>\
-            friend class ncpp::TU_object_p;\
+            template<ncpp::T_is_object F_object__>\
+            friend class ncpp::TW_object_p;\
             template<ncpp::T_is_object F_object__, ncpp::b8 is_has_object_key__, class F_options__>\
             friend class ncpp::TK_object_p;\
-            template<ncpp::T_is_object F_object__>\
-            friend class ncpp::TW_object_p;
+            template<ncpp::T_is_object F_object__, typename F_allocator__, ncpp::b8 is_has_object_key__, class F_options__>\
+            friend class ncpp::TU_object_p;\
+            template<ncpp::T_is_object F_object__, typename F_allocator__, ncpp::b8 is_has_object_key__, class F_options__>\
+            friend class ncpp::TS_object_p;
 
 
 
@@ -203,6 +205,8 @@ namespace ncpp {
     class TK_object_p;
     template<T_is_object F_object__, typename F_allocator__, b8 is_has_object_key__, class F_options__>
     class TU_object_p;
+    template<T_is_object F_object__, typename F_allocator__, b8 is_has_object_key__, class F_options__>
+    class TS_object_p;
 
 
 
@@ -1775,7 +1779,9 @@ namespace ncpp {
 
         }
         template<typename... F_args__>
-        NCPP_FORCE_INLINE TU_object_p&& operator()(F_args__&&... args) {
+        NCPP_FORCE_INLINE TU_object_p&& operator()(F_args__&&... args) && {
+
+            NCPP_ASSERT(!is_valid()) << "can't create object by quick \"()\" operator from a valid pointer";
 
             T_create_object(std::forward<F_args__>(args)...);
 
@@ -2029,7 +2035,9 @@ namespace ncpp {
 
         }
         template<typename... F_args__>
-        NCPP_FORCE_INLINE TU_object_p&& operator()(F_args__&&... args) {
+        NCPP_FORCE_INLINE TU_object_p&& operator()(F_args__&&... args) && {
+
+            NCPP_ASSERT(!is_valid()) << "can't create object by quick \"()\" operator from a valid pointer";
 
             T_create_object(std::forward<F_args__>(args)...);
 
@@ -2054,6 +2062,712 @@ namespace ncpp {
             ((F_object*)raw_object_p_)->~F_object();
 
             allocator.deallocate(raw_object_p_);
+
+        }
+
+
+
+    public:
+        NCPP_FORCE_INLINE W_object_p weak_p() const noexcept {
+
+            return raw_object_p_;
+        }
+        template<T_is_object F_other__>
+        requires T_is_object_down_castable<F_passed_object__, F_other__>
+        NCPP_FORCE_INLINE operator TW_object_p<F_other__> () const noexcept {
+
+            return raw_object_p_;
+        }
+        template<T_is_object F_other__>
+        requires T_is_object_up_castable<F_passed_object__, F_other__>
+        explicit NCPP_FORCE_INLINE operator TW_object_p<F_other__> () const noexcept {
+
+            return raw_object_p_;
+        }
+
+
+
+    public:
+        NCPP_FORCE_INLINE K_object_p keyed_p() const noexcept {
+
+            return { raw_object_p_ };
+        }
+        template<T_is_object F_other__>
+        requires T_is_object_down_castable<F_passed_object__, F_other__>
+        NCPP_FORCE_INLINE operator TK_object_p<F_other__> () const noexcept {
+
+            return { raw_object_p_ };
+        }
+        template<T_is_object F_other__>
+        requires T_is_object_up_castable<F_passed_object__, F_other__>
+        explicit NCPP_FORCE_INLINE operator TK_object_p<F_other__> () const noexcept {
+
+            return { raw_object_p_ };
+        }
+
+
+
+    public:
+        NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
+
+            return (F_passed_object*)raw_object_p_;
+        }
+        NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
+
+            return *((F_passed_object*)raw_object_p_);
+        }
+
+    };
+
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+    template<T_is_object F_passed_object__, typename F_allocator__ = mem::F_object_allocator, b8 is_has_object_key__ = true, class F_options__ = F_default_object_options>
+    class TS_object_p;
+
+
+
+    NCPP_FORCE_INLINE u32 shared_object_counter(void* object_p) noexcept {
+
+        au32* counter_p = ((au32*)object_p) - 1;
+
+        return counter_p->load(eastl::memory_order_acquire);
+    }
+    NCPP_FORCE_INLINE u32 increase_shared_object_counter(void* object_p) noexcept {
+
+        au32* counter_p = ((au32*)object_p) - 1;
+
+        return counter_p->fetch_add(1, eastl::memory_order_acq_rel);
+    }
+    NCPP_FORCE_INLINE u32 decrease_shared_object_counter(void* object_p) noexcept {
+
+        au32* counter_p = ((au32*)object_p) - 1;
+
+        return counter_p->fetch_sub(1, eastl::memory_order_acq_rel);
+    }
+
+
+
+    template<T_is_object F_passed_object__, typename F_allocator__, class F_options__>
+    class TS_object_p<F_passed_object__, F_allocator__, true, F_options__> {
+
+    public:
+        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL;
+
+        using F_passed_object = F_passed_object__;
+        using F_object = std::remove_const_t<F_passed_object__>;
+
+        using F_allocator = F_allocator__;
+        using F_options = F_options__;
+
+        static constexpr b8 is_has_object_key = true;
+
+        static constexpr b8 is_const = std::is_const_v<F_passed_object>;
+
+        template<T_is_object F_other__>
+        using TF_change_object = TS_object_p<F_other__, F_allocator, is_has_object_key, F_options>;
+
+        using F_with_object_key = TS_object_p<F_passed_object__, F_allocator, true, F_options>;
+        using F_no_object_key = TS_object_p<F_passed_object__, F_allocator, false, F_options>;
+
+        using W_object_p = TW_object_p<F_passed_object__>;
+        using K_object_p = TK_object_p<F_passed_object__, is_has_object_key, F_options>;
+
+        using F_object_storage = F_options::template TF_storage<T_is_object_thread_safe<F_object>>;
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    private:
+        F_passed_object* raw_object_p_ = 0;
+        F_object_key object_key_;
+
+    public:
+        NCPP_FORCE_INLINE F_passed_object* raw_object_p() const noexcept { return (F_passed_object*)raw_object_p_; }
+        NCPP_FORCE_INLINE F_passed_object& object() const noexcept { return *(raw_object_p()); }
+
+        NCPP_FORCE_INLINE F_object_key object_key() const noexcept { return object_key_; }
+
+        NCPP_FORCE_INLINE F_object_storage& object_storage() const noexcept { return F_object_storage::instance(); }
+
+        NCPP_FORCE_INLINE u32 object_counter() const noexcept {
+
+            NCPP_ASSERT(raw_object_p_) << "can't get object counter from null pointer";
+
+            return shared_object_counter(raw_object_p_);
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    private:
+        NCPP_FORCE_INLINE TS_object_p(F_passed_object* raw_object_p, F_object_key object_key) noexcept :
+            raw_object_p_(raw_object_p),
+            object_key_(object_key)
+        {
+
+        }
+
+    public:
+        NCPP_FORCE_INLINE TS_object_p() noexcept = default;
+        NCPP_FORCE_INLINE ~TS_object_p() noexcept {
+
+            reset();
+        }
+
+        NCPP_FORCE_INLINE TS_object_p(const TS_object_p& x) noexcept :
+            raw_object_p_(x.raw_object_p_),
+            object_key_(x.object_key_)
+        {
+
+            increase_shared_object_counter(raw_object_p_);
+
+        }
+        NCPP_FORCE_INLINE TS_object_p& operator = (const TS_object_p& x) noexcept
+        {
+
+            reset();
+
+            raw_object_p_ = (F_passed_object*)x.raw_object_p_;
+            object_key_ = x.object_key_;
+
+            increase_shared_object_counter(raw_object_p_);
+
+            return *this;
+        }
+
+        NCPP_FORCE_INLINE TS_object_p(TS_object_p&& x) noexcept :
+            raw_object_p_(x.raw_object_p_),
+            object_key_(x.object_key_)
+        {
+
+            x.reset_no_destroy_internal();
+
+        }
+        NCPP_FORCE_INLINE TS_object_p& operator = (TS_object_p&& x) noexcept
+        {
+
+            reset();
+
+            raw_object_p_ = (F_passed_object*)x.raw_object_p_;
+            object_key_ = x.object_key_;
+
+            x.reset_no_destroy_internal();
+
+            return *this;
+        }
+
+        template<T_is_object F_other__>
+        requires T_is_object_down_castable<F_other__, F_passed_object>
+        NCPP_FORCE_INLINE TS_object_p(const TF_change_object<F_other__>& x) noexcept :
+            raw_object_p_((F_passed_object*)x.raw_object_p_),
+            object_key_(x.object_key_)
+        {
+
+            increase_shared_object_counter(raw_object_p_);
+
+        }
+        template<T_is_object F_other__>
+        requires T_is_object_down_castable<F_other__, F_passed_object>
+        NCPP_FORCE_INLINE TS_object_p& operator = (const TF_change_object<F_other__>& x) noexcept
+        {
+
+            reset();
+
+            raw_object_p_ = (F_passed_object*)x.raw_object_p_;
+            object_key_ = x.object_key_;
+
+            increase_shared_object_counter(raw_object_p_);
+
+            return *this;
+        }
+
+        template<T_is_object F_other__>
+        requires T_is_object_down_castable<F_other__, F_passed_object>
+        NCPP_FORCE_INLINE TS_object_p(TF_change_object<F_other__>&& x) noexcept :
+            raw_object_p_((F_passed_object*)x.raw_object_p_),
+            object_key_(x.object_key_)
+        {
+
+            x.reset_no_destroy_internal();
+
+        }
+        template<T_is_object F_other__>
+        requires T_is_object_down_castable<F_other__, F_passed_object>
+        NCPP_FORCE_INLINE TS_object_p& operator = (TF_change_object<F_other__>&& x) noexcept
+        {
+
+            reset();
+
+            raw_object_p_ = (F_passed_object*)x.raw_object_p_;
+            object_key_ = x.object_key_;
+
+            x.reset_no_destroy_internal();
+
+            return *this;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+        template<T_is_object F_other__>
+        NCPP_FORCE_INLINE const TF_change_object<F_other__>& T_cast() const noexcept {
+
+            return *((const TF_change_object<F_other__>*)this);
+        }
+
+        NCPP_FORCE_INLINE b8 is_valid() const noexcept {
+
+            return (raw_object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 is_null() const noexcept {
+
+            return (raw_object_p_ == 0);
+        }
+
+        NCPP_FORCE_INLINE b8 Q_is_valid() const noexcept {
+
+            return (raw_object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 Q_is_null() const noexcept {
+
+            return (raw_object_p_ == 0);
+        }
+
+
+
+    private:
+        NCPP_FORCE_INLINE void reset_no_destroy_internal() noexcept {
+
+            raw_object_p_ = 0;
+            object_key_.reset();
+        }
+
+    public:
+        NCPP_FORCE_INLINE void reset() noexcept {
+
+            if(raw_object_p_) {
+
+                if(decrease_shared_object_counter(raw_object_p_) != 1) {
+
+                    reset_no_destroy_internal();
+
+                }
+                else {
+
+                    destroy_object_internal();
+                    reset_no_destroy_internal();
+
+                }
+
+            }
+
+        }
+
+
+
+    private:
+        NCPP_FORCE_INLINE void pop_key_internal() noexcept {
+
+            object_key_ = object_storage().key_pool().pop();
+        }
+        NCPP_FORCE_INLINE void push_key_internal() noexcept {
+
+            if(object_key_.is_thread_safe)
+                F_options::template TF_storage<true>::instance().key_pool().push(object_key_);
+            else
+                F_options::template TF_storage<false>::instance().key_pool().push(object_key_);
+        }
+
+
+
+    public:
+        template<typename... F_args__>
+        inline void T_create_object(F_args__&&... args) {
+
+            F_allocator allocator;
+
+            au32* counter_p = (au32*)allocator.allocate(
+                sizeof(au32) + sizeof(F_object),
+                utilities::T_alignof<F_object>,
+                sizeof(au32),
+                0
+            );
+            counter_p->store(1, eastl::memory_order_release);
+
+            raw_object_p_ = (F_passed_object*)(counter_p + 1);
+
+            new ((F_object*)raw_object_p_) F_object(std::forward<F_args__>(args)...);
+
+            pop_key_internal();
+
+        }
+        template<typename... F_args__>
+        NCPP_FORCE_INLINE TS_object_p&& operator()(F_args__&&... args) && {
+
+            NCPP_ASSERT(!is_valid()) << "can't create object by quick \"()\" operator from a valid pointer";
+
+            T_create_object(std::forward<F_args__>(args)...);
+
+            return std::move(*this);
+        }
+
+        template<typename... F_args__>
+        static NCPP_FORCE_INLINE TS_object_p T_make(F_args__&&... args) {
+
+            TS_object_p object_p;
+
+            object_p.T_create_object(std::forward<F_args__>(args)...);
+
+            return std::move(object_p);
+        }
+
+    private:
+        NCPP_FORCE_INLINE void destroy_object_internal() noexcept {
+
+            push_key_internal();
+
+            F_allocator allocator;
+
+            ((F_object*)raw_object_p_)->~F_object();
+
+            au32* counter_p = ((au32*)raw_object_p_) - 1;
+
+            allocator.deallocate(counter_p);
+
+        }
+
+
+
+    public:
+        NCPP_FORCE_INLINE W_object_p weak_p() const noexcept {
+
+            return raw_object_p_;
+        }
+        template<T_is_object F_other__>
+        requires T_is_object_down_castable<F_passed_object__, F_other__>
+        NCPP_FORCE_INLINE operator TW_object_p<F_other__> () const noexcept {
+
+            return raw_object_p_;
+        }
+        template<T_is_object F_other__>
+        requires T_is_object_up_castable<F_passed_object__, F_other__>
+        explicit NCPP_FORCE_INLINE operator TW_object_p<F_other__> () const noexcept {
+
+            return raw_object_p_;
+        }
+
+
+
+    public:
+        NCPP_FORCE_INLINE K_object_p keyed_p() const noexcept {
+
+            return { raw_object_p_, object_key_ };
+        }
+        template<T_is_object F_other__>
+        requires T_is_object_down_castable<F_passed_object__, F_other__>
+        NCPP_FORCE_INLINE operator TK_object_p<F_other__> () const noexcept {
+
+            return { raw_object_p_, object_key_ };
+        }
+        template<T_is_object F_other__>
+        requires T_is_object_up_castable<F_passed_object__, F_other__>
+        explicit NCPP_FORCE_INLINE operator TK_object_p<F_other__> () const noexcept {
+
+            return { raw_object_p_, object_key_ };
+        }
+
+
+
+    public:
+        NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
+
+            return (F_passed_object*)raw_object_p_;
+        }
+        NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
+
+            return *((F_passed_object*)raw_object_p_);
+        }
+
+    };
+
+
+
+    template<T_is_object F_passed_object__, typename F_allocator__, class F_options__>
+    class TS_object_p<F_passed_object__, F_allocator__, false, F_options__> {
+
+    public:
+        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL;
+
+        using F_passed_object = F_passed_object__;
+        using F_object = std::remove_const_t<F_passed_object__>;
+
+        using F_allocator = F_allocator__;
+        using F_options = F_options__;
+
+        static constexpr b8 is_has_object_key = false;
+
+        static constexpr b8 is_const = std::is_const_v<F_passed_object>;
+
+        template<T_is_object F_other__>
+        using TF_change_object = TS_object_p<F_other__, F_allocator, is_has_object_key, F_options>;
+
+        using F_with_object_key = TS_object_p<F_passed_object__, F_allocator, true, F_options>;
+        using F_no_object_key = TS_object_p<F_passed_object__, F_allocator, false, F_options>;
+
+        using W_object_p = TW_object_p<F_passed_object__>;
+        using K_object_p = TK_object_p<F_passed_object__, is_has_object_key, F_options>;
+
+        using F_object_storage = F_options::template TF_storage<T_is_object_thread_safe<F_object>>;
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    private:
+        F_passed_object* raw_object_p_ = 0;
+
+    public:
+        NCPP_FORCE_INLINE F_passed_object* raw_object_p() const noexcept { return (F_passed_object*)raw_object_p_; }
+        NCPP_FORCE_INLINE F_passed_object& object() const noexcept { return *(raw_object_p()); }
+
+        NCPP_FORCE_INLINE F_object_storage& object_storage() const noexcept { return F_object_storage::instance(); }
+
+        NCPP_FORCE_INLINE u32 object_counter() const noexcept {
+
+            NCPP_ASSERT(raw_object_p_) << "can't get object counter from null pointer";
+
+            return shared_object_counter(raw_object_p_);
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    private:
+        NCPP_FORCE_INLINE TS_object_p(F_passed_object* raw_object_p) noexcept :
+            raw_object_p_(raw_object_p)
+        {
+
+        }
+
+    public:
+        NCPP_FORCE_INLINE TS_object_p() noexcept = default;
+        NCPP_FORCE_INLINE ~TS_object_p() noexcept {
+
+            reset();
+        }
+
+        NCPP_FORCE_INLINE TS_object_p(const TS_object_p& x) noexcept :
+            raw_object_p_(x.raw_object_p_)
+        {
+
+            increase_shared_object_counter(raw_object_p_);
+
+        }
+        NCPP_FORCE_INLINE TS_object_p& operator = (const TS_object_p& x) noexcept
+        {
+
+            reset();
+
+            raw_object_p_ = (F_passed_object*)x.raw_object_p_;
+
+            increase_shared_object_counter(raw_object_p_);
+
+            return *this;
+        }
+
+        NCPP_FORCE_INLINE TS_object_p(TS_object_p&& x) noexcept :
+            raw_object_p_(x.raw_object_p_)
+        {
+
+            x.reset_no_destroy_internal();
+
+        }
+        NCPP_FORCE_INLINE TS_object_p& operator = (TS_object_p&& x) noexcept
+        {
+
+            reset();
+
+            raw_object_p_ = (F_passed_object*)x.raw_object_p_;
+
+            x.reset_no_destroy_internal();
+
+            return *this;
+        }
+
+        template<T_is_object F_other__>
+        requires T_is_object_down_castable<F_other__, F_passed_object>
+        NCPP_FORCE_INLINE TS_object_p(const TF_change_object<F_other__>& x) noexcept :
+            raw_object_p_((F_passed_object*)x.raw_object_p_)
+        {
+
+            increase_shared_object_counter(raw_object_p_);
+
+        }
+        template<T_is_object F_other__>
+        requires T_is_object_down_castable<F_other__, F_passed_object>
+        NCPP_FORCE_INLINE TS_object_p& operator = (const TF_change_object<F_other__>& x) noexcept
+        {
+
+            reset();
+
+            raw_object_p_ = (F_passed_object*)x.raw_object_p_;
+
+            increase_shared_object_counter(raw_object_p_);
+
+            return *this;
+        }
+
+        template<T_is_object F_other__>
+        requires T_is_object_down_castable<F_other__, F_passed_object>
+        NCPP_FORCE_INLINE TS_object_p(TF_change_object<F_other__>&& x) noexcept :
+            raw_object_p_((F_passed_object*)x.raw_object_p_)
+        {
+
+            x.reset_no_destroy_internal();
+
+        }
+        template<T_is_object F_other__>
+        requires T_is_object_down_castable<F_other__, F_passed_object>
+        NCPP_FORCE_INLINE TS_object_p& operator = (TF_change_object<F_other__>&& x) noexcept
+        {
+
+            reset();
+
+            raw_object_p_ = (F_passed_object*)x.raw_object_p_;
+
+            x.reset_no_destroy_internal();
+
+            return *this;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+        template<T_is_object F_other__>
+        NCPP_FORCE_INLINE const TF_change_object<F_other__>& T_cast() const noexcept {
+
+            return *((const TF_change_object<F_other__>*)this);
+        }
+
+        NCPP_FORCE_INLINE b8 is_valid() const noexcept {
+
+            return (raw_object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 is_null() const noexcept {
+
+            return (raw_object_p_ == 0);
+        }
+
+        NCPP_FORCE_INLINE b8 Q_is_valid() const noexcept {
+
+            return (raw_object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 Q_is_null() const noexcept {
+
+            return (raw_object_p_ == 0);
+        }
+
+
+
+    private:
+        NCPP_FORCE_INLINE void reset_no_destroy_internal() noexcept {
+
+            raw_object_p_ = 0;
+        }
+
+    public:
+        NCPP_FORCE_INLINE void reset() noexcept {
+
+            if(raw_object_p_) {
+
+                if(decrease_shared_object_counter(raw_object_p_) != 1) {
+
+                    reset_no_destroy_internal();
+
+                }
+                else {
+
+                    destroy_object_internal();
+                    reset_no_destroy_internal();
+
+                }
+
+            }
+
+        }
+
+
+
+    public:
+        template<typename... F_args__>
+        inline void T_create_object(F_args__&&... args) {
+
+            F_allocator allocator;
+
+            au32* counter_p = (au32*)allocator.allocate(
+                sizeof(au32) + sizeof(F_object),
+                utilities::T_alignof<F_object>,
+                sizeof(au32),
+                0
+            );
+            counter_p->store(1, eastl::memory_order_release);
+
+            raw_object_p_ = (F_passed_object*)(counter_p + 1);
+
+            new ((F_object*)raw_object_p_) F_object(std::forward<F_args__>(args)...);
+
+        }
+        template<typename... F_args__>
+        NCPP_FORCE_INLINE TS_object_p&& operator()(F_args__&&... args) && {
+
+            NCPP_ASSERT(!is_valid()) << "can't create object by quick \"()\" operator from a valid pointer";
+
+            T_create_object(std::forward<F_args__>(args)...);
+
+            return std::move(*this);
+        }
+
+        template<typename... F_args__>
+        static NCPP_FORCE_INLINE TS_object_p T_make(F_args__&&... args) {
+
+            TS_object_p object_p;
+
+            object_p.T_create_object(std::forward<F_args__>(args)...);
+
+            return std::move(object_p);
+        }
+
+    private:
+        NCPP_FORCE_INLINE void destroy_object_internal() noexcept {
+
+            F_allocator allocator;
+
+            ((F_object*)raw_object_p_)->~F_object();
+
+            au32* counter_p = ((au32*)raw_object_p_) - 1;
+
+            allocator.deallocate(counter_p);
 
         }
 
