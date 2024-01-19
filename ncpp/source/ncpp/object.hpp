@@ -66,7 +66,7 @@ namespace ncpp {
 
 #define NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL() \
             template<ncpp::b8 is_thread_safe_fr__, typename F_allocator_fr__>     \
-            friend class ncpp::TF_object_key_subpool;                                        \
+            friend class ncpp::TF_default_object_key_subpool;                                        \
                                                     \
             template<ncpp::b8 is_thread_safe_fr__, typename F_allocator_fr__>     \
             friend class ncpp::TF_default_object_key_pool;                                        \
@@ -191,7 +191,7 @@ namespace ncpp {
     class TA_object_memory;
 
     template<b8 is_thread_safe__, typename F_allocator__>
-    class TF_object_key_subpool;
+    class TF_default_object_key_subpool;
 
     template<b8 is_thread_safe__, typename F_allocator__>
     class TF_default_object_key_pool;
@@ -225,10 +225,10 @@ namespace ncpp {
 
 
     template<b8 is_thread_safe__ = false, typename F_allocator__ = mem::F_default_allocator>
-    class TF_object_key_subpool;
+    class TF_default_object_key_subpool;
 
     template<typename F_allocator__>
-    class TF_object_key_subpool<true, F_allocator__> {
+    class TF_default_object_key_subpool<true, F_allocator__> {
 
     public:
         NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
@@ -262,7 +262,6 @@ namespace ncpp {
                 if(size) {
 
                     allocator.deallocate(generation_p);
-                    allocator.deallocate(next_p);
 
                 }
 
@@ -272,28 +271,22 @@ namespace ncpp {
 
                 mem::F_default_allocator allocator;
 
+                sz buffer_size_in_bytes = sizeof(u32) * new_size;
                 u32* new_generation_p = (u32*)allocator.allocate(
-                    sizeof(u32) * new_size,
+                    2 * buffer_size_in_bytes,
                     utilities::T_alignof<u32>,
                     0,
                     0
                 );
-                u32* new_next_p = (u32*)allocator.allocate(
-                    sizeof(u32) * new_size,
-                    utilities::T_alignof<u32>,
-                    0,
-                    0
-                );
+                u32* new_next_p = new_generation_p + buffer_size_in_bytes;
 
                 if(size) {
 
                     u32 min_size = eastl::min(size, new_size);
 
-                    std::memcpy(new_generation_p, generation_p, min_size * sizeof(u32));
-                    std::memcpy(new_next_p, next_p, min_size * sizeof(u32));
+                    std::memcpy(new_generation_p, generation_p, 2 * min_size * sizeof(u32));
 
                     allocator.deallocate(generation_p);
-                    allocator.deallocate(next_p);
 
                 }
 
@@ -333,7 +326,7 @@ namespace ncpp {
 
 
     public:
-        TF_object_key_subpool()
+        TF_default_object_key_subpool()
         {
         }
 
@@ -480,8 +473,9 @@ namespace ncpp {
     };
 
 
+
     template<typename F_allocator__>
-    class TF_object_key_subpool<false, F_allocator__> {
+    class TF_default_object_key_subpool<false, F_allocator__> {
 
     public:
         NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
@@ -509,7 +503,6 @@ namespace ncpp {
                 if(size) {
 
                     allocator.deallocate(generation_p);
-                    allocator.deallocate(next_p);
 
                 }
 
@@ -519,28 +512,22 @@ namespace ncpp {
 
                 mem::F_default_allocator allocator;
 
+                sz buffer_size_in_bytes = sizeof(u32) * new_size;
                 u32* new_generation_p = (u32*)allocator.allocate(
-                    sizeof(u32) * new_size,
+                    2 * buffer_size_in_bytes,
                     utilities::T_alignof<u32>,
                     0,
                     0
                 );
-                u32* new_next_p = (u32*)allocator.allocate(
-                    sizeof(u32) * new_size,
-                    utilities::T_alignof<u32>,
-                    0,
-                    0
-                );
+                u32* new_next_p = new_generation_p + buffer_size_in_bytes;
 
                 if(size) {
 
                     u32 min_size = eastl::min(size, new_size);
 
-                    std::memcpy(new_generation_p, generation_p, min_size * sizeof(u32));
-                    std::memcpy(new_next_p, next_p, min_size * sizeof(u32));
+                    std::memcpy(new_generation_p, generation_p, 2 * min_size * sizeof(u32));
 
                     allocator.deallocate(generation_p);
-                    allocator.deallocate(next_p);
 
                 }
 
@@ -569,7 +556,7 @@ namespace ncpp {
 
 
     public:
-        TF_object_key_subpool()
+        TF_default_object_key_subpool()
         {
         }
 
@@ -660,7 +647,7 @@ namespace ncpp {
 
         using F_allocator = F_allocator__;
 
-        using F_subpool = TF_object_key_subpool<is_thread_safe>;
+        using F_subpool = TF_default_object_key_subpool<is_thread_safe>;
 
 
 
@@ -744,7 +731,7 @@ namespace ncpp {
 
         using F_allocator = F_allocator__;
 
-        using F_subpool = TF_object_key_subpool<is_thread_safe>;
+        using F_subpool = TF_default_object_key_subpool<is_thread_safe>;
 
 
 
