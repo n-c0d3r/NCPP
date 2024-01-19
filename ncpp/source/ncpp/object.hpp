@@ -2205,7 +2205,8 @@ namespace ncpp {
             object_key_(x.object_key_)
         {
 
-            increase_shared_object_counter(raw_object_p_);
+            if(raw_object_p_)
+                increase_shared_object_counter(raw_object_p_);
 
         }
         NCPP_FORCE_INLINE TS_object_p& operator = (const TS_object_p& x) noexcept
@@ -2216,7 +2217,8 @@ namespace ncpp {
             raw_object_p_ = (F_passed_object*)x.raw_object_p_;
             object_key_ = x.object_key_;
 
-            increase_shared_object_counter(raw_object_p_);
+            if(raw_object_p_)
+                increase_shared_object_counter(raw_object_p_);
 
             return *this;
         }
@@ -2270,7 +2272,8 @@ namespace ncpp {
             object_key_(x.object_key_)
         {
 
-            increase_shared_object_counter(raw_object_p_);
+            if(raw_object_p_)
+                increase_shared_object_counter(raw_object_p_);
 
         }
         template<typename F_other__>
@@ -2283,7 +2286,8 @@ namespace ncpp {
             raw_object_p_ = (F_passed_object*)x.raw_object_p_;
             object_key_ = x.object_key_;
 
-            increase_shared_object_counter(raw_object_p_);
+            if(raw_object_p_)
+                increase_shared_object_counter(raw_object_p_);
 
             return *this;
         }
@@ -2586,7 +2590,8 @@ namespace ncpp {
             raw_object_p_(x.raw_object_p_)
         {
 
-            increase_shared_object_counter(raw_object_p_);
+            if(raw_object_p_)
+                increase_shared_object_counter(raw_object_p_);
 
         }
         NCPP_FORCE_INLINE TS_object_p& operator = (const TS_object_p& x) noexcept
@@ -2596,7 +2601,8 @@ namespace ncpp {
 
             raw_object_p_ = (F_passed_object*)x.raw_object_p_;
 
-            increase_shared_object_counter(raw_object_p_);
+            if(raw_object_p_)
+                increase_shared_object_counter(raw_object_p_);
 
             return *this;
         }
@@ -2645,7 +2651,8 @@ namespace ncpp {
             raw_object_p_((F_passed_object*)x.raw_object_p_)
         {
 
-            increase_shared_object_counter(raw_object_p_);
+            if(raw_object_p_)
+                increase_shared_object_counter(raw_object_p_);
 
         }
         template<typename F_other__>
@@ -2657,7 +2664,8 @@ namespace ncpp {
 
             raw_object_p_ = (F_passed_object*)x.raw_object_p_;
 
-            increase_shared_object_counter(raw_object_p_);
+            if(raw_object_p_)
+                increase_shared_object_counter(raw_object_p_);
 
             return *this;
         }
