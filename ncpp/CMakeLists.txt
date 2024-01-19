@@ -143,6 +143,7 @@ endforeach()
 file(GLOB_RECURSE source_files
     "source/*.cpp"
     "source/*.hpp"
+    "source/*.inl"
 )
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/source PREFIX source FILES ${source_files})
 

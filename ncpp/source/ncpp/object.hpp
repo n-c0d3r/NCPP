@@ -64,7 +64,7 @@
 
 namespace ncpp {
 
-#define NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL() \
+#define NCPP_OBJECT_FRIEND_CLASSES() \
             template<ncpp::b8 is_thread_safe_fr__, typename F_allocator_fr__>     \
             friend class ncpp::TF_default_object_key_subpool;                                        \
                                                     \
@@ -74,13 +74,13 @@ namespace ncpp {
             template<ncpp::b8 is_thread_safe_fr__, typename F_allocator_fr__>     \
             friend class ncpp::TF_default_object_storage;                                        \
                                                     \
-            template<ncpp::T_is_object F_object_fr__>\
+            template<typename F_object_fr__>\
             friend class ncpp::TW_object_p;\
-            template<ncpp::T_is_object F_object_fr__, ncpp::b8 is_has_object_key_fr__, class F_options_fr__>\
+            template<typename F_object_fr__, ncpp::b8 is_has_object_key_fr__, class F_options_fr__>\
             friend class ncpp::TK_object_p;\
-            template<ncpp::T_is_object F_object_fr__, typename F_allocator_fr__, ncpp::b8 is_has_object_key_fr__, class F_options_fr__>\
+            template<typename F_object_fr__, typename F_allocator_fr__, ncpp::b8 is_has_object_key_fr__, class F_options_fr__>\
             friend class ncpp::TU_object_p;\
-            template<ncpp::T_is_object F_object_fr__, typename F_allocator_fr__, ncpp::b8 is_has_object_key_fr__, class F_options_fr__>\
+            template<typename F_object_fr__, typename F_allocator_fr__, ncpp::b8 is_has_object_key_fr__, class F_options_fr__>\
             friend class ncpp::TS_object_p;
 
 
@@ -100,23 +100,17 @@ namespace ncpp {
 
 
 #define NCPP_OBJECT_IMPLEMENT(...) \
-            NCPP_RTTI_IMPLEMENT_FLAG(ncpp::TF_object_flag<__VA_ARGS__>);\
-            NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL()
+            NCPP_OBJECT_FRIEND_CLASSES()
 
 #define NCPP_OBJECT_THREAD_SAFE() \
             NCPP_RTTI_IMPLEMENT_FLAG(ncpp::F_object_thread_safe_flag);
 
 
 
-    template<typename F_object__>
-    struct TF_object_flag {};
-
     NCPP_RTTI_CREATE_FLAG(F_object_thread_safe_flag);
 
     template<typename F__>
-    concept T_is_object = NCPP_RTTI_IS_HAS_FLAG(F__, TF_object_flag<F__>);
-    template<typename F__>
-    concept T_is_object_thread_safe = T_is_object<F__> && NCPP_RTTI_IS_HAS_FLAG(F__, F_object_thread_safe_flag);
+    concept T_is_object_thread_safe = NCPP_RTTI_IS_HAS_FLAG(F__, F_object_thread_safe_flag);
 
     struct F_object_key {
 
@@ -199,13 +193,13 @@ namespace ncpp {
     template<b8 is_thread_safe__, typename F_allocator__>
     class TF_default_object_storage;
 
-    template<T_is_object F_object__>
+    template<typename F_object__>
     class TW_object_p;
-    template<T_is_object F_object__, b8 is_has_object_key__, class F_options__>
+    template<typename F_object__, b8 is_has_object_key__, class F_options__>
     class TK_object_p;
-    template<T_is_object F_object__, typename F_allocator__, b8 is_has_object_key__, class F_options__>
+    template<typename F_object__, typename F_allocator__, b8 is_has_object_key__, class F_options__>
     class TU_object_p;
-    template<T_is_object F_object__, typename F_allocator__, b8 is_has_object_key__, class F_options__>
+    template<typename F_object__, typename F_allocator__, b8 is_has_object_key__, class F_options__>
     class TS_object_p;
 
 
@@ -231,7 +225,7 @@ namespace ncpp {
     class TF_default_object_key_subpool<true, F_allocator__> {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
+        NCPP_OBJECT_FRIEND_CLASSES();
 
 
 
@@ -478,7 +472,7 @@ namespace ncpp {
     class TF_default_object_key_subpool<false, F_allocator__> {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
+        NCPP_OBJECT_FRIEND_CLASSES();
 
 
 
@@ -638,7 +632,7 @@ namespace ncpp {
     class TF_default_object_key_pool<true, F_allocator__> {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
+        NCPP_OBJECT_FRIEND_CLASSES();
 
 
 
@@ -722,7 +716,7 @@ namespace ncpp {
     class TF_default_object_key_pool<false, F_allocator__> {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
+        NCPP_OBJECT_FRIEND_CLASSES();
 
 
 
@@ -799,7 +793,7 @@ namespace ncpp {
     class TF_default_object_storage<true, F_allocator__> : public utilities::TI_singleton<TF_default_object_storage<true, F_allocator__>> {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
+        NCPP_OBJECT_FRIEND_CLASSES();
 
 
 
@@ -837,7 +831,7 @@ namespace ncpp {
     class TF_default_object_storage<false, F_allocator__> : public utilities::TI_singleton<TF_default_object_storage<false, F_allocator__>> {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
+        NCPP_OBJECT_FRIEND_CLASSES();
 
 
 
@@ -929,7 +923,7 @@ namespace ncpp {
 
 
     template<typename F1__, typename F2__>
-    concept T_is_object_down_castable = T_is_object<F1__> && T_is_object<F2__> && requires(F1__* p1, F2__* p2) {
+    concept T_is_object_down_castable = requires(F1__* p1, F2__* p2) {
         p2 = p1;
     };
     template<typename F1__, typename F2__>
@@ -951,11 +945,11 @@ namespace ncpp {
 
 
 
-    template<T_is_object F_passed_object__>
+    template<typename F_passed_object__>
     class TW_object_p {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
+        NCPP_OBJECT_FRIEND_CLASSES();
 
         using F_passed_object = F_passed_object__;
         using F_object = std::remove_const_t<F_passed_object__>;
@@ -1017,14 +1011,14 @@ namespace ncpp {
             return *this;
         }
 
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TW_object_p(const TW_object_p<F_other__>& x) noexcept :
             raw_object_p_((F_passed_object*)x.raw_object_p_)
         {
 
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TW_object_p& operator = (const TW_object_p<F_other__>& x) noexcept
         {
@@ -1034,7 +1028,7 @@ namespace ncpp {
             return *this;
         }
 
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TW_object_p(TW_object_p<F_other__>&& x) noexcept :
             raw_object_p_((F_passed_object*)x.raw_object_p_)
@@ -1043,7 +1037,7 @@ namespace ncpp {
             x.reset_no_destroy_internal();
 
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TW_object_p& operator = (TW_object_p<F_other__>&& x) noexcept
         {
@@ -1060,7 +1054,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_up_castable<F_passed_object, F_other__>
         explicit NCPP_FORCE_INLINE operator TW_object_p<F_other__> () const noexcept {
 
@@ -1072,7 +1066,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        template<T_is_object F_other__>
+        template<typename F_other__>
         NCPP_FORCE_INLINE TW_object_p<F_other__> T_cast() const noexcept {
 
             return (F_other__*)raw_object_p_;
@@ -1140,16 +1134,16 @@ namespace ncpp {
 
 
 
-    template<T_is_object F_passed_object__, b8 is_has_object_key__ = true, class F_options__ = F_default_object_options>
+    template<typename F_passed_object__, b8 is_has_object_key__ = true, class F_options__ = F_default_object_options>
     class TK_object_p;
 
 
 
-    template<T_is_object F_passed_object__, class F_options__>
+    template<typename F_passed_object__, class F_options__>
     class TK_object_p<F_passed_object__, true, F_options__> {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
+        NCPP_OBJECT_FRIEND_CLASSES();
 
         using F_passed_object = F_passed_object__;
         using F_object = std::remove_const_t<F_passed_object__>;
@@ -1160,7 +1154,7 @@ namespace ncpp {
 
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
 
-        template<T_is_object F_other__>
+        template<typename F_other__>
         using TK_change_object = TK_object_p<F_other__, is_has_object_key, F_options>;
 
         using F_with_object_key = TK_object_p<F_passed_object__, true, F_options>;
@@ -1237,7 +1231,7 @@ namespace ncpp {
             return *this;
         }
 
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TK_object_p(const TK_change_object<F_other__>& x) noexcept :
             raw_object_p_((F_passed_object*)x.raw_object_p_),
@@ -1245,7 +1239,7 @@ namespace ncpp {
         {
 
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TK_object_p& operator = (const TK_change_object<F_other__>& x) noexcept
         {
@@ -1256,7 +1250,7 @@ namespace ncpp {
             return *this;
         }
 
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TK_object_p(TK_change_object<F_other__>&& x) noexcept :
             raw_object_p_((F_passed_object*)x.raw_object_p_),
@@ -1266,7 +1260,7 @@ namespace ncpp {
             x.reset();
 
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TK_object_p& operator = (TK_change_object<F_other__>&& x) noexcept
         {
@@ -1284,7 +1278,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        template<T_is_object F_other__>
+        template<typename F_other__>
         NCPP_FORCE_INLINE const TK_change_object<F_other__>& T_cast() const noexcept {
 
             return *((const TK_change_object<F_other__>*)this);
@@ -1328,13 +1322,13 @@ namespace ncpp {
 
             return raw_object_p_;
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_passed_object, F_other__>
         NCPP_FORCE_INLINE operator TW_object_p<F_other__> () const noexcept {
 
             return raw_object_p_;
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_up_castable<F_passed_object, F_other__>
         explicit NCPP_FORCE_INLINE operator TW_object_p<F_other__> () const noexcept {
 
@@ -1357,11 +1351,11 @@ namespace ncpp {
 
 
 
-    template<T_is_object F_passed_object__, class F_options__>
+    template<typename F_passed_object__, class F_options__>
     class TK_object_p<F_passed_object__, false, F_options__> {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
+        NCPP_OBJECT_FRIEND_CLASSES();
 
         using F_passed_object = F_passed_object__;
         using F_object = std::remove_const_t<F_passed_object__>;
@@ -1372,7 +1366,7 @@ namespace ncpp {
 
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
 
-        template<T_is_object F_other__>
+        template<typename F_other__>
         using TK_change_object = TK_object_p<F_other__, is_has_object_key, F_options>;
 
         using F_with_object_key = TK_object_p<F_passed_object__, true, F_options>;
@@ -1441,14 +1435,14 @@ namespace ncpp {
             return *this;
         }
 
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TK_object_p(const TK_change_object<F_other__>& x) noexcept :
             raw_object_p_((F_passed_object*)x.raw_object_p_)
         {
 
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TK_object_p& operator = (const TK_change_object<F_other__>& x) noexcept
         {
@@ -1458,7 +1452,7 @@ namespace ncpp {
             return *this;
         }
 
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TK_object_p(TK_change_object<F_other__>&& x) noexcept :
             raw_object_p_((F_passed_object*)x.raw_object_p_)
@@ -1467,7 +1461,7 @@ namespace ncpp {
             x.reset();
 
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TK_object_p& operator = (TK_change_object<F_other__>&& x) noexcept
         {
@@ -1484,7 +1478,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        template<T_is_object F_other__>
+        template<typename F_other__>
         NCPP_FORCE_INLINE const TK_change_object<F_other__>& T_cast() const noexcept {
 
             return *((const TK_change_object<F_other__>*)this);
@@ -1524,13 +1518,13 @@ namespace ncpp {
 
             return raw_object_p_;
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_passed_object, F_other__>
         NCPP_FORCE_INLINE operator TW_object_p<F_other__> () const noexcept {
 
             return raw_object_p_;
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_up_castable<F_passed_object, F_other__>
         explicit NCPP_FORCE_INLINE operator TW_object_p<F_other__> () const noexcept {
 
@@ -1567,16 +1561,16 @@ namespace ncpp {
 
 
 
-    template<T_is_object F_passed_object__, typename F_allocator__ = mem::F_object_allocator, b8 is_has_object_key__ = true, class F_options__ = F_default_object_options>
+    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, b8 is_has_object_key__ = true, class F_options__ = F_default_object_options>
     class TU_object_p;
 
 
 
-    template<T_is_object F_passed_object__, typename F_allocator__, class F_options__>
+    template<typename F_passed_object__, typename F_allocator__, class F_options__>
     class TU_object_p<F_passed_object__, F_allocator__, true, F_options__> {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
+        NCPP_OBJECT_FRIEND_CLASSES();
 
         using F_passed_object = F_passed_object__;
         using F_object = std::remove_const_t<F_passed_object__>;
@@ -1588,7 +1582,7 @@ namespace ncpp {
 
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
 
-        template<T_is_object F_other__>
+        template<typename F_other__>
         using TU_change_object = TU_object_p<F_other__, F_allocator, is_has_object_key, F_options>;
 
         using F_with_object_key = TU_object_p<F_passed_object__, F_allocator, true, F_options>;
@@ -1655,7 +1649,7 @@ namespace ncpp {
             return *this;
         }
 
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TU_object_p(TU_change_object<F_other__>&& x) noexcept :
             raw_object_p_((F_passed_object*)x.raw_object_p_),
@@ -1665,7 +1659,7 @@ namespace ncpp {
             x.reset_no_destroy_internal();
 
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TU_object_p& operator = (TU_change_object<F_other__>&& x) noexcept
         {
@@ -1685,7 +1679,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        template<T_is_object F_other__>
+        template<typename F_other__>
         NCPP_FORCE_INLINE const TU_change_object<F_other__>& T_cast() const noexcept {
 
             return *((const TU_change_object<F_other__>*)this);
@@ -1788,19 +1782,7 @@ namespace ncpp {
         }
 
     private:
-        NCPP_FORCE_INLINE void destroy_object_internal() noexcept {
-
-            push_key_internal();
-
-            F_allocator allocator;
-
-            ((F_object*)raw_object_p_)->~F_object();
-
-            au32* counter_p = ((au32*)raw_object_p_) - 1;
-
-            allocator.deallocate(counter_p);
-
-        }
+        NCPP_FORCE_INLINE void destroy_object_internal() noexcept;
 
 
 
@@ -1809,13 +1791,13 @@ namespace ncpp {
 
             return raw_object_p_;
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_passed_object__, F_other__>
         NCPP_FORCE_INLINE operator TW_object_p<F_other__> () const noexcept {
 
             return raw_object_p_;
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_up_castable<F_passed_object__, F_other__>
         explicit NCPP_FORCE_INLINE operator TW_object_p<F_other__> () const noexcept {
 
@@ -1829,13 +1811,13 @@ namespace ncpp {
 
             return { raw_object_p_, object_key_ };
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_passed_object__, F_other__>
         NCPP_FORCE_INLINE operator TK_object_p<F_other__> () const noexcept {
 
             return { raw_object_p_, object_key_ };
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_up_castable<F_passed_object__, F_other__>
         explicit NCPP_FORCE_INLINE operator TK_object_p<F_other__> () const noexcept {
 
@@ -1858,11 +1840,11 @@ namespace ncpp {
 
 
 
-    template<T_is_object F_passed_object__, typename F_allocator__, class F_options__>
+    template<typename F_passed_object__, typename F_allocator__, class F_options__>
     class TU_object_p<F_passed_object__, F_allocator__, false, F_options__> {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
+        NCPP_OBJECT_FRIEND_CLASSES();
 
         using F_passed_object = F_passed_object__;
         using F_object = std::remove_const_t<F_passed_object__>;
@@ -1874,7 +1856,7 @@ namespace ncpp {
 
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
 
-        template<T_is_object F_other__>
+        template<typename F_other__>
         using TU_change_object = TU_object_p<F_other__, F_allocator, is_has_object_key, F_options>;
 
         using F_with_object_key = TU_object_p<F_passed_object__, F_allocator, true, F_options>;
@@ -1935,7 +1917,7 @@ namespace ncpp {
             return *this;
         }
 
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TU_object_p(TU_change_object<F_other__>&& x) noexcept :
             raw_object_p_((F_passed_object*)x.raw_object_p_)
@@ -1944,7 +1926,7 @@ namespace ncpp {
             x.reset_no_destroy_internal();
 
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TU_object_p& operator = (TU_change_object<F_other__>&& x) noexcept
         {
@@ -1963,7 +1945,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        template<T_is_object F_other__>
+        template<typename F_other__>
         NCPP_FORCE_INLINE const TU_change_object<F_other__>& T_cast() const noexcept {
 
             return *((const TU_change_object<F_other__>*)this);
@@ -2048,17 +2030,7 @@ namespace ncpp {
         }
 
     private:
-        NCPP_FORCE_INLINE void destroy_object_internal() noexcept {
-
-            F_allocator allocator;
-
-            ((F_object*)raw_object_p_)->~F_object();
-
-            au32* counter_p = ((au32*)raw_object_p_) - 1;
-
-            allocator.deallocate(counter_p);
-
-        }
+        NCPP_FORCE_INLINE void destroy_object_internal() noexcept;
 
 
 
@@ -2067,13 +2039,13 @@ namespace ncpp {
 
             return raw_object_p_;
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_passed_object__, F_other__>
         NCPP_FORCE_INLINE operator TW_object_p<F_other__> () const noexcept {
 
             return raw_object_p_;
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_up_castable<F_passed_object__, F_other__>
         explicit NCPP_FORCE_INLINE operator TW_object_p<F_other__> () const noexcept {
 
@@ -2087,13 +2059,13 @@ namespace ncpp {
 
             return { raw_object_p_ };
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_passed_object__, F_other__>
         NCPP_FORCE_INLINE operator TK_object_p<F_other__> () const noexcept {
 
             return { raw_object_p_ };
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_up_castable<F_passed_object__, F_other__>
         explicit NCPP_FORCE_INLINE operator TK_object_p<F_other__> () const noexcept {
 
@@ -2130,7 +2102,7 @@ namespace ncpp {
 
 
 
-    template<T_is_object F_passed_object__, typename F_allocator__ = mem::F_object_allocator, b8 is_has_object_key__ = true, class F_options__ = F_default_object_options>
+    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, b8 is_has_object_key__ = true, class F_options__ = F_default_object_options>
     class TS_object_p;
 
 
@@ -2156,11 +2128,11 @@ namespace ncpp {
 
 
 
-    template<T_is_object F_passed_object__, typename F_allocator__, class F_options__>
+    template<typename F_passed_object__, typename F_allocator__, class F_options__>
     class TS_object_p<F_passed_object__, F_allocator__, true, F_options__> {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
+        NCPP_OBJECT_FRIEND_CLASSES();
 
         using F_passed_object = F_passed_object__;
         using F_object = std::remove_const_t<F_passed_object__>;
@@ -2172,10 +2144,10 @@ namespace ncpp {
 
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
 
-        template<T_is_object F_other__>
+        template<typename F_other__>
         using TS_change_object = TS_object_p<F_other__, F_allocator, is_has_object_key, F_options>;
 
-        template<T_is_object F_other__>
+        template<typename F_other__>
         using TU_change_object = TU_object_p<F_other__, F_allocator, is_has_object_key, F_options>;
 
         using F_with_object_key = TS_object_p<F_passed_object__, F_allocator, true, F_options>;
@@ -2291,7 +2263,7 @@ namespace ncpp {
             return *this;
         }
 
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TS_object_p(const TS_change_object<F_other__>& x) noexcept :
             raw_object_p_((F_passed_object*)x.raw_object_p_),
@@ -2301,7 +2273,7 @@ namespace ncpp {
             increase_shared_object_counter(raw_object_p_);
 
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TS_object_p& operator = (const TS_change_object<F_other__>& x) noexcept
         {
@@ -2316,7 +2288,7 @@ namespace ncpp {
             return *this;
         }
 
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TS_object_p(TS_change_object<F_other__>&& x) noexcept :
             raw_object_p_((F_passed_object*)x.raw_object_p_),
@@ -2326,7 +2298,7 @@ namespace ncpp {
             x.reset_no_destroy_internal();
 
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TS_object_p& operator = (TS_change_object<F_other__>&& x) noexcept
         {
@@ -2341,7 +2313,7 @@ namespace ncpp {
             return *this;
         }
 
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TS_object_p(TU_change_object<F_other__>&& x) noexcept :
             raw_object_p_((F_passed_object*)x.raw_object_p_),
@@ -2351,7 +2323,7 @@ namespace ncpp {
             x.reset_no_destroy_internal();
 
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TS_object_p& operator = (TU_change_object<F_other__>&& x) noexcept
         {
@@ -2371,7 +2343,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        template<T_is_object F_other__>
+        template<typename F_other__>
         NCPP_FORCE_INLINE const TS_change_object<F_other__>& T_cast() const noexcept {
 
             return *((const TS_change_object<F_other__>*)this);
@@ -2484,19 +2456,7 @@ namespace ncpp {
         }
 
     private:
-        NCPP_FORCE_INLINE void destroy_object_internal() noexcept {
-
-            push_key_internal();
-
-            F_allocator allocator;
-
-            ((F_object*)raw_object_p_)->~F_object();
-
-            au32* counter_p = ((au32*)raw_object_p_) - 1;
-
-            allocator.deallocate(counter_p);
-
-        }
+        NCPP_FORCE_INLINE void destroy_object_internal() noexcept;
 
 
 
@@ -2505,13 +2465,13 @@ namespace ncpp {
 
             return raw_object_p_;
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_passed_object__, F_other__>
         NCPP_FORCE_INLINE operator TW_object_p<F_other__> () const noexcept {
 
             return raw_object_p_;
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_up_castable<F_passed_object__, F_other__>
         explicit NCPP_FORCE_INLINE operator TW_object_p<F_other__> () const noexcept {
 
@@ -2525,13 +2485,13 @@ namespace ncpp {
 
             return { raw_object_p_, object_key_ };
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_passed_object__, F_other__>
         NCPP_FORCE_INLINE operator TK_object_p<F_other__> () const noexcept {
 
             return { raw_object_p_, object_key_ };
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_up_castable<F_passed_object__, F_other__>
         explicit NCPP_FORCE_INLINE operator TK_object_p<F_other__> () const noexcept {
 
@@ -2554,11 +2514,11 @@ namespace ncpp {
 
 
 
-    template<T_is_object F_passed_object__, typename F_allocator__, class F_options__>
+    template<typename F_passed_object__, typename F_allocator__, class F_options__>
     class TS_object_p<F_passed_object__, F_allocator__, false, F_options__> {
 
     public:
-        NCPP_OBJECT_POINTER_FRIEND_CLASSES_INTERNAL();
+        NCPP_OBJECT_FRIEND_CLASSES();
 
         using F_passed_object = F_passed_object__;
         using F_object = std::remove_const_t<F_passed_object__>;
@@ -2570,10 +2530,10 @@ namespace ncpp {
 
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
 
-        template<T_is_object F_other__>
+        template<typename F_other__>
         using TS_change_object = TS_object_p<F_other__, F_allocator, is_has_object_key, F_options>;
 
-        template<T_is_object F_other__>
+        template<typename F_other__>
         using TU_change_object = TU_object_p<F_other__, F_allocator, is_has_object_key, F_options>;
 
         using F_with_object_key = TS_object_p<F_passed_object__, F_allocator, true, F_options>;
@@ -2679,7 +2639,7 @@ namespace ncpp {
             return *this;
         }
 
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TS_object_p(const TS_change_object<F_other__>& x) noexcept :
             raw_object_p_((F_passed_object*)x.raw_object_p_)
@@ -2688,7 +2648,7 @@ namespace ncpp {
             increase_shared_object_counter(raw_object_p_);
 
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TS_object_p& operator = (const TS_change_object<F_other__>& x) noexcept
         {
@@ -2702,7 +2662,7 @@ namespace ncpp {
             return *this;
         }
 
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TS_object_p(TS_change_object<F_other__>&& x) noexcept :
             raw_object_p_((F_passed_object*)x.raw_object_p_)
@@ -2711,7 +2671,7 @@ namespace ncpp {
             x.reset_no_destroy_internal();
 
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TS_object_p& operator = (TS_change_object<F_other__>&& x) noexcept
         {
@@ -2725,7 +2685,7 @@ namespace ncpp {
             return *this;
         }
 
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TS_object_p(TU_change_object<F_other__>&& x) noexcept :
             raw_object_p_((F_passed_object*)x.raw_object_p_)
@@ -2734,7 +2694,7 @@ namespace ncpp {
             x.reset_no_destroy_internal();
 
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_other__, F_passed_object>
         NCPP_FORCE_INLINE TS_object_p& operator = (TU_change_object<F_other__>&& x) noexcept
         {
@@ -2753,7 +2713,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        template<T_is_object F_other__>
+        template<typename F_other__>
         NCPP_FORCE_INLINE const TS_change_object<F_other__>& T_cast() const noexcept {
 
             return *((const TS_change_object<F_other__>*)this);
@@ -2848,17 +2808,7 @@ namespace ncpp {
         }
 
     private:
-        NCPP_FORCE_INLINE void destroy_object_internal() noexcept {
-
-            F_allocator allocator;
-
-            ((F_object*)raw_object_p_)->~F_object();
-
-            au32* counter_p = ((au32*)raw_object_p_) - 1;
-
-            allocator.deallocate(counter_p);
-
-        }
+        NCPP_FORCE_INLINE void destroy_object_internal() noexcept;
 
 
 
@@ -2867,13 +2817,13 @@ namespace ncpp {
 
             return raw_object_p_;
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_passed_object__, F_other__>
         NCPP_FORCE_INLINE operator TW_object_p<F_other__> () const noexcept {
 
             return raw_object_p_;
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_up_castable<F_passed_object__, F_other__>
         explicit NCPP_FORCE_INLINE operator TW_object_p<F_other__> () const noexcept {
 
@@ -2887,13 +2837,13 @@ namespace ncpp {
 
             return { raw_object_p_ };
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_down_castable<F_passed_object__, F_other__>
         NCPP_FORCE_INLINE operator TK_object_p<F_other__> () const noexcept {
 
             return { raw_object_p_ };
         }
-        template<T_is_object F_other__>
+        template<typename F_other__>
         requires T_is_object_up_castable<F_passed_object__, F_other__>
         explicit NCPP_FORCE_INLINE operator TK_object_p<F_other__> () const noexcept {
 
@@ -2921,7 +2871,7 @@ namespace ncpp {
 NCPP_BIND_CUSTOM_CPASS(
     NCPP_MA(ncpp::TU_object_p<F_passed_object__, F_allocator__, is_has_object_key__, F_options__>),
     NCPP_MA(ncpp::TK_object_p<F_passed_object__, is_has_object_key__, F_options__>),
-    ncpp::T_is_object F_passed_object__,
+    typename F_passed_object__,
     typename F_allocator__,
     ncpp::b8 is_has_object_key__,
     class F_options__
@@ -2930,7 +2880,7 @@ NCPP_BIND_CUSTOM_CPASS(
 NCPP_BIND_CUSTOM_CPASS(
     NCPP_MA(ncpp::TS_object_p<F_passed_object__, F_allocator__, is_has_object_key__, F_options__>),
     NCPP_MA(ncpp::TK_object_p<F_passed_object__, is_has_object_key__, F_options__>),
-    ncpp::T_is_object F_passed_object__,
+    typename F_passed_object__,
     typename F_allocator__,
     ncpp::b8 is_has_object_key__,
     class F_options__
