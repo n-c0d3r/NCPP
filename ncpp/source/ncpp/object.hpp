@@ -1750,7 +1750,7 @@ namespace ncpp {
             au32* counter_p = (au32*)allocator.allocate(
                 sizeof(sz) + sizeof(F_object),
                 utilities::T_alignof<F_object>,
-                sizeof(au32),
+                sizeof(sz),
                 0
             );
 
@@ -2000,7 +2000,7 @@ namespace ncpp {
             au32* counter_p = (au32*)allocator.allocate(
                 sizeof(sz) + sizeof(F_object),
                 utilities::T_alignof<F_object>,
-                sizeof(au32),
+                sizeof(sz),
                 0
             );
 
@@ -2427,7 +2427,7 @@ namespace ncpp {
             au32* counter_p = (au32*)allocator.allocate(
                 sizeof(sz) + sizeof(F_object),
                 utilities::T_alignof<F_object>,
-                sizeof(au32),
+                sizeof(sz),
                 0
             );
             counter_p->store(1, eastl::memory_order_release);
@@ -2785,7 +2785,7 @@ namespace ncpp {
             au32* counter_p = (au32*)allocator.allocate(
                 sizeof(sz) + sizeof(F_object),
                 utilities::T_alignof<F_object>,
-                sizeof(au32),
+                sizeof(sz),
                 0
             );
             counter_p->store(1, eastl::memory_order_release);
