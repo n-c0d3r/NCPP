@@ -1442,9 +1442,6 @@ namespace ncpp {
 		////////////////////////////////////////////////////////////////////////////////////
 
 #define NCPP_BASIC_ROBJECT(ObjectTypeName,...) NCPP_EXPAND(NCPP_ROBJECT(ncpp::rtti::F_default_options, NCPP_MA(ObjectTypeName), NCPP_MA(ObjectTypeName) __VA_OPT__(,) __VA_ARGS__))
-#define NCPP_QUICK_ROBJECT(...) \
-            NCPP_CURRENT_CLASS_IMPLEMENT();                    \
-            NCPP_BASIC_ROBJECT(NCPP_CURRENT_CLASS() __VA_OPT__(,) __VA_ARGS__)
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////

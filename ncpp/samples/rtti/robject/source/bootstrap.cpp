@@ -102,7 +102,9 @@ NCPP_MAGIC((F__)[4], TD<F__>::dd4);
 
 class A : public B, public C, public TD<i32> {
 
-    NCPP_QUICK_ROBJECT(
+    NCPP_BASIC_ROBJECT(
+        A,
+
         EXTENDS(B),
         EXTENDS(C),
         EXTENDS(TD<i32>),
