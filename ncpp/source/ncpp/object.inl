@@ -17,7 +17,7 @@ namespace ncpp {
 
         au32* counter_p = ((au32*)raw_object_p_) - (EASTL_ALLOCATOR_MIN_ALIGNMENT / sizeof(u32));
 
-        allocator.deallocate(counter_p, 1);
+        allocator.deallocate(counter_p);
 
     }
 
@@ -30,7 +30,7 @@ namespace ncpp {
 
         au32* counter_p = ((au32*)raw_object_p_) - (EASTL_ALLOCATOR_MIN_ALIGNMENT / sizeof(u32));
 
-        allocator.deallocate(counter_p, 1);
+        allocator.deallocate(counter_p);
 
     }
 
@@ -47,7 +47,7 @@ namespace ncpp {
 
         au32* counter_p = ((au32*)raw_object_p_) - (EASTL_ALLOCATOR_MIN_ALIGNMENT / sizeof(u32));
 
-        allocator.deallocate(counter_p, 1);
+        allocator.deallocate(counter_p);
 
     }
 
@@ -60,7 +60,7 @@ namespace ncpp {
 
         au32* counter_p = ((au32*)raw_object_p_) - (EASTL_ALLOCATOR_MIN_ALIGNMENT / sizeof(u32));
 
-        allocator.deallocate(counter_p, 1);
+        allocator.deallocate(counter_p);
 
     }
 
