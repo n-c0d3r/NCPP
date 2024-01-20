@@ -882,25 +882,21 @@ namespace ncpp {
 
 
 
-    template<typename F_allocator__ = mem::F_default_allocator>
+    template<typename F_allocator__>
+    requires (!std::is_same_v<F_allocator__, mem::F_default_allocator>)
     inline void T_initialize_default_object_storages(){
 
         new TF_default_object_storage<true, F_allocator__>(std::thread::hardware_concurrency());
         new TF_default_object_storage<false, F_allocator__>();
 
     }
-    inline void initialize_default_object_storages() {
-        T_initialize_default_object_storages();
-    }
-    template<typename F_allocator__ = mem::F_default_allocator>
+    template<typename F_allocator__>
+    requires (!std::is_same_v<F_allocator__, mem::F_default_allocator>)
     inline void T_release_default_object_storages(){
 
         delete (&TF_default_object_storage<true, F_allocator__>::instance());
         delete (&TF_default_object_storage<false, F_allocator__>::instance());
 
-    }
-    inline void release_default_object_storages() {
-        T_release_default_object_storages();
     }
 
 
