@@ -218,7 +218,7 @@ namespace ncpp {
 
 
 
-    template<b8 is_thread_safe__ = false, typename F_allocator__ = mem::F_default_allocator>
+    template<b8 is_thread_safe__ = false, typename F_allocator__ = eastl::allocator>
     class TF_default_object_key_subpool;
 
     template<typename F_allocator__>
@@ -251,11 +251,11 @@ namespace ncpp {
 
             ~F_generation_buffer(){
 
-                mem::F_default_allocator allocator;
+                eastl::allocator allocator;
 
                 if(size) {
 
-                    allocator.deallocate(generation_p);
+                    allocator.deallocate(generation_p, size);
 
                 }
 
@@ -263,7 +263,7 @@ namespace ncpp {
 
             NCPP_FORCE_INLINE void resize(u32 new_size) {
 
-                mem::F_default_allocator allocator;
+                eastl::allocator allocator;
 
                 sz buffer_size_in_bytes = sizeof(u32) * new_size;
                 u32* new_generation_p = (u32*)allocator.allocate(
@@ -280,7 +280,7 @@ namespace ncpp {
 
                     std::memcpy(new_generation_p, generation_p, 2 * min_size * sizeof(u32));
 
-                    allocator.deallocate(generation_p);
+                    allocator.deallocate(generation_p, min_size);
 
                 }
 
@@ -492,11 +492,11 @@ namespace ncpp {
 
             ~F_generation_buffer(){
 
-                mem::F_default_allocator allocator;
+                eastl::allocator allocator;
 
                 if(size) {
 
-                    allocator.deallocate(generation_p);
+                    allocator.deallocate(generation_p, size);
 
                 }
 
@@ -504,7 +504,7 @@ namespace ncpp {
 
             NCPP_FORCE_INLINE void resize(u32 new_size) {
 
-                mem::F_default_allocator allocator;
+                eastl::allocator allocator;
 
                 sz buffer_size_in_bytes = sizeof(u32) * new_size;
                 u32* new_generation_p = (u32*)allocator.allocate(
@@ -521,7 +521,7 @@ namespace ncpp {
 
                     std::memcpy(new_generation_p, generation_p, 2 * min_size * sizeof(u32));
 
-                    allocator.deallocate(generation_p);
+                    allocator.deallocate(generation_p, min_size);
 
                 }
 
@@ -625,7 +625,7 @@ namespace ncpp {
 
 
 
-    template<b8 is_thread_safe__ = false, typename F_allocator__ = mem::F_default_allocator>
+    template<b8 is_thread_safe__ = false, typename F_allocator__ = eastl::allocator>
     class TF_default_object_key_pool;
 
     template<typename F_allocator__>
@@ -786,7 +786,7 @@ namespace ncpp {
 
 
 
-    template<b8 is_thread_safe__ = false, typename F_allocator__ = mem::F_default_allocator>
+    template<b8 is_thread_safe__ = false, typename F_allocator__ = eastl::allocator>
     class TF_default_object_storage;
 
     template<typename F_allocator__>
@@ -882,7 +882,7 @@ namespace ncpp {
 
 
 
-    template<typename F_allocator__ = mem::F_default_allocator>
+    template<typename F_allocator__ = eastl::allocator>
     struct TF_default_object_options {
 
         using F_this = TF_default_object_options<F_allocator__>;
@@ -1561,7 +1561,7 @@ namespace ncpp {
 
 
 
-    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, b8 is_has_object_key__ = true, class F_options__ = F_default_object_options>
+    template<typename F_passed_object__, typename F_allocator__ = eastl::allocator, b8 is_has_object_key__ = true, class F_options__ = F_default_object_options>
     class TU_object_p;
 
 
@@ -2102,7 +2102,7 @@ namespace ncpp {
 
 
 
-    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, b8 is_has_object_key__ = true, class F_options__ = F_default_object_options>
+    template<typename F_passed_object__, typename F_allocator__ = eastl::allocator, b8 is_has_object_key__ = true, class F_options__ = F_default_object_options>
     class TS_object_p;
 
 

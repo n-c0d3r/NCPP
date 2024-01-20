@@ -11,7 +11,8 @@ class A {
 
 NCPP_ENTRY_POINT(args) {
 
-    auto a_up = TS_object_p<A>()();
+    auto a_up = TU_object_p<A>()();
+    TS_object_p<A> a_sp = std::move(a_up);
 
     NCPP_INFO()
         << "Hello "
