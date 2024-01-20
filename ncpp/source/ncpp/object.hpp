@@ -83,6 +83,8 @@ namespace ncpp {
             template<typename F_object_fr__, typename F_allocator_fr__, ncpp::b8 is_has_object_key_fr__, class F_options_fr__>\
             friend class ncpp::TS_object_p;
 
+#define NCPP_OBJECT_MEMORY_HEADER_SIZE (sizeof(ncpp::u64) * 2)
+
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1012,6 +1014,12 @@ namespace ncpp {
         }
 
     public:
+        static NCPP_FORCE_INLINE TW_object_p unsafe(F_passed_object* raw_object_p) noexcept {
+
+            return raw_object_p;
+        }
+
+    public:
         NCPP_FORCE_INLINE TW_object_p() noexcept = default;
 
         NCPP_FORCE_INLINE TW_object_p(const TW_object_p& x) noexcept :
@@ -1172,6 +1180,13 @@ namespace ncpp {
 
 
 
+    NCPP_FORCE_INLINE F_object_key object_key(void* object_p) noexcept {
+
+        return *(((F_object_key*)object_p) - sizeof(F_object_key));
+    }
+
+
+
     template<typename F_passed_object__, class F_options__>
     class TK_object_p<F_passed_object__, true, F_options__> {
 
@@ -1221,6 +1236,16 @@ namespace ncpp {
             object_key_(object_key)
         {
 
+        }
+
+    public:
+        static NCPP_FORCE_INLINE TK_object_p unsafe(F_passed_object* raw_object_p, F_object_key object_key) noexcept {
+
+            return { raw_object_p, object_key };
+        }
+        static NCPP_FORCE_INLINE TK_object_p unsafe(F_passed_object* raw_object_p) noexcept {
+
+            return { raw_object_p, ncpp::object_key(raw_object_p) };
         }
 
     public:
@@ -1429,6 +1454,12 @@ namespace ncpp {
             raw_object_p_(raw_object_p)
         {
 
+        }
+
+    public:
+        static NCPP_FORCE_INLINE TK_object_p unsafe(F_passed_object* raw_object_p) noexcept {
+
+            return raw_object_p;
         }
 
     public:
@@ -1655,6 +1686,16 @@ namespace ncpp {
         }
 
     public:
+        static NCPP_FORCE_INLINE TU_object_p unsafe(F_passed_object* raw_object_p, F_object_key object_key) noexcept {
+
+            return { raw_object_p, object_key };
+        }
+        static NCPP_FORCE_INLINE TU_object_p unsafe(F_passed_object* raw_object_p) noexcept {
+
+            return { raw_object_p, ncpp::object_key(raw_object_p) };
+        }
+
+    public:
         NCPP_FORCE_INLINE TU_object_p() noexcept = default;
         NCPP_FORCE_INLINE ~TU_object_p() noexcept {
 
@@ -1781,13 +1822,16 @@ namespace ncpp {
             F_allocator allocator;
 
             au32* counter_p = (au32*)allocator.allocate(
-                EASTL_ALLOCATOR_MIN_ALIGNMENT + sizeof(F_object),
+                NCPP_OBJECT_MEMORY_HEADER_SIZE + sizeof(F_object),
                 utilities::T_alignof<F_object>,
-                EASTL_ALLOCATOR_MIN_ALIGNMENT,
+                NCPP_OBJECT_MEMORY_HEADER_SIZE,
                 0
             );
 
-            raw_object_p_ = (F_passed_object*)(counter_p + (EASTL_ALLOCATOR_MIN_ALIGNMENT / sizeof(u32)));
+            F_object_key* object_key_p = ((F_object_key*)counter_p) + 1;
+            *object_key_p = object_key_;
+
+            raw_object_p_ = (F_passed_object*)(counter_p + (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32)));
 
             new ((F_object*)raw_object_p_) F_object(std::forward<F_args__>(args)...);
 
@@ -1925,6 +1969,12 @@ namespace ncpp {
         }
 
     public:
+        static NCPP_FORCE_INLINE TU_object_p unsafe(F_passed_object* raw_object_p) noexcept {
+
+            return raw_object_p;
+        }
+
+    public:
         NCPP_FORCE_INLINE TU_object_p() noexcept = default;
         NCPP_FORCE_INLINE ~TU_object_p() noexcept {
 
@@ -2031,13 +2081,15 @@ namespace ncpp {
             F_allocator allocator;
 
             au32* counter_p = (au32*)allocator.allocate(
-                EASTL_ALLOCATOR_MIN_ALIGNMENT + sizeof(F_object),
+                NCPP_OBJECT_MEMORY_HEADER_SIZE + sizeof(F_object),
                 utilities::T_alignof<F_object>,
-                EASTL_ALLOCATOR_MIN_ALIGNMENT,
+                NCPP_OBJECT_MEMORY_HEADER_SIZE,
                 0
             );
 
-            raw_object_p_ = (F_passed_object*)(counter_p + (EASTL_ALLOCATOR_MIN_ALIGNMENT / sizeof(u32)));
+//            F_object_key* object_key_p = ((F_object_key*)counter_p) + 1;
+
+            raw_object_p_ = (F_passed_object*)(counter_p + (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32)));
 
             new ((F_object*)raw_object_p_) F_object(std::forward<F_args__>(args)...);
 
@@ -2233,6 +2285,16 @@ namespace ncpp {
         }
 
     public:
+        static NCPP_FORCE_INLINE TS_object_p unsafe(F_passed_object* raw_object_p, F_object_key object_key) noexcept {
+
+            return { raw_object_p, object_key };
+        }
+        static NCPP_FORCE_INLINE TS_object_p unsafe(F_passed_object* raw_object_p) noexcept {
+
+            return { raw_object_p, ncpp::object_key(raw_object_p) };
+        }
+
+    public:
         NCPP_FORCE_INLINE TS_object_p() noexcept = default;
         NCPP_FORCE_INLINE ~TS_object_p() noexcept {
 
@@ -2469,21 +2531,24 @@ namespace ncpp {
         template<typename... F_args__>
         inline void T_create_object(F_args__&&... args) {
 
+            pop_key_internal();
+
             F_allocator allocator;
 
             au32* counter_p = (au32*)allocator.allocate(
-                EASTL_ALLOCATOR_MIN_ALIGNMENT + sizeof(F_object),
+                NCPP_OBJECT_MEMORY_HEADER_SIZE + sizeof(F_object),
                 utilities::T_alignof<F_object>,
-                EASTL_ALLOCATOR_MIN_ALIGNMENT,
+                NCPP_OBJECT_MEMORY_HEADER_SIZE,
                 0
             );
             counter_p->store(1, eastl::memory_order_release);
 
-            raw_object_p_ = (F_passed_object*)(counter_p + (EASTL_ALLOCATOR_MIN_ALIGNMENT / sizeof(u32)));
+            F_object_key* object_key_p = ((F_object_key*)counter_p) + 1;
+            *object_key_p = object_key_;
+
+            raw_object_p_ = (F_passed_object*)(counter_p + (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32)));
 
             new ((F_object*)raw_object_p_) F_object(std::forward<F_args__>(args)...);
-
-            pop_key_internal();
 
         }
         template<typename... F_args__>
@@ -2624,6 +2689,12 @@ namespace ncpp {
             raw_object_p_(raw_object_p)
         {
 
+        }
+
+    public:
+        static NCPP_FORCE_INLINE TS_object_p unsafe(F_passed_object* raw_object_p) noexcept {
+
+            return raw_object_p;
         }
 
     public:
@@ -2838,14 +2909,16 @@ namespace ncpp {
             F_allocator allocator;
 
             au32* counter_p = (au32*)allocator.allocate(
-                EASTL_ALLOCATOR_MIN_ALIGNMENT + sizeof(F_object),
+                NCPP_OBJECT_MEMORY_HEADER_SIZE + sizeof(F_object),
                 utilities::T_alignof<F_object>,
-                EASTL_ALLOCATOR_MIN_ALIGNMENT,
+                NCPP_OBJECT_MEMORY_HEADER_SIZE,
                 0
             );
             counter_p->store(1, eastl::memory_order_release);
 
-            raw_object_p_ = (F_passed_object*)(counter_p + (EASTL_ALLOCATOR_MIN_ALIGNMENT / sizeof(u32)));
+//            F_object_key* object_key_p = ((F_object_key*)counter_p) + 1;
+
+            raw_object_p_ = (F_passed_object*)(counter_p + (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32)));
 
             new ((F_object*)raw_object_p_) F_object(std::forward<F_args__>(args)...);
 
@@ -2938,7 +3011,7 @@ NCPP_BIND_CUSTOM_CPASS(
     typename F_allocator__,
     ncpp::b8 is_has_object_key__,
     class F_options__
-)
+);
 
 NCPP_BIND_CUSTOM_CPASS(
     NCPP_MA(ncpp::TS_object_p<F_passed_object__, F_allocator__, is_has_object_key__, F_options__>),
@@ -2947,4 +3020,11 @@ NCPP_BIND_CUSTOM_CPASS(
     typename F_allocator__,
     ncpp::b8 is_has_object_key__,
     class F_options__
-)
+);
+
+
+
+#define NCPP_WTHIS() (ncpp::TW_object_p<std::remove_pointer_t<decltype(this)>>::unsafe(this))
+#define NCPP_KTHIS(...) (ncpp::TK_object_p<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
+//#define NCPP_UTHIS(...) (ncpp::TU_object_p<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
+#define NCPP_STHIS(...) (ncpp::TS_object_p<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
