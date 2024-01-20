@@ -3,9 +3,15 @@
 
 using namespace ncpp;
 
+class A {
 
+
+
+};
 
 NCPP_ENTRY_POINT(args) {
+
+    auto a_up = TS_object_p<A>()();
 
     NCPP_INFO()
         << "Hello "

@@ -2125,6 +2125,12 @@ namespace ncpp {
 
         return counter_p->fetch_sub(1, eastl::memory_order_acq_rel);
     }
+    NCPP_FORCE_INLINE void set_object_counter_to_one(void* object_p) noexcept {
+
+        au32* counter_p = ((au32*)object_p) - 1;
+
+        counter_p->store(1, eastl::memory_order_release);
+    }
 
 
 
@@ -2249,6 +2255,8 @@ namespace ncpp {
             object_key_(x.object_key_)
         {
 
+            set_object_counter_to_one(raw_object_p_);
+
             x.reset_no_destroy_internal();
 
         }
@@ -2259,6 +2267,8 @@ namespace ncpp {
 
             raw_object_p_ = (F_passed_object*)x.raw_object_p_;
             object_key_ = x.object_key_;
+
+            set_object_counter_to_one(raw_object_p_);
 
             x.reset_no_destroy_internal();
 
@@ -2324,6 +2334,8 @@ namespace ncpp {
             object_key_(x.object_key_)
         {
 
+            set_object_counter_to_one(raw_object_p_);
+
             x.reset_no_destroy_internal();
 
         }
@@ -2336,6 +2348,8 @@ namespace ncpp {
 
             raw_object_p_ = (F_passed_object*)x.raw_object_p_;
             object_key_ = x.object_key_;
+
+            set_object_counter_to_one(raw_object_p_);
 
             x.reset_no_destroy_internal();
 
@@ -2630,6 +2644,8 @@ namespace ncpp {
             raw_object_p_(x.raw_object_p_)
         {
 
+            set_object_counter_to_one(raw_object_p_);
+
             x.reset_no_destroy_internal();
 
         }
@@ -2639,6 +2655,8 @@ namespace ncpp {
             reset();
 
             raw_object_p_ = (F_passed_object*)x.raw_object_p_;
+
+            set_object_counter_to_one(raw_object_p_);
 
             x.reset_no_destroy_internal();
 
@@ -2699,6 +2717,8 @@ namespace ncpp {
             raw_object_p_((F_passed_object*)x.raw_object_p_)
         {
 
+            set_object_counter_to_one(raw_object_p_);
+
             x.reset_no_destroy_internal();
 
         }
@@ -2710,6 +2730,8 @@ namespace ncpp {
             reset();
 
             raw_object_p_ = (F_passed_object*)x.raw_object_p_;
+
+            set_object_counter_to_one(raw_object_p_);
 
             x.reset_no_destroy_internal();
 
