@@ -1183,7 +1183,7 @@ namespace ncpp {
 
 
 
-    NCPP_FORCE_INLINE F_object_key object_key(void* oref) noexcept {
+    NCPP_FORCE_INLINE F_object_key object_key_unsafe(void* oref) noexcept {
 
         return *(((F_object_key*)oref) - sizeof(F_object_key));
     }
@@ -1241,7 +1241,7 @@ namespace ncpp {
         }
         static NCPP_FORCE_INLINE TK_oref unsafe(F_passed_object* object_p) noexcept {
 
-            return { object_p, ncpp::object_key(object_p) };
+            return { object_p, ncpp::object_key_unsafe(object_p) };
         }
 
     public:
@@ -1593,7 +1593,7 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE auto with_key() const noexcept {
+        NCPP_FORCE_INLINE auto with_key_unsafe() const noexcept {
 
             return TK_oref<F_passed_object, F_options, true>::unsafe(object_p_);
         }
@@ -1688,7 +1688,7 @@ namespace ncpp {
         }
         static NCPP_FORCE_INLINE TU_oref unsafe(F_passed_object* object_p) noexcept {
 
-            return { object_p, ncpp::object_key(object_p) };
+            return { object_p, ncpp::object_key_unsafe(object_p) };
         }
 
     public:
@@ -2177,27 +2177,27 @@ namespace ncpp {
 
 
 
-    NCPP_FORCE_INLINE u32 shared_object_counter(void* oref) noexcept {
+    NCPP_FORCE_INLINE u32 shared_object_counter_unsafe(void* object_p) noexcept {
 
-        au32* counter_p = ((au32*)oref) - 1;
+        au32* counter_p = ((au32*)object_p) - 1;
 
         return counter_p->load(eastl::memory_order_acquire);
     }
-    NCPP_FORCE_INLINE u32 increase_shared_object_counter(void* oref) noexcept {
+    NCPP_FORCE_INLINE u32 increase_shared_object_counter_unsafe(void* object_p) noexcept {
 
-        au32* counter_p = ((au32*)oref) - 1;
+        au32* counter_p = ((au32*)object_p) - 1;
 
         return counter_p->fetch_add(1, eastl::memory_order_acq_rel);
     }
-    NCPP_FORCE_INLINE u32 decrease_shared_object_counter(void* oref) noexcept {
+    NCPP_FORCE_INLINE u32 decrease_shared_object_counter_unsafe(void* object_p) noexcept {
 
-        au32* counter_p = ((au32*)oref) - 1;
+        au32* counter_p = ((au32*)object_p) - 1;
 
         return counter_p->fetch_sub(1, eastl::memory_order_acq_rel);
     }
-    NCPP_FORCE_INLINE void set_object_counter_to_one(void* oref) noexcept {
+    NCPP_FORCE_INLINE void set_object_counter_to_one_unsafe(void* object_p) noexcept {
 
-        au32* counter_p = ((au32*)oref) - 1;
+        au32* counter_p = ((au32*)object_p) - 1;
 
         counter_p->store(1, eastl::memory_order_release);
     }
@@ -2241,7 +2241,7 @@ namespace ncpp {
 
             NCPP_ASSERT(object_p_) << "can't get object counter from null pointer";
 
-            return shared_object_counter(object_p_);
+            return shared_object_counter_unsafe(object_p_);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2263,7 +2263,7 @@ namespace ncpp {
         }
         static NCPP_FORCE_INLINE TS_oref unsafe(F_passed_object* object_p) noexcept {
 
-            return { object_p, ncpp::object_key(object_p) };
+            return { object_p, ncpp::object_key_unsafe(object_p) };
         }
 
     public:
@@ -2279,7 +2279,7 @@ namespace ncpp {
         {
 
             if(object_p_)
-                increase_shared_object_counter(object_p_);
+                increase_shared_object_counter_unsafe(object_p_);
 
         }
         NCPP_FORCE_INLINE TS_oref& operator = (const TS_oref& x) noexcept
@@ -2291,7 +2291,7 @@ namespace ncpp {
             object_key_ = x.object_key_;
 
             if(object_p_)
-                increase_shared_object_counter(object_p_);
+                increase_shared_object_counter_unsafe(object_p_);
 
             return *this;
         }
@@ -2322,7 +2322,7 @@ namespace ncpp {
             object_key_(x.object_key_)
         {
 
-            set_object_counter_to_one(object_p_);
+            set_object_counter_to_one_unsafe(object_p_);
 
             x.reset_no_destroy_internal();
 
@@ -2335,7 +2335,7 @@ namespace ncpp {
             object_p_ = (F_passed_object*)x.object_p_;
             object_key_ = x.object_key_;
 
-            set_object_counter_to_one(object_p_);
+            set_object_counter_to_one_unsafe(object_p_);
 
             x.reset_no_destroy_internal();
 
@@ -2350,7 +2350,7 @@ namespace ncpp {
         {
 
             if(object_p_)
-                increase_shared_object_counter(object_p_);
+                increase_shared_object_counter_unsafe(object_p_);
 
         }
         template<typename F_other_p__>
@@ -2364,7 +2364,7 @@ namespace ncpp {
             object_key_ = x.object_key_;
 
             if(object_p_)
-                increase_shared_object_counter(object_p_);
+                increase_shared_object_counter_unsafe(object_p_);
 
             return *this;
         }
@@ -2401,7 +2401,7 @@ namespace ncpp {
             object_key_(x.object_key_)
         {
 
-            set_object_counter_to_one(object_p_);
+            set_object_counter_to_one_unsafe(object_p_);
 
             x.reset_no_destroy_internal();
 
@@ -2416,7 +2416,7 @@ namespace ncpp {
             object_p_ = (F_passed_object*)x.object_p_;
             object_key_ = x.object_key_;
 
-            set_object_counter_to_one(object_p_);
+            set_object_counter_to_one_unsafe(object_p_);
 
             x.reset_no_destroy_internal();
 
@@ -2466,7 +2466,7 @@ namespace ncpp {
 
             if(object_p_) {
 
-                if(decrease_shared_object_counter(object_p_) != 1) {
+                if(decrease_shared_object_counter_unsafe(object_p_) != 1) {
 
                     reset_no_destroy_internal();
 
@@ -2632,7 +2632,7 @@ namespace ncpp {
 
             NCPP_ASSERT(object_p_) << "can't get object counter from null pointer";
 
-            return shared_object_counter(object_p_);
+            return shared_object_counter_unsafe(object_p_);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2664,7 +2664,7 @@ namespace ncpp {
         {
 
             if(object_p_)
-                increase_shared_object_counter(object_p_);
+                increase_shared_object_counter_unsafe(object_p_);
 
         }
         NCPP_FORCE_INLINE TS_oref& operator = (const TS_oref& x) noexcept
@@ -2675,7 +2675,7 @@ namespace ncpp {
             object_p_ = (F_passed_object*)x.object_p_;
 
             if(object_p_)
-                increase_shared_object_counter(object_p_);
+                increase_shared_object_counter_unsafe(object_p_);
 
             return *this;
         }
@@ -2703,7 +2703,7 @@ namespace ncpp {
             object_p_(x.object_p_)
         {
 
-            set_object_counter_to_one(object_p_);
+            set_object_counter_to_one_unsafe(object_p_);
 
             x.reset_no_destroy_internal();
 
@@ -2715,7 +2715,7 @@ namespace ncpp {
 
             object_p_ = (F_passed_object*)x.object_p_;
 
-            set_object_counter_to_one(object_p_);
+            set_object_counter_to_one_unsafe(object_p_);
 
             x.reset_no_destroy_internal();
 
@@ -2729,7 +2729,7 @@ namespace ncpp {
         {
 
             if(object_p_)
-                increase_shared_object_counter(object_p_);
+                increase_shared_object_counter_unsafe(object_p_);
 
         }
         template<typename F_other_p__>
@@ -2742,7 +2742,7 @@ namespace ncpp {
             object_p_ = (F_passed_object*)x.object_p_;
 
             if(object_p_)
-                increase_shared_object_counter(object_p_);
+                increase_shared_object_counter_unsafe(object_p_);
 
             return *this;
         }
@@ -2776,7 +2776,7 @@ namespace ncpp {
             object_p_((F_passed_object*)x.object_p_)
         {
 
-            set_object_counter_to_one(object_p_);
+            set_object_counter_to_one_unsafe(object_p_);
 
             x.reset_no_destroy_internal();
 
@@ -2790,7 +2790,7 @@ namespace ncpp {
 
             object_p_ = (F_passed_object*)x.object_p_;
 
-            set_object_counter_to_one(object_p_);
+            set_object_counter_to_one_unsafe(object_p_);
 
             x.reset_no_destroy_internal();
 
@@ -2839,7 +2839,7 @@ namespace ncpp {
 
             if(object_p_) {
 
-                if(decrease_shared_object_counter(object_p_) != 1) {
+                if(decrease_shared_object_counter_unsafe(object_p_) != 1) {
 
                     reset_no_destroy_internal();
 
