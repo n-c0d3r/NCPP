@@ -183,9 +183,6 @@ namespace ncpp {
 
 
 
-    template<class F_options__>
-    class TA_object_memory;
-
     template<b8 is_thread_safe__, typename F_allocator__>
     class TF_default_object_key_subpool;
 
@@ -1175,11 +1172,11 @@ namespace ncpp {
 
 
 
-    template<typename F_passed_object__, class F_options__ = F_default_object_options, b8 is_has_object_key__ = true>
+    template<typename F_passed_object__, class F_options__ = F_default_object_options, b8 is_has_object_key__ = false>
     class TK_oref;
 
     template<typename F_passed_object__, class F_options__ = F_default_object_options>
-    using TK2_oref = TK_oref<F_passed_object__, F_options__, false>;
+    using TK2_oref = TK_oref<F_passed_object__, F_options__, true>;
 
 
 
@@ -1628,11 +1625,11 @@ namespace ncpp {
 
 
 
-    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, b8 is_has_object_key__ = true>
+    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, b8 is_has_object_key__ = false>
     class TU_oref;
 
     template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options>
-    using TU2_oref = TU_oref<F_passed_object__, F_allocator__, F_options__, false>;
+    using TU2_oref = TU_oref<F_passed_object__, F_allocator__, F_options__, true>;
 
 
 
@@ -2169,11 +2166,11 @@ namespace ncpp {
 
 
 
-    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, b8 is_has_object_key__ = true>
+    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, b8 is_has_object_key__ = false>
     class TS_oref;
 
     template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options>
-    using TS2_oref = TS_oref<F_passed_object__, F_allocator__, F_options__, false>;
+    using TS2_oref = TS_oref<F_passed_object__, F_allocator__, F_options__, true>;
 
 
 
