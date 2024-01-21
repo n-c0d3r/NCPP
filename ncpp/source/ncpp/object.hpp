@@ -1886,13 +1886,13 @@ namespace ncpp {
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_passed_object__, F_other_p__>
-        NCPP_FORCE_INLINE operator TK_oref<F_passed_object, F_options, is_has_object_key> () const noexcept {
+        NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key> () const noexcept {
 
             return { object_p_, object_key_ };
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object__, F_other_p__>
-        explicit NCPP_FORCE_INLINE operator TK_oref<F_passed_object, F_options, is_has_object_key> () const noexcept {
+        explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key> () const noexcept {
 
             return { object_p_, object_key_ };
         }
@@ -2128,13 +2128,13 @@ namespace ncpp {
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_passed_object__, F_other_p__>
-        NCPP_FORCE_INLINE operator TK_oref<F_passed_object, F_options, is_has_object_key> () const noexcept {
+        NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key> () const noexcept {
 
             return { object_p_ };
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object__, F_other_p__>
-        explicit NCPP_FORCE_INLINE operator TK_oref<F_passed_object, F_options, is_has_object_key> () const noexcept {
+        explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key> () const noexcept {
 
             return { object_p_ };
         }
@@ -2575,13 +2575,13 @@ namespace ncpp {
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_passed_object__, F_other_p__>
-        NCPP_FORCE_INLINE operator TK_oref<F_passed_object, F_options, is_has_object_key> () const noexcept {
+        NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key> () const noexcept {
 
             return { object_p_, object_key_ };
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object__, F_other_p__>
-        explicit NCPP_FORCE_INLINE operator TK_oref<F_passed_object, F_options, is_has_object_key> () const noexcept {
+        explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key> () const noexcept {
 
             return { object_p_, object_key_ };
         }
@@ -2930,13 +2930,13 @@ namespace ncpp {
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_passed_object__, F_other_p__>
-        NCPP_FORCE_INLINE operator TK_oref<F_passed_object, F_options, is_has_object_key> () const noexcept {
+        NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key> () const noexcept {
 
             return { object_p_ };
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object__, F_other_p__>
-        explicit NCPP_FORCE_INLINE operator TK_oref<F_passed_object, F_options, is_has_object_key> () const noexcept {
+        explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key> () const noexcept {
 
             return { object_p_ };
         }
