@@ -559,6 +559,8 @@ namespace ncpp::internal {
 
 #define NCPP_TEXT(CStr) NCPP_GLUE(L, CStr)
 #define NCPP_NAME(CStr) CStr
+#define NCPP_NAME_ML(...) #__VA_ARGS__
+#define NCPP_TEXT_ML(...) NCPP_TEXT(NCPP_NAME_ML(__VA_ARGS__))
 
 
 
