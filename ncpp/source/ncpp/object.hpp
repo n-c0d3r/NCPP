@@ -81,7 +81,9 @@ namespace ncpp {
             template<typename F_object_fr__, typename F_allocator_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__>\
             friend class ncpp::TU_oref;\
             template<typename F_object_fr__, typename F_allocator_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__>\
-            friend class ncpp::TS_oref;
+            friend class ncpp::TS_oref;\
+            template<typename F_object_fr__, typename F_allocator_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__>\
+            friend class ncpp::TX_oref;
 
 #define NCPP_OBJECT_MEMORY_HEADER_SIZE (sizeof(ncpp::u64) * 2)
 
@@ -138,13 +140,24 @@ namespace ncpp {
             id(id_in),
             generation(generation_in),
             is_thread_safe(is_thread_safe_in)
-        {}
+        {
+
+        }
 
 
 
         NCPP_FORCE_INLINE constexpr operator u64 () const noexcept {
 
             return value;
+        }
+
+        friend NCPP_FORCE_INLINE constexpr b8 operator == (F_object_key a, F_object_key b) noexcept {
+
+            return (a.id == b.id) && (a.generation == b.generation);
+        }
+        friend NCPP_FORCE_INLINE constexpr b8 operator != (F_object_key a, F_object_key b) noexcept {
+
+            return (a.id != b.id) || (a.generation != b.generation);
         }
 
 
@@ -200,6 +213,8 @@ namespace ncpp {
     class TU_oref;
     template<typename F_object__, typename F_allocator__, class F_options__, b8 is_has_object_key__>
     class TS_oref;
+    template<typename F_object__, typename F_allocator__, class F_options__, b8 is_has_object_key__>
+    class TX_oref;
 
 
 
@@ -977,6 +992,105 @@ namespace ncpp {
 
 
 
+#define NCPP_OBJECT_REFERENCE_DEFINE_CASTS_INTERNAL(...) \
+                    template<typename F_other_p__>\
+                    requires T_is_object_up_castable<F_passed_object, F_other_p__>\
+                    NCPP_FORCE_INLINE __VA_ARGS__& T_up_cast() & noexcept {\
+\
+                        return (__VA_ARGS__&)*this;\
+                    }\
+                    template<typename F_other_p__>\
+                    requires T_is_object_up_castable<F_passed_object, F_other_p__>\
+                    NCPP_FORCE_INLINE const __VA_ARGS__& T_up_cast() const & noexcept {\
+\
+                        return (const __VA_ARGS__&)*this;\
+                    }\
+                    template<typename F_other_p__>\
+                    requires T_is_object_up_castable<F_passed_object, F_other_p__>\
+                    NCPP_FORCE_INLINE __VA_ARGS__&& T_up_cast() && noexcept {\
+\
+                        return (__VA_ARGS__&&)*this;\
+                    }\
+                    template<typename F_other_p__>\
+                    requires T_is_object_up_castable<F_passed_object, F_other_p__>\
+                    NCPP_FORCE_INLINE const __VA_ARGS__&& T_up_cast() const && noexcept {\
+\
+                        return (const __VA_ARGS__&&)*this;\
+                    }\
+\
+                    template<typename F_other_p__>\
+                    requires T_is_object_down_castable<F_passed_object, F_other_p__>\
+                    NCPP_FORCE_INLINE __VA_ARGS__& T_down_cast() & noexcept {\
+\
+                        return (__VA_ARGS__&)*this;\
+                    }\
+                    template<typename F_other_p__>\
+                    requires T_is_object_down_castable<F_passed_object, F_other_p__>\
+                    NCPP_FORCE_INLINE const __VA_ARGS__& T_down_cast() const & noexcept {\
+\
+                        return (const __VA_ARGS__&)*this;\
+                    }\
+                    template<typename F_other_p__>\
+                    requires T_is_object_down_castable<F_passed_object, F_other_p__>\
+                    NCPP_FORCE_INLINE __VA_ARGS__&& T_down_cast() && noexcept {\
+\
+                        return (__VA_ARGS__&&)*this;\
+                    }\
+                    template<typename F_other_p__>\
+                    requires T_is_object_down_castable<F_passed_object, F_other_p__>\
+                    NCPP_FORCE_INLINE const __VA_ARGS__&& T_down_cast() const && noexcept {\
+\
+                        return (const __VA_ARGS__&&)*this;\
+                    }\
+\
+                    template<typename F_other_p__>\
+                    requires (T_is_object_up_castable<F_passed_object, F_other_p__> || T_is_object_down_castable<F_passed_object, F_other_p__>)\
+                    NCPP_FORCE_INLINE __VA_ARGS__& T_cast() & noexcept {\
+\
+                        return (__VA_ARGS__&)*this;\
+                    }\
+                    template<typename F_other_p__>\
+                    requires (T_is_object_up_castable<F_passed_object, F_other_p__> || T_is_object_down_castable<F_passed_object, F_other_p__>)\
+                    NCPP_FORCE_INLINE const __VA_ARGS__& T_cast() const & noexcept {\
+\
+                        return (const __VA_ARGS__&)*this;\
+                    }\
+                    template<typename F_other_p__>\
+                    requires (T_is_object_up_castable<F_passed_object, F_other_p__> || T_is_object_down_castable<F_passed_object, F_other_p__>)\
+                    NCPP_FORCE_INLINE __VA_ARGS__&& T_cast() && noexcept {\
+\
+                        return (__VA_ARGS__&&)*this;\
+                    }\
+                    template<typename F_other_p__>\
+                    requires (T_is_object_up_castable<F_passed_object, F_other_p__> || T_is_object_down_castable<F_passed_object, F_other_p__>)\
+                    NCPP_FORCE_INLINE const __VA_ARGS__&& T_cast() const && noexcept {\
+\
+                        return (const __VA_ARGS__&&)*this;\
+                    }\
+\
+                    template<typename F_other_p__>\
+                    NCPP_FORCE_INLINE __VA_ARGS__& T_force_cast() & noexcept {\
+\
+                        return (__VA_ARGS__&)*this;\
+                    }\
+                    template<typename F_other_p__>\
+                    NCPP_FORCE_INLINE const __VA_ARGS__& T_force_cast() const & noexcept {\
+\
+                        return (const __VA_ARGS__&)*this;\
+                    }\
+                    template<typename F_other_p__>\
+                    NCPP_FORCE_INLINE __VA_ARGS__&& T_force_cast() && noexcept {\
+\
+                        return (__VA_ARGS__&&)*this;\
+                    }\
+                    template<typename F_other_p__>\
+                    NCPP_FORCE_INLINE const __VA_ARGS__&& T_force_cast() const && noexcept {\
+\
+                        return (const __VA_ARGS__&&)*this;\
+                    }
+
+
+
     template<typename F_passed_object__>
     class TW_oref {
 
@@ -992,7 +1106,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-    private:
+    protected:
         F_passed_object* object_p_ = 0;
 
     public:
@@ -1104,12 +1218,13 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        template<typename F_other_p__>
-        NCPP_FORCE_INLINE TW_oref<F_other_p__> T_cast() const noexcept {
+        NCPP_OBJECT_REFERENCE_DEFINE_CASTS_INTERNAL(TW_oref<F_other_p__>);
 
-            return (F_other_p__*)object_p_;
-        }
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
 
+    public:
         NCPP_FORCE_INLINE b8 is_valid() const noexcept {
 
             return (object_p_ != 0);
@@ -1207,7 +1322,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-    private:
+    protected:
         F_passed_object* object_p_ = 0;
         F_object_key object_key_;
 
@@ -1329,12 +1444,13 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        template<typename F_other_p__>
-        NCPP_FORCE_INLINE const TK_oref<F_other_p__, F_options, is_has_object_key>& T_cast() const noexcept {
+        NCPP_OBJECT_REFERENCE_DEFINE_CASTS_INTERNAL(TK_oref<F_other_p__, F_options, is_has_object_key>);
 
-            return *((const TK_oref<F_other_p__, F_options, is_has_object_key>*)this);
-        }
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
 
+    public:
         NCPP_FORCE_INLINE b8 is_valid() const noexcept {
 
             if(object_key_.is_thread_safe)
@@ -1344,7 +1460,10 @@ namespace ncpp {
         }
         NCPP_FORCE_INLINE b8 is_null() const noexcept {
 
-            return !object_manager().key_pool().check(object_key_);
+            if(object_key_.is_thread_safe)
+                return !F_options::template TF_manager<true>::instance().key_pool().check(object_key_);
+            else
+                return !F_options::template TF_manager<false>::instance().key_pool().check(object_key_);
         }
 
         NCPP_FORCE_INLINE b8 Q_is_valid() const noexcept {
@@ -1428,7 +1547,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-    private:
+    protected:
         F_passed_object* object_p_ = 0;
 
     public:
@@ -1534,12 +1653,13 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        template<typename F_other_p__>
-        NCPP_FORCE_INLINE const TK_oref<F_other_p__, F_options, is_has_object_key>& T_cast() const noexcept {
+        NCPP_OBJECT_REFERENCE_DEFINE_CASTS_INTERNAL(TK_oref<F_other_p__, F_options, is_has_object_key>);
 
-            return *((const TK_oref<F_other_p__, F_options, is_has_object_key>*)this);
-        }
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
 
+    public:
         NCPP_FORCE_INLINE b8 is_valid() const noexcept {
 
             return (object_p_ != 0);
@@ -1654,7 +1774,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-    private:
+    protected:
         F_passed_object* object_p_ = 0;
         F_object_key object_key_;
 
@@ -1746,12 +1866,13 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        template<typename F_other_p__>
-        NCPP_FORCE_INLINE const TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key>& T_cast() const noexcept {
+        NCPP_OBJECT_REFERENCE_DEFINE_CASTS_INTERNAL(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key>);
 
-            return *((const TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key>*)this);
-        }
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
 
+    public:
         NCPP_FORCE_INLINE b8 is_valid() const noexcept {
 
             return (object_p_ != 0);
@@ -1929,7 +2050,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-    private:
+    protected:
         F_passed_object* object_p_ = 0;
 
     public:
@@ -2007,12 +2128,13 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        template<typename F_other_p__>
-        NCPP_FORCE_INLINE const TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key>& T_cast() const noexcept {
+        NCPP_OBJECT_REFERENCE_DEFINE_CASTS_INTERNAL(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key>);
 
-            return *((const TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key>*)this);
-        }
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
 
+    public:
         NCPP_FORCE_INLINE b8 is_valid() const noexcept {
 
             return (object_p_ != 0);
@@ -2222,7 +2344,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-    private:
+    protected:
         F_passed_object* object_p_ = 0;
         F_object_key object_key_;
 
@@ -2425,12 +2547,13 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        template<typename F_other_p__>
-        NCPP_FORCE_INLINE const TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key>& T_cast() const noexcept {
+        NCPP_OBJECT_REFERENCE_DEFINE_CASTS_INTERNAL(TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key>);
 
-            return *((const TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key>*)this);
-        }
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
 
+    public:
         NCPP_FORCE_INLINE b8 is_valid() const noexcept {
 
             return (object_p_ != 0);
@@ -2618,7 +2741,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-    private:
+    protected:
         F_passed_object* object_p_ = 0;
 
     public:
@@ -2799,12 +2922,13 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        template<typename F_other_p__>
-        NCPP_FORCE_INLINE const TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key>& T_cast() const noexcept {
+        NCPP_OBJECT_REFERENCE_DEFINE_CASTS_INTERNAL(TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key>);
 
-            return *((const TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key>*)this);
-        }
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
 
+    public:
         NCPP_FORCE_INLINE b8 is_valid() const noexcept {
 
             return (object_p_ != 0);
