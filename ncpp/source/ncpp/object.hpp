@@ -1369,7 +1369,7 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TW_oref<F_passed_object> weak_p() const noexcept {
+        NCPP_FORCE_INLINE TW_oref<F_passed_object> weak() const noexcept {
 
             return object_p_;
         }
@@ -1570,7 +1570,7 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TW_oref<F_passed_object> weak_p() const noexcept {
+        NCPP_FORCE_INLINE TW_oref<F_passed_object> weak() const noexcept {
 
             return object_p_;
         }
@@ -1857,7 +1857,7 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TW_oref<F_passed_object> weak_p() const noexcept {
+        NCPP_FORCE_INLINE TW_oref<F_passed_object> weak() const noexcept {
 
             return object_p_;
         }
@@ -1877,7 +1877,7 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TK_oref<F_passed_object, F_options, is_has_object_key> keyed_p() const noexcept {
+        NCPP_FORCE_INLINE TK_oref<F_passed_object, F_options, is_has_object_key> keyed() const noexcept {
 
             return { object_p_, object_key_ };
         }
@@ -2099,7 +2099,7 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TW_oref<F_passed_object> weak_p() const noexcept {
+        NCPP_FORCE_INLINE TW_oref<F_passed_object> weak() const noexcept {
 
             return object_p_;
         }
@@ -2119,7 +2119,7 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TK_oref<F_passed_object, F_options, is_has_object_key> keyed_p() const noexcept {
+        NCPP_FORCE_INLINE TK_oref<F_passed_object, F_options, is_has_object_key> keyed() const noexcept {
 
             return { object_p_ };
         }
@@ -2546,7 +2546,7 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TW_oref<F_passed_object> weak_p() const noexcept {
+        NCPP_FORCE_INLINE TW_oref<F_passed_object> weak() const noexcept {
 
             return object_p_;
         }
@@ -2566,7 +2566,7 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TK_oref<F_passed_object, F_options, is_has_object_key> keyed_p() const noexcept {
+        NCPP_FORCE_INLINE TK_oref<F_passed_object, F_options, is_has_object_key> keyed() const noexcept {
 
             return { object_p_, object_key_ };
         }
@@ -2901,7 +2901,7 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TW_oref<F_passed_object> weak_p() const noexcept {
+        NCPP_FORCE_INLINE TW_oref<F_passed_object> weak() const noexcept {
 
             return object_p_;
         }
@@ -2921,7 +2921,7 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TK_oref<F_passed_object, F_options, is_has_object_key> keyed_p() const noexcept {
+        NCPP_FORCE_INLINE TK_oref<F_passed_object, F_options, is_has_object_key> keyed() const noexcept {
 
             return { object_p_ };
         }
