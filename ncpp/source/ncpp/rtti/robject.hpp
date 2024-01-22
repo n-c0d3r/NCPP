@@ -1384,7 +1384,7 @@ namespace ncpp {
 				static NCPP_FORCE_INLINE ncpp::containers::TF_string<char, typename F_rtti_traits::F_allocator> static_type_name()  { \
 					\
 					if constexpr (ncpp::rtti::secured_name) return ("_" + ncpp::containers::T_to_string<char, typename F_rtti_traits::F_allocator>(ncpp::utilities::T_type_hash_code<F_this>));\
-					else return NCPP_PARSE_RTTI_SECURED_NAME_CODE(NCPP_EXPAND(NCPP_CSTR(ObjectImplementTypeName)), ""); \
+					else return NCPP_PARSE_RTTI_SECURED_NAME_CODE(NCPP_EXPAND(NCPP_CSTR_ML(ObjectImplementTypeName)), ""); \
 				}\
 				\
 				\
