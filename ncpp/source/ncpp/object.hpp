@@ -992,7 +992,7 @@ namespace ncpp {
 
 
 
-#define NCPP_OBJECT_REFERENCE_DEFINE_CASTS_INTERNAL(...) \
+#define NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(...) \
                     template<typename F_other_p__>\
                     requires T_is_object_up_castable<F_passed_object, F_other_p__>\
                     NCPP_FORCE_INLINE __VA_ARGS__& T_up_cast() & noexcept {\
@@ -1218,7 +1218,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_OBJECT_REFERENCE_DEFINE_CASTS_INTERNAL(TW_oref<F_other_p__>);
+        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TW_oref<F_other_p__>);
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -1444,7 +1444,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_OBJECT_REFERENCE_DEFINE_CASTS_INTERNAL(TK_oref<F_other_p__, F_options, is_has_object_key>);
+        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TK_oref<F_other_p__, F_options, is_has_object_key>);
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -1653,7 +1653,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_OBJECT_REFERENCE_DEFINE_CASTS_INTERNAL(TK_oref<F_other_p__, F_options, is_has_object_key>);
+        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TK_oref<F_other_p__, F_options, is_has_object_key>);
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -1866,7 +1866,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_OBJECT_REFERENCE_DEFINE_CASTS_INTERNAL(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key>);
+        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key>);
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2128,7 +2128,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_OBJECT_REFERENCE_DEFINE_CASTS_INTERNAL(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key>);
+        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key>);
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2441,7 +2441,8 @@ namespace ncpp {
             object_key_(x.object_key_)
         {
 
-            set_object_counter_to_one_unsafe(object_p_);
+            if(object_p_)
+                set_object_counter_to_one_unsafe(object_p_);
 
             x.reset_no_destroy_internal();
 
@@ -2454,7 +2455,8 @@ namespace ncpp {
             object_p_ = (F_passed_object*)x.object_p_;
             object_key_ = x.object_key_;
 
-            set_object_counter_to_one_unsafe(object_p_);
+            if(object_p_)
+                set_object_counter_to_one_unsafe(object_p_);
 
             x.reset_no_destroy_internal();
 
@@ -2520,7 +2522,8 @@ namespace ncpp {
             object_key_(x.object_key_)
         {
 
-            set_object_counter_to_one_unsafe(object_p_);
+            if(object_p_)
+                set_object_counter_to_one_unsafe(object_p_);
 
             x.reset_no_destroy_internal();
 
@@ -2535,7 +2538,8 @@ namespace ncpp {
             object_p_ = (F_passed_object*)x.object_p_;
             object_key_ = x.object_key_;
 
-            set_object_counter_to_one_unsafe(object_p_);
+            if(object_p_)
+                set_object_counter_to_one_unsafe(object_p_);
 
             x.reset_no_destroy_internal();
 
@@ -2547,7 +2551,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_OBJECT_REFERENCE_DEFINE_CASTS_INTERNAL(TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key>);
+        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key>);
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2823,7 +2827,8 @@ namespace ncpp {
             object_p_(x.object_p_)
         {
 
-            set_object_counter_to_one_unsafe(object_p_);
+            if(object_p_)
+                set_object_counter_to_one_unsafe(object_p_);
 
             x.reset_no_destroy_internal();
 
@@ -2835,7 +2840,8 @@ namespace ncpp {
 
             object_p_ = (F_passed_object*)x.object_p_;
 
-            set_object_counter_to_one_unsafe(object_p_);
+            if(object_p_)
+                set_object_counter_to_one_unsafe(object_p_);
 
             x.reset_no_destroy_internal();
 
@@ -2896,7 +2902,8 @@ namespace ncpp {
             object_p_((F_passed_object*)x.object_p_)
         {
 
-            set_object_counter_to_one_unsafe(object_p_);
+            if(object_p_)
+                set_object_counter_to_one_unsafe(object_p_);
 
             x.reset_no_destroy_internal();
 
@@ -2910,7 +2917,8 @@ namespace ncpp {
 
             object_p_ = (F_passed_object*)x.object_p_;
 
-            set_object_counter_to_one_unsafe(object_p_);
+            if(object_p_)
+                set_object_counter_to_one_unsafe(object_p_);
 
             x.reset_no_destroy_internal();
 
@@ -2922,7 +2930,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_OBJECT_REFERENCE_DEFINE_CASTS_INTERNAL(TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key>);
+        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key>);
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -3076,6 +3084,1290 @@ namespace ncpp {
 
     };
 
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, b8 is_has_object_key__ = false>
+    class TX_oref;
+
+    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options>
+    using TX2_oref = TX_oref<F_passed_object__, F_allocator__, F_options__, true>;
+
+
+
+    template<typename F_passed_object__, typename F_allocator__, class F_options__>
+    class TX_oref<F_passed_object__, F_allocator__, F_options__, true> {
+
+    public:
+        NCPP_OBJECT_FRIEND_CLASSES();
+
+        using F_passed_object = F_passed_object__;
+        using F_object = std::remove_const_t<F_passed_object__>;
+
+        using F_allocator = F_allocator__;
+        using F_options = F_options__;
+
+        static constexpr b8 is_has_object_key = true;
+        static constexpr b8 is_const = std::is_const_v<F_passed_object>;
+
+        using F_object_manager = F_options::template TF_manager<T_is_object_thread_safe<F_object>>;
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    protected:
+        F_passed_object* object_p_ = 0;
+        F_object_key object_key_;
+        b8 is_shared_ = false;
+
+    public:
+        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept { return (F_passed_object*)object_p_; }
+        NCPP_FORCE_INLINE F_passed_object& object() const noexcept { return *(object_p()); }
+
+        NCPP_FORCE_INLINE F_object_key object_key() const noexcept { return object_key_; }
+
+        NCPP_FORCE_INLINE F_object_manager& object_manager() const noexcept { return F_object_manager::instance(); }
+
+        NCPP_FORCE_INLINE u32 object_counter() const noexcept {
+
+            NCPP_ASSERT(object_p_) << "can't get object counter from null pointer";
+
+            return shared_object_counter_unsafe(object_p_);
+        }
+
+        NCPP_FORCE_INLINE b8 is_shared() const noexcept { return is_shared_; }
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    private:
+        NCPP_FORCE_INLINE TX_oref(F_passed_object* object_p, F_object_key object_key) noexcept :
+            object_p_(object_p),
+            object_key_(object_key)
+        {
+
+        }
+
+    public:
+        static NCPP_FORCE_INLINE TX_oref unsafe(F_passed_object* object_p, F_object_key object_key) noexcept {
+
+            return { object_p, object_key };
+        }
+        static NCPP_FORCE_INLINE TX_oref unsafe(F_passed_object* object_p) noexcept {
+
+            return { object_p, ncpp::object_key_unsafe(object_p) };
+        }
+
+    public:
+        NCPP_FORCE_INLINE TX_oref() noexcept = default;
+        NCPP_FORCE_INLINE ~TX_oref() noexcept {
+
+            reset();
+        }
+
+        NCPP_FORCE_INLINE TX_oref(const TX_oref& x) noexcept :
+            object_p_(x.object_p_),
+            object_key_(x.object_key_),
+            is_shared_(x.is_shared_)
+        {
+
+            if(is_shared_ && object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+        }
+        NCPP_FORCE_INLINE TX_oref& operator = (const TX_oref& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            object_key_ = x.object_key_;
+            is_shared_ = x.is_shared_;
+
+            if(is_shared_ && object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+            return *this;
+        }
+
+        NCPP_FORCE_INLINE TX_oref(TX_oref&& x) noexcept :
+            object_p_(x.object_p_),
+            object_key_(x.object_key_),
+            is_shared_(x.is_shared_)
+        {
+
+            x.reset_no_destroy_internal();
+
+        }
+        NCPP_FORCE_INLINE TX_oref& operator = (TX_oref&& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            object_key_ = x.object_key_;
+            is_shared_ = x.is_shared_;
+
+            x.reset_no_destroy_internal();
+
+            return *this;
+        }
+
+        NCPP_FORCE_INLINE TX_oref(TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key>&& x) noexcept :
+            object_p_(x.object_p_),
+            object_key_(x.object_key_),
+            is_shared_(x.object_p_ != 0)
+        {
+
+            if(object_p_)
+                set_object_counter_to_one_unsafe(object_p_);
+
+            x.reset_no_destroy_internal();
+
+        }
+        NCPP_FORCE_INLINE TX_oref& operator = (TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key>&& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            object_key_ = x.object_key_;
+            is_shared_ = (x.object_p_ != 0);
+
+            if(object_p_)
+                set_object_counter_to_one_unsafe(object_p_);
+
+            x.reset_no_destroy_internal();
+
+            return *this;
+        }
+
+        NCPP_FORCE_INLINE TX_oref(TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key>&& x) noexcept :
+            object_p_(x.object_p_),
+            object_key_(x.object_key_),
+            is_shared_(x.object_p_ != 0)
+        {
+
+            x.reset_no_destroy_internal();
+
+        }
+        NCPP_FORCE_INLINE TX_oref& operator = (TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key>&& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            object_key_ = x.object_key_;
+            is_shared_ = (x.object_p_ != 0);
+
+            x.reset_no_destroy_internal();
+
+            return *this;
+        }
+        NCPP_FORCE_INLINE TX_oref(const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key>& x) noexcept :
+            object_p_(x.object_p_),
+            object_key_(x.object_key_),
+            is_shared_(x.object_p_ != 0)
+        {
+
+            if(object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+        }
+        NCPP_FORCE_INLINE TX_oref& operator = (const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key>& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            object_key_ = x.object_key_;
+            is_shared_ = (x.object_p_ != 0);
+
+            if(object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+            return *this;
+        }
+
+        NCPP_FORCE_INLINE TX_oref(TK_oref<F_passed_object, F_options, is_has_object_key>&& x) noexcept :
+            object_p_(x.object_p_),
+            object_key_(x.object_key_),
+            is_shared_(false)
+        {
+
+            x.reset_no_destroy_internal();
+
+        }
+        NCPP_FORCE_INLINE TX_oref& operator = (TK_oref<F_passed_object, F_options, is_has_object_key>&& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            object_key_ = x.object_key_;
+            is_shared_ = false;
+
+            x.reset_no_destroy_internal();
+
+            return *this;
+        }
+        NCPP_FORCE_INLINE TX_oref(const TK_oref<F_passed_object, F_options, is_has_object_key>& x) noexcept :
+            object_p_(x.object_p_),
+            object_key_(x.object_key_),
+            is_shared_(false)
+        {
+
+            if(object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+        }
+        NCPP_FORCE_INLINE TX_oref& operator = (const TK_oref<F_passed_object, F_options, is_has_object_key>& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            object_key_ = x.object_key_;
+            is_shared_ = false;
+
+            return *this;
+        }
+
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref(const TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key>& x) noexcept :
+            object_p_((F_passed_object*)x.object_p_),
+            object_key_(x.object_key_),
+            is_shared_(x.is_shared_)
+        {
+
+            if(is_shared_ && object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref& operator = (const TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key>& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            object_key_ = x.object_key_;
+            is_shared_ = x.is_shared_;
+
+            if(is_shared_ && object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+            return *this;
+        }
+
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref(TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key>&& x) noexcept :
+            object_p_((F_passed_object*)x.object_p_),
+            object_key_(x.object_key_),
+            is_shared_(x.is_shared_)
+        {
+
+            x.reset_no_destroy_internal();
+
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref& operator = (TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key>&& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            object_key_ = x.object_key_;
+            is_shared_ = x.is_shared_;
+
+            x.reset_no_destroy_internal();
+
+            return *this;
+        }
+
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key>&& x) noexcept :
+            object_p_((F_passed_object*)x.object_p_),
+            object_key_(x.object_key_),
+            is_shared_(x.object_p_ != 0)
+        {
+
+            if(object_p_)
+                set_object_counter_to_one_unsafe(object_p_);
+
+            x.reset_no_destroy_internal();
+
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref& operator = (TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key>&& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            object_key_ = x.object_key_;
+            is_shared_ = (x.object_p_ != 0);
+
+            if(object_p_)
+                set_object_counter_to_one_unsafe(object_p_);
+
+            x.reset_no_destroy_internal();
+
+            return *this;
+        }
+
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref(TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key>&& x) noexcept :
+            object_p_((F_passed_object*)x.object_p_),
+            object_key_(x.object_key_),
+            is_shared_(x.object_p_ != 0)
+        {
+
+            x.reset_no_destroy_internal();
+
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref& operator = (TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key>&& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            object_key_ = x.object_key_;
+            is_shared_ = (x.object_p_ != 0);
+
+            x.reset_no_destroy_internal();
+
+            return *this;
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref(const TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key>& x) noexcept :
+            object_p_((F_passed_object*)x.object_p_),
+            object_key_(x.object_key_),
+            is_shared_(x.object_p_ != 0)
+        {
+
+            if(object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref& operator = (const TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key>& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            object_key_ = x.object_key_;
+            is_shared_ = (x.object_p_ != 0);
+
+            if(object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+            return *this;
+        }
+
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref(TK_oref<F_other_p__, F_options, is_has_object_key>&& x) noexcept :
+            object_p_((F_passed_object*)x.object_p_),
+            object_key_(x.object_key_),
+            is_shared_(false)
+        {
+
+            x.reset_no_destroy_internal();
+
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref& operator = (TK_oref<F_other_p__, F_options, is_has_object_key>&& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            object_key_ = x.object_key_;
+            is_shared_ = false;
+
+            x.reset_no_destroy_internal();
+
+            return *this;
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref(const TK_oref<F_other_p__, F_options, is_has_object_key>& x) noexcept :
+            object_p_((F_passed_object*)x.object_p_),
+            object_key_(x.object_key_),
+            is_shared_(false)
+        {
+
+            if(object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref& operator = (const TK_oref<F_other_p__, F_options, is_has_object_key>& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            object_key_ = x.object_key_;
+            is_shared_ = false;
+
+            return *this;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key>);
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+        NCPP_FORCE_INLINE b8 is_valid() const noexcept {
+
+            if(is_shared_)
+                return (object_p_ != 0);
+
+            if(object_key_.is_thread_safe)
+                return F_options::template TF_manager<true>::instance().key_pool().check(object_key_);
+            else
+                return F_options::template TF_manager<false>::instance().key_pool().check(object_key_);
+        }
+        NCPP_FORCE_INLINE b8 is_null() const noexcept {
+
+            if(is_shared_)
+                return (object_p_ == 0);
+
+            if(object_key_.is_thread_safe)
+                return !F_options::template TF_manager<true>::instance().key_pool().check(object_key_);
+            else
+                return !F_options::template TF_manager<false>::instance().key_pool().check(object_key_);
+        }
+
+        NCPP_FORCE_INLINE b8 Q_is_valid() const noexcept {
+
+            return (object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 Q_is_null() const noexcept {
+
+            return (object_p_ == 0);
+        }
+
+
+
+    private:
+        NCPP_FORCE_INLINE void reset_no_destroy_internal() noexcept {
+
+            object_p_ = 0;
+            object_key_.reset();
+            is_shared_ = false;
+        }
+
+    public:
+        NCPP_FORCE_INLINE void reset() noexcept {
+
+            if(object_p_) {
+
+                if(is_shared_) {
+
+                    if (decrease_shared_object_counter_unsafe(object_p_) != 1) {
+
+                        reset_no_destroy_internal();
+
+                    } else {
+
+                        destroy_object_internal();
+                        reset_no_destroy_internal();
+
+                    }
+
+                }
+                else {
+
+                    reset_no_destroy_internal();
+
+                }
+
+            }
+
+        }
+
+
+
+    private:
+        NCPP_FORCE_INLINE void pop_key_internal() noexcept {
+
+            object_key_ = object_manager().key_pool().pop();
+        }
+        NCPP_FORCE_INLINE void push_key_internal() noexcept {
+
+            if(object_key_.is_thread_safe)
+                F_options::template TF_manager<true>::instance().key_pool().push(object_key_);
+            else
+                F_options::template TF_manager<false>::instance().key_pool().push(object_key_);
+        }
+
+
+
+    public:
+        template<typename... F_args__>
+        inline void T_create_object(F_args__&&... args) {
+
+            pop_key_internal();
+
+            F_allocator allocator;
+
+            au32* counter_p = (au32*)allocator.allocate(
+                NCPP_OBJECT_MEMORY_HEADER_SIZE + sizeof(F_object),
+                utilities::T_alignof<F_object>,
+                NCPP_OBJECT_MEMORY_HEADER_SIZE,
+                0
+            );
+            counter_p->store(1, eastl::memory_order_release);
+
+            F_object_key* object_key_p = ((F_object_key*)counter_p) + 1;
+            *object_key_p = object_key_;
+
+            object_p_ = (F_passed_object*)(counter_p + (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32)));
+
+            new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
+
+            is_shared_ = true;
+
+        }
+        template<typename... F_args__>
+        NCPP_FORCE_INLINE TX_oref&& operator()(F_args__&&... args) && {
+
+            NCPP_ASSERT(!is_valid()) << "can't create object by quick \"()\" operator from a valid pointer";
+
+            T_create_object(std::forward<F_args__>(args)...);
+
+            return std::move(*this);
+        }
+
+        template<typename... F_args__>
+        static NCPP_FORCE_INLINE TX_oref T_make(F_args__&&... args) {
+
+            TX_oref oref;
+
+            oref.T_create_object(std::forward<F_args__>(args)...);
+
+            return std::move(oref);
+        }
+
+    private:
+        NCPP_FORCE_INLINE void destroy_object_internal() noexcept;
+
+
+
+    public:
+        NCPP_FORCE_INLINE TW_oref<F_passed_object> weak() const noexcept {
+
+            return object_p_;
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_passed_object__, F_other_p__>
+        NCPP_FORCE_INLINE operator TW_oref<F_other_p__> () const noexcept {
+
+            return object_p_;
+        }
+        template<typename F_other_p__>
+        requires T_is_object_up_castable<F_passed_object__, F_other_p__>
+        explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__> () const noexcept {
+
+            return object_p_;
+        }
+
+
+
+    public:
+        NCPP_FORCE_INLINE TK_oref<F_passed_object, F_options, is_has_object_key> keyed() const noexcept {
+
+            return { object_p_, object_key_ };
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_passed_object__, F_other_p__>
+        NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key> () const noexcept {
+
+            return { object_p_, object_key_ };
+        }
+        template<typename F_other_p__>
+        requires T_is_object_up_castable<F_passed_object__, F_other_p__>
+        explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key> () const noexcept {
+
+            return { object_p_, object_key_ };
+        }
+
+
+
+    public:
+        NCPP_FORCE_INLINE TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key>& shared() & noexcept {
+
+            NCPP_ASSERT(is_shared_) << "currently non-shared mode";
+
+            return (TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
+        }
+        NCPP_FORCE_INLINE const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key>& shared() const & noexcept {
+
+            NCPP_ASSERT(is_shared_) << "currently non-shared mode";
+
+            return (const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
+        }
+        NCPP_FORCE_INLINE TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key>&& shared() && noexcept {
+
+            NCPP_ASSERT(is_shared_) << "currently non-shared mode";
+
+            return (TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
+        }
+        NCPP_FORCE_INLINE const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key>&& shared() const && noexcept {
+
+            NCPP_ASSERT(is_shared_) << "currently non-shared mode";
+
+            return (const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
+        }
+
+
+
+    public:
+        NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
+
+            return (F_passed_object*)object_p_;
+        }
+        NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
+
+            return *((F_passed_object*)object_p_);
+        }
+
+    };
+
+
+
+    template<typename F_passed_object__, typename F_allocator__, class F_options__>
+    class TX_oref<F_passed_object__, F_allocator__, F_options__, false> {
+
+    public:
+        NCPP_OBJECT_FRIEND_CLASSES();
+
+        using F_passed_object = F_passed_object__;
+        using F_object = std::remove_const_t<F_passed_object__>;
+
+        using F_allocator = F_allocator__;
+        using F_options = F_options__;
+
+        static constexpr b8 is_has_object_key = false;
+        static constexpr b8 is_const = std::is_const_v<F_passed_object>;
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    protected:
+        F_passed_object* object_p_ = 0;
+        b8 is_shared_ = false;
+
+    public:
+        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept { return (F_passed_object*)object_p_; }
+        NCPP_FORCE_INLINE F_passed_object& object() const noexcept { return *(object_p()); }
+
+        NCPP_FORCE_INLINE u32 object_counter() const noexcept {
+
+            NCPP_ASSERT(object_p_) << "can't get object counter from null pointer";
+
+            return shared_object_counter_unsafe(object_p_);
+        }
+
+        NCPP_FORCE_INLINE b8 is_shared() const noexcept { return is_shared_; }
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    private:
+        NCPP_FORCE_INLINE TX_oref(F_passed_object* object_p) noexcept :
+            object_p_(object_p)
+        {
+
+        }
+
+    public:
+        static NCPP_FORCE_INLINE TX_oref unsafe(F_passed_object* object_p) noexcept {
+
+            return object_p;
+        }
+
+    public:
+        NCPP_FORCE_INLINE TX_oref() noexcept = default;
+        NCPP_FORCE_INLINE ~TX_oref() noexcept {
+
+            reset();
+        }
+
+        NCPP_FORCE_INLINE TX_oref(const TX_oref& x) noexcept :
+            object_p_(x.object_p_),
+            is_shared_(x.is_shared_)
+        {
+
+            if(is_shared_ && object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+        }
+        NCPP_FORCE_INLINE TX_oref& operator = (const TX_oref& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            is_shared_ = x.is_shared_;
+
+            if(is_shared_ && object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+            return *this;
+        }
+
+        NCPP_FORCE_INLINE TX_oref(TX_oref&& x) noexcept :
+            object_p_(x.object_p_),
+            is_shared_(x.is_shared_)
+        {
+
+            x.reset_no_destroy_internal();
+
+        }
+        NCPP_FORCE_INLINE TX_oref& operator = (TX_oref&& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            is_shared_ = x.is_shared_;
+
+            x.reset_no_destroy_internal();
+
+            return *this;
+        }
+
+        NCPP_FORCE_INLINE TX_oref(TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key>&& x) noexcept :
+            object_p_(x.object_p_),
+            is_shared_(x.object_p_ != 0)
+        {
+
+            if(object_p_)
+                set_object_counter_to_one_unsafe(object_p_);
+
+            x.reset_no_destroy_internal();
+
+        }
+        NCPP_FORCE_INLINE TX_oref& operator = (TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key>&& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            is_shared_ = (x.object_p_ != 0);
+
+            if(object_p_)
+                set_object_counter_to_one_unsafe(object_p_);
+
+            x.reset_no_destroy_internal();
+
+            return *this;
+        }
+
+        NCPP_FORCE_INLINE TX_oref(TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key>&& x) noexcept :
+            object_p_(x.object_p_),
+            is_shared_(x.object_p_ != 0)
+        {
+
+            x.reset_no_destroy_internal();
+
+        }
+        NCPP_FORCE_INLINE TX_oref& operator = (TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key>&& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            is_shared_ = (x.object_p_ != 0);
+
+            x.reset_no_destroy_internal();
+
+            return *this;
+        }
+        NCPP_FORCE_INLINE TX_oref(const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key>& x) noexcept :
+            object_p_(x.object_p_),
+            is_shared_(x.object_p_ != 0)
+        {
+
+            if(object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+        }
+        NCPP_FORCE_INLINE TX_oref& operator = (const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key>& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            is_shared_ = (x.object_p_ != 0);
+
+            if(object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+            return *this;
+        }
+
+        NCPP_FORCE_INLINE TX_oref(TK_oref<F_passed_object, F_options, is_has_object_key>&& x) noexcept :
+            object_p_(x.object_p_),
+            is_shared_(false)
+        {
+
+            x.reset_no_destroy_internal();
+
+        }
+        NCPP_FORCE_INLINE TX_oref& operator = (TK_oref<F_passed_object, F_options, is_has_object_key>&& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            is_shared_ = false;
+
+            x.reset_no_destroy_internal();
+
+            return *this;
+        }
+        NCPP_FORCE_INLINE TX_oref(const TK_oref<F_passed_object, F_options, is_has_object_key>& x) noexcept :
+            object_p_(x.object_p_),
+            is_shared_(false)
+        {
+
+            if(object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+        }
+        NCPP_FORCE_INLINE TX_oref& operator = (const TK_oref<F_passed_object, F_options, is_has_object_key>& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            is_shared_ = false;
+
+            return *this;
+        }
+
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref(const TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key>& x) noexcept :
+            object_p_((F_passed_object*)x.object_p_),
+            is_shared_(x.is_shared_)
+        {
+
+            if(is_shared_ && object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref& operator = (const TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key>& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            is_shared_ = x.is_shared_;
+
+            if(is_shared_ && object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+            return *this;
+        }
+
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref(TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key>&& x) noexcept :
+            object_p_((F_passed_object*)x.object_p_),
+            is_shared_(x.is_shared_)
+        {
+
+            x.reset_no_destroy_internal();
+
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref& operator = (TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key>&& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            is_shared_ = x.is_shared_;
+
+            x.reset_no_destroy_internal();
+
+            return *this;
+        }
+
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key>&& x) noexcept :
+            object_p_((F_passed_object*)x.object_p_),
+            is_shared_(x.object_p_ != 0)
+        {
+
+            if(object_p_)
+                set_object_counter_to_one_unsafe(object_p_);
+
+            x.reset_no_destroy_internal();
+
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref& operator = (TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key>&& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            is_shared_ = (x.object_p_ != 0);
+
+            if(object_p_)
+                set_object_counter_to_one_unsafe(object_p_);
+
+            x.reset_no_destroy_internal();
+
+            return *this;
+        }
+
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref(TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key>&& x) noexcept :
+            object_p_((F_passed_object*)x.object_p_),
+            is_shared_(x.object_p_ != 0)
+        {
+
+            x.reset_no_destroy_internal();
+
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref& operator = (TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key>&& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            is_shared_ = (x.object_p_ != 0);
+
+            x.reset_no_destroy_internal();
+
+            return *this;
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref(const TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key>& x) noexcept :
+            object_p_((F_passed_object*)x.object_p_),
+            is_shared_(x.object_p_ != 0)
+        {
+
+            if(object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref& operator = (const TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key>& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            is_shared_ = (x.object_p_ != 0);
+
+            if(object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+            return *this;
+        }
+
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref(TK_oref<F_other_p__, F_options, is_has_object_key>&& x) noexcept :
+            object_p_((F_passed_object*)x.object_p_),
+            is_shared_(false)
+        {
+
+            x.reset_no_destroy_internal();
+
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref& operator = (TK_oref<F_other_p__, F_options, is_has_object_key>&& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            is_shared_ = false;
+
+            x.reset_no_destroy_internal();
+
+            return *this;
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref(const TK_oref<F_other_p__, F_options, is_has_object_key>& x) noexcept :
+            object_p_((F_passed_object*)x.object_p_),
+            is_shared_(false)
+        {
+
+            if(object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TX_oref& operator = (const TK_oref<F_other_p__, F_options, is_has_object_key>& x) noexcept
+        {
+
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            is_shared_ = false;
+
+            return *this;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key>);
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+        NCPP_FORCE_INLINE b8 is_valid() const noexcept {
+
+            return (object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 is_null() const noexcept {
+
+            return (object_p_ == 0);
+        }
+
+        NCPP_FORCE_INLINE b8 Q_is_valid() const noexcept {
+
+            return (object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 Q_is_null() const noexcept {
+
+            return (object_p_ == 0);
+        }
+
+
+
+    private:
+        NCPP_FORCE_INLINE void reset_no_destroy_internal() noexcept {
+
+            object_p_ = 0;
+        }
+
+    public:
+        NCPP_FORCE_INLINE void reset() noexcept {
+
+            if(object_p_) {
+
+                if(is_shared_) {
+
+                    if (decrease_shared_object_counter_unsafe(object_p_) != 1) {
+
+                        reset_no_destroy_internal();
+
+                    } else {
+
+                        destroy_object_internal();
+                        reset_no_destroy_internal();
+
+                    }
+
+                }
+                else {
+
+                    reset_no_destroy_internal();
+
+                }
+
+            }
+
+        }
+
+
+
+    public:
+        template<typename... F_args__>
+        inline void T_create_object(F_args__&&... args) {
+
+            F_allocator allocator;
+
+            au32* counter_p = (au32*)allocator.allocate(
+                NCPP_OBJECT_MEMORY_HEADER_SIZE + sizeof(F_object),
+                utilities::T_alignof<F_object>,
+                NCPP_OBJECT_MEMORY_HEADER_SIZE,
+                0
+            );
+            counter_p->store(1, eastl::memory_order_release);
+
+//            F_object_key* object_key_p = ((F_object_key*)counter_p) + 1;
+
+            object_p_ = (F_passed_object*)(counter_p + (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32)));
+
+            new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
+
+            is_shared_ = true;
+
+        }
+        template<typename... F_args__>
+        NCPP_FORCE_INLINE TX_oref&& operator()(F_args__&&... args) && {
+
+            NCPP_ASSERT(!is_valid()) << "can't create object by quick \"()\" operator from a valid pointer";
+
+            T_create_object(std::forward<F_args__>(args)...);
+
+            return std::move(*this);
+        }
+
+        template<typename... F_args__>
+        static NCPP_FORCE_INLINE TX_oref T_make(F_args__&&... args) {
+
+            TX_oref oref;
+
+            oref.T_create_object(std::forward<F_args__>(args)...);
+
+            return std::move(oref);
+        }
+
+    private:
+        NCPP_FORCE_INLINE void destroy_object_internal() noexcept;
+
+
+
+    public:
+        NCPP_FORCE_INLINE TW_oref<F_passed_object> weak() const noexcept {
+
+            return object_p_;
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_passed_object__, F_other_p__>
+        NCPP_FORCE_INLINE operator TW_oref<F_other_p__> () const noexcept {
+
+            return object_p_;
+        }
+        template<typename F_other_p__>
+        requires T_is_object_up_castable<F_passed_object__, F_other_p__>
+        explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__> () const noexcept {
+
+            return object_p_;
+        }
+
+
+
+    public:
+        NCPP_FORCE_INLINE TK_oref<F_passed_object, F_options, is_has_object_key> keyed() const noexcept {
+
+            return { object_p_ };
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_passed_object__, F_other_p__>
+        NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key> () const noexcept {
+
+            return { object_p_ };
+        }
+        template<typename F_other_p__>
+        requires T_is_object_up_castable<F_passed_object__, F_other_p__>
+        explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key> () const noexcept {
+
+            return { object_p_ };
+        }
+
+
+
+    public:
+        NCPP_FORCE_INLINE TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key>& shared() & noexcept {
+
+            NCPP_ASSERT(is_shared_) << "currently non-shared mode";
+
+            return (TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
+        }
+        NCPP_FORCE_INLINE const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key>& shared() const & noexcept {
+
+            NCPP_ASSERT(is_shared_) << "currently non-shared mode";
+
+            return (const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
+        }
+        NCPP_FORCE_INLINE TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key>&& shared() && noexcept {
+
+            NCPP_ASSERT(is_shared_) << "currently non-shared mode";
+
+            return (TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
+        }
+        NCPP_FORCE_INLINE const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key>&& shared() const && noexcept {
+
+            NCPP_ASSERT(is_shared_) << "currently non-shared mode";
+
+            return (const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
+        }
+
+
+
+    public:
+        NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
+
+            return (F_passed_object*)object_p_;
+        }
+        NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
+
+            return *((F_passed_object*)object_p_);
+        }
+
+    };
+
 }
 
 
@@ -3104,6 +4396,8 @@ NCPP_BIND_CUSTOM_CPASS(
 
 #define NCPP_KTHIS(...) (ncpp::TK_oref<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
 #define NCPP_STHIS(...) (ncpp::TS_oref<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
+#define NCPP_XTHIS(...) (ncpp::TX_oref<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
 
 #define NCPP_KTHIS2(...) (ncpp::TK2_oref<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
 #define NCPP_STHIS2(...) (ncpp::TS2_oref<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
+#define NCPP_XTHIS2(...) (ncpp::TX2_oref<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
