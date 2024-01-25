@@ -4390,6 +4390,15 @@ NCPP_BIND_CUSTOM_CPASS(
     ncpp::b8 is_has_object_key__
 );
 
+NCPP_BIND_CUSTOM_CPASS(
+    NCPP_MA(ncpp::TX_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__>),
+    NCPP_MA(ncpp::TK_oref<F_passed_object__, F_options__, is_has_object_key__>),
+    typename F_passed_object__,
+    typename F_allocator__,
+    class F_options__,
+    ncpp::b8 is_has_object_key__
+);
+
 
 
 #define NCPP_WTHIS() (ncpp::TW_oref<std::remove_pointer_t<decltype(this)>>::unsafe(this))
