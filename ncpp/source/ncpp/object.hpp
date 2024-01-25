@@ -133,6 +133,8 @@ namespace ncpp {
         };
 
         NCPP_FORCE_INLINE constexpr F_object_key() noexcept = default;
+        NCPP_FORCE_INLINE constexpr F_object_key(F_null) noexcept : value(NCPP_U64_MAX) {}
+
         NCPP_FORCE_INLINE constexpr F_object_key(u64 value_in) noexcept :
             value(value_in)
         {}
@@ -1132,6 +1134,7 @@ namespace ncpp {
 
     public:
         NCPP_FORCE_INLINE TW_oref() noexcept = default;
+        NCPP_FORCE_INLINE TW_oref(F_null) noexcept {}
 
         NCPP_FORCE_INLINE TW_oref(const TW_oref& x) noexcept :
             object_p_(x.object_p_)
@@ -1358,6 +1361,8 @@ namespace ncpp {
 
     public:
         NCPP_FORCE_INLINE TK_oref() noexcept = default;
+        NCPP_FORCE_INLINE TK_oref(F_null) noexcept {}
+
         NCPP_FORCE_INLINE ~TK_oref() noexcept {
 
             reset();
@@ -1575,6 +1580,8 @@ namespace ncpp {
 
     public:
         NCPP_FORCE_INLINE TK_oref() noexcept = default;
+        NCPP_FORCE_INLINE TK_oref(F_null) noexcept {}
+
         NCPP_FORCE_INLINE ~TK_oref() noexcept {
 
             reset();
@@ -1810,6 +1817,8 @@ namespace ncpp {
 
     public:
         NCPP_FORCE_INLINE TU_oref() noexcept = default;
+        NCPP_FORCE_INLINE TU_oref(F_null) noexcept {}
+
         NCPP_FORCE_INLINE ~TU_oref() noexcept {
 
             reset();
@@ -2076,6 +2085,8 @@ namespace ncpp {
 
     public:
         NCPP_FORCE_INLINE TU_oref() noexcept = default;
+        NCPP_FORCE_INLINE TU_oref(F_null) noexcept {}
+
         NCPP_FORCE_INLINE ~TU_oref() noexcept {
 
             reset();
@@ -2387,6 +2398,8 @@ namespace ncpp {
 
     public:
         NCPP_FORCE_INLINE TS_oref() noexcept = default;
+        NCPP_FORCE_INLINE TS_oref(F_null) noexcept {}
+
         NCPP_FORCE_INLINE ~TS_oref() noexcept {
 
             reset();
@@ -2778,6 +2791,8 @@ namespace ncpp {
 
     public:
         NCPP_FORCE_INLINE TS_oref() noexcept = default;
+        NCPP_FORCE_INLINE TS_oref(F_null) noexcept {}
+
         NCPP_FORCE_INLINE ~TS_oref() noexcept {
 
             reset();
@@ -3175,6 +3190,8 @@ namespace ncpp {
 
     public:
         NCPP_FORCE_INLINE TX_oref() noexcept = default;
+        NCPP_FORCE_INLINE TX_oref(F_null) noexcept {}
+
         NCPP_FORCE_INLINE ~TX_oref() noexcept {
 
             reset();
@@ -3830,6 +3847,8 @@ namespace ncpp {
 
     public:
         NCPP_FORCE_INLINE TX_oref() noexcept = default;
+        NCPP_FORCE_INLINE TX_oref(F_null) noexcept {}
+
         NCPP_FORCE_INLINE ~TX_oref() noexcept {
 
             reset();

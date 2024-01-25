@@ -26,6 +26,9 @@ namespace ncpp {
 
     void pause_console();
 
+    struct F_null {};
+    constexpr F_null null;
+
 }
 
 
