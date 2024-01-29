@@ -97,7 +97,7 @@ namespace ncpp {
 
 #define NCPP_ROBJECT_USER_PRE_REFLECT_MEMBER(...) \
         NCPP_RTTI_IMPLEMENT_FLAG(                                       \
-            ::rtti::F_user_pre_reflect_member_flag \
+            ncpp::rtti::F_user_pre_reflect_member_flag \
         );\
 		template<class F_robject__, typename F_member__, class F_member_sinfo__, NCPP_RTTI_SPECIFIC_TARGS()>\
 		static NCPP_FORCE_INLINE void T_user_pre_reflect_member( \
@@ -121,7 +121,7 @@ namespace ncpp {
 
 #define NCPP_ROBJECT_USER_POST_REFLECT_MEMBER(...) \
         NCPP_RTTI_IMPLEMENT_FLAG(                                       \
-            ::rtti::F_user_post_reflect_member_flag \
+            ncpp::rtti::F_user_post_reflect_member_flag \
         );\
 		template<class F_robject__, typename F_member__, class F_member_sinfo__, NCPP_RTTI_SPECIFIC_TARGS()>\
 		static NCPP_FORCE_INLINE void T_user_post_reflect_member( \
@@ -161,7 +161,7 @@ namespace ncpp {
 
 #define NCPP_ROBJECT_USER_PRE_REFLECT_BASE(...) \
         NCPP_RTTI_IMPLEMENT_FLAG(                                       \
-            ::rtti::F_user_pre_reflect_base_flag \
+            ncpp::rtti::F_user_pre_reflect_base_flag \
         );\
 		template<class F_robject__, class F_base__, NCPP_RTTI_SPECIFIC_TARGS()>\
 		static NCPP_FORCE_INLINE void T_user_pre_reflect_base(\
@@ -182,7 +182,7 @@ namespace ncpp {
 
 #define NCPP_ROBJECT_USER_POST_REFLECT_BASE(...) \
         NCPP_RTTI_IMPLEMENT_FLAG(                                       \
-            ::rtti::F_user_post_reflect_base_flag \
+            ncpp::rtti::F_user_post_reflect_base_flag \
         );\
 		template<class F_robject__, class F_base__, NCPP_RTTI_SPECIFIC_TARGS()>\
 		static NCPP_FORCE_INLINE void T_user_post_reflect_base(\
@@ -221,7 +221,7 @@ namespace ncpp {
 
 #define NCPP_ROBJECT_USER_PRE_REFLECT_OBJECT(...) \
         NCPP_RTTI_IMPLEMENT_FLAG(                                       \
-            ::rtti::F_user_pre_reflect_object_flag \
+            ncpp::rtti::F_user_pre_reflect_object_flag \
         );\
 		template<class F_robject__, NCPP_RTTI_SPECIFIC_TARGS()>\
 		static NCPP_FORCE_INLINE void T_user_pre_reflect_object(\
@@ -241,7 +241,7 @@ namespace ncpp {
 
 #define NCPP_ROBJECT_USER_POST_REFLECT_OBJECT(...) \
         NCPP_RTTI_IMPLEMENT_FLAG(                                       \
-            ::rtti::F_user_post_reflect_object_flag \
+            ncpp::rtti::F_user_post_reflect_object_flag \
         );\
 		template<class F_robject__, NCPP_RTTI_SPECIFIC_TARGS()>\
 		static NCPP_FORCE_INLINE void T_user_post_reflect_object(\
