@@ -1335,7 +1335,7 @@ namespace ncpp {
 
         NCPP_FORCE_INLINE F_object_key object_key() const noexcept { return object_key_; }
 
-        NCPP_FORCE_INLINE typename F_object_manager& object_manager() const { return F_object_manager::instance(); }
+        NCPP_FORCE_INLINE F_object_manager& object_manager() const noexcept { return F_object_manager::instance(); }
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -1558,8 +1558,6 @@ namespace ncpp {
     public:
         NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept { return (F_passed_object*)object_p_; }
         NCPP_FORCE_INLINE F_passed_object& object() const noexcept { return *(object_p()); }
-
-        NCPP_FORCE_INLINE typename F_options::F_manager& object_manager() const { return F_options::F_manager::instance(); }
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
