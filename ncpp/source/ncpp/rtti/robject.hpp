@@ -1028,7 +1028,6 @@ namespace ncpp {
 				\
 				if constexpr (\
 					!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata)\
-					&& !NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info)\
 				)\
 					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberMagicType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
 				\
@@ -1065,7 +1064,6 @@ namespace ncpp {
 				\
 				if constexpr (\
 					!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata)\
-					&& !NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info)\
 				)\
 					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberMagicType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
 				\
@@ -1102,7 +1100,6 @@ namespace ncpp {
 				\
 				if constexpr (\
 					!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata)\
-					&& !NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info)\
 				)\
 					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberMagicType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
 				\
@@ -1147,7 +1144,6 @@ namespace ncpp {
 				\
 				if constexpr (\
 					!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata)\
-					&& !NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info)\
 				)\
 					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberMagicType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
 				\
@@ -1192,7 +1188,6 @@ namespace ncpp {
 				\
 				if constexpr (\
 					!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_metadata)\
-					&& !NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_member_info)\
 				)\
 					{ NCPP_EXPAND(NCPP_ROBJECT_REFLECT_MEMBER_METADATA(MemberMagicType, MemberName __VA_OPT__(,) __VA_ARGS__)) };\
 				\
@@ -1414,7 +1409,7 @@ namespace ncpp {
 					F_rtti_traits::template TF_safe_custom_params<F_reflect_flag__>* custom_params_p = 0\
 				){\
 					\
-					F_robject_type_info* robject_type_info_p = 0;\
+					F_robject_type_info* robject_type_info_p = 0;\t
 					F_robject_member_info* robject_member_info_p = 0;\
 					\
 					if constexpr (!NCPP_RTTI_IS_HAS_FLAG(F_reflect_flag__, ncpp::rtti::F_disable_reflect_robject_type_info))\
