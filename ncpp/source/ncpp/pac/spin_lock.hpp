@@ -60,7 +60,7 @@ namespace ncpp {
 
     namespace pac {
 
-        template<b8 is_single_read__ = false, b8 is_single_write__ = false>
+        template<b8 is_single_read__ = true, b8 is_single_write__ = true>
         class TF_spin_lock;
 
         template<>
