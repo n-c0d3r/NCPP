@@ -5,9 +5,7 @@ NCoder's Game Engine Learning Aimed C++ Library.
 
 ## Features
 + Memory management:
-  + Incremental chunk allocator
-  + **Smart chunk allocator**
-    + **⚠️ Warning**: `not avaiable on NCPP Lite Distribution`
+  + **Chunk allocator**
   + Reference allocator
   + **Powerful allocator base class**
 + Containers:
