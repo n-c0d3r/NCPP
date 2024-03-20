@@ -84,6 +84,29 @@ namespace ncpp {
 
 
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+        template<class F_options__>
+        class TF_chunk_storage;
+        template<class F_options__>
+        class TF_chunk_adaptor;
+        template<class F_options__>
+        class TF_chunk_allocator;
+
+
+
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,12 +126,53 @@ namespace ncpp {
 			using F_global_chunk_p_ring_buffer = containers::TF_ring_buffer<F_chunk_header*, F_default_allocator>;
 			using F_local_chunk_p_ring_buffer = containers::TF_ring_buffer<F_chunk_header*, F_default_allocator>;
 
+            using F_allocator_for_chunks = F_default_allocator;
+
+            struct F_storage_addtional_data {};
+
+
+
             static constexpr b8 enable_allocation_counting_inside_chunks = true;
+            static constexpr b8 chunks_in_a_single_block = true;
+
+
+
+            static NCPP_FORCE_INLINE void pre_push_chunk(void* storage_p) noexcept {}
+            static NCPP_FORCE_INLINE void post_push_chunk(void* storage_p) noexcept {}
+            static NCPP_FORCE_INLINE void pre_pop_chunk(void* storage_p) noexcept {}
+            static NCPP_FORCE_INLINE void post_pop_chunk(void* storage_p) noexcept {}
+
+            static NCPP_FORCE_INLINE void pre_push_chunk_with_chunk_p(void* storage_p, F_chunk_header* chunk_p) noexcept {}
+            static NCPP_FORCE_INLINE void post_push_chunk_with_chunk_p(void* storage_p, F_chunk_header* chunk_p) noexcept {}
+            static NCPP_FORCE_INLINE void post_pop_chunk_with_chunk_p(void* storage_p, F_chunk_header* chunk_p) noexcept {}
 
 		};
 
 
 
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+        template<class F_options__ = F_default_chunk_options>
+        class TF_chunk_storage;
+        template<class F_options__ = F_default_chunk_options>
+        class TF_chunk_adaptor;
+        template<class F_options__ = F_default_chunk_options>
+        class TF_chunk_allocator;
+
+
+
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,30 +187,7 @@ namespace ncpp {
 
 
 
-		template<class F_options__ = F_default_chunk_options>
-		class TF_chunk_storage;
-		template<class F_options__ = F_default_chunk_options>
-		class TF_chunk_adaptor;
-		template<class F_options__ = F_default_chunk_options>
-		class TF_chunk_allocator;
-
-
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-#define NCPP_CHUNK_STORAGE_DEFAULT_CHUNK_COUNT 512
+#define NCPP_CHUNK_STORAGE_DEFAULT_MAX_CHUNK_COUNT 512
 #define NCPP_CHUNK_ADAPTOR_DEFAULT_MAX_CHUNK_COUNT 16
 
 		// Default smart chunk capacity, 256KiB
@@ -178,41 +219,78 @@ namespace ncpp {
 			using F_allocator = TF_chunk_allocator<F_options>;
 			using F_global_chunk_p_ring_buffer = typename F_options::F_global_chunk_p_ring_buffer;
 			using F_local_chunk_p_ring_buffer = typename F_options::F_local_chunk_p_ring_buffer;
+            using F_allocator_for_chunks = typename F_options::F_allocator_for_chunks;
+            using F_storage_addtional_data = typename F_options::F_storage_addtional_data;
+
+
+
+        private:
+            static_assert(
+                !(!F_options::chunks_in_a_single_block && F_options::enable_allocation_counting_inside_chunks),
+                "invalid options, allocation counting can only be enabled when chunks in a single block is enabled"
+            );
 
 
 
 		private:
-			sz chunk_count_ = 0;
+			sz max_chunk_count_ = 0;
 			sz chunk_capacity_ = 0;
 			sz chunk_size_ = 0;
+			sz max_total_size_ = 0;
 
 			F_global_chunk_p_ring_buffer chunk_p_ring_buffer_;
 
 			F_chunk_header* first_chunk_p_ = 0;
 
-			F_default_allocator chunk_allocator_;
+            F_allocator_for_chunks allocator_for_chunks_;
+
+        public:
+            F_storage_addtional_data addtional_data;
 
 		public:
-			NCPP_FORCE_INLINE sz chunk_count() const { return chunk_count_; }
-			NCPP_FORCE_INLINE sz chunk_capacity() const { return chunk_capacity_; }
-			NCPP_FORCE_INLINE sz chunk_size() const { return chunk_size_; }
+			NCPP_FORCE_INLINE sz max_chunk_count() const noexcept { return max_chunk_count_; }
+			NCPP_FORCE_INLINE sz chunk_capacity() const noexcept { return chunk_capacity_; }
+			NCPP_FORCE_INLINE sz chunk_size() const noexcept { return chunk_size_; }
+			NCPP_FORCE_INLINE sz max_total_size() const noexcept { return max_total_size_; }
+
+			NCPP_FORCE_INLINE const F_global_chunk_p_ring_buffer& chunk_p_ring_buffer() const noexcept { return chunk_p_ring_buffer_; }
+
+            NCPP_FORCE_INLINE F_allocator_for_chunks& allocator_for_chunks() noexcept { return allocator_for_chunks_; }
+            NCPP_FORCE_INLINE const F_allocator_for_chunks& allocator_for_chunks() const noexcept { return allocator_for_chunks_; }
 
 
 
 		public:
-			NCPP_FORCE_INLINE TF_chunk_storage(sz chunk_count = NCPP_CHUNK_STORAGE_DEFAULT_CHUNK_COUNT, sz chunk_capacity = NCPP_DEFAULT_CHUNK_CAPACITY) :
-				chunk_p_ring_buffer_(chunk_count),
+			NCPP_FORCE_INLINE TF_chunk_storage(sz max_chunk_count = NCPP_CHUNK_STORAGE_DEFAULT_MAX_CHUNK_COUNT, sz chunk_capacity = NCPP_DEFAULT_CHUNK_CAPACITY) :
+                chunk_p_ring_buffer_(max_chunk_count),
 
-				chunk_count_(chunk_count),
-				chunk_capacity_(aligned_size(chunk_capacity)),
-				chunk_size_(chunk_capacity_ + sizeof(F_chunk_header))
+                max_chunk_count_(max_chunk_count),
+                chunk_capacity_(aligned_size(chunk_capacity)),
+                chunk_size_(chunk_capacity_ + sizeof(F_chunk_header)),
+                max_total_size_((chunk_capacity_ + sizeof(F_chunk_header)) * max_chunk_count)
 			{
 
-				NCPP_ASSERT(chunk_count) << "chunk count is equal to zero, cant create storage";
+				NCPP_ASSERT(max_chunk_count) << "chunk count is equal to zero, cant create storage";
 
 				init_chunks_internal();
 
 			}
+            NCPP_FORCE_INLINE TF_chunk_storage(F_allocator_for_chunks& allocator_for_chunks, sz max_chunk_count = NCPP_CHUNK_STORAGE_DEFAULT_MAX_CHUNK_COUNT, sz chunk_capacity = NCPP_DEFAULT_CHUNK_CAPACITY) :
+                chunk_p_ring_buffer_(max_chunk_count),
+
+                max_chunk_count_(max_chunk_count),
+                chunk_capacity_(aligned_size(chunk_capacity)),
+                chunk_size_(chunk_capacity_ + sizeof(F_chunk_header)),
+                max_total_size_((chunk_capacity_ + sizeof(F_chunk_header)) * max_chunk_count),
+
+                allocator_for_chunks_(allocator_for_chunks)
+            {
+
+                NCPP_ASSERT(max_chunk_count) << "chunk count is equal to zero, cant create storage";
+
+                init_chunks_internal();
+
+            }
 			~TF_chunk_storage() {
 
 				release_internal();
@@ -224,27 +302,33 @@ namespace ncpp {
 		private:
 			void init_chunks_internal() {
 
-				first_chunk_p_ = reinterpret_cast<F_chunk_header*>(chunk_allocator_.allocate(chunk_size() * chunk_count_));
+				first_chunk_p_ = reinterpret_cast<F_chunk_header*>(allocator_for_chunks_.allocate(chunk_size() * max_chunk_count_));
 
-				reset_chunks_internal();
+                rebuild_chunks_internal();
 
 			}
 
 			void release_internal() {
 
-				chunk_allocator_.deallocate(first_chunk_p_);
+                allocator_for_chunks_.deallocate(first_chunk_p_);
 
 			}
 
-			void reset_chunks_internal() {
+			void rebuild_chunks_internal() {
 
 				chunk_p_ring_buffer_.reset();
 
-				for (sz i = 0; i < chunk_count_; ++i) {
+				for (sz i = 0; i < max_chunk_count_; ++i) {
 
-					F_chunk_header* chunk_p = reinterpret_cast<F_chunk_header*>(reinterpret_cast<u8*>(first_chunk_p_) + chunk_size_ * i);
+					F_chunk_header* chunk_p = 0;
 
-					*chunk_p = F_chunk_header{};
+                    if constexpr (F_options::chunks_in_a_single_block){
+                        chunk_p = reinterpret_cast<F_chunk_header*>(reinterpret_cast<u8*>(first_chunk_p_) + chunk_size_ * i);
+                        *chunk_p = F_chunk_header{};
+                    }
+                    else{
+                        chunk_p = new F_chunk_header();
+                    }
 
 					chunk_p_ring_buffer_.push(chunk_p);
 
@@ -257,25 +341,57 @@ namespace ncpp {
 		public:
 			inline void push_chunk(F_chunk_header* chunk_p) {
 
+                if constexpr (!F_options::chunks_in_a_single_block){
+                    if(chunk_p_ring_buffer_.size() == max_chunk_count_){
+                        delete chunk_p;
+                    }
+                }
+
+                F_options::pre_push_chunk(this);
+                F_options::pre_push_chunk_with_chunk_p(this, chunk_p);
+
 				chunk_p_ring_buffer_.push(chunk_p);
+
+                F_options::post_push_chunk(this);
+                F_options::post_push_chunk_with_chunk_p(this, chunk_p);
 
 			}
 			inline F_chunk_header* pop_chunk() {
+
+                F_options::pre_pop_chunk(this);
 
 				F_chunk_header* chunk_p = 0;
 
 				b8 success = chunk_p_ring_buffer_.try_pop(chunk_p);
 
-				NCPP_ASSERT(success) << "unexpected behaviour, ring buffer is empty";
+                if constexpr (F_options::chunks_in_a_single_block){
+                    NCPP_ASSERT(success) << "unexpected behaviour, ring buffer is empty";
+                }
+                else{
+                    if(!success){
+                        chunk_p = new F_chunk_header();
+                    }
+                }
+
+                F_options::post_pop_chunk(this);
+                F_options::post_pop_chunk_with_chunk_p(this, chunk_p);
 
 				return chunk_p;
 			}
-			inline F_chunk_header* chunk_from_data_p(void* p) {
+			inline F_chunk_header* chunk_from_data_p(void* p) const noexcept {
+
+                NCPP_ASSERT(F_options::chunks_in_a_single_block) << "can only get data pointer if chunks in a single block is enabled";
 
 				sz index = (reinterpret_cast<sz>(p) - reinterpret_cast<sz>(first_chunk_p_)) / chunk_size_;
 
 				return reinterpret_cast<F_chunk_header*>(reinterpret_cast<u8*>(first_chunk_p_) + chunk_size_ * index);
 			}
+            inline b8 is_local_data_p(void* p) const noexcept {
+
+                NCPP_ASSERT(F_options::chunks_in_a_single_block) << "can only check local data pointer if chunks in a single block is enabled";
+
+                return (reinterpret_cast<sz>(p) - reinterpret_cast<sz>(first_chunk_p_)) < max_total_size_;
+            }
 
 		};
 
@@ -411,16 +527,6 @@ namespace ncpp {
 
 
 
-		/**
-		 * An allocator is similar to F_incremental_chunk_allocator but is capable of releasing empty chunks.
-		 * It maintains a count of used memory and returns a pointer to the chunk plus the
-		 * memory count each time memory is allocated.
-		 *
-		 * When deallocating memory, this allocator follows a smart approach:
-		 * - If the chunk of the allocation is not the latest chunk and
-		 * - The memory usage in that chunk after deallocation of this allocation is zero,
-		 * Then it deallocates that chunk.
-		 */
 		template<class F_options__>
 		class TF_chunk_allocator : public TA_allocator<TF_chunk_allocator<F_options__>, true> {
 
@@ -619,12 +725,13 @@ namespace ncpp {
 
 				NCPP_ASSERT(adaptor_p_) << "adaptor is null, cant deallocate memory";
 
-				F_chunk_header* chunk_p = storage_p_->chunk_from_data_p(p);
 
 
+                if constexpr (F_options::enable_allocation_counting_inside_chunks) {
 
-                if constexpr (F_options::enable_allocation_counting_inside_chunks)
-				    --(chunk_p->allocation_count);
+                    F_chunk_header* chunk_p = storage_p_->chunk_from_data_p(p);
+                    --(chunk_p->allocation_count);
+                }
 
 
 

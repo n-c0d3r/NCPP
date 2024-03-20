@@ -60,6 +60,8 @@ int main() {
             }
         );
 
+        chunk_storage.chunk_p_ring_buffer();
+
 		{
 
 			{
