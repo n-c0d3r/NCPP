@@ -342,15 +342,15 @@ namespace ncpp {
 		public:
 			inline void push_chunk(F_chunk_header* chunk_p) {
 
+                F_options::pre_push_chunk(this);
+                F_options::pre_push_chunk_with_chunk_p(this, chunk_p);
+
                 if constexpr (!F_options::chunks_in_a_single_block){
                     if(chunk_p_ring_buffer_.size() == max_chunk_count_){
                         chunk_p->~F_chunk_header();
                         allocator_for_chunks_.deallocate(chunk_p);
                     }
                 }
-
-                F_options::pre_push_chunk(this);
-                F_options::pre_push_chunk_with_chunk_p(this, chunk_p);
 
 				chunk_p_ring_buffer_.push(chunk_p);
 
