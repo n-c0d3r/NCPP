@@ -690,13 +690,9 @@ namespace ncpp {
 
 				current_usage_ += actual_size;
 
-
-
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
 				NCPP_INCREASE_USABLE_ALLOCATED_MEMORY(actual_size);
 #endif
-
-
 
 				if (current_usage_ > chunk_capacity_)
 				{
@@ -707,18 +703,12 @@ namespace ncpp {
 
 				}
 
-
-
 				u8* memory_p = current_chunk_p_->current_data();
-
-
 
 				current_chunk_p_->usage = current_usage_;
 
                 if constexpr (F_options::enable_allocation_counting_inside_chunks)
 				    ++current_chunk_p_->allocation_count;
-
-
 
 				return reinterpret_cast<u8*>(align_address(reinterpret_cast<uintptr_t>(memory_p + alignment_offset), alignment)) - alignment_offset;
 
@@ -727,22 +717,11 @@ namespace ncpp {
 
 				NCPP_ASSERT(adaptor_p_) << "adaptor is null, cant deallocate memory";
 
-
-
                 if constexpr (F_options::enable_allocation_counting_inside_chunks) {
 
                     F_chunk_header* chunk_p = storage_p_->chunk_from_data_p(p);
                     --(chunk_p->allocation_count);
                 }
-
-
-
-                // Deprecated, need to call chunk erasing manually
-//                if ((chunk_p->allocation_count == 0) && (chunk_p != current_chunk_p_)) {
-//
-//                    erase_chunk(chunk_p);
-//
-//                }
 
 			}
 
