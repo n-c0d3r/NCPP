@@ -9,11 +9,9 @@ int main() {
 
 	{
 
-#ifndef NCPP_LITE
 		mem::F_chunk_storage chunk_storage;
 		mem::F_chunk_adaptor chunk_adaptor(&chunk_storage);
 		mem::F_chunk_allocator chunk_allocator(&chunk_adaptor);
-#endif
 
 		mem::F_default_allocator default_allocator;
 
