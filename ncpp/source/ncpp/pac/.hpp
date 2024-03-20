@@ -58,11 +58,13 @@ namespace ncpp {
 ////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
 
+#include <ncpp/pac/atomic.hpp>
+#include <ncpp/pac/thread_index.hpp>
+
 #include <ncpp/pac/no_lock.hpp>
 #include <ncpp/pac/spin_lock.hpp>
 #include <ncpp/pac/srsw_spin_lock.hpp>
 #include <ncpp/pac/mrsw_spin_lock.hpp>
 #include <ncpp/pac/srmw_spin_lock.hpp>
-#include <ncpp/pac/thread_index.hpp>
 
 #pragma endregion

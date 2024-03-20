@@ -1,6 +1,6 @@
 #pragma once
 
-/** @file ncpp/mem/smart_chunk_allocator.hpp
+/** @file ncpp/mem/chunk_allocator.hpp
 *	@brief Implements chunk allocator.
 */
 
@@ -63,12 +63,12 @@ namespace ncpp {
 
 	namespace mem {
 
-		struct NCPP_ALIGN(EASTL_ALLOCATOR_MIN_ALIGNMENT) F_smart_chunk_header {
+		struct NCPP_ALIGN(EASTL_ALLOCATOR_MIN_ALIGNMENT) F_chunk_header {
 
 			sz usage = 0;
 			sz allocation_count = 0;
-			F_smart_chunk_header* pev_p = 0;
-			F_smart_chunk_header* next_p = 0;
+			F_chunk_header* prev_p = 0;
+			F_chunk_header* next_p = 0;
 
 			NCPP_FORCE_INLINE u8* data_root() {
 
@@ -98,10 +98,12 @@ namespace ncpp {
 
 
 
-		struct F_default_smart_chunk_options {
+		struct F_default_chunk_options {
 
-			using F_global_chunk_p_ring_buffer = containers::TF_ring_buffer<F_smart_chunk_header*, F_default_allocator>;
-			using F_local_chunk_p_ring_buffer = containers::TF_ring_buffer<F_smart_chunk_header*, F_default_allocator>;
+			using F_global_chunk_p_ring_buffer = containers::TF_ring_buffer<F_chunk_header*, F_default_allocator>;
+			using F_local_chunk_p_ring_buffer = containers::TF_ring_buffer<F_chunk_header*, F_default_allocator>;
+
+            static constexpr b8 enable_allocation_counting_inside_chunks = true;
 
 		};
 
@@ -121,12 +123,12 @@ namespace ncpp {
 
 
 
-		template<class F_options__ = F_default_smart_chunk_options>
-		class TF_smart_chunk_storage;
-		template<class F_options__ = F_default_smart_chunk_options>
-		class TF_smart_chunk_adaptor;
-		template<class F_options__ = F_default_smart_chunk_options>
-		class TF_smart_chunk_allocator;
+		template<class F_options__ = F_default_chunk_options>
+		class TF_chunk_storage;
+		template<class F_options__ = F_default_chunk_options>
+		class TF_chunk_adaptor;
+		template<class F_options__ = F_default_chunk_options>
+		class TF_chunk_allocator;
 
 
 
@@ -144,11 +146,11 @@ namespace ncpp {
 
 
 
-#define NCPP_SMART_CHUNK_STORAGE_DEFAULT_CHUNK_COUNT 512
-#define NCPP_SMART_CHUNK_ADAPTOR_DEFAULT_MAX_CHUNK_COUNT 16
+#define NCPP_CHUNK_STORAGE_DEFAULT_CHUNK_COUNT 512
+#define NCPP_CHUNK_ADAPTOR_DEFAULT_MAX_CHUNK_COUNT 16
 
 		// Default smart chunk capacity, 256KiB
-#define NCPP_DEFAULT_SMART_CHUNK_CAPACITY 256144
+#define NCPP_DEFAULT_CHUNK_CAPACITY 256144
 
 
 
@@ -167,13 +169,13 @@ namespace ncpp {
 
 
 		template<class F_options__>
-		class TF_smart_chunk_storage {
+		class TF_chunk_storage {
 
 		public:
 			using F_options = F_options__;
-			using F_storage = TF_smart_chunk_storage<F_options>;
-			using F_adaptor = TF_smart_chunk_adaptor<F_options>;
-			using F_allocator = TF_smart_chunk_allocator<F_options>;
+			using F_storage = TF_chunk_storage<F_options>;
+			using F_adaptor = TF_chunk_adaptor<F_options>;
+			using F_allocator = TF_chunk_allocator<F_options>;
 			using F_global_chunk_p_ring_buffer = typename F_options::F_global_chunk_p_ring_buffer;
 			using F_local_chunk_p_ring_buffer = typename F_options::F_local_chunk_p_ring_buffer;
 
@@ -186,7 +188,7 @@ namespace ncpp {
 
 			F_global_chunk_p_ring_buffer chunk_p_ring_buffer_;
 
-			F_smart_chunk_header* first_chunk_p_ = 0;
+			F_chunk_header* first_chunk_p_ = 0;
 
 			F_default_allocator chunk_allocator_;
 
@@ -198,12 +200,12 @@ namespace ncpp {
 
 
 		public:
-			NCPP_FORCE_INLINE TF_smart_chunk_storage(sz chunk_count = NCPP_SMART_CHUNK_STORAGE_DEFAULT_CHUNK_COUNT, sz chunk_capacity = NCPP_DEFAULT_SMART_CHUNK_CAPACITY) :
+			NCPP_FORCE_INLINE TF_chunk_storage(sz chunk_count = NCPP_CHUNK_STORAGE_DEFAULT_CHUNK_COUNT, sz chunk_capacity = NCPP_DEFAULT_CHUNK_CAPACITY) :
 				chunk_p_ring_buffer_(chunk_count),
 
 				chunk_count_(chunk_count),
 				chunk_capacity_(aligned_size(chunk_capacity)),
-				chunk_size_(chunk_capacity_ + sizeof(F_smart_chunk_header))
+				chunk_size_(chunk_capacity_ + sizeof(F_chunk_header))
 			{
 
 				NCPP_ASSERT(chunk_count) << "chunk count is equal to zero, cant create storage";
@@ -211,7 +213,7 @@ namespace ncpp {
 				init_chunks_internal();
 
 			}
-			~TF_smart_chunk_storage() {
+			~TF_chunk_storage() {
 
 				release_internal();
 
@@ -222,7 +224,7 @@ namespace ncpp {
 		private:
 			void init_chunks_internal() {
 
-				first_chunk_p_ = reinterpret_cast<F_smart_chunk_header*>(chunk_allocator_.allocate(chunk_size() * chunk_count_));
+				first_chunk_p_ = reinterpret_cast<F_chunk_header*>(chunk_allocator_.allocate(chunk_size() * chunk_count_));
 
 				reset_chunks_internal();
 
@@ -240,9 +242,9 @@ namespace ncpp {
 
 				for (sz i = 0; i < chunk_count_; ++i) {
 
-					F_smart_chunk_header* chunk_p = reinterpret_cast<F_smart_chunk_header*>(reinterpret_cast<u8*>(first_chunk_p_) + chunk_size_ * i);
+					F_chunk_header* chunk_p = reinterpret_cast<F_chunk_header*>(reinterpret_cast<u8*>(first_chunk_p_) + chunk_size_ * i);
 
-					*chunk_p = F_smart_chunk_header{};
+					*chunk_p = F_chunk_header{};
 
 					chunk_p_ring_buffer_.push(chunk_p);
 
@@ -253,14 +255,14 @@ namespace ncpp {
 
 
 		public:
-			inline void push_chunk(F_smart_chunk_header* chunk_p) {
+			inline void push_chunk(F_chunk_header* chunk_p) {
 
 				chunk_p_ring_buffer_.push(chunk_p);
 
 			}
-			inline F_smart_chunk_header* pop_chunk() {
+			inline F_chunk_header* pop_chunk() {
 
-				F_smart_chunk_header* chunk_p = 0;
+				F_chunk_header* chunk_p = 0;
 
 				b8 success = chunk_p_ring_buffer_.try_pop(chunk_p);
 
@@ -268,11 +270,11 @@ namespace ncpp {
 
 				return chunk_p;
 			}
-			inline F_smart_chunk_header* chunk_from_data_p(void* p) {
+			inline F_chunk_header* chunk_from_data_p(void* p) {
 
 				sz index = (reinterpret_cast<sz>(p) - reinterpret_cast<sz>(first_chunk_p_)) / chunk_size_;
 
-				return reinterpret_cast<F_smart_chunk_header*>(reinterpret_cast<u8*>(first_chunk_p_) + chunk_size_ * index);
+				return reinterpret_cast<F_chunk_header*>(reinterpret_cast<u8*>(first_chunk_p_) + chunk_size_ * index);
 			}
 
 		};
@@ -295,13 +297,13 @@ namespace ncpp {
 
 
 		template<class F_options__>
-		class TF_smart_chunk_adaptor {
+		class TF_chunk_adaptor {
 
 		public:
 			using F_options = F_options__;
-			using F_storage = TF_smart_chunk_storage<F_options>;
-			using F_adaptor = TF_smart_chunk_adaptor<F_options>;
-			using F_allocator = TF_smart_chunk_allocator<F_options>;
+			using F_storage = TF_chunk_storage<F_options>;
+			using F_adaptor = TF_chunk_adaptor<F_options>;
+			using F_allocator = TF_chunk_allocator<F_options>;
 			using F_global_chunk_p_ring_buffer = typename F_options::F_global_chunk_p_ring_buffer;
 			using F_local_chunk_p_ring_buffer = typename F_options::F_local_chunk_p_ring_buffer;
 
@@ -316,7 +318,8 @@ namespace ncpp {
 			sz chunk_capacity_ = 0;
 
 		public:
-			NCPP_FORCE_INLINE F_storage* storage_p() { return storage_p_; }
+			NCPP_FORCE_INLINE F_storage* storage_p() noexcept { return storage_p_; }
+			NCPP_FORCE_INLINE const F_storage* storage_p() const noexcept { return storage_p_; }
 
 			NCPP_FORCE_INLINE sz max_chunk_count() const { return max_chunk_count_; }
 			NCPP_FORCE_INLINE sz chunk_capacity() const { return chunk_capacity_; }
@@ -324,7 +327,7 @@ namespace ncpp {
 
 
 		public:
-			inline TF_smart_chunk_adaptor(F_storage* storage_p, sz max_chunk_count = NCPP_SMART_CHUNK_ADAPTOR_DEFAULT_MAX_CHUNK_COUNT) :
+			inline TF_chunk_adaptor(F_storage* storage_p, sz max_chunk_count = NCPP_CHUNK_ADAPTOR_DEFAULT_MAX_CHUNK_COUNT) :
 				storage_p_(storage_p),
 
 				chunk_p_ring_buffer_(max_chunk_count),
@@ -338,7 +341,7 @@ namespace ncpp {
 				setup_default_chunk_pointers_internal();
 
 			}
-			~TF_smart_chunk_adaptor() {
+			~TF_chunk_adaptor() {
 
 				reset();
 
@@ -366,11 +369,11 @@ namespace ncpp {
 
 			}
 
-			inline void push_chunk(F_smart_chunk_header* chunk_p) {
+			inline void push_chunk(F_chunk_header* chunk_p) {
                 
                 NCPP_ASSERT(chunk_p) << "cant push nulll chunk";
 
-				*chunk_p = F_smart_chunk_header {};
+				*chunk_p = F_chunk_header {};
 
 				if (chunk_p_ring_buffer_.size() < max_chunk_count_)
 					chunk_p_ring_buffer_.push(chunk_p);
@@ -378,9 +381,9 @@ namespace ncpp {
 					storage_p_->push_chunk(chunk_p);
 
 			}
-			inline F_smart_chunk_header* pop_chunk() {
+			inline F_chunk_header* pop_chunk() {
 
-				F_smart_chunk_header* chunk_p = 0;
+				F_chunk_header* chunk_p = 0;
 
 				if (!(chunk_p_ring_buffer_.try_pop(chunk_p))) {
 
@@ -419,18 +422,18 @@ namespace ncpp {
 		 * Then it deallocates that chunk.
 		 */
 		template<class F_options__>
-		class TF_smart_chunk_allocator : public TA_allocator<TF_smart_chunk_allocator<F_options__>, true> {
+		class TF_chunk_allocator : public TA_allocator<TF_chunk_allocator<F_options__>, true> {
 
 		private:
-			using F_base = TA_allocator<TF_smart_chunk_allocator<F_options__>, true>;
+			using F_base = TA_allocator<TF_chunk_allocator<F_options__>, true>;
 
 
 
 		public:
 			using F_options = F_options__;
-			using F_storage = TF_smart_chunk_storage<F_options>;
-			using F_adaptor = TF_smart_chunk_adaptor<F_options>;
-			using F_allocator = TF_smart_chunk_allocator<F_options>;
+			using F_storage = TF_chunk_storage<F_options>;
+			using F_adaptor = TF_chunk_adaptor<F_options>;
+			using F_allocator = TF_chunk_allocator<F_options>;
 			using F_global_chunk_p_ring_buffer = typename F_options::F_global_chunk_p_ring_buffer;
 			using F_local_chunk_p_ring_buffer = typename F_options::F_local_chunk_p_ring_buffer;
 
@@ -440,11 +443,11 @@ namespace ncpp {
 			F_adaptor* adaptor_p_ = 0;
 			F_storage* storage_p_ = 0;
 
-			F_smart_chunk_header* head_chunk_p_ = 0;
-			F_smart_chunk_header* tail_chunk_p_ = 0;
+			F_chunk_header* head_chunk_p_ = 0;
+			F_chunk_header* tail_chunk_p_ = 0;
 			u16 chunk_count_ = 0;
 
-			F_smart_chunk_header* current_chunk_p_ = 0;
+			F_chunk_header* current_chunk_p_ = 0;
 			sz current_usage_ = 0;
 
 			sz chunk_capacity_;
@@ -453,8 +456,10 @@ namespace ncpp {
 
 
 		public:
-			NCPP_FORCE_INLINE F_adaptor* adaptor_p() { return adaptor_p_; }
-			NCPP_FORCE_INLINE F_storage* storage_p() { return storage_p_; }
+			NCPP_FORCE_INLINE F_adaptor* adaptor_p() noexcept { return adaptor_p_; }
+			NCPP_FORCE_INLINE const F_adaptor* adaptor_p() const noexcept { return adaptor_p_; }
+			NCPP_FORCE_INLINE F_storage* storage_p() noexcept { return storage_p_; }
+			NCPP_FORCE_INLINE const F_storage* storage_p() const noexcept { return storage_p_; }
 
 			NCPP_FORCE_INLINE sz chunk_capacity() const { return chunk_capacity_; }
 			NCPP_FORCE_INLINE u16 min_chunk_count() const { return min_chunk_count_; }
@@ -464,7 +469,7 @@ namespace ncpp {
 
 		public:
 			// Default chunk capacity is 2MiB
-			inline TF_smart_chunk_allocator(F_adaptor* adaptor_p = 0, u16 min_chunk_count = 0, const char* name = 0) :
+			inline TF_chunk_allocator(F_adaptor* adaptor_p = 0, u16 min_chunk_count = 0, const char* name = 0) :
 				F_base(name),
 				adaptor_p_(adaptor_p),
 
@@ -485,27 +490,27 @@ namespace ncpp {
 				}
 
 			}
-			inline TF_smart_chunk_allocator(const TF_smart_chunk_allocator& x) :
-				TF_smart_chunk_allocator(x.adaptor_p_, x.min_chunk_count_, x.name())
+			inline TF_chunk_allocator(const TF_chunk_allocator& x) :
+				TF_chunk_allocator(x.adaptor_p_, x.min_chunk_count_, x.name())
 			{
 
 
 
 			}
 
-			~TF_smart_chunk_allocator() {
+			~TF_chunk_allocator() {
 
 				reset();
 			}
 
 
 
-		private:
-			F_smart_chunk_header* push_new_chunk() {
+		public:
+			F_chunk_header* get_new_chunk_from_adaptor() {
 
 				NCPP_ASSERT(adaptor_p_) << "adaptor is null, cant push new chunk";
 
-				F_smart_chunk_header* new_chunk_p = adaptor_p_->pop_chunk();
+				F_chunk_header* new_chunk_p = adaptor_p_->pop_chunk();
 
 				*new_chunk_p = {
 				
@@ -526,7 +531,7 @@ namespace ncpp {
 
 				return new_chunk_p;
 			}
-			F_smart_chunk_header* optain_next_chunk(F_smart_chunk_header* chunk_p) {
+			F_chunk_header* optain_next_chunk(F_chunk_header* chunk_p) {
 
 				if (chunk_p && chunk_p->next_p) {
 
@@ -535,14 +540,14 @@ namespace ncpp {
 					return chunk_p->next_p;
 				}
 
-				return push_new_chunk();
+				return get_new_chunk_from_adaptor();
 			}
-			void erase_chunk(F_smart_chunk_header* chunk_p) {
+			void erase_chunk(F_chunk_header* chunk_p) {
 
 				NCPP_ASSERT(adaptor_p_) << "adaptor is null, cant erase chunk";
 
-				F_smart_chunk_header* prev_chunk_p = chunk_p->pev_p;
-				F_smart_chunk_header* next_chunk_p = chunk_p->next_p;
+				F_chunk_header* prev_chunk_p = chunk_p->prev_p;
+				F_chunk_header* next_chunk_p = chunk_p->next_p;
 
 				if (prev_chunk_p) {
 
@@ -552,7 +557,7 @@ namespace ncpp {
 					head_chunk_p_ = next_chunk_p;
 				if (next_chunk_p) {
 
-					next_chunk_p->pev_p = prev_chunk_p;
+					next_chunk_p->prev_p = prev_chunk_p;
 				}
 				else
 					tail_chunk_p_ = prev_chunk_p;
@@ -601,7 +606,9 @@ namespace ncpp {
 
 
 				current_chunk_p_->usage = current_usage_;
-				++current_chunk_p_->allocation_count;
+
+                if constexpr (F_options::enable_allocation_counting_inside_chunks)
+				    ++current_chunk_p_->allocation_count;
 
 
 
@@ -612,19 +619,21 @@ namespace ncpp {
 
 				NCPP_ASSERT(adaptor_p_) << "adaptor is null, cant deallocate memory";
 
-				F_smart_chunk_header* chunk_p = storage_p_->chunk_from_data_p(p);
+				F_chunk_header* chunk_p = storage_p_->chunk_from_data_p(p);
 
 
 
-				--(chunk_p->allocation_count);
+                if constexpr (F_options::enable_allocation_counting_inside_chunks)
+				    --(chunk_p->allocation_count);
 
 
 
-				if ((chunk_p->allocation_count == 0) && (chunk_p != current_chunk_p_)) {
-
-					erase_chunk(chunk_p);
-
-				}
+                // Deprecated, need to call chunk erasing manually
+//                if ((chunk_p->allocation_count == 0) && (chunk_p != current_chunk_p_)) {
+//
+//                    erase_chunk(chunk_p);
+//
+//                }
 
 			}
 
@@ -668,7 +677,7 @@ namespace ncpp {
 
 					current_chunk_p_->usage = 0;
 
-					current_chunk_p_ = current_chunk_p_->pev_p;
+					current_chunk_p_ = current_chunk_p_->prev_p;
 
 				}
 
@@ -692,6 +701,33 @@ namespace ncpp {
 
 			}
 
+            template<typename F_functor__>
+            inline void T_iterate_chunks(F_functor__&& functor) {
+
+                F_chunk_header* chunk_p = head_chunk_p_;
+
+                while (chunk_p) {
+
+                    F_chunk_header* next_chunk_p = chunk_p->next_p;
+                    functor(chunk_p);
+                    chunk_p = next_chunk_p;
+                }
+
+            }
+            template<typename F_functor__>
+            inline void T_reverse_iterate_chunks(F_functor__&& functor) {
+
+                F_chunk_header* chunk_p = tail_chunk_p_;
+
+                while (chunk_p) {
+
+                    F_chunk_header* prev_chunk_p = chunk_p->prev_p;
+                    functor(chunk_p);
+                    chunk_p = prev_chunk_p;
+                }
+
+            }
+
 		};
 
 
@@ -710,9 +746,9 @@ namespace ncpp {
 
 
 
-		using F_smart_chunk_storage = TF_smart_chunk_storage<>;
-		using F_smart_chunk_adaptor = TF_smart_chunk_adaptor<>;
-		using F_smart_chunk_allocator = TF_smart_chunk_allocator<>;
+		using F_chunk_storage = TF_chunk_storage<>;
+		using F_chunk_adaptor = TF_chunk_adaptor<>;
+		using F_chunk_allocator = TF_chunk_allocator<>;
 
 	}
 
