@@ -327,7 +327,8 @@ namespace ncpp {
                         *chunk_p = F_chunk_header{};
                     }
                     else{
-                        chunk_p = new F_chunk_header();
+                        chunk_p = reinterpret_cast<F_chunk_header*>(allocator_for_chunks_.allocate(chunk_size()));
+                        *chunk_p = F_chunk_header{};
                     }
 
 					chunk_p_ring_buffer_.push(chunk_p);
@@ -343,7 +344,8 @@ namespace ncpp {
 
                 if constexpr (!F_options::chunks_in_a_single_block){
                     if(chunk_p_ring_buffer_.size() == max_chunk_count_){
-                        delete chunk_p;
+                        chunk_p->~F_chunk_header();
+                        allocator_for_chunks_.deallocate(chunk_p);
                     }
                 }
 
