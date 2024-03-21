@@ -82,14 +82,23 @@ namespace ncpp {
 				return data_root() + usage;
 			}
 
-            NCPP_FORCE_INLINE void reset_state() noexcept {
+            NCPP_FORCE_INLINE void reset_state(sz uniform_alignment, sz uniform_alignment_offset) noexcept {
 
-                usage = 0;
+                usage = aligned_size(
+                        sizeof(F_chunk_header)
+                        + uniform_alignment_offset
+                        + reinterpret_cast<sz>(this),
+                        uniform_alignment
+                    )
+                    - sizeof(F_chunk_header)
+                    - uniform_alignment_offset
+                    - reinterpret_cast<sz>(this);
+
                 allocation_count = 0;
             }
-            NCPP_FORCE_INLINE void reset() noexcept {
+            NCPP_FORCE_INLINE void reset(sz uniform_alignment, sz uniform_alignment_offset) noexcept {
 
-                reset_state();
+                reset_state(uniform_alignment, uniform_alignment_offset);
 
                 prev_p = 0;
                 next_p = 0;
@@ -153,6 +162,8 @@ namespace ncpp {
 
             static constexpr b8 enable_uniform_allocation = false;
 
+            static constexpr b8 enable_chunk_p_caching_on_allocations = false;
+
 
 
             static NCPP_FORCE_INLINE void pre_push_chunk(void* storage_p) noexcept {}
@@ -165,6 +176,35 @@ namespace ncpp {
             static NCPP_FORCE_INLINE void post_pop_chunk_with_chunk_p(void* storage_p, F_chunk_header* chunk_p) noexcept {}
 
 		};
+
+
+
+        enum class E_chunk_p_from_allocation_p_getter_mode {
+
+            NONE,
+            FROM_SINGLE_BLOCK,
+            FLOOR,
+            CACHE_ON_ALLOCATIONS
+
+        };
+
+        template<class F_options__ = F_default_chunk_options>
+        constexpr E_chunk_p_from_allocation_p_getter_mode T_chunk_p_from_allocation_p_getter_mode() {
+
+            return (
+                (F_options__::enable_chunk_p_caching_on_allocations)
+                ? (E_chunk_p_from_allocation_p_getter_mode::CACHE_ON_ALLOCATIONS)
+                : (
+                    (F_options__::enable_allocation_counting_inside_chunks)
+                    ? (
+                        (F_options__::chunks_in_a_single_block)
+                        ? (E_chunk_p_from_allocation_p_getter_mode::FROM_SINGLE_BLOCK)
+                        : (E_chunk_p_from_allocation_p_getter_mode::FLOOR)
+                    )
+                    : (E_chunk_p_from_allocation_p_getter_mode::NONE)
+                )
+            );
+        }
 
 
 
@@ -344,10 +384,7 @@ namespace ncpp {
 
                 F_chunk_header* chunk_p = 0;
 
-                if constexpr (
-                    !F_options::chunks_in_a_single_block
-                    && F_options::enable_allocation_counting_inside_chunks
-                )
+                if constexpr (T_chunk_p_from_allocation_p_getter_mode<F_options>() == E_chunk_p_from_allocation_p_getter_mode::FLOOR)
                 {
                     chunk_p = reinterpret_cast<F_chunk_header*>(
                         allocator_for_chunks_.allocate(
@@ -367,27 +404,16 @@ namespace ncpp {
                     );
                 }
 
-                *chunk_p = F_chunk_header{
-                    .usage = aligned_size(
-                            sizeof(F_chunk_header)
-                            + uniform_alignment_offset_
-                            + reinterpret_cast<sz>(chunk_p),
-                            uniform_alignment_
-                        )
-                        - sizeof(F_chunk_header)
-                        - uniform_alignment_offset_
-                        - reinterpret_cast<sz>(chunk_p)
-                };
+                chunk_p->reset(
+                    uniform_alignment_,
+                    uniform_alignment_offset_
+                );
 
                 NCPP_ASSERT(
-                    !(
-                        !F_options::chunks_in_a_single_block
-                        && F_options::enable_allocation_counting_inside_chunks
-                    )
+                    (T_chunk_p_from_allocation_p_getter_mode<F_options>() != E_chunk_p_from_allocation_p_getter_mode::FLOOR)
                     ||
                     (
-                        !F_options::chunks_in_a_single_block
-                        && F_options::enable_allocation_counting_inside_chunks
+                        (T_chunk_p_from_allocation_p_getter_mode<F_options>() == E_chunk_p_from_allocation_p_getter_mode::FLOOR)
                         && (reinterpret_cast<sz>(chunk_p) % chunk_size_ == 0)
                     )
                 ) << "if chunk is not in a single block and allocation counting inside chunks is enabled, the allocated chunk's alignment must be equal to its size";
@@ -492,10 +518,7 @@ namespace ncpp {
                 // when chunks are not in a single block and allocation counting is enabled,
                 // the chunk alignment must be equal to its size,
                 // so we need another way to get chunk from data pointer (by "floor" the data pointer)
-                if constexpr (
-                    !F_options::chunks_in_a_single_block
-                    && F_options::enable_allocation_counting_inside_chunks
-                )
+                if constexpr (T_chunk_p_from_allocation_p_getter_mode<F_options>() == E_chunk_p_from_allocation_p_getter_mode::FLOOR)
                 {
                     return (F_chunk_header*)(reinterpret_cast<sz>(p) / chunk_size_ * chunk_size_);
                 }
@@ -510,10 +533,7 @@ namespace ncpp {
                 // the chunk alignment must be equal to its size.
                 // in this case, we use "floor" the data pointer to get the chunk pointer
                 // => therefore, the data pointers are always valid
-                if constexpr (
-                    !F_options::chunks_in_a_single_block
-                    && F_options::enable_allocation_counting_inside_chunks
-                    )
+                if constexpr (T_chunk_p_from_allocation_p_getter_mode<F_options>() != E_chunk_p_from_allocation_p_getter_mode::FROM_SINGLE_BLOCK)
                 {
                     return true;
                 }
@@ -749,7 +769,10 @@ namespace ncpp {
 
 				F_chunk_header* new_chunk_p = adaptor_p_->pop_chunk();
 
-				new_chunk_p->reset_state();
+				new_chunk_p->reset_state(
+                    storage_p_->uniform_alignment(),
+                    storage_p_->uniform_alignment_offset()
+                );
                 new_chunk_p->prev_p = tail_chunk_p_;
 
 				if (tail_chunk_p_)
@@ -767,7 +790,10 @@ namespace ncpp {
 
 				if (chunk_p && chunk_p->next_p) {
 
-					chunk_p->next_p->reset_state();
+					chunk_p->next_p->reset_state(
+                        storage_p_->uniform_alignment(),
+                        storage_p_->uniform_alignment_offset()
+                    );
 
 					return chunk_p->next_p;
 				}
@@ -920,7 +946,10 @@ namespace ncpp {
 
 				while (current_chunk_p_ != head_chunk_p_) {
 
-					current_chunk_p_->reset_state();
+					current_chunk_p_->reset_state(
+                        storage_p_->uniform_alignment(),
+                        storage_p_->uniform_alignment_offset()
+                    );
 
 					current_chunk_p_ = current_chunk_p_->prev_p;
 
