@@ -82,6 +82,19 @@ namespace ncpp {
 				return data_root() + usage;
 			}
 
+            NCPP_FORCE_INLINE void reset_state() noexcept {
+
+                usage = 0;
+                allocation_count = 0;
+            }
+            NCPP_FORCE_INLINE void reset() noexcept {
+
+                reset_state();
+
+                prev_p = 0;
+                next_p = 0;
+            }
+
 		};
 
 
@@ -331,7 +344,29 @@ namespace ncpp {
 
                 F_chunk_header* chunk_p = 0;
 
-                chunk_p = reinterpret_cast<F_chunk_header*>(allocator_for_chunks_.allocate(chunk_size()));
+                if constexpr (
+                    !F_options::chunks_in_a_single_block
+                    && F_options::enable_allocation_counting_inside_chunks
+                )
+                {
+                    chunk_p = reinterpret_cast<F_chunk_header*>(
+                        allocator_for_chunks_.allocate(
+                            chunk_size(),
+                            chunk_size_,
+                            0,
+                            0
+                        )
+                    );
+                }
+                else
+                {
+                    chunk_p = reinterpret_cast<F_chunk_header*>(
+                        allocator_for_chunks_.allocate(
+                            chunk_size()
+                        )
+                    );
+                }
+
                 *chunk_p = F_chunk_header{
                     .usage = aligned_size(
                             sizeof(F_chunk_header)
@@ -660,9 +695,12 @@ namespace ncpp {
 			NCPP_FORCE_INLINE F_storage* storage_p() noexcept { return storage_p_; }
 			NCPP_FORCE_INLINE const F_storage* storage_p() const noexcept { return storage_p_; }
 
-			NCPP_FORCE_INLINE sz chunk_capacity() const { return chunk_capacity_; }
-			NCPP_FORCE_INLINE u16 min_chunk_count() const { return min_chunk_count_; }
-			NCPP_FORCE_INLINE u16 chunk_count() const { return chunk_count_; }
+			NCPP_FORCE_INLINE F_chunk_header* current_chunk_p() noexcept { return current_chunk_p_; }
+			NCPP_FORCE_INLINE const F_chunk_header* current_chunk_p() const noexcept { return current_chunk_p_; }
+
+			NCPP_FORCE_INLINE sz chunk_capacity() const noexcept { return chunk_capacity_; }
+			NCPP_FORCE_INLINE u16 min_chunk_count() const noexcept { return min_chunk_count_; }
+			NCPP_FORCE_INLINE u16 chunk_count() const noexcept { return chunk_count_; }
 
 
 
@@ -711,13 +749,8 @@ namespace ncpp {
 
 				F_chunk_header* new_chunk_p = adaptor_p_->pop_chunk();
 
-				*new_chunk_p = {
-				
-					0,
-					0,
-					tail_chunk_p_
-
-				};
+				new_chunk_p->reset_state();
+                new_chunk_p->prev_p = tail_chunk_p_;
 
 				if (tail_chunk_p_)
 					tail_chunk_p_->next_p = new_chunk_p;
@@ -734,7 +767,7 @@ namespace ncpp {
 
 				if (chunk_p && chunk_p->next_p) {
 
-					chunk_p->next_p->usage = 0;
+					chunk_p->next_p->reset_state();
 
 					return chunk_p->next_p;
 				}
@@ -887,7 +920,7 @@ namespace ncpp {
 
 				while (current_chunk_p_ != head_chunk_p_) {
 
-					current_chunk_p_->usage = 0;
+					current_chunk_p_->reset_state();
 
 					current_chunk_p_ = current_chunk_p_->prev_p;
 
