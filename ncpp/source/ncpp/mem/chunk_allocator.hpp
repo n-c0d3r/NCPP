@@ -70,6 +70,8 @@ namespace ncpp {
 			F_chunk_header* prev_p = 0;
 			F_chunk_header* next_p = 0;
 
+
+
 			NCPP_FORCE_INLINE u8* data_root() {
 
 				return reinterpret_cast<u8*>(this + 1);
@@ -132,8 +134,11 @@ namespace ncpp {
 
 
 
-            static constexpr b8 enable_allocation_counting_inside_chunks = true;
-            static constexpr b8 chunks_in_a_single_block = true;
+            // if enable_allocation_counting_inside_chunks is enabled but chunks_in_a_single_block is not, the allocated chunks must be aligned to their size.
+            static constexpr b8 enable_allocation_counting_inside_chunks = false;
+            static constexpr b8 chunks_in_a_single_block = false;
+
+            static constexpr b8 enable_uniform_allocation = false;
 
 
 
@@ -187,11 +192,12 @@ namespace ncpp {
 
 
 
-#define NCPP_CHUNK_STORAGE_DEFAULT_MAX_CHUNK_COUNT 512
-#define NCPP_CHUNK_ADAPTOR_DEFAULT_MAX_CHUNK_COUNT 16
-
-		// Default smart chunk capacity, 256KiB
+#define NCPP_DEFAULT_CHUNK_STORAGE_MAX_CHUNK_COUNT 512
+#define NCPP_DEFAULT_CHUNK_ADAPTOR_MAX_CHUNK_COUNT 16
 #define NCPP_DEFAULT_CHUNK_CAPACITY 256144
+#define NCPP_DEFAULT_CHUNK_STORAGE_UNIFORM_ALLOCATION_SIZE EASTL_ALLOCATOR_MIN_ALIGNMENT
+#define NCPP_DEFAULT_CHUNK_STORAGE_UNIFORM_ALIGNMENT EASTL_ALLOCATOR_MIN_ALIGNMENT
+#define NCPP_DEFAULT_CHUNK_STORAGE_UNIFORM_ALIGNMENT_OFFSET 0
 
 
 
@@ -224,23 +230,19 @@ namespace ncpp {
 
 
 
-        private:
-            static_assert(
-                !(!F_options::chunks_in_a_single_block && F_options::enable_allocation_counting_inside_chunks),
-                "invalid options, allocation counting can only be enabled when chunks in a single block is enabled"
-            );
-
-
-
 		private:
 			sz max_chunk_count_ = 0;
 			sz chunk_capacity_ = 0;
 			sz chunk_size_ = 0;
 			sz max_total_size_ = 0;
+			sz uniform_allocation_size_ = NCPP_DEFAULT_CHUNK_STORAGE_UNIFORM_ALLOCATION_SIZE;
+            sz uniform_alignment_ = EASTL_ALLOCATOR_MIN_ALIGNMENT;
+            sz uniform_alignment_offset_ = 0;
+            sz uniform_allocation_actual_size_ = 0;
 
 			F_global_chunk_p_ring_buffer chunk_p_ring_buffer_;
 
-			F_chunk_header* first_chunk_p_ = 0;
+			F_chunk_header* first_chunk_p_in_a_single_block_ = 0;
 
             F_allocator_for_chunks allocator_for_chunks_;
 
@@ -252,6 +254,10 @@ namespace ncpp {
 			NCPP_FORCE_INLINE sz chunk_capacity() const noexcept { return chunk_capacity_; }
 			NCPP_FORCE_INLINE sz chunk_size() const noexcept { return chunk_size_; }
 			NCPP_FORCE_INLINE sz max_total_size() const noexcept { return max_total_size_; }
+			NCPP_FORCE_INLINE sz uniform_allocation_size() const noexcept { return uniform_allocation_size_; }
+            NCPP_FORCE_INLINE sz uniform_alignment() const noexcept { return uniform_alignment_; }
+            NCPP_FORCE_INLINE sz uniform_alignment_offset() const noexcept { return uniform_alignment_offset_; }
+            NCPP_FORCE_INLINE sz uniform_allocation_actual_size() const noexcept { return uniform_allocation_actual_size_; }
 
 			NCPP_FORCE_INLINE const F_global_chunk_p_ring_buffer& chunk_p_ring_buffer() const noexcept { return chunk_p_ring_buffer_; }
 
@@ -261,13 +267,23 @@ namespace ncpp {
 
 
 		public:
-			NCPP_FORCE_INLINE TF_chunk_storage(sz max_chunk_count = NCPP_CHUNK_STORAGE_DEFAULT_MAX_CHUNK_COUNT, sz chunk_capacity = NCPP_DEFAULT_CHUNK_CAPACITY) :
+			NCPP_FORCE_INLINE TF_chunk_storage(
+                sz max_chunk_count = NCPP_DEFAULT_CHUNK_STORAGE_MAX_CHUNK_COUNT,
+                sz chunk_capacity = NCPP_DEFAULT_CHUNK_CAPACITY,
+                sz uniform_allocation_size = NCPP_DEFAULT_CHUNK_STORAGE_UNIFORM_ALLOCATION_SIZE,
+                sz uniform_alignment = NCPP_DEFAULT_CHUNK_STORAGE_UNIFORM_ALIGNMENT,
+                sz uniform_alignment_offset = 0
+            ) :
                 chunk_p_ring_buffer_(max_chunk_count),
 
                 max_chunk_count_(max_chunk_count),
                 chunk_capacity_(aligned_size(chunk_capacity)),
                 chunk_size_(chunk_capacity_ + sizeof(F_chunk_header)),
-                max_total_size_((chunk_capacity_ + sizeof(F_chunk_header)) * max_chunk_count)
+                max_total_size_((chunk_capacity_ + sizeof(F_chunk_header)) * max_chunk_count),
+                uniform_allocation_size_(uniform_allocation_size),
+                uniform_alignment_(uniform_alignment),
+                uniform_alignment_offset_(uniform_alignment_offset),
+                uniform_allocation_actual_size_(aligned_size(uniform_allocation_size_, uniform_alignment_))
 			{
 
 				NCPP_ASSERT(max_chunk_count) << "chunk count is equal to zero, cant create storage";
@@ -275,13 +291,24 @@ namespace ncpp {
 				init_chunks_internal();
 
 			}
-            NCPP_FORCE_INLINE TF_chunk_storage(F_allocator_for_chunks& allocator_for_chunks, sz max_chunk_count = NCPP_CHUNK_STORAGE_DEFAULT_MAX_CHUNK_COUNT, sz chunk_capacity = NCPP_DEFAULT_CHUNK_CAPACITY) :
+            NCPP_FORCE_INLINE TF_chunk_storage(
+                F_allocator_for_chunks& allocator_for_chunks,
+                sz max_chunk_count = NCPP_DEFAULT_CHUNK_STORAGE_MAX_CHUNK_COUNT,
+                sz chunk_capacity = NCPP_DEFAULT_CHUNK_CAPACITY,
+                sz uniform_allocation_size = NCPP_DEFAULT_CHUNK_STORAGE_UNIFORM_ALLOCATION_SIZE,
+                sz uniform_alignment = NCPP_DEFAULT_CHUNK_STORAGE_UNIFORM_ALIGNMENT,
+                sz uniform_alignment_offset = 0
+            ) :
                 chunk_p_ring_buffer_(max_chunk_count),
 
                 max_chunk_count_(max_chunk_count),
                 chunk_capacity_(aligned_size(chunk_capacity)),
                 chunk_size_(chunk_capacity_ + sizeof(F_chunk_header)),
                 max_total_size_((chunk_capacity_ + sizeof(F_chunk_header)) * max_chunk_count),
+                uniform_allocation_size_(uniform_allocation_size),
+                uniform_alignment_(uniform_alignment),
+                uniform_alignment_offset_(uniform_alignment_offset),
+                uniform_allocation_actual_size_(aligned_size(uniform_allocation_size_, uniform_alignment_)),
 
                 allocator_for_chunks_(allocator_for_chunks)
             {
@@ -299,10 +326,38 @@ namespace ncpp {
 
 
 
+        private:
+            inline F_chunk_header* create_chunk_that_is_not_in_a_single_block() {
+
+                F_chunk_header* chunk_p = 0;
+
+                chunk_p = reinterpret_cast<F_chunk_header*>(allocator_for_chunks_.allocate(chunk_size()));
+                *chunk_p = F_chunk_header{
+                    .usage = aligned_size(sizeof(F_chunk_header), uniform_alignment_) - sizeof(F_chunk_header)
+                };
+
+                NCPP_ASSERT(
+                    !(
+                        !F_options::chunks_in_a_single_block
+                        && F_options::enable_allocation_counting_inside_chunks
+                    )
+                    ||
+                    (
+                        !F_options::chunks_in_a_single_block
+                        && F_options::enable_allocation_counting_inside_chunks
+                        && (reinterpret_cast<sz>(chunk_p) % chunk_size_ == 0)
+                    )
+                ) << "if chunk is not in a single block and allocation counting inside chunks is enabled, the allocated chunk's alignment must be equal to its size";
+
+                return chunk_p;
+            }
+
+
+
 		private:
 			void init_chunks_internal() {
 
-				first_chunk_p_ = reinterpret_cast<F_chunk_header*>(allocator_for_chunks_.allocate(chunk_size() * max_chunk_count_));
+				first_chunk_p_in_a_single_block_ = reinterpret_cast<F_chunk_header*>(allocator_for_chunks_.allocate(chunk_size() * max_chunk_count_));
 
                 rebuild_chunks_internal();
 
@@ -310,7 +365,7 @@ namespace ncpp {
 
 			void release_internal() {
 
-                allocator_for_chunks_.deallocate(first_chunk_p_);
+                allocator_for_chunks_.deallocate(first_chunk_p_in_a_single_block_);
 
 			}
 
@@ -323,12 +378,13 @@ namespace ncpp {
 					F_chunk_header* chunk_p = 0;
 
                     if constexpr (F_options::chunks_in_a_single_block){
-                        chunk_p = reinterpret_cast<F_chunk_header*>(reinterpret_cast<u8*>(first_chunk_p_) + chunk_size_ * i);
-                        *chunk_p = F_chunk_header{};
+                        chunk_p = reinterpret_cast<F_chunk_header*>(reinterpret_cast<u8*>(first_chunk_p_in_a_single_block_) + chunk_size_ * i);
+                        *chunk_p = F_chunk_header{
+                            .usage = aligned_size(sizeof(F_chunk_header) + uniform_alignment_offset_, uniform_alignment_) - sizeof(F_chunk_header) - uniform_alignment_offset_
+                        };
                     }
                     else{
-                        chunk_p = reinterpret_cast<F_chunk_header*>(allocator_for_chunks_.allocate(chunk_size()));
-                        *chunk_p = F_chunk_header{};
+                        chunk_p = create_chunk_that_is_not_in_a_single_block();
                     }
 
 					chunk_p_ring_buffer_.push(chunk_p);
@@ -371,7 +427,7 @@ namespace ncpp {
                 }
                 else{
                     if(!success){
-                        chunk_p = new F_chunk_header();
+                        chunk_p = create_chunk_that_is_not_in_a_single_block();
                     }
                 }
 
@@ -382,17 +438,36 @@ namespace ncpp {
 			}
 			inline F_chunk_header* chunk_from_data_p(void* p) const noexcept {
 
-                NCPP_ASSERT(F_options::chunks_in_a_single_block) << "can only get data pointer if chunks in a single block is enabled";
+                // when chunks are not in a single block and allocation counting is enabled,
+                // the chunk alignment must be equal to its size,
+                // so we need another way to get chunk from data pointer (by "floor" the data pointer)
+                if constexpr (
+                    !F_options::chunks_in_a_single_block
+                    && F_options::enable_allocation_counting_inside_chunks
+                )
+                {
+                    return (F_chunk_header*)(reinterpret_cast<sz>(p) / chunk_size_ * chunk_size_);
+                }
 
-				sz index = (reinterpret_cast<sz>(p) - reinterpret_cast<sz>(first_chunk_p_)) / chunk_size_;
+				sz index = (reinterpret_cast<sz>(p) - reinterpret_cast<sz>(first_chunk_p_in_a_single_block_)) / chunk_size_;
 
-				return reinterpret_cast<F_chunk_header*>(reinterpret_cast<u8*>(first_chunk_p_) + chunk_size_ * index);
+				return reinterpret_cast<F_chunk_header*>(reinterpret_cast<u8*>(first_chunk_p_in_a_single_block_) + chunk_size_ * index);
 			}
             inline b8 is_local_data_p(void* p) const noexcept {
 
-                NCPP_ASSERT(F_options::chunks_in_a_single_block) << "can only check local data pointer if chunks in a single block is enabled";
+                // when chunks are not in a single block and allocation counting is enabled,
+                // the chunk alignment must be equal to its size.
+                // in this case, we use "floor" the data pointer to get the chunk pointer
+                // => therefore, the data pointers are always valid
+                if constexpr (
+                    !F_options::chunks_in_a_single_block
+                    && F_options::enable_allocation_counting_inside_chunks
+                    )
+                {
+                    return true;
+                }
 
-                return (reinterpret_cast<sz>(p) - reinterpret_cast<sz>(first_chunk_p_)) < max_total_size_;
+                return (reinterpret_cast<sz>(p) - reinterpret_cast<sz>(first_chunk_p_in_a_single_block_)) < max_total_size_;
             }
 
 		};
@@ -445,7 +520,7 @@ namespace ncpp {
 
 
 		public:
-			inline TF_chunk_adaptor(F_storage* storage_p, sz max_chunk_count = NCPP_CHUNK_ADAPTOR_DEFAULT_MAX_CHUNK_COUNT) :
+			inline TF_chunk_adaptor(F_storage* storage_p, sz max_chunk_count = NCPP_DEFAULT_CHUNK_ADAPTOR_MAX_CHUNK_COUNT) :
 				storage_p_(storage_p),
 
 				chunk_p_ring_buffer_(max_chunk_count),
@@ -683,35 +758,68 @@ namespace ncpp {
 		public:
 			NCPP_FORCE_INLINE void* new_mem(sz size, sz alignment, sz alignment_offset) {
 
-				sz actual_size = alignment + alignment_offset + size;
+                if constexpr (F_options::enable_uniform_allocation) {
 
-				NCPP_ASSERT(actual_size <= chunk_capacity_) << "allocation size too big";
-				NCPP_ASSERT(adaptor_p_) << "adaptor is null, cant allocate memory";
+                    // size, alignment and alignment offset are ignored when uniform allocation is enabled
+                    sz actual_size = storage_p_->uniform_allocation_actual_size();
 
-				current_usage_ += actual_size;
+                    NCPP_ASSERT(actual_size <= chunk_capacity_) << "allocation size too big";
+                    NCPP_ASSERT(adaptor_p_) << "adaptor is null, cant allocate memory";
+
+                    current_usage_ += actual_size;
 
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
-				NCPP_INCREASE_USABLE_ALLOCATED_MEMORY(actual_size);
+                    NCPP_INCREASE_USABLE_ALLOCATED_MEMORY(actual_size);
 #endif
 
-				if (current_usage_ > chunk_capacity_)
-				{
+                    if (current_usage_ > chunk_capacity_)
+                    {
 
-					current_chunk_p_ = optain_next_chunk(current_chunk_p_);
+                        current_chunk_p_ = optain_next_chunk(current_chunk_p_);
 
-					current_usage_ = actual_size;
+                        current_usage_ = actual_size;
 
-				}
+                    }
 
-				u8* memory_p = current_chunk_p_->current_data();
+                    u8* memory_p = current_chunk_p_->current_data();
 
-				current_chunk_p_->usage = current_usage_;
+                    current_chunk_p_->usage = current_usage_;
 
-                if constexpr (F_options::enable_allocation_counting_inside_chunks)
-				    ++current_chunk_p_->allocation_count;
+                    if constexpr (F_options::enable_allocation_counting_inside_chunks)
+                        ++current_chunk_p_->allocation_count;
 
-				return reinterpret_cast<u8*>(align_address(reinterpret_cast<uintptr_t>(memory_p + alignment_offset), alignment)) - alignment_offset;
+                    return reinterpret_cast<u8*>(memory_p);
+                }
+                else{
+                    sz actual_size = alignment + size;
 
+                    NCPP_ASSERT(actual_size <= chunk_capacity_) << "allocation size too big";
+                    NCPP_ASSERT(adaptor_p_) << "adaptor is null, cant allocate memory";
+
+                    current_usage_ += actual_size;
+
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+                    NCPP_INCREASE_USABLE_ALLOCATED_MEMORY(actual_size);
+#endif
+
+                    if (current_usage_ > chunk_capacity_)
+                    {
+
+                        current_chunk_p_ = optain_next_chunk(current_chunk_p_);
+
+                        current_usage_ = actual_size;
+
+                    }
+
+                    u8* memory_p = current_chunk_p_->current_data();
+
+                    current_chunk_p_->usage = current_usage_;
+
+                    if constexpr (F_options::enable_allocation_counting_inside_chunks)
+                        ++current_chunk_p_->allocation_count;
+
+                    return reinterpret_cast<u8*>(align_address(reinterpret_cast<uintptr_t>(memory_p + alignment_offset), alignment)) - alignment_offset;
+                }
 			}
 			NCPP_FORCE_INLINE void delete_mem(void* p) {
 
