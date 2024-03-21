@@ -278,12 +278,12 @@ namespace ncpp {
 
                 max_chunk_count_(max_chunk_count),
                 chunk_capacity_(aligned_size(chunk_capacity)),
-                chunk_size_(chunk_capacity_ + sizeof(F_chunk_header)),
+                chunk_size_(aligned_size(chunk_capacity + sizeof(F_chunk_header), uniform_alignment)),
                 max_total_size_((chunk_capacity_ + sizeof(F_chunk_header)) * max_chunk_count),
                 uniform_allocation_size_(uniform_allocation_size),
                 uniform_alignment_(uniform_alignment),
                 uniform_alignment_offset_(uniform_alignment_offset),
-                uniform_allocation_actual_size_(aligned_size(uniform_allocation_size_, uniform_alignment_))
+                uniform_allocation_actual_size_(aligned_size(uniform_allocation_size, uniform_alignment))
 			{
 
 				NCPP_ASSERT(max_chunk_count) << "chunk count is equal to zero, cant create storage";
@@ -303,12 +303,12 @@ namespace ncpp {
 
                 max_chunk_count_(max_chunk_count),
                 chunk_capacity_(aligned_size(chunk_capacity)),
-                chunk_size_(chunk_capacity_ + sizeof(F_chunk_header)),
+                chunk_size_(aligned_size(chunk_capacity + sizeof(F_chunk_header), uniform_alignment)),
                 max_total_size_((chunk_capacity_ + sizeof(F_chunk_header)) * max_chunk_count),
                 uniform_allocation_size_(uniform_allocation_size),
                 uniform_alignment_(uniform_alignment),
                 uniform_alignment_offset_(uniform_alignment_offset),
-                uniform_allocation_actual_size_(aligned_size(uniform_allocation_size_, uniform_alignment_)),
+                uniform_allocation_actual_size_(aligned_size(uniform_allocation_size, uniform_alignment)),
 
                 allocator_for_chunks_(allocator_for_chunks)
             {
