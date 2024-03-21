@@ -333,7 +333,15 @@ namespace ncpp {
 
                 chunk_p = reinterpret_cast<F_chunk_header*>(allocator_for_chunks_.allocate(chunk_size()));
                 *chunk_p = F_chunk_header{
-                    .usage = aligned_size(sizeof(F_chunk_header), uniform_alignment_) - sizeof(F_chunk_header)
+                    .usage = aligned_size(
+                            sizeof(F_chunk_header)
+                            + uniform_alignment_offset_
+                            + reinterpret_cast<sz>(chunk_p),
+                            uniform_alignment_
+                        )
+                        - sizeof(F_chunk_header)
+                        - uniform_alignment_offset_
+                        - reinterpret_cast<sz>(chunk_p)
                 };
 
                 NCPP_ASSERT(
@@ -380,7 +388,15 @@ namespace ncpp {
                     if constexpr (F_options::chunks_in_a_single_block){
                         chunk_p = reinterpret_cast<F_chunk_header*>(reinterpret_cast<u8*>(first_chunk_p_in_a_single_block_) + chunk_size_ * i);
                         *chunk_p = F_chunk_header{
-                            .usage = aligned_size(sizeof(F_chunk_header) + uniform_alignment_offset_, uniform_alignment_) - sizeof(F_chunk_header) - uniform_alignment_offset_
+                            .usage = aligned_size(
+                                    sizeof(F_chunk_header)
+                                    + uniform_alignment_offset_
+                                    + reinterpret_cast<sz>(chunk_p),
+                                    uniform_alignment_
+                                )
+                                - sizeof(F_chunk_header)
+                                - uniform_alignment_offset_
+                                - reinterpret_cast<sz>(chunk_p)
                         };
                     }
                     else{
