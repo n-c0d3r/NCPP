@@ -162,8 +162,6 @@ namespace ncpp {
 
             static constexpr b8 enable_uniform_allocation = false;
 
-            static constexpr b8 enable_chunk_p_caching_on_allocations = false;
-
 
 
             static NCPP_FORCE_INLINE void pre_push_chunk(void* storage_p) noexcept {}
@@ -192,7 +190,7 @@ namespace ncpp {
         constexpr E_chunk_p_from_allocation_p_getter_mode T_chunk_p_from_allocation_p_getter_mode() {
 
             return (
-                (F_options__::enable_chunk_p_caching_on_allocations)
+                (false)
                 ? (E_chunk_p_from_allocation_p_getter_mode::CACHE_ON_ALLOCATIONS)
                 : (
                     (F_options__::enable_allocation_counting_inside_chunks)
