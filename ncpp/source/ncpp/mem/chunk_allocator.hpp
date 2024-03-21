@@ -72,12 +72,12 @@ namespace ncpp {
 
 
 
-			NCPP_FORCE_INLINE u8* data_root() {
+			NCPP_FORCE_INLINE u8* data_root() const noexcept {
 
-				return reinterpret_cast<u8*>(this + 1);
+				return (u8*)(this + 1);
 			}
 
-			NCPP_FORCE_INLINE u8* current_data() {
+			NCPP_FORCE_INLINE u8* current_data() const noexcept {
 
 				return data_root() + usage;
 			}
