@@ -89,12 +89,15 @@ namespace ncpp {
         private:
             F_linked_uniform_block_node* head_node_p_ = 0;
             F_linked_uniform_block_node* tail_node_p_ = 0;
+            sz count_ = 0;
 
         public:
             NCPP_FORCE_INLINE F_linked_uniform_block_node* head_node_p() noexcept { return head_node_p_; }
             NCPP_FORCE_INLINE const F_linked_uniform_block_node* head_node_p() const noexcept { return head_node_p_; }
             NCPP_FORCE_INLINE F_linked_uniform_block_node* tail_node_p() noexcept { return tail_node_p_; }
             NCPP_FORCE_INLINE const F_linked_uniform_block_node* tail_node_p() const noexcept { return tail_node_p_; }
+
+            NCPP_FORCE_INLINE sz count() const noexcept { return count_; }
 
 
 
@@ -123,6 +126,8 @@ namespace ncpp {
                 else {
                     tail_node_p_->next_p = node_p;
                 }
+
+                ++count_;
             }
             void push_front(F_linked_uniform_block_node* node_p) {
 
@@ -138,6 +143,8 @@ namespace ncpp {
                 else {
                     head_node_p_->prev_p = node_p;
                 }
+
+                ++count_;
             }
             void erase(F_linked_uniform_block_node* node_p) {
 
@@ -158,6 +165,11 @@ namespace ncpp {
                 else {
                     head_node_p_ = node_p->next_p;
                 }
+
+                node_p->next_p = 0;
+                node_p->prev_p = 0;
+
+                --count_;
             }
 
             template<typename F_functor__>
@@ -193,11 +205,31 @@ namespace ncpp {
 
 
 
-        template<class F_parent_uniform_provider__ = F_crt_uniform_provider, class F_uniform_block__ = F_linked_uniform_block, class F_uniform_provider_desc__ = F_linked_uniform_provider_desc, class F_uniform_provider_management_params__ = F_linked_uniform_provider_management_params>
-        class TF_linked_uniform_provider : public TA_uniform_provider<F_parent_uniform_provider__, F_uniform_block__, F_uniform_provider_desc__, F_uniform_provider_management_params__> {
+        template<
+            class F_parent_uniform_provider__ = A_invalid_uniform_provider,
+            class F_uniform_block__ = F_linked_uniform_block,
+            class F_child_uniform_block__ = A_uniform_block,
+            class F_uniform_provider_desc__ = F_linked_uniform_provider_desc,
+            class F_uniform_provider_management_params__ = F_linked_uniform_provider_management_params
+        >
+        class TF_linked_uniform_provider :
+            public TA_uniform_provider<
+                F_parent_uniform_provider__,
+                F_uniform_block__,
+                F_child_uniform_block__,
+                F_uniform_provider_desc__,
+                F_uniform_provider_management_params__
+            >
+        {
 
         private:
-            using F_base = TA_uniform_provider<F_parent_uniform_provider__, F_uniform_block__, F_uniform_provider_desc__, F_uniform_provider_management_params__>;
+            using F_base = TA_uniform_provider<
+                F_parent_uniform_provider__,
+                F_uniform_block__,
+                F_child_uniform_block__,
+                F_uniform_provider_desc__,
+                F_uniform_provider_management_params__
+            >;
 
         public:
             using typename F_base::F_parent_uniform_provider;
@@ -205,8 +237,10 @@ namespace ncpp {
             using typename F_base::F_uniform_provider_desc;
             using typename F_base::F_uniform_provider_management_params;
 
+            using typename F_base::F_child_uniform_block;
+
         public:
-            using F_parent_uniform_provider_management_params = typename F_parent_uniform_provider__::F_uniform_provider_management_params;
+            using typename F_base::F_parent_uniform_provider_management_params;
 
 
 

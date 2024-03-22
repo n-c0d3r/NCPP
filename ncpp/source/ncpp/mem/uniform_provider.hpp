@@ -78,7 +78,29 @@ namespace ncpp {
 
 
 
-        class A_invalid_uniform_provider;
+        class A_invalid_uniform_provider {
+
+        public:
+            void* create_block(
+                void* params_p = 0,
+                void* parent_params_p = 0
+            ) { return 0; }
+            void destroy_block(
+                void* block_p,
+                void* params_p = 0,
+                void* parent_params_p = 0
+            ) {}
+
+        public:
+            void* allocate_child_block(
+                void* params_p = 0
+            ){ return 0; }
+            void deallocate_child_block(
+                void* block_p,
+                void* params_p = 0
+            ){}
+
+        };
 
         namespace internal {
 
@@ -89,6 +111,8 @@ namespace ncpp {
                 using F_uniform_provider_desc = typename F_uniform_provider__::F_uniform_provider_desc;
                 using F_uniform_provider_management_params = typename F_uniform_provider__::F_uniform_provider_management_params;
 
+                using F_child_uniform_block = typename F_uniform_provider__::F_child_uniform_block;
+
             };
 
             template<>
@@ -97,6 +121,8 @@ namespace ncpp {
                 using F_uniform_block = void;
                 using F_uniform_provider_desc = void;
                 using F_uniform_provider_management_params = void;
+
+                using F_child_uniform_block = void;
 
             };
 
@@ -107,11 +133,23 @@ namespace ncpp {
 
 
 
-        template<class F_parent_uniform_provider__ = A_invalid_uniform_provider, class F_uniform_block__ = A_uniform_block, class F_uniform_provider_desc__ = A_uniform_provider_desc, class F_uniform_provider_management_params__ = A_uniform_provider_management_params>
+        template<
+            class F_parent_uniform_provider__ = A_invalid_uniform_provider,
+            class F_uniform_block__ = A_uniform_block,
+            class F_child_uniform_block__ = A_uniform_block,
+            class F_uniform_provider_desc__ = A_uniform_provider_desc,
+            class F_uniform_provider_management_params__ = A_uniform_provider_management_params
+        >
         class TA_uniform_provider {
 
         private:
-            using F_this = TA_uniform_provider<F_parent_uniform_provider__, F_uniform_block__, F_uniform_provider_desc__, F_uniform_provider_management_params__>;
+            using F_this = TA_uniform_provider<
+                F_parent_uniform_provider__,
+                F_uniform_block__,
+                F_child_uniform_block__,
+                F_uniform_provider_desc__,
+                F_uniform_provider_management_params__
+            >;
 
         public:
             using F_parent_uniform_provider = F_parent_uniform_provider__;
@@ -119,20 +157,23 @@ namespace ncpp {
             using F_uniform_provider_desc = F_uniform_provider_desc__;
             using F_uniform_provider_management_params = F_uniform_provider_management_params__;
 
+            using F_child_uniform_block = F_child_uniform_block__;
+
         public:
             using F_parent_uniform_block = typename TF_uniform_provider_safe_infos<F_parent_uniform_provider>::F_uniform_block;
             using F_parent_uniform_provider_desc = typename TF_uniform_provider_safe_infos<F_parent_uniform_provider>::F_uniform_provider_desc;
             using F_parent_uniform_provider_management_params = typename TF_uniform_provider_safe_infos<F_parent_uniform_provider>::F_uniform_provider_management_params;
 
+            using F_parent_child_uniform_block = typename TF_uniform_provider_safe_infos<F_parent_uniform_provider>::F_child_uniform_block;
+
         public:
             static_assert(
                 std::is_same_v<F_parent_uniform_provider, A_invalid_uniform_provider>
-                || std::is_same_v<F_parent_uniform_block, A_uniform_block>
-                || std::is_convertible_v<
-                    F_parent_uniform_block*,
-                    F_uniform_block*
+                || std::is_same_v<
+                    F_parent_child_uniform_block,
+                    F_uniform_block
                 >,
-                "the parent uniform provider is not convertible to this uniform provider"
+                "the parent uniform provider is not valid"
             );
 
 
@@ -227,11 +268,11 @@ namespace ncpp {
 
 
         public:
-            NCPP_FORCE_INLINE F_uniform_block* default_create_block() {
+            NCPP_FORCE_INLINE A_uniform_block* default_create_block() {
 
                 NCPP_ASSERT(actual_block_size_) << "invalid block desc";
 
-                return (F_uniform_block*)(
+                A_uniform_block* block_p = (A_uniform_block*)(
                     F_crt_allocator().allocate(
                         actual_block_size_,
                         provider_desc_.block_alignment,
@@ -239,10 +280,16 @@ namespace ncpp {
                         0
                     )
                 );
+
+                new(block_p) F_uniform_block{};
+
+                return block_p;
             }
-            void default_destroy_block(F_uniform_block* block_p) {
+            void default_destroy_block(A_uniform_block* block_p) {
 
                 NCPP_ASSERT(actual_block_size_) << "invalid block desc";
+
+                ((F_uniform_block*)block_p)->~F_uniform_block();
 
                 F_crt_allocator().deallocate(block_p);
             }
@@ -256,16 +303,13 @@ namespace ncpp {
                 F_uniform_block* block_p = 0;
 
                 if(!parent_p)
-                    block_p = default_create_block();
-                else {
+                    block_p = (F_uniform_block*)default_create_block();
+                else
                     block_p = (F_uniform_block*)(
                         parent_p->allocate_child_block(
                             parent_params_p
                         )
                     );
-                }
-
-                new(block_p) F_uniform_block{};
 
                 return block_p;
             }
@@ -274,8 +318,6 @@ namespace ncpp {
                 F_uniform_provider_management_params* params_p = 0,
                 F_parent_uniform_provider_management_params* parent_params_p = 0
             ) {
-
-                ((F_uniform_block*)block_p)->~F_uniform_block();
 
                 if(!parent_p)
                     default_destroy_block(block_p);
@@ -288,11 +330,11 @@ namespace ncpp {
             }
 
         public:
-            F_uniform_block* allocate_child_block(
+            F_child_uniform_block* allocate_child_block(
                 F_uniform_provider_management_params* params_p = 0
             );
             void deallocate_child_block(
-                F_uniform_block* block_p,
+                F_child_uniform_block* block_p,
                 F_uniform_provider_management_params* params_p = 0
             );
 

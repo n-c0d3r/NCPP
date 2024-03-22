@@ -61,11 +61,17 @@ namespace ncpp {
 
 
 
-        template<class F_uniform_block__ = F_crt_uniform_block, class F_uniform_provider_desc__ = F_crt_uniform_provider_desc, class F_uniform_provider_management_params__ = F_crt_uniform_provider_management_params>
+        template<
+            class F_uniform_block__ = F_crt_uniform_block,
+            class F_child_uniform_block__ = A_uniform_block,
+            class F_uniform_provider_desc__ = F_crt_uniform_provider_desc,
+            class F_uniform_provider_management_params__ = F_crt_uniform_provider_management_params
+        >
         class TF_crt_uniform_provider :
             public TA_uniform_provider<
                 A_invalid_uniform_provider,
                 F_uniform_block__,
+                F_child_uniform_block__,
                 F_uniform_provider_desc__,
                 F_uniform_provider_management_params__
             >
@@ -75,6 +81,7 @@ namespace ncpp {
             using F_base = TA_uniform_provider<
                 A_invalid_uniform_provider,
                 F_uniform_block__,
+                F_child_uniform_block__,
                 F_uniform_provider_desc__,
                 F_uniform_provider_management_params__
             >;
@@ -84,6 +91,11 @@ namespace ncpp {
             using typename F_base::F_uniform_block;
             using typename F_base::F_uniform_provider_desc;
             using typename F_base::F_uniform_provider_management_params;
+
+            using typename F_base::F_child_uniform_block;
+
+        public:
+            using typename F_base::F_parent_uniform_provider_management_params;
 
 
 
@@ -116,21 +128,6 @@ namespace ncpp {
             }
 
 
-
-        public:
-            F_uniform_block* allocate_child_block(
-                F_uniform_provider_management_params* params_p = 0
-            ) {
-
-                return F_base::default_create_block();
-            }
-            void deallocate_child_block(
-                F_uniform_block* block_p,
-                F_uniform_provider_management_params* params_p = 0
-            ) {
-
-                F_base::default_destroy_block(block_p);
-            }
 
         public:
             /**
