@@ -132,6 +132,7 @@ namespace ncpp {
                 F_base::default_destroy_block(block_p);
             }
 
+        public:
             /**
              *	Clears everything and to be the same as the default instance.
              */

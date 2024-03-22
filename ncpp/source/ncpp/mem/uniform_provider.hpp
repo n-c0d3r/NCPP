@@ -72,6 +72,8 @@ namespace ncpp {
         };
         struct A_uniform_provider_management_params {
 
+            NCPP_FORCE_INLINE void process_child_management_params(A_uniform_provider_management_params*) noexcept {}
+
         };
 
 
@@ -294,6 +296,7 @@ namespace ncpp {
                 F_uniform_provider_management_params* params_p = 0
             );
 
+        public:
             /**
              *	Clears everything and to be the same as the default instance.
              */

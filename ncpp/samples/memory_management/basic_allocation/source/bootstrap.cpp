@@ -76,10 +76,8 @@ int main() {
 
 
 
-    F_linked_uniform_block_list linked_block_list;
-
     F_linked_uniform_provider_management_params linked_management_params;
-    linked_management_params.upper_list_p = &linked_block_list;
+    pool_management_params.process_child_management_params(&linked_management_params);
 
     auto* block_p = (F_linked_uniform_block*)linked_uniform_provider.create_block(&linked_management_params, &pool_management_params);
 

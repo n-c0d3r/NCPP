@@ -62,7 +62,7 @@ namespace ncpp {
 
         struct F_pool_uniform_block : public F_linked_uniform_block {
 
-            F_linked_uniform_block_list block_list;
+            F_linked_uniform_block_list lower_list;
             sz initialized_size = 0;
 
         };
@@ -75,6 +75,15 @@ namespace ncpp {
         struct F_pool_uniform_provider_management_params : public F_linked_uniform_provider_management_params {
 
             F_pool_uniform_block* pool_block_p = 0;
+
+
+
+            NCPP_FORCE_INLINE void process_child_management_params(F_linked_uniform_provider_management_params* child_management_params_p) noexcept {
+
+                NCPP_ASSERT(pool_block_p) << "invalid pool block";
+
+                child_management_params_p->upper_list_p = &(pool_block_p->lower_list);
+            }
 
         };
 
@@ -179,7 +188,11 @@ namespace ncpp {
 
                 NCPP_ASSERT(params_p->pool_block_p) << "invalid pool block";
 
-                return F_base::default_create_block();
+                F_uniform_block* block_p = F_base::default_create_block();
+
+                block_p->parent_p = params_p->pool_block_p;
+
+                return block_p;
             }
             void deallocate_child_block(
                 F_uniform_block* block_p,
@@ -191,6 +204,7 @@ namespace ncpp {
                 F_base::default_destroy_block(block_p);
             }
 
+        public:
             /**
              *	Clears everything and to be the same as the default instance.
              */
