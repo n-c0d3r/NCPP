@@ -55,26 +55,16 @@ namespace ncpp {
 
     namespace mem {
 
-        struct F_crt_uniform_block : public A_uniform_block {
-
-        };
-        struct F_crt_uniform_provider_desc : public A_uniform_provider_desc {
-
-        };
-        struct F_crt_uniform_provider_management_params : public A_uniform_provider_management_params {
-
-        };
+        using F_crt_uniform_block = A_uniform_block;
+        using F_crt_uniform_provider_desc = A_uniform_provider_desc;
+        using F_crt_uniform_provider_management_params = A_uniform_provider_management_params;
 
 
 
         template<class F_uniform_block__ = F_crt_uniform_block, class F_uniform_provider_desc__ = F_crt_uniform_provider_desc, class F_uniform_provider_management_params__ = F_crt_uniform_provider_management_params>
         class TF_crt_uniform_provider :
             public TA_uniform_provider<
-                TF_crt_uniform_provider<
-                    F_uniform_block__,
-                    F_uniform_provider_desc__,
-                    F_uniform_provider_management_params__
-                >,
+                A_invalid_uniform_provider,
                 F_uniform_block__,
                 F_uniform_provider_desc__,
                 F_uniform_provider_management_params__
@@ -83,11 +73,7 @@ namespace ncpp {
 
         private:
             using F_base = TA_uniform_provider<
-                TF_crt_uniform_provider<
-                    F_uniform_block__,
-                    F_uniform_provider_desc__,
-                    F_uniform_provider_management_params__
-                >,
+                A_invalid_uniform_provider,
                 F_uniform_block__,
                 F_uniform_provider_desc__,
                 F_uniform_provider_management_params__
@@ -132,17 +118,15 @@ namespace ncpp {
 
 
         public:
-            A_uniform_block* allocate_child_block(
-                A_uniform_provider_management_params* params_p = 0,
-                A_uniform_provider_management_params* child_params_p = 0
+            F_uniform_block* allocate_child_block(
+                F_uniform_provider_management_params* params_p = 0
             ) {
 
                 return F_base::default_create_block();
             }
             void deallocate_child_block(
-                A_uniform_block* block_p,
-                A_uniform_provider_management_params* params_p = 0,
-                A_uniform_provider_management_params* child_params_p = 0
+                F_uniform_block* block_p,
+                F_uniform_provider_management_params* params_p = 0
             ) {
 
                 F_base::default_destroy_block(block_p);

@@ -57,13 +57,20 @@ namespace ncpp {
     namespace mem {
 
         class F_linked_uniform_block_list;
+        struct F_linked_uniform_block;
 
 
 
+        struct F_linked_uniform_block_node {
+
+            F_linked_uniform_block* block_p = 0;
+            F_linked_uniform_block_node* prev_p = 0;
+            F_linked_uniform_block_node* next_p = 0;
+
+        };
         struct F_linked_uniform_block : public F_crt_uniform_block {
 
-            F_linked_uniform_block* prev_p = 0;
-            F_linked_uniform_block* next_p = 0;
+            F_linked_uniform_block_node upper_node;
 
         };
         struct F_linked_uniform_provider_desc : public F_crt_uniform_provider_desc {
@@ -71,7 +78,7 @@ namespace ncpp {
         };
         struct F_linked_uniform_provider_management_params : public F_crt_uniform_provider_management_params {
 
-            F_linked_uniform_block_list* target_list_p = 0;
+            F_linked_uniform_block_list* upper_list_p = 0;
 
         };
 
@@ -80,14 +87,14 @@ namespace ncpp {
         class F_linked_uniform_block_list {
 
         private:
-            F_linked_uniform_block* head_block_p_ = 0;
-            F_linked_uniform_block* tail_block_p_ = 0;
+            F_linked_uniform_block_node* head_node_p_ = 0;
+            F_linked_uniform_block_node* tail_node_p_ = 0;
 
         public:
-            NCPP_FORCE_INLINE F_linked_uniform_block* head_block_p() noexcept { return head_block_p_; }
-            NCPP_FORCE_INLINE const F_linked_uniform_block* head_block_p() const noexcept { return head_block_p_; }
-            NCPP_FORCE_INLINE F_linked_uniform_block* tail_block_p() noexcept { return tail_block_p_; }
-            NCPP_FORCE_INLINE const F_linked_uniform_block* tail_block_p() const noexcept { return tail_block_p_; }
+            NCPP_FORCE_INLINE F_linked_uniform_block_node* head_node_p() noexcept { return head_node_p_; }
+            NCPP_FORCE_INLINE const F_linked_uniform_block_node* head_node_p() const noexcept { return head_node_p_; }
+            NCPP_FORCE_INLINE F_linked_uniform_block_node* tail_node_p() noexcept { return tail_node_p_; }
+            NCPP_FORCE_INLINE const F_linked_uniform_block_node* tail_node_p() const noexcept { return tail_node_p_; }
 
 
 
@@ -102,83 +109,83 @@ namespace ncpp {
 
 
         public:
-            void push_back(F_linked_uniform_block* block_p) {
+            void push_back(F_linked_uniform_block_node* node_p) {
 
-                NCPP_ASSERT(block_p) << "invalid block to add";
+                NCPP_ASSERT(node_p) << "invalid block to add";
 
-                block_p->prev_p = tail_block_p_;
+                node_p->prev_p = tail_node_p_;
 
-                if(tail_block_p_ == 0) {
+                if(tail_node_p_ == 0) {
 
-                    tail_block_p_ = block_p;
-                    head_block_p_ = block_p;
+                    tail_node_p_ = node_p;
+                    head_node_p_ = node_p;
                 }
                 else {
-                    tail_block_p_->next_p = block_p;
+                    tail_node_p_->next_p = node_p;
                 }
             }
-            void push_front(F_linked_uniform_block* block_p) {
+            void push_front(F_linked_uniform_block_node* node_p) {
 
-                NCPP_ASSERT(block_p) << "invalid block to add";
+                NCPP_ASSERT(node_p) << "invalid block to add";
 
-                block_p->next_p = head_block_p_;
+                node_p->next_p = head_node_p_;
 
-                if(head_block_p_ == 0) {
+                if(head_node_p_ == 0) {
 
-                    head_block_p_ = block_p;
-                    tail_block_p_ = block_p;
+                    head_node_p_ = node_p;
+                    tail_node_p_ = node_p;
                 }
                 else {
-                    head_block_p_->prev_p = block_p;
+                    head_node_p_->prev_p = node_p;
                 }
             }
-            void erase(F_linked_uniform_block* block_p) {
+            void erase(F_linked_uniform_block_node* node_p) {
 
-                NCPP_ASSERT(block_p) << "invalid block to add";
+                NCPP_ASSERT(node_p) << "invalid block to add";
 
-                if(block_p->next_p) {
+                if(node_p->next_p) {
 
-                    block_p->next_p->prev_p = block_p->prev_p;
+                    node_p->next_p->prev_p = node_p->prev_p;
                 }
                 else {
-                    tail_block_p_ = block_p->prev_p;
+                    tail_node_p_ = node_p->prev_p;
                 }
 
-                if(block_p->prev_p) {
+                if(node_p->prev_p) {
 
-                    block_p->prev_p->next_p = block_p->next_p;
+                    node_p->prev_p->next_p = node_p->next_p;
                 }
                 else {
-                    head_block_p_ = block_p->next_p;
+                    head_node_p_ = node_p->next_p;
                 }
             }
 
             template<typename F_functor__>
             void T_iterate(F_functor__&& functor) {
 
-                F_linked_uniform_block* block_p = head_block_p_;
+                F_linked_uniform_block_node* node_p = head_node_p_;
 
-                while(block_p) {
+                while(node_p) {
 
-                    F_linked_uniform_block* next_block_p = block_p->next_p;
+                    F_linked_uniform_block_node* next_node_p = node_p->next_p;
 
-                    functor(block_p);
+                    functor(node_p);
 
-                    block_p = next_block_p;
+                    node_p = next_node_p;
                 }
             }
             template<typename F_functor__>
             void T_reverse_iterate(F_functor__&& functor) {
 
-                F_linked_uniform_block* block_p = tail_block_p_;
+                F_linked_uniform_block_node* node_p = tail_node_p_;
 
-                while(block_p) {
+                while(node_p) {
 
-                    F_linked_uniform_block* prev_block_p = block_p->prev_p;
+                    F_linked_uniform_block_node* prev_node_p = node_p->prev_p;
 
-                    functor(block_p);
+                    functor(node_p);
 
-                    block_p = prev_block_p;
+                    node_p = prev_node_p;
                 }
             }
 
@@ -197,6 +204,9 @@ namespace ncpp {
             using typename F_base::F_uniform_block;
             using typename F_base::F_uniform_provider_desc;
             using typename F_base::F_uniform_provider_management_params;
+
+        public:
+            using F_parent_uniform_provider_management_params = typename F_parent_uniform_provider__::F_uniform_provider_management_params;
 
 
 
@@ -231,28 +241,33 @@ namespace ncpp {
 
 
         public:
-            A_uniform_block* create_block(
-                A_uniform_provider_management_params* params_p = 0,
-                A_uniform_provider_management_params* parent_params_p = 0
+            F_uniform_block* create_block(
+                F_uniform_provider_management_params* params_p = 0,
+                F_parent_uniform_provider_management_params* parent_params_p = 0
             ) {
 
-                NCPP_ASSERT(((F_linked_uniform_provider_management_params*)params_p)->target_list_p) << "invalid target list";
+                NCPP_ASSERT(params_p->upper_list_p) << "invalid target list";
 
                 F_uniform_block* block_p = (F_uniform_block*)F_base::create_block(params_p, parent_params_p);
 
-                ((F_linked_uniform_provider_management_params*)params_p)->target_list_p->push_back(block_p);
+                F_linked_uniform_block_node* upper_node_p = &(block_p->upper_node);
+                upper_node_p->block_p = block_p;
+
+                params_p->upper_list_p->push_back(upper_node_p);
 
                 return block_p;
             }
             void destroy_block(
-                A_uniform_block* block_p,
-                A_uniform_provider_management_params* params_p = 0,
-                A_uniform_provider_management_params* parent_params_p = 0
+                F_uniform_block* block_p,
+                F_uniform_provider_management_params* params_p = 0,
+                F_parent_uniform_provider_management_params* parent_params_p = 0
             ) {
 
-                NCPP_ASSERT(((F_linked_uniform_provider_management_params*)params_p)->target_list_p) << "invalid target list";
+                NCPP_ASSERT(params_p->upper_list_p) << "invalid target list";
 
-                ((F_linked_uniform_provider_management_params*)params_p)->target_list_p->erase((F_uniform_block*)block_p);
+                F_linked_uniform_block_node* upper_node_p = &(block_p->upper_node_p);
+
+                params_p->upper_list_p->erase(upper_node_p);
 
                 F_base::destroy_block(block_p, params_p, parent_params_p);
             }

@@ -60,7 +60,7 @@ int main() {
     F_linked_uniform_block_list pool_block_list;
 
     F_pool_uniform_provider_management_params pool_management_params;
-    pool_management_params.target_list_p = &pool_block_list;
+    pool_management_params.upper_list_p = &pool_block_list;
 
     auto* pool_block_p = (F_pool_uniform_block*)pool_uniform_provider.create_block(&pool_management_params);
 
@@ -79,7 +79,7 @@ int main() {
     F_linked_uniform_block_list linked_block_list;
 
     F_linked_uniform_provider_management_params linked_management_params;
-    linked_management_params.target_list_p = &linked_block_list;
+    linked_management_params.upper_list_p = &linked_block_list;
 
     auto* block_p = (F_linked_uniform_block*)linked_uniform_provider.create_block(&linked_management_params, &pool_management_params);
 

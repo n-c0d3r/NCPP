@@ -63,6 +63,7 @@ namespace ncpp {
         struct F_pool_uniform_block : public F_linked_uniform_block {
 
             F_linked_uniform_block_list block_list;
+            sz initialized_size = 0;
 
         };
         struct F_pool_uniform_provider_desc : public F_linked_uniform_provider_desc {
@@ -90,6 +91,9 @@ namespace ncpp {
             using typename F_base::F_uniform_block;
             using typename F_base::F_uniform_provider_desc;
             using typename F_base::F_uniform_provider_management_params;
+
+        public:
+            using F_parent_uniform_provider_management_params = typename F_parent_uniform_provider__::F_uniform_provider_management_params;
 
 
 
@@ -150,41 +154,39 @@ namespace ncpp {
 
 
         public:
-            A_uniform_block* create_block(
-                A_uniform_provider_management_params* params_p = 0,
-                A_uniform_provider_management_params* parent_params_p = 0
+            F_uniform_block* create_block(
+                F_uniform_provider_management_params* params_p = 0,
+                F_parent_uniform_provider_management_params* parent_params_p = 0
             ) {
 
-                A_uniform_block* block_p = F_base::create_block(params_p, parent_params_p);
+                F_uniform_block* block_p = F_base::create_block(params_p, parent_params_p);
 
                 return block_p;
             }
             void destroy_block(
-                A_uniform_block* block_p,
-                A_uniform_provider_management_params* params_p = 0,
-                A_uniform_provider_management_params* parent_params_p = 0
+                F_uniform_block* block_p,
+                F_uniform_provider_management_params* params_p = 0,
+                F_parent_uniform_provider_management_params* parent_params_p = 0
             ) {
 
                 F_base::destroy_block(block_p, params_p, parent_params_p);
             }
 
         public:
-            A_uniform_block* allocate_child_block(
-                A_uniform_provider_management_params* params_p = 0,
-                A_uniform_provider_management_params* child_params_p = 0
+            F_uniform_block* allocate_child_block(
+                F_uniform_provider_management_params* params_p = 0
             ) {
 
-                NCPP_ASSERT(((F_pool_uniform_provider_management_params*)params_p)->pool_block_p) << "invalid pool block";
+                NCPP_ASSERT(params_p->pool_block_p) << "invalid pool block";
 
                 return F_base::default_create_block();
             }
             void deallocate_child_block(
-                A_uniform_provider_management_params* block_p,
-                A_uniform_provider_management_params* params_p = 0,
-                A_uniform_provider_management_params* child_params_p = 0
+                F_uniform_block* block_p,
+                F_uniform_provider_management_params* params_p = 0
             ) {
 
-                NCPP_ASSERT(((F_pool_uniform_provider_management_params*)params_p)->pool_block_p) << "invalid pool block";
+                NCPP_ASSERT(params_p->pool_block_p) << "invalid pool block";
 
                 F_base::default_destroy_block(block_p);
             }

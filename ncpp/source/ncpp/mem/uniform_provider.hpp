@@ -58,6 +58,8 @@ namespace ncpp {
 
         struct A_uniform_block {
 
+            A_uniform_block* parent_p = 0;
+
         };
         struct A_uniform_provider_desc {
 
@@ -74,7 +76,36 @@ namespace ncpp {
 
 
 
-        template<class F_parent_uniform_provider__, class F_uniform_block__, class F_uniform_provider_desc__, class F_uniform_provider_management_params__>
+        class A_invalid_uniform_provider;
+
+        namespace internal {
+
+            template<class F_uniform_provider__>
+            struct TF_uniform_provider_safe_infos {
+
+                using F_uniform_block = typename F_uniform_provider__::F_uniform_block;
+                using F_uniform_provider_desc = typename F_uniform_provider__::F_uniform_provider_desc;
+                using F_uniform_provider_management_params = typename F_uniform_provider__::F_uniform_provider_management_params;
+
+            };
+
+            template<>
+            struct TF_uniform_provider_safe_infos<A_invalid_uniform_provider> {
+
+                using F_uniform_block = void;
+                using F_uniform_provider_desc = void;
+                using F_uniform_provider_management_params = void;
+
+            };
+
+        }
+
+        template<class F_uniform_provider__>
+        using TF_uniform_provider_safe_infos = internal::TF_uniform_provider_safe_infos<F_uniform_provider__>;
+
+
+
+        template<class F_parent_uniform_provider__ = A_invalid_uniform_provider, class F_uniform_block__ = A_uniform_block, class F_uniform_provider_desc__ = A_uniform_provider_desc, class F_uniform_provider_management_params__ = A_uniform_provider_management_params>
         class TA_uniform_provider {
 
         private:
@@ -85,6 +116,22 @@ namespace ncpp {
             using F_uniform_block = F_uniform_block__;
             using F_uniform_provider_desc = F_uniform_provider_desc__;
             using F_uniform_provider_management_params = F_uniform_provider_management_params__;
+
+        public:
+            using F_parent_uniform_block = typename TF_uniform_provider_safe_infos<F_parent_uniform_provider>::F_uniform_block;
+            using F_parent_uniform_provider_desc = typename TF_uniform_provider_safe_infos<F_parent_uniform_provider>::F_uniform_provider_desc;
+            using F_parent_uniform_provider_management_params = typename TF_uniform_provider_safe_infos<F_parent_uniform_provider>::F_uniform_provider_management_params;
+
+        public:
+            static_assert(
+                std::is_same_v<F_parent_uniform_provider, A_invalid_uniform_provider>
+                || std::is_same_v<F_parent_uniform_block, A_uniform_block>
+                || std::is_convertible_v<
+                    F_parent_uniform_block*,
+                    F_uniform_block*
+                >,
+                "the parent uniform provider is not convertible to this uniform provider"
+            );
 
 
 
@@ -191,7 +238,7 @@ namespace ncpp {
                     )
                 );
             }
-            void default_destroy_block(void* block_p) {
+            void default_destroy_block(F_uniform_block* block_p) {
 
                 NCPP_ASSERT(actual_block_size_) << "invalid block desc";
 
@@ -199,54 +246,52 @@ namespace ncpp {
             }
 
         public:
-            A_uniform_block* create_block(
-                A_uniform_provider_management_params* params_p = 0,
-                A_uniform_provider_management_params* parent_params_p = 0
+            F_uniform_block* create_block(
+                F_uniform_provider_management_params* params_p = 0,
+                F_parent_uniform_provider_management_params* parent_params_p = 0
             ) {
 
-                A_uniform_block* block_p = 0;
+                F_uniform_block* block_p = 0;
 
                 if(!parent_p)
                     block_p = default_create_block();
-                else
-                    block_p = (
+                else {
+                    block_p = (F_uniform_block*)(
                         parent_p->allocate_child_block(
-                            parent_params_p,
-                            params_p
+                            parent_params_p
                         )
                     );
+                }
 
                 new(block_p) F_uniform_block{};
 
                 return block_p;
             }
             void destroy_block(
-                A_uniform_block* block_p,
-                A_uniform_provider_management_params* params_p = 0,
-                A_uniform_provider_management_params* parent_params_p = 0
+                F_uniform_block* block_p,
+                F_uniform_provider_management_params* params_p = 0,
+                F_parent_uniform_provider_management_params* parent_params_p = 0
             ) {
 
                 ((F_uniform_block*)block_p)->~F_uniform_block();
 
                 if(!parent_p)
                     default_destroy_block(block_p);
-                else
+                else {
                     parent_p->deallocate_child_block(
                         block_p,
-                        parent_params_p,
-                        params_p
+                        parent_params_p
                     );
+                }
             }
 
         public:
-            A_uniform_block* allocate_child_block(
-                A_uniform_provider_management_params* params_p = 0,
-                A_uniform_provider_management_params* child_params_p = 0
+            F_uniform_block* allocate_child_block(
+                F_uniform_provider_management_params* params_p = 0
             );
             void deallocate_child_block(
-                A_uniform_block* block_p,
-                A_uniform_provider_management_params* params_p = 0,
-                A_uniform_provider_management_params* child_params_p = 0
+                F_uniform_block* block_p,
+                F_uniform_provider_management_params* params_p = 0
             );
 
             /**
