@@ -173,7 +173,7 @@ namespace ncpp {
                     F_parent_child_uniform_block,
                     F_uniform_block
                 >,
-                "the parent uniform provider is not valid"
+                "invalid parent uniform provider"
             );
 
 
