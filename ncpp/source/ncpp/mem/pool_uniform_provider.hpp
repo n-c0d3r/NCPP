@@ -60,18 +60,18 @@ namespace ncpp {
 
 
 
-        struct F_pool_uniform_block : public F_crt_uniform_block {
+        struct F_pool_uniform_block : public F_linked_uniform_block {
 
             F_linked_uniform_block_list block_list;
 
         };
-        struct F_pool_uniform_provider_desc : public F_crt_uniform_provider_desc {
+        struct F_pool_uniform_provider_desc : public F_linked_uniform_provider_desc {
 
             sz child_block_size = 0;
             sz max_child_block_count_per_pool_block = 0;
 
         };
-        struct F_pool_uniform_provider_management_params : public F_crt_uniform_provider_management_params {
+        struct F_pool_uniform_provider_management_params : public F_linked_uniform_provider_management_params {
 
             F_pool_uniform_block* pool_block_p = 0;
 
@@ -80,10 +80,10 @@ namespace ncpp {
 
 
         template<class F_parent_uniform_provider__ = F_crt_uniform_provider, class F_uniform_block__ = F_pool_uniform_block, class F_uniform_provider_desc__ = F_pool_uniform_provider_desc, class F_uniform_provider_management_params__ = F_pool_uniform_provider_management_params>
-        class TF_pool_uniform_provider : public TA_uniform_provider<F_parent_uniform_provider__, F_uniform_block__, F_uniform_provider_desc__, F_uniform_provider_management_params__> {
+        class TF_pool_uniform_provider : public TF_linked_uniform_provider<F_parent_uniform_provider__, F_uniform_block__, F_uniform_provider_desc__, F_uniform_provider_management_params__> {
 
         private:
-            using F_base = TA_uniform_provider<F_parent_uniform_provider__, F_uniform_block__, F_uniform_provider_desc__, F_uniform_provider_management_params__>;
+            using F_base = TF_linked_uniform_provider<F_parent_uniform_provider__, F_uniform_block__, F_uniform_provider_desc__, F_uniform_provider_management_params__>;
 
         public:
             using typename F_base::F_parent_uniform_provider;
