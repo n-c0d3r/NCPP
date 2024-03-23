@@ -33,6 +33,7 @@
 
 #include <ncpp/mem/allocator.hpp>
 #include <ncpp/mem/crt_allocator.hpp>
+#include <ncpp/utilities/combine_types.hpp>
 
 #pragma endregion
 
@@ -272,11 +273,11 @@ namespace ncpp {
 
 
         public:
-            NCPP_FORCE_INLINE I_uniform_block* default_create_block() {
+            NCPP_FORCE_INLINE F_uniform_block* default_create_block() {
 
                 NCPP_ASSERT(actual_block_size_) << "invalid block desc";
 
-                I_uniform_block* block_p = (I_uniform_block*)(
+                F_uniform_block* block_p = (F_uniform_block*)(
                     F_crt_allocator().allocate(
                         actual_block_size_,
                         provider_desc_.block_alignment,
@@ -289,7 +290,7 @@ namespace ncpp {
 
                 return block_p;
             }
-            void default_destroy_block(I_uniform_block* block_p) {
+            void default_destroy_block(F_uniform_block* block_p) {
 
                 NCPP_ASSERT(actual_block_size_) << "invalid block desc";
 

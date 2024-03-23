@@ -69,14 +69,17 @@ namespace ncpp {
 
         };
 
-        struct I_linked_uniform_block :
-            public I_crt_uniform_block,
-            public I_parent_p_uniform_block
+        struct I_linked_uniform_block
         {
 
             F_linked_uniform_block_node main_node;
 
         };
+        using F_linked_uniform_block = NCPP_COMBINE_TYPES(
+            I_crt_uniform_block,
+            I_parent_p_uniform_block,
+            I_linked_uniform_block
+        );
 
         struct I_linked_uniform_provider_desc : public I_crt_uniform_provider_desc {
 
