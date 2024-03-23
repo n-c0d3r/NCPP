@@ -65,17 +65,23 @@ namespace ncpp {
 
             template<typename... F_types__>
             struct TF_list_to_combined_struct<utilities::TF_template_targ_list<F_types__...>> :
-                public F_types__ ...
+                public F_types__...
             {
 
                 using F_type_list = TF_template_targ_list<F_types__...>;
 
             };
 
-            template<typename F_type__>
+            template<typename... F_type__>
             struct TF_modify_list_helper {
 
-                using F = utilities::TF_template_targ_list<F_type__>;
+                using F = utilities::TF_template_targ_list<F_type__...>;
+
+            };
+            template<>
+            struct TF_modify_list_helper<> {
+
+                using F = utilities::TF_template_targ_list<>;
 
             };
             template<typename F_list__>
@@ -111,10 +117,37 @@ namespace ncpp {
 
 
         template<typename... F_types__>
-        using TF_combine_types = combine_types_internal::TF_list_to_combined_struct<combine_types_internal::TF_combine_types_to_list<F_types__...>>;
+        using TF_combine_types = combine_types_internal::TF_list_to_combined_struct<
+            typename combine_types_internal::TF_combine_types_to_list<F_types__...>::F_remove_void
+        >;
+
+
+
+        namespace combine_types_internal {
+
+            template<typename F1__, typename F2__>
+            struct TF_check_if_valid_combined_helper {
+
+                using F1_combine_types = TF_combine_types<F1__, void>;
+                using F1_F2_combine_types = TF_combine_types<F1__, F2__, void>;
+
+                using F1_types = F1_combine_types::F_type_list;
+                using F1_F2_types = F1_F2_combine_types::F_type_list;
+
+                static constexpr b8 is_valid = (F1_types::count == F1_F2_types::count);
+
+            };
+
+            template<typename F1__, typename F2__>
+            concept T_check_if_valid_combined = TF_check_if_valid_combined_helper<F1__, F2__>::is_valid;
+
+        }
 
     }
 
 }
 
 #define NCPP_COMBINE_TYPES(...) ncpp::utilities::TF_combine_types<__VA_ARGS__>
+
+#define NCPP_IS_COMBINED(...) (ncpp::utilities::combine_types_internal::T_check_if_valid_combined<__VA_ARGS__>)
+#define NCPP_REQUIRE_COMBINED(...) static_assert(NCPP_IS_COMBINED(__VA_ARGS__))

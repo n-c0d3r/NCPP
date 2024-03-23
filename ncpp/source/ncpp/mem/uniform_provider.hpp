@@ -57,28 +57,42 @@ namespace ncpp {
 
     namespace mem {
 
-        struct I_uniform_block {};
         struct I_parent_p_uniform_block {
 
-            I_uniform_block* parent_p = 0;
+            void* parent_p = 0;
 
         };
 
-        struct I_uniform_provider_desc {
+        using F_default_uniform_block = NCPP_COMBINE_TYPES(
+        );
+
+
+
+        struct I_payload_uniform_provider_desc {
 
             sz payload_size = 0;
             sz payload_alignment = EASTL_ALLOCATOR_MIN_ALIGNMENT;
             sz payload_alignment_offset = 0;
 
+        };
+
+        struct I_block_uniform_provider_desc {
+
             sz block_alignment = EASTL_ALLOCATOR_MIN_ALIGNMENT;
 
         };
 
-        struct I_uniform_provider_management_params {
+        using F_default_uniform_provider_desc = NCPP_COMBINE_TYPES(
 
-            NCPP_FORCE_INLINE void process_child_management_params(I_uniform_provider_management_params*) noexcept {}
+            I_payload_uniform_provider_desc,
+            I_block_uniform_provider_desc
 
-        };
+        );
+
+
+
+        using F_default_uniform_provider_management_params = NCPP_COMBINE_TYPES(
+        );
 
 
 
@@ -139,10 +153,10 @@ namespace ncpp {
 
         template<
             class F_parent_uniform_provider__ = F_invalid_uniform_provider,
-            class F_uniform_block__ = I_uniform_block,
-            class F_child_uniform_block__ = I_uniform_block,
-            class F_uniform_provider_desc__ = I_uniform_provider_desc,
-            class F_uniform_provider_management_params__ = I_uniform_provider_management_params
+            typename F_uniform_block__ = F_default_uniform_block,
+            typename F_child_uniform_block__ = F_default_uniform_block,
+            typename F_uniform_provider_desc__ = F_default_uniform_provider_desc,
+            typename F_uniform_provider_management_params__ = F_default_uniform_provider_management_params
         >
         class TA_uniform_provider {
 
@@ -179,6 +193,13 @@ namespace ncpp {
                 >,
                 "invalid parent uniform provider"
             );
+
+        public:
+            NCPP_REQUIRE_COMBINED(F_uniform_block, F_default_uniform_block);
+            NCPP_REQUIRE_COMBINED(F_uniform_provider_desc, F_default_uniform_provider_desc);
+            NCPP_REQUIRE_COMBINED(F_uniform_provider_management_params, F_default_uniform_provider_management_params);
+
+            NCPP_REQUIRE_COMBINED(F_child_uniform_block, F_default_uniform_block);
 
 
 

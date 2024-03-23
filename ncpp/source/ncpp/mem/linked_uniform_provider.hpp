@@ -56,38 +56,11 @@ namespace ncpp {
 
     namespace mem {
 
-        class F_linked_uniform_block_list;
-        struct I_linked_uniform_block;
-
-
-
         struct F_linked_uniform_block_node {
 
-            I_linked_uniform_block* block_p = 0;
+            void* block_p = 0;
             F_linked_uniform_block_node* prev_p = 0;
             F_linked_uniform_block_node* next_p = 0;
-
-        };
-
-        struct I_linked_uniform_block
-        {
-
-            F_linked_uniform_block_node main_node;
-
-        };
-        using F_linked_uniform_block = NCPP_COMBINE_TYPES(
-            I_crt_uniform_block,
-            I_parent_p_uniform_block,
-            I_linked_uniform_block
-        );
-
-        struct I_linked_uniform_provider_desc : public I_crt_uniform_provider_desc {
-
-        };
-
-        struct I_linked_uniform_provider_management_params : public I_crt_uniform_provider_management_params {
-
-            F_linked_uniform_block_list* main_list_p = 0;
 
         };
 
@@ -212,12 +185,59 @@ namespace ncpp {
 
 
 
+        struct I_main_node_uniform_block
+        {
+
+            F_linked_uniform_block_node main_node;
+
+        };
+        struct I_child_list_uniform_block
+        {
+
+            F_linked_uniform_block_list child_list;
+
+        };
+
+        using F_linked_uniform_block = NCPP_COMBINE_TYPES(
+
+            F_default_uniform_block,
+
+            I_main_node_uniform_block
+
+        );
+
+
+
+        using F_linked_uniform_provider_desc = NCPP_COMBINE_TYPES(
+
+            F_default_uniform_provider_desc
+
+        );
+
+
+
+        struct I_main_list_p_uniform_provider_management_params {
+
+            F_linked_uniform_block_list* main_list_p = 0;
+
+        };
+
+        using F_linked_uniform_provider_management_params = NCPP_COMBINE_TYPES(
+
+            F_default_uniform_provider_management_params,
+
+            I_main_list_p_uniform_provider_management_params
+
+        );
+
+
+
         template<
             class F_parent_uniform_provider__ = F_invalid_uniform_provider,
-            class F_uniform_block__ = I_linked_uniform_block,
-            class F_child_uniform_block__ = I_uniform_block,
-            class F_uniform_provider_desc__ = I_linked_uniform_provider_desc,
-            class F_uniform_provider_management_params__ = I_linked_uniform_provider_management_params
+            typename F_uniform_block__ = F_linked_uniform_block,
+            typename F_child_uniform_block__ = void,
+            typename F_uniform_provider_desc__ = F_linked_uniform_provider_desc,
+            typename F_uniform_provider_management_params__ = F_linked_uniform_provider_management_params
         >
         class TF_linked_uniform_provider :
             public TA_uniform_provider<
@@ -252,11 +272,11 @@ namespace ncpp {
 
 
         public:
-            NCPP_REQUIRE_BASE(F_uniform_block, I_linked_uniform_block);
-            NCPP_REQUIRE_BASE(F_uniform_provider_desc, I_linked_uniform_provider_desc);
-            NCPP_REQUIRE_BASE(F_uniform_provider_management_params, I_linked_uniform_provider_management_params);
+            NCPP_REQUIRE_COMBINED(F_uniform_block, F_linked_uniform_block);
+            NCPP_REQUIRE_COMBINED(F_uniform_provider_desc, F_linked_uniform_provider_desc);
+            NCPP_REQUIRE_COMBINED(F_uniform_provider_management_params, F_linked_uniform_provider_management_params);
 
-            NCPP_REQUIRE_BASE(F_child_uniform_block, I_uniform_block);
+            NCPP_REQUIRE_COMBINED(F_child_uniform_block, void);
 
 
 

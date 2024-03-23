@@ -55,19 +55,31 @@ namespace ncpp {
 
     namespace mem {
 
-        using I_crt_uniform_block = I_uniform_block;
+        using F_crt_uniform_block = NCPP_COMBINE_TYPES(
 
-        using I_crt_uniform_provider_desc = I_uniform_provider_desc;
+            F_default_uniform_block
 
-        using I_crt_uniform_provider_management_params = I_uniform_provider_management_params;
+        );
+
+        using F_crt_uniform_provider_desc = NCPP_COMBINE_TYPES(
+
+            F_default_uniform_provider_desc
+
+        );
+
+        using F_crt_uniform_provider_management_params = NCPP_COMBINE_TYPES(
+
+            F_default_uniform_provider_management_params
+
+        );
 
 
 
         template<
-            class F_uniform_block__ = I_crt_uniform_block,
-            class F_child_uniform_block__ = I_uniform_block,
-            class F_uniform_provider_desc__ = I_crt_uniform_provider_desc,
-            class F_uniform_provider_management_params__ = I_crt_uniform_provider_management_params
+            typename F_uniform_block__ = F_crt_uniform_block,
+            typename F_child_uniform_block__ = F_default_uniform_block,
+            typename F_uniform_provider_desc__ = F_crt_uniform_provider_desc,
+            typename F_uniform_provider_management_params__ = F_crt_uniform_provider_management_params
         >
         class TF_crt_uniform_provider :
             public TA_uniform_provider<
@@ -102,11 +114,11 @@ namespace ncpp {
 
 
         public:
-            NCPP_REQUIRE_BASE(F_uniform_block, I_crt_uniform_block);
-            NCPP_REQUIRE_BASE(F_uniform_provider_desc, I_crt_uniform_provider_desc);
-            NCPP_REQUIRE_BASE(F_uniform_provider_management_params, I_crt_uniform_provider_management_params);
+            NCPP_REQUIRE_BASE(F_uniform_block, F_default_uniform_block);
+            NCPP_REQUIRE_BASE(F_uniform_provider_desc, F_default_uniform_provider_desc);
+            NCPP_REQUIRE_BASE(F_uniform_provider_management_params, F_default_uniform_provider_management_params);
 
-            NCPP_REQUIRE_BASE(F_child_uniform_block, I_uniform_block);
+            NCPP_REQUIRE_BASE(F_child_uniform_block, F_default_uniform_block);
 
 
 

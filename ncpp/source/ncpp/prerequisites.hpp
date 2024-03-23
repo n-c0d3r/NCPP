@@ -587,7 +587,14 @@ namespace ncpp::internal {
 //  NCPP_REQUIRE_BASE(...)
 ////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_REQUIRE_BASE(...) static_assert(std::derived_from<__VA_ARGS__>);
+namespace ncpp::internal {
+
+    template<typename F1__, typename F2__>
+    concept T_is_pointer_derived_from = std::is_convertible_v<F1__*, F2__*>;
+
+}
+
+#define NCPP_REQUIRE_BASE(...) static_assert(ncpp::internal::T_is_pointer_derived_from<__VA_ARGS__>);
 
 
 
