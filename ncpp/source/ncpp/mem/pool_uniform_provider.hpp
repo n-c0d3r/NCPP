@@ -56,23 +56,19 @@ namespace ncpp {
 
     namespace mem {
 
-        class F_pool_uniform_block_list;
+        struct D_available_memory_block_linked_list {
 
-
-
-        struct I_available_list_uniform_block {
-
-            F_linked_uniform_block_list available_list;
+            F_linked_uniform_block_list available_memory_block_linked_list;
 
         };
-        struct I_available_node_uniform_block {
+        struct D_available_memory_block_linked_node {
 
-            F_linked_uniform_block_node available_node;
+            F_linked_uniform_block_node available_memory_block_linked_node;
 
         };
-        struct I_initialized_count_uniform_block {
+        struct D_child_pool_memory_block_initialized_count {
 
-            sz initialized_count = 0;
+            sz child_pool_memory_block_initialized_count = 0;
 
         };
 
@@ -80,17 +76,17 @@ namespace ncpp {
 
             F_linked_uniform_block,
 
-            I_child_list_uniform_block,
-            I_available_list_uniform_block,
-            I_initialized_count_uniform_block
+            D_child_memory_block_linked_list,
+            D_available_memory_block_linked_list,
+            D_child_pool_memory_block_initialized_count
 
         );
         using F_child_pool_uniform_block = NCPP_COMBINE_TYPES(
 
             F_linked_uniform_block,
 
-            I_available_node_uniform_block,
-            I_parent_p_uniform_block
+            D_available_memory_block_linked_node,
+            D_parent_memory_block_p
 
         );
 
@@ -185,9 +181,9 @@ namespace ncpp {
             {
                 F_uniform_block* pool_block_p = (F_uniform_block*)(provider_management_params_p->pool_block_p);
 
-                F_linked_uniform_block_list* child_list_p = &(pool_block_p->child_list);
+                F_linked_uniform_block_list* child_memory_block_linked_list_p = &(pool_block_p->child_memory_block_linked_list);
 
-                child_provider_management_params_p->main_list_p = child_list_p;
+                child_provider_management_params_p->main_memory_block_linked_list_p = child_memory_block_linked_list_p;
             }
 
 
@@ -263,33 +259,33 @@ namespace ncpp {
 
                 const auto& pdesc = NCPP_BASE_THIS()->provider_desc();
 
-                if(pool_block_p->available_list.count()) {
+                if(pool_block_p->available_memory_block_linked_list.count()) {
 
-                    block_node_p = pool_block_p->available_list.tail_node_p();
+                    block_node_p = pool_block_p->available_memory_block_linked_list.tail_node_p();
                     block_p = (F_child_uniform_block*)(block_node_p->block_p);
 
-                    pool_block_p->available_list.erase(block_node_p);
+                    pool_block_p->available_memory_block_linked_list.erase(block_node_p);
 
                     new(block_p) F_child_uniform_block{};
                 }
                 else {
                     NCPP_ASSERT(
-                        pool_block_p->initialized_count < pdesc.max_child_block_count_per_pool_block
+                        pool_block_p->child_pool_memory_block_initialized_count < pdesc.max_child_block_count_per_pool_block
                     ) << "pool block is full";
 
                     block_p = (F_child_uniform_block*)(
                         (u8*)(NCPP_BASE_THIS()->block_p_to_root_data_p(pool_block_p))
-                        + pdesc.child_block_size * pool_block_p->initialized_count
+                        + pdesc.child_block_size * pool_block_p->child_pool_memory_block_initialized_count
                     );
                     new(block_p) F_child_uniform_block{};
 
-                    ++(pool_block_p->initialized_count);
+                    ++(pool_block_p->child_pool_memory_block_initialized_count);
                 }
 
-                block_node_p = &(block_p->available_node);
+                block_node_p = &(block_p->available_memory_block_linked_node);
                 block_node_p->block_p = block_p;
 
-                block_p->parent_p = params_p->pool_block_p;
+                block_p->parent_memory_block_p = params_p->pool_block_p;
 
                 return block_p;
             }
@@ -302,10 +298,10 @@ namespace ncpp {
 
                 F_uniform_block* pool_block_p = (F_uniform_block*)(params_p->pool_block_p);
 
-                F_linked_uniform_block_node* block_node_p = &(block_p->available_node);
+                F_linked_uniform_block_node* block_node_p = &(block_p->available_memory_block_linked_node);
                 block_node_p->block_p = block_p;
 
-                pool_block_p->available_list.push_back(block_node_p);
+                pool_block_p->available_memory_block_linked_list.push_back(block_node_p);
             }
 
         public:

@@ -185,16 +185,16 @@ namespace ncpp {
 
 
 
-        struct I_main_node_uniform_block
+        struct D_main_memory_block_linked_node
         {
 
-            F_linked_uniform_block_node main_node;
+            F_linked_uniform_block_node main_memory_block_linked_node;
 
         };
-        struct I_child_list_uniform_block
+        struct D_child_memory_block_linked_list
         {
 
-            F_linked_uniform_block_list child_list;
+            F_linked_uniform_block_list child_memory_block_linked_list;
 
         };
 
@@ -202,7 +202,7 @@ namespace ncpp {
 
             F_default_uniform_block,
 
-            I_main_node_uniform_block
+            D_main_memory_block_linked_node
 
         );
 
@@ -216,9 +216,9 @@ namespace ncpp {
 
 
 
-        struct I_main_list_p_uniform_provider_management_params {
+        struct D_main_memory_block_linked_list_p {
 
-            F_linked_uniform_block_list* main_list_p = 0;
+            F_linked_uniform_block_list* main_memory_block_linked_list_p = 0;
 
         };
 
@@ -226,7 +226,7 @@ namespace ncpp {
 
             F_default_uniform_provider_management_params,
 
-            I_main_list_p_uniform_provider_management_params
+            D_main_memory_block_linked_list_p
 
         );
 
@@ -317,14 +317,14 @@ namespace ncpp {
                 F_parent_uniform_provider_management_params* parent_params_p = 0
             ) {
 
-                NCPP_ASSERT(params_p->main_list_p) << "invalid target list";
+                NCPP_ASSERT(params_p->main_memory_block_linked_list_p) << "invalid target list";
 
                 F_uniform_block* block_p = (F_uniform_block*)F_base::create_block(params_p, parent_params_p);
 
-                F_linked_uniform_block_node* main_node_p = &(block_p->main_node);
-                main_node_p->block_p = block_p;
+                F_linked_uniform_block_node* main_memory_block_linked_node_p = &(block_p->main_memory_block_linked_node);
+                main_memory_block_linked_node_p->block_p = block_p;
 
-                params_p->main_list_p->push_back(main_node_p);
+                params_p->main_memory_block_linked_list_p->push_back(main_memory_block_linked_node_p);
 
                 return block_p;
             }
@@ -334,11 +334,11 @@ namespace ncpp {
                 F_parent_uniform_provider_management_params* parent_params_p = 0
             ) {
 
-                NCPP_ASSERT(params_p->main_list_p) << "invalid target list";
+                NCPP_ASSERT(params_p->main_memory_block_linked_list_p) << "invalid target list";
 
-                F_linked_uniform_block_node* main_node_p = &(block_p->main_node);
+                F_linked_uniform_block_node* main_memory_block_linked_node_p = &(block_p->main_memory_block_linked_node);
 
-                params_p->main_list_p->erase(main_node_p);
+                params_p->main_memory_block_linked_list_p->erase(main_memory_block_linked_node_p);
 
                 F_base::destroy_block(block_p, params_p, parent_params_p);
             }

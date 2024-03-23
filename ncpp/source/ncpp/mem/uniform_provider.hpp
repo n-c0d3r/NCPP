@@ -57,9 +57,9 @@ namespace ncpp {
 
     namespace mem {
 
-        struct I_parent_p_uniform_block {
+        struct D_parent_memory_block_p {
 
-            void* parent_p = 0;
+            void* parent_memory_block_p = 0;
 
         };
 
@@ -68,24 +68,33 @@ namespace ncpp {
 
 
 
-        struct I_payload_uniform_provider_desc {
+        struct D_memory_block_payload_size {
 
-            sz payload_size = 0;
-            sz payload_alignment = EASTL_ALLOCATOR_MIN_ALIGNMENT;
-            sz payload_alignment_offset = 0;
+            sz memory_payload_size = 0;
 
         };
+        struct D_memory_block_payload_alignment {
 
-        struct I_block_uniform_provider_desc {
+            sz memory_payload_alignment = EASTL_ALLOCATOR_MIN_ALIGNMENT;
 
-            sz block_alignment = EASTL_ALLOCATOR_MIN_ALIGNMENT;
+        };
+        struct D_memory_block_payload_alignment_offset {
+
+            sz memory_payload_alignment_offset = 0;
+
+        };
+        struct D_memory_memory_block_alignment {
+
+            sz memory_block_alignment = EASTL_ALLOCATOR_MIN_ALIGNMENT;
 
         };
 
         using F_default_uniform_provider_desc = NCPP_COMBINE_TYPES(
 
-            I_payload_uniform_provider_desc,
-            I_block_uniform_provider_desc
+            D_memory_block_payload_size,
+            D_memory_block_payload_alignment,
+            D_memory_block_payload_alignment_offset,
+            D_memory_memory_block_alignment
 
         );
 
@@ -221,7 +230,7 @@ namespace ncpp {
 
 
         public:
-            F_parent_uniform_provider* parent_p = 0;
+            F_parent_uniform_provider* parent_memory_block_p = 0;
 
 
 
@@ -265,21 +274,21 @@ namespace ncpp {
 
                 NCPP_ASSERT(
                     (
-                        provider_desc_.block_alignment
-                        / provider_desc_.payload_alignment
-                        * provider_desc_.payload_alignment
+                        provider_desc_.memory_block_alignment
+                        / provider_desc_.memory_payload_alignment
+                        * provider_desc_.memory_payload_alignment
                     )
-                    == provider_desc_.block_alignment
-                ) << "block alignment must be multiples of payload alignment";
+                    == provider_desc_.memory_block_alignment
+                ) << "block alignment must be multiples of memory_payload alignment";
 
                 header_size_ = align_size(
-                    sizeof(F_uniform_block) + provider_desc_.payload_alignment_offset,
-                    provider_desc_.payload_alignment
-                ) - provider_desc_.payload_alignment_offset;
+                    sizeof(F_uniform_block) + provider_desc_.memory_payload_alignment_offset,
+                    provider_desc_.memory_payload_alignment
+                ) - provider_desc_.memory_payload_alignment_offset;
 
                 actual_block_size_ = align_size(
                     header_size_ + provider_desc_.payload_size,
-                    provider_desc_.block_alignment
+                    provider_desc_.memory_block_alignment
                 );
             }
 
@@ -301,7 +310,7 @@ namespace ncpp {
                 F_uniform_block* block_p = (F_uniform_block*)(
                     F_crt_allocator().allocate(
                         actual_block_size_,
-                        provider_desc_.block_alignment,
+                        provider_desc_.memory_block_alignment,
                         0,
                         0
                     )
@@ -328,11 +337,11 @@ namespace ncpp {
 
                 F_uniform_block* block_p = 0;
 
-                if(!parent_p)
+                if(!parent_memory_block_p)
                     block_p = (F_uniform_block*)default_create_block();
                 else
                     block_p = (F_uniform_block*)(
-                        parent_p->allocate_child_block(
+                        parent_memory_block_p->allocate_child_block(
                             parent_params_p
                         )
                     );
@@ -345,10 +354,10 @@ namespace ncpp {
                 F_parent_uniform_provider_management_params* parent_params_p = 0
             ) {
 
-                if(!parent_p)
+                if(!parent_memory_block_p)
                     default_destroy_block(block_p);
                 else {
-                    parent_p->deallocate_child_block(
+                    parent_memory_block_p->deallocate_child_block(
                         block_p,
                         parent_params_p
                     );
