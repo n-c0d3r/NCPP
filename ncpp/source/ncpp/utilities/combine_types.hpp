@@ -1,8 +1,8 @@
 #pragma once
 
 /**
- *  @file ncpp/utilities/mem_wrap.hpp
- *  @brief Implements mem_wrap.
+ *  @file ncpp/utilities/combine_types.hpp
+ *  @brief Implements combine_types.
  */
 
 
@@ -29,6 +29,12 @@
 
 #include <ncpp/prerequisites.hpp>
 
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+
+#include <ncpp/utilities/template_targ_list.hpp>
+
 #pragma endregion
 
 
@@ -51,44 +57,105 @@ namespace ncpp {
 
     namespace utilities {
 
-        template<typename F__>
-        struct TF_mem_wrap {
+        namespace combine_types_internal {
 
-            u8 bytes[sizeof(F__)];
+            template<typename F_list__>
+            struct TF_list_to_combined_struct {
+            };
+
+            template<typename... F_types__>
+            struct TF_list_to_combined_struct<utilities::TF_template_targ_list<F_types__...>> :
+                public F_types__...
+            {
+
+                using F_type_list = TF_template_targ_list<F_types__...>;
+
+            };
+
+            template<typename... F_types__>
+            struct TF_modify_list_helper;
+            template<typename F_type__>
+            struct TF_modify_list_helper<F_type__> {
+
+                using F = utilities::TF_template_targ_list<F_type__>;
+
+            };
+            template<>
+            struct TF_modify_list_helper<> {
+
+                using F = utilities::TF_template_targ_list<>;
+
+            };
+            template<typename F_list__>
+            struct TF_modify_list_helper<TF_list_to_combined_struct<F_list__>> {
+
+                using F = F_list__;
+
+            };
+            template<>
+            struct TF_modify_list_helper<utilities::TF_template_targ_list<>> {
+
+                using F = utilities::TF_template_targ_list<>;
+
+            };
+            template<typename F_type__>
+            struct TF_modify_list_helper<utilities::TF_template_targ_list<F_type__>> {
+
+                using F = typename TF_modify_list_helper<F_type__>::F;
+
+            };
+            template<typename F_type__, typename... F_rest__>
+            struct TF_modify_list_helper<utilities::TF_template_targ_list<F_type__, F_rest__...>> {
+
+                using F_first_list = typename TF_modify_list_helper<F_type__>::F;
+                using F_rest_list = typename TF_modify_list_helper<utilities::TF_template_targ_list<F_rest__...>>::F;
+
+                using F = F_first_list::template TF_combine<F_rest_list>;
+
+            };
+
+            template<typename... Fs__>
+            using TF_modify_list = typename TF_modify_list_helper<Fs__...>::F;
+
+            template<typename... F_types__>
+            using TF_combine_types_to_list = typename TF_modify_list<utilities::TF_template_targ_list<F_types__...>>::F_remove_repeats;
+
+        }
 
 
 
-            NCPP_FORCE_INLINE F__& get() noexcept {
-
-                return *((F__*)this);
-            }
-            NCPP_FORCE_INLINE const F__& get() const noexcept {
-
-                return *((const F__*)this);
-            }
-
-            NCPP_FORCE_INLINE F__& operator()() noexcept {
-
-                return get();
-            }
-            NCPP_FORCE_INLINE const F__& operator()() const noexcept {
-
-                return get();
-            }
+        template<typename... F_types__>
+        using TF_combine_types = combine_types_internal::TF_list_to_combined_struct<
+            typename combine_types_internal::TF_combine_types_to_list<F_types__...>::F_remove_void
+        >;
 
 
 
-            NCPP_FORCE_INLINE void construct(auto&&... args) {
+        namespace combine_types_internal {
 
-                new(&(get())) F__(std::forward<decltype(args)>(args)...);
-            }
-            NCPP_FORCE_INLINE void destruct() {
+            template<typename F1__, typename F2__>
+            struct TF_check_if_valid_combined_helper {
 
-                get().~F__();
-            }
+                using F1_combine_types = TF_combine_types<F1__, void>;
+                using F1_F2_combine_types = TF_combine_types<F1__, F2__, void>;
 
-        };
+                using F1_types = F1_combine_types::F_type_list;
+                using F1_F2_types = F1_F2_combine_types::F_type_list;
+
+                static constexpr b8 is_valid = (F1_types::count == F1_F2_types::count);
+
+            };
+
+            template<typename F1__, typename F2__>
+            concept T_check_if_valid_combined = TF_check_if_valid_combined_helper<F1__, F2__>::is_valid;
+
+        }
 
     }
 
 }
+
+#define NCPP_COMBINE_TYPES(...) ncpp::utilities::TF_combine_types<__VA_ARGS__>
+
+#define NCPP_IS_COMBINED(...) (ncpp::utilities::combine_types_internal::T_check_if_valid_combined<__VA_ARGS__>)
+#define NCPP_REQUIRE_COMBINED(...) static_assert(NCPP_IS_COMBINED(__VA_ARGS__))

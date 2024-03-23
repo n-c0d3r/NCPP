@@ -78,8 +78,13 @@ set(FILES_TO_DELETE
 
     # mem
     "ncpp/source/ncpp/mem/clusafi_allocator.hpp"
-    "ncpp/source/ncpp/mem/fast_object_allocator.hpp"
     "ncpp/source/ncpp/mem/garbage_collection.hpp"
+    "ncpp/source/ncpp/mem/uniform_provider.hpp"
+    "ncpp/source/ncpp/mem/crt_uniform_provider.hpp"
+    "ncpp/source/ncpp/mem/linked_uniform_provider.hpp"
+    "ncpp/source/ncpp/mem/pool_uniform_provider.hpp"
+    "ncpp/source/ncpp/mem/uniform_storage.hpp"
+    "ncpp/source/ncpp/mem/uniform_adaptor.hpp"
 
     # rtti
     "ncpp/source/ncpp/rtti/rcontainer.hpp"

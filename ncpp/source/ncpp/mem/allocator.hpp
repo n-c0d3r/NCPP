@@ -1,6 +1,6 @@
 #pragma once
 
-/** @file ncpp/allocator_base.hpp
+/** @file ncpp/mem/allocator.hpp
 *	@brief Implements allocator base class template.
 */
 
@@ -58,7 +58,7 @@ namespace ncpp {
 
 	namespace mem {
     
-        NCPP_FORCE_INLINE constexpr sz aligned_size(sz size, size_t align = EASTL_ALLOCATOR_MIN_ALIGNMENT)
+        NCPP_FORCE_INLINE constexpr sz align_size(sz size, size_t align = EASTL_ALLOCATOR_MIN_ALIGNMENT)
         {
             const size_t mask = align - 1;
             return (size + mask) & ~mask;
@@ -122,14 +122,11 @@ namespace ncpp {
 
 
 
-		/**
-		 *	Base allocator class.
-		 */
 		template<class F_allocator__, b8 enable_manual_alignment__ = false, b8 auto_count_non_default_allocations__ = false>
 		class TA_allocator {
 
 		private:
-			using F_this = TA_allocator<F_allocator__, enable_manual_alignment__>;
+			using F_this = TA_allocator<F_allocator__, enable_manual_alignment__, auto_count_non_default_allocations__>;
 
 
 
@@ -221,7 +218,7 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 
 
         public:
-            NCPP_FORCE_INLINE b8 operator==(const TA_allocator& x) noexcept {
+            NCPP_FORCE_INLINE b8 operator==(const TA_allocator& x) const noexcept {
 
                 return (this == &x);
             }

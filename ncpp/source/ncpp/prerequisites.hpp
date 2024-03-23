@@ -560,6 +560,19 @@ namespace ncpp::internal {
 
 
 ////////////////////////////////////////////////////////////////////////////////////
+//  NCPP_BASE_THIS(), NCPP_BASE_THIS_CONST(),...
+////////////////////////////////////////////////////////////////////////////////////
+
+#define NCPP_BASE_THIS() ((F_base*)this)
+#define NCPP_BASE_THIS_CONST() ((const F_base*)this)
+#define NCPP_BASE_P(x) ((F_base*)x)
+#define NCPP_BASE_P_CONST(x) ((const F_base*)x)
+#define NCPP_BASE_R(x) ((F_base&)x)
+#define NCPP_BASE_R_CONST(x) ((const F_base&)x)
+
+
+
+////////////////////////////////////////////////////////////////////////////////////
 //  NCPP_TEXT(CStr) and NCPP_NAME(CStr) macros
 ////////////////////////////////////////////////////////////////////////////////////
 
@@ -567,6 +580,21 @@ namespace ncpp::internal {
 #define NCPP_NAME(CStr) CStr
 #define NCPP_NAME_ML(...) #__VA_ARGS__
 #define NCPP_TEXT_ML(...) NCPP_TEXT(NCPP_NAME_ML(__VA_ARGS__))
+
+
+
+////////////////////////////////////////////////////////////////////////////////////
+//  NCPP_REQUIRE_BASE(...)
+////////////////////////////////////////////////////////////////////////////////////
+
+namespace ncpp::internal {
+
+    template<typename F1__, typename F2__>
+    concept T_is_pointer_derived_from = std::is_convertible_v<F1__*, F2__*>;
+
+}
+
+#define NCPP_REQUIRE_BASE(...) static_assert(ncpp::internal::T_is_pointer_derived_from<__VA_ARGS__>);
 
 
 

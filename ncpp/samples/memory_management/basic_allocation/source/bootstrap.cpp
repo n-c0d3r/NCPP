@@ -7,7 +7,7 @@ using namespace ncpp;
 
 int main() {
 	
-	mem::F_default_allocator allocator;
+	F_default_allocator allocator;
 
 
 
@@ -18,11 +18,11 @@ int main() {
 
     NCPP_INFO() << p_debug_info << std::endl;
 
-	mem::log_memory_stats();
+	log_memory_stats();
 
 	allocator.deallocate(p, 512);
 
-	mem::log_memory_stats();
+	log_memory_stats();
 
 
 
@@ -33,11 +33,11 @@ int main() {
 
     NCPP_INFO() << aligned_p_debug_info << std::endl;
 
-	mem::log_memory_stats();
+	log_memory_stats();
 
 	allocator.deallocate(aligned_p, 512);
 
-	mem::log_memory_stats();
+	log_memory_stats();
 
 
 

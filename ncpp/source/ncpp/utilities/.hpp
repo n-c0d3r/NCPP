@@ -112,4 +112,6 @@ namespace ncpp {
 
 #include <ncpp/utilities/bitscan_reverse.hpp>
 
+#include <ncpp/utilities/combine_types.hpp>
+
 #pragma endregion
