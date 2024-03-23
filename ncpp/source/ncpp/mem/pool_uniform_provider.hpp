@@ -80,6 +80,7 @@ namespace ncpp {
 
             F_linked_uniform_block,
 
+            I_child_list_uniform_block,
             I_available_list_uniform_block,
             I_initialized_count_uniform_block
 
@@ -88,7 +89,8 @@ namespace ncpp {
 
             F_linked_uniform_block,
 
-            I_available_node_uniform_block
+            I_available_node_uniform_block,
+            I_parent_p_uniform_block
 
         );
 
@@ -176,6 +178,21 @@ namespace ncpp {
 
 
         public:
+            static void process_child_provider_management_params(
+                F_pool_uniform_provider_management_params* provider_management_params_p,
+                auto* child_provider_management_params_p
+            )
+            {
+                F_uniform_block* pool_block_p = (F_uniform_block*)(provider_management_params_p->pool_block_p);
+
+                F_linked_uniform_block_list* child_list_p = &(pool_block_p->child_list);
+
+                child_provider_management_params_p->main_list_p = child_list_p;
+            }
+
+
+
+        public:
             NCPP_FORCE_INLINE TF_pool_uniform_provider() noexcept = default;
             NCPP_FORCE_INLINE TF_pool_uniform_provider(const F_uniform_provider_desc& provider_desc) :
                 F_base(parse_provider_desc(provider_desc))
@@ -239,24 +256,14 @@ namespace ncpp {
 
                 NCPP_ASSERT(params_p->pool_block_p) << "invalid pool block";
 
-                F_uniform_block* pool_block_p = params_p->pool_block_p;
+                F_uniform_block* pool_block_p = (F_uniform_block*)(params_p->pool_block_p);
 
                 F_child_uniform_block* block_p = 0;
                 F_linked_uniform_block_node* block_node_p = 0;
 
                 const auto& pdesc = NCPP_BASE_THIS()->provider_desc();
 
-                if(pool_block_p->initialized_count < pdesc.max_child_block_count_per_pool_block) {
-                    block_p = (F_child_uniform_block*)(
-                        (u8*)(NCPP_BASE_THIS()->block_p_to_root_data_p(pool_block_p))
-                        + pdesc.child_block_size * pool_block_p->initialized_count
-                    );
-                    new(block_p) F_child_uniform_block{};
-
-                    ++(pool_block_p->initialized_count);
-                }
-                else{
-                    NCPP_ASSERT(pool_block_p->available_list.count()) << "pool block out of bound";
+                if(pool_block_p->available_list.count()) {
 
                     block_node_p = pool_block_p->available_list.tail_node_p();
                     block_p = (F_child_uniform_block*)(block_node_p->block_p);
@@ -264,6 +271,19 @@ namespace ncpp {
                     pool_block_p->available_list.erase(block_node_p);
 
                     new(block_p) F_child_uniform_block{};
+                }
+                else {
+                    NCPP_ASSERT(
+                        pool_block_p->initialized_count < pdesc.max_child_block_count_per_pool_block
+                    ) << "pool block is full";
+
+                    block_p = (F_child_uniform_block*)(
+                        (u8*)(NCPP_BASE_THIS()->block_p_to_root_data_p(pool_block_p))
+                        + pdesc.child_block_size * pool_block_p->initialized_count
+                    );
+                    new(block_p) F_child_uniform_block{};
+
+                    ++(pool_block_p->initialized_count);
                 }
 
                 block_node_p = &(block_p->available_node);
@@ -280,7 +300,7 @@ namespace ncpp {
 
                 NCPP_ASSERT(params_p->pool_block_p) << "invalid pool block";
 
-                F_uniform_block* pool_block_p = params_p->pool_block_p;
+                F_uniform_block* pool_block_p = (F_uniform_block*)(params_p->pool_block_p);
 
                 F_linked_uniform_block_node* block_node_p = &(block_p->available_node);
                 block_node_p->block_p = block_p;
@@ -303,6 +323,10 @@ namespace ncpp {
 
 
         using F_pool_uniform_provider = TF_pool_uniform_provider<>;
+        using F_child_pool_uniform_provider = TF_linked_uniform_provider<
+            F_pool_uniform_provider,
+            F_child_pool_uniform_block
+        >;
 
     }
 

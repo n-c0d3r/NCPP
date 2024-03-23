@@ -5,21 +5,6 @@ using namespace ncpp;
 
 
 
-class F_demo_uniform_storage : public TA_uniform_storage<F_demo_uniform_storage, F_linked_uniform_provider> {
-
-public:
-    F_demo_uniform_storage()
-    {
-
-        init_provider({
-
-        });
-    }
-
-};
-
-
-
 int main() {
 	
 	F_default_allocator allocator;

@@ -72,10 +72,12 @@ namespace ncpp {
 
             };
 
-            template<typename... F_type__>
-            struct TF_modify_list_helper {
+            template<typename... F_types__>
+            struct TF_modify_list_helper;
+            template<typename F_type__>
+            struct TF_modify_list_helper<F_type__> {
 
-                using F = utilities::TF_template_targ_list<F_type__...>;
+                using F = utilities::TF_template_targ_list<F_type__>;
 
             };
             template<>
@@ -88,6 +90,12 @@ namespace ncpp {
             struct TF_modify_list_helper<TF_list_to_combined_struct<F_list__>> {
 
                 using F = F_list__;
+
+            };
+            template<>
+            struct TF_modify_list_helper<utilities::TF_template_targ_list<>> {
+
+                using F = utilities::TF_template_targ_list<>;
 
             };
             template<typename F_type__>
@@ -106,8 +114,8 @@ namespace ncpp {
 
             };
 
-            template<typename F__>
-            using TF_modify_list = typename TF_modify_list_helper<F__>::F;
+            template<typename... Fs__>
+            using TF_modify_list = typename TF_modify_list_helper<Fs__...>::F;
 
             template<typename... F_types__>
             using TF_combine_types_to_list = typename TF_modify_list<utilities::TF_template_targ_list<F_types__...>>::F_remove_repeats;
