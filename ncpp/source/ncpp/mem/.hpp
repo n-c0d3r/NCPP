@@ -48,12 +48,14 @@
 #include <ncpp/mem/object_allocator.hpp>
 #include <ncpp/mem/dummy_allocator.hpp>
 
+#ifndef NCPP_LITE
 #include <ncpp/mem/uniform_provider.hpp>
 #include <ncpp/mem/uniform_storage.hpp>
 #include <ncpp/mem/uniform_adaptor.hpp>
 #include <ncpp/mem/crt_uniform_provider.hpp>
 #include <ncpp/mem/linked_uniform_provider.hpp>
 #include <ncpp/mem/pool_uniform_provider.hpp>
+#endif
 
 #ifndef NCPP_LITE
 #include <ncpp/mem/gob_allocator.hpp>
