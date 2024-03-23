@@ -389,7 +389,7 @@ namespace ncpp {
 
 #define NCPP_STATIC_WARNING(...) \
 struct NCPP_PP_CAT(NCPP_STATIC_WARNING,__LINE__) { \
-  NCPP_DEPRECATE(void _(::ncpp::internal::NCPP_STATIC_WARNING_helper::false_type const& ) __VA_ARGS__) {}; \
+  NCPP_DEPRECATE(void _(::ncpp::internal::NCPP_STATIC_WARNING_helper::false_type const& ), __VA_ARGS__) {}; \
   void _(::ncpp::internal::NCPP_STATIC_WARNING_helper::true_type const& ) {}; \
   NCPP_PP_CAT(NCPP_STATIC_WARNING,__LINE__)() {_(ncpp::internal::NCPP_STATIC_WARNING_helper::converter<__VA_ARGS__>());} \
 }

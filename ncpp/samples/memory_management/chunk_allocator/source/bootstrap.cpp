@@ -8,14 +8,10 @@ using namespace ncpp;
 int main() {
 
 	{
-		
-		mem::F_incremental_chunk_allocator incremental_chunk_allocator;
 
-#ifndef NCPP_LITE
-		mem::F_smart_chunk_storage smart_chunk_storage;
-		mem::F_smart_chunk_adaptor smart_chunk_adaptor(&smart_chunk_storage);
-		mem::F_smart_chunk_allocator smart_chunk_allocator(&smart_chunk_adaptor);
-#endif
+		mem::F_chunk_storage chunk_storage;
+		mem::F_chunk_adaptor chunk_adaptor(&chunk_storage);
+		mem::F_chunk_allocator chunk_allocator(&chunk_adaptor);
 
 		mem::F_default_allocator default_allocator;
 
@@ -27,47 +23,14 @@ int main() {
 		TG_vector<void*> pointers(allocation_count);
 
 		{
-
-			{
-
-				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_incremental_chunk_allocator::allocate");
-
-				for (u32 i = 0; i < allocation_count; ++i) {
-
-					pointers[i] = incremental_chunk_allocator.allocate(allocation_size, 0);
-
-				}
-
-			}
-
-			mem::log_memory_stats();
-
-			{
-
-				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_incremental_chunk_allocator::deallocate");
-
-				for (u32 i = 0; i < allocation_count; ++i) {
-
-					incremental_chunk_allocator.deallocate(pointers[i]);
-
-				}
-
-			}
-
-			mem::log_memory_stats();
-
-		}
-
-#ifndef NCPP_LITE
-		{
 			
 			{
 
-				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_smart_chunk_allocator::allocate");
+				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_chunk_allocator::allocate");
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
-					pointers[i] = smart_chunk_allocator.allocate(allocation_size, 0);
+					pointers[i] = chunk_allocator.allocate(allocation_size, 0);
 
 				}
 
@@ -77,11 +40,11 @@ int main() {
 
 			{
 
-				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_smart_chunk_allocator::deallocate");
+				NCPP_SCOPED_PROFILER_SAMPLE("ncpp::mem::F_chunk_allocator::deallocate");
 
 				for (u32 i = 0; i < allocation_count; ++i) {
 
-					smart_chunk_allocator.deallocate(pointers[i]);
+					chunk_allocator.deallocate(pointers[i]);
 
 				}
 
@@ -90,7 +53,14 @@ int main() {
 			mem::log_memory_stats();
 			
 		}
-#endif
+
+        chunk_allocator.T_reverse_iterate_chunks(
+            [](F_chunk_header* chunk_p){
+                NCPP_INFO() << chunk_p->usage;
+            }
+        );
+
+        chunk_storage.chunk_p_ring_buffer();
 
 		{
 

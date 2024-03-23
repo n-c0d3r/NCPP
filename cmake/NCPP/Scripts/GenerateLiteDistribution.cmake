@@ -77,8 +77,8 @@ set(FILES_TO_DELETE
     "ncpp/source/ncpp/object_deprecated.hpp"
 
     # mem
-    "ncpp/source/ncpp/mem/smart_chunk_allocator.hpp"
     "ncpp/source/ncpp/mem/clusafi_allocator.hpp"
+    "ncpp/source/ncpp/mem/fast_object_allocator.hpp"
     "ncpp/source/ncpp/mem/garbage_collection.hpp"
 
     # rtti

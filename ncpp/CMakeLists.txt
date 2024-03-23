@@ -46,6 +46,8 @@ if(NCPP_ENABLE_MEMORY_COUNTING OR NCPP_ENABLE_ALLOCATOR_NAME)
 else()
     NCPP_SetGlobal(NCPP_HAS_ALLOC_DEBUG_INFO OFF)
 endif()
+set(NCPP_DEFAULT_GOB_LEVEL_COUNT 16 CACHE STRING "Default gob level count")
+set(NCPP_DEFAULT_GOB_LEAF_NODE_SIZE 8 CACHE STRING "Default gob leaf node size")
 
 # ncpp pac options
 option(NCPP_ENABLE_SCOPED_PROFILER_SAMPLE "If not enabled, scoped profiler samples will be ignored when compiling" ON)

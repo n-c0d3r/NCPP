@@ -46,11 +46,10 @@
 #include <ncpp/mem/ephemeral_allocator.hpp>
 #include <ncpp/mem/object_allocator.hpp>
 #include <ncpp/mem/dummy_allocator.hpp>
-#include <ncpp/mem/incremental_chunk_allocator.hpp>
+#include <ncpp/mem/chunk_allocator.hpp>
 
 #ifndef NCPP_LITE
-#include <ncpp/mem/smart_chunk_allocator.hpp>
-#include <ncpp/mem/clusafi_allocator.hpp>
+#include <ncpp/mem/gob_allocator.hpp>
 #include <ncpp/mem/garbage_collection.hpp>
 #endif
 

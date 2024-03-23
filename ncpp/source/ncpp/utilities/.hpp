@@ -110,4 +110,6 @@ namespace ncpp {
 
 #include <ncpp/utilities/try_class.hpp>
 
+#include <ncpp/utilities/bitscan_reverse.hpp>
+
 #pragma endregion
