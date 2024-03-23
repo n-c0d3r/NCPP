@@ -56,6 +56,37 @@ namespace ncpp {
 
             u8 bytes[sizeof(F__)];
 
+
+
+            NCPP_FORCE_INLINE F__& get() noexcept {
+
+                return *((F__*)this);
+            }
+            NCPP_FORCE_INLINE const F__& get() const noexcept {
+
+                return *((const F__*)this);
+            }
+
+            NCPP_FORCE_INLINE F__& operator()() noexcept {
+
+                return get();
+            }
+            NCPP_FORCE_INLINE const F__& operator()() const noexcept {
+
+                return get();
+            }
+
+
+
+            NCPP_FORCE_INLINE void construct(auto&&... args) {
+
+                new(&(get())) F__(std::forward<decltype(args)>(args)...);
+            }
+            NCPP_FORCE_INLINE void destruct() {
+
+                get().~F__();
+            }
+
         };
 
     }

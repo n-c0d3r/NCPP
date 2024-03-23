@@ -56,12 +56,14 @@ namespace ncpp {
 
     namespace mem {
 
-        struct A_uniform_block {
+        struct I_uniform_block {};
+        struct I_parent_p_uniform_block {
 
-            A_uniform_block* parent_p = 0;
+            I_uniform_block* parent_p = 0;
 
         };
-        struct A_uniform_provider_desc {
+
+        struct I_uniform_provider_desc {
 
             sz payload_size = 0;
             sz payload_alignment = EASTL_ALLOCATOR_MIN_ALIGNMENT;
@@ -70,15 +72,16 @@ namespace ncpp {
             sz block_alignment = EASTL_ALLOCATOR_MIN_ALIGNMENT;
 
         };
-        struct A_uniform_provider_management_params {
 
-            NCPP_FORCE_INLINE void process_child_management_params(A_uniform_provider_management_params*) noexcept {}
+        struct I_uniform_provider_management_params {
+
+            NCPP_FORCE_INLINE void process_child_management_params(I_uniform_provider_management_params*) noexcept {}
 
         };
 
 
 
-        class A_invalid_uniform_provider {
+        class F_invalid_uniform_provider final {
 
         public:
             void* create_block(
@@ -116,7 +119,7 @@ namespace ncpp {
             };
 
             template<>
-            struct TF_uniform_provider_safe_infos<A_invalid_uniform_provider> {
+            struct TF_uniform_provider_safe_infos<F_invalid_uniform_provider> {
 
                 using F_uniform_block = void;
                 using F_uniform_provider_desc = void;
@@ -134,11 +137,11 @@ namespace ncpp {
 
 
         template<
-            class F_parent_uniform_provider__ = A_invalid_uniform_provider,
-            class F_uniform_block__ = A_uniform_block,
-            class F_child_uniform_block__ = A_uniform_block,
-            class F_uniform_provider_desc__ = A_uniform_provider_desc,
-            class F_uniform_provider_management_params__ = A_uniform_provider_management_params
+            class F_parent_uniform_provider__ = F_invalid_uniform_provider,
+            class F_uniform_block__ = I_uniform_block,
+            class F_child_uniform_block__ = I_uniform_block,
+            class F_uniform_provider_desc__ = I_uniform_provider_desc,
+            class F_uniform_provider_management_params__ = I_uniform_provider_management_params
         >
         class TA_uniform_provider {
 
@@ -168,7 +171,7 @@ namespace ncpp {
 
         public:
             static_assert(
-                std::is_same_v<F_parent_uniform_provider, A_invalid_uniform_provider>
+                std::is_same_v<F_parent_uniform_provider, F_invalid_uniform_provider>
                 || std::is_same_v<
                     F_parent_child_uniform_block,
                     F_uniform_block
@@ -208,6 +211,7 @@ namespace ncpp {
 
                 setup();
             }
+
             NCPP_FORCE_INLINE TA_uniform_provider(const TA_uniform_provider& x) :
                 provider_desc_(x.provider_desc_)
             {
@@ -268,11 +272,11 @@ namespace ncpp {
 
 
         public:
-            NCPP_FORCE_INLINE A_uniform_block* default_create_block() {
+            NCPP_FORCE_INLINE I_uniform_block* default_create_block() {
 
                 NCPP_ASSERT(actual_block_size_) << "invalid block desc";
 
-                A_uniform_block* block_p = (A_uniform_block*)(
+                I_uniform_block* block_p = (I_uniform_block*)(
                     F_crt_allocator().allocate(
                         actual_block_size_,
                         provider_desc_.block_alignment,
@@ -285,7 +289,7 @@ namespace ncpp {
 
                 return block_p;
             }
-            void default_destroy_block(A_uniform_block* block_p) {
+            void default_destroy_block(I_uniform_block* block_p) {
 
                 NCPP_ASSERT(actual_block_size_) << "invalid block desc";
 

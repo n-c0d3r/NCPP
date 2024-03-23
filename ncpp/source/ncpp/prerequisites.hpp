@@ -562,6 +562,7 @@ namespace ncpp::internal {
 ////////////////////////////////////////////////////////////////////////////////////
 //  NCPP_BASE_THIS(), NCPP_BASE_THIS_CONST(),...
 ////////////////////////////////////////////////////////////////////////////////////
+
 #define NCPP_BASE_THIS() ((F_base*)this)
 #define NCPP_BASE_THIS_CONST() ((const F_base*)this)
 #define NCPP_BASE_P(x) ((F_base*)x)
@@ -579,6 +580,14 @@ namespace ncpp::internal {
 #define NCPP_NAME(CStr) CStr
 #define NCPP_NAME_ML(...) #__VA_ARGS__
 #define NCPP_TEXT_ML(...) NCPP_TEXT(NCPP_NAME_ML(__VA_ARGS__))
+
+
+
+////////////////////////////////////////////////////////////////////////////////////
+//  NCPP_REQUIRE_BASE(...)
+////////////////////////////////////////////////////////////////////////////////////
+
+#define NCPP_REQUIRE_BASE(...) static_assert(std::derived_from<__VA_ARGS__>);
 
 
 

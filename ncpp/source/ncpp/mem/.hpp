@@ -49,6 +49,8 @@
 #include <ncpp/mem/dummy_allocator.hpp>
 
 #include <ncpp/mem/uniform_provider.hpp>
+#include <ncpp/mem/uniform_storage.hpp>
+#include <ncpp/mem/uniform_adaptor.hpp>
 #include <ncpp/mem/crt_uniform_provider.hpp>
 #include <ncpp/mem/linked_uniform_provider.hpp>
 #include <ncpp/mem/pool_uniform_provider.hpp>

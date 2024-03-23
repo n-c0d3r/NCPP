@@ -1,7 +1,7 @@
 #pragma once
 
-/** @file ncpp/mem/crt_uniform_provider.hpp
-*	@brief Implements current runtime uniform provider.
+/** @file ncpp/mem/uniform_adaptor.hpp
+*	@brief Implements uniform adaptor base class template.
 */
 
 
@@ -31,6 +31,8 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#include <ncpp/mem/allocator.hpp>
+#include <ncpp/mem/crt_allocator.hpp>
 #include <ncpp/mem/uniform_provider.hpp>
 
 #pragma endregion
@@ -55,86 +57,62 @@ namespace ncpp {
 
     namespace mem {
 
-        using I_crt_uniform_block = I_uniform_block;
-
-        using I_crt_uniform_provider_desc = I_uniform_provider_desc;
-
-        using I_crt_uniform_provider_management_params = I_uniform_provider_management_params;
-
-
-
         template<
-            class F_uniform_block__ = I_crt_uniform_block,
-            class F_child_uniform_block__ = I_uniform_block,
-            class F_uniform_provider_desc__ = I_crt_uniform_provider_desc,
-            class F_uniform_provider_management_params__ = I_crt_uniform_provider_management_params
+            class F_uniform_adaptor__,
+            class F_uniform_storage__,
+            class F_source_in__
         >
-        class TF_crt_uniform_provider :
-            public TA_uniform_provider<
-                F_invalid_uniform_provider,
-                F_uniform_block__,
-                F_child_uniform_block__,
-                F_uniform_provider_desc__,
-                F_uniform_provider_management_params__
-            >
-        {
+        class TA_uniform_adaptor {
 
         private:
-            using F_base = TA_uniform_provider<
-                F_invalid_uniform_provider,
-                F_uniform_block__,
-                F_child_uniform_block__,
-                F_uniform_provider_desc__,
-                F_uniform_provider_management_params__
+            using F_this = TA_uniform_adaptor<
+                F_uniform_adaptor__,
+                F_uniform_storage__,
+                F_source_in__
             >;
 
         public:
-            using typename F_base::F_parent_uniform_provider;
-            using typename F_base::F_uniform_block;
-            using typename F_base::F_uniform_provider_desc;
-            using typename F_base::F_uniform_provider_management_params;
-
-            using typename F_base::F_child_uniform_block;
+            using F_uniform_adaptor = F_uniform_adaptor__;
+            using F_uniform_storage = F_uniform_storage__;
+            using F_source_in = F_source_in__;
 
         public:
-            using typename F_base::F_parent_uniform_provider_management_params;
-
-
+            using F_uniform_provider = typename F_uniform_storage::F_uniform_provider;
 
         public:
-            NCPP_REQUIRE_BASE(F_uniform_block, I_crt_uniform_block);
-            NCPP_REQUIRE_BASE(F_uniform_provider_desc, I_crt_uniform_provider_desc);
-            NCPP_REQUIRE_BASE(F_uniform_provider_management_params, I_crt_uniform_provider_management_params);
+            using F_uniform_block = typename TF_uniform_provider_safe_infos<F_uniform_provider>::F_uniform_block;
+            using F_uniform_provider_desc = typename TF_uniform_provider_safe_infos<F_uniform_provider>::F_uniform_provider_desc;
+            using F_uniform_provider_management_params = typename TF_uniform_provider_safe_infos<F_uniform_provider>::F_uniform_provider_management_params;
 
-            NCPP_REQUIRE_BASE(F_child_uniform_block, I_uniform_block);
+            using F_child_uniform_block = typename TF_uniform_provider_safe_infos<F_uniform_provider>::F_child_uniform_block;
 
 
+
+        private:
+            F_source_in* source_in_p_;
 
         public:
-            NCPP_FORCE_INLINE TF_crt_uniform_provider() noexcept = default;
-            NCPP_FORCE_INLINE TF_crt_uniform_provider(const F_uniform_provider_desc& provider_desc) :
-                F_base(provider_desc)
+            NCPP_FORCE_INLINE F_source_in* source_in_p() noexcept { return source_in_p_; }
+            NCPP_FORCE_INLINE const F_source_in* source_in_p() const noexcept { return source_in_p_; }
+
+
+
+        protected:
+            NCPP_FORCE_INLINE TA_uniform_adaptor(F_source_in* source_in_p) :
+                source_in_p_(source_in_p)
             {
             }
 
-            NCPP_FORCE_INLINE TF_crt_uniform_provider(const TF_crt_uniform_provider& x) :
-                F_base(NCPP_BASE_R_CONST(x).provider_desc())
-            {
-            }
+            NCPP_FORCE_INLINE TA_uniform_adaptor(const TA_uniform_adaptor& x) = delete;
+            NCPP_FORCE_INLINE TA_uniform_adaptor(TA_uniform_adaptor&& x) = delete;
 
-            NCPP_FORCE_INLINE TF_crt_uniform_provider& operator=(const TF_crt_uniform_provider& x) {
-
-                NCPP_BASE_THIS()->set_provider_desc(
-                    NCPP_BASE_R_CONST(x).provider_desc()
-                );
-
-                return *this;
-            }
+            NCPP_FORCE_INLINE TA_uniform_adaptor& operator=(const TA_uniform_adaptor& x) = delete;
+            NCPP_FORCE_INLINE TA_uniform_adaptor& operator=(TA_uniform_adaptor&& x) = delete;
 
 
 
         public:
-            NCPP_FORCE_INLINE b8 operator==(const TF_crt_uniform_provider& x) const noexcept {
+            NCPP_FORCE_INLINE b8 operator==(const TA_uniform_adaptor& x) const noexcept {
 
                 return (this == &x);
             }
@@ -142,20 +120,10 @@ namespace ncpp {
 
 
         public:
-            /**
-             *	Clears everything and to be the same as the default instance.
-             */
-            NCPP_FORCE_INLINE void reset() {}
-            /**
-             *	Clear some essential datas.
-             */
-            NCPP_FORCE_INLINE void clear() {}
+            F_uniform_block* pop_block();
+            void push_block(F_uniform_block*);
 
         };
-
-
-
-        using F_crt_uniform_provider = TF_crt_uniform_provider<>;
 
     }
 

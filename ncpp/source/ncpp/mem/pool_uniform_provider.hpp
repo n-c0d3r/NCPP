@@ -60,36 +60,36 @@ namespace ncpp {
 
 
 
-        struct F_pool_uniform_block : public F_linked_uniform_block {
+        struct I_pool_uniform_block : public I_linked_uniform_block {
 
-            F_linked_uniform_block_list lower_list;
+            F_linked_uniform_block_list child_list;
 
             F_linked_uniform_block_list available_list;
             sz initialized_count = 0;
 
         };
-        struct F_child_pool_uniform_block : public F_linked_uniform_block {
+        struct I_child_pool_uniform_block : public I_linked_uniform_block {
 
             F_linked_uniform_block_node available_node;
 
         };
-        struct F_pool_uniform_provider_desc : public F_linked_uniform_provider_desc {
+        struct I_pool_uniform_provider_desc : public I_linked_uniform_provider_desc {
 
             sz child_block_size = 0;
             sz max_child_block_count_per_pool_block = 0;
 
         };
-        struct F_pool_uniform_provider_management_params : public F_linked_uniform_provider_management_params {
+        struct I_pool_uniform_provider_management_params : public I_linked_uniform_provider_management_params {
 
-            F_pool_uniform_block* pool_block_p = 0;
+            I_pool_uniform_block* pool_block_p = 0;
 
 
 
-            NCPP_FORCE_INLINE void process_child_management_params(F_linked_uniform_provider_management_params* child_management_params_p) noexcept {
+            NCPP_FORCE_INLINE void process_child_management_params(I_linked_uniform_provider_management_params* child_management_params_p) noexcept {
 
                 NCPP_ASSERT(pool_block_p) << "invalid pool block";
 
-                child_management_params_p->upper_list_p = &(pool_block_p->lower_list);
+                child_management_params_p->main_list_p = &(pool_block_p->child_list);
             }
 
         };
@@ -97,11 +97,11 @@ namespace ncpp {
 
 
         template<
-            class F_parent_uniform_provider__ = A_invalid_uniform_provider,
-            class F_uniform_block__ = F_pool_uniform_block,
-            class F_child_uniform_block__ = F_child_pool_uniform_block,
-            class F_uniform_provider_desc__ = F_pool_uniform_provider_desc,
-            class F_uniform_provider_management_params__ = F_pool_uniform_provider_management_params
+            class F_parent_uniform_provider__ = F_invalid_uniform_provider,
+            class F_uniform_block__ = I_pool_uniform_block,
+            class F_child_uniform_block__ = I_child_pool_uniform_block,
+            class F_uniform_provider_desc__ = I_pool_uniform_provider_desc,
+            class F_uniform_provider_management_params__ = I_pool_uniform_provider_management_params
         >
         class TF_pool_uniform_provider :
             public TF_linked_uniform_provider<
@@ -136,12 +136,22 @@ namespace ncpp {
 
 
         public:
+            NCPP_REQUIRE_BASE(F_uniform_block, I_pool_uniform_block);
+            NCPP_REQUIRE_BASE(F_uniform_provider_desc, I_pool_uniform_provider_desc);
+            NCPP_REQUIRE_BASE(F_uniform_provider_management_params, I_pool_uniform_provider_management_params);
+
+            NCPP_REQUIRE_BASE(F_child_uniform_block, I_child_pool_uniform_block);
+
+
+
+        public:
             NCPP_FORCE_INLINE TF_pool_uniform_provider() noexcept = default;
             NCPP_FORCE_INLINE TF_pool_uniform_provider(const F_uniform_provider_desc& provider_desc) :
                 F_base(parse_provider_desc(provider_desc))
             {
                 setup();
             }
+
             NCPP_FORCE_INLINE TF_pool_uniform_provider(const TF_pool_uniform_provider& x) :
                 F_base(NCPP_BASE_R_CONST(x).provider_desc())
             {
@@ -192,25 +202,6 @@ namespace ncpp {
 
 
         public:
-            F_uniform_block* create_block(
-                F_uniform_provider_management_params* params_p = 0,
-                F_parent_uniform_provider_management_params* parent_params_p = 0
-            ) {
-
-                F_uniform_block* block_p = F_base::create_block(params_p, parent_params_p);
-
-                return block_p;
-            }
-            void destroy_block(
-                F_uniform_block* block_p,
-                F_uniform_provider_management_params* params_p = 0,
-                F_parent_uniform_provider_management_params* parent_params_p = 0
-            ) {
-
-                F_base::destroy_block(block_p, params_p, parent_params_p);
-            }
-
-        public:
             F_child_uniform_block* allocate_child_block(
                 F_uniform_provider_management_params* params_p = 0
             ) {
@@ -258,7 +249,12 @@ namespace ncpp {
 
                 NCPP_ASSERT(params_p->pool_block_p) << "invalid pool block";
 
-                F_base::default_destroy_block(block_p);
+                F_uniform_block* pool_block_p = params_p->pool_block_p;
+
+                F_linked_uniform_block_node* block_node_p = &(block_p->available_node);
+                block_node_p->block_p = block_p;
+
+                pool_block_p->available_list.push_back(block_node_p);
             }
 
         public:
