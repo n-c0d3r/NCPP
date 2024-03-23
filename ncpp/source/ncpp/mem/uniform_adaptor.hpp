@@ -59,7 +59,7 @@ namespace ncpp {
 
         template<
             class F_uniform_adaptor__,
-            class F_uniform_storage__,
+            class F_uniform_provider__,
             class F_source_in__
         >
         class TA_uniform_adaptor {
@@ -67,17 +67,14 @@ namespace ncpp {
         private:
             using F_this = TA_uniform_adaptor<
                 F_uniform_adaptor__,
-                F_uniform_storage__,
+                F_uniform_provider__,
                 F_source_in__
             >;
 
         public:
             using F_uniform_adaptor = F_uniform_adaptor__;
-            using F_uniform_storage = F_uniform_storage__;
+            using F_uniform_provider = F_uniform_provider__;
             using F_source_in = F_source_in__;
-
-        public:
-            using F_uniform_provider = typename F_uniform_storage::F_uniform_provider;
 
         public:
             using F_uniform_block = typename TF_uniform_provider_safe_infos<F_uniform_provider>::F_uniform_block;
