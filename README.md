@@ -5,7 +5,7 @@ NCoder's Game Engine Learning Aimed C++ Library.
 
 ## Features
 + Memory management:
-  + **Chunk allocator**
+  + **Uniform provider**/**storage**/**adaptor**
   + Reference allocator
   + **Powerful allocator base class**
 + Containers:
@@ -45,7 +45,6 @@ NCoder's Game Engine Learning Aimed C++ Library.
     + Easy to use
     + No additional memory cost on reflected object
     + Metadata supports
-    + Fast compilation
     + Flexible and highly customizable
 
 ---
