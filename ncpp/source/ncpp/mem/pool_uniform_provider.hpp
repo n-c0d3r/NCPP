@@ -92,10 +92,14 @@ namespace ncpp {
 
 
 
-        struct I_child_pool_uniform_provider_desc {
+        struct D_child_pool_memory_block_size {
 
-            sz child_block_size = 0;
-            sz max_child_block_count_per_pool_block = 0;
+            sz child_pool_memory_block_size = 0;
+
+        };
+        struct D_max_child_pool_memory_block_count_per_pool_memory_block {
+
+            sz max_child_pool_memory_block_count_per_pool_memory_block = 0;
 
         };
 
@@ -103,15 +107,16 @@ namespace ncpp {
 
             F_linked_uniform_provider_desc,
 
-            I_child_pool_uniform_provider_desc
+            D_child_pool_memory_block_size,
+            D_max_child_pool_memory_block_count_per_pool_memory_block
 
         );
 
 
 
-        struct I_pool_block_p_uniform_provider_management_params {
+        struct D_pool_memory_block_p {
 
-            void* pool_block_p = 0;
+            void* pool_memory_block_p = 0;
 
         };
 
@@ -119,7 +124,7 @@ namespace ncpp {
 
             F_linked_uniform_provider_management_params,
 
-            I_pool_block_p_uniform_provider_management_params
+            D_pool_memory_block_p
 
         );
 
@@ -179,9 +184,9 @@ namespace ncpp {
                 auto* child_provider_management_params_p
             )
             {
-                F_uniform_block* pool_block_p = (F_uniform_block*)(provider_management_params_p->pool_block_p);
+                F_uniform_block* pool_memory_block_p = (F_uniform_block*)(provider_management_params_p->pool_memory_block_p);
 
-                F_linked_uniform_block_list* child_memory_block_linked_list_p = &(pool_block_p->child_memory_block_linked_list);
+                F_linked_uniform_block_list* child_memory_block_linked_list_p = &(pool_memory_block_p->child_memory_block_linked_list);
 
                 child_provider_management_params_p->main_memory_block_linked_list_p = child_memory_block_linked_list_p;
             }
@@ -227,15 +232,15 @@ namespace ncpp {
             F_uniform_provider_desc parse_provider_desc(const F_uniform_provider_desc& desc) {
 
                 NCPP_ASSERT(
-                    desc.child_block_size
+                    desc.child_pool_memory_block_size
                 ) << "invalid child block size";
                 NCPP_ASSERT(
-                    desc.max_child_block_count_per_pool_block
+                    desc.max_child_pool_memory_block_count_per_pool_memory_block
                 ) << "invalid child block count per pool block";
 
                 F_uniform_provider_desc result = desc;
 
-                result.payload_size = desc.child_block_size * desc.max_child_block_count_per_pool_block;
+                result.payload_size = desc.child_pool_memory_block_size * desc.max_child_pool_memory_block_count_per_pool_memory_block;
 
                 return result;
             }
@@ -250,42 +255,42 @@ namespace ncpp {
                 F_uniform_provider_management_params* params_p = 0
             ) {
 
-                NCPP_ASSERT(params_p->pool_block_p) << "invalid pool block";
+                NCPP_ASSERT(params_p->pool_memory_block_p) << "invalid pool block";
 
-                F_uniform_block* pool_block_p = (F_uniform_block*)(params_p->pool_block_p);
+                F_uniform_block* pool_memory_block_p = (F_uniform_block*)(params_p->pool_memory_block_p);
 
                 F_child_uniform_block* block_p = 0;
                 F_linked_uniform_block_node* block_node_p = 0;
 
                 const auto& pdesc = NCPP_BASE_THIS()->provider_desc();
 
-                if(pool_block_p->available_memory_block_linked_list.count()) {
+                if(pool_memory_block_p->available_memory_block_linked_list.count()) {
 
-                    block_node_p = pool_block_p->available_memory_block_linked_list.tail_node_p();
+                    block_node_p = pool_memory_block_p->available_memory_block_linked_list.tail_node_p();
                     block_p = (F_child_uniform_block*)(block_node_p->block_p);
 
-                    pool_block_p->available_memory_block_linked_list.erase(block_node_p);
+                    pool_memory_block_p->available_memory_block_linked_list.erase(block_node_p);
 
                     new(block_p) F_child_uniform_block{};
                 }
                 else {
                     NCPP_ASSERT(
-                        pool_block_p->child_pool_memory_block_initialized_count < pdesc.max_child_block_count_per_pool_block
+                        pool_memory_block_p->child_pool_memory_block_initialized_count < pdesc.max_child_pool_memory_block_count_per_pool_memory_block
                     ) << "pool block is full";
 
                     block_p = (F_child_uniform_block*)(
-                        (u8*)(NCPP_BASE_THIS()->block_p_to_root_data_p(pool_block_p))
-                        + pdesc.child_block_size * pool_block_p->child_pool_memory_block_initialized_count
+                        (u8*)(NCPP_BASE_THIS()->block_p_to_root_data_p(pool_memory_block_p))
+                        + pdesc.child_pool_memory_block_size * pool_memory_block_p->child_pool_memory_block_initialized_count
                     );
                     new(block_p) F_child_uniform_block{};
 
-                    ++(pool_block_p->child_pool_memory_block_initialized_count);
+                    ++(pool_memory_block_p->child_pool_memory_block_initialized_count);
                 }
 
                 block_node_p = &(block_p->available_memory_block_linked_node);
                 block_node_p->block_p = block_p;
 
-                block_p->parent_memory_block_p = params_p->pool_block_p;
+                block_p->parent_memory_block_p = params_p->pool_memory_block_p;
 
                 return block_p;
             }
@@ -294,14 +299,14 @@ namespace ncpp {
                 F_uniform_provider_management_params* params_p = 0
             ) {
 
-                NCPP_ASSERT(params_p->pool_block_p) << "invalid pool block";
+                NCPP_ASSERT(params_p->pool_memory_block_p) << "invalid pool block";
 
-                F_uniform_block* pool_block_p = (F_uniform_block*)(params_p->pool_block_p);
+                F_uniform_block* pool_memory_block_p = (F_uniform_block*)(params_p->pool_memory_block_p);
 
                 F_linked_uniform_block_node* block_node_p = &(block_p->available_memory_block_linked_node);
                 block_node_p->block_p = block_p;
 
-                pool_block_p->available_memory_block_linked_list.push_back(block_node_p);
+                pool_memory_block_p->available_memory_block_linked_list.push_back(block_node_p);
             }
 
         public:
