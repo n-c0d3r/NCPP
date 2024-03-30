@@ -74,15 +74,15 @@ namespace ncpp {
             template<ncpp::b8 is_thread_safe_fr__, typename F_allocator_fr__>     \
             friend class ncpp::TF_default_object_manager;                                        \
                                                     \
-            template<typename F_object_fr__, typename F_validate__>\
+            template<typename F_object_fr__, typename F_requirements__>\
             friend class ncpp::TW_oref;\
-            template<typename F_object_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__, typename F_validate__>\
+            template<typename F_object_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__, typename F_requirements__>\
             friend class ncpp::TK_oref;\
-            template<typename F_object_fr__, typename F_allocator_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__, typename F_validate__>\
+            template<typename F_object_fr__, typename F_allocator_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__, typename F_requirements__>\
             friend class ncpp::TU_oref;\
-            template<typename F_object_fr__, typename F_allocator_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__, typename F_validate__>\
+            template<typename F_object_fr__, typename F_allocator_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__, typename F_requirements__>\
             friend class ncpp::TS_oref;\
-            template<typename F_object_fr__, typename F_allocator_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__, typename F_validate__>\
+            template<typename F_object_fr__, typename F_allocator_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__, typename F_requirements__>\
             friend class ncpp::TX_oref;
 
 #define NCPP_OBJECT_MEMORY_HEADER_SIZE (sizeof(ncpp::u64) * 2)
@@ -201,28 +201,60 @@ namespace ncpp {
 
 
 
-    struct F_default_validate {
+#define NCPP_CHECK_OREF_REQUIREMENTS(...) \
+            NCPP_ENABLE_IF_DEBUG( \
+                std::remove_const_t<std::remove_pointer_t<decltype(__VA_ARGS__)>>::F_requirements::T_check(*(__VA_ARGS__))                    \
+            );
 
-        template<T_is_oref F_oref__>
-        static NCPP_FORCE_INLINE void T_validate(const F_oref__& oref) noexcept {
+    template<class F_requirements__>
+    struct TF_requirements_base {
+
+        template<
+            class F_passed_oref__,
+            class F_requirements_binded_oref__ = std::remove_const_t<std::remove_reference_t<F_passed_oref__>>::template TF_bind_requirements<F_requirements__>,
+            typename F_return__ = utilities::TF_nth_template_targ<
+                std::is_rvalue_reference_v<F_passed_oref__>,
+                utilities::TF_nth_template_targ<
+                    std::is_const_v<std::remove_reference_t<F_passed_oref__>>,
+                    F_requirements_binded_oref__,
+                    const F_requirements_binded_oref__
+                >&,
+                utilities::TF_nth_template_targ<
+                    std::is_const_v<std::remove_reference_t<F_passed_oref__>>,
+                    F_requirements_binded_oref__,
+                    const F_requirements_binded_oref__
+                >&&
+            >
+        >
+        static NCPP_FORCE_INLINE F_return__ T_apply(F_passed_oref__&& oref) noexcept
+        {
+
+            NCPP_ENABLE_IF_DEBUG(
+                F_requirements__::T_check((const F_requirements_binded_oref__&)oref);
+            );
+
+            return ((F_return__)oref);
         }
 
     };
 
-    struct F_valid_validate {
+    struct F_default_requirements : public TF_requirements_base<F_default_requirements> {
 
         template<T_is_oref F_oref__>
-        static NCPP_FORCE_INLINE void T_validate(const F_oref__& oref) noexcept {
+        static NCPP_FORCE_INLINE void T_check(const F_oref__& oref) noexcept {
+        }
+
+    };
+
+    struct F_valid_requirements : public TF_requirements_base<F_valid_requirements> {
+
+        template<T_is_oref F_oref__>
+        static NCPP_FORCE_INLINE void T_check(const F_oref__& oref) noexcept {
 
             NCPP_ASSERT(oref.is_valid()) << "invalid oref";
         }
 
     };
-
-#define NCPP_VALIDATE_OREF(...) \
-            NCPP_ENABLE_IF_DEBUG( \
-                std::remove_const_t<std::remove_pointer_t<decltype(__VA_ARGS__)>>::F_validate::T_validate(*(__VA_ARGS__))                    \
-            );
 
 
 
@@ -249,15 +281,15 @@ namespace ncpp {
     template<b8 is_thread_safe__, typename F_allocator__>
     class TF_default_object_manager;
 
-    template<typename F_passed_object__, typename F_validate__>
+    template<typename F_passed_object__, typename F_requirements__>
     class TW_oref;
-    template<typename F_passed_object__, class F_options__, b8 is_has_object_key__, typename F_validate__>
+    template<typename F_passed_object__, class F_options__, b8 is_has_object_key__, typename F_requirements__>
     class TK_oref;
-    template<typename F_passed_object__, typename F_allocator__, class F_options__, b8 is_has_object_key__, typename F_validate__>
+    template<typename F_passed_object__, typename F_allocator__, class F_options__, b8 is_has_object_key__, typename F_requirements__>
     class TU_oref;
-    template<typename F_passed_object__, typename F_allocator__, class F_options__, b8 is_has_object_key__, typename F_validate__>
+    template<typename F_passed_object__, typename F_allocator__, class F_options__, b8 is_has_object_key__, typename F_requirements__>
     class TS_oref;
-    template<typename F_passed_object__, typename F_allocator__, class F_options__, b8 is_has_object_key__, typename F_validate__>
+    template<typename F_passed_object__, typename F_allocator__, class F_options__, b8 is_has_object_key__, typename F_requirements__>
     class TX_oref;
 
 
@@ -276,74 +308,74 @@ namespace ncpp {
 
 
 
-    template<typename F_passed_object__, typename F_validate__ = F_default_validate>
-    using TW = TW_oref<F_passed_object__, F_validate__>;
+    template<typename F_passed_object__, typename F_requirements__ = F_default_requirements>
+    using TW = TW_oref<F_passed_object__, F_requirements__>;
 
     template<
         typename F_passed_object__,
         class F_options__ = F_default_object_options,
         b8 is_has_object_key__ = false,
-        typename F_validate__ = F_default_validate
+        typename F_requirements__ = F_default_requirements
     >
-    using TK = TK_oref<F_passed_object__, F_options__, is_has_object_key__, F_validate__>;
+    using TK = TK_oref<F_passed_object__, F_options__, is_has_object_key__, F_requirements__>;
 
     template<
         typename F_passed_object__,
         class F_options__ = F_default_object_options,
-        typename F_validate__ = F_default_validate
+        typename F_requirements__ = F_default_requirements
     >
-    using TK2 = TK_oref<F_passed_object__, F_options__, true, F_validate__>;
-
-    template<
-        typename F_passed_object__,
-        typename F_allocator__ = mem::F_object_allocator,
-        class F_options__ = F_default_object_options,
-        b8 is_has_object_key__ = false,
-        typename F_validate__ = F_default_validate
-    >
-    using TU = TU_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_validate__>;
-
-    template<
-        typename F_passed_object__,
-        typename F_allocator__ = mem::F_object_allocator,
-        class F_options__ = F_default_object_options,
-        typename F_validate__ = F_default_validate
-    >
-    using TU2 = TU_oref<F_passed_object__, F_allocator__, F_options__, true, F_validate__>;
+    using TK2 = TK_oref<F_passed_object__, F_options__, true, F_requirements__>;
 
     template<
         typename F_passed_object__,
         typename F_allocator__ = mem::F_object_allocator,
         class F_options__ = F_default_object_options,
         b8 is_has_object_key__ = false,
-        typename F_validate__ = F_default_validate
+        typename F_requirements__ = F_default_requirements
     >
-    using TS = TS_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_validate__>;
+    using TU = TU_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>;
 
     template<
         typename F_passed_object__,
         typename F_allocator__ = mem::F_object_allocator,
         class F_options__ = F_default_object_options,
-        typename F_validate__ = F_default_validate
+        typename F_requirements__ = F_default_requirements
     >
-    using TS2 = TS_oref<F_passed_object__, F_allocator__, F_options__, true, F_validate__>;
+    using TU2 = TU_oref<F_passed_object__, F_allocator__, F_options__, true, F_requirements__>;
 
     template<
         typename F_passed_object__,
         typename F_allocator__ = mem::F_object_allocator,
         class F_options__ = F_default_object_options,
         b8 is_has_object_key__ = false,
-        typename F_validate__ = F_default_validate
+        typename F_requirements__ = F_default_requirements
     >
-    using TX = TX_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_validate__>;
+    using TS = TS_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>;
 
     template<
         typename F_passed_object__,
         typename F_allocator__ = mem::F_object_allocator,
         class F_options__ = F_default_object_options,
-        typename F_validate__ = F_default_validate
+        typename F_requirements__ = F_default_requirements
     >
-    using TX2 = TX_oref<F_passed_object__, F_allocator__, F_options__, true, F_validate__>;
+    using TS2 = TS_oref<F_passed_object__, F_allocator__, F_options__, true, F_requirements__>;
+
+    template<
+        typename F_passed_object__,
+        typename F_allocator__ = mem::F_object_allocator,
+        class F_options__ = F_default_object_options,
+        b8 is_has_object_key__ = false,
+        typename F_requirements__ = F_default_requirements
+    >
+    using TX = TX_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>;
+
+    template<
+        typename F_passed_object__,
+        typename F_allocator__ = mem::F_object_allocator,
+        class F_options__ = F_default_object_options,
+        typename F_requirements__ = F_default_requirements
+    >
+    using TX2 = TX_oref<F_passed_object__, F_allocator__, F_options__, true, F_requirements__>;
 
 
 
@@ -362,35 +394,20 @@ namespace ncpp {
 
 
     template<typename F_passed_object__>
-    using TW_valid = TW_oref<F_passed_object__, F_valid_validate>;
+    using TW_valid = TW_oref<F_passed_object__, F_valid_requirements>;
 
     template<
         typename F_passed_object__,
         class F_options__ = F_default_object_options,
         b8 is_has_object_key__ = false
     >
-    using TK_valid = TK_oref<F_passed_object__, F_options__, is_has_object_key__, F_valid_validate>;
+    using TK_valid = TK_oref<F_passed_object__, F_options__, is_has_object_key__, F_valid_requirements>;
 
     template<
         typename F_passed_object__,
         class F_options__ = F_default_object_options
     >
-    using TK2_valid = TK_oref<F_passed_object__, F_options__, true, F_valid_validate>;
-
-    template<
-        typename F_passed_object__,
-        typename F_allocator__ = mem::F_object_allocator,
-        class F_options__ = F_default_object_options,
-        b8 is_has_object_key__ = false
-    >
-    using TU_valid = TU_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_valid_validate>;
-
-    template<
-        typename F_passed_object__,
-        typename F_allocator__ = mem::F_object_allocator,
-        class F_options__ = F_default_object_options
-    >
-    using TU2_valid = TU_oref<F_passed_object__, F_allocator__, F_options__, true, F_valid_validate>;
+    using TK2_valid = TK_oref<F_passed_object__, F_options__, true, F_valid_requirements>;
 
     template<
         typename F_passed_object__,
@@ -398,14 +415,14 @@ namespace ncpp {
         class F_options__ = F_default_object_options,
         b8 is_has_object_key__ = false
     >
-    using TS_valid = TS_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_valid_validate>;
+    using TU_valid = TU_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_valid_requirements>;
 
     template<
         typename F_passed_object__,
         typename F_allocator__ = mem::F_object_allocator,
         class F_options__ = F_default_object_options
     >
-    using TS2_valid = TS_oref<F_passed_object__, F_allocator__, F_options__, true, F_valid_validate>;
+    using TU2_valid = TU_oref<F_passed_object__, F_allocator__, F_options__, true, F_valid_requirements>;
 
     template<
         typename F_passed_object__,
@@ -413,14 +430,29 @@ namespace ncpp {
         class F_options__ = F_default_object_options,
         b8 is_has_object_key__ = false
     >
-    using TX_valid = TX_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_valid_validate>;
+    using TS_valid = TS_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_valid_requirements>;
 
     template<
         typename F_passed_object__,
         typename F_allocator__ = mem::F_object_allocator,
         class F_options__ = F_default_object_options
     >
-    using TX2_valid = TX_oref<F_passed_object__, F_allocator__, F_options__, true, F_valid_validate>;
+    using TS2_valid = TS_oref<F_passed_object__, F_allocator__, F_options__, true, F_valid_requirements>;
+
+    template<
+        typename F_passed_object__,
+        typename F_allocator__ = mem::F_object_allocator,
+        class F_options__ = F_default_object_options,
+        b8 is_has_object_key__ = false
+    >
+    using TX_valid = TX_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_valid_requirements>;
+
+    template<
+        typename F_passed_object__,
+        typename F_allocator__ = mem::F_object_allocator,
+        class F_options__ = F_default_object_options
+    >
+    using TX2_valid = TX_oref<F_passed_object__, F_allocator__, F_options__, true, F_valid_requirements>;
 
 
 
@@ -1297,11 +1329,11 @@ namespace ncpp {
 
 
 
-    template<typename F_passed_object__, typename F_validate__ = F_default_validate>
+    template<typename F_passed_object__, typename F_requirements__ = F_default_requirements>
     class TW_oref {
 
     private:
-        using F_this = TW_oref<F_passed_object__, F_validate__>;
+        using F_this = TW_oref<F_passed_object__, F_requirements__>;
 
     public:
         NCPP_OBJECT_FRIEND_CLASSES();
@@ -1309,7 +1341,7 @@ namespace ncpp {
         using F_passed_object = F_passed_object__;
         using F_object = std::remove_const_t<F_passed_object__>;
 
-        using F_validate = F_validate__;
+        using F_requirements = F_requirements__;
 
         static constexpr b8 is_const = std::is_const_v<F_passed_object__>;
 
@@ -1318,8 +1350,8 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        template<typename F_new_validate__>
-        using TF_bind_validate = TW_oref<F_passed_object__, F_new_validate__>;
+        template<typename F_new_requirements__>
+        using TF_bind_requirements = TW_oref<F_passed_object__, F_new_requirements__>;
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -1347,7 +1379,7 @@ namespace ncpp {
         NCPP_FORCE_INLINE TW_oref(F_passed_object* object_p) noexcept :
             object_p_(object_p)
         {
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
 
     public:
@@ -1359,25 +1391,25 @@ namespace ncpp {
     public:
         NCPP_FORCE_INLINE TW_oref() noexcept {
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         NCPP_FORCE_INLINE TW_oref(F_null) noexcept {
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
 
         NCPP_FORCE_INLINE TW_oref(const TW_oref& x) noexcept :
             object_p_(x.object_p_)
         {
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         NCPP_FORCE_INLINE TW_oref& operator = (const TW_oref& x) noexcept
         {
 
             object_p_ = (F_passed_object*)x.object_p_;
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
@@ -1388,7 +1420,7 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
         }
         NCPP_FORCE_INLINE TW_oref& operator = (TW_oref&& x) noexcept
@@ -1398,52 +1430,52 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TW_oref(const TW_oref<F_other_p__, F_validate>& x) noexcept :
+        NCPP_FORCE_INLINE TW_oref(const TW_oref<F_other_p__, F_requirements>& x) noexcept :
             object_p_((F_passed_object*)x.object_p_)
         {
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TW_oref& operator = (const TW_oref<F_other_p__, F_validate>& x) noexcept
+        NCPP_FORCE_INLINE TW_oref& operator = (const TW_oref<F_other_p__, F_requirements>& x) noexcept
         {
 
             object_p_ = (F_passed_object*)x.object_p_;
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TW_oref(TW_oref<F_other_p__, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TW_oref(TW_oref<F_other_p__, F_requirements>&& x) noexcept :
             object_p_((F_passed_object*)x.object_p_)
         {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TW_oref& operator = (TW_oref<F_other_p__, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TW_oref& operator = (TW_oref<F_other_p__, F_requirements>&& x) noexcept
         {
 
             object_p_ = (F_passed_object*)x.object_p_;
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
@@ -1455,7 +1487,7 @@ namespace ncpp {
     public:
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object, F_other_p__>
-        explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_validate> () const noexcept {
+        explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
             return (F_other_p__*)object_p_;
         }
@@ -1465,7 +1497,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TW_oref<F_other_p__, F_validate>);
+        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TW_oref<F_other_p__, F_requirements>);
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -1534,11 +1566,11 @@ namespace ncpp {
 
 
 
-    template<typename F_passed_object__, class F_options__ = F_default_object_options, b8 is_has_object_key__ = false, typename F_validate__ = F_default_validate>
+    template<typename F_passed_object__, class F_options__ = F_default_object_options, b8 is_has_object_key__ = false, typename F_requirements__ = F_default_requirements>
     class TK_oref;
 
-    template<typename F_passed_object__, class F_options__ = F_default_object_options, typename F_validate__ = F_default_validate>
-    using TK2_oref = TK_oref<F_passed_object__, F_options__, true, F_validate__>;
+    template<typename F_passed_object__, class F_options__ = F_default_object_options, typename F_requirements__ = F_default_requirements>
+    using TK2_oref = TK_oref<F_passed_object__, F_options__, true, F_requirements__>;
 
 
 
@@ -1549,11 +1581,11 @@ namespace ncpp {
 
 
 
-    template<typename F_passed_object__, class F_options__, typename F_validate__>
-    class TK_oref<F_passed_object__, F_options__, true, F_validate__> {
+    template<typename F_passed_object__, class F_options__, typename F_requirements__>
+    class TK_oref<F_passed_object__, F_options__, true, F_requirements__> {
 
     private:
-        using F_this = TK_oref<F_passed_object__, F_options__, true, F_validate__>;
+        using F_this = TK_oref<F_passed_object__, F_options__, true, F_requirements__>;
 
     public:
         NCPP_OBJECT_FRIEND_CLASSES();
@@ -1563,7 +1595,7 @@ namespace ncpp {
 
         using F_options = F_options__;
 
-        using F_validate = F_validate__;
+        using F_requirements = F_requirements__;
 
         static constexpr b8 is_has_object_key = true;
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
@@ -1575,8 +1607,8 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        template<typename F_new_validate__>
-        using TF_bind_validate = TK_oref<F_passed_object__, F_options__, is_has_object_key, F_new_validate__>;
+        template<typename F_new_requirements__>
+        using TF_bind_requirements = TK_oref<F_passed_object__, F_options__, is_has_object_key, F_new_requirements__>;
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -1611,7 +1643,7 @@ namespace ncpp {
             object_key_(object_key)
         {
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
 
     public:
@@ -1627,11 +1659,11 @@ namespace ncpp {
     public:
         NCPP_FORCE_INLINE TK_oref() noexcept {
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         NCPP_FORCE_INLINE TK_oref(F_null) noexcept {
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
 
         NCPP_FORCE_INLINE ~TK_oref() noexcept {
@@ -1644,7 +1676,7 @@ namespace ncpp {
             object_key_(x.object_key_)
         {
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         NCPP_FORCE_INLINE TK_oref& operator = (const TK_oref& x) noexcept
         {
@@ -1652,7 +1684,7 @@ namespace ncpp {
             object_p_ = (F_passed_object*)x.object_p_;
             object_key_ = x.object_key_;
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
@@ -1664,7 +1696,7 @@ namespace ncpp {
 
             x.reset();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
         }
         NCPP_FORCE_INLINE TK_oref& operator = (TK_oref&& x) noexcept
@@ -1675,48 +1707,48 @@ namespace ncpp {
 
             x.reset();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TK_oref(const TK_oref<F_other_p__, F_options, is_has_object_key, F_validate>& x) noexcept :
+        NCPP_FORCE_INLINE TK_oref(const TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>& x) noexcept :
             object_p_((F_passed_object*)x.object_p_),
             object_key_(x.object_key_)
         {
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TK_oref& operator = (const TK_oref<F_other_p__, F_options, is_has_object_key, F_validate>& x) noexcept
+        NCPP_FORCE_INLINE TK_oref& operator = (const TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>& x) noexcept
         {
 
             object_p_ = (F_passed_object*)x.object_p_;
             object_key_ = x.object_key_;
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TK_oref(TK_oref<F_other_p__, F_options, is_has_object_key, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TK_oref(TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_((F_passed_object*)x.object_p_),
             object_key_(x.object_key_)
         {
 
             x.reset();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TK_oref& operator = (TK_oref<F_other_p__, F_options, is_has_object_key, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TK_oref& operator = (TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
 
             object_p_ = (F_passed_object*)x.object_p_;
@@ -1724,7 +1756,7 @@ namespace ncpp {
 
             x.reset();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
@@ -1734,7 +1766,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TK_oref<F_other_p__, F_options, is_has_object_key, F_validate>);
+        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>);
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -1778,19 +1810,19 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TW_oref<F_passed_object, F_validate> weak() const noexcept {
+        NCPP_FORCE_INLINE TW_oref<F_passed_object, F_requirements> weak() const noexcept {
 
             return object_p_;
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_passed_object, F_other_p__>
-        NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_validate> () const noexcept {
+        NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
             return object_p_;
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object, F_other_p__>
-        explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_validate> () const noexcept {
+        explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
             return object_p_;
         }
@@ -1800,7 +1832,7 @@ namespace ncpp {
     public:
         NCPP_FORCE_INLINE auto no_key() const noexcept {
 
-            return TK_oref<F_passed_object, F_options, false, F_validate>::unsafe(object_p_);
+            return TK_oref<F_passed_object, F_options, false, F_requirements>::unsafe(object_p_);
         }
 
 
@@ -1819,11 +1851,11 @@ namespace ncpp {
 
 
 
-    template<typename F_passed_object__, class F_options__, typename F_validate__>
-    class TK_oref<F_passed_object__, F_options__, false, F_validate__> {
+    template<typename F_passed_object__, class F_options__, typename F_requirements__>
+    class TK_oref<F_passed_object__, F_options__, false, F_requirements__> {
 
     private:
-        using F_this = TK_oref<F_passed_object__, F_options__, false, F_validate__>;
+        using F_this = TK_oref<F_passed_object__, F_options__, false, F_requirements__>;
 
     public:
         NCPP_OBJECT_FRIEND_CLASSES();
@@ -1833,7 +1865,7 @@ namespace ncpp {
 
         using F_options = F_options__;
 
-        using F_validate = F_validate__;
+        using F_requirements = F_requirements__;
 
         static constexpr b8 is_has_object_key = false;
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
@@ -1843,8 +1875,8 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        template<typename F_new_validate__>
-        using TF_bind_validate = TK_oref<F_passed_object__, F_options__, is_has_object_key, F_new_validate__>;
+        template<typename F_new_requirements__>
+        using TF_bind_requirements = TK_oref<F_passed_object__, F_options__, is_has_object_key, F_new_requirements__>;
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -1873,7 +1905,7 @@ namespace ncpp {
             object_p_(object_p)
         {
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
 
     public:
@@ -1885,11 +1917,11 @@ namespace ncpp {
     public:
         NCPP_FORCE_INLINE TK_oref() noexcept {
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         NCPP_FORCE_INLINE TK_oref(F_null) noexcept {
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
 
         NCPP_FORCE_INLINE ~TK_oref() noexcept {
@@ -1901,14 +1933,14 @@ namespace ncpp {
             object_p_(x.object_p_)
         {
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         NCPP_FORCE_INLINE TK_oref& operator = (const TK_oref& x) noexcept
         {
 
             object_p_ = (F_passed_object*)x.object_p_;
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
@@ -1919,7 +1951,7 @@ namespace ncpp {
 
             x.reset();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
         }
         NCPP_FORCE_INLINE TK_oref& operator = (TK_oref&& x) noexcept
@@ -1929,52 +1961,52 @@ namespace ncpp {
 
             x.reset();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TK_oref(const TK_oref<F_other_p__, F_options, is_has_object_key, F_validate>& x) noexcept :
+        NCPP_FORCE_INLINE TK_oref(const TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>& x) noexcept :
             object_p_((F_passed_object*)x.object_p_)
         {
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TK_oref& operator = (const TK_oref<F_other_p__, F_options, is_has_object_key, F_validate>& x) noexcept
+        NCPP_FORCE_INLINE TK_oref& operator = (const TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>& x) noexcept
         {
 
             object_p_ = (F_passed_object*)x.object_p_;
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TK_oref(TK_oref<F_other_p__, F_options, is_has_object_key, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TK_oref(TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_((F_passed_object*)x.object_p_)
         {
 
             x.reset();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TK_oref& operator = (TK_oref<F_other_p__, F_options, is_has_object_key, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TK_oref& operator = (TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
 
             object_p_ = (F_passed_object*)x.object_p_;
 
             x.reset();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
@@ -1984,7 +2016,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TK_oref<F_other_p__, F_options, is_has_object_key, F_validate>);
+        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>);
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2021,19 +2053,19 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TW_oref<F_passed_object, F_validate> weak() const noexcept {
+        NCPP_FORCE_INLINE TW_oref<F_passed_object, F_requirements> weak() const noexcept {
 
             return object_p_;
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_passed_object, F_other_p__>
-        NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_validate> () const noexcept {
+        NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
             return object_p_;
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object, F_other_p__>
-        explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_validate> () const noexcept {
+        explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
             return object_p_;
         }
@@ -2043,7 +2075,7 @@ namespace ncpp {
     public:
         NCPP_FORCE_INLINE auto with_key_unsafe() const noexcept {
 
-            return TK_oref<F_passed_object, F_options, true, F_validate>::unsafe(object_p_);
+            return TK_oref<F_passed_object, F_options, true, F_requirements>::unsafe(object_p_);
         }
 
 
@@ -2076,19 +2108,19 @@ namespace ncpp {
 
 
 
-    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, b8 is_has_object_key__ = false, typename F_validate__ = F_default_validate>
+    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, b8 is_has_object_key__ = false, typename F_requirements__ = F_default_requirements>
     class TU_oref;
 
-    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, typename F_validate__ = F_default_validate>
-    using TU2_oref = TU_oref<F_passed_object__, F_allocator__, F_options__, true, F_validate__>;
+    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, typename F_requirements__ = F_default_requirements>
+    using TU2_oref = TU_oref<F_passed_object__, F_allocator__, F_options__, true, F_requirements__>;
 
 
 
-    template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_validate__>
-    class TU_oref<F_passed_object__, F_allocator__, F_options__, true, F_validate__> {
+    template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_requirements__>
+    class TU_oref<F_passed_object__, F_allocator__, F_options__, true, F_requirements__> {
 
     private:
-        using F_this = TU_oref<F_passed_object__, F_allocator__, F_options__, true, F_validate__>;
+        using F_this = TU_oref<F_passed_object__, F_allocator__, F_options__, true, F_requirements__>;
 
     public:
         NCPP_OBJECT_FRIEND_CLASSES();
@@ -2099,7 +2131,7 @@ namespace ncpp {
         using F_allocator = F_allocator__;
         using F_options = F_options__;
 
-        using F_validate = F_validate__;
+        using F_requirements = F_requirements__;
 
         static constexpr b8 is_has_object_key = true;
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
@@ -2111,8 +2143,8 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        template<typename F_new_validate__>
-        using TF_bind_validate = TU_oref<F_passed_object__, F_allocator, F_options__, is_has_object_key, F_new_validate__>;
+        template<typename F_new_requirements__>
+        using TF_bind_requirements = TU_oref<F_passed_object__, F_allocator, F_options__, is_has_object_key, F_new_requirements__>;
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2147,7 +2179,7 @@ namespace ncpp {
             object_key_(object_key)
         {
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
 
     public:
@@ -2163,11 +2195,11 @@ namespace ncpp {
     public:
         NCPP_FORCE_INLINE TU_oref() noexcept {
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         NCPP_FORCE_INLINE TU_oref(F_null) noexcept {
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
 
         NCPP_FORCE_INLINE ~TU_oref() noexcept {
@@ -2182,7 +2214,7 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
         }
         NCPP_FORCE_INLINE TU_oref& operator = (TU_oref&& x) noexcept
@@ -2195,26 +2227,26 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TU_oref(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TU_oref(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_((F_passed_object*)x.object_p_),
             object_key_(x.object_key_)
         {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TU_oref& operator = (TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TU_oref& operator = (TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
 
             reset();
@@ -2224,7 +2256,7 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
@@ -2234,7 +2266,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>);
+        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>);
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2346,19 +2378,19 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TW_oref<F_passed_object, F_validate> weak() const noexcept {
+        NCPP_FORCE_INLINE TW_oref<F_passed_object, F_requirements> weak() const noexcept {
 
             return object_p_;
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_passed_object__, F_other_p__>
-        NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_validate> () const noexcept {
+        NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
             return object_p_;
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object__, F_other_p__>
-        explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_validate> () const noexcept {
+        explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
             return object_p_;
         }
@@ -2366,19 +2398,19 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TK_oref<F_passed_object, F_options, is_has_object_key, F_validate> keyed() const noexcept {
+        NCPP_FORCE_INLINE TK_oref<F_passed_object, F_options, is_has_object_key, F_requirements> keyed() const noexcept {
 
             return { object_p_, object_key_ };
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_passed_object__, F_other_p__>
-        NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_validate> () const noexcept {
+        NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> () const noexcept {
 
             return { object_p_, object_key_ };
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object__, F_other_p__>
-        explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_validate> () const noexcept {
+        explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> () const noexcept {
 
             return { object_p_, object_key_ };
         }
@@ -2399,11 +2431,11 @@ namespace ncpp {
 
 
 
-    template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_validate__>
-    class TU_oref<F_passed_object__, F_allocator__, F_options__, false, F_validate__> {
+    template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_requirements__>
+    class TU_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__> {
 
     private:
-        using F_this = TU_oref<F_passed_object__, F_allocator__, F_options__, false, F_validate__>;
+        using F_this = TU_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
 
     public:
         NCPP_OBJECT_FRIEND_CLASSES();
@@ -2414,7 +2446,7 @@ namespace ncpp {
         using F_allocator = F_allocator__;
         using F_options = F_options__;
 
-        using F_validate = F_validate__;
+        using F_requirements = F_requirements__;
 
         static constexpr b8 is_has_object_key = false;
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
@@ -2424,8 +2456,8 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        template<typename F_new_validate__>
-        using TF_bind_validate = TU_oref<F_passed_object__, F_allocator, F_options__, is_has_object_key, F_new_validate__>;
+        template<typename F_new_requirements__>
+        using TF_bind_requirements = TU_oref<F_passed_object__, F_allocator, F_options__, is_has_object_key, F_new_requirements__>;
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2454,7 +2486,7 @@ namespace ncpp {
             object_p_(object_p)
         {
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
 
     public:
@@ -2466,11 +2498,11 @@ namespace ncpp {
     public:
         NCPP_FORCE_INLINE TU_oref() noexcept {
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         NCPP_FORCE_INLINE TU_oref(F_null) noexcept {
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
 
         NCPP_FORCE_INLINE ~TU_oref() noexcept {
@@ -2484,7 +2516,7 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
         }
         NCPP_FORCE_INLINE TU_oref& operator = (TU_oref&& x) noexcept
@@ -2496,24 +2528,24 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TU_oref(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TU_oref(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_((F_passed_object*)x.object_p_)
         {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TU_oref& operator = (TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TU_oref& operator = (TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
 
             reset();
@@ -2522,7 +2554,7 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
@@ -2532,7 +2564,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>);
+        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>);
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2625,19 +2657,19 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TW_oref<F_passed_object, F_validate> weak() const noexcept {
+        NCPP_FORCE_INLINE TW_oref<F_passed_object, F_requirements> weak() const noexcept {
 
             return object_p_;
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_passed_object__, F_other_p__>
-        NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_validate> () const noexcept {
+        NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
             return object_p_;
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object__, F_other_p__>
-        explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_validate> () const noexcept {
+        explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
             return object_p_;
         }
@@ -2645,19 +2677,19 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TK_oref<F_passed_object, F_options, is_has_object_key, F_validate> keyed() const noexcept {
+        NCPP_FORCE_INLINE TK_oref<F_passed_object, F_options, is_has_object_key, F_requirements> keyed() const noexcept {
 
             return { object_p_ };
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_passed_object__, F_other_p__>
-        NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_validate> () const noexcept {
+        NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> () const noexcept {
 
             return { object_p_ };
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object__, F_other_p__>
-        explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_validate> () const noexcept {
+        explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> () const noexcept {
 
             return { object_p_ };
         }
@@ -2692,11 +2724,11 @@ namespace ncpp {
 
 
 
-    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, b8 is_has_object_key__ = false, typename F_validate__ = F_default_validate>
+    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, b8 is_has_object_key__ = false, typename F_requirements__ = F_default_requirements>
     class TS_oref;
 
-    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, typename F_validate__ = F_default_validate>
-    using TS2_oref = TS_oref<F_passed_object__, F_allocator__, F_options__, true, F_validate__>;
+    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, typename F_requirements__ = F_default_requirements>
+    using TS2_oref = TS_oref<F_passed_object__, F_allocator__, F_options__, true, F_requirements__>;
 
 
 
@@ -2727,11 +2759,11 @@ namespace ncpp {
 
 
 
-    template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_validate__>
-    class TS_oref<F_passed_object__, F_allocator__, F_options__, true, F_validate__> {
+    template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_requirements__>
+    class TS_oref<F_passed_object__, F_allocator__, F_options__, true, F_requirements__> {
 
     private:
-        using F_this = TS_oref<F_passed_object__, F_allocator__, F_options__, true, F_validate__>;
+        using F_this = TS_oref<F_passed_object__, F_allocator__, F_options__, true, F_requirements__>;
 
     public:
         NCPP_OBJECT_FRIEND_CLASSES();
@@ -2742,7 +2774,7 @@ namespace ncpp {
         using F_allocator = F_allocator__;
         using F_options = F_options__;
 
-        using F_validate = F_validate__;
+        using F_requirements = F_requirements__;
 
         static constexpr b8 is_has_object_key = true;
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
@@ -2754,8 +2786,8 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        template<typename F_new_validate__>
-        using TF_bind_validate = TS_oref<F_passed_object__, F_allocator, F_options__, is_has_object_key, F_new_validate__>;
+        template<typename F_new_requirements__>
+        using TF_bind_requirements = TS_oref<F_passed_object__, F_allocator, F_options__, is_has_object_key, F_new_requirements__>;
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2797,7 +2829,7 @@ namespace ncpp {
             object_key_(object_key)
         {
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
 
     public:
@@ -2813,11 +2845,11 @@ namespace ncpp {
     public:
         NCPP_FORCE_INLINE TS_oref() noexcept {
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         NCPP_FORCE_INLINE TS_oref(F_null) noexcept {
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
 
         NCPP_FORCE_INLINE ~TS_oref() noexcept {
@@ -2833,7 +2865,7 @@ namespace ncpp {
             if(object_p_)
                 increase_shared_object_counter_unsafe(object_p_);
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
         }
         NCPP_FORCE_INLINE TS_oref& operator = (const TS_oref& x) noexcept
@@ -2847,7 +2879,7 @@ namespace ncpp {
             if(object_p_)
                 increase_shared_object_counter_unsafe(object_p_);
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
@@ -2859,7 +2891,7 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         NCPP_FORCE_INLINE TS_oref& operator = (TS_oref&& x) noexcept
         {
@@ -2871,12 +2903,12 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
 
-        NCPP_FORCE_INLINE TS_oref(TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TS_oref(TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_(x.object_p_),
             object_key_(x.object_key_)
         {
@@ -2886,9 +2918,9 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
-        NCPP_FORCE_INLINE TS_oref& operator = (TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TS_oref& operator = (TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
 
             reset();
@@ -2901,14 +2933,14 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TS_oref(const TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>& x) noexcept :
+        NCPP_FORCE_INLINE TS_oref(const TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>& x) noexcept :
             object_p_((F_passed_object*)x.object_p_),
             object_key_(x.object_key_)
         {
@@ -2916,11 +2948,11 @@ namespace ncpp {
             if(object_p_)
                 increase_shared_object_counter_unsafe(object_p_);
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TS_oref& operator = (const TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>& x) noexcept
+        NCPP_FORCE_INLINE TS_oref& operator = (const TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>& x) noexcept
         {
 
             reset();
@@ -2931,25 +2963,25 @@ namespace ncpp {
             if(object_p_)
                 increase_shared_object_counter_unsafe(object_p_);
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TS_oref(TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TS_oref(TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_((F_passed_object*)x.object_p_),
             object_key_(x.object_key_)
         {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TS_oref& operator = (TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TS_oref& operator = (TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
 
             reset();
@@ -2959,14 +2991,14 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TS_oref(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TS_oref(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_((F_passed_object*)x.object_p_),
             object_key_(x.object_key_)
         {
@@ -2976,11 +3008,11 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TS_oref& operator = (TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TS_oref& operator = (TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
 
             reset();
@@ -2993,7 +3025,7 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
@@ -3003,7 +3035,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>);
+        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>);
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -3125,19 +3157,19 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TW_oref<F_passed_object, F_validate> weak() const noexcept {
+        NCPP_FORCE_INLINE TW_oref<F_passed_object, F_requirements> weak() const noexcept {
 
             return object_p_;
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_passed_object__, F_other_p__>
-        NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_validate> () const noexcept {
+        NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
             return object_p_;
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object__, F_other_p__>
-        explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_validate> () const noexcept {
+        explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
             return object_p_;
         }
@@ -3145,19 +3177,19 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TK_oref<F_passed_object, F_options, is_has_object_key, F_validate> keyed() const noexcept {
+        NCPP_FORCE_INLINE TK_oref<F_passed_object, F_options, is_has_object_key, F_requirements> keyed() const noexcept {
 
             return { object_p_, object_key_ };
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_passed_object__, F_other_p__>
-        NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_validate> () const noexcept {
+        NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> () const noexcept {
 
             return { object_p_, object_key_ };
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object__, F_other_p__>
-        explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_validate> () const noexcept {
+        explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> () const noexcept {
 
             return { object_p_, object_key_ };
         }
@@ -3178,11 +3210,11 @@ namespace ncpp {
 
 
 
-    template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_validate__>
-    class TS_oref<F_passed_object__, F_allocator__, F_options__, false, F_validate__> {
+    template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_requirements__>
+    class TS_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__> {
 
     private:
-        using F_this = TS_oref<F_passed_object__, F_allocator__, F_options__, false, F_validate__>;
+        using F_this = TS_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
 
     public:
         NCPP_OBJECT_FRIEND_CLASSES();
@@ -3193,7 +3225,7 @@ namespace ncpp {
         using F_allocator = F_allocator__;
         using F_options = F_options__;
 
-        using F_validate = F_validate__;
+        using F_requirements = F_requirements__;
 
         static constexpr b8 is_has_object_key = false;
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
@@ -3203,8 +3235,8 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        template<typename F_new_validate__>
-        using TF_bind_validate = TS_oref<F_passed_object__, F_allocator, F_options__, is_has_object_key, F_new_validate__>;
+        template<typename F_new_requirements__>
+        using TF_bind_requirements = TS_oref<F_passed_object__, F_allocator, F_options__, is_has_object_key, F_new_requirements__>;
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -3297,7 +3329,7 @@ namespace ncpp {
             return *this;
         }
 
-        NCPP_FORCE_INLINE TS_oref(TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TS_oref(TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_(x.object_p_)
         {
 
@@ -3307,7 +3339,7 @@ namespace ncpp {
             x.reset_no_destroy_internal();
 
         }
-        NCPP_FORCE_INLINE TS_oref& operator = (TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TS_oref& operator = (TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
 
             reset();
@@ -3324,7 +3356,7 @@ namespace ncpp {
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TS_oref(const TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>& x) noexcept :
+        NCPP_FORCE_INLINE TS_oref(const TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>& x) noexcept :
             object_p_((F_passed_object*)x.object_p_)
         {
 
@@ -3334,7 +3366,7 @@ namespace ncpp {
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TS_oref& operator = (const TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>& x) noexcept
+        NCPP_FORCE_INLINE TS_oref& operator = (const TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>& x) noexcept
         {
 
             reset();
@@ -3349,7 +3381,7 @@ namespace ncpp {
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TS_oref(TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TS_oref(TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_((F_passed_object*)x.object_p_)
         {
 
@@ -3358,7 +3390,7 @@ namespace ncpp {
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TS_oref& operator = (TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TS_oref& operator = (TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
 
             reset();
@@ -3372,7 +3404,7 @@ namespace ncpp {
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TS_oref(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TS_oref(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_((F_passed_object*)x.object_p_)
         {
 
@@ -3384,7 +3416,7 @@ namespace ncpp {
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TS_oref& operator = (TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TS_oref& operator = (TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
 
             reset();
@@ -3404,7 +3436,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>);
+        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>);
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -3507,19 +3539,19 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TW_oref<F_passed_object, F_validate> weak() const noexcept {
+        NCPP_FORCE_INLINE TW_oref<F_passed_object, F_requirements> weak() const noexcept {
 
             return object_p_;
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_passed_object__, F_other_p__>
-        NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_validate> () const noexcept {
+        NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
             return object_p_;
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object__, F_other_p__>
-        explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_validate> () const noexcept {
+        explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
             return object_p_;
         }
@@ -3527,19 +3559,19 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TK_oref<F_passed_object, F_options, is_has_object_key, F_validate> keyed() const noexcept {
+        NCPP_FORCE_INLINE TK_oref<F_passed_object, F_options, is_has_object_key, F_requirements> keyed() const noexcept {
 
             return { object_p_ };
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_passed_object__, F_other_p__>
-        NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_validate> () const noexcept {
+        NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> () const noexcept {
 
             return { object_p_ };
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object__, F_other_p__>
-        explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_validate> () const noexcept {
+        explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> () const noexcept {
 
             return { object_p_ };
         }
@@ -3574,19 +3606,19 @@ namespace ncpp {
 
 
 
-    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, b8 is_has_object_key__ = false, typename F_validate__ = F_default_validate>
+    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, b8 is_has_object_key__ = false, typename F_requirements__ = F_default_requirements>
     class TX_oref;
 
-    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, typename F_validate__ = F_default_validate>
-    using TX2_oref = TX_oref<F_passed_object__, F_allocator__, F_options__, true, F_validate__>;
+    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, typename F_requirements__ = F_default_requirements>
+    using TX2_oref = TX_oref<F_passed_object__, F_allocator__, F_options__, true, F_requirements__>;
 
 
 
-    template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_validate__>
-    class TX_oref<F_passed_object__, F_allocator__, F_options__, true, F_validate__> {
+    template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_requirements__>
+    class TX_oref<F_passed_object__, F_allocator__, F_options__, true, F_requirements__> {
 
     private:
-        using F_this = TX_oref<F_passed_object__, F_allocator__, F_options__, true, F_validate__>;
+        using F_this = TX_oref<F_passed_object__, F_allocator__, F_options__, true, F_requirements__>;
 
     public:
         NCPP_OBJECT_FRIEND_CLASSES();
@@ -3597,7 +3629,7 @@ namespace ncpp {
         using F_allocator = F_allocator__;
         using F_options = F_options__;
 
-        using F_validate = F_validate__;
+        using F_requirements = F_requirements__;
 
         static constexpr b8 is_has_object_key = true;
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
@@ -3609,8 +3641,8 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        template<typename F_new_validate__>
-        using TF_bind_validate = TX_oref<F_passed_object__, F_allocator, F_options__, is_has_object_key, F_new_validate__>;
+        template<typename F_new_requirements__>
+        using TF_bind_requirements = TX_oref<F_passed_object__, F_allocator, F_options__, is_has_object_key, F_new_requirements__>;
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -3655,7 +3687,7 @@ namespace ncpp {
             object_key_(object_key)
         {
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
 
     public:
@@ -3686,7 +3718,7 @@ namespace ncpp {
             if(is_shared_ && object_p_)
                 increase_shared_object_counter_unsafe(object_p_);
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         NCPP_FORCE_INLINE TX_oref& operator = (const TX_oref& x) noexcept
         {
@@ -3700,7 +3732,7 @@ namespace ncpp {
             if(is_shared_ && object_p_)
                 increase_shared_object_counter_unsafe(object_p_);
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
@@ -3713,7 +3745,7 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         NCPP_FORCE_INLINE TX_oref& operator = (TX_oref&& x) noexcept
         {
@@ -3726,12 +3758,12 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
 
-        NCPP_FORCE_INLINE TX_oref(TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TX_oref(TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_(x.object_p_),
             object_key_(x.object_key_),
             is_shared_(x.object_p_ != 0)
@@ -3742,9 +3774,9 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
-        NCPP_FORCE_INLINE TX_oref& operator = (TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TX_oref& operator = (TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
 
             reset();
@@ -3758,12 +3790,12 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
 
-        NCPP_FORCE_INLINE TX_oref(TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TX_oref(TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_(x.object_p_),
             object_key_(x.object_key_),
             is_shared_(x.object_p_ != 0)
@@ -3771,9 +3803,9 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
-        NCPP_FORCE_INLINE TX_oref& operator = (TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TX_oref& operator = (TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
 
             reset();
@@ -3784,11 +3816,11 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
-        NCPP_FORCE_INLINE TX_oref(const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>& x) noexcept :
+        NCPP_FORCE_INLINE TX_oref(const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>& x) noexcept :
             object_p_(x.object_p_),
             object_key_(x.object_key_),
             is_shared_(x.object_p_ != 0)
@@ -3797,9 +3829,9 @@ namespace ncpp {
             if(object_p_)
                 increase_shared_object_counter_unsafe(object_p_);
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
-        NCPP_FORCE_INLINE TX_oref& operator = (const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>& x) noexcept
+        NCPP_FORCE_INLINE TX_oref& operator = (const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>& x) noexcept
         {
 
             reset();
@@ -3811,12 +3843,12 @@ namespace ncpp {
             if(object_p_)
                 increase_shared_object_counter_unsafe(object_p_);
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
 
-        NCPP_FORCE_INLINE TX_oref(TK_oref<F_passed_object, F_options, is_has_object_key, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TX_oref(TK_oref<F_passed_object, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_(x.object_p_),
             object_key_(x.object_key_),
             is_shared_(false)
@@ -3824,9 +3856,9 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
-        NCPP_FORCE_INLINE TX_oref& operator = (TK_oref<F_passed_object, F_options, is_has_object_key, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TX_oref& operator = (TK_oref<F_passed_object, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
 
             reset();
@@ -3837,11 +3869,11 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
-        NCPP_FORCE_INLINE TX_oref(const TK_oref<F_passed_object, F_options, is_has_object_key, F_validate>& x) noexcept :
+        NCPP_FORCE_INLINE TX_oref(const TK_oref<F_passed_object, F_options, is_has_object_key, F_requirements>& x) noexcept :
             object_p_(x.object_p_),
             object_key_(x.object_key_),
             is_shared_(false)
@@ -3850,9 +3882,9 @@ namespace ncpp {
             if(object_p_)
                 increase_shared_object_counter_unsafe(object_p_);
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
-        NCPP_FORCE_INLINE TX_oref& operator = (const TK_oref<F_passed_object, F_options, is_has_object_key, F_validate>& x) noexcept
+        NCPP_FORCE_INLINE TX_oref& operator = (const TK_oref<F_passed_object, F_options, is_has_object_key, F_requirements>& x) noexcept
         {
 
             reset();
@@ -3861,14 +3893,14 @@ namespace ncpp {
             object_key_ = x.object_key_;
             is_shared_ = false;
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref(const TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>& x) noexcept :
+        NCPP_FORCE_INLINE TX_oref(const TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>& x) noexcept :
             object_p_((F_passed_object*)x.object_p_),
             object_key_(x.object_key_),
             is_shared_(x.is_shared_)
@@ -3877,11 +3909,11 @@ namespace ncpp {
             if(is_shared_ && object_p_)
                 increase_shared_object_counter_unsafe(object_p_);
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref& operator = (const TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>& x) noexcept
+        NCPP_FORCE_INLINE TX_oref& operator = (const TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>& x) noexcept
         {
 
             reset();
@@ -3893,14 +3925,14 @@ namespace ncpp {
             if(is_shared_ && object_p_)
                 increase_shared_object_counter_unsafe(object_p_);
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref(TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TX_oref(TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_((F_passed_object*)x.object_p_),
             object_key_(x.object_key_),
             is_shared_(x.is_shared_)
@@ -3908,11 +3940,11 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref& operator = (TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TX_oref& operator = (TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
 
             reset();
@@ -3923,14 +3955,14 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TX_oref(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_((F_passed_object*)x.object_p_),
             object_key_(x.object_key_),
             is_shared_(x.object_p_ != 0)
@@ -3941,11 +3973,11 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref& operator = (TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TX_oref& operator = (TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
 
             reset();
@@ -3959,14 +3991,14 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref(TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TX_oref(TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_((F_passed_object*)x.object_p_),
             object_key_(x.object_key_),
             is_shared_(x.object_p_ != 0)
@@ -3974,11 +4006,11 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref& operator = (TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TX_oref& operator = (TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
 
             reset();
@@ -3989,13 +4021,13 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref(const TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>& x) noexcept :
+        NCPP_FORCE_INLINE TX_oref(const TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>& x) noexcept :
             object_p_((F_passed_object*)x.object_p_),
             object_key_(x.object_key_),
             is_shared_(x.object_p_ != 0)
@@ -4004,11 +4036,11 @@ namespace ncpp {
             if(object_p_)
                 increase_shared_object_counter_unsafe(object_p_);
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref& operator = (const TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>& x) noexcept
+        NCPP_FORCE_INLINE TX_oref& operator = (const TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>& x) noexcept
         {
 
             reset();
@@ -4020,14 +4052,14 @@ namespace ncpp {
             if(object_p_)
                 increase_shared_object_counter_unsafe(object_p_);
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref(TK_oref<F_other_p__, F_options, is_has_object_key, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TX_oref(TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_((F_passed_object*)x.object_p_),
             object_key_(x.object_key_),
             is_shared_(false)
@@ -4035,11 +4067,11 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref& operator = (TK_oref<F_other_p__, F_options, is_has_object_key, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TX_oref& operator = (TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
 
             reset();
@@ -4050,13 +4082,13 @@ namespace ncpp {
 
             x.reset_no_destroy_internal();
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref(const TK_oref<F_other_p__, F_options, is_has_object_key, F_validate>& x) noexcept :
+        NCPP_FORCE_INLINE TX_oref(const TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>& x) noexcept :
             object_p_((F_passed_object*)x.object_p_),
             object_key_(x.object_key_),
             is_shared_(false)
@@ -4065,11 +4097,11 @@ namespace ncpp {
             if(object_p_)
                 increase_shared_object_counter_unsafe(object_p_);
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref& operator = (const TK_oref<F_other_p__, F_options, is_has_object_key, F_validate>& x) noexcept
+        NCPP_FORCE_INLINE TX_oref& operator = (const TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>& x) noexcept
         {
 
             reset();
@@ -4078,7 +4110,7 @@ namespace ncpp {
             object_key_ = x.object_key_;
             is_shared_ = false;
 
-            NCPP_VALIDATE_OREF(this);
+            NCPP_CHECK_OREF_REQUIREMENTS(this);
 
             return *this;
         }
@@ -4088,7 +4120,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>);
+        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>);
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -4233,19 +4265,19 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TW_oref<F_passed_object, F_validate> weak() const noexcept {
+        NCPP_FORCE_INLINE TW_oref<F_passed_object, F_requirements> weak() const noexcept {
 
             return object_p_;
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_passed_object__, F_other_p__>
-        NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_validate> () const noexcept {
+        NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
             return object_p_;
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object__, F_other_p__>
-        explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_validate> () const noexcept {
+        explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
             return object_p_;
         }
@@ -4253,19 +4285,19 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TK_oref<F_passed_object, F_options, is_has_object_key, F_validate> keyed() const noexcept {
+        NCPP_FORCE_INLINE TK_oref<F_passed_object, F_options, is_has_object_key, F_requirements> keyed() const noexcept {
 
             return { object_p_, object_key_ };
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_passed_object__, F_other_p__>
-        NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_validate> () const noexcept {
+        NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> () const noexcept {
 
             return { object_p_, object_key_ };
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object__, F_other_p__>
-        explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_validate> () const noexcept {
+        explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> () const noexcept {
 
             return { object_p_, object_key_ };
         }
@@ -4273,29 +4305,29 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>& shared() & noexcept {
+        NCPP_FORCE_INLINE TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>& shared() & noexcept {
 
             NCPP_ASSERT(is_shared_) << "currently non-shared mode";
 
-            return (TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>&)*this;
+            return (TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&)*this;
         }
-        NCPP_FORCE_INLINE const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>& shared() const & noexcept {
+        NCPP_FORCE_INLINE const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>& shared() const & noexcept {
 
             NCPP_ASSERT(is_shared_) << "currently non-shared mode";
 
-            return (const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>&)*this;
+            return (const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&)*this;
         }
-        NCPP_FORCE_INLINE TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>&& shared() && noexcept {
+        NCPP_FORCE_INLINE TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& shared() && noexcept {
 
             NCPP_ASSERT(is_shared_) << "currently non-shared mode";
 
-            return (TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>&&)*this;
+            return (TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&&)*this;
         }
-        NCPP_FORCE_INLINE const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>&& shared() const && noexcept {
+        NCPP_FORCE_INLINE const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& shared() const && noexcept {
 
             NCPP_ASSERT(is_shared_) << "currently non-shared mode";
 
-            return (const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>&&)*this;
+            return (const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&&)*this;
         }
 
 
@@ -4314,11 +4346,11 @@ namespace ncpp {
 
 
 
-    template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_validate__>
-    class TX_oref<F_passed_object__, F_allocator__, F_options__, false, F_validate__> {
+    template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_requirements__>
+    class TX_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__> {
 
     private:
-        using F_this = TX_oref<F_passed_object__, F_allocator__, F_options__, false, F_validate__>;
+        using F_this = TX_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
 
     public:
         NCPP_OBJECT_FRIEND_CLASSES();
@@ -4329,7 +4361,7 @@ namespace ncpp {
         using F_allocator = F_allocator__;
         using F_options = F_options__;
 
-        using F_validate = F_validate__;
+        using F_requirements = F_requirements__;
 
         static constexpr b8 is_has_object_key = false;
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
@@ -4339,8 +4371,8 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        template<typename F_new_validate__>
-        using TF_bind_validate = TX_oref<F_passed_object__, F_allocator, F_options__, is_has_object_key, F_new_validate__>;
+        template<typename F_new_requirements__>
+        using TF_bind_requirements = TX_oref<F_passed_object__, F_allocator, F_options__, is_has_object_key, F_new_requirements__>;
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -4440,7 +4472,7 @@ namespace ncpp {
             return *this;
         }
 
-        NCPP_FORCE_INLINE TX_oref(TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TX_oref(TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_(x.object_p_),
             is_shared_(x.object_p_ != 0)
         {
@@ -4451,7 +4483,7 @@ namespace ncpp {
             x.reset_no_destroy_internal();
 
         }
-        NCPP_FORCE_INLINE TX_oref& operator = (TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TX_oref& operator = (TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
 
             reset();
@@ -4467,7 +4499,7 @@ namespace ncpp {
             return *this;
         }
 
-        NCPP_FORCE_INLINE TX_oref(TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TX_oref(TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_(x.object_p_),
             is_shared_(x.object_p_ != 0)
         {
@@ -4475,7 +4507,7 @@ namespace ncpp {
             x.reset_no_destroy_internal();
 
         }
-        NCPP_FORCE_INLINE TX_oref& operator = (TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TX_oref& operator = (TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
 
             reset();
@@ -4487,7 +4519,7 @@ namespace ncpp {
 
             return *this;
         }
-        NCPP_FORCE_INLINE TX_oref(const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>& x) noexcept :
+        NCPP_FORCE_INLINE TX_oref(const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>& x) noexcept :
             object_p_(x.object_p_),
             is_shared_(x.object_p_ != 0)
         {
@@ -4496,7 +4528,7 @@ namespace ncpp {
                 increase_shared_object_counter_unsafe(object_p_);
 
         }
-        NCPP_FORCE_INLINE TX_oref& operator = (const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>& x) noexcept
+        NCPP_FORCE_INLINE TX_oref& operator = (const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>& x) noexcept
         {
 
             reset();
@@ -4510,7 +4542,7 @@ namespace ncpp {
             return *this;
         }
 
-        NCPP_FORCE_INLINE TX_oref(TK_oref<F_passed_object, F_options, is_has_object_key, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TX_oref(TK_oref<F_passed_object, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_(x.object_p_),
             is_shared_(false)
         {
@@ -4518,7 +4550,7 @@ namespace ncpp {
             x.reset_no_destroy_internal();
 
         }
-        NCPP_FORCE_INLINE TX_oref& operator = (TK_oref<F_passed_object, F_options, is_has_object_key, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TX_oref& operator = (TK_oref<F_passed_object, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
 
             reset();
@@ -4530,7 +4562,7 @@ namespace ncpp {
 
             return *this;
         }
-        NCPP_FORCE_INLINE TX_oref(const TK_oref<F_passed_object, F_options, is_has_object_key, F_validate>& x) noexcept :
+        NCPP_FORCE_INLINE TX_oref(const TK_oref<F_passed_object, F_options, is_has_object_key, F_requirements>& x) noexcept :
             object_p_(x.object_p_),
             is_shared_(false)
         {
@@ -4539,7 +4571,7 @@ namespace ncpp {
                 increase_shared_object_counter_unsafe(object_p_);
 
         }
-        NCPP_FORCE_INLINE TX_oref& operator = (const TK_oref<F_passed_object, F_options, is_has_object_key, F_validate>& x) noexcept
+        NCPP_FORCE_INLINE TX_oref& operator = (const TK_oref<F_passed_object, F_options, is_has_object_key, F_requirements>& x) noexcept
         {
 
             reset();
@@ -4552,7 +4584,7 @@ namespace ncpp {
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref(const TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>& x) noexcept :
+        NCPP_FORCE_INLINE TX_oref(const TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>& x) noexcept :
             object_p_((F_passed_object*)x.object_p_),
             is_shared_(x.is_shared_)
         {
@@ -4563,7 +4595,7 @@ namespace ncpp {
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref& operator = (const TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>& x) noexcept
+        NCPP_FORCE_INLINE TX_oref& operator = (const TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>& x) noexcept
         {
 
             reset();
@@ -4579,7 +4611,7 @@ namespace ncpp {
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref(TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TX_oref(TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_((F_passed_object*)x.object_p_),
             is_shared_(x.is_shared_)
         {
@@ -4589,7 +4621,7 @@ namespace ncpp {
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref& operator = (TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TX_oref& operator = (TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
 
             reset();
@@ -4604,7 +4636,7 @@ namespace ncpp {
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TX_oref(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_((F_passed_object*)x.object_p_),
             is_shared_(x.object_p_ != 0)
         {
@@ -4617,7 +4649,7 @@ namespace ncpp {
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref& operator = (TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TX_oref& operator = (TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
 
             reset();
@@ -4635,7 +4667,7 @@ namespace ncpp {
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref(TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TX_oref(TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_((F_passed_object*)x.object_p_),
             is_shared_(x.object_p_ != 0)
         {
@@ -4645,7 +4677,7 @@ namespace ncpp {
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref& operator = (TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TX_oref& operator = (TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
 
             reset();
@@ -4659,7 +4691,7 @@ namespace ncpp {
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref(const TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>& x) noexcept :
+        NCPP_FORCE_INLINE TX_oref(const TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>& x) noexcept :
             object_p_((F_passed_object*)x.object_p_),
             is_shared_(x.object_p_ != 0)
         {
@@ -4670,7 +4702,7 @@ namespace ncpp {
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref& operator = (const TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>& x) noexcept
+        NCPP_FORCE_INLINE TX_oref& operator = (const TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>& x) noexcept
         {
 
             reset();
@@ -4686,7 +4718,7 @@ namespace ncpp {
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref(TK_oref<F_other_p__, F_options, is_has_object_key, F_validate>&& x) noexcept :
+        NCPP_FORCE_INLINE TX_oref(TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_((F_passed_object*)x.object_p_),
             is_shared_(false)
         {
@@ -4696,7 +4728,7 @@ namespace ncpp {
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref& operator = (TK_oref<F_other_p__, F_options, is_has_object_key, F_validate>&& x) noexcept
+        NCPP_FORCE_INLINE TX_oref& operator = (TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
 
             reset();
@@ -4710,7 +4742,7 @@ namespace ncpp {
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref(const TK_oref<F_other_p__, F_options, is_has_object_key, F_validate>& x) noexcept :
+        NCPP_FORCE_INLINE TX_oref(const TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>& x) noexcept :
             object_p_((F_passed_object*)x.object_p_),
             is_shared_(false)
         {
@@ -4721,7 +4753,7 @@ namespace ncpp {
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
-        NCPP_FORCE_INLINE TX_oref& operator = (const TK_oref<F_other_p__, F_options, is_has_object_key, F_validate>& x) noexcept
+        NCPP_FORCE_INLINE TX_oref& operator = (const TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>& x) noexcept
         {
 
             reset();
@@ -4737,7 +4769,7 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_validate>);
+        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>);
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -4850,19 +4882,19 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TW_oref<F_passed_object, F_validate> weak() const noexcept {
+        NCPP_FORCE_INLINE TW_oref<F_passed_object, F_requirements> weak() const noexcept {
 
             return object_p_;
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_passed_object__, F_other_p__>
-        NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_validate> () const noexcept {
+        NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
             return object_p_;
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object__, F_other_p__>
-        explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_validate> () const noexcept {
+        explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
             return object_p_;
         }
@@ -4870,19 +4902,19 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TK_oref<F_passed_object, F_options, is_has_object_key, F_validate> keyed() const noexcept {
+        NCPP_FORCE_INLINE TK_oref<F_passed_object, F_options, is_has_object_key, F_requirements> keyed() const noexcept {
 
             return { object_p_ };
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_passed_object__, F_other_p__>
-        NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_validate> () const noexcept {
+        NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> () const noexcept {
 
             return { object_p_ };
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object__, F_other_p__>
-        explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_validate> () const noexcept {
+        explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> () const noexcept {
 
             return { object_p_ };
         }
@@ -4890,29 +4922,29 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>& shared() & noexcept {
+        NCPP_FORCE_INLINE TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>& shared() & noexcept {
 
             NCPP_ASSERT(is_shared_) << "currently non-shared mode";
 
-            return (TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>&)*this;
+            return (TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&)*this;
         }
-        NCPP_FORCE_INLINE const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>& shared() const & noexcept {
+        NCPP_FORCE_INLINE const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>& shared() const & noexcept {
 
             NCPP_ASSERT(is_shared_) << "currently non-shared mode";
 
-            return (const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>&)*this;
+            return (const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&)*this;
         }
-        NCPP_FORCE_INLINE TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>&& shared() && noexcept {
+        NCPP_FORCE_INLINE TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& shared() && noexcept {
 
             NCPP_ASSERT(is_shared_) << "currently non-shared mode";
 
-            return (TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>&&)*this;
+            return (TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&&)*this;
         }
-        NCPP_FORCE_INLINE const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>&& shared() const && noexcept {
+        NCPP_FORCE_INLINE const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& shared() const && noexcept {
 
             NCPP_ASSERT(is_shared_) << "currently non-shared mode";
 
-            return (const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_validate>&&)*this;
+            return (const TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&&)*this;
         }
 
 
@@ -4929,78 +4961,38 @@ namespace ncpp {
 
     };
 
-
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-    template<
-        typename F_validate__,
-        class F_passed_oref__,
-        class F_validate_binded_oref__ = std::remove_const_t<std::remove_reference_t<F_passed_oref__>>::template TF_bind_validate<F_validate__>,
-        typename F_return__ = utilities::TF_nth_template_targ<
-            std::is_rvalue_reference_v<F_passed_oref__>,
-            utilities::TF_nth_template_targ<
-                std::is_const_v<std::remove_reference_t<F_passed_oref__>>,
-                F_validate_binded_oref__,
-                const F_validate_binded_oref__
-            >&,
-            utilities::TF_nth_template_targ<
-                std::is_const_v<std::remove_reference_t<F_passed_oref__>>,
-                F_validate_binded_oref__,
-                const F_validate_binded_oref__
-            >&&
-        >
-    >
-    NCPP_FORCE_INLINE F_return__ T_apply_validate(F_passed_oref__&& oref) noexcept
-    {
-
-        return ((F_return__)oref);
-    }
-
 }
 
 
 
 NCPP_BIND_CUSTOM_CPASS(
-    NCPP_MA(ncpp::TU_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_validate__>),
-    NCPP_MA(ncpp::TK_oref<F_passed_object__, F_options__, is_has_object_key__, F_validate__>),
+    NCPP_MA(ncpp::TU_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>),
+    NCPP_MA(ncpp::TK_oref<F_passed_object__, F_options__, is_has_object_key__, F_requirements__>),
     typename F_passed_object__,
     typename F_allocator__,
     class F_options__,
     ncpp::b8 is_has_object_key__,
-    typename F_validate__
+    typename F_requirements__
 );
 
 NCPP_BIND_CUSTOM_CPASS(
-    NCPP_MA(ncpp::TS_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_validate__>),
-    NCPP_MA(ncpp::TK_oref<F_passed_object__, F_options__, is_has_object_key__, F_validate__>),
+    NCPP_MA(ncpp::TS_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>),
+    NCPP_MA(ncpp::TK_oref<F_passed_object__, F_options__, is_has_object_key__, F_requirements__>),
     typename F_passed_object__,
     typename F_allocator__,
     class F_options__,
     ncpp::b8 is_has_object_key__,
-    typename F_validate__
+    typename F_requirements__
 );
 
 NCPP_BIND_CUSTOM_CPASS(
-    NCPP_MA(ncpp::TX_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_validate__>),
-    NCPP_MA(ncpp::TK_oref<F_passed_object__, F_options__, is_has_object_key__, F_validate__>),
+    NCPP_MA(ncpp::TX_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>),
+    NCPP_MA(ncpp::TK_oref<F_passed_object__, F_options__, is_has_object_key__, F_requirements__>),
     typename F_passed_object__,
     typename F_allocator__,
     class F_options__,
     ncpp::b8 is_has_object_key__,
-    typename F_validate__
+    typename F_requirements__
 );
 
 
