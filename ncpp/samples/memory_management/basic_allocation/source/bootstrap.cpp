@@ -3,13 +3,18 @@
 
 using namespace ncpp;
 
-
+class A{};
 
 int main() {
+
+    auto a1 = TU<A>()();
+
+    TK<A> a2 = a1.keyed();
+    TK_valid<A> a3 = T_apply_validate<F_valid_validate>(a2);
+
+
 	
 	F_default_allocator allocator;
-
-
 
 	// non-aligned allocation
 	void* p = allocator.allocate(512);
