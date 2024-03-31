@@ -217,20 +217,20 @@ namespace ncpp {
             class F_passed_oref__,
             class F_requirements_binded_oref__ = std::remove_const_t<std::remove_reference_t<F_passed_oref__>>::template TF_bind_requirements<F_requirements__>,
             typename F_return__ = utilities::TF_nth_template_targ<
-                std::is_rvalue_reference_v<F_passed_oref__>,
+                std::is_lvalue_reference_v<F_passed_oref__>,
                 utilities::TF_nth_template_targ<
                     std::is_const_v<std::remove_reference_t<F_passed_oref__>>,
                     F_requirements_binded_oref__,
                     const F_requirements_binded_oref__
-                >&,
+                >&&,
                 utilities::TF_nth_template_targ<
                     std::is_const_v<std::remove_reference_t<F_passed_oref__>>,
                     F_requirements_binded_oref__,
                     const F_requirements_binded_oref__
-                >&&
+                >&
             >
         >
-        static NCPP_FORCE_INLINE F_return__ T_apply(F_passed_oref__&& oref) noexcept
+        static NCPP_FORCE_INLINE F_return__ T_forward(F_passed_oref__&& oref) noexcept
         {
 
             NCPP_ENABLE_IF_DEBUG(
