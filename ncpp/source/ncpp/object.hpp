@@ -240,6 +240,25 @@ namespace ncpp {
             return ((F_return__)oref);
         }
 
+        template<
+            class F_passed_oref__,
+            class F_requirements_binded_oref__ = std::remove_const_t<std::remove_reference_t<F_passed_oref__>>::template TF_bind_requirements<F_requirements__>,
+            utilities::TF_nth_template_targ<
+                std::is_const_v<std::remove_reference_t<F_passed_oref__>>,
+                F_requirements_binded_oref__,
+                const F_requirements_binded_oref__
+            >&&
+        >
+        static NCPP_FORCE_INLINE F_return__ T_move(F_passed_oref__&& oref) noexcept
+        {
+
+            NCPP_ENABLE_IF_DEBUG(
+                F_requirements__::T_check((const F_requirements_binded_oref__&)oref);
+            );
+
+            return ((F_return__)oref);
+        }
+
     };
 
     struct F_default_requirements : public TF_requirements_base<F_default_requirements> {
