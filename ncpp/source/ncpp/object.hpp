@@ -243,7 +243,7 @@ namespace ncpp {
         template<
             class F_passed_oref__,
             class F_requirements_binded_oref__ = std::remove_const_t<std::remove_reference_t<F_passed_oref__>>::template TF_bind_requirements<F_requirements__>,
-            utilities::TF_nth_template_targ<
+            typename F_return__ = utilities::TF_nth_template_targ<
                 std::is_const_v<std::remove_reference_t<F_passed_oref__>>,
                 F_requirements_binded_oref__,
                 const F_requirements_binded_oref__
