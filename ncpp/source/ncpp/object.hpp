@@ -74,15 +74,15 @@ namespace ncpp {
             template<ncpp::b8 is_thread_safe_fr__, typename F_allocator_fr__>     \
             friend class ncpp::TF_default_object_manager;                                        \
                                                     \
-            template<typename F_object_fr__, typename F_requirements__>\
+            template<typename F_object_fr__, typename F_requirements_fr__>\
             friend class ncpp::TW_oref;\
-            template<typename F_object_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__, typename F_requirements__>\
+            template<typename F_object_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__, typename F_requirements_fr__>\
             friend class ncpp::TK_oref;\
-            template<typename F_object_fr__, typename F_allocator_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__, typename F_requirements__>\
+            template<typename F_object_fr__, typename F_allocator_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__, typename F_requirements_fr__>\
             friend class ncpp::TU_oref;\
-            template<typename F_object_fr__, typename F_allocator_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__, typename F_requirements__>\
+            template<typename F_object_fr__, typename F_allocator_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__, typename F_requirements_fr__>\
             friend class ncpp::TS_oref;\
-            template<typename F_object_fr__, typename F_allocator_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__, typename F_requirements__>\
+            template<typename F_object_fr__, typename F_allocator_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__, typename F_requirements_fr__>\
             friend class ncpp::TX_oref;
 
 #define NCPP_OBJECT_MEMORY_HEADER_SIZE (sizeof(ncpp::u64) * 2)
