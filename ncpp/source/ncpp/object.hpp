@@ -341,168 +341,6 @@ namespace ncpp {
 
 
 
-    template<typename F_passed_object__, typename F_requirements__ = F_default_requirements>
-    using TW = TW_oref<F_passed_object__, F_requirements__>;
-
-    template<
-        typename F_passed_object__,
-        class F_options__ = F_default_object_options,
-        b8 is_has_object_key__ = true,
-        typename F_requirements__ = F_default_requirements
-    >
-    using TK = TK_oref<F_passed_object__, F_options__, is_has_object_key__, F_requirements__>;
-
-    template<
-        typename F_passed_object__,
-        class F_options__ = F_default_object_options,
-        typename F_requirements__ = F_default_requirements
-    >
-    using TK2 = TK_oref<F_passed_object__, F_options__, false, F_requirements__>;
-
-    template<
-        typename F_passed_object__,
-        typename F_allocator__ = mem::F_object_allocator,
-        class F_options__ = F_default_object_options,
-        b8 is_has_object_key__ = true,
-        typename F_requirements__ = F_default_requirements
-    >
-    using TU = TU_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>;
-
-    template<
-        typename F_passed_object__,
-        typename F_allocator__ = mem::F_object_allocator,
-        class F_options__ = F_default_object_options,
-        typename F_requirements__ = F_default_requirements
-    >
-    using TU2 = TU_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
-
-    template<
-        typename F_passed_object__,
-        typename F_allocator__ = mem::F_object_allocator,
-        class F_options__ = F_default_object_options,
-        b8 is_has_object_key__ = true,
-        typename F_requirements__ = F_default_requirements
-    >
-    using TS = TS_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>;
-
-    template<
-        typename F_passed_object__,
-        typename F_allocator__ = mem::F_object_allocator,
-        class F_options__ = F_default_object_options,
-        typename F_requirements__ = F_default_requirements
-    >
-    using TS2 = TS_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
-
-    template<
-        typename F_passed_object__,
-        typename F_allocator__ = mem::F_object_allocator,
-        class F_options__ = F_default_object_options,
-        b8 is_has_object_key__ = true,
-        typename F_requirements__ = F_default_requirements
-    >
-    using TX = TX_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>;
-
-    template<
-        typename F_passed_object__,
-        typename F_allocator__ = mem::F_object_allocator,
-        class F_options__ = F_default_object_options,
-        typename F_requirements__ = F_default_requirements
-    >
-    using TX2 = TX_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
-
-
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-    template<typename F_passed_object__>
-    using TW_valid = TW_oref<F_passed_object__, F_valid_requirements>;
-
-    template<
-        typename F_passed_object__,
-        class F_options__ = F_default_object_options,
-        b8 is_has_object_key__ = true
-    >
-    using TK_valid = TK_oref<F_passed_object__, F_options__, is_has_object_key__, F_valid_requirements>;
-
-    template<
-        typename F_passed_object__,
-        class F_options__ = F_default_object_options
-    >
-    using TK2_valid = TK_oref<F_passed_object__, F_options__, false, F_valid_requirements>;
-
-    template<
-        typename F_passed_object__,
-        typename F_allocator__ = mem::F_object_allocator,
-        class F_options__ = F_default_object_options,
-        b8 is_has_object_key__ = true
-    >
-    using TU_valid = TU_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_valid_requirements>;
-
-    template<
-        typename F_passed_object__,
-        typename F_allocator__ = mem::F_object_allocator,
-        class F_options__ = F_default_object_options
-    >
-    using TU2_valid = TU_oref<F_passed_object__, F_allocator__, F_options__, false, F_valid_requirements>;
-
-    template<
-        typename F_passed_object__,
-        typename F_allocator__ = mem::F_object_allocator,
-        class F_options__ = F_default_object_options,
-        b8 is_has_object_key__ = true
-    >
-    using TS_valid = TS_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_valid_requirements>;
-
-    template<
-        typename F_passed_object__,
-        typename F_allocator__ = mem::F_object_allocator,
-        class F_options__ = F_default_object_options
-    >
-    using TS2_valid = TS_oref<F_passed_object__, F_allocator__, F_options__, false, F_valid_requirements>;
-
-    template<
-        typename F_passed_object__,
-        typename F_allocator__ = mem::F_object_allocator,
-        class F_options__ = F_default_object_options,
-        b8 is_has_object_key__ = true
-    >
-    using TX_valid = TX_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_valid_requirements>;
-
-    template<
-        typename F_passed_object__,
-        typename F_allocator__ = mem::F_object_allocator,
-        class F_options__ = F_default_object_options
-    >
-    using TX2_valid = TX_oref<F_passed_object__, F_allocator__, F_options__, false, F_valid_requirements>;
-
-
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
     template<b8 is_thread_safe__ = false, typename F_allocator__ = mem::F_default_allocator>
     class TF_default_object_key_subpool;
 
@@ -1246,6 +1084,168 @@ namespace ncpp {
     };
     template<typename F1__, typename F2__>
     concept T_is_object_up_castable = T_is_object_down_castable<F2__, F1__> && !T_is_object_down_castable<F1__, F2__>;
+
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+    template<typename F_passed_object__, typename F_requirements__ = F_default_requirements>
+    using TW = TW_oref<F_passed_object__, F_requirements__>;
+
+    template<
+        typename F_passed_object__,
+        class F_options__ = F_default_object_options,
+        b8 is_has_object_key__ = true,
+        typename F_requirements__ = F_default_requirements
+    >
+    using TK = TK_oref<F_passed_object__, F_options__, is_has_object_key__, F_requirements__>;
+
+    template<
+        typename F_passed_object__,
+        class F_options__ = F_default_object_options,
+        typename F_requirements__ = F_default_requirements
+    >
+    using TK2 = TK_oref<F_passed_object__, F_options__, false, F_requirements__>;
+
+    template<
+        typename F_passed_object__,
+        typename F_allocator__ = mem::F_object_allocator,
+        class F_options__ = F_default_object_options,
+        b8 is_has_object_key__ = true,
+        typename F_requirements__ = F_default_requirements
+    >
+    using TU = TU_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>;
+
+    template<
+        typename F_passed_object__,
+        typename F_allocator__ = mem::F_object_allocator,
+        class F_options__ = F_default_object_options,
+        typename F_requirements__ = F_default_requirements
+    >
+    using TU2 = TU_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
+
+    template<
+        typename F_passed_object__,
+        typename F_allocator__ = mem::F_object_allocator,
+        class F_options__ = F_default_object_options,
+        b8 is_has_object_key__ = true,
+        typename F_requirements__ = F_default_requirements
+    >
+    using TS = TS_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>;
+
+    template<
+        typename F_passed_object__,
+        typename F_allocator__ = mem::F_object_allocator,
+        class F_options__ = F_default_object_options,
+        typename F_requirements__ = F_default_requirements
+    >
+    using TS2 = TS_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
+
+    template<
+        typename F_passed_object__,
+        typename F_allocator__ = mem::F_object_allocator,
+        class F_options__ = F_default_object_options,
+        b8 is_has_object_key__ = true,
+        typename F_requirements__ = F_default_requirements
+    >
+    using TX = TX_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>;
+
+    template<
+        typename F_passed_object__,
+        typename F_allocator__ = mem::F_object_allocator,
+        class F_options__ = F_default_object_options,
+        typename F_requirements__ = F_default_requirements
+    >
+    using TX2 = TX_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
+
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+    template<typename F_passed_object__>
+    using TW_valid = TW_oref<F_passed_object__, F_valid_requirements>;
+
+    template<
+        typename F_passed_object__,
+        class F_options__ = F_default_object_options,
+        b8 is_has_object_key__ = true
+    >
+    using TK_valid = TK_oref<F_passed_object__, F_options__, is_has_object_key__, F_valid_requirements>;
+
+    template<
+        typename F_passed_object__,
+        class F_options__ = F_default_object_options
+    >
+    using TK2_valid = TK_oref<F_passed_object__, F_options__, false, F_valid_requirements>;
+
+    template<
+        typename F_passed_object__,
+        typename F_allocator__ = mem::F_object_allocator,
+        class F_options__ = F_default_object_options,
+        b8 is_has_object_key__ = true
+    >
+    using TU_valid = TU_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_valid_requirements>;
+
+    template<
+        typename F_passed_object__,
+        typename F_allocator__ = mem::F_object_allocator,
+        class F_options__ = F_default_object_options
+    >
+    using TU2_valid = TU_oref<F_passed_object__, F_allocator__, F_options__, false, F_valid_requirements>;
+
+    template<
+        typename F_passed_object__,
+        typename F_allocator__ = mem::F_object_allocator,
+        class F_options__ = F_default_object_options,
+        b8 is_has_object_key__ = true
+    >
+    using TS_valid = TS_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_valid_requirements>;
+
+    template<
+        typename F_passed_object__,
+        typename F_allocator__ = mem::F_object_allocator,
+        class F_options__ = F_default_object_options
+    >
+    using TS2_valid = TS_oref<F_passed_object__, F_allocator__, F_options__, false, F_valid_requirements>;
+
+    template<
+        typename F_passed_object__,
+        typename F_allocator__ = mem::F_object_allocator,
+        class F_options__ = F_default_object_options,
+        b8 is_has_object_key__ = true
+    >
+    using TX_valid = TX_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_valid_requirements>;
+
+    template<
+        typename F_passed_object__,
+        typename F_allocator__ = mem::F_object_allocator,
+        class F_options__ = F_default_object_options
+    >
+    using TX2_valid = TX_oref<F_passed_object__, F_allocator__, F_options__, false, F_valid_requirements>;
 
 
 
