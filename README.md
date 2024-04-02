@@ -28,7 +28,7 @@ NCoder's Game Engine Learning Aimed C++ Library.
     + **"U" oref**
     + **"K" oref**
     + **"W" oref**
-    + **"Customizable oref requirements**
+    + **Customizable oref requirements**
 + Utilities:
   + **Magic type syntax** for both variables and functions: `(F_returns...)(F_arguments...)`
   + **Constant passing** (`optimized and flexible constant variable passing`)

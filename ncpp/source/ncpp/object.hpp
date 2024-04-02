@@ -269,7 +269,7 @@ namespace ncpp {
 
     };
 
-    struct F_default_requirements : public TF_requirements_base<F_default_requirements> {
+    struct F_no_requirements : public TF_requirements_base<F_no_requirements> {
 
         template<T_is_oref F_oref__>
         static NCPP_FORCE_INLINE b8 T_check(const F_oref__& oref) noexcept {
@@ -1101,21 +1101,21 @@ namespace ncpp {
 
 
 
-    template<typename F_passed_object__, typename F_requirements__ = F_default_requirements>
+    template<typename F_passed_object__, typename F_requirements__ = F_no_requirements>
     using TW = TW_oref<F_passed_object__, F_requirements__>;
 
     template<
         typename F_passed_object__,
         class F_options__ = F_default_object_options,
         b8 is_has_object_key__ = true,
-        typename F_requirements__ = F_default_requirements
+        typename F_requirements__ = F_no_requirements
     >
     using TK = TK_oref<F_passed_object__, F_options__, is_has_object_key__, F_requirements__>;
 
     template<
         typename F_passed_object__,
         class F_options__ = F_default_object_options,
-        typename F_requirements__ = F_default_requirements
+        typename F_requirements__ = F_no_requirements
     >
     using TK2 = TK_oref<F_passed_object__, F_options__, false, F_requirements__>;
 
@@ -1124,7 +1124,7 @@ namespace ncpp {
         typename F_allocator__ = mem::F_object_allocator,
         class F_options__ = F_default_object_options,
         b8 is_has_object_key__ = true,
-        typename F_requirements__ = F_default_requirements
+        typename F_requirements__ = F_no_requirements
     >
     using TU = TU_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>;
 
@@ -1132,7 +1132,7 @@ namespace ncpp {
         typename F_passed_object__,
         typename F_allocator__ = mem::F_object_allocator,
         class F_options__ = F_default_object_options,
-        typename F_requirements__ = F_default_requirements
+        typename F_requirements__ = F_no_requirements
     >
     using TU2 = TU_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
 
@@ -1141,7 +1141,7 @@ namespace ncpp {
         typename F_allocator__ = mem::F_object_allocator,
         class F_options__ = F_default_object_options,
         b8 is_has_object_key__ = true,
-        typename F_requirements__ = F_default_requirements
+        typename F_requirements__ = F_no_requirements
     >
     using TS = TS_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>;
 
@@ -1149,7 +1149,7 @@ namespace ncpp {
         typename F_passed_object__,
         typename F_allocator__ = mem::F_object_allocator,
         class F_options__ = F_default_object_options,
-        typename F_requirements__ = F_default_requirements
+        typename F_requirements__ = F_no_requirements
     >
     using TS2 = TS_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
 
@@ -1158,7 +1158,7 @@ namespace ncpp {
         typename F_allocator__ = mem::F_object_allocator,
         class F_options__ = F_default_object_options,
         b8 is_has_object_key__ = true,
-        typename F_requirements__ = F_default_requirements
+        typename F_requirements__ = F_no_requirements
     >
     using TX = TX_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>;
 
@@ -1166,7 +1166,7 @@ namespace ncpp {
         typename F_passed_object__,
         typename F_allocator__ = mem::F_object_allocator,
         class F_options__ = F_default_object_options,
-        typename F_requirements__ = F_default_requirements
+        typename F_requirements__ = F_no_requirements
     >
     using TX2 = TX_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
 
@@ -1362,7 +1362,7 @@ namespace ncpp {
 
 
 
-    template<typename F_passed_object__, typename F_requirements__ = F_default_requirements>
+    template<typename F_passed_object__, typename F_requirements__ = F_no_requirements>
     class TW_oref {
 
     private:
@@ -1593,6 +1593,28 @@ namespace ncpp {
             return *((F_passed_object*)object_p_);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+        NCPP_FORCE_INLINE auto& no_requirements() & noexcept {
+
+            return (TW<F_passed_object>&)*this;
+        }
+        NCPP_FORCE_INLINE const auto& no_requirements() const & noexcept {
+
+            return (const TW<F_passed_object>&)*this;
+        }
+        NCPP_FORCE_INLINE auto&& no_requirements() && noexcept {
+
+            return (TW<F_passed_object>&&)*this;
+        }
+        NCPP_FORCE_INLINE const auto&& no_requirements() const && noexcept {
+
+            return (const TW<F_passed_object>&&)*this;
+        }
+
     };
 
 
@@ -1611,10 +1633,10 @@ namespace ncpp {
 
 
 
-    template<typename F_passed_object__, class F_options__ = F_default_object_options, b8 is_has_object_key__ = true, typename F_requirements__ = F_default_requirements>
+    template<typename F_passed_object__, class F_options__ = F_default_object_options, b8 is_has_object_key__ = true, typename F_requirements__ = F_no_requirements>
     class TK_oref;
 
-    template<typename F_passed_object__, class F_options__ = F_default_object_options, typename F_requirements__ = F_default_requirements>
+    template<typename F_passed_object__, class F_options__ = F_default_object_options, typename F_requirements__ = F_no_requirements>
     using TK2_oref = TK_oref<F_passed_object__, F_options__, false, F_requirements__>;
 
 
@@ -1904,6 +1926,28 @@ namespace ncpp {
             return *((F_passed_object*)object_p_);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+        NCPP_FORCE_INLINE auto& no_requirements() & noexcept {
+
+            return (TK<F_passed_object, F_options, is_has_object_key>&)*this;
+        }
+        NCPP_FORCE_INLINE const auto& no_requirements() const & noexcept {
+
+            return (const TK<F_passed_object, F_options, is_has_object_key>&)*this;
+        }
+        NCPP_FORCE_INLINE auto&& no_requirements() && noexcept {
+
+            return (TK<F_passed_object, F_options, is_has_object_key>&&)*this;
+        }
+        NCPP_FORCE_INLINE const auto&& no_requirements() const && noexcept {
+
+            return (const TK<F_passed_object, F_options, is_has_object_key>&&)*this;
+        }
+
     };
 
 
@@ -2159,6 +2203,28 @@ namespace ncpp {
             return *((F_passed_object*)object_p_);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+        NCPP_FORCE_INLINE auto& no_requirements() & noexcept {
+
+            return (TK<F_passed_object, F_options, is_has_object_key>&)*this;
+        }
+        NCPP_FORCE_INLINE const auto& no_requirements() const & noexcept {
+
+            return (const TK<F_passed_object, F_options, is_has_object_key>&)*this;
+        }
+        NCPP_FORCE_INLINE auto&& no_requirements() && noexcept {
+
+            return (TK<F_passed_object, F_options, is_has_object_key>&&)*this;
+        }
+        NCPP_FORCE_INLINE const auto&& no_requirements() const && noexcept {
+
+            return (const TK<F_passed_object, F_options, is_has_object_key>&&)*this;
+        }
+
     };
 
 
@@ -2177,10 +2243,10 @@ namespace ncpp {
 
 
 
-    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, b8 is_has_object_key__ = true, typename F_requirements__ = F_default_requirements>
+    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, b8 is_has_object_key__ = true, typename F_requirements__ = F_no_requirements>
     class TU_oref;
 
-    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, typename F_requirements__ = F_default_requirements>
+    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, typename F_requirements__ = F_no_requirements>
     using TU2_oref = TU_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
 
 
@@ -2508,6 +2574,28 @@ namespace ncpp {
             return *((F_passed_object*)object_p_);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+        NCPP_FORCE_INLINE auto& no_requirements() & noexcept {
+
+            return (TU<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
+        }
+        NCPP_FORCE_INLINE const auto& no_requirements() const & noexcept {
+
+            return (const TU<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
+        }
+        NCPP_FORCE_INLINE auto&& no_requirements() && noexcept {
+
+            return (TU<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
+        }
+        NCPP_FORCE_INLINE const auto&& no_requirements() const && noexcept {
+
+            return (const TU<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
+        }
+
     };
 
 
@@ -2799,6 +2887,28 @@ namespace ncpp {
             return *((F_passed_object*)object_p_);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+        NCPP_FORCE_INLINE auto& no_requirements() & noexcept {
+
+            return (TU<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
+        }
+        NCPP_FORCE_INLINE const auto& no_requirements() const & noexcept {
+
+            return (const TU<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
+        }
+        NCPP_FORCE_INLINE auto&& no_requirements() && noexcept {
+
+            return (TU<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
+        }
+        NCPP_FORCE_INLINE const auto&& no_requirements() const && noexcept {
+
+            return (const TU<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
+        }
+
     };
 
 
@@ -2817,10 +2927,10 @@ namespace ncpp {
 
 
 
-    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, b8 is_has_object_key__ = true, typename F_requirements__ = F_default_requirements>
+    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, b8 is_has_object_key__ = true, typename F_requirements__ = F_no_requirements>
     class TS_oref;
 
-    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, typename F_requirements__ = F_default_requirements>
+    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, typename F_requirements__ = F_no_requirements>
     using TS2_oref = TS_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
 
 
@@ -3311,6 +3421,28 @@ namespace ncpp {
             return *((F_passed_object*)object_p_);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+        NCPP_FORCE_INLINE auto& no_requirements() & noexcept {
+
+            return (TS<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
+        }
+        NCPP_FORCE_INLINE const auto& no_requirements() const & noexcept {
+
+            return (const TS<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
+        }
+        NCPP_FORCE_INLINE auto&& no_requirements() && noexcept {
+
+            return (TS<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
+        }
+        NCPP_FORCE_INLINE const auto&& no_requirements() const && noexcept {
+
+            return (const TS<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
+        }
+
     };
 
 
@@ -3705,6 +3837,28 @@ namespace ncpp {
             return *((F_passed_object*)object_p_);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+        NCPP_FORCE_INLINE auto& no_requirements() & noexcept {
+
+            return (TS<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
+        }
+        NCPP_FORCE_INLINE const auto& no_requirements() const & noexcept {
+
+            return (const TS<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
+        }
+        NCPP_FORCE_INLINE auto&& no_requirements() && noexcept {
+
+            return (TS<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
+        }
+        NCPP_FORCE_INLINE const auto&& no_requirements() const && noexcept {
+
+            return (const TS<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
+        }
+
     };
 
 
@@ -3723,10 +3877,10 @@ namespace ncpp {
 
 
 
-    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, b8 is_has_object_key__ = true, typename F_requirements__ = F_default_requirements>
+    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, b8 is_has_object_key__ = true, typename F_requirements__ = F_no_requirements>
     class TX_oref;
 
-    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, typename F_requirements__ = F_default_requirements>
+    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, typename F_requirements__ = F_no_requirements>
     using TX2_oref = TX_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
 
 
@@ -4471,6 +4625,28 @@ namespace ncpp {
             return *((F_passed_object*)object_p_);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+        NCPP_FORCE_INLINE auto& no_requirements() & noexcept {
+
+            return (TX<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
+        }
+        NCPP_FORCE_INLINE const auto& no_requirements() const & noexcept {
+
+            return (const TX<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
+        }
+        NCPP_FORCE_INLINE auto&& no_requirements() && noexcept {
+
+            return (TX<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
+        }
+        NCPP_FORCE_INLINE const auto&& no_requirements() const && noexcept {
+
+            return (const TX<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
+        }
+
     };
 
 
@@ -5098,6 +5274,28 @@ namespace ncpp {
         NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
 
             return *((F_passed_object*)object_p_);
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+        NCPP_FORCE_INLINE auto& no_requirements() & noexcept {
+
+            return (TX<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
+        }
+        NCPP_FORCE_INLINE const auto& no_requirements() const & noexcept {
+
+            return (const TX<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
+        }
+        NCPP_FORCE_INLINE auto&& no_requirements() && noexcept {
+
+            return (TX<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
+        }
+        NCPP_FORCE_INLINE const auto&& no_requirements() const && noexcept {
+
+            return (const TX<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
         }
 
     };
