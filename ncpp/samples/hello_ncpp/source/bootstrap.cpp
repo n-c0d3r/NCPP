@@ -3,11 +3,9 @@
 
 using namespace ncpp;
 
-struct A{};
+
 
 NCPP_ENTRY_POINT(args) {
-
-    auto a = TU<A>()();
 
     NCPP_INFO()
         << "Hello "
