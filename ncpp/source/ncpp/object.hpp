@@ -913,7 +913,7 @@ namespace ncpp {
     class TF_default_object_manager;
 
     template<typename F_allocator__>
-    class TF_default_object_manager<true, F_allocator__> : public utilities::TI_singleton<TF_default_object_manager<true, F_allocator__>> {
+    class TF_default_object_manager<true, F_allocator__> {
 
     public:
         NCPP_OBJECT_FRIEND_CLASSES();
@@ -951,7 +951,7 @@ namespace ncpp {
     };
 
     template<typename F_allocator__>
-    class TF_default_object_manager<false, F_allocator__> : public utilities::TI_singleton<TF_default_object_manager<false, F_allocator__>> {
+    class TF_default_object_manager<false, F_allocator__> {
 
     public:
         NCPP_OBJECT_FRIEND_CLASSES();
@@ -988,6 +988,24 @@ namespace ncpp {
     };
 
     using F_default_object_manager = TF_default_object_manager<>;
+
+    namespace internal {
+
+        extern NCPP_API TF_default_object_manager<false> default_object_manager;
+        extern NCPP_API TF_default_object_manager<true> default_object_manager_thread_safe;
+
+        template<b8 is_thread_safe__>
+        struct TF_default_object_manager_helper;
+        template<>
+        struct TF_default_object_manager_helper<false> {
+            static NCPP_FORCE_INLINE auto& get_manager() noexcept { return default_object_manager; }
+        };
+        template<>
+        struct TF_default_object_manager_helper<true> {
+            static NCPP_FORCE_INLINE auto& get_manager() noexcept { return default_object_manager_thread_safe; }
+        };
+
+    }
 
 
 
@@ -1053,10 +1071,20 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
 
-        template<b8 is_thread_safe_ = false>
-        using TF_manager = TF_default_object_manager<is_thread_safe_, F_allocator__>;
+        template<b8 is_thread_safe__ = false>
+        using TF_manager = TF_default_object_manager<is_thread_safe__, F_allocator__>;
 
         using F_manager = TF_manager<>;
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+        template<b8 is_thread_safe__>
+        static NCPP_FORCE_INLINE auto& T_get_manager() noexcept {
+
+            return internal::TF_default_object_manager_helper<is_thread_safe__>::get_manager();
+        }
 
     };
 
@@ -1667,7 +1695,7 @@ namespace ncpp {
         static constexpr b8 is_has_object_key = true;
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
 
-        using F_object_manager = F_options::template TF_manager<T_is_object_thread_safe<F_object>>;
+        using F_default_object_manager = F_options::template TF_manager<T_is_object_thread_safe<F_object>>;
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -1698,7 +1726,7 @@ namespace ncpp {
 
         NCPP_FORCE_INLINE F_object_key object_key() const noexcept { return object_key_; }
 
-        NCPP_FORCE_INLINE F_object_manager& object_manager() const noexcept { return F_object_manager::instance(); }
+        NCPP_FORCE_INLINE F_default_object_manager& default_object_manager() const noexcept { return F_options::template T_get_manager<T_is_object_thread_safe<F_object>>(); }
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -1846,9 +1874,9 @@ namespace ncpp {
                 return true;
 
             if(object_key_.is_thread_safe)
-                return F_options::template TF_manager<true>::instance().key_pool().check(object_key_);
+                return F_options::template T_get_manager<true>().key_pool().check(object_key_);
             else
-                return F_options::template TF_manager<false>::instance().key_pool().check(object_key_);
+                return F_options::template T_get_manager<false>().key_pool().check(object_key_);
         }
         NCPP_FORCE_INLINE b8 is_null() const noexcept {
 
@@ -1856,9 +1884,9 @@ namespace ncpp {
                 return false;
 
             if(object_key_.is_thread_safe)
-                return !F_options::template TF_manager<true>::instance().key_pool().check(object_key_);
+                return !F_options::template T_get_manager<true>().key_pool().check(object_key_);
             else
-                return !F_options::template TF_manager<false>::instance().key_pool().check(object_key_);
+                return !F_options::template T_get_manager<false>().key_pool().check(object_key_);
         }
 
         NCPP_FORCE_INLINE b8 Q_is_valid() const noexcept {
@@ -2271,7 +2299,7 @@ namespace ncpp {
         static constexpr b8 is_has_object_key = true;
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
 
-        using F_object_manager = F_options::template TF_manager<T_is_object_thread_safe<F_object>>;
+        using F_default_object_manager = F_options::template TF_manager<T_is_object_thread_safe<F_object>>;
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2302,7 +2330,7 @@ namespace ncpp {
 
         NCPP_FORCE_INLINE F_object_key object_key() const noexcept { return object_key_; }
 
-        NCPP_FORCE_INLINE F_object_manager& object_manager() const noexcept { return F_object_manager::instance(); }
+        NCPP_FORCE_INLINE F_default_object_manager& default_object_manager() const noexcept { return F_options::template T_get_manager<T_is_object_thread_safe<F_object>>(); }
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2464,14 +2492,14 @@ namespace ncpp {
     private:
         NCPP_FORCE_INLINE void pop_key_internal() noexcept {
 
-            object_key_ = object_manager().key_pool().pop();
+            object_key_ = default_object_manager().key_pool().pop();
         }
         NCPP_FORCE_INLINE void push_key_internal() noexcept {
 
             if(object_key_.is_thread_safe)
-                F_options::template TF_manager<true>::instance().key_pool().push(object_key_);
+                F_options::template T_get_manager<true>().key_pool().push(object_key_);
             else
-                F_options::template TF_manager<false>::instance().key_pool().push(object_key_);
+                F_options::template T_get_manager<false>().key_pool().push(object_key_);
         }
 
 
@@ -2982,7 +3010,7 @@ namespace ncpp {
         static constexpr b8 is_has_object_key = true;
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
 
-        using F_object_manager = F_options::template TF_manager<T_is_object_thread_safe<F_object>>;
+        using F_default_object_manager = F_options::template TF_manager<T_is_object_thread_safe<F_object>>;
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -3013,7 +3041,7 @@ namespace ncpp {
 
         NCPP_FORCE_INLINE F_object_key object_key() const noexcept { return object_key_; }
 
-        NCPP_FORCE_INLINE F_object_manager& object_manager() const noexcept { return F_object_manager::instance(); }
+        NCPP_FORCE_INLINE F_default_object_manager& default_object_manager() const noexcept { return F_options::template T_get_manager<T_is_object_thread_safe<F_object>>(); }
 
         NCPP_FORCE_INLINE u32 object_counter() const noexcept {
 
@@ -3310,14 +3338,14 @@ namespace ncpp {
     private:
         NCPP_FORCE_INLINE void pop_key_internal() noexcept {
 
-            object_key_ = object_manager().key_pool().pop();
+            object_key_ = default_object_manager().key_pool().pop();
         }
         NCPP_FORCE_INLINE void push_key_internal() noexcept {
 
             if(object_key_.is_thread_safe)
-                F_options::template TF_manager<true>::instance().key_pool().push(object_key_);
+                F_options::template T_get_manager<true>().key_pool().push(object_key_);
             else
-                F_options::template TF_manager<false>::instance().key_pool().push(object_key_);
+                F_options::template T_get_manager<false>().key_pool().push(object_key_);
         }
 
 
@@ -3905,7 +3933,7 @@ namespace ncpp {
         static constexpr b8 is_has_object_key = true;
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
 
-        using F_object_manager = F_options::template TF_manager<T_is_object_thread_safe<F_object>>;
+        using F_default_object_manager = F_options::template TF_manager<T_is_object_thread_safe<F_object>>;
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -3937,7 +3965,7 @@ namespace ncpp {
 
         NCPP_FORCE_INLINE F_object_key object_key() const noexcept { return object_key_; }
 
-        NCPP_FORCE_INLINE F_object_manager& object_manager() const noexcept { return F_object_manager::instance(); }
+        NCPP_FORCE_INLINE F_default_object_manager& default_object_manager() const noexcept { return F_options::template T_get_manager<T_is_object_thread_safe<F_object>>(); }
 
         NCPP_FORCE_INLINE u32 object_counter() const noexcept {
 
@@ -4407,9 +4435,9 @@ namespace ncpp {
                 return (object_p_ != 0);
 
             if(object_key_.is_thread_safe)
-                return F_options::template TF_manager<true>::instance().key_pool().check(object_key_);
+                return F_options::template T_get_manager<true>().key_pool().check(object_key_);
             else
-                return F_options::template TF_manager<false>::instance().key_pool().check(object_key_);
+                return F_options::template T_get_manager<false>().key_pool().check(object_key_);
         }
         NCPP_FORCE_INLINE b8 is_null() const noexcept {
 
@@ -4420,9 +4448,9 @@ namespace ncpp {
                 return (object_p_ == 0);
 
             if(object_key_.is_thread_safe)
-                return !F_options::template TF_manager<true>::instance().key_pool().check(object_key_);
+                return !F_options::template T_get_manager<true>().key_pool().check(object_key_);
             else
-                return !F_options::template TF_manager<false>::instance().key_pool().check(object_key_);
+                return !F_options::template T_get_manager<false>().key_pool().check(object_key_);
         }
 
         NCPP_FORCE_INLINE b8 Q_is_valid() const noexcept {
@@ -4484,14 +4512,14 @@ namespace ncpp {
     private:
         NCPP_FORCE_INLINE void pop_key_internal() noexcept {
 
-            object_key_ = object_manager().key_pool().pop();
+            object_key_ = default_object_manager().key_pool().pop();
         }
         NCPP_FORCE_INLINE void push_key_internal() noexcept {
 
             if(object_key_.is_thread_safe)
-                F_options::template TF_manager<true>::instance().key_pool().push(object_key_);
+                F_options::template T_get_manager<true>().key_pool().push(object_key_);
             else
-                F_options::template TF_manager<false>::instance().key_pool().push(object_key_);
+                F_options::template T_get_manager<false>().key_pool().push(object_key_);
         }
 
 

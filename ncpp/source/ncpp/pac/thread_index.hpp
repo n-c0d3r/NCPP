@@ -50,8 +50,8 @@ namespace ncpp {
 
     namespace pac {
 
-        extern void bind_thread_index(u32);
-        extern u32 thread_index();
+        NCPP_API void bind_thread_index(u32);
+        NCPP_API u32 thread_index();
 
     }
 

@@ -3,14 +3,11 @@
 
 using namespace ncpp;
 
-
+struct A{};
 
 NCPP_ENTRY_POINT(args) {
 
-    F_crt_uniform_provider::F_uniform_provider_desc provider_desc;
-    provider_desc.payload_size = 16;
-
-    F_crt_uniform_provider provider(provider_desc);
+    auto a = TU<A>()();
 
     NCPP_INFO()
         << "Hello "

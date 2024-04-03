@@ -252,6 +252,53 @@ namespace ncpp {
 #pragma region Macros
 
 ////////////////////////////////////////////////////////////////////////////////////
+//  DLL macros
+////////////////////////////////////////////////////////////////////////////////////
+
+#ifdef NCPP_DLL
+
+    #ifdef NCPP_DLL_IMPLEMENTATION
+
+    #ifdef EA_COMPILER_MSVC
+        #define NCPP_API      __declspec(dllexport)
+        #define NCPP_LOCAL
+    #elif defined(__CYGWIN__)
+        #define NCPP_API      __attribute__((dllexport))
+        #define NCPP_LOCAL
+    #elif (defined(__GNUC__) && (__GNUC__ >= 4))
+        #define NCPP_API      __attribute__ ((visibility("default")))
+        #define NCPP_LOCAL    __attribute__ ((visibility("hidden")))
+    #else
+        #error "Unknown compiler"
+    #endif
+
+    #else
+
+    #ifdef EA_COMPILER_MSVC
+        #define NCPP_API      __declspec(dllimport)
+        #define NCPP_LOCAL
+    #elif defined(__CYGWIN__)
+        #define NCPP_API      __attribute__((dllimport))
+        #define NCPP_LOCAL
+    #elif (defined(__GNUC__) && (__GNUC__ >= 4))
+        #define NCPP_API      __attribute__ ((visibility("default")))
+        #define NCPP_LOCAL    __attribute__ ((visibility("hidden")))
+    #else
+        #error "Unknown compiler"
+    #endif
+
+    #endif
+
+#else
+
+    #define NCPP_API
+    #define NCPP_LOCAL
+
+#endif
+
+
+
+////////////////////////////////////////////////////////////////////////////////////
 //  Warning disable macros
 ////////////////////////////////////////////////////////////////////////////////////
 
@@ -401,7 +448,7 @@ struct NCPP_PP_CAT(NCPP_STATIC_WARNING,__LINE__) { \
 ////////////////////////////////////////////////////////////////////////////////////
 
 namespace ncpp::internal {
-    void log_warning_failed_at(std::ostream& ostream, const char* file_path_p, const char* function_name_p, uint32_t line, const char* condition);
+    NCPP_API void log_warning_failed_at(std::ostream& ostream, const char* file_path_p, const char* function_name_p, uint32_t line, const char* condition);
     struct F_warning_tail_logger {
 
         std::ostream& ostream = std::cout;
@@ -447,7 +494,7 @@ namespace ncpp::internal {
 ////////////////////////////////////////////////////////////////////////////////////
 
 namespace ncpp::internal {
-    void log_assertion_failed_at(std::ostream& ostream, const char* file_path_p, const char* function_name_p, uint32_t line, const char* condition);
+    NCPP_API void log_assertion_failed_at(std::ostream& ostream, const char* file_path_p, const char* function_name_p, uint32_t line, const char* condition);
     struct F_assert_tail_logger {
 
         std::ostream& ostream = std::cout;
@@ -490,7 +537,7 @@ namespace ncpp::internal {
 ////////////////////////////////////////////////////////////////////////////////////
 
 namespace ncpp::internal {
-    void log_info_failed_at(std::ostream& ostream, const char* file_path_p, const char* function_name_p, uint32_t line);
+    NCPP_API void log_info_failed_at(std::ostream& ostream, const char* file_path_p, const char* function_name_p, uint32_t line);
     struct F_info_tail_logger {
 
         std::ostream& ostream = std::cout;
@@ -527,7 +574,7 @@ namespace ncpp::internal {
 ////////////////////////////////////////////////////////////////////////////////////
 
 namespace ncpp::internal {
-    void log_winfo_failed_at(std::wostream& ostream, const wchar_t* file_path_p, const wchar_t* function_name_p, uint32_t line);
+    NCPP_API void log_winfo_failed_at(std::wostream& ostream, const wchar_t* file_path_p, const wchar_t* function_name_p, uint32_t line);
     struct F_winfo_tail_logger {
 
         std::wostream& ostream = std::wcout;
