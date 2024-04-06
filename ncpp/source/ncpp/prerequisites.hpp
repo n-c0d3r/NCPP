@@ -259,33 +259,33 @@ namespace ncpp {
 
     #ifdef NCPP_DLL_IMPLEMENTATION
 
-    #ifdef EA_COMPILER_MSVC
-        #define NCPP_API      __declspec(dllexport)
-        #define NCPP_LOCAL
-    #elif defined(__CYGWIN__)
-        #define NCPP_API      __attribute__((dllexport))
-        #define NCPP_LOCAL
-    #elif (defined(__GNUC__) && (__GNUC__ >= 4))
-        #define NCPP_API      __attribute__ ((visibility("default")))
-        #define NCPP_LOCAL    __attribute__ ((visibility("hidden")))
-    #else
-        #error "Unknown compiler"
-    #endif
+        #ifdef EA_COMPILER_MSVC
+            #define NCPP_API      __declspec(dllexport)
+            #define NCPP_LOCAL
+        #elif defined(__CYGWIN__)
+            #define NCPP_API      __attribute__((dllexport))
+            #define NCPP_LOCAL
+        #elif (defined(__GNUC__) && (__GNUC__ >= 4))
+            #define NCPP_API      __attribute__ ((visibility("default")))
+            #define NCPP_LOCAL    __attribute__ ((visibility("hidden")))
+        #else
+            #error "Unknown compiler"
+        #endif
 
     #else
 
-    #ifdef EA_COMPILER_MSVC
-        #define NCPP_API      __declspec(dllimport)
-        #define NCPP_LOCAL
-    #elif defined(__CYGWIN__)
-        #define NCPP_API      __attribute__((dllimport))
-        #define NCPP_LOCAL
-    #elif (defined(__GNUC__) && (__GNUC__ >= 4))
-        #define NCPP_API      __attribute__ ((visibility("default")))
-        #define NCPP_LOCAL    __attribute__ ((visibility("hidden")))
-    #else
-        #error "Unknown compiler"
-    #endif
+        #ifdef EA_COMPILER_MSVC
+            #define NCPP_API      __declspec(dllimport)
+            #define NCPP_LOCAL
+        #elif defined(__CYGWIN__)
+            #define NCPP_API      __attribute__((dllimport))
+            #define NCPP_LOCAL
+        #elif (defined(__GNUC__) && (__GNUC__ >= 4))
+            #define NCPP_API      __attribute__ ((visibility("default")))
+            #define NCPP_LOCAL    __attribute__ ((visibility("hidden")))
+        #else
+            #error "Unknown compiler"
+        #endif
 
     #endif
 
