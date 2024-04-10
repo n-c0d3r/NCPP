@@ -108,4 +108,4 @@ NCoder's Game Engine Learning Aimed C++ Library.
 ---
 
 ## License
-+ NCPP is licensed under the [Abytek Software Private License](https://github.com/Abytek/NCPP/blob/main/LICENSE)
++ NCPP is licensed under the [MIT License](https://github.com/n-c0d3r/NCPP/blob/main/LICENSE)
