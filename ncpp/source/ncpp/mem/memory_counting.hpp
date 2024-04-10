@@ -67,8 +67,8 @@ namespace ncpp {
 
 
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
-		extern aptrd total_allocated_memory_g;
-		extern aptrd usable_allocated_memory_g;
+		extern NCPP_API aptrd total_allocated_memory_g;
+		extern NCPP_API aptrd usable_allocated_memory_g;
 
 #define NCPP_TOTAL_ALLOCATED_MEMORY() total_allocated_memory_g.load(eastl::memory_order_acquire)
 #define NCPP_INCREASE_TOTAL_ALLOCATED_MEMORY(bytes) total_allocated_memory_g.fetch_add((ncpp::ptrd)bytes, eastl::memory_order_release)

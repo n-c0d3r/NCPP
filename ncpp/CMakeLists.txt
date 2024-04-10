@@ -38,6 +38,9 @@ include(NCPP/ObjectAllocatorConfig)
 #####################################################################################
 #   Options
 #####################################################################################
+# ncpp linking options
+option(NCPP_DLL "Build NCPP as DLL or not" OFF)
+
 # ncpp mem options
 option(NCPP_ENABLE_MEMORY_COUNTING "Enable memory counting" ON)
 option(NCPP_ENABLE_ALLOCATOR_NAME "Enable allocator name" ON)
@@ -160,7 +163,12 @@ source_group(TREE "${CMAKE_CURRENT_BINARY_DIR}/generated_files" PREFIX generated
 #####################################################################################
 #   Create ncpp target
 #####################################################################################
-add_library(ncpp STATIC
+if(${NCPP_DLL})
+    set(ncppLinkingMode "SHARED")
+else()
+    set(ncppLinkingMode "STATIC")
+endif()
+add_library(ncpp ${ncppLinkingMode}
     ${source_files}
     ${generated_files}
 )
@@ -234,6 +242,13 @@ endif()
 
 if(NCPP_ENABLE_ARM_NEON)
     target_compile_options(ncpp PUBLIC ${NCPP_COMPILER_FLAG_ARM_NEON})
+endif()
+
+if(${NCPP_DLL})
+    target_compile_definitions(ncpp
+        PRIVATE
+            -DNCPP_DLL_IMPLEMENTATION
+    )
 endif()
 
 
