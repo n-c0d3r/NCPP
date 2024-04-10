@@ -1618,6 +1618,10 @@ namespace ncpp {
 
 
     public:
+        NCPP_FORCE_INLINE operator bool() const noexcept {
+
+            return is_valid();
+        }
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
@@ -1959,6 +1963,10 @@ namespace ncpp {
 
 
     public:
+        NCPP_FORCE_INLINE operator bool() const noexcept {
+
+            return is_valid();
+        }
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
@@ -2244,6 +2252,10 @@ namespace ncpp {
 
 
     public:
+        NCPP_FORCE_INLINE operator bool() const noexcept {
+
+            return is_valid();
+        }
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
@@ -2623,6 +2635,10 @@ namespace ncpp {
 
 
     public:
+        NCPP_FORCE_INLINE operator bool() const noexcept {
+
+            return is_valid();
+        }
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
@@ -2944,6 +2960,10 @@ namespace ncpp {
 
 
     public:
+        NCPP_FORCE_INLINE operator bool() const noexcept {
+
+            return is_valid();
+        }
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
@@ -3490,6 +3510,10 @@ namespace ncpp {
 
 
     public:
+        NCPP_FORCE_INLINE operator bool() const noexcept {
+
+            return is_valid();
+        }
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
@@ -3948,6 +3972,10 @@ namespace ncpp {
 
 
     public:
+        NCPP_FORCE_INLINE operator bool() const noexcept {
+
+            return is_valid();
+        }
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
@@ -4762,6 +4790,10 @@ namespace ncpp {
 
 
     public:
+        NCPP_FORCE_INLINE operator bool() const noexcept {
+
+            return is_valid();
+        }
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
@@ -5495,6 +5527,10 @@ namespace ncpp {
 
 
     public:
+        NCPP_FORCE_INLINE operator bool() const noexcept {
+
+            return is_valid();
+        }
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
