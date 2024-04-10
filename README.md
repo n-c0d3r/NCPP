@@ -6,7 +6,6 @@ NCoder's Game Engine Learning Aimed C++ Library.
 ## Features
 + Memory management:
   + **Uniform provider**/**storage**/**adaptor**
-      + **⚠️ Warning**: `not avaiable on NCPP Lite Distribution`
   + Reference allocator
   + **Powerful allocator base class**
 + Containers:
@@ -22,7 +21,6 @@ NCoder's Game Engine Learning Aimed C++ Library.
   + **Convenient coloring**
   + ...
 + Object:
-    + **⚠️ Warning**: `not avaiable on NCPP Lite Distribution`
     + **"X" oref** (`mixed from "S" and "K" semantics`)
     + **"S" oref**
     + **"U" oref**
@@ -43,7 +41,6 @@ NCoder's Game Engine Learning Aimed C++ Library.
   + Type flag
   + Subtype
   + **Reflection**
-    + **⚠️ Warning**: `not avaiable on NCPP Lite Distribution`
     + Easy to use
     + No additional memory cost on reflected object
     + Metadata supports
