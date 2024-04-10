@@ -2548,31 +2548,9 @@ namespace ncpp {
 
     public:
         template<typename... F_args__>
-        inline void T_create_object(F_args__&&... args) {
-
-            F_allocator allocator;
-
-            au32* counter_p = (au32*)allocator.allocate(
-                NCPP_OBJECT_MEMORY_HEADER_SIZE + sizeof(F_object),
-                utilities::T_alignof<F_object>,
-                NCPP_OBJECT_MEMORY_HEADER_SIZE,
-                0
-            );
-
-            F_object_key* object_key_p = ((F_object_key*)counter_p) + 1;
-            *object_key_p = object_key_;
-
-            object_p_ = (F_passed_object*)(counter_p + (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32)));
-
-            new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
-
-            pop_key_internal();
-
-        }
+        inline void T_create_object(F_args__&&... args);
         template<typename... F_args__>
         NCPP_FORCE_INLINE TU_oref&& operator()(F_args__&&... args) && {
-
-            NCPP_ASSERT(!is_valid()) << "can't create object by quick \"()\" operator from a valid pointer";
 
             T_create_object(std::forward<F_args__>(args)...);
 
@@ -2876,28 +2854,9 @@ namespace ncpp {
 
     public:
         template<typename... F_args__>
-        inline void T_create_object(F_args__&&... args) {
-
-            F_allocator allocator;
-
-            au32* counter_p = (au32*)allocator.allocate(
-                NCPP_OBJECT_MEMORY_HEADER_SIZE + sizeof(F_object),
-                utilities::T_alignof<F_object>,
-                NCPP_OBJECT_MEMORY_HEADER_SIZE,
-                0
-            );
-
-//            F_object_key* object_key_p = ((F_object_key*)counter_p) + 1;
-
-            object_p_ = (F_passed_object*)(counter_p + (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32)));
-
-            new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
-
-        }
+        inline void T_create_object(F_args__&&... args);
         template<typename... F_args__>
         NCPP_FORCE_INLINE TU_oref&& operator()(F_args__&&... args) && {
-
-            NCPP_ASSERT(!is_valid()) << "can't create object by quick \"()\" operator from a valid pointer";
 
             T_create_object(std::forward<F_args__>(args)...);
 
@@ -3027,25 +2986,25 @@ namespace ncpp {
 
     NCPP_FORCE_INLINE u32 shared_object_counter_unsafe(void* object_p) noexcept {
 
-        au32* counter_p = ((au32*)object_p) - 1;
+        au32* counter_p = ((au32*)object_p) - (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32));
 
         return counter_p->load(eastl::memory_order_acquire);
     }
     NCPP_FORCE_INLINE u32 increase_shared_object_counter_unsafe(void* object_p) noexcept {
 
-        au32* counter_p = ((au32*)object_p) - 1;
+        au32* counter_p = ((au32*)object_p) - (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32));
 
         return counter_p->fetch_add(1, eastl::memory_order_acq_rel);
     }
     NCPP_FORCE_INLINE u32 decrease_shared_object_counter_unsafe(void* object_p) noexcept {
 
-        au32* counter_p = ((au32*)object_p) - 1;
+        au32* counter_p = ((au32*)object_p) - (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32));
 
         return counter_p->fetch_sub(1, eastl::memory_order_acq_rel);
     }
     NCPP_FORCE_INLINE void set_object_counter_to_one_unsafe(void* object_p) noexcept {
 
-        au32* counter_p = ((au32*)object_p) - 1;
+        au32* counter_p = ((au32*)object_p) - (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32));
 
         counter_p->store(1, eastl::memory_order_release);
     }
@@ -3422,32 +3381,9 @@ namespace ncpp {
 
     public:
         template<typename... F_args__>
-        inline void T_create_object(F_args__&&... args) {
-
-            pop_key_internal();
-
-            F_allocator allocator;
-
-            au32* counter_p = (au32*)allocator.allocate(
-                NCPP_OBJECT_MEMORY_HEADER_SIZE + sizeof(F_object),
-                utilities::T_alignof<F_object>,
-                NCPP_OBJECT_MEMORY_HEADER_SIZE,
-                0
-            );
-            counter_p->store(1, eastl::memory_order_release);
-
-            F_object_key* object_key_p = ((F_object_key*)counter_p) + 1;
-            *object_key_p = object_key_;
-
-            object_p_ = (F_passed_object*)(counter_p + (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32)));
-
-            new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
-
-        }
+        inline void T_create_object(F_args__&&... args);
         template<typename... F_args__>
         NCPP_FORCE_INLINE TS_oref&& operator()(F_args__&&... args) && {
-
-            NCPP_ASSERT(!is_valid()) << "can't create object by quick \"()\" operator from a valid pointer";
 
             T_create_object(std::forward<F_args__>(args)...);
 
@@ -3887,29 +3823,9 @@ namespace ncpp {
 
     public:
         template<typename... F_args__>
-        inline void T_create_object(F_args__&&... args) {
-
-            F_allocator allocator;
-
-            au32* counter_p = (au32*)allocator.allocate(
-                NCPP_OBJECT_MEMORY_HEADER_SIZE + sizeof(F_object),
-                utilities::T_alignof<F_object>,
-                NCPP_OBJECT_MEMORY_HEADER_SIZE,
-                0
-            );
-            counter_p->store(1, eastl::memory_order_release);
-
-//            F_object_key* object_key_p = ((F_object_key*)counter_p) + 1;
-
-            object_p_ = (F_passed_object*)(counter_p + (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32)));
-
-            new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
-
-        }
+        inline void T_create_object(F_args__&&... args);
         template<typename... F_args__>
         NCPP_FORCE_INLINE TS_oref&& operator()(F_args__&&... args) && {
-
-            NCPP_ASSERT(!is_valid()) << "can't create object by quick \"()\" operator from a valid pointer";
 
             T_create_object(std::forward<F_args__>(args)...);
 
@@ -4672,30 +4588,7 @@ namespace ncpp {
 
     public:
         template<typename... F_args__>
-        inline void T_create_object(F_args__&&... args) {
-
-            pop_key_internal();
-
-            F_allocator allocator;
-
-            au32* counter_p = (au32*)allocator.allocate(
-                NCPP_OBJECT_MEMORY_HEADER_SIZE + sizeof(F_object),
-                utilities::T_alignof<F_object>,
-                NCPP_OBJECT_MEMORY_HEADER_SIZE,
-                0
-            );
-            counter_p->store(1, eastl::memory_order_release);
-
-            F_object_key* object_key_p = ((F_object_key*)counter_p) + 1;
-            *object_key_p = object_key_;
-
-            object_p_ = (F_passed_object*)(counter_p + (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32)));
-
-            new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
-
-            is_shared_ = true;
-
-        }
+        inline void T_create_object(F_args__&&... args);
         template<typename... F_args__>
         NCPP_FORCE_INLINE TX_oref&& operator()(F_args__&&... args) && {
 
@@ -5412,31 +5305,9 @@ namespace ncpp {
 
     public:
         template<typename... F_args__>
-        inline void T_create_object(F_args__&&... args) {
-
-            F_allocator allocator;
-
-            au32* counter_p = (au32*)allocator.allocate(
-                NCPP_OBJECT_MEMORY_HEADER_SIZE + sizeof(F_object),
-                utilities::T_alignof<F_object>,
-                NCPP_OBJECT_MEMORY_HEADER_SIZE,
-                0
-            );
-            counter_p->store(1, eastl::memory_order_release);
-
-//            F_object_key* object_key_p = ((F_object_key*)counter_p) + 1;
-
-            object_p_ = (F_passed_object*)(counter_p + (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32)));
-
-            new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
-
-            is_shared_ = true;
-
-        }
+        inline void T_create_object(F_args__&&... args);
         template<typename... F_args__>
         NCPP_FORCE_INLINE TX_oref&& operator()(F_args__&&... args) && {
-
-            NCPP_ASSERT(!is_valid()) << "can't create object by quick \"()\" operator from a valid pointer";
 
             T_create_object(std::forward<F_args__>(args)...);
 
