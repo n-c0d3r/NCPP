@@ -1586,9 +1586,13 @@ namespace ncpp {
     public:
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+
             return (F_passed_object*)object_p_;
         }
         NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
+
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
 
             return *((F_passed_object*)object_p_);
         }
@@ -1919,9 +1923,13 @@ namespace ncpp {
     public:
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+
             return (F_passed_object*)object_p_;
         }
         NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
+
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
 
             return *((F_passed_object*)object_p_);
         }
@@ -2196,9 +2204,13 @@ namespace ncpp {
     public:
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+
             return (F_passed_object*)object_p_;
         }
         NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
+
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
 
             return *((F_passed_object*)object_p_);
         }
@@ -2567,9 +2579,13 @@ namespace ncpp {
     public:
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+
             return (F_passed_object*)object_p_;
         }
         NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
+
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
 
             return *((F_passed_object*)object_p_);
         }
@@ -2880,9 +2896,13 @@ namespace ncpp {
     public:
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+
             return (F_passed_object*)object_p_;
         }
         NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
+
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
 
             return *((F_passed_object*)object_p_);
         }
@@ -3414,9 +3434,13 @@ namespace ncpp {
     public:
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+
             return (F_passed_object*)object_p_;
         }
         NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
+
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
 
             return *((F_passed_object*)object_p_);
         }
@@ -3830,9 +3854,13 @@ namespace ncpp {
     public:
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+
             return (F_passed_object*)object_p_;
         }
         NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
+
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
 
             return *((F_passed_object*)object_p_);
         }
@@ -4618,9 +4646,13 @@ namespace ncpp {
     public:
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+
             return (F_passed_object*)object_p_;
         }
         NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
+
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
 
             return *((F_passed_object*)object_p_);
         }
@@ -5269,9 +5301,13 @@ namespace ncpp {
     public:
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+
             return (F_passed_object*)object_p_;
         }
         NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
+
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
 
             return *((F_passed_object*)object_p_);
         }
