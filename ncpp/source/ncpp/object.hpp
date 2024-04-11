@@ -2601,11 +2601,15 @@ namespace ncpp {
 
 
 
-    public:
+    private:
         template<typename... F_args__>
         inline void T_create_object(F_args__&&... args);
+
+    public:
         template<typename... F_args__>
         NCPP_FORCE_INLINE TU_oref&& operator()(F_args__&&... args) && {
+
+            NCPP_ASSERT(!is_valid()) << "object reference is already valid";
 
             T_create_object(std::forward<F_args__>(args)...);
 
@@ -2613,13 +2617,13 @@ namespace ncpp {
         }
 
         template<typename... F_args__>
-        static NCPP_FORCE_INLINE TU_oref T_make(F_args__&&... args) {
+        static NCPP_FORCE_INLINE F_this T_make(F_args__&&... args) {
 
-            TU_oref oref;
+            utilities::TF_mem_wrap<F_this> oref;
 
-            oref.T_create_object(std::forward<F_args__>(args)...);
+            ((F_this&)oref).T_create_object(std::forward<F_args__>(args)...);
 
-            return std::move(oref);
+            return { ((F_this&)oref).object_p_, ((F_this&)oref).object_key_ };
         }
 
     private:
@@ -2916,11 +2920,15 @@ namespace ncpp {
 
 
 
-    public:
+    private:
         template<typename... F_args__>
         inline void T_create_object(F_args__&&... args);
+
+    public:
         template<typename... F_args__>
         NCPP_FORCE_INLINE TU_oref&& operator()(F_args__&&... args) && {
+
+            NCPP_ASSERT(!is_valid()) << "object reference is already valid";
 
             T_create_object(std::forward<F_args__>(args)...);
 
@@ -2928,13 +2936,13 @@ namespace ncpp {
         }
 
         template<typename... F_args__>
-        static NCPP_FORCE_INLINE TU_oref T_make(F_args__&&... args) {
+        static NCPP_FORCE_INLINE F_this T_make(F_args__&&... args) {
 
-            TU_oref oref;
+            utilities::TF_mem_wrap<F_this> oref;
 
-            oref.T_create_object(std::forward<F_args__>(args)...);
+            ((F_this&)oref).T_create_object(std::forward<F_args__>(args)...);
 
-            return std::move(oref);
+            return { ((F_this&)oref).object_p_ };
         }
 
     private:
@@ -3454,11 +3462,15 @@ namespace ncpp {
 
 
 
-    public:
+    private:
         template<typename... F_args__>
         inline void T_create_object(F_args__&&... args);
+
+    public:
         template<typename... F_args__>
         NCPP_FORCE_INLINE TS_oref&& operator()(F_args__&&... args) && {
+
+            NCPP_ASSERT(!is_valid()) << "object reference is already valid";
 
             T_create_object(std::forward<F_args__>(args)...);
 
@@ -3466,13 +3478,13 @@ namespace ncpp {
         }
 
         template<typename... F_args__>
-        static NCPP_FORCE_INLINE TS_oref T_make(F_args__&&... args) {
+        static NCPP_FORCE_INLINE F_this T_make(F_args__&&... args) {
 
-            TS_oref oref;
+            utilities::TF_mem_wrap<F_this> oref;
 
-            oref.T_create_object(std::forward<F_args__>(args)...);
+            ((F_this&)oref).T_create_object(std::forward<F_args__>(args)...);
 
-            return std::move(oref);
+            return { ((F_this&)oref).object_p_, ((F_this&)oref).object_key_ };
         }
 
     private:
@@ -3907,11 +3919,15 @@ namespace ncpp {
 
 
 
-    public:
+    private:
         template<typename... F_args__>
         inline void T_create_object(F_args__&&... args);
+
+    public:
         template<typename... F_args__>
         NCPP_FORCE_INLINE TS_oref&& operator()(F_args__&&... args) && {
+
+            NCPP_ASSERT(!is_valid()) << "object reference is already valid";
 
             T_create_object(std::forward<F_args__>(args)...);
 
@@ -3919,13 +3935,13 @@ namespace ncpp {
         }
 
         template<typename... F_args__>
-        static NCPP_FORCE_INLINE TS_oref T_make(F_args__&&... args) {
+        static NCPP_FORCE_INLINE F_this T_make(F_args__&&... args) {
 
-            TS_oref oref;
+            utilities::TF_mem_wrap<F_this> oref;
 
-            oref.T_create_object(std::forward<F_args__>(args)...);
+            ((F_this&)oref).T_create_object(std::forward<F_args__>(args)...);
 
-            return std::move(oref);
+            return { ((F_this&)oref).object_p_ };
         }
 
     private:
@@ -4695,13 +4711,15 @@ namespace ncpp {
 
 
 
-    public:
+    private:
         template<typename... F_args__>
         inline void T_create_object(F_args__&&... args);
+
+    public:
         template<typename... F_args__>
         NCPP_FORCE_INLINE TX_oref&& operator()(F_args__&&... args) && {
 
-            NCPP_ASSERT(!is_valid()) << "can't create object by quick \"()\" operator from a valid pointer";
+            NCPP_ASSERT(!is_valid()) << "object reference is already valid";
 
             T_create_object(std::forward<F_args__>(args)...);
 
@@ -4709,13 +4727,13 @@ namespace ncpp {
         }
 
         template<typename... F_args__>
-        static NCPP_FORCE_INLINE TX_oref T_make(F_args__&&... args) {
+        static NCPP_FORCE_INLINE F_this T_make(F_args__&&... args) {
 
-            TX_oref oref;
+            utilities::TF_mem_wrap<F_this> oref;
 
-            oref.T_create_object(std::forward<F_args__>(args)...);
+            ((F_this&)oref).T_create_object(std::forward<F_args__>(args)...);
 
-            return std::move(oref);
+            return { ((F_this&)oref).object_p_, ((F_this&)oref).object_key_ };
         }
 
     private:
@@ -5423,11 +5441,15 @@ namespace ncpp {
 
 
 
-    public:
+    private:
         template<typename... F_args__>
         inline void T_create_object(F_args__&&... args);
+
+    public:
         template<typename... F_args__>
         NCPP_FORCE_INLINE TX_oref&& operator()(F_args__&&... args) && {
+
+            NCPP_ASSERT(!is_valid()) << "object reference is already valid";
 
             T_create_object(std::forward<F_args__>(args)...);
 
@@ -5435,13 +5457,13 @@ namespace ncpp {
         }
 
         template<typename... F_args__>
-        static NCPP_FORCE_INLINE TX_oref T_make(F_args__&&... args) {
+        static NCPP_FORCE_INLINE F_this T_make(F_args__&&... args) {
 
-            TX_oref oref;
+            utilities::TF_mem_wrap<F_this> oref;
 
-            oref.T_create_object(std::forward<F_args__>(args)...);
+            ((F_this&)oref).T_create_object(std::forward<F_args__>(args)...);
 
-            return std::move(oref);
+            return { ((F_this&)oref).object_p_ };
         }
 
     private:

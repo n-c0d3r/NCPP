@@ -24,8 +24,6 @@ namespace ncpp {
     template<typename... F_args__>
     NCPP_FORCE_INLINE void TU_oref<F_passed_object__, F_allocator__, F_options__, true, F_child_oref__>::T_create_object(F_args__&&... args) {
 
-        NCPP_ASSERT(!is_valid()) << "object reference is already valid";
-
         F_allocator allocator;
 
         au32* counter_p = (au32*)allocator.allocate(
