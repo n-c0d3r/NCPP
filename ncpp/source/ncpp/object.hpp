@@ -284,7 +284,7 @@ namespace ncpp {
         template<T_is_oref F_oref__>
         static NCPP_FORCE_INLINE b8 T_check(const F_oref__& oref) noexcept {
 
-            return oref.is_valid();
+            return oref.NQ_is_valid();
         }
 
     };
@@ -1586,6 +1586,15 @@ namespace ncpp {
             return (object_p_ == 0);
         }
 
+        NCPP_FORCE_INLINE b8 NQ_is_valid() const noexcept {
+
+            return (object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 NQ_is_null() const noexcept {
+
+            return (object_p_ == 0);
+        }
+
         NCPP_FORCE_INLINE b8 Q_is_valid() const noexcept {
 
             if constexpr (F_requirements::is_always_valid)
@@ -1907,6 +1916,21 @@ namespace ncpp {
                 return !F_options::template T_get_manager<false>().key_pool().check(object_key_);
         }
 
+        NCPP_FORCE_INLINE b8 NQ_is_valid() const noexcept {
+
+            if(object_key_.is_thread_safe)
+                return F_options::template T_get_manager<true>().key_pool().check(object_key_);
+            else
+                return F_options::template T_get_manager<false>().key_pool().check(object_key_);
+        }
+        NCPP_FORCE_INLINE b8 NQ_is_null() const noexcept {
+
+            if(object_key_.is_thread_safe)
+                return !F_options::template T_get_manager<true>().key_pool().check(object_key_);
+            else
+                return !F_options::template T_get_manager<false>().key_pool().check(object_key_);
+        }
+
         NCPP_FORCE_INLINE b8 Q_is_valid() const noexcept {
 
             if constexpr (F_requirements::is_always_valid)
@@ -2193,6 +2217,15 @@ namespace ncpp {
 
             if constexpr (F_requirements::is_always_valid)
                 return false;
+
+            return (object_p_ == 0);
+        }
+
+        NCPP_FORCE_INLINE b8 NQ_is_valid() const noexcept {
+
+            return (object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 NQ_is_null() const noexcept {
 
             return (object_p_ == 0);
         }
@@ -2489,6 +2522,15 @@ namespace ncpp {
 
             if constexpr (F_requirements::is_always_valid)
                 return false;
+
+            return (object_p_ == 0);
+        }
+
+        NCPP_FORCE_INLINE b8 NQ_is_valid() const noexcept {
+
+            return (object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 NQ_is_null() const noexcept {
 
             return (object_p_ == 0);
         }
@@ -2811,6 +2853,15 @@ namespace ncpp {
 
             if constexpr (F_requirements::is_always_valid)
                 return false;
+
+            return (object_p_ == 0);
+        }
+
+        NCPP_FORCE_INLINE b8 NQ_is_valid() const noexcept {
+
+            return (object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 NQ_is_null() const noexcept {
 
             return (object_p_ == 0);
         }
@@ -3317,6 +3368,15 @@ namespace ncpp {
             return (object_p_ == 0);
         }
 
+        NCPP_FORCE_INLINE b8 NQ_is_valid() const noexcept {
+
+            return (object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 NQ_is_null() const noexcept {
+
+            return (object_p_ == 0);
+        }
+
         NCPP_FORCE_INLINE b8 Q_is_valid() const noexcept {
 
             if constexpr (F_requirements::is_always_valid)
@@ -3771,6 +3831,15 @@ namespace ncpp {
 
             if constexpr (F_requirements::is_always_valid)
                 return false;
+
+            return (object_p_ == 0);
+        }
+
+        NCPP_FORCE_INLINE b8 NQ_is_valid() const noexcept {
+
+            return (object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 NQ_is_null() const noexcept {
 
             return (object_p_ == 0);
         }
@@ -4515,6 +4584,27 @@ namespace ncpp {
                 return !F_options::template T_get_manager<false>().key_pool().check(object_key_);
         }
 
+        NCPP_FORCE_INLINE b8 NQ_is_valid() const noexcept {
+
+            if(is_shared_)
+                return (object_p_ != 0);
+
+            if(object_key_.is_thread_safe)
+                return F_options::template T_get_manager<true>().key_pool().check(object_key_);
+            else
+                return F_options::template T_get_manager<false>().key_pool().check(object_key_);
+        }
+        NCPP_FORCE_INLINE b8 NQ_is_null() const noexcept {
+
+            if(is_shared_)
+                return (object_p_ == 0);
+
+            if(object_key_.is_thread_safe)
+                return !F_options::template T_get_manager<true>().key_pool().check(object_key_);
+            else
+                return !F_options::template T_get_manager<false>().key_pool().check(object_key_);
+        }
+
         NCPP_FORCE_INLINE b8 Q_is_valid() const noexcept {
 
             if constexpr (F_requirements::is_always_valid)
@@ -5245,6 +5335,15 @@ namespace ncpp {
 
             if constexpr (F_requirements::is_always_valid)
                 return false;
+
+            return (object_p_ == 0);
+        }
+
+        NCPP_FORCE_INLINE b8 NQ_is_valid() const noexcept {
+
+            return (object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 NQ_is_null() const noexcept {
 
             return (object_p_ == 0);
         }
