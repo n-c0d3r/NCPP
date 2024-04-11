@@ -1086,6 +1086,19 @@ namespace ncpp {
             return internal::TF_default_object_manager_helper<is_thread_safe__>::get_manager();
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+        static constexpr u32 initial_shared_reference_count = 1;
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+        template<typename F_passed_object__>
+        static NCPP_FORCE_INLINE void T_shared_oref_pre_destruct(F_passed_object__*) noexcept {}
+
     };
 
     using F_default_object_options = TF_default_object_options<>;
@@ -3346,6 +3359,8 @@ namespace ncpp {
 
             if(object_p_) {
 
+                F_options__::T_shared_oref_pre_destruct(object_p_);
+
                 if(decrease_shared_object_counter_unsafe(object_p_) != 1) {
 
                     reset_no_destroy_internal();
@@ -3802,6 +3817,8 @@ namespace ncpp {
         NCPP_FORCE_INLINE void reset() noexcept {
 
             if(object_p_) {
+
+                F_options__::T_shared_oref_pre_destruct(object_p_);
 
                 if(decrease_shared_object_counter_unsafe(object_p_) != 1) {
 
@@ -4547,6 +4564,8 @@ namespace ncpp {
 
                 if(is_shared_) {
 
+                    F_options__::T_shared_oref_pre_destruct(object_p_);
+
                     if (decrease_shared_object_counter_unsafe(object_p_) != 1) {
 
                         reset_no_destroy_internal();
@@ -5278,6 +5297,8 @@ namespace ncpp {
             if(object_p_) {
 
                 if(is_shared_) {
+
+                    F_options__::T_shared_oref_pre_destruct(object_p_);
 
                     if (decrease_shared_object_counter_unsafe(object_p_) != 1) {
 
