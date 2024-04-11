@@ -24,6 +24,8 @@ namespace ncpp {
     template<typename... F_args__>
     NCPP_FORCE_INLINE void TU_oref<F_passed_object__, F_allocator__, F_options__, true, F_child_oref__>::T_create_object(F_args__&&... args) {
 
+        pop_key_internal();
+
         F_allocator allocator;
 
         au32* counter_p = (au32*)allocator.allocate(
@@ -39,8 +41,6 @@ namespace ncpp {
         object_p_ = (F_passed_object*)(counter_p + (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32)));
 
         new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
-
-        pop_key_internal();
 
     }
 
