@@ -1404,9 +1404,6 @@ namespace ncpp {
 
         static constexpr b8 is_const = std::is_const_v<F_passed_object__>;
 
-        template<class F_requirements__, b8 is_always_valid__ = false>
-        friend struct TF_requirements_base;
-
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -1720,9 +1717,6 @@ namespace ncpp {
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
 
         using F_default_object_manager = F_options::template TF_manager<T_is_object_thread_safe<F_object>>;
-
-        template<class F_requirements__, b8 is_always_valid__ = false>
-        friend struct TF_requirements_base;
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2053,9 +2047,6 @@ namespace ncpp {
         static constexpr b8 is_has_object_key = false;
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
 
-        template<class F_requirements__, b8 is_always_valid__ = false>
-        friend struct TF_requirements_base;
-
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2378,9 +2369,6 @@ namespace ncpp {
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
 
         using F_default_object_manager = F_options::template TF_manager<T_is_object_thread_safe<F_object>>;
-
-        template<class F_requirements__, b8 is_always_valid__ = false>
-        friend struct TF_requirements_base;
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2731,9 +2719,6 @@ namespace ncpp {
 
         static constexpr b8 is_has_object_key = false;
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
-
-        template<class F_requirements__, b8 is_always_valid__ = false>
-        friend struct TF_requirements_base;
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -3104,9 +3089,6 @@ namespace ncpp {
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
 
         using F_default_object_manager = F_options::template TF_manager<T_is_object_thread_safe<F_object>>;
-
-        template<class F_requirements__, b8 is_always_valid__ = false>
-        friend struct TF_requirements_base;
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -3599,9 +3581,6 @@ namespace ncpp {
         static constexpr b8 is_has_object_key = false;
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
 
-        template<class F_requirements__, b8 is_always_valid__ = false>
-        friend struct TF_requirements_base;
-
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -4082,9 +4061,6 @@ namespace ncpp {
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
 
         using F_default_object_manager = F_options::template TF_manager<T_is_object_thread_safe<F_object>>;
-
-        template<class F_requirements__, b8 is_always_valid__ = false>
-        friend struct TF_requirements_base;
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -4881,9 +4857,6 @@ namespace ncpp {
 
         static constexpr b8 is_has_object_key = false;
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
-
-        template<class F_requirements__, b8 is_always_valid__ = false>
-        friend struct TF_requirements_base;
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
