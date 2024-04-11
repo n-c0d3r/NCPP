@@ -107,7 +107,7 @@ namespace ncpp {
             NCPP_OBJECT_MEMORY_HEADER_SIZE,
             0
         );
-        counter_p->store(1, eastl::memory_order_release);
+        counter_p->store(F_options__::initial_shared_reference_count, eastl::memory_order_release);
 
         F_object_key* object_key_p = (F_object_key*)(((u64*)counter_p) + 1);
         *object_key_p = object_key_;
@@ -142,7 +142,7 @@ namespace ncpp {
             NCPP_OBJECT_MEMORY_HEADER_SIZE,
             0
         );
-        counter_p->store(1, eastl::memory_order_release);
+        counter_p->store(F_options__::initial_shared_reference_count, eastl::memory_order_release);
 
         object_p_ = (F_passed_object*)(counter_p + (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32)));
 
@@ -180,7 +180,7 @@ namespace ncpp {
             NCPP_OBJECT_MEMORY_HEADER_SIZE,
             0
         );
-        counter_p->store(1, eastl::memory_order_release);
+        counter_p->store(F_options__::initial_shared_reference_count, eastl::memory_order_release);
 
         F_object_key* object_key_p = (F_object_key*)(((u64*)counter_p) + 1);
         *object_key_p = object_key_;
@@ -217,7 +217,7 @@ namespace ncpp {
             NCPP_OBJECT_MEMORY_HEADER_SIZE,
             0
         );
-        counter_p->store(1, eastl::memory_order_release);
+        counter_p->store(F_options__::initial_shared_reference_count, eastl::memory_order_release);
 
         object_p_ = (F_passed_object*)(counter_p + (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32)));
 
