@@ -1979,6 +1979,26 @@ namespace ncpp {
 
 
     public:
+        NCPP_FORCE_INLINE F_this& keyed() & noexcept {
+
+            return (F_this&)(*this);
+        }
+        NCPP_FORCE_INLINE F_this&& keyed() && noexcept {
+
+            return (F_this&&)(*this);
+        }
+        NCPP_FORCE_INLINE F_this const& keyed() const & noexcept {
+
+            return (F_this const&)(*this);
+        }
+        NCPP_FORCE_INLINE F_this const&& keyed() const && noexcept {
+
+            return (F_this const&&)(*this);
+        }
+
+
+
+    public:
         NCPP_FORCE_INLINE auto no_key() const noexcept {
 
             return TK_oref<F_passed_object, F_options, false, F_requirements>::unsafe(object_p_);
@@ -2272,6 +2292,26 @@ namespace ncpp {
         explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
             return object_p_;
+        }
+
+
+
+    public:
+        NCPP_FORCE_INLINE F_this& keyed() & noexcept {
+
+            return (F_this&)(*this);
+        }
+        NCPP_FORCE_INLINE F_this&& keyed() && noexcept {
+
+            return (F_this&&)(*this);
+        }
+        NCPP_FORCE_INLINE F_this const& keyed() const & noexcept {
+
+            return (F_this const&)(*this);
+        }
+        NCPP_FORCE_INLINE F_this const&& keyed() const && noexcept {
+
+            return (F_this const&&)(*this);
         }
 
 
