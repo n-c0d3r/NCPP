@@ -289,7 +289,7 @@ namespace ncpp {
 
     };
 
-#define NCPP_FOREF_VALID(...) ncpp::F_valid_requirements::T_forward(__VA_ARGS__)
+#define NCPP_FOREF_VALID(...) ncpp::F_valid_requirements::T_forward((__VA_ARGS__).keyed())
 
 
 
