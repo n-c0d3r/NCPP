@@ -552,10 +552,12 @@ namespace ncpp {
         using TM_initializer_list = TF_initializer_list<F_item__>;
 
         template<typename F__>
-        NCPP_FORCE_INLINE TG_span<F__> T_inil_span(TG_initializer_list<F__> inil) {
+        NCPP_FORCE_INLINE TG_span<F__> T_inil_span(F__ inil[]) {
 
             return { inil.begin(), inil.size() };
         }
+
+#define NCPP_INIL_SPAN(...) ncpp::containers::T_inil_span({ __VA_ARGS__ })
 
 
 
