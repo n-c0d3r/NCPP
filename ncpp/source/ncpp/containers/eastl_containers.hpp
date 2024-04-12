@@ -551,6 +551,12 @@ namespace ncpp {
         template<typename F_item__>
         using TM_initializer_list = TF_initializer_list<F_item__>;
 
+        template<typename F__>
+        NCPP_FORCE_INLINE TG_span<F__> T_inil_span(TG_initializer_list<F__> inil) {
+
+            return { inil.begin(), inil.size() };
+        }
+
 
 
         ////////////////////////////////////////////////////////////////////////////////////
