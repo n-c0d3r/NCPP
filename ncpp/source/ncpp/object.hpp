@@ -290,6 +290,11 @@ namespace ncpp {
     };
 
 #define NCPP_FOREF_VALID(...) ncpp::F_valid_requirements::T_forward((__VA_ARGS__).keyed())
+#define NCPP_FHANDLE_VALID(...) std::remove_const_t< \
+                std::remove_reference_t<                 \
+                    decltype(__VA_ARGS__)                \
+                >                                        \
+            > { NCPP_FOREF_VALID((__VA_ARGS__).oref) }
 
 
 
