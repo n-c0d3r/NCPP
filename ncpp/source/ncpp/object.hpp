@@ -295,11 +295,13 @@ namespace ncpp {
                     decltype(__VA_ARGS__)            \
                 >                                    \
             >::template TF_forward_oref<             \
-                typename std::remove_const_t<        \
-                    std::remove_reference_t<         \
-                        decltype(__VA_ARGS__)        \
-                    >                                \
-                >::F_oref                            \
+                ncpp::TK_valid<                      \
+                    typename std::remove_const_t<    \
+                        std::remove_reference_t<     \
+                            decltype(__VA_ARGS__)    \
+                        >                            \
+                    >::F_oref::F_passed_object       \
+                >                                    \
             > { NCPP_FOREF_VALID((__VA_ARGS__).oref) }
 
 
