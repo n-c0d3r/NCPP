@@ -289,7 +289,7 @@ namespace ncpp {
 
     };
 
-#define NCPP_FHANDLE_TEMPLATE_ARG() ncpp::T_is_oref F_oref__
+#define NCPP_FHANDLE_TEMPLATE() ncpp::T_is_oref F_oref__
 #define NCPP_FHANDLE_REQUIRE_OBJECT(...) requires std::is_base_of_v<__VA_ARGS__, typename F_oref__::F_object>
 #define NCPP_FHANDLE_GENERATED_BODY(Name, ...) \
             public:\
