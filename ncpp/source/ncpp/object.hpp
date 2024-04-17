@@ -289,15 +289,16 @@ namespace ncpp {
 
     };
 
-#define NCPP_FHANDLE_TEMPLATE() ncpp::T_is_oref F_oref__
-#define NCPP_FHANDLE_REQUIRE_OBJECT(...) requires std::is_base_of_v<__VA_ARGS__, typename F_oref__::F_object>
+#define NCPP_FHANDLE_TEMPLATE(...) \
+            template<ncpp::T_is_oref F_oref__>\
+            requires std::is_base_of_v<__VA_ARGS__, typename F_oref__::F_object>
 #define NCPP_FHANDLE_GENERATED_BODY(Name, ...) \
             public:\
                 using F_oref = F_oref__;\
                 \
             public:\
                 template<ncpp::T_is_oref F_oref_in__>\
-                __VA_ARGS__\
+                requires std::is_base_of_v<__VA_ARGS__, typename F_oref__::F_object>\
                 using TF_forward_oref = Name<F_oref_in__>;\
                 \
             public:\
