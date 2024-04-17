@@ -309,6 +309,7 @@ namespace ncpp {
                 \
                     return oref;\
                 }
+#define NCPP_FHANDLE_CHECK(...) ((__VA_ARGS__).oref.is_valid())
 
 #define NCPP_FOREF_VALID(...) ncpp::F_valid_requirements::T_forward((__VA_ARGS__).keyed())
 #define NCPP_FHANDLE_VALID(...) std::remove_const_t< \
