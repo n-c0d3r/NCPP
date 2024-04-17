@@ -289,6 +289,26 @@ namespace ncpp {
 
     };
 
+#define NCPP_FHANDLE_TEMPLATE_ARG() ncpp::T_is_oref F_oref__
+#define NCPP_FHANDLE_REQUIRE_OBJECT(...) requires std::is_base_of_v<__VA_ARGS__, typename F_oref__::F_object>
+#define NCPP_FHANDLE_GENERATED_BODY(Name, ...) \
+            public:\
+                using F_oref = F_oref__;\
+                \
+            public:\
+                template<ncpp::T_is_oref F_oref_in__>\
+                __VA_ARGS__\
+                using TF_forward_oref = Name<F_oref_in__>;\
+                \
+            public:\
+                F_oref__ oref;\
+                \
+            public:\
+                NCPP_FORCE_INLINE operator F_oref__() noexcept {\
+                \
+                    return oref;\
+                }
+
 #define NCPP_FOREF_VALID(...) ncpp::F_valid_requirements::T_forward((__VA_ARGS__).keyed())
 #define NCPP_FHANDLE_VALID(...) std::remove_const_t< \
                 std::remove_reference_t<             \
