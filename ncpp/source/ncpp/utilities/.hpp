@@ -114,4 +114,6 @@ namespace ncpp {
 
 #include <ncpp/utilities/combine_types.hpp>
 
+#include <ncpp/utilities/flag.hpp>
+
 #pragma endregion
