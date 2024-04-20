@@ -325,7 +325,7 @@ namespace ncpp {
                     >::F_oref::F_passed_object       \
                 >                                    \
             > { NCPP_FOREF_VALID((__VA_ARGS__).oref) }
-#define NCPP_FHANDLE_VALID_AS_FOREF(...) (NCPP_FHANDLE_VALID(__VA_ARGS__).oref)
+#define NCPP_FHANDLE_VALID_AS_OREF(...) (NCPP_FHANDLE_VALID(__VA_ARGS__).oref)
 
 
 
