@@ -308,7 +308,24 @@ namespace ncpp {
                 NCPP_FORCE_INLINE operator F_oref__() noexcept {\
                 \
                     return oref;\
+                }\
+                NCPP_FORCE_INLINE operator bool() const noexcept {\
+                \
+                    return oref.is_valid();\
+                }\
+                NCPP_FORCE_INLINE F_oref__* operator ->() const noexcept {\
+                \
+                    NCPP_ASSERT_OREF_REQUIREMENTS(oref);\
+                \
+                    return (F_oref__*)(oref.object_p());\
+                }\
+                NCPP_FORCE_INLINE F_oref__& operator *() const noexcept {\
+                \
+                    NCPP_ASSERT_OREF_REQUIREMENTS(oref);\
+                \
+                    return *((F_oref__*)(oref.object_p()));\
                 }
+
 #define NCPP_FHANDLE_CHECK(...) ((__VA_ARGS__).oref.is_valid())
 
 #define NCPP_FOREF_VALID(...) ncpp::F_valid_requirements::T_forward((__VA_ARGS__).keyed())
