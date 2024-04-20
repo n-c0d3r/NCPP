@@ -294,7 +294,10 @@ namespace ncpp {
             __VA_OPT__(requires std::is_base_of_v<__VA_ARGS__, typename F_oref__::F_object>)
 #define NCPP_FHANDLE_GENERATED_BODY(Name, ...) \
             public:\
-                using F_oref = F_oref__;\
+                using F_oref = F_oref__;       \
+                                               \
+            private:                               \
+                using F_this = Name<F_oref>;\
                 \
             public:\
                 template<ncpp::T_is_oref F_oref_in__>\
@@ -324,7 +327,104 @@ namespace ncpp {
                     NCPP_ASSERT_OREF_REQUIREMENTS(oref);\
                 \
                     return *((F_oref__*)(oref.object_p()));\
-                }
+                }                              \
+                                               \
+            public:                            \
+                    template<typename F_other_p__>\
+                    requires ncpp::T_is_object_up_castable<F_oref__, F_other_p__>\
+                    NCPP_FORCE_INLINE F_this& T_up_cast() & noexcept {\
+\
+                        return (F_this&)*this;\
+                    }\
+                    template<typename F_other_p__>\
+                    requires ncpp::T_is_object_up_castable<F_oref__, F_other_p__>\
+                    NCPP_FORCE_INLINE const F_this& T_up_cast() const & noexcept {\
+\
+                        return (const F_this&)*this;\
+                    }\
+                    template<typename F_other_p__>\
+                    requires ncpp::T_is_object_up_castable<F_oref__, F_other_p__>\
+                    NCPP_FORCE_INLINE F_this&& T_up_cast() && noexcept {\
+\
+                        return (F_this&&)*this;\
+                    }\
+                    template<typename F_other_p__>\
+                    requires ncpp::T_is_object_up_castable<F_oref__, F_other_p__>\
+                    NCPP_FORCE_INLINE const F_this&& T_up_cast() const && noexcept {\
+\
+                        return (const F_this&&)*this;\
+                    }\
+\
+                    template<typename F_other_p__>\
+                    requires ncpp::T_is_object_down_castable<F_oref__, F_other_p__>\
+                    NCPP_FORCE_INLINE F_this& T_down_cast() & noexcept {\
+\
+                        return (F_this&)*this;\
+                    }\
+                    template<typename F_other_p__>\
+                    requires ncpp::T_is_object_down_castable<F_oref__, F_other_p__>\
+                    NCPP_FORCE_INLINE const F_this& T_down_cast() const & noexcept {\
+\
+                        return (const F_this&)*this;\
+                    }\
+                    template<typename F_other_p__>\
+                    requires ncpp::T_is_object_down_castable<F_oref__, F_other_p__>\
+                    NCPP_FORCE_INLINE F_this&& T_down_cast() && noexcept {\
+\
+                        return (F_this&&)*this;\
+                    }\
+                    template<typename F_other_p__>\
+                    requires ncpp::T_is_object_down_castable<F_oref__, F_other_p__>\
+                    NCPP_FORCE_INLINE const F_this&& T_down_cast() const && noexcept {\
+\
+                        return (const F_this&&)*this;\
+                    }\
+\
+                    template<typename F_other_p__>\
+                    requires (ncpp::T_is_object_up_castable<F_oref__, F_other_p__> || ncpp::T_is_object_down_castable<F_oref__, F_other_p__>)\
+                    NCPP_FORCE_INLINE F_this& T_cast() & noexcept {\
+\
+                        return (F_this&)*this;\
+                    }\
+                    template<typename F_other_p__>\
+                    requires (ncpp::T_is_object_up_castable<F_oref__, F_other_p__> || ncpp::T_is_object_down_castable<F_oref__, F_other_p__>)\
+                    NCPP_FORCE_INLINE const F_this& T_cast() const & noexcept {\
+\
+                        return (const F_this&)*this;\
+                    }\
+                    template<typename F_other_p__>\
+                    requires (ncpp::T_is_object_up_castable<F_oref__, F_other_p__> || ncpp::T_is_object_down_castable<F_oref__, F_other_p__>)\
+                    NCPP_FORCE_INLINE F_this&& T_cast() && noexcept {\
+\
+                        return (F_this&&)*this;\
+                    }\
+                    template<typename F_other_p__>\
+                    requires (ncpp::T_is_object_up_castable<F_oref__, F_other_p__> || ncpp::T_is_object_down_castable<F_oref__, F_other_p__>)\
+                    NCPP_FORCE_INLINE const F_this&& T_cast() const && noexcept {\
+\
+                        return (const F_this&&)*this;\
+                    }\
+\
+                    template<typename F_other_p__>\
+                    NCPP_FORCE_INLINE F_this& T_force_cast() & noexcept {\
+\
+                        return (F_this&)*this;\
+                    }\
+                    template<typename F_other_p__>\
+                    NCPP_FORCE_INLINE const F_this& T_force_cast() const & noexcept {\
+\
+                        return (const F_this&)*this;\
+                    }\
+                    template<typename F_other_p__>\
+                    NCPP_FORCE_INLINE F_this&& T_force_cast() && noexcept {\
+\
+                        return (F_this&&)*this;\
+                    }\
+                    template<typename F_other_p__>\
+                    NCPP_FORCE_INLINE const F_this&& T_force_cast() const && noexcept {\
+\
+                        return (const F_this&&)*this;\
+                    }
 
 #define NCPP_FHANDLE_CHECK(...) ((__VA_ARGS__).oref.is_valid())
 
