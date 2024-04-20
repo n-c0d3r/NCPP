@@ -316,15 +316,35 @@ namespace ncpp {
                 \
                     return oref.is_valid();\
                 }\
-                NCPP_FORCE_INLINE typename F_oref__::F_passed_object* operator ->() const noexcept {\
+                NCPP_FORCE_INLINE bool is_valid() const noexcept {\
                 \
-                    NCPP_ASSERT_OREF_REQUIREMENTS(oref);\
+                    return oref.is_valid();\
+                }\
+                NCPP_FORCE_INLINE bool is_null() const noexcept {\
+                \
+                    return oref.is_null();\
+                }\
+                NCPP_FORCE_INLINE bool NQ_is_valid() const noexcept {\
+                \
+                    return oref.NQ_is_valid();\
+                }\
+                NCPP_FORCE_INLINE bool NQ_is_null() const noexcept {\
+                \
+                    return oref.NQ_is_null();\
+                }\
+                NCPP_FORCE_INLINE bool Q_is_valid() const noexcept {\
+                \
+                    return oref.Q_is_valid();\
+                }\
+                NCPP_FORCE_INLINE bool Q_is_null() const noexcept {\
+                \
+                    return oref.Q_is_null();\
+                }\
+                NCPP_FORCE_INLINE typename F_oref__::F_passed_object* operator ->() const noexcept {\
                 \
                     return (typename F_oref__::F_passed_object*)(oref.object_p());\
                 }\
                 NCPP_FORCE_INLINE typename F_oref__::F_passed_object& operator *() const noexcept {\
-                \
-                    NCPP_ASSERT_OREF_REQUIREMENTS(oref);\
                 \
                     return *((typename F_oref__::F_passed_object*)(oref.object_p()));\
                 }                              \
@@ -1584,8 +1604,14 @@ namespace ncpp {
         F_passed_object* object_p_ = 0;
 
     public:
-        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept { return (F_passed_object*)object_p_; }
-        NCPP_FORCE_INLINE F_passed_object& object() const noexcept { return *(object_p()); }
+        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            return (F_passed_object*)object_p_;
+        }
+        NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            return *(object_p());
+        }
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -1901,8 +1927,14 @@ namespace ncpp {
         F_object_key object_key_;
 
     public:
-        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept { return (F_passed_object*)object_p_; }
-        NCPP_FORCE_INLINE F_passed_object& object() const noexcept { return *(object_p()); }
+        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            return (F_passed_object*)object_p_;
+        }
+        NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            return *(object_p());
+        }
 
         NCPP_FORCE_INLINE F_object_key object_key() const noexcept { return object_key_; }
 
@@ -2251,8 +2283,14 @@ namespace ncpp {
         F_passed_object* object_p_ = 0;
 
     public:
-        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept { return (F_passed_object*)object_p_; }
-        NCPP_FORCE_INLINE F_passed_object& object() const noexcept { return *(object_p()); }
+        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            return (F_passed_object*)object_p_;
+        }
+        NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            return *(object_p());
+        }
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2597,8 +2635,14 @@ namespace ncpp {
         F_object_key object_key_;
 
     public:
-        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept { return (F_passed_object*)object_p_; }
-        NCPP_FORCE_INLINE F_passed_object& object() const noexcept { return *(object_p()); }
+        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            return (F_passed_object*)object_p_;
+        }
+        NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            return *(object_p());
+        }
 
         NCPP_FORCE_INLINE F_object_key object_key() const noexcept { return object_key_; }
 
@@ -2948,8 +2992,14 @@ namespace ncpp {
         F_passed_object* object_p_ = 0;
 
     public:
-        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept { return (F_passed_object*)object_p_; }
-        NCPP_FORCE_INLINE F_passed_object& object() const noexcept { return *(object_p()); }
+        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            return (F_passed_object*)object_p_;
+        }
+        NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            return *(object_p());
+        }
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -3321,8 +3371,14 @@ namespace ncpp {
         F_object_key object_key_;
 
     public:
-        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept { return (F_passed_object*)object_p_; }
-        NCPP_FORCE_INLINE F_passed_object& object() const noexcept { return *(object_p()); }
+        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            return (F_passed_object*)object_p_;
+        }
+        NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            return *(object_p());
+        }
 
         NCPP_FORCE_INLINE F_object_key object_key() const noexcept { return object_key_; }
 
@@ -3813,8 +3869,14 @@ namespace ncpp {
         F_passed_object* object_p_ = 0;
 
     public:
-        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept { return (F_passed_object*)object_p_; }
-        NCPP_FORCE_INLINE F_passed_object& object() const noexcept { return *(object_p()); }
+        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            return (F_passed_object*)object_p_;
+        }
+        NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            return *(object_p());
+        }
 
         NCPP_FORCE_INLINE u32 object_counter() const noexcept {
 
@@ -4298,8 +4360,14 @@ namespace ncpp {
         b8 is_shared_ = false;
 
     public:
-        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept { return (F_passed_object*)object_p_; }
-        NCPP_FORCE_INLINE F_passed_object& object() const noexcept { return *(object_p()); }
+        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            return (F_passed_object*)object_p_;
+        }
+        NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            return *(object_p());
+        }
 
         NCPP_FORCE_INLINE F_object_key object_key() const noexcept { return object_key_; }
 
@@ -5095,8 +5163,14 @@ namespace ncpp {
         b8 is_shared_ = false;
 
     public:
-        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept { return (F_passed_object*)object_p_; }
-        NCPP_FORCE_INLINE F_passed_object& object() const noexcept { return *(object_p()); }
+        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            return (F_passed_object*)object_p_;
+        }
+        NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            return *(object_p());
+        }
 
         NCPP_FORCE_INLINE u32 object_counter() const noexcept {
 
