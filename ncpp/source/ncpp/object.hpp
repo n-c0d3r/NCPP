@@ -332,98 +332,98 @@ namespace ncpp {
             public:                            \
                     template<typename F_other_p__>\
                     requires ncpp::T_is_object_up_castable<typename F_oref__::F_passed_object, F_other_p__>\
-                    NCPP_FORCE_INLINE Name<F_oref__::TF_bind_passed_object<F_other_p__>>& T_up_cast() & noexcept {\
+                    NCPP_FORCE_INLINE Name<F_oref__::template TF_bind_passed_object<F_other_p__>>& T_up_cast() & noexcept {\
 \
-                        return (Name<F_oref__::TF_bind_passed_object<F_other_p__>>&)*this;\
+                        return (Name<F_oref__::template TF_bind_passed_object<F_other_p__>>&)*this;\
                     }\
                     template<typename F_other_p__>\
                     requires ncpp::T_is_object_up_castable<typename F_oref__::F_passed_object, F_other_p__>\
-                    NCPP_FORCE_INLINE const Name<F_oref__::TF_bind_passed_object<F_other_p__>>& T_up_cast() const & noexcept {\
+                    NCPP_FORCE_INLINE const Name<F_oref__::template TF_bind_passed_object<F_other_p__>>& T_up_cast() const & noexcept {\
 \
-                        return (const Name<F_oref__::TF_bind_passed_object<F_other_p__>>&)*this;\
+                        return (const Name<F_oref__::template TF_bind_passed_object<F_other_p__>>&)*this;\
                     }\
                     template<typename F_other_p__>\
                     requires ncpp::T_is_object_up_castable<typename F_oref__::F_passed_object, F_other_p__>\
-                    NCPP_FORCE_INLINE Name<F_oref__::TF_bind_passed_object<F_other_p__>>&& T_up_cast() && noexcept {\
+                    NCPP_FORCE_INLINE Name<F_oref__::template TF_bind_passed_object<F_other_p__>>&& T_up_cast() && noexcept {\
 \
-                        return (Name<F_oref__::TF_bind_passed_object<F_other_p__>>&&)*this;\
+                        return (Name<F_oref__::template TF_bind_passed_object<F_other_p__>>&&)*this;\
                     }\
                     template<typename F_other_p__>\
                     requires ncpp::T_is_object_up_castable<typename F_oref__::F_passed_object, F_other_p__>\
-                    NCPP_FORCE_INLINE const Name<F_oref__::TF_bind_passed_object<F_other_p__>>&& T_up_cast() const && noexcept {\
+                    NCPP_FORCE_INLINE const Name<F_oref__::template TF_bind_passed_object<F_other_p__>>&& T_up_cast() const && noexcept {\
 \
-                        return (const Name<F_oref__::TF_bind_passed_object<F_other_p__>>&&)*this;\
+                        return (const Name<F_oref__::template TF_bind_passed_object<F_other_p__>>&&)*this;\
                     }\
 \
                     template<typename F_other_p__>\
                     requires ncpp::T_is_object_down_castable<typename F_oref__::F_passed_object, F_other_p__>\
-                    NCPP_FORCE_INLINE Name<F_oref__::TF_bind_passed_object<F_other_p__>>& T_down_cast() & noexcept {\
+                    NCPP_FORCE_INLINE Name<F_oref__::template TF_bind_passed_object<F_other_p__>>& T_down_cast() & noexcept {\
 \
-                        return (Name<F_oref__::TF_bind_passed_object<F_other_p__>>&)*this;\
+                        return (Name<F_oref__::template TF_bind_passed_object<F_other_p__>>&)*this;\
                     }\
                     template<typename F_other_p__>\
                     requires ncpp::T_is_object_down_castable<typename F_oref__::F_passed_object, F_other_p__>\
-                    NCPP_FORCE_INLINE const Name<F_oref__::TF_bind_passed_object<F_other_p__>>& T_down_cast() const & noexcept {\
+                    NCPP_FORCE_INLINE const Name<F_oref__::template TF_bind_passed_object<F_other_p__>>& T_down_cast() const & noexcept {\
 \
-                        return (const Name<F_oref__::TF_bind_passed_object<F_other_p__>>&)*this;\
+                        return (const Name<F_oref__::template TF_bind_passed_object<F_other_p__>>&)*this;\
                     }\
                     template<typename F_other_p__>\
                     requires ncpp::T_is_object_down_castable<typename F_oref__::F_passed_object, F_other_p__>\
-                    NCPP_FORCE_INLINE Name<F_oref__::TF_bind_passed_object<F_other_p__>>&& T_down_cast() && noexcept {\
+                    NCPP_FORCE_INLINE Name<F_oref__::template TF_bind_passed_object<F_other_p__>>&& T_down_cast() && noexcept {\
 \
-                        return (Name<F_oref__::TF_bind_passed_object<F_other_p__>>&&)*this;\
+                        return (Name<F_oref__::template TF_bind_passed_object<F_other_p__>>&&)*this;\
                     }\
                     template<typename F_other_p__>\
                     requires ncpp::T_is_object_down_castable<typename F_oref__::F_passed_object, F_other_p__>\
-                    NCPP_FORCE_INLINE const Name<F_oref__::TF_bind_passed_object<F_other_p__>>&& T_down_cast() const && noexcept {\
+                    NCPP_FORCE_INLINE const Name<F_oref__::template TF_bind_passed_object<F_other_p__>>&& T_down_cast() const && noexcept {\
 \
-                        return (const Name<F_oref__::TF_bind_passed_object<F_other_p__>>&&)*this;\
+                        return (const Name<F_oref__::template TF_bind_passed_object<F_other_p__>>&&)*this;\
                     }\
 \
                     template<typename F_other_p__>\
                     requires (ncpp::T_is_object_up_castable<typename F_oref__::F_passed_object, F_other_p__> || ncpp::T_is_object_down_castable<typename F_oref__::F_passed_object, F_other_p__>)\
-                    NCPP_FORCE_INLINE Name<F_oref__::TF_bind_passed_object<F_other_p__>>& T_cast() & noexcept {\
+                    NCPP_FORCE_INLINE Name<F_oref__::template TF_bind_passed_object<F_other_p__>>& T_cast() & noexcept {\
 \
-                        return (Name<F_oref__::TF_bind_passed_object<F_other_p__>>&)*this;\
+                        return (Name<F_oref__::template TF_bind_passed_object<F_other_p__>>&)*this;\
                     }\
                     template<typename F_other_p__>\
                     requires (ncpp::T_is_object_up_castable<typename F_oref__::F_passed_object, F_other_p__> || ncpp::T_is_object_down_castable<typename F_oref__::F_passed_object, F_other_p__>)\
-                    NCPP_FORCE_INLINE const Name<F_oref__::TF_bind_passed_object<F_other_p__>>& T_cast() const & noexcept {\
+                    NCPP_FORCE_INLINE const Name<F_oref__::template TF_bind_passed_object<F_other_p__>>& T_cast() const & noexcept {\
 \
-                        return (const Name<F_oref__::TF_bind_passed_object<F_other_p__>>&)*this;\
+                        return (const Name<F_oref__::template TF_bind_passed_object<F_other_p__>>&)*this;\
                     }\
                     template<typename F_other_p__>\
                     requires (ncpp::T_is_object_up_castable<typename F_oref__::F_passed_object, F_other_p__> || ncpp::T_is_object_down_castable<typename F_oref__::F_passed_object, F_other_p__>)\
-                    NCPP_FORCE_INLINE Name<F_oref__::TF_bind_passed_object<F_other_p__>>&& T_cast() && noexcept {\
+                    NCPP_FORCE_INLINE Name<F_oref__::template TF_bind_passed_object<F_other_p__>>&& T_cast() && noexcept {\
 \
-                        return (Name<F_oref__::TF_bind_passed_object<F_other_p__>>&&)*this;\
+                        return (Name<F_oref__::template TF_bind_passed_object<F_other_p__>>&&)*this;\
                     }\
                     template<typename F_other_p__>\
                     requires (ncpp::T_is_object_up_castable<typename F_oref__::F_passed_object, F_other_p__> || ncpp::T_is_object_down_castable<typename F_oref__::F_passed_object, F_other_p__>)\
-                    NCPP_FORCE_INLINE const Name<F_oref__::TF_bind_passed_object<F_other_p__>>&& T_cast() const && noexcept {\
+                    NCPP_FORCE_INLINE const Name<F_oref__::template TF_bind_passed_object<F_other_p__>>&& T_cast() const && noexcept {\
 \
-                        return (const Name<F_oref__::TF_bind_passed_object<F_other_p__>>&&)*this;\
+                        return (const Name<F_oref__::template TF_bind_passed_object<F_other_p__>>&&)*this;\
                     }\
 \
                     template<typename F_other_p__>\
-                    NCPP_FORCE_INLINE Name<F_oref__::TF_bind_passed_object<F_other_p__>>& T_force_cast() & noexcept {\
+                    NCPP_FORCE_INLINE Name<F_oref__::template TF_bind_passed_object<F_other_p__>>& T_force_cast() & noexcept {\
 \
-                        return (Name<F_oref__::TF_bind_passed_object<F_other_p__>>&)*this;\
+                        return (Name<F_oref__::template TF_bind_passed_object<F_other_p__>>&)*this;\
                     }\
                     template<typename F_other_p__>\
-                    NCPP_FORCE_INLINE const Name<F_oref__::TF_bind_passed_object<F_other_p__>>& T_force_cast() const & noexcept {\
+                    NCPP_FORCE_INLINE const Name<F_oref__::template TF_bind_passed_object<F_other_p__>>& T_force_cast() const & noexcept {\
 \
-                        return (const Name<F_oref__::TF_bind_passed_object<F_other_p__>>&)*this;\
+                        return (const Name<F_oref__::template TF_bind_passed_object<F_other_p__>>&)*this;\
                     }\
                     template<typename F_other_p__>\
-                    NCPP_FORCE_INLINE Name<F_oref__::TF_bind_passed_object<F_other_p__>>&& T_force_cast() && noexcept {\
+                    NCPP_FORCE_INLINE Name<F_oref__::template TF_bind_passed_object<F_other_p__>>&& T_force_cast() && noexcept {\
 \
-                        return (Name<F_oref__::TF_bind_passed_object<F_other_p__>>&&)*this;\
+                        return (Name<F_oref__::template TF_bind_passed_object<F_other_p__>>&&)*this;\
                     }\
                     template<typename F_other_p__>\
-                    NCPP_FORCE_INLINE const Name<F_oref__::TF_bind_passed_object<F_other_p__>>&& T_force_cast() const && noexcept {\
+                    NCPP_FORCE_INLINE const Name<F_oref__::template TF_bind_passed_object<F_other_p__>>&& T_force_cast() const && noexcept {\
 \
-                        return (const Name<F_oref__::TF_bind_passed_object<F_other_p__>>&&)*this;\
+                        return (const Name<F_oref__::template TF_bind_passed_object<F_other_p__>>&&)*this;\
                     }
 
 #define NCPP_FHANDLE_CHECK(...) ((__VA_ARGS__).oref.is_valid())
