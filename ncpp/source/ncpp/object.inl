@@ -13,11 +13,11 @@ namespace ncpp {
 
         ((F_object*)object_p_)->~F_object();
 
+        push_key_internal();
+
         au32* counter_p = ((au32*)object_p_) - (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32));
 
         allocator.deallocate(counter_p);
-
-        push_key_internal();
 
     }
     template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_child_oref__>
@@ -84,11 +84,11 @@ namespace ncpp {
 
         ((F_object*)object_p_)->~F_object();
 
+        push_key_internal();
+
         au32* counter_p = ((au32*)object_p_) - (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32));
 
         allocator.deallocate(counter_p);
-
-        push_key_internal();
 
     }
     template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_child_oref__>
@@ -157,11 +157,11 @@ namespace ncpp {
 
         ((F_object*)object_p_)->~F_object();
 
+        push_key_internal();
+
         au32* counter_p = ((au32*)object_p_) - (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32));
 
         allocator.deallocate(counter_p);
-
-        push_key_internal();
 
     }
     template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_child_oref__>
