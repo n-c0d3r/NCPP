@@ -9,8 +9,6 @@ namespace ncpp {
     template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_child_oref__>
     NCPP_FORCE_INLINE void TU_oref<F_passed_object__, F_allocator__, F_options__, true, F_child_oref__>::destroy_object_internal() noexcept {
 
-        push_key_internal();
-
         F_allocator allocator;
 
         ((F_object*)object_p_)->~F_object();
@@ -18,6 +16,8 @@ namespace ncpp {
         au32* counter_p = ((au32*)object_p_) - (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32));
 
         allocator.deallocate(counter_p);
+
+        push_key_internal();
 
     }
     template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_child_oref__>
@@ -80,8 +80,6 @@ namespace ncpp {
     template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_child_oref__>
     NCPP_FORCE_INLINE void TS_oref<F_passed_object__, F_allocator__, F_options__, true, F_child_oref__>::destroy_object_internal() noexcept {
 
-        push_key_internal();
-
         F_allocator allocator;
 
         ((F_object*)object_p_)->~F_object();
@@ -89,6 +87,8 @@ namespace ncpp {
         au32* counter_p = ((au32*)object_p_) - (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32));
 
         allocator.deallocate(counter_p);
+
+        push_key_internal();
 
     }
     template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_child_oref__>
@@ -153,8 +153,6 @@ namespace ncpp {
     template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_child_oref__>
     NCPP_FORCE_INLINE void TX_oref<F_passed_object__, F_allocator__, F_options__, true, F_child_oref__>::destroy_object_internal() noexcept {
 
-        push_key_internal();
-
         F_allocator allocator;
 
         ((F_object*)object_p_)->~F_object();
@@ -162,6 +160,8 @@ namespace ncpp {
         au32* counter_p = ((au32*)object_p_) - (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32));
 
         allocator.deallocate(counter_p);
+
+        push_key_internal();
 
     }
     template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_child_oref__>
