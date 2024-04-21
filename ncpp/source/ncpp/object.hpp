@@ -295,6 +295,12 @@ namespace ncpp {
 #define NCPP_FHANDLE_GENERATED_BODY(Name, ...) \
             public:\
                 using F_oref = F_oref__;       \
+\
+            public:\
+                template<typename F_new_requirements__>\
+                using TF_bind_requirements = typename F_oref::template TF_bind_requirements<F_new_requirements__>;\
+                template<typename F_passed_object_in__>\
+                using TF_bind_passed_object = typename F_oref::template TF_bind_passed_object<F_passed_object_in__>;\
                                                \
             private:                               \
                 using F_this = Name<F_oref>;\
