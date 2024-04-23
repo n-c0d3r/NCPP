@@ -3613,6 +3613,8 @@ namespace ncpp {
 
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
             	x.reset_no_destroy_internal();
+			else if(object_p_)
+				increase_shared_object_counter_unsafe(object_p_);
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
@@ -3628,6 +3630,8 @@ namespace ncpp {
 
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
 				x.reset_no_destroy_internal();
+			else if(object_p_)
+				increase_shared_object_counter_unsafe(object_p_);
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
@@ -3707,6 +3711,8 @@ namespace ncpp {
 
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
 				x.reset_no_destroy_internal();
+			else if(object_p_)
+					increase_shared_object_counter_unsafe(object_p_);
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
@@ -3724,6 +3730,8 @@ namespace ncpp {
 
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
 				x.reset_no_destroy_internal();
+			else if(object_p_)
+				increase_shared_object_counter_unsafe(object_p_);
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
@@ -4127,6 +4135,8 @@ namespace ncpp {
 
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
             	x.reset_no_destroy_internal();
+			else if(object_p_)
+				increase_shared_object_counter_unsafe(object_p_);
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
@@ -4142,6 +4152,8 @@ namespace ncpp {
 
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
 				x.reset_no_destroy_internal();
+			else if(object_p_)
+				increase_shared_object_counter_unsafe(object_p_);
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
@@ -4218,6 +4230,8 @@ namespace ncpp {
 
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
 				x.reset_no_destroy_internal();
+			else if(object_p_)
+				increase_shared_object_counter_unsafe(object_p_);
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
@@ -4235,6 +4249,8 @@ namespace ncpp {
 
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
 				x.reset_no_destroy_internal();
+			else if(object_p_)
+				increase_shared_object_counter_unsafe(object_p_);
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
@@ -4663,8 +4679,12 @@ namespace ncpp {
         {
 
 			if(x.is_shared_)
+			{
 				if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
 					x.reset_no_destroy_internal();
+				else if (object_p_)
+					increase_shared_object_counter_unsafe(object_p_);
+			}
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
@@ -4680,8 +4700,12 @@ namespace ncpp {
             is_shared_ = x.is_shared_;
 
 			if(x.is_shared_)
+			{
 				if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
 					x.reset_no_destroy_internal();
+				else if (object_p_)
+					increase_shared_object_counter_unsafe(object_p_);
+			}
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
@@ -4732,6 +4756,8 @@ namespace ncpp {
 
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
 				x.reset_no_destroy_internal();
+			else if(object_p_)
+				increase_shared_object_counter_unsafe(object_p_);
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
@@ -4748,6 +4774,8 @@ namespace ncpp {
 
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
 				x.reset_no_destroy_internal();
+			else if(object_p_)
+				increase_shared_object_counter_unsafe(object_p_);
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
@@ -4876,8 +4904,12 @@ namespace ncpp {
         {
 
 			if(x.is_shared_)
+			{
 				if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
 					x.reset_no_destroy_internal();
+				else if (object_p_)
+					increase_shared_object_counter_unsafe(object_p_);
+			}
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
@@ -4895,8 +4927,12 @@ namespace ncpp {
             is_shared_ = x.is_shared_;
 
 			if(x.is_shared_)
+			{
 				if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
 					x.reset_no_destroy_internal();
+				else if (object_p_)
+					increase_shared_object_counter_unsafe(object_p_);
+			}
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
@@ -4953,6 +4989,8 @@ namespace ncpp {
 
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
 				x.reset_no_destroy_internal();
+			else if(object_p_)
+				increase_shared_object_counter_unsafe(object_p_);
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
@@ -4971,6 +5009,8 @@ namespace ncpp {
 
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
 				x.reset_no_destroy_internal();
+			else if(object_p_)
+				increase_shared_object_counter_unsafe(object_p_);
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
 			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
@@ -5494,10 +5534,17 @@ namespace ncpp {
             is_shared_(x.is_shared_)
         {
 
-//            x.reset_no_destroy_internal();
+			if(x.is_shared_)
+			{
+				if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+					x.reset_no_destroy_internal();
+				else if (object_p_)
+					increase_shared_object_counter_unsafe(object_p_);
+			}
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
-//            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+            	NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
         }
         NCPP_FORCE_INLINE TX_oref& operator = (TX_oref&& x) noexcept
@@ -5508,10 +5555,17 @@ namespace ncpp {
             object_p_ = (F_passed_object*)x.object_p_;
             is_shared_ = x.is_shared_;
 
-//            x.reset_no_destroy_internal();
+			if(x.is_shared_)
+			{
+				if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+					x.reset_no_destroy_internal();
+				else if (object_p_)
+					increase_shared_object_counter_unsafe(object_p_);
+			}
 
-            NCPP_ASSERT_OREF_REQUIREMENTS(this);
-//            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
             return *this;
         }
@@ -5554,10 +5608,14 @@ namespace ncpp {
             is_shared_(x.object_p_ != 0)
         {
 
-            x.reset_no_destroy_internal();
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				x.reset_no_destroy_internal();
+			else if (object_p_)
+				increase_shared_object_counter_unsafe(object_p_);
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
         }
         NCPP_FORCE_INLINE TX_oref& operator = (TS_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
@@ -5568,10 +5626,14 @@ namespace ncpp {
             object_p_ = (F_passed_object*)x.object_p_;
             is_shared_ = (x.object_p_ != 0);
 
-            x.reset_no_destroy_internal();
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				x.reset_no_destroy_internal();
+			else if (object_p_)
+				increase_shared_object_counter_unsafe(object_p_);
 
-            NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
             return *this;
         }
@@ -5691,10 +5753,16 @@ namespace ncpp {
         {
 
 			if(x.is_shared_)
-				x.reset_no_destroy_internal();
+			{
+				if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+					x.reset_no_destroy_internal();
+				else if (object_p_)
+					increase_shared_object_counter_unsafe(object_p_);
+			}
 
-            NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
         }
         template<typename F_other_p__>
@@ -5708,10 +5776,16 @@ namespace ncpp {
             is_shared_ = x.is_shared_;
 
 			if(x.is_shared_)
-				x.reset_no_destroy_internal();
+			{
+				if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+					x.reset_no_destroy_internal();
+				else if (object_p_)
+					increase_shared_object_counter_unsafe(object_p_);
+			}
 
-            NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
             return *this;
         }
@@ -5760,10 +5834,14 @@ namespace ncpp {
             is_shared_(x.object_p_ != 0)
         {
 
-            x.reset_no_destroy_internal();
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				x.reset_no_destroy_internal();
+			else if (object_p_)
+				increase_shared_object_counter_unsafe(object_p_);
 
-            NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
         }
         template<typename F_other_p__>
@@ -5776,10 +5854,14 @@ namespace ncpp {
             object_p_ = (F_passed_object*)x.object_p_;
             is_shared_ = (x.object_p_ != 0);
 
-            x.reset_no_destroy_internal();
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				x.reset_no_destroy_internal();
+			else if (object_p_)
+				increase_shared_object_counter_unsafe(object_p_);
 
-            NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
             return *this;
         }
