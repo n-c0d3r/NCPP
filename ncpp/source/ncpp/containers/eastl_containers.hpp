@@ -557,7 +557,7 @@ namespace ncpp {
             return TG_span<F__>((F__*)inil.begin(), (sz)inil.size() );
         }
 
-#define NCPP_INIL_SPAN(...) ncpp::containers::T_inil_span({ __VA_ARGS__ })
+#define NCPP_INIL_SPAN(...) { __VA_OPT__(ncpp::containers::T_inil_span({ __VA_ARGS__ })) }
 
 
 
