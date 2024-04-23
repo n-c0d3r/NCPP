@@ -1705,10 +1705,10 @@ namespace ncpp {
             object_p_(x.object_p_)
         {
 
-            x.reset_no_destroy_internal();
+//            x.reset_no_destroy_internal();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+//            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
         }
         NCPP_FORCE_INLINE TW_oref& operator = (TW_oref&& x) noexcept
@@ -1716,10 +1716,10 @@ namespace ncpp {
 
             object_p_ = (F_passed_object*)x.object_p_;
 
-            x.reset_no_destroy_internal();
+//            x.reset_no_destroy_internal();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+//            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
             return *this;
         }
@@ -1752,10 +1752,10 @@ namespace ncpp {
             object_p_((F_passed_object*)x.object_p_)
         {
 
-            x.reset_no_destroy_internal();
+//            x.reset_no_destroy_internal();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+//            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
         }
         template<typename F_other_p__>
@@ -1765,10 +1765,10 @@ namespace ncpp {
 
             object_p_ = (F_passed_object*)x.object_p_;
 
-            x.reset_no_destroy_internal();
+//            x.reset_no_destroy_internal();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+//            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
             return *this;
         }
@@ -2067,10 +2067,10 @@ namespace ncpp {
             object_key_(x.object_key_)
         {
 
-            x.reset();
+//            x.reset();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+//            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
         }
         NCPP_FORCE_INLINE TK_oref& operator = (TK_oref&& x) noexcept
@@ -2079,10 +2079,10 @@ namespace ncpp {
             object_p_ = (F_passed_object*)x.object_p_;
             object_key_ = x.object_key_;
 
-            x.reset();
+//            x.reset();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+//            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
             return *this;
         }
@@ -2116,10 +2116,10 @@ namespace ncpp {
             object_key_(x.object_key_)
         {
 
-            x.reset();
+//            x.reset();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+//            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
         }
         template<typename F_other_p__>
@@ -2130,10 +2130,10 @@ namespace ncpp {
             object_p_ = (F_passed_object*)x.object_p_;
             object_key_ = x.object_key_;
 
-            x.reset();
+//            x.reset();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+//            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
             return *this;
         }
@@ -2432,10 +2432,10 @@ namespace ncpp {
             object_p_(x.object_p_)
         {
 
-            x.reset();
+//            x.reset();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+//            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
         }
         NCPP_FORCE_INLINE TK_oref& operator = (TK_oref&& x) noexcept
@@ -2443,10 +2443,10 @@ namespace ncpp {
 
             object_p_ = (F_passed_object*)x.object_p_;
 
-            x.reset();
+//            x.reset();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+//            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
             return *this;
         }
@@ -2477,10 +2477,10 @@ namespace ncpp {
             object_p_((F_passed_object*)x.object_p_)
         {
 
-            x.reset();
+//            x.reset();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+//            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
         }
         template<typename F_other_p__>
@@ -2490,10 +2490,10 @@ namespace ncpp {
 
             object_p_ = (F_passed_object*)x.object_p_;
 
-            x.reset();
+//            x.reset();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+//            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
             return *this;
         }
@@ -4646,7 +4646,8 @@ namespace ncpp {
             is_shared_(x.is_shared_)
         {
 
-            x.reset_no_destroy_internal();
+			if(x.is_shared_)
+            	x.reset_no_destroy_internal();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
             NCPP_ASSERT_OREF_REQUIREMENTS(&x);
@@ -4660,7 +4661,8 @@ namespace ncpp {
             object_key_ = x.object_key_;
             is_shared_ = x.is_shared_;
 
-            x.reset_no_destroy_internal();
+			if(x.is_shared_)
+				x.reset_no_destroy_internal();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
             NCPP_ASSERT_OREF_REQUIREMENTS(&x);
@@ -4677,7 +4679,7 @@ namespace ncpp {
             if(object_p_)
                 set_object_counter_to_one_unsafe(object_p_);
 
-            x.reset_no_destroy_internal();
+			x.reset_no_destroy_internal();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
             NCPP_ASSERT_OREF_REQUIREMENTS(&x);
@@ -4694,7 +4696,7 @@ namespace ncpp {
             if(object_p_)
                 set_object_counter_to_one_unsafe(object_p_);
 
-            x.reset_no_destroy_internal();
+			x.reset_no_destroy_internal();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
             NCPP_ASSERT_OREF_REQUIREMENTS(&x);
@@ -4708,7 +4710,7 @@ namespace ncpp {
             is_shared_(x.object_p_ != 0)
         {
 
-            x.reset_no_destroy_internal();
+			x.reset_no_destroy_internal();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
             NCPP_ASSERT_OREF_REQUIREMENTS(&x);
@@ -4722,7 +4724,7 @@ namespace ncpp {
             object_key_ = x.object_key_;
             is_shared_ = (x.object_p_ != 0);
 
-            x.reset_no_destroy_internal();
+			x.reset_no_destroy_internal();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
             NCPP_ASSERT_OREF_REQUIREMENTS(&x);
@@ -4763,10 +4765,10 @@ namespace ncpp {
             is_shared_(false)
         {
 
-            x.reset_no_destroy_internal();
+//			x.reset_no_destroy_internal();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+//            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
         }
         NCPP_FORCE_INLINE TX_oref& operator = (TK_oref<F_passed_object, F_options, is_has_object_key, F_requirements>&& x) noexcept
         {
@@ -4777,10 +4779,10 @@ namespace ncpp {
             object_key_ = x.object_key_;
             is_shared_ = false;
 
-            x.reset_no_destroy_internal();
+//			x.reset_no_destroy_internal();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+//            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
             return *this;
         }
@@ -4849,7 +4851,8 @@ namespace ncpp {
             is_shared_(x.is_shared_)
         {
 
-            x.reset_no_destroy_internal();
+			if(x.is_shared_)
+				x.reset_no_destroy_internal();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
             NCPP_ASSERT_OREF_REQUIREMENTS(&x);
@@ -4865,7 +4868,8 @@ namespace ncpp {
             object_key_ = x.object_key_;
             is_shared_ = x.is_shared_;
 
-            x.reset_no_destroy_internal();
+			if(x.is_shared_)
+				x.reset_no_destroy_internal();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
             NCPP_ASSERT_OREF_REQUIREMENTS(&x);
@@ -4982,10 +4986,10 @@ namespace ncpp {
             is_shared_(false)
         {
 
-            x.reset_no_destroy_internal();
+//            x.reset_no_destroy_internal();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+//            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
         }
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
@@ -4998,10 +5002,10 @@ namespace ncpp {
             object_key_ = x.object_key_;
             is_shared_ = false;
 
-            x.reset_no_destroy_internal();
+//            x.reset_no_destroy_internal();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+//            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
             return *this;
         }
@@ -5458,10 +5462,10 @@ namespace ncpp {
             is_shared_(x.is_shared_)
         {
 
-            x.reset_no_destroy_internal();
+//            x.reset_no_destroy_internal();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+//            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
         }
         NCPP_FORCE_INLINE TX_oref& operator = (TX_oref&& x) noexcept
@@ -5472,10 +5476,10 @@ namespace ncpp {
             object_p_ = (F_passed_object*)x.object_p_;
             is_shared_ = x.is_shared_;
 
-            x.reset_no_destroy_internal();
+//            x.reset_no_destroy_internal();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+//            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
             return *this;
         }
@@ -5571,10 +5575,10 @@ namespace ncpp {
             is_shared_(false)
         {
 
-            x.reset_no_destroy_internal();
+//            x.reset_no_destroy_internal();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+//            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
         }
         NCPP_FORCE_INLINE TX_oref& operator = (TK_oref<F_passed_object, F_options, is_has_object_key, F_requirements>&& x) noexcept
@@ -5585,10 +5589,10 @@ namespace ncpp {
             object_p_ = (F_passed_object*)x.object_p_;
             is_shared_ = false;
 
-            x.reset_no_destroy_internal();
+//            x.reset_no_destroy_internal();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+//            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
             return *this;
         }
@@ -5654,7 +5658,8 @@ namespace ncpp {
             is_shared_(x.is_shared_)
         {
 
-            x.reset_no_destroy_internal();
+			if(x.is_shared_)
+				x.reset_no_destroy_internal();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
             NCPP_ASSERT_OREF_REQUIREMENTS(&x);
@@ -5670,7 +5675,8 @@ namespace ncpp {
             object_p_ = (F_passed_object*)x.object_p_;
             is_shared_ = x.is_shared_;
 
-            x.reset_no_destroy_internal();
+			if(x.is_shared_)
+				x.reset_no_destroy_internal();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
             NCPP_ASSERT_OREF_REQUIREMENTS(&x);
@@ -5783,10 +5789,10 @@ namespace ncpp {
             is_shared_(false)
         {
 
-            x.reset_no_destroy_internal();
+//            x.reset_no_destroy_internal();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+//            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
         }
         template<typename F_other_p__>
@@ -5799,10 +5805,10 @@ namespace ncpp {
             object_p_ = (F_passed_object*)x.object_p_;
             is_shared_ = false;
 
-            x.reset_no_destroy_internal();
+//            x.reset_no_destroy_internal();
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
+//            NCPP_ASSERT_OREF_REQUIREMENTS(&x);
 
             return *this;
         }
