@@ -631,10 +631,10 @@ namespace ncpp::internal {
 
 
 ////////////////////////////////////////////////////////////////////////////////////
-//  NCPP_LVCONST(...) macro
+//  NCPP_LRCONST(...) macro
 ////////////////////////////////////////////////////////////////////////////////////
 
-#define NCPP_LVCONST(...) ((const std::remove_const_t<std::remove_reference_t<decltype(__VA_ARGS__)>>&)(__VA_ARGS__))
+#define NCPP_LRCONST(...) ((const std::remove_const_t<std::remove_reference_t<decltype(__VA_ARGS__)>>&)(__VA_ARGS__))
 
 
 
