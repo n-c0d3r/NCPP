@@ -116,4 +116,6 @@ namespace ncpp {
 
 #include <ncpp/utilities/flag.hpp>
 
+#include <ncpp/utilities/hash_type_memory.hpp>
+
 #pragma endregion
