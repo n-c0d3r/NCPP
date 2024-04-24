@@ -62,6 +62,9 @@ namespace ncpp {
 
 			NCPP_FORCE_INLINE sz operator()(const F__& x) const noexcept {
 
+				if constexpr (sizeof(F__) == sizeof(sz))
+					return *((const sz*)&x);
+
 				const u32 e_count = sizeof(F__) / sizeof(u32);
 
 				u32 hash = 0;
