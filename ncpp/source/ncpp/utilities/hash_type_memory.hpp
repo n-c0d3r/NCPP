@@ -67,7 +67,7 @@ namespace ncpp {
 				u32 hash = 0;
 
 #define NCPP_INTERNAL_UPDATE_HASH_TYPE_MEM(...) \
-					u32 element = ((const u32*)&x)[__VA_ARGS__];\
+					u32 element = __VA_ARGS__;\
 \
 					element *= 0xcc9e2d51;\
 					element = ( element << 15 ) | ( element >> (32 - 15) );\
@@ -80,7 +80,7 @@ namespace ncpp {
 #define NCPP_INTERNAL_UPDATE_HASH_TYPE_MEM_LOOP_STEP(...) \
 				if constexpr (e_count > __VA_ARGS__)\
 				{\
-					NCPP_INTERNAL_UPDATE_HASH_TYPE_MEM(__VA_ARGS__);\
+					NCPP_INTERNAL_UPDATE_HASH_TYPE_MEM(((const u32*)&x)[__VA_ARGS__]);\
 				}
 
 				NCPP_INTERNAL_UPDATE_HASH_TYPE_MEM_LOOP_STEP(0);
@@ -186,7 +186,7 @@ namespace ncpp {
 
 				if constexpr (sizeof(F__) % sizeof(u32)) {
 
-					NCPP_INTERNAL_UPDATE_HASH_TYPE_MEM(e_count);
+					NCPP_INTERNAL_UPDATE_HASH_TYPE_MEM(((const u8*)&x)[e_count * sizeof(u32)]);
 				}
 
 				return murmur_finalize_32(hash);
