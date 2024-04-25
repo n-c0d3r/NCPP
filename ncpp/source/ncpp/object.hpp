@@ -293,25 +293,25 @@ namespace ncpp {
                                                                                         \
             template<ncpp::T_is_oref F_oref__>\
             __VA_OPT__(requires std::is_base_of_v<Name, typename F_oref__::F_object>) \
-			struct Name;                                                                          \
+			struct TF##NamePrefixConnector##Name;                                                                          \
                                                                                         \
-            __VA_OPT__(using U##OrefIndex##NamePrefixConnector##Name = Name<ncpp::TU<__VA_ARGS__>>;) \
+            __VA_OPT__(using U##OrefIndex##NamePrefixConnector##Name = TF##NamePrefixConnector##Name<ncpp::TU<__VA_ARGS__>>;) \
                                                                                         \
-            __VA_OPT__(using K##OrefIndex##NamePrefixConnector##Name = Name<ncpp::TK<__VA_ARGS__>>;) \
+            __VA_OPT__(using K##OrefIndex##NamePrefixConnector##Name = TF##NamePrefixConnector##Name<ncpp::TK<__VA_ARGS__>>;) \
                                                                                         \
-            __VA_OPT__(using S##OrefIndex##NamePrefixConnector##Name = Name<ncpp::TS<__VA_ARGS__>>;) \
+            __VA_OPT__(using S##OrefIndex##NamePrefixConnector##Name = TF##NamePrefixConnector##Name<ncpp::TS<__VA_ARGS__>>;) \
                                                                                         \
-            __VA_OPT__(using X##OrefIndex##NamePrefixConnector##Name = Name<ncpp::TX<__VA_ARGS__>>;) \
+            __VA_OPT__(using X##OrefIndex##NamePrefixConnector##Name = TF##NamePrefixConnector##Name<ncpp::TX<__VA_ARGS__>>;) \
                                                                                         \
-            __VA_OPT__(using K##OrefIndex##_valid##NamePrefixConnector##Name = Name<ncpp::TK_valid<__VA_ARGS__>>;) \
+            __VA_OPT__(using K##OrefIndex##_valid##NamePrefixConnector##Name = TF##NamePrefixConnector##Name<ncpp::TK_valid<__VA_ARGS__>>;) \
                                                                                         \
-            __VA_OPT__(using S##OrefIndex##_valid##NamePrefixConnector##Name = Name<ncpp::TS_valid<__VA_ARGS__>>;) \
+            __VA_OPT__(using S##OrefIndex##_valid##NamePrefixConnector##Name = TF##NamePrefixConnector##Name<ncpp::TS_valid<__VA_ARGS__>>;) \
                                                                                         \
-            __VA_OPT__(using X##OrefIndex##_valid##NamePrefixConnector##Name = Name<ncpp::TX_valid<__VA_ARGS__>>;) \
+            __VA_OPT__(using X##OrefIndex##_valid##NamePrefixConnector##Name = TF##NamePrefixConnector##Name<ncpp::TX_valid<__VA_ARGS__>>;) \
                                                                                         \
             template<ncpp::T_is_oref F_oref__>\
-            __VA_OPT__(requires std::is_base_of_v<Name, typename F_oref__::F_object>) \
-			struct PreClassKeyword Name
+            __VA_OPT__(requires std::is_base_of_v<__VA_ARGS__, typename F_oref__::F_object>) \
+			struct PreClassKeyword TF##NamePrefixConnector##Name
 
 #define NCPP_FHANDLE_TEMPLATE(Name, ...) NCPP_FHANDLE_TEMPLATE_ADVANCED(Name,_,,,__VA_ARGS__)
 #define NCPP_FHANDLE2_TEMPLATE(Name, ...) NCPP_FHANDLE_TEMPLATE_ADVANCED(Name,_,2,,__VA_ARGS__)
