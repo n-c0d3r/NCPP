@@ -316,7 +316,7 @@ namespace ncpp {
 #define NCPP_FHANDLE_TEMPLATE(Name, ...) NCPP_FHANDLE_TEMPLATE_ADVANCED(Name,_,,,__VA_ARGS__)
 #define NCPP_FHANDLE2_TEMPLATE(Name, ...) NCPP_FHANDLE_TEMPLATE_ADVANCED(Name,_,2,,__VA_ARGS__)
 
-#define NCPP_FHANDLE_GENERATED_BODY(Name, ...) \
+#define NCPP_FHANDLE_GENERATED_BODY_ADVANCED(Name, NamePrefixConnector, ...) \
             public:\
                 using F_oref = F_oref__;       \
 \
@@ -514,6 +514,8 @@ namespace ncpp {
 \
                     return (const TF_bind_requirements<F_requirements_in__>&&)*this;\
                 }
+
+#define NCPP_FHANDLE_GENERATED_BODY(Name, NamePrefixConnector, ...) NCPP_FHANDLE_GENERATED_BODY_ADVANCED(Name,_,__VA_ARGS__)
 
 #define NCPP_FHANDLE_CHECK(...) ((__VA_ARGS__).oref.is_valid())
 
