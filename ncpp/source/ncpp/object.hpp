@@ -309,6 +309,20 @@ namespace ncpp {
                                                                                         \
             __VA_OPT__(using X##OrefIndex##_valid##NamePrefixConnector##Name = TF##NamePrefixConnector##Name<ncpp::TX_valid<__VA_ARGS__>>;) \
                                                                                         \
+            __VA_OPT__(using UPA##OrefIndex##NamePrefixConnector##Name = TF##NamePrefixConnector##Name<ncpp::TU<__VA_ARGS__>>&&;) \
+                                                                                        \
+            __VA_OPT__(using KPA##OrefIndex##NamePrefixConnector##Name = const TF##NamePrefixConnector##Name<ncpp::TK<__VA_ARGS__>>&;) \
+                                                                                        \
+            __VA_OPT__(using SPA##OrefIndex##NamePrefixConnector##Name = const TF##NamePrefixConnector##Name<ncpp::TS<__VA_ARGS__>>&;) \
+                                                                                        \
+            __VA_OPT__(using XPA##OrefIndex##NamePrefixConnector##Name = const TF##NamePrefixConnector##Name<ncpp::TX<__VA_ARGS__>>&;) \
+                                                                                        \
+            __VA_OPT__(using KPA##OrefIndex##_valid##NamePrefixConnector##Name = const TF##NamePrefixConnector##Name<ncpp::TK_valid<__VA_ARGS__>>&;) \
+                                                                                        \
+            __VA_OPT__(using SPA##OrefIndex##_valid##NamePrefixConnector##Name = const TF##NamePrefixConnector##Name<ncpp::TS_valid<__VA_ARGS__>>&;) \
+                                                                                        \
+            __VA_OPT__(using XPA##OrefIndex##_valid##NamePrefixConnector##Name = const TF##NamePrefixConnector##Name<ncpp::TX_valid<__VA_ARGS__>>&;) \
+                                                                                        \
             template<ncpp::T_is_oref F_oref__>\
             __VA_OPT__(requires std::is_base_of_v<__VA_ARGS__, typename F_oref__::F_object>) \
 			struct PreClassKeyword TF##NamePrefixConnector##Name
