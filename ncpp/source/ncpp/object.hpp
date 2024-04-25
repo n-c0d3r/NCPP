@@ -293,7 +293,7 @@ namespace ncpp {
                                                                                         \
             template<ncpp::T_is_oref F_oref__>\
             __VA_OPT__(requires std::is_base_of_v<Name, typename F_oref__::F_object>) \
-			class Name;                                                                          \
+			struct Name;                                                                          \
                                                                                         \
             __VA_OPT__(using U##OrefIndex##NamePrefixConnector##Name = Name<ncpp::TU<__VA_ARGS__>>;) \
                                                                                         \
@@ -311,7 +311,7 @@ namespace ncpp {
                                                                                         \
             template<ncpp::T_is_oref F_oref__>\
             __VA_OPT__(requires std::is_base_of_v<Name, typename F_oref__::F_object>) \
-			class PreClassKeyword Name
+			struct PreClassKeyword Name
 
 #define NCPP_FHANDLE_TEMPLATE(Name, ...) NCPP_FHANDLE_TEMPLATE_ADVANCED(Name,_,,,__VA_ARGS__)
 #define NCPP_FHANDLE2_TEMPLATE(Name, ...) NCPP_FHANDLE_TEMPLATE_ADVANCED(Name,_,2,,__VA_ARGS__)
