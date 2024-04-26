@@ -189,7 +189,13 @@ namespace ncpp {
 
 				if constexpr (sizeof(F__) % sizeof(u32)) {
 
-					NCPP_INTERNAL_UPDATE_HASH_TYPE_MEM(((const u8*)&x)[e_count * sizeof(u32)]);
+					NCPP_INTERNAL_UPDATE_HASH_TYPE_MEM((
+						(((const u32*)&x)[e_count])
+						& ~(
+							1
+							<< (sizeof(F__) % sizeof(u32))
+						)
+					));
 				}
 
 				return murmur_finalize_32(hash);
