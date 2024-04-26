@@ -336,9 +336,13 @@ namespace ncpp {
 \
             public:\
                 template<typename F_new_requirements__>\
-                using TF_bind_requirements = typename F_oref::template TF_bind_requirements<F_new_requirements__>;\
+                using TF_bind_requirements = TF##NamePrefixConnector##Name<  \
+					typename F_oref::template TF_bind_requirements<F_new_requirements__>\
+                >;                                                             \
                 template<typename F_passed_object_in__>\
-                using TF_bind_passed_object = typename F_oref::template TF_bind_passed_object<F_passed_object_in__>;\
+                using TF_bind_passed_object = TF##NamePrefixConnector##Name< \
+					typename F_oref::template TF_bind_passed_object<F_passed_object_in__>\
+				>;                                                         \
                                                \
             private:                               \
                 using F_this = TF##NamePrefixConnector##Name<F_oref>;\
