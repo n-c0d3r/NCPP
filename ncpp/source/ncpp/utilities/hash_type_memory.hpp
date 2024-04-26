@@ -65,7 +65,7 @@ namespace ncpp {
 				if constexpr (sizeof(F__) == sizeof(sz))
 					return *((const sz*)&x);
 
-				const u32 e_count = sizeof(F__) / sizeof(u32);
+				constexpr u32 e_count = sizeof(F__) / sizeof(u32);
 
 				u32 hash = 0;
 
@@ -191,9 +191,12 @@ namespace ncpp {
 
 					NCPP_INTERNAL_UPDATE_HASH_TYPE_MEM((
 						(((const u32*)&x)[e_count])
-						& ~(
-							1
-							<< (sizeof(F__) % sizeof(u32))
+						& (
+							(
+								1
+								<< (sizeof(F__) % sizeof(u32))
+							)
+							- 1
 						)
 					));
 				}
