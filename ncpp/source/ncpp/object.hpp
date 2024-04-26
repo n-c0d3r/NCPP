@@ -495,19 +495,19 @@ namespace ncpp {
                 }                          \
                                                \
             public:                            \
-                NCPP_FORCE_INLINE auto& no_requirements() & noexcept {\
+                NCPP_FORCE_INLINE TF_bind_requirements<ncpp::F_no_requirements>& no_requirements() & noexcept {\
 \
                     return (TF_bind_requirements<ncpp::F_no_requirements>&)*this;\
                 }\
-                NCPP_FORCE_INLINE const auto& no_requirements() const & noexcept {\
+                NCPP_FORCE_INLINE const TF_bind_requirements<ncpp::F_no_requirements>& no_requirements() const & noexcept {\
 \
                     return (const TF_bind_requirements<ncpp::F_no_requirements>&)*this;\
                 }\
-                NCPP_FORCE_INLINE auto&& no_requirements() && noexcept {\
+                NCPP_FORCE_INLINE TF_bind_requirements<ncpp::F_no_requirements>&& no_requirements() && noexcept {\
 \
                     return (TF_bind_requirements<ncpp::F_no_requirements>&&)*this;\
                 }\
-                NCPP_FORCE_INLINE const auto&& no_requirements() const && noexcept {\
+                NCPP_FORCE_INLINE const TF_bind_requirements<ncpp::F_no_requirements>&& no_requirements() const && noexcept {\
 \
                     return (const TF_bind_requirements<ncpp::F_no_requirements>&&)*this;\
                 }\
