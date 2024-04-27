@@ -161,7 +161,7 @@ namespace ncpp {
 
 
 
-#ifdef NCPP_DEBUG
+#ifdef NCPP_ENABLE_ASSERT
         struct F_large_view_owner_counter {
 
             au64 m = 1;
@@ -193,7 +193,7 @@ namespace ncpp {
         private:
             const F_container* container_p_ = 0;
 
-#ifdef NCPP_DEBUG
+#ifdef NCPP_ENABLE_ASSERT
             F_large_view_owner_counter* owner_counter_p_ = 0;
 #endif
 
@@ -204,7 +204,7 @@ namespace ncpp {
             NCPP_FORCE_INLINE b8 is_null() const { return (container_p_ == 0); }
             NCPP_FORCE_INLINE b8 is_valid() const { return (container_p_ != 0); }
 
-#ifdef NCPP_DEBUG
+#ifdef NCPP_ENABLE_ASSERT
             NCPP_FORCE_INLINE F_large_view_owner_counter* owner_counter_p() const {
 
                 return (F_large_view_owner_counter*)owner_counter_p_;
@@ -216,7 +216,7 @@ namespace ncpp {
         public:
             NCPP_FORCE_INLINE TF_large_view() = default;
 
-            NCPP_FORCE_INLINE ~TF_large_view() NCPP_ENABLE_IF_RELEASE(noexcept) {
+            NCPP_FORCE_INLINE ~TF_large_view() NCPP_DISABLE_IF_ASSERTION_ENABLED(noexcept) {
 
                 reset();
 
@@ -232,11 +232,11 @@ namespace ncpp {
             NCPP_FORCE_INLINE TF_large_view(
                 const F__& x,
                 const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}
-                NCPP_ENABLE_IF_DEBUG(, const F_large_view_owner_counter& owner_counter = F_large_view_owner_counter())
+                NCPP_ENABLE_IF_ASSERTION_ENABLED(, const F_large_view_owner_counter& owner_counter = F_large_view_owner_counter())
             ) :
                 container_p_((const F_container*)&container)
 
-#ifdef NCPP_DEBUG
+#ifdef NCPP_ENABLE_ASSERT
                 ,
                 owner_counter_p_((F_large_view_owner_counter*)(&owner_counter))
 #endif
@@ -249,11 +249,11 @@ namespace ncpp {
             NCPP_FORCE_INLINE TF_large_view(
                 std::initializer_list<utilities::TF_value<F_container>> x, 
                 const utilities::TF_no_constructor<F_container>& container = utilities::TF_no_constructor<F_container>{}
-                NCPP_ENABLE_IF_DEBUG(, const F_large_view_owner_counter& owner_counter = F_large_view_owner_counter())
+                NCPP_ENABLE_IF_ASSERTION_ENABLED(, const F_large_view_owner_counter& owner_counter = F_large_view_owner_counter())
             ) :
                 container_p_((const F_container*)&container)
 
-#ifdef NCPP_DEBUG
+#ifdef NCPP_ENABLE_ASSERT
                 ,
                 owner_counter_p_((F_large_view_owner_counter*)(&owner_counter))
 #endif
@@ -296,18 +296,18 @@ namespace ncpp {
 
 
         public:
-            NCPP_FORCE_INLINE TF_large_view(const F_this& other_view) NCPP_ENABLE_IF_RELEASE(noexcept) :
+            NCPP_FORCE_INLINE TF_large_view(const F_this& other_view) NCPP_DISABLE_IF_ASSERTION_ENABLED(noexcept) :
                 container_p_(reinterpret_cast<const F_container*>(other_view.container_p()))
             {
 
-                NCPP_ENABLE_IF_DEBUG(T_increase_owner_counter((F_this&)other_view));
+                NCPP_ENABLE_IF_ASSERTION_ENABLED(T_increase_owner_counter((F_this&)other_view));
 
             }
-            NCPP_FORCE_INLINE TF_large_view& operator = (const F_this& other_view) NCPP_ENABLE_IF_RELEASE(noexcept) {
+            NCPP_FORCE_INLINE TF_large_view& operator = (const F_this& other_view) NCPP_DISABLE_IF_ASSERTION_ENABLED(noexcept) {
 
                 container_p_ = reinterpret_cast<const F_container*>(other_view.container_p());
 
-                NCPP_ENABLE_IF_DEBUG(T_increase_owner_counter((F_this&)other_view));
+                NCPP_ENABLE_IF_ASSERTION_ENABLED(T_increase_owner_counter((F_this&)other_view));
 
                 return *this;
             }
@@ -315,20 +315,20 @@ namespace ncpp {
 
 
         public:
-            NCPP_FORCE_INLINE TF_large_view(F_this&& other_view) NCPP_ENABLE_IF_RELEASE(noexcept) :
+            NCPP_FORCE_INLINE TF_large_view(F_this&& other_view) NCPP_DISABLE_IF_ASSERTION_ENABLED(noexcept) :
                 container_p_(reinterpret_cast<const F_container*>(other_view.container_p()))
             {
 
-                NCPP_ENABLE_IF_DEBUG(T_increase_owner_counter((F_this&)other_view));
+                NCPP_ENABLE_IF_ASSERTION_ENABLED(T_increase_owner_counter((F_this&)other_view));
 
                 other_view.reset();
 
             }
-            NCPP_FORCE_INLINE TF_large_view& operator = (F_this&& other_view) NCPP_ENABLE_IF_RELEASE(noexcept) {
+            NCPP_FORCE_INLINE TF_large_view& operator = (F_this&& other_view) NCPP_DISABLE_IF_ASSERTION_ENABLED(noexcept) {
 
                 container_p_ = reinterpret_cast<const F_container*>(other_view.container_p());
 
-                NCPP_ENABLE_IF_DEBUG(T_increase_owner_counter((F_this&)other_view));
+                NCPP_ENABLE_IF_ASSERTION_ENABLED(T_increase_owner_counter((F_this&)other_view));
 
                 other_view.reset();
 
@@ -368,22 +368,22 @@ namespace ncpp {
                 class F_other_view__,
                 std::enable_if_t<T_is_same_large_views<F_this, F_other_view__>, i32> = 0
             >
-            NCPP_FORCE_INLINE TF_large_view(const F_other_view__& other_view) NCPP_ENABLE_IF_RELEASE(noexcept) :
+            NCPP_FORCE_INLINE TF_large_view(const F_other_view__& other_view) NCPP_DISABLE_IF_ASSERTION_ENABLED(noexcept) :
                 container_p_(reinterpret_cast<const F_container*>(other_view.container_p()))
             {
 
-                NCPP_ENABLE_IF_DEBUG(T_increase_owner_counter((F_other_view__&)other_view));
+                NCPP_ENABLE_IF_ASSERTION_ENABLED(T_increase_owner_counter((F_other_view__&)other_view));
 
             }
             template<
                 class F_other_view__,
                 std::enable_if_t<T_is_same_large_views<F_this, F_other_view__>, i32> = 0
             >
-            NCPP_FORCE_INLINE TF_large_view& operator = (const F_other_view__& other_view) NCPP_ENABLE_IF_RELEASE(noexcept) {
+            NCPP_FORCE_INLINE TF_large_view& operator = (const F_other_view__& other_view) NCPP_DISABLE_IF_ASSERTION_ENABLED(noexcept) {
 
                 container_p_ = reinterpret_cast<const F_container*>(other_view.container_p());
 
-                NCPP_ENABLE_IF_DEBUG(T_increase_owner_counter((F_other_view__&)other_view));
+                NCPP_ENABLE_IF_ASSERTION_ENABLED(T_increase_owner_counter((F_other_view__&)other_view));
 
                 return *this;
             }
@@ -395,11 +395,11 @@ namespace ncpp {
                 class F_other_view__,
                 std::enable_if_t<T_is_same_large_views<F_this, F_other_view__>, i32> = 0
             >
-            NCPP_FORCE_INLINE TF_large_view(F_other_view__&& other_view) NCPP_ENABLE_IF_RELEASE(noexcept) :
+            NCPP_FORCE_INLINE TF_large_view(F_other_view__&& other_view) NCPP_DISABLE_IF_ASSERTION_ENABLED(noexcept) :
                 container_p_(reinterpret_cast<const F_container*>(other_view.container_p()))
             {
 
-                NCPP_ENABLE_IF_DEBUG(T_increase_owner_counter((F_other_view__&)other_view));
+                NCPP_ENABLE_IF_ASSERTION_ENABLED(T_increase_owner_counter((F_other_view__&)other_view));
 
                 other_view.reset();
 
@@ -408,11 +408,11 @@ namespace ncpp {
                 class F_other_view__,
                 std::enable_if_t<T_is_same_large_views<F_this, F_other_view__>, i32> = 0
             >
-            NCPP_FORCE_INLINE TF_large_view& operator = (F_other_view__&& other_view) NCPP_ENABLE_IF_RELEASE(noexcept) {
+            NCPP_FORCE_INLINE TF_large_view& operator = (F_other_view__&& other_view) NCPP_DISABLE_IF_ASSERTION_ENABLED(noexcept) {
 
                 container_p_ = reinterpret_cast<const F_container*>(other_view.container_p());
 
-                NCPP_ENABLE_IF_DEBUG(T_increase_owner_counter((F_other_view__&)other_view));
+                NCPP_ENABLE_IF_ASSERTION_ENABLED(T_increase_owner_counter((F_other_view__&)other_view));
 
                 other_view.reset();
 
@@ -574,7 +574,7 @@ namespace ncpp {
 
 
         public:
-#ifdef NCPP_DEBUG
+#ifdef NCPP_ENABLE_ASSERT
             template<class F_other_view__>
             NCPP_FORCE_INLINE void T_increase_owner_counter(F_other_view__& other_view) {
 
@@ -604,9 +604,9 @@ namespace ncpp {
             }
 #endif
 
-            NCPP_FORCE_INLINE void reset() NCPP_ENABLE_IF_RELEASE(noexcept) {
+            NCPP_FORCE_INLINE void reset() NCPP_DISABLE_IF_ASSERTION_ENABLED(noexcept) {
 
-                NCPP_ENABLE_IF_DEBUG(decrease_owner_counter());
+                NCPP_ENABLE_IF_ASSERTION_ENABLED(decrease_owner_counter());
 
                 container_p_ = 0;
             }
