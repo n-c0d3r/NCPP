@@ -867,10 +867,10 @@ namespace ncpp {
         NCPP_FORCE_INLINE b8 check(F_object_key object_key) const noexcept {
 
             generation_buffer_.lock.rlock();
-            b8 result = (generation_buffer_.generation_p[object_key.id] == object_key.generation);
-            generation_buffer_.lock.runlock();
+			b8 result = (generation_buffer_.generation_p[object_key.id % generation_buffer_.size] == object_key.generation);
+			generation_buffer_.lock.runlock();
 
-            return result;
+			return result;
         }
 
     };
@@ -1027,8 +1027,8 @@ namespace ncpp {
     public:
         NCPP_FORCE_INLINE b8 check(F_object_key object_key) const noexcept {
 
-            return (generation_buffer_.generation_p[object_key.id] == object_key.generation);
-        }
+			return (generation_buffer_.generation_p[object_key.id % generation_buffer_.size] == object_key.generation);
+		}
 
     };
 
