@@ -1114,9 +1114,14 @@ namespace ncpp {
             if(object_key.is_null())
                 return false;
 
+			u32 subpool_index = object_key.id / max_local_generation_count_;
+
+			if(subpool_index >= subpool_count_)
+				return false;
+
             object_key.id %= max_local_generation_count_;
 
-            return subpool_vector_[object_key.id / max_local_generation_count_].check(object_key);
+            return subpool_vector_[subpool_index].check(object_key);
         }
 
     };
