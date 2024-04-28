@@ -269,7 +269,7 @@ namespace ncpp {
 				<< std::endl
 				<< "struct: " << T_cout_value(utilities::T_type_fullname<F_requirements__>())
 				<< std::endl
-				<< "object pointer: " << T_cout_value(oref.object_p_);
+				<< "object pointer: " << T_cout_value(oref.object_p_unsafe());
         }
 
     };
@@ -1857,14 +1857,6 @@ namespace ncpp {
 
         static constexpr b8 is_const = std::is_const_v<F_passed_object__>;
 
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-
-	public:
-		template<class F_requirements_in__, b8 is_always_valid_in__>
-		struct TF_requirements_base;
-
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -1898,6 +1890,12 @@ namespace ncpp {
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
             return *(object_p());
         }
+		NCPP_FORCE_INLINE F_passed_object* object_p_unsafe() const noexcept {
+			return (F_passed_object*)object_p_;
+		}
+		NCPP_FORCE_INLINE F_passed_object& object_unsafe() const noexcept {
+			return *(object_p());
+		}
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2208,14 +2206,6 @@ namespace ncpp {
 
         using F_default_object_manager = F_options::template TF_manager<T_is_object_thread_safe<F_object>>;
 
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-
-	public:
-		template<class F_requirements_in__, b8 is_always_valid_in__>
-		struct TF_requirements_base;
-
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2242,14 +2232,20 @@ namespace ncpp {
         F_object_key object_key_;
 
     public:
-        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
-            NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            return (F_passed_object*)object_p_;
-        }
-        NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
-            NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            return *(object_p());
-        }
+		NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return (F_passed_object*)object_p_;
+		}
+		NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return *(object_p());
+		}
+		NCPP_FORCE_INLINE F_passed_object* object_p_unsafe() const noexcept {
+			return (F_passed_object*)object_p_;
+		}
+		NCPP_FORCE_INLINE F_passed_object& object_unsafe() const noexcept {
+			return *(object_p());
+		}
 
         NCPP_FORCE_INLINE F_object_key object_key() const noexcept { return object_key_; }
 
@@ -2594,14 +2590,6 @@ namespace ncpp {
         static constexpr b8 is_has_object_key = false;
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
 
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-
-	public:
-		template<class F_requirements_in__, b8 is_always_valid_in__>
-		struct TF_requirements_base;
-
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2627,14 +2615,20 @@ namespace ncpp {
         F_passed_object* object_p_ = 0;
 
     public:
-        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
-            NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            return (F_passed_object*)object_p_;
-        }
-        NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
-            NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            return *(object_p());
-        }
+		NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return (F_passed_object*)object_p_;
+		}
+		NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return *(object_p());
+		}
+		NCPP_FORCE_INLINE F_passed_object* object_p_unsafe() const noexcept {
+			return (F_passed_object*)object_p_;
+		}
+		NCPP_FORCE_INLINE F_passed_object& object_unsafe() const noexcept {
+			return *(object_p());
+		}
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2974,14 +2968,6 @@ namespace ncpp {
 
         using F_default_object_manager = F_options::template TF_manager<T_is_object_thread_safe<F_object>>;
 
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-
-	public:
-		template<class F_requirements_in__, b8 is_always_valid_in__>
-		struct TF_requirements_base;
-
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -3008,14 +2994,20 @@ namespace ncpp {
         F_object_key object_key_;
 
     public:
-        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
-            NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            return (F_passed_object*)object_p_;
-        }
-        NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
-            NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            return *(object_p());
-        }
+		NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return (F_passed_object*)object_p_;
+		}
+		NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return *(object_p());
+		}
+		NCPP_FORCE_INLINE F_passed_object* object_p_unsafe() const noexcept {
+			return (F_passed_object*)object_p_;
+		}
+		NCPP_FORCE_INLINE F_passed_object& object_unsafe() const noexcept {
+			return *(object_p());
+		}
 
         NCPP_FORCE_INLINE F_object_key object_key() const noexcept { return object_key_; }
 
@@ -3361,14 +3353,6 @@ namespace ncpp {
         static constexpr b8 is_has_object_key = false;
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
 
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-
-	public:
-		template<class F_requirements_in__, b8 is_always_valid_in__>
-		struct TF_requirements_base;
-
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -3394,14 +3378,20 @@ namespace ncpp {
         F_passed_object* object_p_ = 0;
 
     public:
-        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
-            NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            return (F_passed_object*)object_p_;
-        }
-        NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
-            NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            return *(object_p());
-        }
+		NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return (F_passed_object*)object_p_;
+		}
+		NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return *(object_p());
+		}
+		NCPP_FORCE_INLINE F_passed_object* object_p_unsafe() const noexcept {
+			return (F_passed_object*)object_p_;
+		}
+		NCPP_FORCE_INLINE F_passed_object& object_unsafe() const noexcept {
+			return *(object_p());
+		}
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -3768,14 +3758,6 @@ namespace ncpp {
 
         using F_default_object_manager = F_options::template TF_manager<T_is_object_thread_safe<F_object>>;
 
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-
-	public:
-		template<class F_requirements_in__, b8 is_always_valid_in__>
-		struct TF_requirements_base;
-
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -3802,14 +3784,20 @@ namespace ncpp {
         F_object_key object_key_;
 
     public:
-        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
-            NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            return (F_passed_object*)object_p_;
-        }
-        NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
-            NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            return *(object_p());
-        }
+		NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return (F_passed_object*)object_p_;
+		}
+		NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return *(object_p());
+		}
+		NCPP_FORCE_INLINE F_passed_object* object_p_unsafe() const noexcept {
+			return (F_passed_object*)object_p_;
+		}
+		NCPP_FORCE_INLINE F_passed_object& object_unsafe() const noexcept {
+			return *(object_p());
+		}
 
         NCPP_FORCE_INLINE F_object_key object_key() const noexcept { return object_key_; }
 
@@ -4312,14 +4300,6 @@ namespace ncpp {
         static constexpr b8 is_has_object_key = false;
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
 
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-
-	public:
-		template<class F_requirements_in__, b8 is_always_valid_in__>
-		struct TF_requirements_base;
-
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -4345,14 +4325,20 @@ namespace ncpp {
         F_passed_object* object_p_ = 0;
 
     public:
-        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
-            NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            return (F_passed_object*)object_p_;
-        }
-        NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
-            NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            return *(object_p());
-        }
+		NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return (F_passed_object*)object_p_;
+		}
+		NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return *(object_p());
+		}
+		NCPP_FORCE_INLINE F_passed_object* object_p_unsafe() const noexcept {
+			return (F_passed_object*)object_p_;
+		}
+		NCPP_FORCE_INLINE F_passed_object& object_unsafe() const noexcept {
+			return *(object_p());
+		}
 
         NCPP_FORCE_INLINE u32 object_counter() const noexcept {
 
@@ -4846,14 +4832,6 @@ namespace ncpp {
 
         using F_default_object_manager = F_options::template TF_manager<T_is_object_thread_safe<F_object>>;
 
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-
-	public:
-		template<class F_requirements_in__, b8 is_always_valid_in__>
-		struct TF_requirements_base;
-
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -4881,14 +4859,20 @@ namespace ncpp {
         b8 is_shared_ = false;
 
     public:
-        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
-            NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            return (F_passed_object*)object_p_;
-        }
-        NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
-            NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            return *(object_p());
-        }
+		NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return (F_passed_object*)object_p_;
+		}
+		NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return *(object_p());
+		}
+		NCPP_FORCE_INLINE F_passed_object* object_p_unsafe() const noexcept {
+			return (F_passed_object*)object_p_;
+		}
+		NCPP_FORCE_INLINE F_passed_object& object_unsafe() const noexcept {
+			return *(object_p());
+		}
 
         NCPP_FORCE_INLINE F_object_key object_key() const noexcept { return object_key_; }
 
@@ -5723,14 +5707,6 @@ namespace ncpp {
         static constexpr b8 is_has_object_key = false;
         static constexpr b8 is_const = std::is_const_v<F_passed_object>;
 
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////////////////////////////////////////////////////////
-
-	public:
-		template<class F_requirements_in__, b8 is_always_valid_in__>
-		struct TF_requirements_base;
-
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -5757,14 +5733,20 @@ namespace ncpp {
         b8 is_shared_ = false;
 
     public:
-        NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
-            NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            return (F_passed_object*)object_p_;
-        }
-        NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
-            NCPP_ASSERT_OREF_REQUIREMENTS(this);
-            return *(object_p());
-        }
+		NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return (F_passed_object*)object_p_;
+		}
+		NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return *(object_p());
+		}
+		NCPP_FORCE_INLINE F_passed_object* object_p_unsafe() const noexcept {
+			return (F_passed_object*)object_p_;
+		}
+		NCPP_FORCE_INLINE F_passed_object& object_unsafe() const noexcept {
+			return *(object_p());
+		}
 
         NCPP_FORCE_INLINE u32 object_counter() const noexcept {
 
