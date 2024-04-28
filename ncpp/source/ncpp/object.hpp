@@ -537,13 +537,13 @@ namespace ncpp {
 				requires ncpp::T_is_object_down_castable<typename F_oref__::F_passed_object, typename F_other_oref__::F_passed_object>\
 				NCPP_FORCE_INLINE operator TF##NamePrefixConnector##Name<F_other_oref__> () const noexcept {\
 			\
-					return { (const F_other_oref__)oref };\
+					return { (const F_other_oref__&)oref };\
 				}\
 				template<ncpp::T_is_oref F_other_oref__>\
 				requires ncpp::T_is_object_up_castable<typename F_oref__::F_passed_object, typename F_other_oref__::F_passed_object>\
 				explicit NCPP_FORCE_INLINE operator TF##NamePrefixConnector##Name<F_other_oref__> () const noexcept {\
 			\
-					return { (const F_other_oref__)oref };\
+					return { (const F_other_oref__&)oref };\
 				}
 
 #define NCPP_FHANDLE_GENERATED_BODY(Name, NamePrefixConnector, ...) NCPP_FHANDLE_GENERATED_BODY_ADVANCED(Name,_,__VA_ARGS__)
