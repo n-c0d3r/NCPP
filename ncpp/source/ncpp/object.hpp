@@ -534,13 +534,13 @@ namespace ncpp {
                 }                                                            \
 			public:                                                                   \
 				template<ncpp::T_is_oref F_other_oref__>\
-				requires T_is_object_down_castable<typename F_oref__::F_passed_object, typename F_other_oref__::F_passed_object>\
+				requires ncpp::T_is_object_down_castable<typename F_oref__::F_passed_object, typename F_other_oref__::F_passed_object>\
 				NCPP_FORCE_INLINE operator TF##NamePrefixConnector##Name<F_other_oref__> () const noexcept {\
 			\
 					return { oref };\
 				}\
 				template<ncpp::T_is_oref F_other_oref__>\
-				requires T_is_object_up_castable<typename F_oref__::F_passed_object, typename F_other_oref__::F_passed_object>\
+				requires ncpp::T_is_object_up_castable<typename F_oref__::F_passed_object, typename F_other_oref__::F_passed_object>\
 				explicit NCPP_FORCE_INLINE operator TF##NamePrefixConnector##Name<F_other_oref__> () const noexcept {\
 			\
 					return { oref };\
