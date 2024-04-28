@@ -264,7 +264,12 @@ namespace ncpp {
         template<T_is_oref F_oref__>
         static NCPP_FORCE_INLINE void T_assert(const F_oref__& oref) noexcept {
 
-            NCPP_ASSERT(F_requirements__::T_check(oref)) << "requirements are not satisfied " << utilities::T_type_fullname<F_requirements__>();
+            NCPP_ASSERT(F_requirements__::T_check(oref))
+				<< "requirements are not satisfied"
+				<< std::endl
+				<< "struct: " << T_cout_value(utilities::T_type_fullname<F_requirements__>())
+				<< std::endl
+				<< "object pointer: " << T_cout_value(oref.object_p());
         }
 
     };
