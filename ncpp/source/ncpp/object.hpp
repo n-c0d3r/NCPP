@@ -410,6 +410,12 @@ namespace ncpp {
                 }                              \
                                                \
             public:                            \
+				NCPP_FORCE_INLINE void reset() {                                         \
+                                                                             \
+                	oref.reset();                                                             \
+				}\
+                                               \
+            public:                            \
                 template<typename F_other_p__>\
                 requires ncpp::T_is_object_up_castable<typename F_oref__::F_passed_object, F_other_p__>\
                 NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>& T_up_cast() & noexcept {\
