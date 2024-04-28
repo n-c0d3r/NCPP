@@ -330,6 +330,13 @@ namespace ncpp {
 #define NCPP_FHANDLE_TEMPLATE(Name, ...) NCPP_FHANDLE_TEMPLATE_ADVANCED(Name,_,,,__VA_ARGS__)
 #define NCPP_FHANDLE2_TEMPLATE(Name, ...) NCPP_FHANDLE_TEMPLATE_ADVANCED(Name,_,2,,__VA_ARGS__)
 
+#define NCPP_FHANDLE_TEMPLATE_DEFINE_MEMBER_ADVANCED(Name, NamePrefixConnector, OrefIndex, ...) \
+            template<ncpp::T_is_oref F_oref__>\
+            __VA_OPT__(requires std::is_base_of_v<__VA_ARGS__, typename F_oref__::F_object>)
+
+#define NCPP_FHANDLE_TEMPLATE_DEFINE_MEMBER(Name, ...) NCPP_FHANDLE_TEMPLATE_DEFINE_MEMBER_ADVANCED(Name,_,,__VA_ARGS__)
+#define NCPP_FHANDLE2_TEMPLATE_DEFINE_MEMBER(Name, ...) NCPP_FHANDLE_TEMPLATE_DEFINE_MEMBER_ADVANCED(Name,_,2,__VA_ARGS__)
+
 #define NCPP_FHANDLE_GENERATED_BODY_ADVANCED(Name, NamePrefixConnector, ...) \
             public:\
                 using F_oref = F_oref__;       \
