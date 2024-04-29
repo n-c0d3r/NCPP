@@ -11,11 +11,11 @@ namespace ncpp {
 
         F_allocator allocator;
 
-        ((F_object*)object_p_)->~F_object();
+		(*NCPP_OBJECT_P_TO_DESTRUCTOR_CALLER_P(object_p_))(object_p_);
 
         push_key_internal();
 
-        au32* counter_p = ((au32*)object_p_) - (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32));
+        au32* counter_p = NCPP_OBJECT_P_TO_COUNTER_P(object_p_);
 
         allocator.deallocate(counter_p);
 
@@ -35,10 +35,12 @@ namespace ncpp {
             0
         );
 
-        F_object_key* object_key_p = (F_object_key*)(((u64*)counter_p) + 1);
-        *object_key_p = object_key_;
+        *NCPP_RAW_P_TO_KEY_P(counter_p) = object_key_;
+		*NCPP_RAW_P_TO_DESTRUCTOR_CALLER_P(counter_p) = [](void* p){
+		  	((F_object*)p)->~F_object();
+		};
 
-        object_p_ = (F_passed_object*)(counter_p + (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32)));
+        object_p_ = NCPP_RAW_P_TO_OBJECT_P(counter_p);
 
         new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
 
@@ -49,9 +51,9 @@ namespace ncpp {
 
         F_allocator allocator;
 
-        ((F_object*)object_p_)->~F_object();
+		(*NCPP_OBJECT_P_TO_DESTRUCTOR_CALLER_P(object_p_))(object_p_);
 
-        au32* counter_p = ((au32*)object_p_) - (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32));
+        au32* counter_p = NCPP_OBJECT_P_TO_COUNTER_P(object_p_);
 
         allocator.deallocate(counter_p);
 
@@ -69,7 +71,11 @@ namespace ncpp {
             0
         );
 
-        object_p_ = (F_passed_object*)(counter_p + (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32)));
+		*NCPP_RAW_P_TO_DESTRUCTOR_CALLER_P(counter_p) = [](void* p){
+		  ((F_object*)p)->~F_object();
+		};
+
+        object_p_ = NCPP_RAW_P_TO_OBJECT_P(counter_p);
 
         new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
 
@@ -82,11 +88,11 @@ namespace ncpp {
 
         F_allocator allocator;
 
-        ((F_object*)object_p_)->~F_object();
+		(*NCPP_OBJECT_P_TO_DESTRUCTOR_CALLER_P(object_p_))(object_p_);
 
         push_key_internal();
 
-        au32* counter_p = ((au32*)object_p_) - (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32));
+        au32* counter_p = NCPP_OBJECT_P_TO_COUNTER_P(object_p_);
 
         allocator.deallocate(counter_p);
 
@@ -107,10 +113,12 @@ namespace ncpp {
         );
         counter_p->store(F_options__::initial_shared_reference_count, eastl::memory_order_release);
 
-        F_object_key* object_key_p = (F_object_key*)(((u64*)counter_p) + 1);
-        *object_key_p = object_key_;
+		*NCPP_RAW_P_TO_KEY_P(counter_p) = object_key_;
+		*NCPP_RAW_P_TO_DESTRUCTOR_CALLER_P(counter_p) = [](void* p){
+		  	((F_object*)p)->~F_object();
+		};
 
-        object_p_ = (F_passed_object*)(counter_p + (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32)));
+        object_p_ = NCPP_RAW_P_TO_OBJECT_P(counter_p);
 
         new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
 
@@ -121,9 +129,9 @@ namespace ncpp {
 
         F_allocator allocator;
 
-        ((F_object*)object_p_)->~F_object();
+		(*NCPP_OBJECT_P_TO_DESTRUCTOR_CALLER_P(object_p_))(object_p_);
 
-        au32* counter_p = ((au32*)object_p_) - (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32));
+        au32* counter_p = NCPP_OBJECT_P_TO_COUNTER_P(object_p_);
 
         allocator.deallocate(counter_p);
 
@@ -142,7 +150,11 @@ namespace ncpp {
         );
         counter_p->store(F_options__::initial_shared_reference_count, eastl::memory_order_release);
 
-        object_p_ = (F_passed_object*)(counter_p + (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32)));
+		*NCPP_RAW_P_TO_DESTRUCTOR_CALLER_P(counter_p) = [](void* p){
+		  	((F_object*)p)->~F_object();
+		};
+
+        object_p_ = NCPP_RAW_P_TO_OBJECT_P(counter_p);
 
         new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
 
@@ -155,11 +167,11 @@ namespace ncpp {
 
         F_allocator allocator;
 
-        ((F_object*)object_p_)->~F_object();
+		(*NCPP_OBJECT_P_TO_DESTRUCTOR_CALLER_P(object_p_))(object_p_);
 
         push_key_internal();
 
-        au32* counter_p = ((au32*)object_p_) - (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32));
+        au32* counter_p = NCPP_OBJECT_P_TO_COUNTER_P(object_p_);
 
         allocator.deallocate(counter_p);
 
@@ -180,10 +192,12 @@ namespace ncpp {
         );
         counter_p->store(F_options__::initial_shared_reference_count, eastl::memory_order_release);
 
-        F_object_key* object_key_p = (F_object_key*)(((u64*)counter_p) + 1);
-        *object_key_p = object_key_;
+		*NCPP_RAW_P_TO_KEY_P(counter_p) = object_key_;
+		*NCPP_RAW_P_TO_DESTRUCTOR_CALLER_P(counter_p) = [](void* p){
+		  	((F_object*)p)->~F_object();
+		};
 
-        object_p_ = (F_passed_object*)(counter_p + (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32)));
+        object_p_ = NCPP_RAW_P_TO_OBJECT_P(counter_p);
 
         new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
 
@@ -196,9 +210,9 @@ namespace ncpp {
 
         F_allocator allocator;
 
-        ((F_object*)object_p_)->~F_object();
+		(*NCPP_OBJECT_P_TO_DESTRUCTOR_CALLER_P(object_p_))(object_p_);
 
-        au32* counter_p = ((au32*)object_p_) - (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32));
+        au32* counter_p = NCPP_OBJECT_P_TO_COUNTER_P(object_p_);
 
         allocator.deallocate(counter_p);
 
@@ -217,7 +231,11 @@ namespace ncpp {
         );
         counter_p->store(F_options__::initial_shared_reference_count, eastl::memory_order_release);
 
-        object_p_ = (F_passed_object*)(counter_p + (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32)));
+		*NCPP_RAW_P_TO_DESTRUCTOR_CALLER_P(counter_p) = [](void* p){
+		  	((F_object*)p)->~F_object();
+		};
+
+        object_p_ = NCPP_RAW_P_TO_OBJECT_P(counter_p);
 
         new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
 

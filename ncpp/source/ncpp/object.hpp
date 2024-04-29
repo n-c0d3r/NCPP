@@ -85,7 +85,96 @@ namespace ncpp {
             template<typename F_object_fr__, typename F_allocator_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__, typename F_requirements_fr__>\
             friend class ncpp::TX_oref;
 
-#define NCPP_OBJECT_MEMORY_HEADER_SIZE (sizeof(ncpp::u64) * 2)
+
+
+#define NCPP_OBJECT_COUNTER_MEMORY_OFFSET (0)
+#define NCPP_OBJECT_KEY_MEMORY_OFFSET ( \
+                (NCPP_OBJECT_COUNTER_MEMORY_OFFSET + sizeof(ncpp::u64))\
+			)
+#define NCPP_OBJECT_DESTRUCTOR_CALLER_MEMORY_OFFSET ( \
+                NCPP_OBJECT_KEY_MEMORY_OFFSET + sizeof(ncpp::u64)                             \
+			)
+#define NCPP_OBJECT_MEMORY_OFFSET ( \
+                NCPP_OBJECT_DESTRUCTOR_CALLER_MEMORY_OFFSET + sizeof(ncpp::u64)                             \
+			)
+#define NCPP_OBJECT_MEMORY_HEADER_SIZE NCPP_OBJECT_MEMORY_OFFSET
+
+#define NCPP_OBJECT_COUNTER_MEMORY_OFFSET_REVERSE (NCPP_OBJECT_MEMORY_HEADER_SIZE - NCPP_OBJECT_COUNTER_MEMORY_OFFSET)
+#define NCPP_OBJECT_KEY_MEMORY_OFFSET_REVERSE (NCPP_OBJECT_MEMORY_HEADER_SIZE - NCPP_OBJECT_KEY_MEMORY_OFFSET)
+#define NCPP_OBJECT_DESTRUCTOR_CALLER_MEMORY_OFFSET_REVERSE (NCPP_OBJECT_MEMORY_HEADER_SIZE - NCPP_OBJECT_DESTRUCTOR_CALLER_MEMORY_OFFSET)
+
+#define NCPP_RAW_P_TO_COUNTER_P(...) ( \
+                (ncpp::au32*)                          \
+				( \
+					((ncpp::u8*)(__VA_ARGS__))            \
+            		+ NCPP_OBJECT_COUNTER_MEMORY_OFFSET                            \
+				)                                     \
+			)
+#define NCPP_RAW_P_TO_KEY_P(...) ( \
+                (ncpp::F_object_key*)                          \
+				( \
+					((ncpp::u8*)(__VA_ARGS__))            \
+            		+ NCPP_OBJECT_KEY_MEMORY_OFFSET                    \
+				)                                     \
+			)
+#define NCPP_RAW_P_TO_DESTRUCTOR_CALLER_P(...) ( \
+                (void(*)(void*))                          \
+				( \
+					((ncpp::u8*)(__VA_ARGS__))            \
+            		+ NCPP_OBJECT_DESTRUCTOR_CALLER_MEMORY_OFFSET                        \
+				)                                     \
+			)
+#define NCPP_RAW_P_TO_OBJECT_P(...) ( \
+                (void*)                          \
+				( \
+					((ncpp::u8*)(__VA_ARGS__))            \
+            		+ NCPP_OBJECT_MEMORY_OFFSET                        \
+				)                                     \
+			)
+
+#define NCPP_OBJECT_P_TO_COUNTER_P(...) ( \
+                (ncpp::au32*)                          \
+				( \
+					((ncpp::u8*)(__VA_ARGS__))            \
+            		- NCPP_OBJECT_COUNTER_MEMORY_OFFSET_REVERSE                              \
+				)                                     \
+			)
+#define NCPP_OBJECT_P_TO_KEY_P(...) ( \
+                (ncpp::F_object_key*)                          \
+				( \
+					((ncpp::u8*)(__VA_ARGS__))            \
+            		- NCPP_OBJECT_KEY_MEMORY_OFFSET_REVERSE                              \
+				)                                     \
+			)
+#define NCPP_OBJECT_P_TO_DESTRUCTOR_CALLER_P(...) ( \
+                (void(*)(void*))                          \
+				( \
+					((ncpp::u8*)(__VA_ARGS__))            \
+            		- NCPP_OBJECT_DESTRUCTOR_CALLER_MEMORY_OFFSET_REVERSE                              \
+				)                                     \
+			)
+
+#define NCPP_COUNTER_P_TO_OBJECT_P(...) ( \
+                (void*)                          \
+				( \
+					((ncpp::u8*)(__VA_ARGS__))            \
+            		+ NCPP_OBJECT_COUNTER_MEMORY_OFFSET_REVERSE                              \
+				)                                     \
+			)
+#define NCPP_KEY_P_TO_OBJECT_P(...) ( \
+                (void*)                          \
+				( \
+					((ncpp::u8*)(__VA_ARGS__))            \
+            		+ NCPP_OBJECT_KEY_MEMORY_OFFSET_REVERSE                              \
+				)                                     \
+			)
+#define NCPP_DESTRUCTOR_CALLER_P_TO_OBJECT_P(...) ( \
+                (void*)                          \
+				( \
+					((ncpp::u8*)(__VA_ARGS__))            \
+            		+ NCPP_OBJECT_DESTRUCTOR_CALLER_MEMORY_OFFSET_REVERSE                              \
+				)                                     \
+			)
 
 
 
@@ -3717,25 +3806,25 @@ namespace ncpp {
 
     NCPP_FORCE_INLINE u32 shared_object_counter_unsafe(void* object_p) noexcept {
 
-        au32* counter_p = ((au32*)object_p) - (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32));
+        au32* counter_p = ((au32*)object_p) - (NCPP_OBJECT_COUNTER_MEMORY_OFFSET_REVERSE / sizeof(u32));
 
         return counter_p->load(eastl::memory_order_acquire);
     }
     NCPP_FORCE_INLINE u32 increase_shared_object_counter_unsafe(void* object_p) noexcept {
 
-        au32* counter_p = ((au32*)object_p) - (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32));
+        au32* counter_p = ((au32*)object_p) - (NCPP_OBJECT_COUNTER_MEMORY_OFFSET_REVERSE / sizeof(u32));
 
         return counter_p->fetch_add(1, eastl::memory_order_acq_rel);
     }
     NCPP_FORCE_INLINE u32 decrease_shared_object_counter_unsafe(void* object_p) noexcept {
 
-        au32* counter_p = ((au32*)object_p) - (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32));
+        au32* counter_p = ((au32*)object_p) - (NCPP_OBJECT_COUNTER_MEMORY_OFFSET_REVERSE / sizeof(u32));
 
         return counter_p->fetch_sub(1, eastl::memory_order_acq_rel);
     }
     NCPP_FORCE_INLINE void set_object_counter_to_one_unsafe(void* object_p) noexcept {
 
-        au32* counter_p = ((au32*)object_p) - (NCPP_OBJECT_MEMORY_HEADER_SIZE / sizeof(u32));
+        au32* counter_p = ((au32*)object_p) - (NCPP_OBJECT_COUNTER_MEMORY_OFFSET_REVERSE / sizeof(u32));
 
         counter_p->store(1, eastl::memory_order_release);
     }
