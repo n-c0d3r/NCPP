@@ -40,7 +40,7 @@ namespace ncpp {
 		  	((F_object*)p)->~F_object();
 		};
 
-        object_p_ = NCPP_RAW_P_TO_OBJECT_P(counter_p);
+        object_p_ = (F_passed_object__*)NCPP_RAW_P_TO_OBJECT_P(counter_p);
 
         new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
 
@@ -75,7 +75,7 @@ namespace ncpp {
 		  ((F_object*)p)->~F_object();
 		};
 
-        object_p_ = NCPP_RAW_P_TO_OBJECT_P(counter_p);
+        object_p_ = (F_passed_object__*)NCPP_RAW_P_TO_OBJECT_P(counter_p);
 
         new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
 
@@ -118,7 +118,7 @@ namespace ncpp {
 		  	((F_object*)p)->~F_object();
 		};
 
-        object_p_ = NCPP_RAW_P_TO_OBJECT_P(counter_p);
+        object_p_ = (F_passed_object__*)NCPP_RAW_P_TO_OBJECT_P(counter_p);
 
         new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
 
@@ -154,7 +154,7 @@ namespace ncpp {
 		  	((F_object*)p)->~F_object();
 		};
 
-        object_p_ = NCPP_RAW_P_TO_OBJECT_P(counter_p);
+        object_p_ = (F_passed_object__*)NCPP_RAW_P_TO_OBJECT_P(counter_p);
 
         new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
 
@@ -197,7 +197,7 @@ namespace ncpp {
 		  	((F_object*)p)->~F_object();
 		};
 
-        object_p_ = NCPP_RAW_P_TO_OBJECT_P(counter_p);
+        object_p_ = (F_passed_object__*)NCPP_RAW_P_TO_OBJECT_P(counter_p);
 
         new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
 
@@ -235,7 +235,7 @@ namespace ncpp {
 		  	((F_object*)p)->~F_object();
 		};
 
-        object_p_ = NCPP_RAW_P_TO_OBJECT_P(counter_p);
+        object_p_ = (F_passed_object__*)NCPP_RAW_P_TO_OBJECT_P(counter_p);
 
         new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
 
