@@ -85,6 +85,8 @@ namespace ncpp {
             template<typename F_object_fr__, typename F_allocator_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__, typename F_requirements_fr__>\
             friend class ncpp::TX_oref;
 
+	using F_object_destructor_caller = void(*)(void*);
+
 
 
 #define NCPP_OBJECT_COUNTER_MEMORY_OFFSET (0)
@@ -118,7 +120,7 @@ namespace ncpp {
 				)                                     \
 			)
 #define NCPP_RAW_P_TO_DESTRUCTOR_CALLER_P(...) ( \
-                (void(*)(void*))                          \
+                (ncpp::F_object_destructor_caller*)                          \
 				( \
 					((ncpp::u8*)(__VA_ARGS__))            \
             		+ NCPP_OBJECT_DESTRUCTOR_CALLER_MEMORY_OFFSET                        \
@@ -147,7 +149,7 @@ namespace ncpp {
 				)                                     \
 			)
 #define NCPP_OBJECT_P_TO_DESTRUCTOR_CALLER_P(...) ( \
-                (void(*)(void*))                          \
+                (ncpp::F_object_destructor_caller*)                          \
 				( \
 					((ncpp::u8*)(__VA_ARGS__))            \
             		- NCPP_OBJECT_DESTRUCTOR_CALLER_MEMORY_OFFSET_REVERSE                              \
