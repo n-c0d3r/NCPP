@@ -64,22 +64,12 @@ namespace ncpp {
 		public:
 			NCPP_FORCE_INLINE F_crt_allocator(const char* name = 0) :
                     TA_allocator(name)
-			{
-
-
-
-			}
+			{}
 			NCPP_FORCE_INLINE F_crt_allocator(const F_crt_allocator& x) :
                     TA_allocator()
-			{
-
-
-
-			}
-
-			~F_crt_allocator() {
-
-			}
+			{}
+			~F_crt_allocator()
+			{}
 
 		};
 
