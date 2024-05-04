@@ -1981,10 +1981,12 @@ namespace ncpp {
     public:
         NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
             return (F_passed_object*)object_p_;
         }
         NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
             return *(object_p());
         }
 		NCPP_FORCE_INLINE F_passed_object* object_p_unsafe() const noexcept {
@@ -2196,12 +2198,14 @@ namespace ncpp {
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 
             return (F_passed_object*)object_p_;
         }
         NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 
             return *((F_passed_object*)object_p_);
         }
@@ -2331,10 +2335,12 @@ namespace ncpp {
     public:
 		NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
 			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 			return (F_passed_object*)object_p_;
 		}
 		NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
 			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 			return *(object_p());
 		}
 		NCPP_FORCE_INLINE F_passed_object* object_p_unsafe() const noexcept {
@@ -2611,12 +2617,14 @@ namespace ncpp {
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 
             return (F_passed_object*)object_p_;
         }
         NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 
             return *((F_passed_object*)object_p_);
         }
@@ -2714,10 +2722,12 @@ namespace ncpp {
     public:
 		NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
 			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 			return (F_passed_object*)object_p_;
 		}
 		NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
 			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 			return *(object_p());
 		}
 		NCPP_FORCE_INLINE F_passed_object* object_p_unsafe() const noexcept {
@@ -2964,12 +2974,14 @@ namespace ncpp {
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 
             return (F_passed_object*)object_p_;
         }
         NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 
             return *((F_passed_object*)object_p_);
         }
@@ -3093,10 +3105,12 @@ namespace ncpp {
     public:
 		NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
 			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 			return (F_passed_object*)object_p_;
 		}
 		NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
 			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 			return *(object_p());
 		}
 		NCPP_FORCE_INLINE F_passed_object* object_p_unsafe() const noexcept {
@@ -3373,12 +3387,14 @@ namespace ncpp {
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 
             return (F_passed_object*)object_p_;
         }
         NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 
             return *((F_passed_object*)object_p_);
         }
@@ -3477,10 +3493,12 @@ namespace ncpp {
     public:
 		NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
 			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 			return (F_passed_object*)object_p_;
 		}
 		NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
 			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 			return *(object_p());
 		}
 		NCPP_FORCE_INLINE F_passed_object* object_p_unsafe() const noexcept {
@@ -3727,12 +3745,14 @@ namespace ncpp {
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 
             return (F_passed_object*)object_p_;
         }
         NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 
             return *((F_passed_object*)object_p_);
         }
@@ -3883,10 +3903,12 @@ namespace ncpp {
     public:
 		NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
 			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 			return (F_passed_object*)object_p_;
 		}
 		NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
 			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 			return *(object_p());
 		}
 		NCPP_FORCE_INLINE F_passed_object* object_p_unsafe() const noexcept {
@@ -4320,12 +4342,14 @@ namespace ncpp {
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 
             return (F_passed_object*)object_p_;
         }
         NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 
             return *((F_passed_object*)object_p_);
         }
@@ -4424,10 +4448,12 @@ namespace ncpp {
     public:
 		NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
 			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 			return (F_passed_object*)object_p_;
 		}
 		NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
 			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 			return *(object_p());
 		}
 		NCPP_FORCE_INLINE F_passed_object* object_p_unsafe() const noexcept {
@@ -4828,12 +4854,14 @@ namespace ncpp {
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 
             return (F_passed_object*)object_p_;
         }
         NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 
             return *((F_passed_object*)object_p_);
         }
@@ -4958,10 +4986,12 @@ namespace ncpp {
     public:
 		NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
 			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 			return (F_passed_object*)object_p_;
 		}
 		NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
 			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 			return *(object_p());
 		}
 		NCPP_FORCE_INLINE F_passed_object* object_p_unsafe() const noexcept {
@@ -5727,12 +5757,14 @@ namespace ncpp {
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 
             return (F_passed_object*)object_p_;
         }
         NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 
             return *((F_passed_object*)object_p_);
         }
@@ -5832,10 +5864,12 @@ namespace ncpp {
     public:
 		NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
 			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 			return (F_passed_object*)object_p_;
 		}
 		NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
 			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 			return *(object_p());
 		}
 		NCPP_FORCE_INLINE F_passed_object* object_p_unsafe() const noexcept {
@@ -6536,12 +6570,14 @@ namespace ncpp {
         NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 
             return (F_passed_object*)object_p_;
         }
         NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
 
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
 
             return *((F_passed_object*)object_p_);
         }
