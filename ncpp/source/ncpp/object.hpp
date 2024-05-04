@@ -601,7 +601,15 @@ namespace ncpp {
                 NCPP_FORCE_INLINE const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&& T_force_cast() const && noexcept {\
 \
                     return (const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&&)*this;\
-                }                          \
+                }                                                            \
+                                                                                              \
+            public:                            \
+                NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<             \
+				  	TK<typename F_oref__::F_passed_object>\
+				> keyed() const noexcept {\
+\
+                    return { oref.keyed() };\
+                }\
                                                \
             public:                            \
                 NCPP_FORCE_INLINE TF_bind_requirements<ncpp::F_no_requirements>& no_requirements() & noexcept {\
