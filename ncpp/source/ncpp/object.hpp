@@ -651,13 +651,15 @@ namespace ncpp {
                 }                                                            \
 			public:                                                                   \
 				template<ncpp::T_is_oref F_other_oref__>\
-				requires ncpp::T_is_object_down_castable<typename F_oref__::F_passed_object, typename F_other_oref__::F_passed_object>\
+				requires ncpp::T_is_object_down_castable<typename F_oref__::F_passed_object, typename F_other_oref__::F_passed_object>   \
+					&& std::is_same_v<typename F_oref__::F_requirements, typename F_other_oref__::F_requirements>\
 				NCPP_FORCE_INLINE operator TF##NamePrefixConnector##Name<F_other_oref__> () const noexcept {\
 			\
 					return { (const F_other_oref__&)oref };\
 				}\
 				template<ncpp::T_is_oref F_other_oref__>\
 				requires ncpp::T_is_object_up_castable<typename F_oref__::F_passed_object, typename F_other_oref__::F_passed_object>\
+					&& std::is_same_v<typename F_oref__::F_requirements, typename F_other_oref__::F_requirements>\
 				explicit NCPP_FORCE_INLINE operator TF##NamePrefixConnector##Name<F_other_oref__> () const noexcept {\
 			\
 					return { (const F_other_oref__&)oref };\
@@ -1949,6 +1951,7 @@ namespace ncpp {
     template<typename F_passed_object__, typename F_requirements__ = F_no_requirements>
     class TW_oref {
 
+    private:
     private:
         using F_this = TW_oref<F_passed_object__, F_requirements__>;
 
