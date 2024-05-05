@@ -663,7 +663,7 @@ namespace ncpp {
 					return { (const F_other_oref__&)oref };\
 				}
 
-#define NCPP_FHANDLE_GENERATED_BODY(Name, NamePrefixConnector, ...) NCPP_FHANDLE_GENERATED_BODY_ADVANCED(Name,_,__VA_ARGS__)
+#define NCPP_FHANDLE_GENERATED_BODY(Name, ...) NCPP_FHANDLE_GENERATED_BODY_ADVANCED(Name,_,__VA_ARGS__)
 
 #define NCPP_FHANDLE_CHECK(...) ((__VA_ARGS__).oref.is_valid())
 
