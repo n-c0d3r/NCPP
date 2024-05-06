@@ -684,6 +684,7 @@ namespace ncpp {
 
 #define NCPP_FHANDLE_CHECK(...) ((__VA_ARGS__).oref.is_valid())
 
+#define NCPP_FOH_VALID(...) ncpp::F_valid_requirements::T_forward((__VA_ARGS__).keyed())
 #define NCPP_FOREF_VALID(...) ncpp::F_valid_requirements::T_forward((__VA_ARGS__).keyed())
 #define NCPP_FHANDLE_VALID(...) std::remove_const_t< \
                 std::remove_reference_t<             \
@@ -699,6 +700,7 @@ namespace ncpp {
                 >                                    \
             > { NCPP_FOREF_VALID((__VA_ARGS__).oref) }
 #define NCPP_FHANDLE_VALID_AS_OREF(...) (NCPP_FHANDLE_VALID(__VA_ARGS__).oref)
+#define NCPP_FOH_VALID_AS_OREF(...) (ncpp::internal::F_this_oref_getter::invoke(NCPP_FHANDLE_VALID(__VA_ARGS__)))
 
 #define NCPP_FHANDLE_REWRAP(...) { (__VA_ARGS__).oref }
 
