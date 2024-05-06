@@ -684,8 +684,12 @@ namespace ncpp {
 
 #define NCPP_FHANDLE_CHECK(...) ((__VA_ARGS__).oref.is_valid())
 
+// uses to cast from an oref or an object handle to keyed valid form
 #define NCPP_FOH_VALID(...) ncpp::F_valid_requirements::T_forward((__VA_ARGS__).keyed())
+// uses to cast from an oref or an object handle to keyed valid form, 
+// but recommended to use NCPP_FOH_VALID(...) insteads
 #define NCPP_FOREF_VALID(...) ncpp::F_valid_requirements::T_forward((__VA_ARGS__).keyed())
+// uses to cast from an object handle to keyed valid form
 #define NCPP_FHANDLE_VALID(...) std::remove_const_t< \
                 std::remove_reference_t<             \
                     decltype(__VA_ARGS__)            \
@@ -699,8 +703,9 @@ namespace ncpp {
                     >::F_oref::F_passed_object       \
                 >                                    \
             > { NCPP_FOREF_VALID((__VA_ARGS__).oref) }
+// uses to cast from an object handle to keyed valid oref
 #define NCPP_FHANDLE_VALID_AS_OREF(...) (NCPP_FHANDLE_VALID(__VA_ARGS__).oref)
-#define NCPP_FOH_VALID_AS_OREF(...) (ncpp::internal::F_this_oref_getter::invoke(NCPP_FOH_VALID(__VA_ARGS__)))
+// uses to cast from an oref or an object handle to keyed valid oref
 #define NCPP_AOH_VALID(...) (ncpp::internal::F_this_oref_getter::invoke(NCPP_FOH_VALID(__VA_ARGS__)))
 
 #define NCPP_FHANDLE_REWRAP(...) { (__VA_ARGS__).oref }
