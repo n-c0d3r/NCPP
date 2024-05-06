@@ -620,7 +620,7 @@ namespace ncpp {
                                                                                               \
             public:                            \
                 NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<             \
-				  	ncpp::TK<typename F_oref__::F_passed_object, typename F_oref__::F_options, typename F_oref__::is_has_object_key, typename F_oref__::F_requirements>\
+				  	ncpp::TK<typename F_oref__::F_passed_object>::template TF_bind_requirements<typename F_oref__::F_requirements>\
 				> keyed() const noexcept {\
 \
                     return { oref.keyed() };\
