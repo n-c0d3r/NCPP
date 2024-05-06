@@ -620,7 +620,7 @@ namespace ncpp {
                                                                                               \
             public:                            \
                 NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<             \
-				  	ncpp::TK<typename F_oref__::F_passed_object>\
+				  	ncpp::TK<typename F_oref__::F_passed_object, typename F_oref__::F_options, typename F_oref__::is_has_object_key, typename F_oref__::F_requirements>\
 				> keyed() const noexcept {\
 \
                     return { oref.keyed() };\
@@ -701,6 +701,7 @@ namespace ncpp {
             > { NCPP_FOREF_VALID((__VA_ARGS__).oref) }
 #define NCPP_FHANDLE_VALID_AS_OREF(...) (NCPP_FHANDLE_VALID(__VA_ARGS__).oref)
 #define NCPP_FOH_VALID_AS_OREF(...) (ncpp::internal::F_this_oref_getter::invoke(NCPP_FHANDLE_VALID(__VA_ARGS__)))
+#define NCPP_AOH_VALID(...) (ncpp::internal::F_this_oref_getter::invoke(NCPP_FHANDLE_VALID(__VA_ARGS__)))
 
 #define NCPP_FHANDLE_REWRAP(...) { (__VA_ARGS__).oref }
 
