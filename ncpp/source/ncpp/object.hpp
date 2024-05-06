@@ -297,6 +297,17 @@ namespace ncpp {
                 std::remove_const_t<std::remove_pointer_t<decltype(__VA_ARGS__)>>::F_requirements::T_assert(*(__VA_ARGS__))                    \
             );
 
+	namespace internal
+	{
+		struct F_this_oref_getter
+		{
+			static NCPP_FORCE_INLINE const auto& invoke(const auto& o)
+			{
+				return o.this_oref_internal();
+			}
+		};
+	}
+
     template<class F_requirements__, b8 is_always_valid__ = false>
     struct TF_requirements_base {
 
@@ -325,7 +336,7 @@ namespace ncpp {
         {
 
             NCPP_ENABLE_IF_DEBUG(
-                F_requirements__::T_assert((const F_requirements_binded_oref__&)oref);
+                F_requirements__::T_assert(internal::F_this_oref_getter::invoke(oref));
             );
 
             return ((F_return__)oref);
@@ -344,7 +355,7 @@ namespace ncpp {
         {
 
             NCPP_ENABLE_IF_DEBUG(
-                F_requirements__::T_assert((const F_requirements_binded_oref__&)oref);
+                F_requirements__::T_assert(internal::F_this_oref_getter::invoke(oref));
             );
 
             return ((F_return__)oref);
@@ -446,6 +457,10 @@ namespace ncpp {
                 using TF_bind_passed_object = TF##NamePrefixConnector##Name< \
 					typename F_oref::template TF_bind_passed_object<F_passed_object_in__>\
 				>;                                                         \
+                                               \
+            private:\
+				friend ncpp::internal::F_this_oref_getter;\
+                NCPP_FORCE_INLINE const auto& this_oref_internal() const noexcept { return oref; } \
                                                \
             private:                               \
                 using F_this = TF##NamePrefixConnector##Name<F_oref>;\
@@ -1973,7 +1988,11 @@ namespace ncpp {
         template<typename F_new_requirements__>
         using TF_bind_requirements = TW_oref<F_passed_object__, F_new_requirements__>;
         template<typename F_passed_object_in__>
-        using TF_bind_passed_object = TW_oref<F_passed_object_in__, F_requirements>;
+    	using TF_bind_passed_object = TW_oref<F_passed_object_in__, F_requirements>;
+
+    private:
+    	friend ncpp::internal::F_this_oref_getter;
+    	NCPP_FORCE_INLINE const auto& this_oref_internal() const noexcept { return *this; }
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2326,7 +2345,11 @@ namespace ncpp {
         template<typename F_new_requirements__>
         using TF_bind_requirements = TK_oref<F_passed_object__, F_options__, is_has_object_key, F_new_requirements__>;
         template<typename F_passed_object_in__>
-        using TF_bind_passed_object = TK_oref<F_passed_object_in__, F_options__, is_has_object_key, F_requirements>;
+    	using TF_bind_passed_object = TK_oref<F_passed_object_in__, F_options__, is_has_object_key, F_requirements>;
+
+    private:
+    	friend ncpp::internal::F_this_oref_getter;
+    	NCPP_FORCE_INLINE const auto& this_oref_internal() const noexcept { return *this; }
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2714,7 +2737,11 @@ namespace ncpp {
         template<typename F_new_requirements__>
         using TF_bind_requirements = TK_oref<F_passed_object__, F_options__, is_has_object_key, F_new_requirements__>;
         template<typename F_passed_object_in__>
-        using TF_bind_passed_object = TK_oref<F_passed_object_in__, F_options__, is_has_object_key, F_requirements>;
+    	using TF_bind_passed_object = TK_oref<F_passed_object_in__, F_options__, is_has_object_key, F_requirements>;
+
+    private:
+    	friend ncpp::internal::F_this_oref_getter;
+    	NCPP_FORCE_INLINE const auto& this_oref_internal() const noexcept { return *this; }
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -3096,7 +3123,11 @@ namespace ncpp {
         template<typename F_new_requirements__>
         using TF_bind_requirements = TU_oref<F_passed_object__, F_allocator, F_options__, is_has_object_key, F_new_requirements__>;
         template<typename F_passed_object_in__>
-        using TF_bind_passed_object = TU_oref<F_passed_object_in__, F_allocator, F_options__, is_has_object_key, F_requirements>;
+    	using TF_bind_passed_object = TU_oref<F_passed_object_in__, F_allocator, F_options__, is_has_object_key, F_requirements>;
+
+    private:
+    	friend ncpp::internal::F_this_oref_getter;
+    	NCPP_FORCE_INLINE const auto& this_oref_internal() const noexcept { return *this; }
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -3485,7 +3516,11 @@ namespace ncpp {
         template<typename F_new_requirements__>
         using TF_bind_requirements = TU_oref<F_passed_object__, F_allocator, F_options__, is_has_object_key, F_new_requirements__>;
         template<typename F_passed_object_in__>
-        using TF_bind_passed_object = TU_oref<F_passed_object_in__, F_allocator, F_options__, is_has_object_key, F_requirements>;
+    	using TF_bind_passed_object = TU_oref<F_passed_object_in__, F_allocator, F_options__, is_has_object_key, F_requirements>;
+
+    private:
+    	friend ncpp::internal::F_this_oref_getter;
+    	NCPP_FORCE_INLINE const auto& this_oref_internal() const noexcept { return *this; }
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -3894,7 +3929,11 @@ namespace ncpp {
         template<typename F_new_requirements__>
         using TF_bind_requirements = TS_oref<F_passed_object__, F_allocator, F_options__, is_has_object_key, F_new_requirements__>;
         template<typename F_passed_object_in__>
-        using TF_bind_passed_object = TS_oref<F_passed_object_in__, F_allocator, F_options__, is_has_object_key, F_requirements>;
+    	using TF_bind_passed_object = TS_oref<F_passed_object_in__, F_allocator, F_options__, is_has_object_key, F_requirements>;
+
+    private:
+    	friend ncpp::internal::F_this_oref_getter;
+    	NCPP_FORCE_INLINE const auto& this_oref_internal() const noexcept { return *this; }
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -4440,7 +4479,11 @@ namespace ncpp {
         template<typename F_new_requirements__>
         using TF_bind_requirements = TS_oref<F_passed_object__, F_allocator, F_options__, is_has_object_key, F_new_requirements__>;
         template<typename F_passed_object_in__>
-        using TF_bind_passed_object = TS_oref<F_passed_object_in__, F_allocator, F_options__, is_has_object_key, F_requirements>;
+    	using TF_bind_passed_object = TS_oref<F_passed_object_in__, F_allocator, F_options__, is_has_object_key, F_requirements>;
+
+    private:
+    	friend ncpp::internal::F_this_oref_getter;
+    	NCPP_FORCE_INLINE const auto& this_oref_internal() const noexcept { return *this; }
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -4976,7 +5019,11 @@ namespace ncpp {
         template<typename F_new_requirements__>
         using TF_bind_requirements = TX_oref<F_passed_object__, F_allocator, F_options__, is_has_object_key, F_new_requirements__>;
         template<typename F_passed_object_in__>
-        using TF_bind_passed_object = TX_oref<F_passed_object_in__, F_allocator, F_options__, is_has_object_key, F_requirements>;
+    	using TF_bind_passed_object = TX_oref<F_passed_object_in__, F_allocator, F_options__, is_has_object_key, F_requirements>;
+
+    private:
+    	friend ncpp::internal::F_this_oref_getter;
+    	NCPP_FORCE_INLINE const auto& this_oref_internal() const noexcept { return *this; }
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -5856,6 +5903,10 @@ namespace ncpp {
         using TF_bind_requirements = TX_oref<F_passed_object__, F_allocator, F_options__, is_has_object_key, F_new_requirements__>;
         template<typename F_passed_object_in__>
         using TF_bind_passed_object = TX_oref<F_passed_object_in__, F_allocator, F_options__, is_has_object_key, F_requirements>;
+
+    private:
+    	friend ncpp::internal::F_this_oref_getter;
+    	NCPP_FORCE_INLINE const auto& this_oref_internal() const noexcept { return *this; }
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
