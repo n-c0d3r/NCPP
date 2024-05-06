@@ -700,8 +700,8 @@ namespace ncpp {
                 >                                    \
             > { NCPP_FOREF_VALID((__VA_ARGS__).oref) }
 #define NCPP_FHANDLE_VALID_AS_OREF(...) (NCPP_FHANDLE_VALID(__VA_ARGS__).oref)
-#define NCPP_FOH_VALID_AS_OREF(...) (ncpp::internal::F_this_oref_getter::invoke(NCPP_FHANDLE_VALID(__VA_ARGS__)))
-#define NCPP_AOH_VALID(...) (ncpp::internal::F_this_oref_getter::invoke(NCPP_FHANDLE_VALID(__VA_ARGS__)))
+#define NCPP_FOH_VALID_AS_OREF(...) (ncpp::internal::F_this_oref_getter::invoke(NCPP_FOH_VALID(__VA_ARGS__)))
+#define NCPP_AOH_VALID(...) (ncpp::internal::F_this_oref_getter::invoke(NCPP_FOH_VALID(__VA_ARGS__)))
 
 #define NCPP_FHANDLE_REWRAP(...) { (__VA_ARGS__).oref }
 
