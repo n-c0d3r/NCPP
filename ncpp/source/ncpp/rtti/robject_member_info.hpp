@@ -120,7 +120,7 @@ namespace ncpp {
 			TF_robject_member_info(
 				sz hash_code,
 				sz function_address_or_variable_getter_address,
-                containers::TF_view<containers::TF_string<char, F_allocator>> name,
+				const containers::TF_string<char, F_allocator>& name,
 				sz id,
 				u16 size,
                 b8 is_virtual_function,
