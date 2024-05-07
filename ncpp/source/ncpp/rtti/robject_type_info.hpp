@@ -90,7 +90,7 @@ namespace ncpp {
 		public:
 			NCPP_FORCE_INLINE F_rcontainer* rcontainer_p() { return rcontainer_p_; }
 			NCPP_FORCE_INLINE const F_rcontainer* rcontainer_p() const { return rcontainer_p_; }
-			NCPP_FORCE_INLINE containers::TF_view<containers::TF_string<char, F_allocator>> name() const { return name_; }
+			NCPP_FORCE_INLINE const containers::TF_string<char, F_allocator>& name() const { return name_; }
 			NCPP_FORCE_INLINE F_subtype subtype() const { return subtype_; }
 
 			NCPP_FORCE_INLINE const containers::TF_set<F_robject_type_info*>& base_type_info_p_set() const { return base_type_info_p_set_; }
@@ -114,7 +114,7 @@ namespace ncpp {
             NCPP_FORCE_INLINE const containers::TF_unordered_multimap<containers::TF_string<char, typename F_rtti_traits::F_allocator>, F_robject_member_info*>& name_to_member_info_p_map() const { return name_to_member_info_p_map_; }
             NCPP_FORCE_INLINE const containers::TF_unordered_map<u64, F_robject_member_info*>& hash_code_to_member_info_p_map() const { return hash_code_to_member_info_p_map_; }
 
-			inline F_robject_member_info* member_info(containers::TF_view<containers::TF_string<char, F_allocator>> name) {
+			inline F_robject_member_info* member_info(const containers::TF_string<char, F_allocator>& name) {
 
 				auto it = name_to_member_info_p_map_.find(name);
 
@@ -123,7 +123,7 @@ namespace ncpp {
 
 				return it->second;
 			}
-			inline const F_robject_member_info* member_info(containers::TF_view<containers::TF_string<char, F_allocator>> name) const {
+			inline const F_robject_member_info* member_info(const containers::TF_string<char, F_allocator>& name) const {
 
 				auto it = name_to_member_info_p_map_.find(name);
 
@@ -160,7 +160,7 @@ namespace ncpp {
 				name_to_member_info_p_map_.insert({ info->name(), info });
                 hash_code_to_member_info_p_map_.insert({ info->hash_code(), info });
 			}
-			inline void remove_member_info(containers::TF_view<containers::TF_string<char, F_allocator>> name) {
+			inline void remove_member_info(const containers::TF_string<char, F_allocator>& name) {
 
                 auto name_range = name_to_member_info_p_map_.equal_range(name);
 
@@ -219,19 +219,14 @@ namespace ncpp {
 
 
 		public:
-			NCPP_FORCE_INLINE TF_robject_type_info(F_rcontainer* rcontainer_p, containers::TF_view<containers::TF_string<char, F_allocator>> name, F_subtype subtype) :
+			NCPP_FORCE_INLINE TF_robject_type_info(F_rcontainer* rcontainer_p, const containers::TF_string<char, F_allocator>& name, F_subtype subtype) :
 				rcontainer_p_(rcontainer_p),
 				name_(name),
                 subtype_(subtype)
-			{
-
-
-
-			}
+			{}
 			~TF_robject_type_info() {
 
 				clear();
-
 			}
 
 

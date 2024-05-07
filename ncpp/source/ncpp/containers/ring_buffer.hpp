@@ -89,7 +89,7 @@ namespace ncpp {
 			NCPP_FORCE_INLINE bool is_null() const { return !capacity_; }
             NCPP_FORCE_INLINE ptrd begin_index() const { return begin_index_; }
             NCPP_FORCE_INLINE ptrd end_index() const { return end_index_; }
-            NCPP_FORCE_INLINE TF_view<F_item_vector> item_vector() const { return item_vector_; }
+            NCPP_FORCE_INLINE const F_item_vector& item_vector() const { return item_vector_; }
 
 
 

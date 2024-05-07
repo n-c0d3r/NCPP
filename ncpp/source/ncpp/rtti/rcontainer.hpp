@@ -101,7 +101,7 @@ namespace ncpp {
 
                 return it->second;
             }
-            inline F_robject_type_info* robject_type_info(containers::TF_view<containers::TF_string<char, F_allocator>> fullname) {
+            inline F_robject_type_info* robject_type_info(const containers::TF_string<char, F_allocator>& fullname) {
 
                 auto it = fullname_to_robject_type_info_p_map_.find(fullname);
 
@@ -128,7 +128,7 @@ namespace ncpp {
 
 				return it->second;
 			}
-			inline const F_robject_type_info* robject_type_info(containers::TF_view<containers::TF_string<char, F_allocator>> fullname) const {
+			inline const F_robject_type_info* robject_type_info(const containers::TF_string<char, F_allocator>& fullname) const {
 
 				auto it = fullname_to_robject_type_info_p_map_.find(fullname);
 
@@ -174,7 +174,7 @@ namespace ncpp {
 
 				}
 			}
-			inline void remove_robject_type_info(containers::TF_view<containers::TF_string<char, F_allocator>> fullname) {
+			inline void remove_robject_type_info(const containers::TF_string<char, F_allocator>& fullname) {
 
 				auto it = fullname_to_robject_type_info_p_map_.find(fullname);
 

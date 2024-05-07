@@ -79,7 +79,7 @@ namespace ncpp {
                 sz function_address_ = 0;
                 sz variable_getter_address_;
             };
-			containers::TF_string<char, typename F_rtti_traits::F_allocator> name_;
+			containers::TF_string<char, F_allocator> name_;
 			sz id_ = 0;
 			u16 size_ = 0;
             b8 is_virtual_function_ = false;
@@ -101,7 +101,7 @@ namespace ncpp {
 			NCPP_FORCE_INLINE u64 hash_code() const { return hash_code_; }
             NCPP_FORCE_INLINE sz function_address() const { return function_address_; }
 			NCPP_FORCE_INLINE sz variable_getter_address() const { return variable_getter_address_; }
-			NCPP_FORCE_INLINE containers::TF_view<containers::TF_string<char, F_allocator>> name() const { return name_; }
+			NCPP_FORCE_INLINE const containers::TF_string<char, F_allocator>& name() const { return name_; }
 			NCPP_FORCE_INLINE sz id() const { return id_; }
             NCPP_FORCE_INLINE u16 size() const { return size_; }
 			NCPP_FORCE_INLINE b8 is_function() const { return (size_ == 0); }

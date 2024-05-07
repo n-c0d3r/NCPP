@@ -70,7 +70,6 @@ namespace ncpp {
             using F_allocator = F_allocator__;
 
             using F_vector = TF_vector<F_int, F_allocator>;
-            using V_vector = TF_view<F_vector>;
 
             
             
@@ -89,8 +88,8 @@ namespace ncpp {
             
             NCPP_FORCE_INLINE F_int hash_mask() const { return hash_mask_; }
             
-            NCPP_FORCE_INLINE V_vector hash_vector() const { return hash_vector_; }
-            NCPP_FORCE_INLINE V_vector index_vector() const { return index_vector_; }
+            NCPP_FORCE_INLINE const F_vector& hash_vector() const { return hash_vector_; }
+            NCPP_FORCE_INLINE const F_vector& index_vector() const { return index_vector_; }
             
             
             
