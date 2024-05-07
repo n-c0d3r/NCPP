@@ -77,13 +77,10 @@ namespace ncpp {
                 using F = TF_nth_template_targ<
                     (
                         (!std::is_same_v<typename TF_custom_cpass_bind_helper<F__>::F, F__>) ? 3 :
-                        (!is_size_over_pointer_size && !is_has_container_allocator) ? 0 :
-                        (is_has_container_allocator) ? 2 :
-                        1
+                        (is_size_over_pointer_size) ? 1 : 0
                     ),
                     F__,
                     const F__ &,
-                    containers::TF_view<F__, is_always_mutable__>,
                     typename TF_custom_cpass_bind_helper<F__>::F
                 >;
 
