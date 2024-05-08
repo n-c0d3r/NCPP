@@ -50,23 +50,23 @@ endfunction()
 #####################################################################################
 NCPP_EARepository_Checkout(
     NAME EASTL
-    GIT_URL "https://github.com/electronicarts/EASTL.git"
+    GIT_URL "https://github.com/n-c0d3r/EASTL.git"
     GIT_COMMIT "05f4b4aef33f2f3ded08f19fa97f5a27ff35ff9f"
 )
 NCPP_EARepository_Checkout(
     NAME EAStdC
-    GIT_URL "https://github.com/electronicarts/EAStdC.git"
-    GIT_COMMIT "fbcc34e89c63636054334888f3a5bd7ac2fd4b76"
+    GIT_URL "https://github.com/n-c0d3r/EAStdC.git"
+    GIT_COMMIT "5621cd506c78f475f1d5db8a470a7a334939eaa3"
 )
 NCPP_EARepository_Checkout(
     NAME EAAssert
-    GIT_URL "https://github.com/electronicarts/EAAssert.git"
-    GIT_COMMIT "e5e181255de2e883dd1f987c78ccc42ac81d3bca"
+    GIT_URL "https://github.com/n-c0d3r/EAAssert.git"
+    GIT_COMMIT "3f34ff5246614555b4299cee6918a4241ea90aec"
 )
 NCPP_EARepository_Checkout(
     NAME EAThread
-    GIT_URL "https://github.com/electronicarts/EAThread.git"
-    GIT_COMMIT "b05f3b308a9be1b525f09c79bd66ce8736fe5630"
+    GIT_URL "https://github.com/n-c0d3r/EAThread.git"
+    GIT_COMMIT "80b7a812ed1d4df3535b214b4d64bb916cee9f8b"
 )
 
 # If EABase is not cloned, delete the empty EABase subdirectory to be cloned next time
@@ -76,8 +76,8 @@ endif()
 
 NCPP_EARepository_Checkout(
     NAME EABase
-    GIT_URL "https://github.com/electronicarts/EABase.git"
-    GIT_COMMIT "521cb053d9320636f53226ffc616216cf532f0ef"
+    GIT_URL "https://github.com/n-c0d3r/EABase.git"
+    GIT_COMMIT "a5b5065aba247193b9c5afc9b942ee1f59a21293"
     CUSTOM_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/dependencies/EAThread/test/packages"
 )
 
