@@ -91,7 +91,7 @@ if(NCPP_ENABLE_DOCUMENTATIONS)
         BRIEF "Ncoder's Game Engine Learning Aimed C++ Library."
 
         TARGET_NAME ncpp.documentations
-        TARGET_FOLDER ncpp
+        TARGET_FOLDER NCoder/ncpp
         TARGET_LABEL documentations
 
         INPUT_DIRS 
