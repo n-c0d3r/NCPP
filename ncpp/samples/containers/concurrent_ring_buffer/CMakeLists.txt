@@ -18,7 +18,7 @@ add_executable(ncpp.samples.containers.concurrent_ring_buffer
 # ncpp.samples.containers.concurrent_ring_buffer target settings
 set_target_properties(ncpp.samples.containers.concurrent_ring_buffer
     PROPERTIES 
-        FOLDER "ncpp/samples/containers"
+        FOLDER "NCoder/ncpp/samples/containers"
         PROJECT_LABEL "concurrent_ring_buffer"
 )
 target_link_libraries(ncpp.samples.containers.concurrent_ring_buffer

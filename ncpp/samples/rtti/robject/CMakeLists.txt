@@ -22,7 +22,7 @@ add_executable(ncpp.samples.rtti.robject
 # ncpp.samples.rtti.robject target settings
 set_target_properties(ncpp.samples.rtti.robject
     PROPERTIES 
-        FOLDER "ncpp/samples/rtti"
+        FOLDER "NCoder/ncpp/samples/rtti"
         PROJECT_LABEL "robject"
 )
 target_link_libraries(ncpp.samples.rtti.robject

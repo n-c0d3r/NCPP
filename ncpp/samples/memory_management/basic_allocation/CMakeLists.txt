@@ -18,7 +18,7 @@ add_executable(ncpp.samples.memory_management.basic_allocation
 # ncpp.samples.memory_management.basic_allocation target settings
 set_target_properties(ncpp.samples.memory_management.basic_allocation
     PROPERTIES 
-        FOLDER "ncpp/samples/memory_management"
+        FOLDER "NCoder/ncpp/samples/memory_management"
         PROJECT_LABEL "basic_allocation"
 )
 target_link_libraries(ncpp.samples.memory_management.basic_allocation

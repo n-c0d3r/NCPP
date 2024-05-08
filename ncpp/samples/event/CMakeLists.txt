@@ -18,7 +18,7 @@ add_executable(ncpp.samples.event
 # ncpp.samples.event target settings
 set_target_properties(ncpp.samples.event
     PROPERTIES 
-        FOLDER "ncpp/samples"
+        FOLDER "NCoder/ncpp/samples"
         PROJECT_LABEL "event"
 )
 target_link_libraries(ncpp.samples.event

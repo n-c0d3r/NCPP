@@ -180,7 +180,7 @@ add_library(ncpp ${ncppLinkingMode}
 #####################################################################################
 set_target_properties(ncpp
     PROPERTIES 
-        FOLDER "ncpp"
+        FOLDER "NCoder/ncpp"
 )
 
 target_precompile_headers(ncpp

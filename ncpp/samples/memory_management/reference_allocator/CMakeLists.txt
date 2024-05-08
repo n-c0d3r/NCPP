@@ -18,7 +18,7 @@ add_executable(ncpp.samples.memory_management.reference_allocator
 # ncpp.samples.memory_management.reference_allocator target settings
 set_target_properties(ncpp.samples.memory_management.reference_allocator
     PROPERTIES 
-        FOLDER "ncpp/samples/memory_management"
+        FOLDER "NCoder/ncpp/samples/memory_management"
         PROJECT_LABEL "reference_allocator"
 )
 target_link_libraries(ncpp.samples.memory_management.reference_allocator

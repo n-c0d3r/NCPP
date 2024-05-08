@@ -18,7 +18,7 @@ add_executable(ncpp.samples.memory_management.garbage_collection
 # ncpp.samples.memory_management.garbage_collection target settings
 set_target_properties(ncpp.samples.memory_management.garbage_collection
     PROPERTIES 
-        FOLDER "ncpp/samples/memory_management"
+        FOLDER "NCoder/ncpp/samples/memory_management"
         PROJECT_LABEL "garbage_collection"
 )
 target_link_libraries(ncpp.samples.memory_management.garbage_collection

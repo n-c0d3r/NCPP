@@ -18,7 +18,7 @@ add_executable(ncpp.samples.containers.hash_table
 # ncpp.samples.containers.hash_table target settings
 set_target_properties(ncpp.samples.containers.hash_table
     PROPERTIES 
-        FOLDER "ncpp/samples/containers"
+        FOLDER "NCoder/ncpp/samples/containers"
         PROJECT_LABEL "hash_table"
 )
 target_link_libraries(ncpp.samples.containers.hash_table

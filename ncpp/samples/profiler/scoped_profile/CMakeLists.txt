@@ -18,7 +18,7 @@ add_executable(ncpp.samples.profiler.scoped_profile
 # ncpp.samples.profiler.scoped_profile target settings
 set_target_properties(ncpp.samples.profiler.scoped_profile
     PROPERTIES 
-        FOLDER "ncpp/samples/profiler"
+        FOLDER "NCoder/ncpp/samples/profiler"
         PROJECT_LABEL "scoped_profile"
 )
 target_link_libraries(ncpp.samples.profiler.scoped_profile

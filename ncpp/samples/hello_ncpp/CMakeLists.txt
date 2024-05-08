@@ -18,7 +18,7 @@ add_executable(ncpp.samples.hello_ncpp
 # ncpp.samples.hello_ncpp target settings
 set_target_properties(ncpp.samples.hello_ncpp
     PROPERTIES 
-        FOLDER "ncpp/samples"
+        FOLDER "NCoder/ncpp/samples"
         PROJECT_LABEL "hello_ncpp"
 )
 target_link_libraries(ncpp.samples.hello_ncpp
