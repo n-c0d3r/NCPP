@@ -32,6 +32,7 @@ include(NCPP/DefaultAllocatorConfig)
 include(NCPP/GeneralAllocatorConfig)
 include(NCPP/EphemeralAllocatorConfig)
 include(NCPP/ObjectAllocatorConfig)
+include(NCPP/ObjectOptionsConfig)
 
 
 
@@ -40,6 +41,9 @@ include(NCPP/ObjectAllocatorConfig)
 #####################################################################################
 # ncpp linking options
 option(NCPP_DLL "Build NCPP as DLL or not" OFF)
+
+# ncpp object options
+option(NCPP_OBJECT_THREAD_SAFE_BY_DEFAULT "If enabled, all objects are marked thread safe" ON)
 
 # ncpp mem options
 option(NCPP_ENABLE_MEMORY_COUNTING "Enable memory counting" ON)

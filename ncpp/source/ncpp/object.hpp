@@ -194,9 +194,6 @@ namespace ncpp {
 
 
 
-#define NCPP_OBJECT_IMPLEMENT(...) \
-            NCPP_OBJECT_FRIEND_CLASSES()
-
 #define NCPP_OBJECT_THREAD_SAFE() \
             NCPP_RTTI_IMPLEMENT_FLAG(ncpp::F_object_thread_safe_flag);
 
@@ -1493,9 +1490,9 @@ namespace ncpp {
 
 
     template<typename F_allocator__ = mem::F_default_allocator>
-    struct TF_default_object_options {
+    struct TF_object_options {
 
-        using F_this = TF_default_object_options<F_allocator__>;
+        using F_this = TF_object_options<F_allocator__>;
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -1537,7 +1534,13 @@ namespace ncpp {
 
     };
 
-    using F_default_object_options = TF_default_object_options<>;
+}
+
+#include <ncpp/object_options_config.hpp>
+
+namespace ncpp {
+
+    struct F_object_options : public TF_object_options<> {};
 
 
 
@@ -6872,3 +6875,18 @@ NCPP_BIND_CUSTOM_CPASS(
 #define NCPP_KTHIS2_UNSAFE(...) (ncpp::TK2<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
 #define NCPP_STHIS2_UNSAFE(...) (ncpp::TS2<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
 #define NCPP_XTHIS2_UNSAFE(...) (ncpp::TX2<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
+
+
+
+#define NCPP_OBJECT_MINIMAL(...) \
+			NCPP_DISABLE_COPY(__VA_ARGS__) \
+			NCPP_OBJECT_FRIEND_CLASSES()
+
+#ifdef NCPP_OBJECT_THREAD_SAFE_BY_DEFAULT
+#define NCPP_OBJECT(...) \
+			NCPP_OBJECT_MINIMAL() \
+			NCPP_OBJECT_THREAD_SAFE()
+#else
+#define NCPP_OBJECT(...) \
+			NCPP_OBJECT_MINIMAL()
+#endif
