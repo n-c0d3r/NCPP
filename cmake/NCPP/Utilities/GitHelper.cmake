@@ -47,12 +47,15 @@ function(NCPP_GitHelper_Clone)
     cmake_parse_arguments(
             PARGS                                                                                                         # prefix of output variables
             "QUIET"                                                                                                       # list of names of the boolean arguments (only defined ones will be true)
-            "PROJECT_NAME;GIT_URL;GIT_TAG;GIT_BRANCH;MAIN_GIT_BRANCH;GIT_COMMIT;DIRECTORY;SOURCE_DIR_VARIABLE;CLONE_RESULT_VARIABLE"      # list of names of mono-valued arguments
+            "PROJECT_NAME;GIT_URL;GIT_TAG;GIT_BRANCH;GIT_COMMIT;DIRECTORY"      # list of names of mono-valued arguments
             ""                                                                                                            # list of names of multi-valued arguments (output variables are lists)
             ${ARGN}                                                                                                       # arguments of the function to parse, here we take the all original ones
-    )                                                                                                                      # remaining unparsed arguments can be found in PARGS_UNPARSED_ARGUMENTS
-    if(NOT PARGS_MAIN_GIT_BRANCH)
-        set(PARGS_MAIN_GIT_BRANCH "master")
+    )
+    set(USE_GIT_BRANCH OFF)# remaining unparsed arguments can be found in PARGS_UNPARSED_ARGUMENTS
+    if(NOT PARGS_GIT_BRANCH)
+        set(PARGS_GIT_BRANCH "master")
+    else()
+        set(USE_GIT_BRANCH ON)
     endif()
                                                                                                                  # remaining unparsed arguments can be found in PARGS_UNPARSED_ARGUMENTS
     if(NOT PARGS_PROJECT_NAME)
@@ -67,96 +70,36 @@ function(NCPP_GitHelper_Clone)
         set(PARGS_DIRECTORY ${CMAKE_BINARY_DIR})
     endif()
 
-    if(NOT PARGS_SOURCE_DIR_VARIABLE)
-        set(${PARGS_PROJECT_NAME}_SOURCE_DIR
-                ${PARGS_DIRECTORY}/${PARGS_PROJECT_NAME}
-                CACHE INTERNAL "" FORCE) # makes var visible everywhere because PARENT_SCOPE wouldn't include this scope
-        
-        set(SOURCE_DIR ${PARGS_PROJECT_NAME}_SOURCE_DIR)
-    else()
-        set(${PARGS_SOURCE_DIR_VARIABLE}
-                ${PARGS_DIRECTORY}/${PARGS_PROJECT_NAME}
-                CACHE INTERNAL "" FORCE) # makes var visible everywhere because PARENT_SCOPE wouldn't include this scope
-        
-        set(SOURCE_DIR ${PARGS_SOURCE_DIR_VARIABLE})
-    endif()
-
-    if(NOT PARGS_CLONE_RESULT_VARIABLE)   
-        set(CLONE_RESULT ${PARGS_PROJECT_NAME}_CLONE_RESULT)
-    else()
-        set(CLONE_RESULT ${PARGS_CLONE_RESULT_VARIABLE})
-    endif()    
-
-    # check that only one of GIT_TAG xor GIT_BRANCH xor GIT_COMMIT was passed
-    at_most_one(at_most_one_tag ${PARGS_GIT_TAG} ${PARGS_GIT_BRANCH} ${PARGS_GIT_COMMIT})
-
-    if(NOT at_most_one_tag)
-        message(FATAL_ERROR "you can only provide one of GIT_TAG, GIT_BRANCH or GIT_COMMIT")
-    endif()
-
     if(NOT PARGS_QUIET)
         message(STATUS "downloading/updating ${PARGS_PROJECT_NAME}")
     endif()
 
     # first clone the repo
-    if(EXISTS ${${SOURCE_DIR}})
-        if(NOT PARGS_QUIET)
-            message(STATUS "${PARGS_PROJECT_NAME} directory found, pulling...")
-        endif()
-        
+    if(NOT PARGS_QUIET)
+        message(STATUS "${PARGS_PROJECT_NAME} directory not found, cloning...")
+    endif()
+
+    if(PARGS_GIT_BRANCH)
         execute_process(
-                COMMAND             ${GIT_EXECUTABLE} pull origin "${PARGS_MAIN_GIT_BRANCH}"
-                WORKING_DIRECTORY   ${${SOURCE_DIR}}
-                RESULT_VARIABLE     git_result
-                OUTPUT_VARIABLE     git_output)
-        if(git_result EQUAL "0")
-                execute_process(
-                COMMAND             ${GIT_EXECUTABLE} submodule update --remote
-                WORKING_DIRECTORY   ${${SOURCE_DIR}}
-                RESULT_VARIABLE     git_result
-                OUTPUT_VARIABLE     git_output)
-                if(NOT git_result EQUAL "0")
-                    set(${CLONE_RESULT} FALSE CACHE INTERNAL "" FORCE)
-                    if(NOT PARGS_QUIET)
-                        message(WARNING "${PARGS_PROJECT_NAME}  submodule update error") #ToDo: maybe FATAL_ERROR?
-                    endif()
-                    return()
-                endif()
-        else()
-            set(${CLONE_RESULT} FALSE CACHE INTERNAL "" FORCE)
-            if(NOT PARGS_QUIET)
-                message(WARNING "${PARGS_PROJECT_NAME} pull error")  #ToDo: maybe FATAL_ERROR?
-            endif()
-            return()
-        endif()
+            COMMAND             ${GIT_EXECUTABLE} clone -b ${PARGS_GIT_BRANCH} ${PARGS_GIT_URL}
+            WORKING_DIRECTORY   ${PARGS_DIRECTORY}
+            RESULT_VARIABLE     git_result
+            OUTPUT_VARIABLE     git_output
+        )
     else()
+        execute_process(
+            COMMAND             ${GIT_EXECUTABLE} clone ${PARGS_GIT_URL}
+            WORKING_DIRECTORY   ${PARGS_DIRECTORY}
+            RESULT_VARIABLE     git_result
+            OUTPUT_VARIABLE     git_output
+        )
+    endif()
+
+    if(NOT git_result EQUAL "0")
         if(NOT PARGS_QUIET)
-            message(STATUS "${PARGS_PROJECT_NAME} directory not found, cloning...")
+            message(WARNING "${PARGS_PROJECT_NAME} clone error ${git_result}")  #ToDo: maybe FATAL_ERROR?
         endif()
-
-        if(PARGS_GIT_BRANCH)
-            execute_process(
-                    COMMAND             ${GIT_EXECUTABLE} clone -b ${PARGS_GIT_BRANCH} ${PARGS_GIT_URL}
-                    WORKING_DIRECTORY   ${PARGS_DIRECTORY}
-                    RESULT_VARIABLE     git_result
-                    OUTPUT_VARIABLE     git_output
-            )
-        else()
-            execute_process(
-                    COMMAND             ${GIT_EXECUTABLE} clone ${PARGS_GIT_URL}
-                    WORKING_DIRECTORY   ${PARGS_DIRECTORY}
-                    RESULT_VARIABLE     git_result
-                    OUTPUT_VARIABLE     git_output
-            )
-        endif()
-
-        if(NOT git_result EQUAL "0")
-            set(${CLONE_RESULT} FALSE CACHE INTERNAL "" FORCE)
-            if(NOT PARGS_QUIET)
-                message(WARNING "${PARGS_PROJECT_NAME} clone error ${git_result}")  #ToDo: maybe FATAL_ERROR?
-            endif()
-            return()
-        endif()   
+        return()
     endif()
 
     if(NOT PARGS_QUIET)
@@ -165,57 +108,41 @@ function(NCPP_GitHelper_Clone)
 
 
 
-    # execute_process(
-    #     COMMAND             ${GIT_EXECUTABLE} submodule update --init
-    #     WORKING_DIRECTORY   ${PARGS_DIRECTORY}/${PARGS_PROJECT_NAME}
-    #     RESULT_VARIABLE     git_result
-    #     OUTPUT_VARIABLE     git_output
-    # )
-
-    # if(NOT git_result EQUAL "0")
-    #     if(NOT PARGS_QUIET)
-    #         message("${PARGS_PROJECT_NAME} init submodule failed. ${git_output}")  #ToDo: maybe FATAL_ERROR?
-    #     endif()
-    # endif()
-
-    # if(NOT PARGS_QUIET)
-    #     message(STATUS "${git_output}")
-    # endif()
-
-
-
     # now checkout the right commit
     if(PARGS_GIT_TAG)
         execute_process(
-                COMMAND             ${GIT_EXECUTABLE} fetch --all --tags --prune
-                COMMAND             ${GIT_EXECUTABLE} checkout tags/${PARGS_GIT_TAG} -b tag_${PARGS_GIT_TAG}
-                WORKING_DIRECTORY   ${${SOURCE_DIR}}
-                RESULT_VARIABLE     git_result
-                OUTPUT_VARIABLE     git_output)
-    elseif(PARGS_GIT_BRANCH OR PARGS_GIT_COMMIT)
+            COMMAND             ${GIT_EXECUTABLE} fetch --all --tags --prune
+            COMMAND             ${GIT_EXECUTABLE} checkout tags/${PARGS_GIT_TAG} -b tag_${PARGS_GIT_TAG}
+            WORKING_DIRECTORY   "${PARGS_DIRECTORY}/${PARGS_PROJECT_NAME}"
+            RESULT_VARIABLE     git_result
+            OUTPUT_VARIABLE     git_output)
+    elseif(PARGS_GIT_COMMIT)
         execute_process(
-                COMMAND             ${GIT_EXECUTABLE} checkout ${PARGS_GIT_BRANCH} ${PARGS_GIT_COMMIT}
-                WORKING_DIRECTORY   ${${SOURCE_DIR}}
-                RESULT_VARIABLE     git_result
-                OUTPUT_VARIABLE     git_output)
+            COMMAND             ${GIT_EXECUTABLE} checkout ${PARGS_GIT_COMMIT}
+            WORKING_DIRECTORY   "${PARGS_DIRECTORY}/${PARGS_PROJECT_NAME}"
+            RESULT_VARIABLE     git_result
+            OUTPUT_VARIABLE     git_output)
+    elseif(USE_GIT_BRANCH)
+        execute_process(
+            COMMAND             ${GIT_EXECUTABLE} checkout ${PARGS_GIT_BRANCH}
+            WORKING_DIRECTORY   "${PARGS_DIRECTORY}/${PARGS_PROJECT_NAME}"
+            RESULT_VARIABLE     git_result
+            OUTPUT_VARIABLE     git_output)
     else()
         if(NOT PARGS_QUIET)
-            message(STATUS "no tag specified, defaulting to ${PARGS_MAIN_GIT_BRANCH}")
+            message(STATUS "no tag specified, defaulting to ${PARGS_GIT_BRANCH}")
         endif()
         execute_process(
-                COMMAND             ${GIT_EXECUTABLE} checkout "${PARGS_MAIN_GIT_BRANCH}"
-                WORKING_DIRECTORY   ${${SOURCE_DIR}}
-                RESULT_VARIABLE     git_result
-                OUTPUT_VARIABLE     git_output)
+            COMMAND             ${GIT_EXECUTABLE} checkout "${PARGS_GIT_BRANCH}"
+            WORKING_DIRECTORY   "${PARGS_DIRECTORY}/${PARGS_PROJECT_NAME}"
+            RESULT_VARIABLE     git_result
+            OUTPUT_VARIABLE     git_output)
     endif()
     if(NOT git_result EQUAL "0")
-        set(${CLONE_RESULT} FALSE CACHE INTERNAL "" FORCE)
         if(NOT PARGS_QUIET)
             message(WARNING "${PARGS_PROJECT_NAME} some error happens. ${git_output}")  #ToDo: maybe FATAL_ERROR?
         endif()
         return()
-    else()
-        set(${CLONE_RESULT} TRUE CACHE INTERNAL "" FORCE)
     endif()
     if(NOT PARGS_QUIET)
         message(STATUS "${git_output}")
