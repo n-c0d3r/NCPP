@@ -47,10 +47,14 @@ function(NCPP_GitHelper_Clone)
     cmake_parse_arguments(
             PARGS                                                                                                         # prefix of output variables
             "QUIET"                                                                                                       # list of names of the boolean arguments (only defined ones will be true)
-            "PROJECT_NAME;GIT_URL;GIT_TAG;GIT_BRANCH;GIT_COMMIT;DIRECTORY;SOURCE_DIR_VARIABLE;CLONE_RESULT_VARIABLE"      # list of names of mono-valued arguments
+            "PROJECT_NAME;GIT_URL;GIT_TAG;GIT_BRANCH;MAIN_GIT_BRANCH;GIT_COMMIT;DIRECTORY;SOURCE_DIR_VARIABLE;CLONE_RESULT_VARIABLE"      # list of names of mono-valued arguments
             ""                                                                                                            # list of names of multi-valued arguments (output variables are lists)
             ${ARGN}                                                                                                       # arguments of the function to parse, here we take the all original ones
-    )                                                                                                                     # remaining unparsed arguments can be found in PARGS_UNPARSED_ARGUMENTS
+    )                                                                                                                      # remaining unparsed arguments can be found in PARGS_UNPARSED_ARGUMENTS
+    if(NOT PARGS_MAIN_GIT_BRANCH)
+        set(PARGS_MAIN_GIT_BRANCH "master")
+    endif()
+                                                                                                                 # remaining unparsed arguments can be found in PARGS_UNPARSED_ARGUMENTS
     if(NOT PARGS_PROJECT_NAME)
         message(FATAL_ERROR "You must provide a project name")
     endif()
@@ -101,7 +105,7 @@ function(NCPP_GitHelper_Clone)
         endif()
         
         execute_process(
-                COMMAND             ${GIT_EXECUTABLE} pull origin master
+                COMMAND             ${GIT_EXECUTABLE} pull origin "${PARGS_MAIN_GIT_BRANCH}"
                 WORKING_DIRECTORY   ${${SOURCE_DIR}}
                 RESULT_VARIABLE     git_result
                 OUTPUT_VARIABLE     git_output)
@@ -196,10 +200,10 @@ function(NCPP_GitHelper_Clone)
                 OUTPUT_VARIABLE     git_output)
     else()
         if(NOT PARGS_QUIET)
-            message(STATUS "no tag specified, defaulting to master")
+            message(STATUS "no tag specified, defaulting to ${PARGS_MAIN_GIT_BRANCH}")
         endif()
         execute_process(
-                COMMAND             ${GIT_EXECUTABLE} checkout master
+                COMMAND             ${GIT_EXECUTABLE} checkout "${PARGS_MAIN_GIT_BRANCH}"
                 WORKING_DIRECTORY   ${${SOURCE_DIR}}
                 RESULT_VARIABLE     git_result
                 OUTPUT_VARIABLE     git_output)
