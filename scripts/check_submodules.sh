@@ -3,5 +3,5 @@
 SOURCE_DIR="$(dirname "$0")/.."
 
 cd "$SOURCE_DIR"
-git submodule update --init
-git submodule update
+git submodule update --init --recursive
+git submodule update --recursive
