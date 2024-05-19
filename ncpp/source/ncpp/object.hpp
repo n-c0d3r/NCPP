@@ -2103,6 +2103,14 @@ namespace ncpp {
             return *this;
         }
 
+		NCPP_FORCE_INLINE TW_oref& operator = (F_null) noexcept
+		{
+			object_p_ = 0;
+
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return *this;
+		}
+
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
         NCPP_FORCE_INLINE TW_oref(const TW_oref<F_other_p__, F_requirements>& x) noexcept :
@@ -2479,6 +2487,15 @@ namespace ncpp {
 
             return *this;
         }
+
+		NCPP_FORCE_INLINE TK_oref& operator = (F_null) noexcept
+		{
+			object_p_ = 0;
+			object_key_ = F_object_key();
+
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return *this;
+		}
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
@@ -2878,6 +2895,14 @@ namespace ncpp {
             return *this;
         }
 
+		NCPP_FORCE_INLINE TK_oref& operator = (F_null) noexcept
+		{
+			object_p_ = 0;
+
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return *this;
+		}
+
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
         NCPP_FORCE_INLINE TK_oref(const TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>& x) noexcept :
@@ -3262,6 +3287,15 @@ namespace ncpp {
             return *this;
         }
 
+		NCPP_FORCE_INLINE TU_oref& operator = (F_null) noexcept
+		{
+			object_p_ = 0;
+			object_key_ = F_object_key();
+
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return *this;
+		}
+
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
         NCPP_FORCE_INLINE TU_oref(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
@@ -3642,6 +3676,14 @@ namespace ncpp {
 
             return *this;
         }
+
+		NCPP_FORCE_INLINE TU_oref& operator = (F_null) noexcept
+		{
+			object_p_ = 0;
+
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return *this;
+		}
 
         template<typename F_other_p__>
         requires T_is_object_down_castable<F_other_p__, F_passed_object>
@@ -4108,6 +4150,15 @@ namespace ncpp {
 
             return *this;
         }
+
+		NCPP_FORCE_INLINE TS_oref& operator = (F_null) noexcept
+		{
+			object_p_ = 0;
+			object_key_ = F_object_key();
+
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return *this;
+		}
 
         NCPP_FORCE_INLINE TS_oref(TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_(x.object_p_),
@@ -4644,6 +4695,14 @@ namespace ncpp {
 
             return *this;
         }
+
+		NCPP_FORCE_INLINE TS_oref& operator = (F_null) noexcept
+		{
+			object_p_ = 0;
+
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return *this;
+		}
 
         NCPP_FORCE_INLINE TS_oref(TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_(x.object_p_)
@@ -5210,6 +5269,16 @@ namespace ncpp {
 
             return *this;
         }
+
+		NCPP_FORCE_INLINE TX_oref& operator = (F_null) noexcept
+		{
+			object_p_ = 0;
+			object_key_ = F_object_key();
+			is_shared_ = false;
+
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return *this;
+		}
 
         NCPP_FORCE_INLINE TX_oref(TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_(x.object_p_),
@@ -6100,6 +6169,15 @@ namespace ncpp {
 
             return *this;
         }
+
+		NCPP_FORCE_INLINE TX_oref& operator = (F_null) noexcept
+		{
+			object_p_ = 0;
+			is_shared_ = false;
+
+			NCPP_ASSERT_OREF_REQUIREMENTS(this);
+			return *this;
+		}
 
         NCPP_FORCE_INLINE TX_oref(TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
             object_p_(x.object_p_),
