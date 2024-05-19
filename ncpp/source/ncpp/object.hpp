@@ -805,7 +805,15 @@ namespace ncpp {
 	NCPP_FORCE_INLINE b8 T_check_object_polymorphism(auto* object_p) {
 
 		return (
-			dynamic_cast<F_target__*>((std::remove_const_t<decltype(object_p)>*)object_p)
+			dynamic_cast<F_target__*>(
+				(
+					std::remove_const_t<
+					    std::remove_pointer_t<
+					        decltype(object_p)
+						>
+					>*
+				)object_p
+			)
 			!= 0
 		);
 	}
