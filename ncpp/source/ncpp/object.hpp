@@ -7552,27 +7552,27 @@ NCPP_BIND_CUSTOM_CPASS(
 
 
 
-#define NCPP_WTHIS_MUTABLE() (ncpp::TW_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>>>::unsafe(this))
+#define NCPP_WTHIS_MUTABLE() (ncpp::TW_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>>>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
 
-#define NCPP_KTHIS_MUTABLE(...) (ncpp::TK_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
-#define NCPP_STHIS_MUTABLE(...) (ncpp::TS_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
-#define NCPP_XTHIS_MUTABLE(...) (ncpp::TX_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
+#define NCPP_KTHIS_MUTABLE(...) (ncpp::TK_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
+#define NCPP_STHIS_MUTABLE(...) (ncpp::TS_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
+#define NCPP_XTHIS_MUTABLE(...) (ncpp::TX_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
 
-#define NCPP_KTHIS2_MUTABLE(...) (ncpp::TK2_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
-#define NCPP_STHIS2_MUTABLE(...) (ncpp::TS2_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
-#define NCPP_XTHIS2_MUTABLE(...) (ncpp::TX2_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
+#define NCPP_KTHIS2_MUTABLE(...) (ncpp::TK2_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
+#define NCPP_STHIS2_MUTABLE(...) (ncpp::TS2_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
+#define NCPP_XTHIS2_MUTABLE(...) (ncpp::TX2_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
 
 
 
-#define NCPP_WTHIS_UNSAFE_MUTABLE() (ncpp::TW<std::remove_const_t<std::remove_pointer_t<decltype(this)>>>::unsafe(this))
+#define NCPP_WTHIS_UNSAFE_MUTABLE() (ncpp::TW<std::remove_const_t<std::remove_pointer_t<decltype(this)>>>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
 
-#define NCPP_KTHIS_UNSAFE_MUTABLE(...) (ncpp::TK<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
-#define NCPP_STHIS_UNSAFE_MUTABLE(...) (ncpp::TS<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
-#define NCPP_XTHIS_UNSAFE_MUTABLE(...) (ncpp::TX<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
+#define NCPP_KTHIS_UNSAFE_MUTABLE(...) (ncpp::TK<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
+#define NCPP_STHIS_UNSAFE_MUTABLE(...) (ncpp::TS<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
+#define NCPP_XTHIS_UNSAFE_MUTABLE(...) (ncpp::TX<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
 
-#define NCPP_KTHIS2_UNSAFE_MUTABLE(...) (ncpp::TK2<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
-#define NCPP_STHIS2_UNSAFE_MUTABLE(...) (ncpp::TS2<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
-#define NCPP_XTHIS2_UNSAFE_MUTABLE(...) (ncpp::TX2<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
+#define NCPP_KTHIS2_UNSAFE_MUTABLE(...) (ncpp::TK2<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
+#define NCPP_STHIS2_UNSAFE_MUTABLE(...) (ncpp::TS2<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
+#define NCPP_XTHIS2_UNSAFE_MUTABLE(...) (ncpp::TX2<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
 
 
 
