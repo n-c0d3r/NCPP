@@ -686,6 +686,17 @@ namespace ncpp {
 \
                     return (const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&&)*this;\
                 }                                                            \
+\
+                template<typename F_other_p__>\
+                NCPP_FORCE_INLINE auto T_interface() noexcept {\
+\
+                    return oref.T_interface<F_other_p__>();\
+                }\
+                template<typename F_other_p__>\
+                NCPP_FORCE_INLINE auto T_interface() const noexcept {\
+\
+                    return oref.T_interface<F_other_p__>();\
+                }\
                                                                                               \
             public:                            \
                 NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<             \
@@ -2342,6 +2353,40 @@ namespace ncpp {
     public:
         NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TW_oref<F_other_p__, F_requirements>);
 
+	public:
+		template<typename F_other_p__>
+		NCPP_FORCE_INLINE TW_oref<F_other_p__, F_requirements> T_interface() noexcept {
+
+			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+				return (TW_oref<F_other_p__, F_requirements>&)*this;
+			else
+				return TW_oref<F_other_p__, F_requirements>::unsafe(
+					dynamic_cast<F_other_p__*>(object_p_)
+				);
+		}
+		template<typename F_other_p__>\
+		NCPP_FORCE_INLINE TW_oref<F_other_p__, F_requirements> T_interface() const noexcept {
+
+			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+				return (const TW_oref<F_other_p__, F_requirements>&)*this;
+			else
+				return TW_oref<F_other_p__, F_requirements>::unsafe(
+					dynamic_cast<F_other_p__*>(object_p_)
+				);
+		}
+
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -2717,6 +2762,42 @@ namespace ncpp {
 
     public:
         NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>);
+
+	public:
+		template<typename F_other_p__>
+		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() noexcept {
+
+			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+				return (TK_oref<F_other_p__, F_requirements>&)*this;
+			else
+				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
+					dynamic_cast<F_other_p__*>(object_p_),
+					object_key_
+				);
+		}
+		template<typename F_other_p__>\
+		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() const noexcept {
+
+			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+				return (const TK_oref<F_other_p__, F_requirements>&)*this;
+			else
+				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
+					dynamic_cast<F_other_p__*>(object_p_),
+					object_key_
+				);
+		}
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -3124,6 +3205,40 @@ namespace ncpp {
     public:
         NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>);
 
+	public:
+		template<typename F_other_p__>
+		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() noexcept {
+
+			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+				return (TK_oref<F_other_p__, F_requirements>&)*this;
+			else
+				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
+					dynamic_cast<F_other_p__*>(object_p_)
+				);
+		}
+		template<typename F_other_p__>\
+		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() const noexcept {
+
+			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+				return (const TK_oref<F_other_p__, F_requirements>&)*this;
+			else
+				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
+					dynamic_cast<F_other_p__*>(object_p_)
+				);
+		}
+
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -3504,6 +3619,42 @@ namespace ncpp {
 
     public:
         NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>);
+
+	public:
+		template<typename F_other_p__>
+		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() noexcept {
+
+			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+				return (TU_oref<F_other_p__, F_requirements>&)*this;
+			else
+				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
+					dynamic_cast<F_other_p__*>(object_p_),
+					object_key_
+				);
+		}
+		template<typename F_other_p__>\
+		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() const noexcept {
+
+			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+				return (const TU_oref<F_other_p__, F_requirements>&)*this;
+			else
+				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
+					dynamic_cast<F_other_p__*>(object_p_),
+					object_key_
+				);
+		}
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -3898,6 +4049,40 @@ namespace ncpp {
 
     public:
         NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>);
+
+	public:
+		template<typename F_other_p__>
+		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() noexcept {
+
+			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+				return (TU_oref<F_other_p__, F_requirements>&)*this;
+			else
+				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
+					dynamic_cast<F_other_p__*>(object_p_)
+				);
+		}
+		template<typename F_other_p__>\
+		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() const noexcept {
+
+			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+				return (const TU_oref<F_other_p__, F_requirements>&)*this;
+			else
+				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
+					dynamic_cast<F_other_p__*>(object_p_)
+				);
+		}
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -4490,6 +4675,42 @@ namespace ncpp {
     public:
         NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>);
 
+	public:
+		template<typename F_other_p__>
+		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() noexcept {
+
+			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+				return (TS_oref<F_other_p__, F_requirements>&)*this;
+			else
+				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
+					dynamic_cast<F_other_p__*>(object_p_),
+					object_key_
+				);
+		}
+		template<typename F_other_p__>\
+		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() const noexcept {
+
+			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+				return (const TS_oref<F_other_p__, F_requirements>&)*this;
+			else
+				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
+					dynamic_cast<F_other_p__*>(object_p_),
+					object_key_
+				);
+		}
+
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -5037,6 +5258,40 @@ namespace ncpp {
 
     public:
         NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TS_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>);
+
+	public:
+		template<typename F_other_p__>
+		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() noexcept {
+
+			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+				return (TS_oref<F_other_p__, F_requirements>&)*this;
+			else
+				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
+					dynamic_cast<F_other_p__*>(object_p_)
+				);
+		}
+		template<typename F_other_p__>\
+		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() const noexcept {
+
+			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+				return (const TS_oref<F_other_p__, F_requirements>&)*this;
+			else
+				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
+					dynamic_cast<F_other_p__*>(object_p_)
+				);
+		}
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -5885,6 +6140,44 @@ namespace ncpp {
 
     public:
         NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>);
+
+	public:
+		template<typename F_other_p__>
+		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() noexcept {
+
+			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+				return (TX_oref<F_other_p__, F_requirements>&)*this;
+			else
+				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
+					dynamic_cast<F_other_p__*>(object_p_),
+					object_key_,
+					is_shared_
+				);
+		}
+		template<typename F_other_p__>\
+		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() const noexcept {
+
+			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+				return (const TX_oref<F_other_p__, F_requirements>&)*this;
+			else
+				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
+					dynamic_cast<F_other_p__*>(object_p_),
+					object_key_,
+					is_shared_
+				);
+		}
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
@@ -6780,6 +7073,42 @@ namespace ncpp {
 
     public:
         NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TX_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>);
+
+	public:
+		template<typename F_other_p__>
+		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() noexcept {
+
+			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+				return (TX_oref<F_other_p__, F_requirements>&)*this;
+			else
+				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
+					dynamic_cast<F_other_p__*>(object_p_),
+					is_shared_
+				);
+		}
+		template<typename F_other_p__>\
+		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() const noexcept {
+
+			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+				return (const TX_oref<F_other_p__, F_requirements>&)*this;
+			else
+				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
+					dynamic_cast<F_other_p__*>(object_p_),
+					is_shared_
+				);
+		}
 
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
