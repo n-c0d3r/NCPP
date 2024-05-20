@@ -2364,7 +2364,7 @@ namespace ncpp {
 			) << "invalid object polymorphism";
 
 			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
-				return (TW_oref<F_other_p__, F_requirements>&)*this;
+				return *this;
 			else
 				return TW_oref<F_other_p__, F_requirements>::unsafe(
 					dynamic_cast<F_other_p__*>(object_p_)
@@ -2380,7 +2380,7 @@ namespace ncpp {
 			) << "invalid object polymorphism";
 
 			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
-				return (const TW_oref<F_other_p__, F_requirements>&)*this;
+				return *this;
 			else
 				return TW_oref<F_other_p__, F_requirements>::unsafe(
 					dynamic_cast<F_other_p__*>(object_p_)
@@ -2774,7 +2774,7 @@ namespace ncpp {
 			) << "invalid object polymorphism";
 
 			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
-				return (TK_oref<F_other_p__, F_requirements>&)*this;
+				return *this;
 			else
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					dynamic_cast<F_other_p__*>(object_p_),
@@ -2791,7 +2791,7 @@ namespace ncpp {
 			) << "invalid object polymorphism";
 
 			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
-				return (const TK_oref<F_other_p__, F_requirements>&)*this;
+				return *this;
 			else
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					dynamic_cast<F_other_p__*>(object_p_),
@@ -3216,7 +3216,7 @@ namespace ncpp {
 			) << "invalid object polymorphism";
 
 			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
-				return (TK_oref<F_other_p__, F_requirements>&)*this;
+				return *this;
 			else
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					dynamic_cast<F_other_p__*>(object_p_)
@@ -3232,7 +3232,7 @@ namespace ncpp {
 			) << "invalid object polymorphism";
 
 			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
-				return (const TK_oref<F_other_p__, F_requirements>&)*this;
+				return *this;
 			else
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					dynamic_cast<F_other_p__*>(object_p_)
@@ -3631,7 +3631,7 @@ namespace ncpp {
 			) << "invalid object polymorphism";
 
 			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
-				return (TU_oref<F_other_p__, F_requirements>&)*this;
+				return *this;
 			else
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					dynamic_cast<F_other_p__*>(object_p_),
@@ -3648,7 +3648,7 @@ namespace ncpp {
 			) << "invalid object polymorphism";
 
 			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
-				return (const TU_oref<F_other_p__, F_requirements>&)*this;
+				return *this;
 			else
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					dynamic_cast<F_other_p__*>(object_p_),
@@ -4061,7 +4061,7 @@ namespace ncpp {
 			) << "invalid object polymorphism";
 
 			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
-				return (TU_oref<F_other_p__, F_requirements>&)*this;
+				return *this;
 			else
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					dynamic_cast<F_other_p__*>(object_p_)
@@ -4077,7 +4077,7 @@ namespace ncpp {
 			) << "invalid object polymorphism";
 
 			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
-				return (const TU_oref<F_other_p__, F_requirements>&)*this;
+				return *this;
 			else
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					dynamic_cast<F_other_p__*>(object_p_)
@@ -4686,7 +4686,7 @@ namespace ncpp {
 			) << "invalid object polymorphism";
 
 			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
-				return (TS_oref<F_other_p__, F_requirements>&)*this;
+				return *this;
 			else
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					dynamic_cast<F_other_p__*>(object_p_),
@@ -4703,7 +4703,7 @@ namespace ncpp {
 			) << "invalid object polymorphism";
 
 			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
-				return (const TS_oref<F_other_p__, F_requirements>&)*this;
+				return *this;
 			else
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					dynamic_cast<F_other_p__*>(object_p_),
@@ -5270,7 +5270,7 @@ namespace ncpp {
 			) << "invalid object polymorphism";
 
 			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
-				return (TS_oref<F_other_p__, F_requirements>&)*this;
+				return *this;
 			else
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					dynamic_cast<F_other_p__*>(object_p_)
@@ -5286,7 +5286,7 @@ namespace ncpp {
 			) << "invalid object polymorphism";
 
 			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
-				return (const TS_oref<F_other_p__, F_requirements>&)*this;
+				return *this;
 			else
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					dynamic_cast<F_other_p__*>(object_p_)
@@ -6152,7 +6152,7 @@ namespace ncpp {
 			) << "invalid object polymorphism";
 
 			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
-				return (TX_oref<F_other_p__, F_requirements>&)*this;
+				return *this;
 			else
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					dynamic_cast<F_other_p__*>(object_p_),
@@ -6170,7 +6170,7 @@ namespace ncpp {
 			) << "invalid object polymorphism";
 
 			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
-				return (const TX_oref<F_other_p__, F_requirements>&)*this;
+				return *this;
 			else
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					dynamic_cast<F_other_p__*>(object_p_),
@@ -7085,7 +7085,7 @@ namespace ncpp {
 			) << "invalid object polymorphism";
 
 			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
-				return (TX_oref<F_other_p__, F_requirements>&)*this;
+				return *this;
 			else
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					dynamic_cast<F_other_p__*>(object_p_),
@@ -7102,7 +7102,7 @@ namespace ncpp {
 			) << "invalid object polymorphism";
 
 			if(std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
-				return (const TX_oref<F_other_p__, F_requirements>&)*this;
+				return *this;
 			else
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					dynamic_cast<F_other_p__*>(object_p_),
