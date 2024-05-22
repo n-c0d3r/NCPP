@@ -839,9 +839,9 @@ namespace ncpp {
 		);
 	}
 	template<typename F_target__>
-	NCPP_FORCE_INLINE b8 T_try_cast_object(auto* object_p, F_target__*& out_ref_p) {
+	NCPP_FORCE_INLINE F_target__* T_try_cast_object(auto* object_p) {
 
-		F_target__* p = dynamic_cast<F_target__*>(
+		return dynamic_cast<F_target__*>(
 			(
 				std::remove_const_t<
 					std::remove_pointer_t<
@@ -850,7 +850,6 @@ namespace ncpp {
 				>*
 			)object_p
 		);
-		return (p != 0);
 	}
 
 
@@ -2386,9 +2385,9 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
 
-			F_other_p__* casted_object_p = 0;
+			F_other_p__* casted_object_p = T_try_cast_object<F_other_p__>(object_p_);
 
-			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
+			if(casted_object_p)
 			{
 				out_ref = TW_oref<F_other_p__>::unsafe(casted_object_p);
 				return true;
@@ -2818,9 +2817,9 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
 
-			F_other_p__* casted_object_p = 0;
+			F_other_p__* casted_object_p = T_try_cast_object<F_other_p__>(object_p_);
 
-			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
+			if(casted_object_p)
 			{
 				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key>::unsafe(casted_object_p, object_key_);
 				return true;
@@ -3284,9 +3283,9 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
 
-			F_other_p__* casted_object_p = 0;
+			F_other_p__* casted_object_p = T_try_cast_object<F_other_p__>(object_p_);
 
-			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
+			if(casted_object_p)
 			{
 				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key>::unsafe(casted_object_p);
 				return true;
@@ -3721,9 +3720,9 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
 
-			F_other_p__* casted_object_p = 0;
+			F_other_p__* casted_object_p = T_try_cast_object<F_other_p__>(object_p_);
 
-			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
+			if(casted_object_p)
 			{
 				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key>::unsafe(casted_object_p, object_key_);
 				return true;
@@ -4175,9 +4174,9 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
 
-			F_other_p__* casted_object_p = 0;
+			F_other_p__* casted_object_p = T_try_cast_object<F_other_p__>(object_p_);
 
-			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
+			if(casted_object_p)
 			{
 				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key>::unsafe(casted_object_p);
 				return true;
@@ -4822,9 +4821,9 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
 
-			F_other_p__* casted_object_p = 0;
+			F_other_p__* casted_object_p = T_try_cast_object<F_other_p__>(object_p_);
 
-			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
+			if(casted_object_p)
 			{
 				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key>::unsafe(casted_object_p, object_key_);
 				return true;
@@ -5430,9 +5429,9 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
 
-			F_other_p__* casted_object_p = 0;
+			F_other_p__* casted_object_p = T_try_cast_object<F_other_p__>(object_p_);
 
-			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
+			if(casted_object_p)
 			{
 				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key>::unsafe(casted_object_p);
 				return true;
@@ -6334,9 +6333,9 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
 
-			F_other_p__* casted_object_p = 0;
+			F_other_p__* casted_object_p = T_try_cast_object<F_other_p__>(object_p_);
 
-			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
+			if(casted_object_p)
 			{
 				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key>::unsafe(casted_object_p, object_key_, is_shared_);
 				return true;
@@ -7293,9 +7292,9 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
 
-			F_other_p__* casted_object_p = 0;
+			F_other_p__* casted_object_p = T_try_cast_object<F_other_p__>(object_p_);
 
-			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
+			if(casted_object_p)
 			{
 				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key>::unsafe(casted_object_p, is_shared_);
 				return true;
