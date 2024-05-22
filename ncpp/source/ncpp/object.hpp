@@ -2390,7 +2390,7 @@ namespace ncpp {
 
 			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
 			{
-				out_ref = TW_oref<F_other_p__, F_requirements>::unsafe(casted_object_p);
+				out_ref = TW_oref<F_other_p__>::unsafe(casted_object_p);
 				return true;
 			}
 
@@ -2822,7 +2822,7 @@ namespace ncpp {
 
 			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
 			{
-				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(casted_object_p, object_key_);
+				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key>::unsafe(casted_object_p, object_key_);
 				return true;
 			}
 
@@ -3288,7 +3288,7 @@ namespace ncpp {
 
 			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
 			{
-				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(casted_object_p);
+				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key>::unsafe(casted_object_p);
 				return true;
 			}
 
@@ -3725,7 +3725,7 @@ namespace ncpp {
 
 			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
 			{
-				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(casted_object_p, object_key_);
+				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key>::unsafe(casted_object_p, object_key_);
 				return true;
 			}
 
@@ -4179,7 +4179,7 @@ namespace ncpp {
 
 			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
 			{
-				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(casted_object_p);
+				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key>::unsafe(casted_object_p);
 				return true;
 			}
 
@@ -4826,7 +4826,7 @@ namespace ncpp {
 
 			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
 			{
-				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(casted_object_p, object_key_);
+				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key>::unsafe(casted_object_p, object_key_);
 				return true;
 			}
 
@@ -5434,7 +5434,7 @@ namespace ncpp {
 
 			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
 			{
-				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(casted_object_p);
+				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key>::unsafe(casted_object_p);
 				return true;
 			}
 
@@ -6338,7 +6338,7 @@ namespace ncpp {
 
 			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
 			{
-				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(casted_object_p, object_key_, is_shared_);
+				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key>::unsafe(casted_object_p, object_key_, is_shared_);
 				return true;
 			}
 
@@ -7297,7 +7297,7 @@ namespace ncpp {
 
 			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
 			{
-				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(casted_object_p, is_shared_);
+				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key>::unsafe(casted_object_p, is_shared_);
 				return true;
 			}
 
