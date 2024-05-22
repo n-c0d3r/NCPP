@@ -693,6 +693,11 @@ namespace ncpp {
                     return oref.template T_check_polymorphism<F_other_p__>();\
                 }\
                 template<typename F_other_p__>\
+                NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {\
+\
+                    return oref.template T_try_interface<F_other_p__>(out_ref);\
+                }\
+                template<typename F_other_p__>\
                 NCPP_FORCE_INLINE auto T_interface() noexcept {\
 \
                     return oref.template T_interface<F_other_p__>();\
@@ -832,6 +837,20 @@ namespace ncpp {
 			)
 			!= 0
 		);
+	}
+	template<typename F_target__>
+	NCPP_FORCE_INLINE b8 T_try_cast_object(auto* object_p, F_target__*& out_ref_p) {
+
+		F_target__* p = dynamic_cast<F_target__*>(
+			(
+				std::remove_const_t<
+					std::remove_pointer_t<
+						decltype(object_p)
+					>
+				>*
+			)object_p
+		);
+		return (p != 0);
 	}
 
 
@@ -2360,9 +2379,22 @@ namespace ncpp {
 
 	public:
 		template<typename F_other_p__>
-		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
+		NCPP_FORCE_INLINE b8 T_check_polymorphism(auto& out_ref) const noexcept {
 
 			return ncpp::T_check_object_polymorphism<F_other_p__>(object_p_);
+		}
+		template<typename F_other_p__>
+		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
+
+			F_other_p__* casted_object_p = 0;
+
+			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
+			{
+				out_ref = TW_oref<F_other_p__, F_requirements>::unsafe(casted_object_p);
+				return true;
+			}
+
+			return false;
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE TW_oref<F_other_p__, F_requirements> T_interface() noexcept {
@@ -2782,6 +2814,19 @@ namespace ncpp {
 		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
 
 			return ncpp::T_check_object_polymorphism<F_other_p__>(object_p_);
+		}
+		template<typename F_other_p__>
+		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
+
+			F_other_p__* casted_object_p = 0;
+
+			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
+			{
+				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(casted_object_p, object_key_);
+				return true;
+			}
+
+			return false;
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() noexcept {
@@ -3237,6 +3282,19 @@ namespace ncpp {
 			return ncpp::T_check_object_polymorphism<F_other_p__>(object_p_);
 		}
 		template<typename F_other_p__>
+		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
+
+			F_other_p__* casted_object_p = 0;
+
+			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
+			{
+				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(casted_object_p);
+				return true;
+			}
+
+			return false;
+		}
+		template<typename F_other_p__>
 		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() noexcept {
 
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
@@ -3659,6 +3717,19 @@ namespace ncpp {
 		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
 
 			return ncpp::T_check_object_polymorphism<F_other_p__>(object_p_);
+		}
+		template<typename F_other_p__>
+		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
+
+			F_other_p__* casted_object_p = 0;
+
+			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
+			{
+				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(casted_object_p, object_key_);
+				return true;
+			}
+
+			return false;
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() noexcept {
@@ -4100,6 +4171,19 @@ namespace ncpp {
 		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
 
 			return ncpp::T_check_object_polymorphism<F_other_p__>(object_p_);
+		}
+		template<typename F_other_p__>
+		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
+
+			F_other_p__* casted_object_p = 0;
+
+			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
+			{
+				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(casted_object_p);
+				return true;
+			}
+
+			return false;
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() noexcept {
@@ -4736,6 +4820,19 @@ namespace ncpp {
 			return ncpp::T_check_object_polymorphism<F_other_p__>(object_p_);
 		}
 		template<typename F_other_p__>
+		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
+
+			F_other_p__* casted_object_p = 0;
+
+			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
+			{
+				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(casted_object_p, object_key_);
+				return true;
+			}
+
+			return false;
+		}
+		template<typename F_other_p__>
 		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() noexcept {
 
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
@@ -5329,6 +5426,19 @@ namespace ncpp {
 		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
 
 			return ncpp::T_check_object_polymorphism<F_other_p__>(object_p_);
+		}
+		template<typename F_other_p__>
+		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
+
+			F_other_p__* casted_object_p = 0;
+
+			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
+			{
+				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(casted_object_p);
+				return true;
+			}
+
+			return false;
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() noexcept {
@@ -6220,6 +6330,19 @@ namespace ncpp {
 		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
 
 			return ncpp::T_check_object_polymorphism<F_other_p__>(object_p_);
+		}
+		template<typename F_other_p__>
+		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
+
+			F_other_p__* casted_object_p = 0;
+
+			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
+			{
+				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(casted_object_p, object_key_, is_shared_);
+				return true;
+			}
+
+			return false;
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() noexcept {
@@ -7166,6 +7289,19 @@ namespace ncpp {
 		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
 
 			return ncpp::T_check_object_polymorphism<F_other_p__>(object_p_);
+		}
+		template<typename F_other_p__>
+		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
+
+			F_other_p__* casted_object_p = 0;
+
+			if(T_try_cast_object<F_other_p__>(object_p_, casted_object_p))
+			{
+				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(casted_object_p, is_shared_);
+				return true;
+			}
+
+			return false;
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() noexcept {
