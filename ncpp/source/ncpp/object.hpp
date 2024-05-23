@@ -823,7 +823,7 @@ namespace ncpp {
 
 
 	template<typename F_target__>
-	NCPP_FORCE_INLINE b8 T_check_object_polymorphism_for_direct_casting(auto* object_p) {
+	NCPP_FORCE_INLINE b8 T_check_object_polymorphism(auto* object_p) {
 
 		return (
 			dynamic_cast<F_target__*>(
