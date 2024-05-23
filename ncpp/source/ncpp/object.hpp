@@ -855,7 +855,7 @@ namespace ncpp {
 	NCPP_FORCE_INLINE b8 T_check_object_polymorphism_for_direct_casting(auto* object_p) {
 
 		return (
-			(T_try_cast_object<F_target__>(object_p) == object_p)
+			(T_try_cast_object<F_target__>(object_p) == ((F_target__*)object_p))
 			&& (object_p != 0)
 		);
 	}
