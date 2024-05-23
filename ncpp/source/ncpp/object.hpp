@@ -524,7 +524,7 @@ namespace ncpp {
                 NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>& T_up_cast() & noexcept {\
 \
 					NCPP_ASSERT(                                      \
-						ncpp::T_check_object_polymorphism<F_other_p__>(                        \
+						ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(                        \
 							oref.object_p_unsafe()                        \
 						)\
 					) << "invalid object polymorphism";\
@@ -536,7 +536,7 @@ namespace ncpp {
                 NCPP_FORCE_INLINE const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>& T_up_cast() const & noexcept {\
 \
 					NCPP_ASSERT(                                      \
-						ncpp::T_check_object_polymorphism<F_other_p__>(                        \
+						ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(                        \
 							oref.object_p_unsafe()                        \
 						)\
 					) << "invalid object polymorphism";\
@@ -548,7 +548,7 @@ namespace ncpp {
                 NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&& T_up_cast() && noexcept {\
 \
 					NCPP_ASSERT(                                      \
-						ncpp::T_check_object_polymorphism<F_other_p__>(                        \
+						ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(                        \
 							oref.object_p_unsafe()                        \
 						)\
 					) << "invalid object polymorphism";\
@@ -560,7 +560,7 @@ namespace ncpp {
                 NCPP_FORCE_INLINE const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&& T_up_cast() const && noexcept {\
 \
 					NCPP_ASSERT(                                      \
-						ncpp::T_check_object_polymorphism<F_other_p__>(                        \
+						ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(                        \
 							oref.object_p_unsafe()                        \
 						)\
 					) << "invalid object polymorphism";\
@@ -598,7 +598,7 @@ namespace ncpp {
                 NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>& T_cast() & noexcept {\
 \
 					NCPP_ASSERT(                                      \
-						ncpp::T_check_object_polymorphism<F_other_p__>(                        \
+						ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(                        \
 							oref.object_p_unsafe()                        \
 						)\
 					) << "invalid object polymorphism";\
@@ -610,7 +610,7 @@ namespace ncpp {
                 NCPP_FORCE_INLINE const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>& T_cast() const & noexcept {\
 \
 					NCPP_ASSERT(                                      \
-						ncpp::T_check_object_polymorphism<F_other_p__>(                        \
+						ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(                        \
 							oref.object_p_unsafe()                        \
 						)\
 					) << "invalid object polymorphism";\
@@ -622,7 +622,7 @@ namespace ncpp {
                 NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&& T_cast() && noexcept {\
 \
 					NCPP_ASSERT(                                      \
-						ncpp::T_check_object_polymorphism<F_other_p__>(                        \
+						ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(                        \
 							oref.object_p_unsafe()                        \
 						)\
 					) << "invalid object polymorphism";\
@@ -634,7 +634,7 @@ namespace ncpp {
                 NCPP_FORCE_INLINE const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&& T_cast() const && noexcept {\
 \
 					NCPP_ASSERT(                                      \
-						ncpp::T_check_object_polymorphism<F_other_p__>(                        \
+						ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(                        \
 							oref.object_p_unsafe()                        \
 						)\
 					) << "invalid object polymorphism";\
@@ -646,7 +646,7 @@ namespace ncpp {
                 NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>& T_force_cast() & noexcept {\
 \
 					NCPP_ASSERT(                                      \
-						ncpp::T_check_object_polymorphism<F_other_p__>(                        \
+						ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(                        \
 							oref.object_p_unsafe()                        \
 						)\
 					) << "invalid object polymorphism";\
@@ -657,7 +657,7 @@ namespace ncpp {
                 NCPP_FORCE_INLINE const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>& T_force_cast() const & noexcept {\
 \
 					NCPP_ASSERT(                                      \
-						ncpp::T_check_object_polymorphism<F_other_p__>(                        \
+						ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(                        \
 							oref.object_p_unsafe()                        \
 						)\
 					) << "invalid object polymorphism";\
@@ -668,7 +668,7 @@ namespace ncpp {
                 NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&& T_force_cast() && noexcept {\
 \
 					NCPP_ASSERT(                                      \
-						ncpp::T_check_object_polymorphism<F_other_p__>(                        \
+						ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(                        \
 							oref.object_p_unsafe()                        \
 						)\
 					) << "invalid object polymorphism";\
@@ -679,7 +679,7 @@ namespace ncpp {
                 NCPP_FORCE_INLINE const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&& T_force_cast() const && noexcept {\
 \
 					NCPP_ASSERT(                                      \
-						ncpp::T_check_object_polymorphism<F_other_p__>(                        \
+						ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(                        \
 							oref.object_p_unsafe()                        \
 						)\
 					) << "invalid object polymorphism";\
@@ -768,7 +768,7 @@ namespace ncpp {
 				explicit NCPP_FORCE_INLINE operator TF##NamePrefixConnector##Name<F_other_oref__> () const noexcept {\
 \
 					NCPP_ASSERT(                                      \
-						ncpp::T_check_object_polymorphism<typename F_other_oref__::F_passed_object>(                        \
+						ncpp::T_check_object_polymorphism_for_direct_casting<typename F_other_oref__::F_passed_object>(                        \
 							oref.object_p_unsafe()                        \
 						)\
 					) << "invalid object polymorphism";\
@@ -823,7 +823,7 @@ namespace ncpp {
 
 
 	template<typename F_target__>
-	NCPP_FORCE_INLINE b8 T_check_object_polymorphism(auto* object_p) {
+	NCPP_FORCE_INLINE b8 T_check_object_polymorphism_for_direct_casting(auto* object_p) {
 
 		return (
 			dynamic_cast<F_target__*>(
@@ -849,6 +849,14 @@ namespace ncpp {
 					>
 				>*
 			)object_p
+		);
+	}
+	template<typename F_target__>
+	NCPP_FORCE_INLINE b8 T_check_object_polymorphism_for_direct_casting(auto* object_p) {
+
+		return (
+			(T_try_cast_object<F_target__>(object_p) == object_p)
+			&& (object_p != 0)
 		);
 	}
 
@@ -2026,7 +2034,7 @@ namespace ncpp {
                     NCPP_FORCE_INLINE __VA_ARGS__& T_up_cast() & noexcept {\
 \
 						NCPP_ASSERT(                                      \
-							ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)\
+							ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)\
 						) << "invalid object polymorphism";\
 \
                         return (__VA_ARGS__&)*this;\
@@ -2036,7 +2044,7 @@ namespace ncpp {
                     NCPP_FORCE_INLINE const __VA_ARGS__& T_up_cast() const & noexcept {\
 \
 						NCPP_ASSERT(                                      \
-							ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)\
+							ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)\
 						) << "invalid object polymorphism";\
 \
                         return (const __VA_ARGS__&)*this;\
@@ -2046,7 +2054,7 @@ namespace ncpp {
                     NCPP_FORCE_INLINE __VA_ARGS__&& T_up_cast() && noexcept {\
 \
 						NCPP_ASSERT(                                      \
-							ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)\
+							ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)\
 						) << "invalid object polymorphism";\
 \
                         return (__VA_ARGS__&&)*this;\
@@ -2056,7 +2064,7 @@ namespace ncpp {
                     NCPP_FORCE_INLINE const __VA_ARGS__&& T_up_cast() const && noexcept {\
 \
 						NCPP_ASSERT(                                      \
-							ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)\
+							ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)\
 						) << "invalid object polymorphism";\
 \
                         return (const __VA_ARGS__&&)*this;\
@@ -2092,7 +2100,7 @@ namespace ncpp {
                     NCPP_FORCE_INLINE __VA_ARGS__& T_cast() & noexcept {\
 \
 						NCPP_ASSERT(                                      \
-							ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)\
+							ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)\
 						) << "invalid object polymorphism";\
 \
                         return (__VA_ARGS__&)*this;\
@@ -2102,7 +2110,7 @@ namespace ncpp {
                     NCPP_FORCE_INLINE const __VA_ARGS__& T_cast() const & noexcept {\
 \
 						NCPP_ASSERT(                                      \
-							ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)\
+							ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)\
 						) << "invalid object polymorphism";\
 \
                         return (const __VA_ARGS__&)*this;\
@@ -2112,7 +2120,7 @@ namespace ncpp {
                     NCPP_FORCE_INLINE __VA_ARGS__&& T_cast() && noexcept {\
 \
 						NCPP_ASSERT(                                      \
-							ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)\
+							ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)\
 						) << "invalid object polymorphism";\
 \
                         return (__VA_ARGS__&&)*this;\
@@ -2122,7 +2130,7 @@ namespace ncpp {
                     NCPP_FORCE_INLINE const __VA_ARGS__&& T_cast() const && noexcept {\
 \
 						NCPP_ASSERT(                                      \
-							ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)\
+							ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)\
 						) << "invalid object polymorphism";\
 \
                         return (const __VA_ARGS__&&)*this;\
@@ -2132,7 +2140,7 @@ namespace ncpp {
                     NCPP_FORCE_INLINE __VA_ARGS__& T_force_cast() & noexcept {\
 \
 						NCPP_ASSERT(                                      \
-							ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)\
+							ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)\
 						) << "invalid object polymorphism";\
 \
                         return (__VA_ARGS__&)*this;\
@@ -2141,7 +2149,7 @@ namespace ncpp {
                     NCPP_FORCE_INLINE const __VA_ARGS__& T_force_cast() const & noexcept {\
 \
 						NCPP_ASSERT(                                      \
-							ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)\
+							ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)\
 						) << "invalid object polymorphism";\
 \
                         return (const __VA_ARGS__&)*this;\
@@ -2150,7 +2158,7 @@ namespace ncpp {
                     NCPP_FORCE_INLINE __VA_ARGS__&& T_force_cast() && noexcept {\
 \
 						NCPP_ASSERT(                                      \
-							ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)\
+							ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)\
 						) << "invalid object polymorphism";\
 \
                         return (__VA_ARGS__&&)*this;\
@@ -2159,7 +2167,7 @@ namespace ncpp {
                     NCPP_FORCE_INLINE const __VA_ARGS__&& T_force_cast() const && noexcept {\
 \
 						NCPP_ASSERT(                                      \
-							ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)\
+							ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)\
 						) << "invalid object polymorphism";\
 \
                         return (const __VA_ARGS__&&)*this;\
@@ -2363,7 +2371,7 @@ namespace ncpp {
         explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
             return (F_other_p__*)object_p_;
@@ -2380,7 +2388,7 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_check_polymorphism(auto& out_ref) const noexcept {
 
-			return ncpp::T_check_object_polymorphism<F_other_p__>(object_p_);
+			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_);
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
@@ -2401,7 +2409,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -2419,7 +2427,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -2812,7 +2820,7 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
 
-			return ncpp::T_check_object_polymorphism<F_other_p__>(object_p_);
+			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_);
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
@@ -2833,7 +2841,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -2853,7 +2861,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -2972,7 +2980,7 @@ namespace ncpp {
         explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
             return object_p_;
@@ -3278,7 +3286,7 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
 
-			return ncpp::T_check_object_polymorphism<F_other_p__>(object_p_);
+			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_);
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
@@ -3299,7 +3307,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -3317,7 +3325,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -3401,7 +3409,7 @@ namespace ncpp {
         explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
             return object_p_;
@@ -3715,7 +3723,7 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
 
-			return ncpp::T_check_object_polymorphism<F_other_p__>(object_p_);
+			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_);
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
@@ -3736,7 +3744,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -3756,7 +3764,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -3899,7 +3907,7 @@ namespace ncpp {
         explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
             return object_p_;
@@ -3923,7 +3931,7 @@ namespace ncpp {
         explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> () const noexcept {
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
             return { object_p_, object_key_ };
@@ -4169,7 +4177,7 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
 
-			return ncpp::T_check_object_polymorphism<F_other_p__>(object_p_);
+			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_);
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
@@ -4190,7 +4198,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -4208,7 +4216,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -4333,7 +4341,7 @@ namespace ncpp {
         explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
             return object_p_;
@@ -4357,7 +4365,7 @@ namespace ncpp {
         explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> () const noexcept {
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
             return { object_p_ };
@@ -4816,7 +4824,7 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
 
-			return ncpp::T_check_object_polymorphism<F_other_p__>(object_p_);
+			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_);
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
@@ -4837,7 +4845,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -4857,7 +4865,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -5011,7 +5019,7 @@ namespace ncpp {
         explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
             return object_p_;
@@ -5035,7 +5043,7 @@ namespace ncpp {
         explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> () const noexcept {
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
             return { object_p_, object_key_ };
@@ -5424,7 +5432,7 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
 
-			return ncpp::T_check_object_polymorphism<F_other_p__>(object_p_);
+			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_);
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
@@ -5445,7 +5453,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -5463,7 +5471,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -5599,7 +5607,7 @@ namespace ncpp {
         explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
             return object_p_;
@@ -5623,7 +5631,7 @@ namespace ncpp {
         explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> () const noexcept {
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
             return { object_p_ };
@@ -6328,7 +6336,7 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
 
-			return ncpp::T_check_object_polymorphism<F_other_p__>(object_p_);
+			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_);
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
@@ -6349,7 +6357,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -6371,7 +6379,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -6580,7 +6588,7 @@ namespace ncpp {
         explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
             return object_p_;
@@ -6604,7 +6612,7 @@ namespace ncpp {
         explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> () const noexcept {
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
             return { object_p_, object_key_ };
@@ -7287,7 +7295,7 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
 
-			return ncpp::T_check_object_polymorphism<F_other_p__>(object_p_);
+			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_);
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
@@ -7308,7 +7316,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -7328,7 +7336,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -7474,7 +7482,7 @@ namespace ncpp {
         explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
             return object_p_;
@@ -7498,7 +7506,7 @@ namespace ncpp {
         explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> () const noexcept {
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
             return { object_p_ };
