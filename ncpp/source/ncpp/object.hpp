@@ -2409,7 +2409,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -2427,7 +2427,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -2841,7 +2841,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -2861,7 +2861,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -3307,7 +3307,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -3325,7 +3325,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -3744,7 +3744,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -3764,7 +3764,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -4198,7 +4198,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -4216,7 +4216,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -4845,7 +4845,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -4865,7 +4865,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -5453,7 +5453,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -5471,7 +5471,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -6357,7 +6357,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -6379,7 +6379,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -7316,7 +7316,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
@@ -7336,7 +7336,7 @@ namespace ncpp {
 			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
 
 			NCPP_ASSERT(
-				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
 			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
