@@ -521,7 +521,7 @@ namespace ncpp {
             public:                            \
                 template<typename F_other_p__>\
                 requires ncpp::T_is_object_up_castable<typename F_oref__::F_passed_object, F_other_p__>\
-                NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>& T_up_cast() & noexcept {\
+                NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>> T_up_cast() noexcept {\
 \
 					NCPP_ASSERT(                                      \
 						ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(                        \
@@ -533,7 +533,7 @@ namespace ncpp {
                 }\
                 template<typename F_other_p__>\
                 requires ncpp::T_is_object_up_castable<typename F_oref__::F_passed_object, F_other_p__>\
-                NCPP_FORCE_INLINE const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>& T_up_cast() const & noexcept {\
+                NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>> T_up_cast() const noexcept {\
 \
 					NCPP_ASSERT(                                      \
 						ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(                        \
@@ -543,59 +543,23 @@ namespace ncpp {
 \
                     return (const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&)*this;\
                 }\
-                template<typename F_other_p__>\
-                requires ncpp::T_is_object_up_castable<typename F_oref__::F_passed_object, F_other_p__>\
-                NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&& T_up_cast() && noexcept {\
-\
-					NCPP_ASSERT(                                      \
-						ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(                        \
-							oref.object_p_unsafe()                        \
-						)\
-					) << "invalid object polymorphism";\
-\
-                    return (TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&&)*this;\
-                }\
-                template<typename F_other_p__>\
-                requires ncpp::T_is_object_up_castable<typename F_oref__::F_passed_object, F_other_p__>\
-                NCPP_FORCE_INLINE const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&& T_up_cast() const && noexcept {\
-\
-					NCPP_ASSERT(                                      \
-						ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(                        \
-							oref.object_p_unsafe()                        \
-						)\
-					) << "invalid object polymorphism";\
-\
-                    return (const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&&)*this;\
-                }\
 \
                 template<typename F_other_p__>\
                 requires ncpp::T_is_object_down_castable<typename F_oref__::F_passed_object, F_other_p__>\
-                NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>& T_down_cast() & noexcept {\
+                NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>> T_down_cast() noexcept {\
 \
                     return (TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&)*this;\
                 }\
                 template<typename F_other_p__>\
                 requires ncpp::T_is_object_down_castable<typename F_oref__::F_passed_object, F_other_p__>\
-                NCPP_FORCE_INLINE const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>& T_down_cast() const & noexcept {\
+                NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>> T_down_cast() const noexcept {\
 \
                     return (const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&)*this;\
-                }\
-                template<typename F_other_p__>\
-                requires ncpp::T_is_object_down_castable<typename F_oref__::F_passed_object, F_other_p__>\
-                NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&& T_down_cast() && noexcept {\
-\
-                    return (TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&&)*this;\
-                }\
-                template<typename F_other_p__>\
-                requires ncpp::T_is_object_down_castable<typename F_oref__::F_passed_object, F_other_p__>\
-                NCPP_FORCE_INLINE const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&& T_down_cast() const && noexcept {\
-\
-                    return (const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&&)*this;\
                 }\
 \
                 template<typename F_other_p__>\
                 requires (ncpp::T_is_object_up_castable<typename F_oref__::F_passed_object, F_other_p__> || ncpp::T_is_object_down_castable<typename F_oref__::F_passed_object, F_other_p__>)\
-                NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>& T_cast() & noexcept {\
+                NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>> T_cast() noexcept {\
 \
 					NCPP_ASSERT(                                      \
 						ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(                        \
@@ -607,7 +571,7 @@ namespace ncpp {
                 }\
                 template<typename F_other_p__>\
                 requires (ncpp::T_is_object_up_castable<typename F_oref__::F_passed_object, F_other_p__> || ncpp::T_is_object_down_castable<typename F_oref__::F_passed_object, F_other_p__>)\
-                NCPP_FORCE_INLINE const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>& T_cast() const & noexcept {\
+                NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>> T_cast() const noexcept {\
 \
 					NCPP_ASSERT(                                      \
 						ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(                        \
@@ -617,33 +581,9 @@ namespace ncpp {
 \
                     return (const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&)*this;\
                 }\
-                template<typename F_other_p__>\
-                requires (ncpp::T_is_object_up_castable<typename F_oref__::F_passed_object, F_other_p__> || ncpp::T_is_object_down_castable<typename F_oref__::F_passed_object, F_other_p__>)\
-                NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&& T_cast() && noexcept {\
-\
-					NCPP_ASSERT(                                      \
-						ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(                        \
-							oref.object_p_unsafe()                        \
-						)\
-					) << "invalid object polymorphism";\
-\
-                    return (TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&&)*this;\
-                }\
-                template<typename F_other_p__>\
-                requires (ncpp::T_is_object_up_castable<typename F_oref__::F_passed_object, F_other_p__> || ncpp::T_is_object_down_castable<typename F_oref__::F_passed_object, F_other_p__>)\
-                NCPP_FORCE_INLINE const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&& T_cast() const && noexcept {\
-\
-					NCPP_ASSERT(                                      \
-						ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(                        \
-							oref.object_p_unsafe()                        \
-						)\
-					) << "invalid object polymorphism";\
-\
-                    return (const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&&)*this;\
-                }\
 \
                 template<typename F_other_p__>\
-                NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>& T_force_cast() & noexcept {\
+                NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>> T_force_cast() noexcept {\
 \
 					NCPP_ASSERT(                                      \
 						ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(                        \
@@ -654,7 +594,7 @@ namespace ncpp {
                     return (TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&)*this;\
                 }\
                 template<typename F_other_p__>\
-                NCPP_FORCE_INLINE const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>& T_force_cast() const & noexcept {\
+                NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>> T_force_cast() const noexcept {\
 \
 					NCPP_ASSERT(                                      \
 						ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(                        \
@@ -664,28 +604,6 @@ namespace ncpp {
 \
                     return (const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&)*this;\
                 }\
-                template<typename F_other_p__>\
-                NCPP_FORCE_INLINE TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&& T_force_cast() && noexcept {\
-\
-					NCPP_ASSERT(                                      \
-						ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(                        \
-							oref.object_p_unsafe()                        \
-						)\
-					) << "invalid object polymorphism";\
-\
-                    return (TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&&)*this;\
-                }\
-                template<typename F_other_p__>\
-                NCPP_FORCE_INLINE const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&& T_force_cast() const && noexcept {\
-\
-					NCPP_ASSERT(                                      \
-						ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(                        \
-							oref.object_p_unsafe()                        \
-						)\
-					) << "invalid object polymorphism";\
-\
-                    return (const TF##NamePrefixConnector##Name<typename F_oref__::template TF_bind_passed_object<F_other_p__>>&&)*this;\
-                }                                                            \
 \
                 template<typename F_other_p__>\
                 NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {\
@@ -717,43 +635,26 @@ namespace ncpp {
                 }\
                                                \
             public:                            \
-                NCPP_FORCE_INLINE TF_bind_requirements<ncpp::F_no_requirements>& no_requirements() & noexcept {\
+                NCPP_FORCE_INLINE TF_bind_requirements<ncpp::F_no_requirements> no_requirements() noexcept {\
 \
                     return (TF_bind_requirements<ncpp::F_no_requirements>&)*this;\
                 }\
-                NCPP_FORCE_INLINE const TF_bind_requirements<ncpp::F_no_requirements>& no_requirements() const & noexcept {\
+                NCPP_FORCE_INLINE TF_bind_requirements<ncpp::F_no_requirements> no_requirements() const noexcept {\
 \
-                    return (const TF_bind_requirements<ncpp::F_no_requirements>&)*this;\
-                }\
-                NCPP_FORCE_INLINE TF_bind_requirements<ncpp::F_no_requirements>&& no_requirements() && noexcept {\
-\
-                    return (TF_bind_requirements<ncpp::F_no_requirements>&&)*this;\
-                }\
-                NCPP_FORCE_INLINE const TF_bind_requirements<ncpp::F_no_requirements>&& no_requirements() const && noexcept {\
-\
-                    return (const TF_bind_requirements<ncpp::F_no_requirements>&&)*this;\
+                    return (TF_bind_requirements<ncpp::F_no_requirements> const&)*this;\
                 }\
 \
                 template<typename F_requirements_in__ = ncpp::F_no_requirements>\
-                NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__>& T_require() & noexcept {\
+                NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__> T_require() noexcept {\
 \
                     return (TF_bind_requirements<F_requirements_in__>&)*this;\
                 }\
                 template<typename F_requirements_in__ = ncpp::F_no_requirements>\
-                NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__>&& T_require() && noexcept {\
+                NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__> T_require() const noexcept {\
 \
-                    return (TF_bind_requirements<F_requirements_in__>&&)*this;\
+                    return (TF_bind_requirements<F_requirements_in__> const&)*this;\
                 }\
-                template<typename F_requirements_in__ = ncpp::F_no_requirements>\
-                NCPP_FORCE_INLINE const TF_bind_requirements<F_requirements_in__>& T_require() const& noexcept {\
-\
-                    return (const TF_bind_requirements<F_requirements_in__>&)*this;\
-                }\
-                template<typename F_requirements_in__ = ncpp::F_no_requirements>\
-                NCPP_FORCE_INLINE const TF_bind_requirements<F_requirements_in__>&& T_require() const&& noexcept {\
-\
-                    return (const TF_bind_requirements<F_requirements_in__>&&)*this;\
-                }                                                            \
+                                                                             \
 			public:                                                                   \
 				template<ncpp::T_is_oref F_other_oref__>\
 				requires ncpp::T_is_object_down_castable<typename F_oref__::F_passed_object, typename F_other_oref__::F_passed_object>   \
@@ -2031,7 +1932,7 @@ namespace ncpp {
 #define NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(...) \
                     template<typename F_other_p__>\
                     requires T_is_object_up_castable<F_passed_object, F_other_p__>\
-                    NCPP_FORCE_INLINE __VA_ARGS__& T_up_cast() & noexcept {\
+                    NCPP_FORCE_INLINE __VA_ARGS__ T_up_cast() noexcept {\
 \
 						NCPP_ASSERT(                                      \
 							ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)\
@@ -2041,7 +1942,7 @@ namespace ncpp {
                     }\
                     template<typename F_other_p__>\
                     requires T_is_object_up_castable<F_passed_object, F_other_p__>\
-                    NCPP_FORCE_INLINE const __VA_ARGS__& T_up_cast() const & noexcept {\
+                    NCPP_FORCE_INLINE __VA_ARGS__ T_up_cast() const noexcept {\
 \
 						NCPP_ASSERT(                                      \
 							ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)\
@@ -2049,55 +1950,23 @@ namespace ncpp {
 \
                         return (const __VA_ARGS__&)*this;\
                     }\
-                    template<typename F_other_p__>\
-                    requires T_is_object_up_castable<F_passed_object, F_other_p__>\
-                    NCPP_FORCE_INLINE __VA_ARGS__&& T_up_cast() && noexcept {\
-\
-						NCPP_ASSERT(                                      \
-							ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)\
-						) << "invalid object polymorphism";\
-\
-                        return (__VA_ARGS__&&)*this;\
-                    }\
-                    template<typename F_other_p__>\
-                    requires T_is_object_up_castable<F_passed_object, F_other_p__>\
-                    NCPP_FORCE_INLINE const __VA_ARGS__&& T_up_cast() const && noexcept {\
-\
-						NCPP_ASSERT(                                      \
-							ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)\
-						) << "invalid object polymorphism";\
-\
-                        return (const __VA_ARGS__&&)*this;\
-                    }\
 \
                     template<typename F_other_p__>\
                     requires T_is_object_down_castable<F_passed_object, F_other_p__>\
-                    NCPP_FORCE_INLINE __VA_ARGS__& T_down_cast() & noexcept {\
+                    NCPP_FORCE_INLINE __VA_ARGS__ T_down_cast() noexcept {\
 \
                         return (__VA_ARGS__&)*this;\
                     }\
                     template<typename F_other_p__>\
                     requires T_is_object_down_castable<F_passed_object, F_other_p__>\
-                    NCPP_FORCE_INLINE const __VA_ARGS__& T_down_cast() const & noexcept {\
+                    NCPP_FORCE_INLINE __VA_ARGS__ T_down_cast() const noexcept {\
 \
                         return (const __VA_ARGS__&)*this;\
-                    }\
-                    template<typename F_other_p__>\
-                    requires T_is_object_down_castable<F_passed_object, F_other_p__>\
-                    NCPP_FORCE_INLINE __VA_ARGS__&& T_down_cast() && noexcept {\
-\
-                        return (__VA_ARGS__&&)*this;\
-                    }\
-                    template<typename F_other_p__>\
-                    requires T_is_object_down_castable<F_passed_object, F_other_p__>\
-                    NCPP_FORCE_INLINE const __VA_ARGS__&& T_down_cast() const && noexcept {\
-\
-                        return (const __VA_ARGS__&&)*this;\
                     }\
 \
                     template<typename F_other_p__>\
                     requires (T_is_object_up_castable<F_passed_object, F_other_p__> || T_is_object_down_castable<F_passed_object, F_other_p__>)\
-                    NCPP_FORCE_INLINE __VA_ARGS__& T_cast() & noexcept {\
+                    NCPP_FORCE_INLINE __VA_ARGS__ T_cast() noexcept {\
 \
 						NCPP_ASSERT(                                      \
 							ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)\
@@ -2107,7 +1976,7 @@ namespace ncpp {
                     }\
                     template<typename F_other_p__>\
                     requires (T_is_object_up_castable<F_passed_object, F_other_p__> || T_is_object_down_castable<F_passed_object, F_other_p__>)\
-                    NCPP_FORCE_INLINE const __VA_ARGS__& T_cast() const & noexcept {\
+                    NCPP_FORCE_INLINE __VA_ARGS__ T_cast() const noexcept {\
 \
 						NCPP_ASSERT(                                      \
 							ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)\
@@ -2115,29 +1984,9 @@ namespace ncpp {
 \
                         return (const __VA_ARGS__&)*this;\
                     }\
-                    template<typename F_other_p__>\
-                    requires (T_is_object_up_castable<F_passed_object, F_other_p__> || T_is_object_down_castable<F_passed_object, F_other_p__>)\
-                    NCPP_FORCE_INLINE __VA_ARGS__&& T_cast() && noexcept {\
-\
-						NCPP_ASSERT(                                      \
-							ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)\
-						) << "invalid object polymorphism";\
-\
-                        return (__VA_ARGS__&&)*this;\
-                    }\
-                    template<typename F_other_p__>\
-                    requires (T_is_object_up_castable<F_passed_object, F_other_p__> || T_is_object_down_castable<F_passed_object, F_other_p__>)\
-                    NCPP_FORCE_INLINE const __VA_ARGS__&& T_cast() const && noexcept {\
-\
-						NCPP_ASSERT(                                      \
-							ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)\
-						) << "invalid object polymorphism";\
-\
-                        return (const __VA_ARGS__&&)*this;\
-                    }\
 \
                     template<typename F_other_p__>\
-                    NCPP_FORCE_INLINE __VA_ARGS__& T_force_cast() & noexcept {\
+                    NCPP_FORCE_INLINE __VA_ARGS__ T_force_cast() noexcept {\
 \
 						NCPP_ASSERT(                                      \
 							ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)\
@@ -2146,7 +1995,7 @@ namespace ncpp {
                         return (__VA_ARGS__&)*this;\
                     }\
                     template<typename F_other_p__>\
-                    NCPP_FORCE_INLINE const __VA_ARGS__& T_force_cast() const & noexcept {\
+                    NCPP_FORCE_INLINE __VA_ARGS__ T_force_cast() const noexcept {\
 \
 						NCPP_ASSERT(                                      \
 							ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)\
@@ -2154,24 +2003,6 @@ namespace ncpp {
 \
                         return (const __VA_ARGS__&)*this;\
                     }\
-                    template<typename F_other_p__>\
-                    NCPP_FORCE_INLINE __VA_ARGS__&& T_force_cast() && noexcept {\
-\
-						NCPP_ASSERT(                                      \
-							ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)\
-						) << "invalid object polymorphism";\
-\
-                        return (__VA_ARGS__&&)*this;\
-                    }\
-                    template<typename F_other_p__>\
-                    NCPP_FORCE_INLINE const __VA_ARGS__&& T_force_cast() const && noexcept {\
-\
-						NCPP_ASSERT(                                      \
-							ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)\
-						) << "invalid object polymorphism";\
-\
-                        return (const __VA_ARGS__&&)*this;\
-                    }
 
 
 
@@ -2525,42 +2356,24 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_FORCE_INLINE auto& no_requirements() & noexcept {
+		NCPP_FORCE_INLINE auto no_requirements() noexcept {
 
-            return (TW<F_passed_object>&)*this;
-        }
-        NCPP_FORCE_INLINE const auto& no_requirements() const & noexcept {
+			return (TF_bind_requirements<F_no_requirements>&)*this;
+		}
+		NCPP_FORCE_INLINE const auto& no_requirements() const noexcept {
 
-            return (const TW<F_passed_object>&)*this;
-        }
-        NCPP_FORCE_INLINE auto&& no_requirements() && noexcept {
-
-            return (TW<F_passed_object>&&)*this;
-        }
-        NCPP_FORCE_INLINE const auto&& no_requirements() const && noexcept {
-
-            return (const TW<F_passed_object>&&)*this;
-        }
+			return (const TF_bind_requirements<F_no_requirements>&)*this;
+		}
 
         template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__>& T_require() & noexcept {
+        NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__> T_require() noexcept {
 
             return (TF_bind_requirements<F_requirements_in__>&)*this;
         }
         template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__>&& T_require() && noexcept {
-
-            return (TF_bind_requirements<F_requirements_in__>&&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE const TF_bind_requirements<F_requirements_in__>& T_require() const& noexcept {
+        NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__> T_require() const noexcept {
 
             return (const TF_bind_requirements<F_requirements_in__>&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE const TF_bind_requirements<F_requirements_in__>&& T_require() const&& noexcept {
-
-            return (const TF_bind_requirements<F_requirements_in__>&&)*this;
         }
 
     };
@@ -2989,21 +2802,13 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE F_this& keyed() & noexcept {
+        NCPP_FORCE_INLINE F_this keyed() noexcept {
 
             return (F_this&)(*this);
         }
-        NCPP_FORCE_INLINE F_this&& keyed() && noexcept {
-
-            return (F_this&&)(*this);
-        }
-        NCPP_FORCE_INLINE F_this const& keyed() const & noexcept {
+        NCPP_FORCE_INLINE F_this keyed() const noexcept {
 
             return (F_this const&)(*this);
-        }
-        NCPP_FORCE_INLINE F_this const&& keyed() const && noexcept {
-
-            return (F_this const&&)(*this);
         }
 
 
@@ -3041,43 +2846,25 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_FORCE_INLINE auto& no_requirements() & noexcept {
+		NCPP_FORCE_INLINE auto no_requirements() noexcept {
 
-            return (TK<F_passed_object, F_options, is_has_object_key>&)*this;
-        }
-        NCPP_FORCE_INLINE const auto& no_requirements() const & noexcept {
+			return (TF_bind_requirements<F_no_requirements>&)*this;
+		}
+		NCPP_FORCE_INLINE const auto& no_requirements() const noexcept {
 
-            return (const TK<F_passed_object, F_options, is_has_object_key>&)*this;
-        }
-        NCPP_FORCE_INLINE auto&& no_requirements() && noexcept {
+			return (const TF_bind_requirements<F_no_requirements>&)*this;
+		}
 
-            return (TK<F_passed_object, F_options, is_has_object_key>&&)*this;
-        }
-        NCPP_FORCE_INLINE const auto&& no_requirements() const && noexcept {
+		template<typename F_requirements_in__ = F_no_requirements>
+		NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__> T_require() noexcept {
 
-            return (const TK<F_passed_object, F_options, is_has_object_key>&&)*this;
-        }
+			return (TF_bind_requirements<F_requirements_in__>&)*this;
+		}
+		template<typename F_requirements_in__ = F_no_requirements>
+		NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__> T_require() const noexcept {
 
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__>& T_require() & noexcept {
-
-            return (TF_bind_requirements<F_requirements_in__>&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__>&& T_require() && noexcept {
-
-            return (TF_bind_requirements<F_requirements_in__>&&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE const TF_bind_requirements<F_requirements_in__>& T_require() const& noexcept {
-
-            return (const TF_bind_requirements<F_requirements_in__>&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE const TF_bind_requirements<F_requirements_in__>&& T_require() const&& noexcept {
-
-            return (const TF_bind_requirements<F_requirements_in__>&&)*this;
-        }
+			return (const TF_bind_requirements<F_requirements_in__>&)*this;
+		}
 
     };
 
@@ -3418,22 +3205,14 @@ namespace ncpp {
 
 
     public:
-        NCPP_FORCE_INLINE F_this& keyed() & noexcept {
+		NCPP_FORCE_INLINE F_this keyed() noexcept {
 
-            return (F_this&)(*this);
-        }
-        NCPP_FORCE_INLINE F_this&& keyed() && noexcept {
+			return (F_this&)(*this);
+		}
+		NCPP_FORCE_INLINE F_this keyed() const noexcept {
 
-            return (F_this&&)(*this);
-        }
-        NCPP_FORCE_INLINE F_this const& keyed() const & noexcept {
-
-            return (F_this const&)(*this);
-        }
-        NCPP_FORCE_INLINE F_this const&& keyed() const && noexcept {
-
-            return (F_this const&&)(*this);
-        }
+			return (F_this const&)(*this);
+		}
 
 
 
@@ -3470,43 +3249,25 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_FORCE_INLINE auto& no_requirements() & noexcept {
+		NCPP_FORCE_INLINE auto no_requirements() noexcept {
 
-            return (TK<F_passed_object, F_options, is_has_object_key>&)*this;
-        }
-        NCPP_FORCE_INLINE const auto& no_requirements() const & noexcept {
+			return (TF_bind_requirements<F_no_requirements>&)*this;
+		}
+		NCPP_FORCE_INLINE const auto& no_requirements() const noexcept {
 
-            return (const TK<F_passed_object, F_options, is_has_object_key>&)*this;
-        }
-        NCPP_FORCE_INLINE auto&& no_requirements() && noexcept {
+			return (const TF_bind_requirements<F_no_requirements>&)*this;
+		}
 
-            return (TK<F_passed_object, F_options, is_has_object_key>&&)*this;
-        }
-        NCPP_FORCE_INLINE const auto&& no_requirements() const && noexcept {
+		template<typename F_requirements_in__ = F_no_requirements>
+		NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__> T_require() noexcept {
 
-            return (const TK<F_passed_object, F_options, is_has_object_key>&&)*this;
-        }
+			return (TF_bind_requirements<F_requirements_in__>&)*this;
+		}
+		template<typename F_requirements_in__ = F_no_requirements>
+		NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__> T_require() const noexcept {
 
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__>& T_require() & noexcept {
-
-            return (TF_bind_requirements<F_requirements_in__>&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__>&& T_require() && noexcept {
-
-            return (TF_bind_requirements<F_requirements_in__>&&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE const TF_bind_requirements<F_requirements_in__>& T_require() const& noexcept {
-
-            return (const TF_bind_requirements<F_requirements_in__>&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE const TF_bind_requirements<F_requirements_in__>&& T_require() const&& noexcept {
-
-            return (const TF_bind_requirements<F_requirements_in__>&&)*this;
-        }
+			return (const TF_bind_requirements<F_requirements_in__>&)*this;
+		}
 
     };
 
@@ -3964,43 +3725,25 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_FORCE_INLINE auto& no_requirements() & noexcept {
+		NCPP_FORCE_INLINE auto no_requirements() noexcept {
 
-            return (TU<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
-        }
-        NCPP_FORCE_INLINE const auto& no_requirements() const & noexcept {
+			return (TF_bind_requirements<F_no_requirements>&)*this;
+		}
+		NCPP_FORCE_INLINE const auto& no_requirements() const noexcept {
 
-            return (const TU<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
-        }
-        NCPP_FORCE_INLINE auto&& no_requirements() && noexcept {
+			return (const TF_bind_requirements<F_no_requirements>&)*this;
+		}
 
-            return (TU<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
-        }
-        NCPP_FORCE_INLINE const auto&& no_requirements() const && noexcept {
+		template<typename F_requirements_in__ = F_no_requirements>
+		NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__> T_require() noexcept {
 
-            return (const TU<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
-        }
+			return (TF_bind_requirements<F_requirements_in__>&)*this;
+		}
+		template<typename F_requirements_in__ = F_no_requirements>
+		NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__> T_require() const noexcept {
 
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__>& T_require() & noexcept {
-
-            return (TF_bind_requirements<F_requirements_in__>&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__>&& T_require() && noexcept {
-
-            return (TF_bind_requirements<F_requirements_in__>&&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE const TF_bind_requirements<F_requirements_in__>& T_require() const& noexcept {
-
-            return (const TF_bind_requirements<F_requirements_in__>&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE const TF_bind_requirements<F_requirements_in__>&& T_require() const&& noexcept {
-
-            return (const TF_bind_requirements<F_requirements_in__>&&)*this;
-        }
+			return (const TF_bind_requirements<F_requirements_in__>&)*this;
+		}
 
     };
 
@@ -4398,43 +4141,25 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_FORCE_INLINE auto& no_requirements() & noexcept {
+		NCPP_FORCE_INLINE auto no_requirements() noexcept {
 
-            return (TU<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
-        }
-        NCPP_FORCE_INLINE const auto& no_requirements() const & noexcept {
+			return (TF_bind_requirements<F_no_requirements>&)*this;
+		}
+		NCPP_FORCE_INLINE const auto& no_requirements() const noexcept {
 
-            return (const TU<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
-        }
-        NCPP_FORCE_INLINE auto&& no_requirements() && noexcept {
+			return (const TF_bind_requirements<F_no_requirements>&)*this;
+		}
 
-            return (TU<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
-        }
-        NCPP_FORCE_INLINE const auto&& no_requirements() const && noexcept {
+		template<typename F_requirements_in__ = F_no_requirements>
+		NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__> T_require() noexcept {
 
-            return (const TU<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
-        }
+			return (TF_bind_requirements<F_requirements_in__>&)*this;
+		}
+		template<typename F_requirements_in__ = F_no_requirements>
+		NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__> T_require() const noexcept {
 
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__>& T_require() & noexcept {
-
-            return (TF_bind_requirements<F_requirements_in__>&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__>&& T_require() && noexcept {
-
-            return (TF_bind_requirements<F_requirements_in__>&&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE const TF_bind_requirements<F_requirements_in__>& T_require() const& noexcept {
-
-            return (const TF_bind_requirements<F_requirements_in__>&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE const TF_bind_requirements<F_requirements_in__>&& T_require() const&& noexcept {
-
-            return (const TF_bind_requirements<F_requirements_in__>&&)*this;
-        }
+			return (const TF_bind_requirements<F_requirements_in__>&)*this;
+		}
 
     };
 
@@ -5076,43 +4801,25 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_FORCE_INLINE auto& no_requirements() & noexcept {
+		NCPP_FORCE_INLINE auto no_requirements() noexcept {
 
-            return (TS<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
-        }
-        NCPP_FORCE_INLINE const auto& no_requirements() const & noexcept {
+			return (TF_bind_requirements<F_no_requirements>&)*this;
+		}
+		NCPP_FORCE_INLINE const auto& no_requirements() const noexcept {
 
-            return (const TS<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
-        }
-        NCPP_FORCE_INLINE auto&& no_requirements() && noexcept {
+			return (const TF_bind_requirements<F_no_requirements>&)*this;
+		}
 
-            return (TS<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
-        }
-        NCPP_FORCE_INLINE const auto&& no_requirements() const && noexcept {
+		template<typename F_requirements_in__ = F_no_requirements>
+		NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__> T_require() noexcept {
 
-            return (const TS<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
-        }
+			return (TF_bind_requirements<F_requirements_in__>&)*this;
+		}
+		template<typename F_requirements_in__ = F_no_requirements>
+		NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__> T_require() const noexcept {
 
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__>& T_require() & noexcept {
-
-            return (TF_bind_requirements<F_requirements_in__>&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__>&& T_require() && noexcept {
-
-            return (TF_bind_requirements<F_requirements_in__>&&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE const TF_bind_requirements<F_requirements_in__>& T_require() const& noexcept {
-
-            return (const TF_bind_requirements<F_requirements_in__>&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE const TF_bind_requirements<F_requirements_in__>&& T_require() const&& noexcept {
-
-            return (const TF_bind_requirements<F_requirements_in__>&&)*this;
-        }
+			return (const TF_bind_requirements<F_requirements_in__>&)*this;
+		}
 
     };
 
@@ -5664,43 +5371,25 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_FORCE_INLINE auto& no_requirements() & noexcept {
+		NCPP_FORCE_INLINE auto no_requirements() noexcept {
 
-            return (TS<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
-        }
-        NCPP_FORCE_INLINE const auto& no_requirements() const & noexcept {
+			return (TF_bind_requirements<F_no_requirements>&)*this;
+		}
+		NCPP_FORCE_INLINE const auto& no_requirements() const noexcept {
 
-            return (const TS<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
-        }
-        NCPP_FORCE_INLINE auto&& no_requirements() && noexcept {
+			return (const TF_bind_requirements<F_no_requirements>&)*this;
+		}
 
-            return (TS<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
-        }
-        NCPP_FORCE_INLINE const auto&& no_requirements() const && noexcept {
+		template<typename F_requirements_in__ = F_no_requirements>
+		NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__> T_require() noexcept {
 
-            return (const TS<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
-        }
+			return (TF_bind_requirements<F_requirements_in__>&)*this;
+		}
+		template<typename F_requirements_in__ = F_no_requirements>
+		NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__> T_require() const noexcept {
 
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__>& T_require() & noexcept {
-
-            return (TF_bind_requirements<F_requirements_in__>&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__>&& T_require() && noexcept {
-
-            return (TF_bind_requirements<F_requirements_in__>&&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE const TF_bind_requirements<F_requirements_in__>& T_require() const& noexcept {
-
-            return (const TF_bind_requirements<F_requirements_in__>&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE const TF_bind_requirements<F_requirements_in__>&& T_require() const&& noexcept {
-
-            return (const TF_bind_requirements<F_requirements_in__>&&)*this;
-        }
+			return (const TF_bind_requirements<F_requirements_in__>&)*this;
+		}
 
     };
 
@@ -6673,43 +6362,25 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_FORCE_INLINE auto& no_requirements() & noexcept {
+		NCPP_FORCE_INLINE auto no_requirements() noexcept {
 
-            return (TX<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
-        }
-        NCPP_FORCE_INLINE const auto& no_requirements() const & noexcept {
+			return (TF_bind_requirements<F_no_requirements>&)*this;
+		}
+		NCPP_FORCE_INLINE const auto& no_requirements() const noexcept {
 
-            return (const TX<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
-        }
-        NCPP_FORCE_INLINE auto&& no_requirements() && noexcept {
+			return (const TF_bind_requirements<F_no_requirements>&)*this;
+		}
 
-            return (TX<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
-        }
-        NCPP_FORCE_INLINE const auto&& no_requirements() const && noexcept {
+		template<typename F_requirements_in__ = F_no_requirements>
+		NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__> T_require() noexcept {
 
-            return (const TX<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
-        }
+			return (TF_bind_requirements<F_requirements_in__>&)*this;
+		}
+		template<typename F_requirements_in__ = F_no_requirements>
+		NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__> T_require() const noexcept {
 
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__>& T_require() & noexcept {
-
-            return (TF_bind_requirements<F_requirements_in__>&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__>&& T_require() && noexcept {
-
-            return (TF_bind_requirements<F_requirements_in__>&&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE const TF_bind_requirements<F_requirements_in__>& T_require() const& noexcept {
-
-            return (const TF_bind_requirements<F_requirements_in__>&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE const TF_bind_requirements<F_requirements_in__>&& T_require() const&& noexcept {
-
-            return (const TF_bind_requirements<F_requirements_in__>&&)*this;
-        }
+			return (const TF_bind_requirements<F_requirements_in__>&)*this;
+		}
 
     };
 
@@ -7567,43 +7238,25 @@ namespace ncpp {
         ////////////////////////////////////////////////////////////////////////////////////
 
     public:
-        NCPP_FORCE_INLINE auto& no_requirements() & noexcept {
+		NCPP_FORCE_INLINE auto no_requirements() noexcept {
 
-            return (TX<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
-        }
-        NCPP_FORCE_INLINE const auto& no_requirements() const & noexcept {
+			return (TF_bind_requirements<F_no_requirements>&)*this;
+		}
+		NCPP_FORCE_INLINE const auto& no_requirements() const noexcept {
 
-            return (const TX<F_passed_object, F_allocator, F_options, is_has_object_key>&)*this;
-        }
-        NCPP_FORCE_INLINE auto&& no_requirements() && noexcept {
+			return (const TF_bind_requirements<F_no_requirements>&)*this;
+		}
 
-            return (TX<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
-        }
-        NCPP_FORCE_INLINE const auto&& no_requirements() const && noexcept {
+		template<typename F_requirements_in__ = F_no_requirements>
+		NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__> T_require() noexcept {
 
-            return (const TX<F_passed_object, F_allocator, F_options, is_has_object_key>&&)*this;
-        }
+			return (TF_bind_requirements<F_requirements_in__>&)*this;
+		}
+		template<typename F_requirements_in__ = F_no_requirements>
+		NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__> T_require() const noexcept {
 
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__>& T_require() & noexcept {
-
-            return (TF_bind_requirements<F_requirements_in__>&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__>&& T_require() && noexcept {
-
-            return (TF_bind_requirements<F_requirements_in__>&&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE const TF_bind_requirements<F_requirements_in__>& T_require() const& noexcept {
-
-            return (const TF_bind_requirements<F_requirements_in__>&)*this;
-        }
-        template<typename F_requirements_in__ = F_no_requirements>
-        NCPP_FORCE_INLINE const TF_bind_requirements<F_requirements_in__>&& T_require() const&& noexcept {
-
-            return (const TF_bind_requirements<F_requirements_in__>&&)*this;
-        }
+			return (const TF_bind_requirements<F_requirements_in__>&)*this;
+		}
 
     };
 
