@@ -7262,81 +7262,82 @@ namespace ncpp {
 
 
 
-    namespace internal {
+	namespace internal {
 
-        struct F_fake_obj {};
+		struct F_fake_obj {};
 
-        template<
-            typename F_allocator__ = mem::F_object_allocator,
-            typename F_passed_object__ = F_fake_obj,
             class F_options__ = F_default_object_options,
-            b8 is_has_object_key__ = true,
-            typename F_requirements__ = F_no_requirements
-        >
-        struct TF_lock_shared_helper {
+		template<
+			typename F_allocator__ = mem::F_object_allocator,
+			typename F_passed_object__ = F_fake_obj,
+			class F_options__ = F_default_object_options,
+			b8 is_has_object_key__ = true,
+			typename F_requirements__ = F_no_requirements
+		>
+		struct TF_share_helper {
 
-            using S = TS_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>;
-            using K = TK_oref<F_passed_object__, F_options__, is_has_object_key__, F_requirements__>;
+			using S = TS_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>;
+			using K = TK_oref<F_passed_object__, F_options__, is_has_object_key__, F_requirements__>;
 
-            static inline S get(const K& k) {
+			static inline S get(const K& k) {
 
-                if(k.is_valid()) {
-                    auto* object_p = k.object_p();
-                    increase_shared_object_counter_unsafe(object_p);
-                    return S::unsafe(object_p, k.object_key());
-                }
-                else {
-                    return F_null{};
-                }
-            }
+				if(k.is_valid()) {
+					auto* object_p = k.object_p();
+					increase_shared_object_counter_unsafe(object_p);
+					return S::unsafe(object_p, k.object_key());
+				}
+				else {
+					return F_null{};
+				}
+			}
 
-        };
-        template<
-            typename F_allocator__,
-            typename F_passed_object__,
-            class F_options__,
-            typename F_requirements__
-        >
-        struct TF_lock_shared_helper<
-            F_allocator__,
-            F_passed_object__,
-            F_options__,
-            false,
-            F_requirements__
-        > {
+		};
+		template<
+			typename F_allocator__,
+			typename F_passed_object__,
+			class F_options__,
+			typename F_requirements__
+		>
+		struct TF_share_helper<
+			F_allocator__,
+			F_passed_object__,
+			F_options__,
+			false,
+			F_requirements__
+		> {
 
-            using S = TS_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
-            using K = TK_oref<F_passed_object__, F_options__, false, F_requirements__>;
+			using S = TS_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
+			using K = TK_oref<F_passed_object__, F_options__, false, F_requirements__>;
 
-            static inline S get(const K& k) {
+			static inline S get(const K& k) {
 
-                if(k.is_valid()) {
-                    auto* object_p = k.object_p();
-                    increase_shared_object_counter_unsafe(object_p);
-                    return S::unsafe(object_p);
-                }
-                else {
-                    return F_null{};
-                }
-            }
+				if(k.is_valid()) {
+					auto* object_p = k.object_p();
+					increase_shared_object_counter_unsafe(object_p);
+					return S::unsafe(object_p);
+				}
+				else {
+					return F_null{};
+				}
+			}
 
-        };
+		};
 
-    };
+	};
 
-    template<
-        typename F_allocator__ = mem::F_object_allocator,
-        typename F_passed_object__ = internal::F_fake_obj,
-        class F_options__ = F_default_object_options,
-        b8 is_has_object_key__ = true,
-        typename F_requirements__ = F_no_requirements
-    >
-    NCPP_FORCE_INLINE TS_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__> T_lock_shared(
-        ncpp::TK_oref<F_passed_object__, F_options__, is_has_object_key__, F_requirements__> k
-    ) {
+	template<
+		typename F_allocator__ = mem::F_object_allocator,
+		typename F_passed_object__ = internal::F_fake_obj,
+		class F_options__ = F_default_object_options,
+		b8 is_has_object_key__ = true,
+		typename F_requirements__ = F_no_requirements
+	>
+	NCPP_FORCE_INLINE TS_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__> T_share(
+		ncpp::TKPA<F_passed_object__, F_options__, is_has_object_key__, F_requirements__> k
+	) {
 
-        return internal::TF_lock_shared_helper<F_allocator__, F_passed_object__, F_options__, is_has_object_key__, F_requirements__>::get(k);
-    }
+		return internal::TF_share_helper<F_allocator__, F_passed_object__, F_options__, is_has_object_key__, F_requirements__>::get(k);
+	}
 
 }
 
