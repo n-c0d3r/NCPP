@@ -201,11 +201,14 @@ namespace ncpp {
 
     NCPP_RTTI_CREATE_FLAG(F_object_thread_safe_flag);
     NCPP_RTTI_CREATE_FLAG(F_oref_flag);
+    NCPP_RTTI_CREATE_FLAG(F_main_object_flag);
 
     template<typename F__>
     concept T_is_object_thread_safe = NCPP_RTTI_IS_HAS_FLAG(F__, F_object_thread_safe_flag);
     template<typename F__>
     concept T_is_oref = NCPP_RTTI_IS_HAS_FLAG(F__, F_oref_flag);
+	template<typename F__>
+	concept T_is_main_object = NCPP_RTTI_IS_HAS_FLAG(F__, F_main_object_flag);
 
     struct F_object_key {
 
@@ -7266,7 +7269,6 @@ namespace ncpp {
 
 		struct F_fake_obj {};
 
-            class F_options__ = F_default_object_options,
 		template<
 			typename F_allocator__ = mem::F_object_allocator,
 			typename F_passed_object__ = F_fake_obj,
@@ -7335,6 +7337,10 @@ namespace ncpp {
 	NCPP_FORCE_INLINE TS_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__> T_share(
 		ncpp::TKPA<F_passed_object__, F_options__, is_has_object_key__, F_requirements__> k
 	) {
+		static_assert(
+			T_is_main_object<std::remove_const_t<F_passed_object__>>,
+		    "require non interface object"
+		);
 
 		return internal::TF_share_helper<F_allocator__, F_passed_object__, F_options__, is_has_object_key__, F_requirements__>::get(k);
 	}
@@ -7425,7 +7431,8 @@ NCPP_BIND_CUSTOM_CPASS(
 
 #define NCPP_OBJECT_MINIMAL(...) \
 			NCPP_DISABLE_COPY(__VA_ARGS__) \
-			NCPP_OBJECT_FRIEND_CLASSES()
+			NCPP_OBJECT_FRIEND_CLASSES()  \
+			NCPP_RTTI_IMPLEMENT_FLAG(ncpp::F_main_object_flag)
 
 #ifdef NCPP_OBJECT_THREAD_SAFE_BY_DEFAULT
 #define NCPP_OBJECT(...) \
