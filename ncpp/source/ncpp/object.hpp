@@ -870,7 +870,7 @@ namespace ncpp {
                     0,
                     0
                 );
-                u32* new_next_p = new_generation_p + size;
+                u32* new_next_p = new_generation_p + new_size;
 
                 if(size) {
 
@@ -1168,7 +1168,7 @@ namespace ncpp {
                     0,
                     0
                 );
-                u32* new_next_p = new_generation_p + size;
+                u32* new_next_p = new_generation_p + new_size;
 
                 if(size) {
 
