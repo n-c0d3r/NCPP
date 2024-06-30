@@ -843,6 +843,7 @@ namespace ncpp {
         struct F_generation_buffer {
 
             u32* generation_p = 0;
+			aflag* generation_lock_p = 0;
             u32* next_p = 0;
             u32 size = 0;
             mutable pac::TF_spin_lock<false, true> lock;
@@ -854,7 +855,6 @@ namespace ncpp {
                 if(size) {
 
                     allocator.deallocate(generation_p);
-
                 }
 
             }
@@ -865,18 +865,18 @@ namespace ncpp {
 
                 sz buffer_size_in_bytes = sizeof(u32) * new_size;
                 u32* new_generation_p = (u32*)allocator.allocate(
-                    2 * buffer_size_in_bytes,
+                    buffer_size_in_bytes,
                     utilities::T_alignof<u32>,
                     0,
                     0
                 );
-                u32* new_next_p = new_generation_p + new_size;
+                u32* new_next_p = new_generation_p + size;
 
                 if(size) {
 
                     u32 min_size = eastl::min(size, new_size);
 
-                    std::memcpy(new_generation_p, generation_p, 2 * min_size * sizeof(u32));
+                    std::memcpy(new_generation_p, generation_p, min_size * sizeof(u32));
 
                     allocator.deallocate(generation_p);
 
@@ -894,12 +894,17 @@ namespace ncpp {
 
                 if(min_size > size) {
 
-                    resize(min_size);
-
+					resize(
+						1 << u32(
+							ceil(
+								log((f32)min_size)
+								/ log(2.0f)
+							)
+						)
+					);
                 }
 
                 lock.wunlock();
-
             }
 
         };
@@ -1068,6 +1073,51 @@ namespace ncpp {
 
 			return result;
         }
+		NCPP_FORCE_INLINE b8 check_and_callback_if_valid(F_object_key object_key, auto&& callback_if_valid) const noexcept {
+
+			generation_buffer_.lock.rlock();
+
+			if(object_key.id >= generation_buffer_.size) {
+
+				generation_buffer_.lock.runlock();
+				return false;
+			}
+
+			b8 result = (generation_buffer_.generation_p[object_key.id] == object_key.generation);
+
+			if(result)
+			{
+				callback_if_valid();
+				generation_buffer_.lock.runlock();
+				return true;
+			}
+
+			generation_buffer_.lock.runlock();
+			return false;
+		}
+		NCPP_FORCE_INLINE b8 check_and_callback_if_null(F_object_key object_key, auto&& callback_if_null) const noexcept {
+
+			generation_buffer_.lock.rlock();
+
+			if(object_key.id >= generation_buffer_.size) {
+
+				callback_if_null();
+				generation_buffer_.lock.runlock();
+				return false;
+			}
+
+			b8 result = (generation_buffer_.generation_p[object_key.id] == object_key.generation);
+
+			if(result)
+			{
+				generation_buffer_.lock.runlock();
+				return true;
+			}
+
+			callback_if_null();
+			generation_buffer_.lock.runlock();
+			return false;
+		}
 
     };
 
@@ -1113,18 +1163,18 @@ namespace ncpp {
 
                 sz buffer_size_in_bytes = sizeof(u32) * new_size;
                 u32* new_generation_p = (u32*)allocator.allocate(
-                    2 * buffer_size_in_bytes,
+                    buffer_size_in_bytes,
                     utilities::T_alignof<u32>,
                     0,
                     0
                 );
-                u32* new_next_p = new_generation_p + new_size;
+                u32* new_next_p = new_generation_p + size;
 
                 if(size) {
 
                     u32 min_size = eastl::min(size, new_size);
 
-                    std::memcpy(new_generation_p, generation_p, 2 * min_size * sizeof(u32));
+                    std::memcpy(new_generation_p, generation_p, min_size * sizeof(u32));
 
                     allocator.deallocate(generation_p);
 
@@ -1140,10 +1190,15 @@ namespace ncpp {
 
                 if(min_size > size) {
 
-                    resize(min_size);
-
+                    resize(
+						1 << u32(
+							ceil(
+								log((f32)min_size)
+								/ log(2.0f)
+							)
+						)
+					);
                 }
-
             }
 
         };
@@ -1227,6 +1282,35 @@ namespace ncpp {
 				return false;
 
 			return (generation_buffer_.generation_p[object_key.id] == object_key.generation);
+		}
+		NCPP_FORCE_INLINE b8 check_and_callback_if_valid(F_object_key object_key, auto&& callback_if_valid) const noexcept {
+
+			if(object_key.id >= generation_buffer_.size)
+				return false;
+
+			if (generation_buffer_.generation_p[object_key.id] == object_key.generation)
+			{
+				callback_if_valid();
+				return true;
+			}
+
+			return false;
+		}
+		NCPP_FORCE_INLINE b8 check_and_callback_if_null(F_object_key object_key, auto&& callback_if_null) const noexcept
+		{
+			if (object_key.id >= generation_buffer_.size) {
+
+				callback_if_null();
+				return false;
+			}
+
+			if (generation_buffer_.generation_p[object_key.id] == object_key.generation)
+			{
+				return true;
+			}
+
+			callback_if_null();
+			return false;
 		}
 
     };
@@ -1322,6 +1406,40 @@ namespace ncpp {
 
             return subpool_vector_[subpool_index].check(object_key);
         }
+		NCPP_FORCE_INLINE b8 check_and_callback_if_valid(F_object_key object_key, auto&& callback_if_valid) const noexcept {
+
+			if(object_key.is_null())
+				return false;
+
+			u32 subpool_index = object_key.id / max_local_generation_count_;
+
+			if(subpool_index >= subpool_count_)
+				return false;
+
+			object_key.id %= max_local_generation_count_;
+
+			return subpool_vector_[subpool_index].check_and_callback_if_valid(object_key, NCPP_FORWARD(callback_if_valid));
+		}
+		NCPP_FORCE_INLINE b8 check_and_callback_if_null(F_object_key object_key, auto&& callback_if_null) const noexcept {
+
+			if(object_key.is_null())
+			{
+				callback_if_null();
+				return false;
+			}
+
+			u32 subpool_index = object_key.id / max_local_generation_count_;
+
+			if(subpool_index >= subpool_count_)
+			{
+				callback_if_null();
+				return false;
+			}
+
+			object_key.id %= max_local_generation_count_;
+
+			return subpool_vector_[subpool_index].check_and_callback_if_null(object_key, NCPP_FORWARD(callback_if_null));
+		}
 
     };
 
@@ -1378,6 +1496,23 @@ namespace ncpp {
 
             return subpool_.check(object_key);
         }
+		NCPP_FORCE_INLINE b8 check_and_callback_if_valid(F_object_key object_key, auto&& callback_if_valid) const noexcept {
+
+			if(object_key.is_null())
+				return false;
+
+			return subpool_.check_and_callback_if_valid(object_key, NCPP_FORWARD(callback_if_valid));
+		}
+		NCPP_FORCE_INLINE b8 check_and_callback_if_null(F_object_key object_key, auto&& callback_if_null) const noexcept
+		{
+			if (object_key.is_null()) {
+
+				callback_if_null();
+				return false;
+			}
+
+			return subpool_.check_and_callback_if_null(object_key, NCPP_FORWARD(callback_if_null));
+		}
 
     };
 
@@ -2753,6 +2888,31 @@ namespace ncpp {
 			return true;
         }
 
+		NCPP_FORCE_INLINE b8 NQ_is_valid(auto&& callback_if_valid) const noexcept {
+
+			if(object_p_)
+			{
+				if (object_key_.is_thread_safe)
+					return F_options::template T_get_manager<true>().key_pool().check_and_callback_if_valid(object_key_, NCPP_FORWARD(callback_if_valid));
+				else
+					return F_options::template T_get_manager<false>().key_pool().check_and_callback_if_valid(object_key_, NCPP_FORWARD(callback_if_valid));
+			}
+
+			return false;
+		}
+		NCPP_FORCE_INLINE b8 NQ_is_null(auto&& callback_if_null) const noexcept {
+
+			if(object_p_)
+			{
+				if (object_key_.is_thread_safe)
+					return !F_options::template T_get_manager<true>().key_pool().check_and_callback_if_null(object_key_, NCPP_FORWARD(callback_if_null));
+				else
+					return !F_options::template T_get_manager<false>().key_pool().check_and_callback_if_null(object_key_, NCPP_FORWARD(callback_if_null));
+			}
+
+			return true;
+		}
+
         NCPP_FORCE_INLINE b8 Q_is_valid() const noexcept {
 
             if constexpr (F_requirements::is_always_valid)
@@ -3156,6 +3316,27 @@ namespace ncpp {
 
             return (object_p_ == 0);
         }
+
+		NCPP_FORCE_INLINE b8 NQ_is_valid(auto&& callback_if_valid) const noexcept {
+
+			if (object_p_ != 0) {
+
+				callback_if_valid();
+				return true;
+			}
+
+			return false;
+		}
+		NCPP_FORCE_INLINE b8 NQ_is_null(auto&& callback_if_null) const noexcept {
+
+			if (object_p_ == 0) {
+
+				callback_if_null();
+				return true;
+			}
+
+			return false;
+		}
 
         NCPP_FORCE_INLINE b8 Q_is_valid() const noexcept {
 
@@ -6161,6 +6342,37 @@ namespace ncpp {
 			return true;
         }
 
+		NCPP_FORCE_INLINE b8 NQ_is_valid(auto&& callback_if_valid) const noexcept {
+
+			if(is_shared_)
+				return (object_p_ != 0);
+
+			if(object_p_)
+			{
+				if (object_key_.is_thread_safe)
+					return F_options::template T_get_manager<true>().key_pool().check_and_callback_if_valid(object_key_, NCPP_FORWARD(callback_if_valid));
+				else
+					return F_options::template T_get_manager<false>().key_pool().check_and_callback_if_valid(object_key_, NCPP_FORWARD(callback_if_valid));
+			}
+
+			return false;
+		}
+		NCPP_FORCE_INLINE b8 NQ_is_null(auto&& callback_if_null) const noexcept {
+
+			if(is_shared_)
+				return (object_p_ == 0);
+
+			if(object_p_)
+			{
+				if (object_key_.is_thread_safe)
+					return !F_options::template T_get_manager<true>().key_pool().check_and_callback_if_null(object_key_, NCPP_FORWARD(callback_if_null));
+				else
+					return !F_options::template T_get_manager<false>().key_pool().check_and_callback_if_null(object_key_, NCPP_FORWARD(callback_if_null));
+			}
+
+			return true;
+		}
+
         NCPP_FORCE_INLINE b8 Q_is_valid() const noexcept {
 
             if constexpr (F_requirements::is_always_valid)
@@ -7054,6 +7266,27 @@ namespace ncpp {
             return (object_p_ == 0);
         }
 
+		NCPP_FORCE_INLINE b8 NQ_is_valid(auto&& callback_if_valid) const noexcept {
+
+			if (object_p_ != 0) {
+
+				callback_if_valid();
+				return true;
+			}
+
+			return false;
+		}
+		NCPP_FORCE_INLINE b8 NQ_is_null(auto&& callback_if_null) const noexcept {
+
+			if (object_p_ == 0) {
+
+				callback_if_null();
+				return true;
+			}
+
+			return false;
+		}
+
         NCPP_FORCE_INLINE b8 Q_is_valid() const noexcept {
 
             if constexpr (F_requirements::is_always_valid)
@@ -7277,22 +7510,23 @@ namespace ncpp {
 			typename F_requirements__ = F_no_requirements
 		>
 		struct TF_share_helper {
-
 			using S = TS_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>;
 			using K = TK_oref<F_passed_object__, F_options__, is_has_object_key__, F_requirements__>;
 
 			static inline S get(const K& k) {
 
-				if(k.is_valid()) {
-					auto* object_p = k.object_p();
-					increase_shared_object_counter_unsafe(object_p);
-					return S::unsafe(object_p, k.object_key());
-				}
-				else {
-					return F_null{};
-				}
-			}
+				S result;
 
+				k.NQ_is_valid(
+					[&result, &k]() {
+					  	auto* object_p = k.object_p();
+					  	increase_shared_object_counter_unsafe(object_p);
+					  	result = S::unsafe(object_p, k.object_key());
+					}
+				);
+
+				return std::move(result);
+			}
 		};
 		template<
 			typename F_allocator__,
@@ -7307,22 +7541,23 @@ namespace ncpp {
 			false,
 			F_requirements__
 		> {
-
 			using S = TS_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
 			using K = TK_oref<F_passed_object__, F_options__, false, F_requirements__>;
 
 			static inline S get(const K& k) {
 
-				if(k.is_valid()) {
-					auto* object_p = k.object_p();
-					increase_shared_object_counter_unsafe(object_p);
-					return S::unsafe(object_p);
-				}
-				else {
-					return F_null{};
-				}
-			}
+				S result;
 
+				k.NQ_is_valid(
+					[&result, &k]() {
+					  	auto* object_p = k.object_p();
+					  	increase_shared_object_counter_unsafe(object_p);
+					  	result = S::unsafe(object_p);
+					}
+				);
+
+				return std::move(result);
+			}
 		};
 
 	};
@@ -7344,6 +7579,251 @@ namespace ncpp {
 
 		return internal::TF_share_helper<F_allocator__, F_passed_object__, F_options__, is_has_object_key__, F_requirements__>::get(k);
 	}
+
+
+
+	template<
+		typename F_allocator__ = mem::F_object_allocator,
+		typename F_passed_object__ = internal::F_fake_obj,
+		class F_options__ = F_default_object_options,
+		b8 is_has_object_key__ = true,
+		typename F_requirements__ = F_no_requirements
+	>
+	struct TF_object_unique_collection {
+
+	private:
+		using F_this = TF_object_unique_collection<F_allocator__, F_passed_object__, F_options__, false, F_requirements__>;
+
+	public:
+		NCPP_OBJECT_FRIEND_CLASSES();
+
+		using F_passed_object = F_passed_object__;
+		using F_object = std::remove_const_t<F_passed_object__>;
+
+		using F_allocator = F_allocator__;
+		using F_options = F_options__;
+
+		using F_requirements = F_requirements__;
+
+		using U = TU<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>;
+		using K = TK<F_passed_object__, F_options__, is_has_object_key__, F_requirements__>;
+		using K_valid = TK_valid<F_passed_object__, F_options__, is_has_object_key__>;
+
+		static constexpr b8 is_has_object_key = false;
+		static constexpr b8 is_const = std::is_const_v<F_passed_object>;
+
+
+
+	private:
+		struct F_oref_hash {
+			NCPP_FORCE_INLINE u64 operator()(const U& oref) const noexcept {
+				return oref.object_p();
+			}
+		};
+
+
+
+	private:
+		containers::TG_unordered_set<U, F_oref_hash> container_;
+
+	public:
+		NCPP_FORCE_INLINE const auto& container() const noexcept { return container_; }
+
+
+
+	public:
+		TF_object_unique_collection() = default;
+		TF_object_unique_collection(TF_object_unique_collection&& x) :
+			container_(std::move(x.container_))
+		{
+			x.reset();
+		}
+		TF_object_unique_collection& operator = (TF_object_unique_collection&& x) {
+
+			container_ = std::move(x.container_);
+
+			x.reset();
+
+			return *this;
+		}
+
+
+
+	public:
+		void push(U&& oref) {
+
+			container_.insert(std::move(oref));
+		}
+		void pop(const K_valid& oref) {
+
+			container_.erase(oref);
+		}
+
+	public:
+		void reset() {
+
+			container_.reset();
+		}
+
+
+
+	public:
+		template<typename... F_args__>
+		K_valid T_create_object(F_args__&&... args) {
+
+			auto unique_object_p = U()(std::forward<F_args__>(args)...);
+			auto keyed_object_p = NCPP_FOH_VALID(unique_object_p);
+
+			push(std::move(unique_object_p));
+
+			return keyed_object_p;
+		}
+
+	};
+
+
+
+	template<
+		typename F_allocator__ = mem::F_object_allocator,
+		typename F_passed_object__ = internal::F_fake_obj,
+		class F_options__ = F_default_object_options,
+		b8 is_has_object_key__ = true,
+		typename F_requirements__ = F_no_requirements
+	>
+	struct TF_object_shared_collection {
+
+    private:
+        using F_this = TF_object_shared_collection<F_allocator__, F_passed_object__, F_options__, false, F_requirements__>;
+
+		using F_object_unique_collection = TF_object_unique_collection<F_allocator__, F_passed_object__, F_options__, false, F_requirements__>;
+
+    public:
+        NCPP_OBJECT_FRIEND_CLASSES();
+
+        using F_passed_object = F_passed_object__;
+        using F_object = std::remove_const_t<F_passed_object__>;
+
+        using F_allocator = F_allocator__;
+        using F_options = F_options__;
+
+        using F_requirements = F_requirements__;
+
+		using S = TS<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>;
+
+        static constexpr b8 is_has_object_key = false;
+        static constexpr b8 is_const = std::is_const_v<F_passed_object>;
+
+
+
+	private:
+		struct F_oref_hash {
+			NCPP_FORCE_INLINE u64 operator()(const S& oref) const noexcept {
+				return oref.object_p();
+			}
+		};
+
+
+
+	private:
+		containers::TG_unordered_set<S, F_oref_hash> container_;
+
+	public:
+		NCPP_FORCE_INLINE const auto& container() const noexcept { return container_; }
+
+
+
+	public:
+		TF_object_shared_collection() = default;
+		TF_object_shared_collection(const TF_object_shared_collection& x) :
+			container_(x.container_)
+		{
+		}
+		TF_object_shared_collection& operator = (const TF_object_shared_collection& x) {
+
+			container_ = x.container_;
+
+			return *this;
+		}
+		TF_object_shared_collection(TF_object_shared_collection&& x) :
+			container_(std::move(x.container_))
+		{
+			x.reset();
+		}
+		TF_object_shared_collection& operator = (TF_object_shared_collection&& x) {
+
+			container_ = std::move(x.container_);
+
+			x.reset();
+
+			return *this;
+		}
+		TF_object_shared_collection(F_object_unique_collection&& x)
+		{
+			auto& x_container = (
+				containers::TG_unordered_set<typename F_object_unique_collection::U, F_oref_hash>&
+			)(x.container());
+
+			for(auto& object_p : x_container) {
+
+				container_.insert(std::move(object_p));
+			}
+
+			x.reset();
+		}
+		TF_object_shared_collection& operator = (F_object_unique_collection&& x) {
+
+			container_.reset();
+
+			auto& x_container = (
+				containers::TG_unordered_set<typename F_object_unique_collection::U, F_oref_hash>&
+			)(x.container());
+
+			for(auto& object_p : x_container) {
+
+				container_.insert(std::move(object_p));
+			}
+
+			x.reset();
+
+			return *this;
+		}
+
+
+
+	public:
+		void push(const S& oref) {
+
+			container_.insert(oref);
+		}
+		void push(S&& oref) {
+
+			container_.insert(std::move(oref));
+		}
+		void pop(const S& oref) {
+
+			container_.erase(oref);
+		}
+
+	public:
+		void reset() {
+
+			container_.reset();
+		}
+
+
+
+	public:
+		template<typename... F_args__>
+		S T_create_object(F_args__&&... args) {
+
+			auto object_p = S()(std::forward<F_args__>(args)...);
+
+			push(object_p);
+
+			return std::move(object_p);
+		}
+
+	};
 
 }
 
