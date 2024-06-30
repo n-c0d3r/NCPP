@@ -947,7 +947,7 @@ namespace ncpp {
 
                 generation_buffer_.lock.rlock();
                 generation_buffer_.generation_p[out_generation_index] = 0;
-                generation_buffer_.flag_p[out_generation_index] = aflag{};
+                new(generation_buffer_.flag_p + out_generation_index) aflag{ATOMIC_FLAG_INIT};
                 generation_buffer_.lock.runlock();
 
                 out_generation = 0;
