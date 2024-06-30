@@ -843,8 +843,8 @@ namespace ncpp {
         struct F_generation_buffer {
 
             u32* generation_p = 0;
-			aflag* generation_lock_p = 0;
             u32* next_p = 0;
+			aflag* lock_p = 0;
             u32 size = 0;
             mutable pac::TF_spin_lock<false, true> lock;
 
@@ -852,20 +852,25 @@ namespace ncpp {
 
                 mem::F_default_allocator allocator;
 
-                if(size) {
-
+                if(size)
                     allocator.deallocate(generation_p);
-                }
-
             }
+
+			static NCPP_FORCE_INLINE sz calculate_buffer_size_in_bytes(u32 element_count) noexcept
+			{
+				return (
+					element_count * sizeof(u32) // generations
+					+ element_count * sizeof(u32) // nexts
+					+ element_count * sizeof(aflag) // flags
+				);
+			}
 
             NCPP_FORCE_INLINE void resize(u32 new_size) {
 
                 mem::F_default_allocator allocator;
 
-                sz buffer_size_in_bytes = sizeof(u32) * new_size;
                 u32* new_generation_p = (u32*)allocator.allocate(
-                    2 * buffer_size_in_bytes,
+					calculate_buffer_size_in_bytes(new_size),
                     utilities::T_alignof<u32>,
                     0,
                     0
@@ -873,13 +878,12 @@ namespace ncpp {
                 u32* new_next_p = new_generation_p + new_size;
 
                 if(size) {
-
                     u32 min_size = eastl::min(size, new_size);
 
-                    std::memcpy(new_generation_p, generation_p, 2 * min_size * sizeof(u32));
+                    std::memcpy(new_generation_p, generation_p, min_size * sizeof(u32));
+                    std::memcpy(new_next_p, next_p, min_size * sizeof(u32));
 
                     allocator.deallocate(generation_p);
-
                 }
 
                 generation_p = new_generation_p;
@@ -1157,13 +1161,20 @@ namespace ncpp {
 
             }
 
+			static NCPP_FORCE_INLINE sz calculate_buffer_size_in_bytes(u32 element_count) noexcept
+			{
+				return (
+					element_count * sizeof(u32) // generations
+					+ element_count * sizeof(u32) // nexts
+				);
+			}
+
             NCPP_FORCE_INLINE void resize(u32 new_size) {
 
                 mem::F_default_allocator allocator;
 
-                sz buffer_size_in_bytes = sizeof(u32) * new_size;
                 u32* new_generation_p = (u32*)allocator.allocate(
-					2 * buffer_size_in_bytes,
+					calculate_buffer_size_in_bytes(new_size),
                     utilities::T_alignof<u32>,
                     0,
                     0
@@ -1171,13 +1182,12 @@ namespace ncpp {
                 u32* new_next_p = new_generation_p + new_size;
 
                 if(size) {
-
                     u32 min_size = eastl::min(size, new_size);
 
-                    std::memcpy(new_generation_p, generation_p, 2 * min_size * sizeof(u32));
+					std::memcpy(new_generation_p, generation_p, min_size * sizeof(u32));
+					std::memcpy(new_next_p, next_p, min_size * sizeof(u32));
 
                     allocator.deallocate(generation_p);
-
                 }
 
                 generation_p = new_generation_p;
