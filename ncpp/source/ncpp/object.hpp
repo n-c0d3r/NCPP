@@ -865,7 +865,7 @@ namespace ncpp {
 
                 sz buffer_size_in_bytes = sizeof(u32) * new_size;
                 u32* new_generation_p = (u32*)allocator.allocate(
-                    buffer_size_in_bytes,
+                    2 * buffer_size_in_bytes,
                     utilities::T_alignof<u32>,
                     0,
                     0
@@ -876,7 +876,7 @@ namespace ncpp {
 
                     u32 min_size = eastl::min(size, new_size);
 
-                    std::memcpy(new_generation_p, generation_p, min_size * sizeof(u32));
+                    std::memcpy(new_generation_p, generation_p, 2 * min_size * sizeof(u32));
 
                     allocator.deallocate(generation_p);
 
@@ -1163,7 +1163,7 @@ namespace ncpp {
 
                 sz buffer_size_in_bytes = sizeof(u32) * new_size;
                 u32* new_generation_p = (u32*)allocator.allocate(
-                    buffer_size_in_bytes,
+					2 * buffer_size_in_bytes,
                     utilities::T_alignof<u32>,
                     0,
                     0
@@ -1174,7 +1174,7 @@ namespace ncpp {
 
                     u32 min_size = eastl::min(size, new_size);
 
-                    std::memcpy(new_generation_p, generation_p, min_size * sizeof(u32));
+                    std::memcpy(new_generation_p, generation_p, 2 * min_size * sizeof(u32));
 
                     allocator.deallocate(generation_p);
 
