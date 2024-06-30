@@ -7529,6 +7529,12 @@ namespace ncpp {
 
 		struct F_fake_obj {};
 
+	}
+
+
+
+	namespace internal {
+
 		template<
 			typename F_allocator__ = mem::F_object_allocator,
 			typename F_passed_object__ = F_fake_obj,
@@ -7605,6 +7611,86 @@ namespace ncpp {
 		);
 
 		return internal::TF_share_helper<F_allocator__, F_passed_object__, F_options__, is_has_object_key__, F_requirements__>::get(k);
+	}
+
+
+
+	namespace internal {
+
+		template<
+			typename F_allocator__ = mem::F_object_allocator,
+			typename F_passed_object__ = F_fake_obj,
+			class F_options__ = F_default_object_options,
+			b8 is_has_object_key__ = true,
+			typename F_requirements__ = F_no_requirements
+		>
+		struct TF_unique_helper {
+			using U = TU_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>;
+			using K = TK_oref<F_passed_object__, F_options__, is_has_object_key__, F_requirements__>;
+
+			static inline U get(const K& k) {
+
+				U result;
+
+				k.NQ_is_valid(
+					[&result, &k]() {
+					  	auto* object_p = k.object_p();
+					  	result = U::unsafe(object_p, k.object_key());
+					}
+				);
+
+				return std::move(result);
+			}
+		};
+		template<
+			typename F_allocator__,
+			typename F_passed_object__,
+			class F_options__,
+			typename F_requirements__
+		>
+		struct TF_unique_helper<
+			F_allocator__,
+			F_passed_object__,
+			F_options__,
+			false,
+			F_requirements__
+		> {
+			using U = TU_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
+			using K = TK_oref<F_passed_object__, F_options__, false, F_requirements__>;
+
+			static inline U get(const K& k) {
+
+				U result;
+
+				k.NQ_is_valid(
+					[&result, &k]() {
+					  	auto* object_p = k.object_p();
+					  	result = U::unsafe(object_p);
+					}
+				);
+
+				return std::move(result);
+			}
+		};
+
+	};
+
+	template<
+		typename F_allocator__ = mem::F_object_allocator,
+		typename F_passed_object__ = internal::F_fake_obj,
+		class F_options__ = F_default_object_options,
+		b8 is_has_object_key__ = true,
+		typename F_requirements__ = F_no_requirements
+	>
+	NCPP_FORCE_INLINE TU_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__> T_unique(
+		ncpp::TKPA<F_passed_object__, F_options__, is_has_object_key__, F_requirements__> k
+	) {
+		static_assert(
+			T_is_main_object<std::remove_const_t<F_passed_object__>>,
+			"require non interface object"
+		);
+
+		return internal::TF_unique_helper<F_allocator__, F_passed_object__, F_options__, is_has_object_key__, F_requirements__>::get(k);
 	}
 
 
