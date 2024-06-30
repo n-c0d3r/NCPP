@@ -490,13 +490,13 @@ namespace ncpp {
                 \
                     return oref.is_null();\
                 }\
-                NCPP_FORCE_INLINE bool NQ_is_valid() const noexcept {\
+                NCPP_FORCE_INLINE bool NQ_is_valid(auto&&... args) const noexcept {\
                 \
-                    return oref.NQ_is_valid();\
+                    return oref.NQ_is_valid(NCPP_FORWARD(args)...);\
                 }\
-                NCPP_FORCE_INLINE bool NQ_is_null() const noexcept {\
+                NCPP_FORCE_INLINE bool NQ_is_null(auto&&... args) const noexcept {\
                 \
-                    return oref.NQ_is_null();\
+                    return oref.NQ_is_null(NCPP_FORWARD(args)...);\
                 }\
                 NCPP_FORCE_INLINE bool Q_is_valid() const noexcept {\
                 \
