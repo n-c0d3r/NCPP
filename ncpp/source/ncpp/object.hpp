@@ -844,7 +844,7 @@ namespace ncpp {
 
             u32* generation_p = 0;
             u32* next_p = 0;
-			aflag* lock_p = 0;
+			aflag* flag_p = 0;
             u32 size = 0;
             mutable pac::TF_spin_lock<false, true> lock;
 
@@ -876,18 +876,21 @@ namespace ncpp {
                     0
                 );
                 u32* new_next_p = new_generation_p + new_size;
+                aflag* new_flag_p = (aflag*)(new_next_p + new_size);
 
                 if(size) {
                     u32 min_size = eastl::min(size, new_size);
 
                     std::memcpy(new_generation_p, generation_p, min_size * sizeof(u32));
                     std::memcpy(new_next_p, next_p, min_size * sizeof(u32));
+                    std::memcpy(new_flag_p, flag_p, min_size * sizeof(aflag));
 
                     allocator.deallocate(generation_p);
                 }
 
                 generation_p = new_generation_p;
                 next_p = new_next_p;
+				flag_p = new_flag_p;
                 size = new_size;
 
             }
@@ -944,6 +947,7 @@ namespace ncpp {
 
                 generation_buffer_.lock.rlock();
                 generation_buffer_.generation_p[out_generation_index] = 0;
+                generation_buffer_.flag_p[out_generation_index] = aflag{};
                 generation_buffer_.lock.runlock();
 
                 out_generation = 0;
@@ -951,7 +955,6 @@ namespace ncpp {
                 return true;
             }
             else{
-
                 generation_buffer_.lock.rlock();
                 u32 next_free_generation_tail_index = generation_buffer_.next_p[free_generation_tail_index];
                 out_generation = generation_buffer_.generation_p[free_generation_tail_index];
@@ -986,14 +989,12 @@ namespace ncpp {
                 )
                 && !is_special
             ) {
-
                 is_special = try_optain_generation(
                     free_generation_tail_index,
                     new_free_generation_tail_index,
                     obtained_generation_index,
                     out_generation
                 );
-
             }
 
             out_generation_index = obtained_generation_index;
@@ -1009,18 +1010,29 @@ namespace ncpp {
             out_free_generation_tail_index = generation_index;
 
         }
-        inline void free_generation(u32 generation_index) noexcept {
+        inline void free_generation(u32 generation_index) noexcept
+		{
+			// increase generation
+			{
+				generation_buffer_.lock.rlock();
 
-            generation_buffer_.lock.rlock();
-            ++(generation_buffer_.generation_p[generation_index]);
-            generation_buffer_.lock.runlock();
+				// lock object to let it still available for accessing inside critical sections
+				auto& flag = generation_buffer_.flag_p[generation_index];
+				while (flag.test_and_set(eastl::memory_order_acquire));
 
+				++(generation_buffer_.generation_p[generation_index]);
+
+				// unlock object
+				flag.clear();
+
+				generation_buffer_.lock.runlock();
+			}
+
+			// update next generation index and free generation tail index
             u32 free_generation_tail_index = free_generation_tail_index_.load(eastl::memory_order_acquire);
-
             u32 new_free_generation_tail_index = NCPP_U32_MAX;
 
             try_free_generation(generation_index, free_generation_tail_index, new_free_generation_tail_index);
-
             while(
                 free_generation_tail_index_.compare_exchange_weak(
                     free_generation_tail_index,
@@ -1029,11 +1041,8 @@ namespace ncpp {
                 )
             )
             {
-
                 try_free_generation(generation_index, free_generation_tail_index, new_free_generation_tail_index);
-
             }
-
         }
 
 
@@ -1091,7 +1100,15 @@ namespace ncpp {
 
 			if(result)
 			{
+				// lock object to let it still available for accessing inside critical sections
+				auto& flag = generation_buffer_.flag_p[object_key.generation];
+				while (flag.test_and_set(eastl::memory_order_acquire));
+
 				callback_if_valid();
+
+				// unlock object
+				flag.clear();
+
 				generation_buffer_.lock.runlock();
 				return true;
 			}
