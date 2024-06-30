@@ -865,18 +865,18 @@ namespace ncpp {
 
                 sz buffer_size_in_bytes = sizeof(u32) * new_size;
                 u32* new_generation_p = (u32*)allocator.allocate(
-                    2 * buffer_size_in_bytes,
+                    buffer_size_in_bytes,
                     utilities::T_alignof<u32>,
                     0,
                     0
                 );
-                u32* new_next_p = new_generation_p + new_size;
+                u32* new_next_p = new_generation_p + size;
 
                 if(size) {
 
                     u32 min_size = eastl::min(size, new_size);
 
-                    std::memcpy(new_generation_p, generation_p, 2 * min_size * sizeof(u32));
+                    std::memcpy(new_generation_p, generation_p, min_size * sizeof(u32));
 
                     allocator.deallocate(generation_p);
 
@@ -894,7 +894,14 @@ namespace ncpp {
 
                 if(min_size > size) {
 
-					resize(min_size);
+					resize(
+						1 << u32(
+							ceil(
+								log((f32)min_size)
+								/ log(2.0f)
+							)
+						)
+					);
                 }
 
                 lock.wunlock();
@@ -1156,18 +1163,18 @@ namespace ncpp {
 
                 sz buffer_size_in_bytes = sizeof(u32) * new_size;
                 u32* new_generation_p = (u32*)allocator.allocate(
-                    2 * buffer_size_in_bytes,
+                    buffer_size_in_bytes,
                     utilities::T_alignof<u32>,
                     0,
                     0
                 );
-                u32* new_next_p = new_generation_p + new_size;
+                u32* new_next_p = new_generation_p + size;
 
                 if(size) {
 
                     u32 min_size = eastl::min(size, new_size);
 
-                    std::memcpy(new_generation_p, generation_p, 2 * min_size * sizeof(u32));
+                    std::memcpy(new_generation_p, generation_p, min_size * sizeof(u32));
 
                     allocator.deallocate(generation_p);
 
@@ -1183,7 +1190,14 @@ namespace ncpp {
 
                 if(min_size > size) {
 
-                    resize(min_size);
+                    resize(
+						1 << u32(
+							ceil(
+								log((f32)min_size)
+								/ log(2.0f)
+							)
+						)
+					);
                 }
             }
 
