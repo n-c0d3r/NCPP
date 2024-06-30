@@ -2172,7 +2172,7 @@ namespace ncpp {
 
 
     template<typename F_passed_object__, typename F_requirements__ = F_no_requirements>
-    class TW_oref {
+    class TW_oref final {
 
     private:
     private:
@@ -2575,7 +2575,7 @@ namespace ncpp {
 
 
     template<typename F_passed_object__, class F_options__, typename F_requirements__>
-    class TK_oref<F_passed_object__, F_options__, true, F_requirements__> {
+    class TK_oref<F_passed_object__, F_options__, true, F_requirements__> final {
 
     private:
         using F_this = TK_oref<F_passed_object__, F_options__, true, F_requirements__>;
@@ -3061,7 +3061,7 @@ namespace ncpp {
 
 
     template<typename F_passed_object__, class F_options__, typename F_requirements__>
-    class TK_oref<F_passed_object__, F_options__, false, F_requirements__> {
+    class TK_oref<F_passed_object__, F_options__, false, F_requirements__> final {
 
     private:
         using F_this = TK_oref<F_passed_object__, F_options__, false, F_requirements__>;
@@ -3507,7 +3507,7 @@ namespace ncpp {
 
 
     template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_requirements__>
-    class TU_oref<F_passed_object__, F_allocator__, F_options__, true, F_requirements__> {
+    class TU_oref<F_passed_object__, F_allocator__, F_options__, true, F_requirements__> final {
 
     private:
         using F_this = TU_oref<F_passed_object__, F_allocator__, F_options__, true, F_requirements__>;
@@ -3961,7 +3961,7 @@ namespace ncpp {
 
 
     template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_requirements__>
-    class TU_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__> {
+    class TU_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__> final {
 
     private:
         using F_this = TU_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
@@ -4426,7 +4426,7 @@ namespace ncpp {
 
 
     template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_requirements__>
-    class TS_oref<F_passed_object__, F_allocator__, F_options__, true, F_requirements__> {
+    class TS_oref<F_passed_object__, F_allocator__, F_options__, true, F_requirements__> final {
 
     private:
         using F_this = TS_oref<F_passed_object__, F_allocator__, F_options__, true, F_requirements__>;
@@ -5037,7 +5037,7 @@ namespace ncpp {
 
 
     template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_requirements__>
-    class TS_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__> {
+    class TS_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__> final {
 
     private:
         using F_this = TS_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
@@ -5629,7 +5629,7 @@ namespace ncpp {
 
 
     template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_requirements__>
-    class TX_oref<F_passed_object__, F_allocator__, F_options__, true, F_requirements__> {
+    class TX_oref<F_passed_object__, F_allocator__, F_options__, true, F_requirements__> final {
 
     private:
         using F_this = TX_oref<F_passed_object__, F_allocator__, F_options__, true, F_requirements__>;
@@ -6629,7 +6629,7 @@ namespace ncpp {
 
 
     template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_requirements__>
-    class TX_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__> {
+    class TX_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__> final {
 
     private:
         using F_this = TX_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
