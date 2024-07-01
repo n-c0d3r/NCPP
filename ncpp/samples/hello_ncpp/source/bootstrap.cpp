@@ -3,7 +3,11 @@
 
 using namespace ncpp;
 
+struct A {
 
+
+
+};
 
 NCPP_ENTRY_POINT(args) {
 
@@ -17,6 +21,9 @@ NCPP_ENTRY_POINT(args) {
         << T_cout_lowlight(" (LITE)")
 #endif
         << E_log_color::RESET;
+
+	TS<A> a_p = TS<A>()();
+	TS<A_object> v_p = a_p;
 
     pause_console();
 

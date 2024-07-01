@@ -64,6 +64,10 @@
 
 namespace ncpp {
 
+    class A_object;
+
+
+
 #define NCPP_OBJECT_FRIEND_CLASSES() \
             template<ncpp::b8 is_thread_safe_fr__, typename F_allocator_fr__>     \
             friend class ncpp::TF_default_object_key_subpool;                                        \
@@ -783,6 +787,9 @@ namespace ncpp {
 	template<typename F_target__>
 	NCPP_FORCE_INLINE F_target__* T_try_cast_object(auto* object_p) {
 
+        if constexpr (std::is_same_v<std::remove_const_t<F_target__>, A_object>)
+            return (F_target__*)object_p;
+
 		return dynamic_cast<F_target__*>(
 			(
 				std::remove_const_t<
@@ -844,7 +851,29 @@ namespace ncpp {
 
 
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+	class A_object
+	{
+	public:
+		NCPP_OBJECT_FRIEND_CLASSES();
+	};
+
+
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1907,11 +1936,23 @@ namespace ncpp {
 
 
     template<typename F1__, typename F2__>
-    concept T_is_object_down_castable = requires(F1__* p1, F2__* p2) {
-        p2 = p1;
-    };
+    concept T_is_object_down_castable = (
+		(
+			(
+				std::is_same_v<F2__, A_object>
+				&& !std::is_const_v<F1__>
+			)
+			|| std::is_same_v<F2__, const A_object>
+		)
+		|| requires(F1__* p1, F2__* p2) {
+			p2 = p1;
+		}
+	);
     template<typename F1__, typename F2__>
-    concept T_is_object_up_castable = T_is_object_down_castable<F2__, F1__> && !T_is_object_down_castable<F1__, F2__>;
+    concept T_is_object_up_castable = (
+		T_is_object_down_castable<F2__, F1__>
+		&& !T_is_object_down_castable<F1__, F2__>
+	);
 
 
 
@@ -2641,7 +2682,7 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_check_polymorphism(auto& out_ref) const noexcept {
 
-			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_);
+			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_) || std::is_same_v<std::remove_const_t<F_other_p__>, A_object>;
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
@@ -2663,9 +2704,13 @@ namespace ncpp {
 
 			NCPP_ASSERT(
 				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				|| std::is_same_v<std::remove_const_t<F_other_p__>, A_object>
 			) << "invalid object polymorphism";
 
-			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+			if constexpr (
+				std::is_same_v<std::remove_const_t<F_other_p__>, F_object>
+				|| std::is_same_v<F_object, A_object>
+			)
 				return TW_oref<F_other_p__, F_requirements>::unsafe(
 					(F_other_p__*)object_p_
 				);
@@ -2681,9 +2726,13 @@ namespace ncpp {
 
 			NCPP_ASSERT(
 				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				|| std::is_same_v<std::remove_const_t<F_other_p__>, A_object>
 			) << "invalid object polymorphism";
 
-			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+			if constexpr (
+				std::is_same_v<std::remove_const_t<F_other_p__>, F_object>
+				|| std::is_same_v<F_object, A_object>
+			)
 				return TW_oref<F_other_p__, F_requirements>::unsafe(
 					(F_other_p__*)object_p_
 				);
@@ -3055,7 +3104,7 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
 
-			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_);
+			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_) || std::is_same_v<std::remove_const_t<F_other_p__>, A_object>;
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
@@ -3077,9 +3126,13 @@ namespace ncpp {
 
 			NCPP_ASSERT(
 				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				|| std::is_same_v<std::remove_const_t<F_other_p__>, A_object>
 			) << "invalid object polymorphism";
 
-			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+			if constexpr (
+				std::is_same_v<std::remove_const_t<F_other_p__>, F_object>
+				|| std::is_same_v<F_object, A_object>
+			)
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					(F_other_p__*)object_p_,
 					object_key_
@@ -3097,9 +3150,13 @@ namespace ncpp {
 
 			NCPP_ASSERT(
 				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				|| std::is_same_v<std::remove_const_t<F_other_p__>, A_object>
 			) << "invalid object polymorphism";
 
-			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+			if constexpr (
+				std::is_same_v<std::remove_const_t<F_other_p__>, F_object>
+				|| std::is_same_v<F_object, A_object>
+			)
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					(F_other_p__*)object_p_,
 					object_key_
@@ -3520,7 +3577,7 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
 
-			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_);
+			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_) || std::is_same_v<std::remove_const_t<F_other_p__>, A_object>;
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
@@ -3542,9 +3599,13 @@ namespace ncpp {
 
 			NCPP_ASSERT(
 				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				|| std::is_same_v<std::remove_const_t<F_other_p__>, A_object>
 			) << "invalid object polymorphism";
 
-			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+			if constexpr (
+				std::is_same_v<std::remove_const_t<F_other_p__>, F_object>
+				|| std::is_same_v<F_object, A_object>
+			)
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					(F_other_p__*)object_p_
 				);
@@ -3560,9 +3621,13 @@ namespace ncpp {
 
 			NCPP_ASSERT(
 				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				|| std::is_same_v<std::remove_const_t<F_other_p__>, A_object>
 			) << "invalid object polymorphism";
 
-			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+			if constexpr (
+				std::is_same_v<std::remove_const_t<F_other_p__>, F_object>
+				|| std::is_same_v<F_object, A_object>
+			)
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					(F_other_p__*)object_p_
 				);
@@ -3952,7 +4017,7 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
 
-			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_);
+			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_) || std::is_same_v<std::remove_const_t<F_other_p__>, A_object>;
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
@@ -3974,9 +4039,13 @@ namespace ncpp {
 
 			NCPP_ASSERT(
 				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				|| std::is_same_v<std::remove_const_t<F_other_p__>, A_object>
 			) << "invalid object polymorphism";
 
-			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+			if constexpr (
+				std::is_same_v<std::remove_const_t<F_other_p__>, F_object>
+				|| std::is_same_v<F_object, A_object>
+			)
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					(F_other_p__*)object_p_,
 					object_key_
@@ -3994,9 +4063,13 @@ namespace ncpp {
 
 			NCPP_ASSERT(
 				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				|| std::is_same_v<std::remove_const_t<F_other_p__>, A_object>
 			) << "invalid object polymorphism";
 
-			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+			if constexpr (
+				std::is_same_v<std::remove_const_t<F_other_p__>, F_object>
+				|| std::is_same_v<F_object, A_object>
+			)
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					(F_other_p__*)object_p_,
 					object_key_
@@ -4388,7 +4461,7 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
 
-			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_);
+			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_) || std::is_same_v<std::remove_const_t<F_other_p__>, A_object>;
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
@@ -4410,9 +4483,13 @@ namespace ncpp {
 
 			NCPP_ASSERT(
 				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				|| std::is_same_v<std::remove_const_t<F_other_p__>, A_object>
 			) << "invalid object polymorphism";
 
-			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+			if constexpr (
+				std::is_same_v<std::remove_const_t<F_other_p__>, F_object>
+				|| std::is_same_v<F_object, A_object>
+			)
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					(F_other_p__*)object_p_
 				);
@@ -4428,9 +4505,13 @@ namespace ncpp {
 
 			NCPP_ASSERT(
 				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				|| std::is_same_v<std::remove_const_t<F_other_p__>, A_object>
 			) << "invalid object polymorphism";
 
-			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+			if constexpr (
+				std::is_same_v<std::remove_const_t<F_other_p__>, F_object>
+				|| std::is_same_v<F_object, A_object>
+			)
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					(F_other_p__*)object_p_
 				);
@@ -5017,7 +5098,7 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
 
-			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_);
+			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_) || std::is_same_v<std::remove_const_t<F_other_p__>, A_object>;
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
@@ -5039,9 +5120,13 @@ namespace ncpp {
 
 			NCPP_ASSERT(
 				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				|| std::is_same_v<std::remove_const_t<F_other_p__>, A_object>
 			) << "invalid object polymorphism";
 
-			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+			if constexpr (
+				std::is_same_v<std::remove_const_t<F_other_p__>, F_object>
+				|| std::is_same_v<F_object, A_object>
+			)
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					(F_other_p__*)object_p_,
 					object_key_
@@ -5059,9 +5144,13 @@ namespace ncpp {
 
 			NCPP_ASSERT(
 				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				|| std::is_same_v<std::remove_const_t<F_other_p__>, A_object>
 			) << "invalid object polymorphism";
 
-			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+			if constexpr (
+				std::is_same_v<std::remove_const_t<F_other_p__>, F_object>
+				|| std::is_same_v<F_object, A_object>
+			)
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					(F_other_p__*)object_p_,
 					object_key_
@@ -5607,7 +5696,7 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
 
-			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_);
+			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_) || std::is_same_v<std::remove_const_t<F_other_p__>, A_object>;
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
@@ -5629,9 +5718,13 @@ namespace ncpp {
 
 			NCPP_ASSERT(
 				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				|| std::is_same_v<std::remove_const_t<F_other_p__>, A_object>
 			) << "invalid object polymorphism";
 
-			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+			if constexpr (
+				std::is_same_v<std::remove_const_t<F_other_p__>, F_object>
+				|| std::is_same_v<F_object, A_object>
+			)
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					(F_other_p__*)object_p_
 				);
@@ -5647,9 +5740,13 @@ namespace ncpp {
 
 			NCPP_ASSERT(
 				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				|| std::is_same_v<std::remove_const_t<F_other_p__>, A_object>
 			) << "invalid object polymorphism";
 
-			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+			if constexpr (
+				std::is_same_v<std::remove_const_t<F_other_p__>, F_object>
+				|| std::is_same_v<F_object, A_object>
+			)
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					(F_other_p__*)object_p_
 				);
@@ -6206,7 +6303,7 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
 
-			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_);
+			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_) || std::is_same_v<std::remove_const_t<F_other_p__>, A_object>;
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
@@ -6228,9 +6325,13 @@ namespace ncpp {
 
 			NCPP_ASSERT(
 				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				|| std::is_same_v<std::remove_const_t<F_other_p__>, A_object>
 			) << "invalid object polymorphism";
 
-			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+			if constexpr (
+				std::is_same_v<std::remove_const_t<F_other_p__>, F_object>
+				|| std::is_same_v<F_object, A_object>
+			)
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					(F_other_p__*)object_p_,
 					object_key_
@@ -6248,9 +6349,13 @@ namespace ncpp {
 
 			NCPP_ASSERT(
 				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				|| std::is_same_v<std::remove_const_t<F_other_p__>, A_object>
 			) << "invalid object polymorphism";
 
-			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+			if constexpr (
+				std::is_same_v<std::remove_const_t<F_other_p__>, F_object>
+				|| std::is_same_v<F_object, A_object>
+			)
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					(F_other_p__*)object_p_,
 					object_key_
@@ -6771,7 +6876,7 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
 
-			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_);
+			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_) || std::is_same_v<std::remove_const_t<F_other_p__>, A_object>;
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
@@ -6793,9 +6898,13 @@ namespace ncpp {
 
 			NCPP_ASSERT(
 				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				|| std::is_same_v<std::remove_const_t<F_other_p__>, A_object>
 			) << "invalid object polymorphism";
 
-			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+			if constexpr (
+				std::is_same_v<std::remove_const_t<F_other_p__>, F_object>
+				|| std::is_same_v<F_object, A_object>
+			)
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					(F_other_p__*)object_p_
 				);
@@ -6811,9 +6920,13 @@ namespace ncpp {
 
 			NCPP_ASSERT(
 				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				|| std::is_same_v<std::remove_const_t<F_other_p__>, A_object>
 			) << "invalid object polymorphism";
 
-			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+			if constexpr (
+				std::is_same_v<std::remove_const_t<F_other_p__>, F_object>
+				|| std::is_same_v<F_object, A_object>
+			)
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					(F_other_p__*)object_p_
 				);
@@ -7650,7 +7763,7 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
 
-			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_);
+			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_) || std::is_same_v<std::remove_const_t<F_other_p__>, A_object>;
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
@@ -7672,9 +7785,13 @@ namespace ncpp {
 
 			NCPP_ASSERT(
 				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				|| std::is_same_v<std::remove_const_t<F_other_p__>, A_object>
 			) << "invalid object polymorphism";
 
-			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+			if constexpr (
+				std::is_same_v<std::remove_const_t<F_other_p__>, F_object>
+				|| std::is_same_v<F_object, A_object>
+			)
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					(F_other_p__*)object_p_,
 					object_key_,
@@ -7694,9 +7811,13 @@ namespace ncpp {
 
 			NCPP_ASSERT(
 				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				|| std::is_same_v<std::remove_const_t<F_other_p__>, A_object>
 			) << "invalid object polymorphism";
 
-			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+			if constexpr (
+				std::is_same_v<std::remove_const_t<F_other_p__>, F_object>
+				|| std::is_same_v<F_object, A_object>
+			)
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					(F_other_p__*)object_p_,
 					object_key_,
@@ -8622,7 +8743,7 @@ namespace ncpp {
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
 
-			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_);
+			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_) || std::is_same_v<std::remove_const_t<F_other_p__>, A_object>;
 		}
 		template<typename F_other_p__>
 		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
@@ -8644,9 +8765,13 @@ namespace ncpp {
 
 			NCPP_ASSERT(
 				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				|| std::is_same_v<std::remove_const_t<F_other_p__>, A_object>
 			) << "invalid object polymorphism";
 
-			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+			if constexpr (
+				std::is_same_v<std::remove_const_t<F_other_p__>, F_object>
+				|| std::is_same_v<F_object, A_object>
+			)
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					(F_other_p__*)object_p_,
 					is_shared_
@@ -8664,9 +8789,13 @@ namespace ncpp {
 
 			NCPP_ASSERT(
 				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+				|| std::is_same_v<std::remove_const_t<F_other_p__>, A_object>
 			) << "invalid object polymorphism";
 
-			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+			if constexpr (
+				std::is_same_v<std::remove_const_t<F_other_p__>, F_object>
+				|| std::is_same_v<F_object, A_object>
+			)
 				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
 					(F_other_p__*)object_p_,
 					is_shared_
