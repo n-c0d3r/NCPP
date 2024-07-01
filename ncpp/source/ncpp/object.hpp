@@ -83,13 +83,35 @@ namespace ncpp {
             template<typename F_object_fr__, typename F_allocator_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__, typename F_requirements_fr__>\
             friend class ncpp::TS_oref;\
             template<typename F_object_fr__, typename F_allocator_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__, typename F_requirements_fr__>\
+            friend class ncpp::TGC_oref;\
+            template<typename F_object_fr__, typename F_allocator_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__, typename F_requirements_fr__>\
+            friend class ncpp::TGC_root_oref;\
+            template<typename F_object_fr__, typename F_allocator_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__, typename F_requirements_fr__>\
             friend class ncpp::TX_oref;
 
 	using F_object_destructor_caller = void(*)(void*);
 
+    struct F_gc_object_state {
+
+        union {
+
+            struct {
+
+                u64 is_in_checking_queue : 1;
+                u64 frame_index : 63;
+
+            };
+
+            u64 value = (NCPP_U64_MAX - (1 << 63)); // is_in_checking_queue = 0, frame_index = 2^63 - 1
+
+        };
+
+    };
+
 
 
 #define NCPP_OBJECT_COUNTER_MEMORY_OFFSET (0)
+#define NCPP_OBJECT_GC_OBJECT_STATE_MEMORY_OFFSET NCPP_OBJECT_COUNTER_MEMORY_OFFSET
 #define NCPP_OBJECT_KEY_MEMORY_OFFSET ( \
                 (NCPP_OBJECT_COUNTER_MEMORY_OFFSET + sizeof(ncpp::u64))\
 			)
@@ -102,11 +124,19 @@ namespace ncpp {
 #define NCPP_OBJECT_MEMORY_HEADER_SIZE NCPP_OBJECT_MEMORY_OFFSET
 
 #define NCPP_OBJECT_COUNTER_MEMORY_OFFSET_REVERSE (NCPP_OBJECT_MEMORY_HEADER_SIZE - NCPP_OBJECT_COUNTER_MEMORY_OFFSET)
+#define NCPP_OBJECT_GC_OBJECT_STATE_MEMORY_OFFSET_REVERSE NCPP_OBJECT_COUNTER_MEMORY_OFFSET_REVERSE
 #define NCPP_OBJECT_KEY_MEMORY_OFFSET_REVERSE (NCPP_OBJECT_MEMORY_HEADER_SIZE - NCPP_OBJECT_KEY_MEMORY_OFFSET)
 #define NCPP_OBJECT_DESTRUCTOR_CALLER_MEMORY_OFFSET_REVERSE (NCPP_OBJECT_MEMORY_HEADER_SIZE - NCPP_OBJECT_DESTRUCTOR_CALLER_MEMORY_OFFSET)
 
 #define NCPP_RAW_P_TO_COUNTER_P(...) ( \
                 (ncpp::au32*)                          \
+				( \
+					((ncpp::u8*)(__VA_ARGS__))            \
+            		+ NCPP_OBJECT_COUNTER_MEMORY_OFFSET                            \
+				)                                     \
+			)
+#define NCPP_RAW_P_TO_GC_OBJECT_STATE_P(...) ( \
+                (ncpp::F_gc_object_state*)                          \
 				( \
 					((ncpp::u8*)(__VA_ARGS__))            \
             		+ NCPP_OBJECT_COUNTER_MEMORY_OFFSET                            \
@@ -141,6 +171,13 @@ namespace ncpp {
             		- NCPP_OBJECT_COUNTER_MEMORY_OFFSET_REVERSE                              \
 				)                                     \
 			)
+#define NCPP_OBJECT_P_TO_GC_OBJECT_STATE_P(...) ( \
+                (ncpp::F_gc_object_state*)                          \
+				( \
+					((ncpp::u8*)(__VA_ARGS__))            \
+            		- NCPP_OBJECT_COUNTER_MEMORY_OFFSET_REVERSE                              \
+				)                                     \
+			)
 #define NCPP_OBJECT_P_TO_KEY_P(...) ( \
                 (ncpp::F_object_key*)                          \
 				( \
@@ -163,6 +200,7 @@ namespace ncpp {
             		+ NCPP_OBJECT_COUNTER_MEMORY_OFFSET_REVERSE                              \
 				)                                     \
 			)
+#define NCPP_GC_OBJECT_STATE_P_TO_OBJECT_P(...) NCPP_COUNTER_P_TO_OBJECT_P(__VA_ARGS__)
 #define NCPP_KEY_P_TO_OBJECT_P(...) ( \
                 (void*)                          \
 				( \
@@ -797,6 +835,10 @@ namespace ncpp {
     class TU_oref;
     template<typename F_passed_object__, typename F_allocator__, class F_options__, b8 is_has_object_key__, typename F_requirements__>
     class TS_oref;
+    template<typename F_passed_object__, typename F_allocator__, class F_options__, b8 is_has_object_key__, typename F_requirements__>
+    class TGC_oref;
+    template<typename F_passed_object__, typename F_allocator__, class F_options__, b8 is_has_object_key__, typename F_requirements__>
+    class TGC_root_oref;
     template<typename F_passed_object__, typename F_allocator__, class F_options__, b8 is_has_object_key__, typename F_requirements__>
     class TX_oref;
 
@@ -1694,7 +1736,88 @@ namespace ncpp {
 
 
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+	template<b8 is_thread_safe__ = false, typename F_allocator__ = mem::F_default_allocator>
+	class TF_default_gc_root_collection;
+
+	template<typename F_allocator__>
+	class TF_default_gc_root_collection<true, F_allocator__> {
+
+	public:
+		NCPP_OBJECT_FRIEND_CLASSES();
+
+
+
+	public:
+		static constexpr b8 is_thread_safe = true;
+
+		using F_allocator = F_allocator__;
+
+
+
+	private:
+
+	public:
+
+
+
+	public:
+		TF_default_gc_root_collection(u32 subpool_count)
+		{
+		}
+		~TF_default_gc_root_collection(){
+		}
+
+	};
+
+	template<typename F_allocator__>
+	class TF_default_gc_root_collection<false, F_allocator__> {
+
+	public:
+		NCPP_OBJECT_FRIEND_CLASSES();
+
+
+
+	public:
+		static constexpr b8 is_thread_safe = false;
+
+		using F_allocator = F_allocator__;
+
+
+
+	private:
+
+	public:
+
+
+
+	public:
+		TF_default_gc_root_collection()
+		{
+		}
+		~TF_default_gc_root_collection(){
+		}
+
+	};
+
+	using F_default_gc_root_collection = TF_default_gc_root_collection<>;
+
+
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1750,6 +1873,12 @@ namespace ncpp {
 
         template<typename F_passed_object__>
         static NCPP_FORCE_INLINE void T_shared_oref_pre_destruct(F_passed_object__*) noexcept {}
+
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////
+
+
 
     };
 
@@ -1859,6 +1988,40 @@ namespace ncpp {
         b8 is_has_object_key__ = true,
         typename F_requirements__ = F_no_requirements
     >
+    using TGC = TGC_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>;
+
+    template<
+        typename F_passed_object__,
+        typename F_allocator__ = mem::F_object_allocator,
+        class F_options__ = F_default_object_options,
+        typename F_requirements__ = F_no_requirements
+    >
+    using TGC2 = TGC_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
+
+    template<
+        typename F_passed_object__,
+        typename F_allocator__ = mem::F_object_allocator,
+        class F_options__ = F_default_object_options,
+        b8 is_has_object_key__ = true,
+        typename F_requirements__ = F_no_requirements
+    >
+    using TGC_root = TGC_root_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>;
+
+    template<
+        typename F_passed_object__,
+        typename F_allocator__ = mem::F_object_allocator,
+        class F_options__ = F_default_object_options,
+        typename F_requirements__ = F_no_requirements
+    >
+    using TGC2_root = TGC_root_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
+
+    template<
+        typename F_passed_object__,
+        typename F_allocator__ = mem::F_object_allocator,
+        class F_options__ = F_default_object_options,
+        b8 is_has_object_key__ = true,
+        typename F_requirements__ = F_no_requirements
+    >
     using TX = TX_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>;
 
     template<
@@ -1915,6 +2078,36 @@ namespace ncpp {
         class F_options__ = F_default_object_options
     >
     using TS2_valid = TS_oref<F_passed_object__, F_allocator__, F_options__, false, F_valid_requirements>;
+
+    template<
+        typename F_passed_object__,
+        typename F_allocator__ = mem::F_object_allocator,
+        class F_options__ = F_default_object_options,
+        b8 is_has_object_key__ = true
+    >
+    using TGC_valid = TGC_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_valid_requirements>;
+
+    template<
+        typename F_passed_object__,
+        typename F_allocator__ = mem::F_object_allocator,
+        class F_options__ = F_default_object_options
+    >
+    using TGC2_valid = TGC_oref<F_passed_object__, F_allocator__, F_options__, false, F_valid_requirements>;
+
+    template<
+        typename F_passed_object__,
+        typename F_allocator__ = mem::F_object_allocator,
+        class F_options__ = F_default_object_options,
+        b8 is_has_object_key__ = true
+    >
+    using TGC_root_valid = TGC_root_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_valid_requirements>;
+
+    template<
+        typename F_passed_object__,
+        typename F_allocator__ = mem::F_object_allocator,
+        class F_options__ = F_default_object_options
+    >
+    using TGC2_root_valid = TGC_root_oref<F_passed_object__, F_allocator__, F_options__, false, F_valid_requirements>;
 
     template<
         typename F_passed_object__,
@@ -2006,6 +2199,40 @@ namespace ncpp {
 		b8 is_has_object_key__ = true,
 		typename F_requirements__ = F_no_requirements
 	>
+	using TGCPA = const TGC_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>&;
+
+	template<
+		typename F_passed_object__,
+		typename F_allocator__ = mem::F_object_allocator,
+		class F_options__ = F_default_object_options,
+		typename F_requirements__ = F_no_requirements
+	>
+	using TGCPA2 = const TGC_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>&;
+
+	template<
+		typename F_passed_object__,
+		typename F_allocator__ = mem::F_object_allocator,
+		class F_options__ = F_default_object_options,
+		b8 is_has_object_key__ = true,
+		typename F_requirements__ = F_no_requirements
+	>
+	using TGCPA_root = const TGC_root_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>&;
+
+	template<
+		typename F_passed_object__,
+		typename F_allocator__ = mem::F_object_allocator,
+		class F_options__ = F_default_object_options,
+		typename F_requirements__ = F_no_requirements
+	>
+	using TGCPA2_root = const TGC_root_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>&;
+
+	template<
+		typename F_passed_object__,
+		typename F_allocator__ = mem::F_object_allocator,
+		class F_options__ = F_default_object_options,
+		b8 is_has_object_key__ = true,
+		typename F_requirements__ = F_no_requirements
+	>
 	using TXPA = const TX_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_requirements__>&;
 
 	template<
@@ -2062,6 +2289,36 @@ namespace ncpp {
 		class F_options__ = F_default_object_options
 	>
 	using TSPA2_valid = const TS_oref<F_passed_object__, F_allocator__, F_options__, false, F_valid_requirements>&;
+
+	template<
+		typename F_passed_object__,
+		typename F_allocator__ = mem::F_object_allocator,
+		class F_options__ = F_default_object_options,
+		b8 is_has_object_key__ = true
+	>
+	using TGCPA_valid = const TGC_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_valid_requirements>&;
+
+	template<
+		typename F_passed_object__,
+		typename F_allocator__ = mem::F_object_allocator,
+		class F_options__ = F_default_object_options
+	>
+	using TGCPA2_valid = const TGC_oref<F_passed_object__, F_allocator__, F_options__, false, F_valid_requirements>&;
+
+	template<
+		typename F_passed_object__,
+		typename F_allocator__ = mem::F_object_allocator,
+		class F_options__ = F_default_object_options,
+		b8 is_has_object_key__ = true
+	>
+	using TGCPA_root_valid = const TGC_root_oref<F_passed_object__, F_allocator__, F_options__, is_has_object_key__, F_valid_requirements>&;
+
+	template<
+		typename F_passed_object__,
+		typename F_allocator__ = mem::F_object_allocator,
+		class F_options__ = F_default_object_options
+	>
+	using TGCPA2_root_valid = const TGC_root_oref<F_passed_object__, F_allocator__, F_options__, false, F_valid_requirements>&;
 
 	template<
 		typename F_passed_object__,
@@ -5621,6 +5878,1163 @@ namespace ncpp {
 
 
     template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, b8 is_has_object_key__ = true, typename F_requirements__ = F_no_requirements>
+    class TGC_oref;
+
+    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, typename F_requirements__ = F_no_requirements>
+    using TGC2_oref = TGC_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
+
+
+
+    template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_requirements__>
+    class TGC_oref<F_passed_object__, F_allocator__, F_options__, true, F_requirements__> final {
+
+    private:
+        using F_this = TGC_oref<F_passed_object__, F_allocator__, F_options__, true, F_requirements__>;
+
+    public:
+        NCPP_OBJECT_FRIEND_CLASSES();
+
+        using F_passed_object = F_passed_object__;
+        using F_object = std::remove_const_t<F_passed_object__>;
+
+        using F_allocator = F_allocator__;
+        using F_options = F_options__;
+
+        using F_requirements = F_requirements__;
+
+        static constexpr b8 is_has_object_key = true;
+        static constexpr b8 is_const = std::is_const_v<F_passed_object>;
+
+        using F_default_object_manager = F_options::template TF_manager<T_is_object_thread_safe<F_object>>;
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+        template<typename F_new_requirements__>
+        using TF_bind_requirements = TGC_oref<F_passed_object__, F_allocator, F_options__, is_has_object_key, F_new_requirements__>;
+        template<typename F_passed_object_in__>
+    	using TF_bind_passed_object = TGC_oref<F_passed_object_in__, F_allocator, F_options__, is_has_object_key, F_requirements>;
+
+    private:
+    	friend ncpp::internal::F_this_oref_getter;
+    	NCPP_FORCE_INLINE const auto& this_oref_internal() const noexcept { return *this; }
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+        NCPP_RTTI_IMPLEMENT_FLAG(F_oref_flag);
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    protected:
+        F_passed_object* object_p_ = 0;
+        F_object_key object_key_;
+
+    public:
+		NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
+			NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
+			return (F_passed_object*)object_p_;
+		}
+		NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
+			NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
+			return *(object_p());
+		}
+		NCPP_FORCE_INLINE F_passed_object* object_p_unsafe() const noexcept {
+			return (F_passed_object*)object_p_;
+		}
+		NCPP_FORCE_INLINE F_passed_object& object_unsafe() const noexcept {
+			return *(object_p());
+		}
+
+        NCPP_FORCE_INLINE F_object_key object_key() const noexcept { return object_key_; }
+
+        NCPP_FORCE_INLINE F_default_object_manager& default_object_manager() const noexcept { return F_options::template T_get_manager<T_is_object_thread_safe<F_object>>(); }
+
+        NCPP_FORCE_INLINE u32 object_counter() const noexcept {
+
+            NCPP_ASSERT(object_p_) << "can't get object counter from null pointer";
+
+            return shared_object_counter_unsafe(object_p_);
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    private:
+        NCPP_FORCE_INLINE TGC_oref(F_passed_object* object_p, F_object_key object_key) noexcept :
+            object_p_(object_p),
+            object_key_(object_key)
+        {
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+        }
+
+    public:
+        static NCPP_FORCE_INLINE TGC_oref unsafe(F_passed_object* object_p, F_object_key object_key) noexcept {
+
+            return { object_p, object_key };
+        }
+        static NCPP_FORCE_INLINE TGC_oref unsafe(F_passed_object* object_p) noexcept {
+
+            return { object_p, ncpp::object_key_unsafe(object_p) };
+        }
+
+    public:
+        NCPP_FORCE_INLINE TGC_oref() noexcept {
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+        }
+        NCPP_FORCE_INLINE TGC_oref(F_null) noexcept {
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+        }
+
+        NCPP_FORCE_INLINE ~TGC_oref() noexcept {
+
+            reset();
+        }
+
+        NCPP_FORCE_INLINE TGC_oref(const TGC_oref& x) noexcept :
+            object_p_(x.object_p_),
+            object_key_(x.object_key_)
+        {
+            if(object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+        }
+        NCPP_FORCE_INLINE TGC_oref& operator = (const TGC_oref& x) noexcept
+        {
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            object_key_ = x.object_key_;
+
+            if(object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+
+            return *this;
+        }
+
+        NCPP_FORCE_INLINE TGC_oref(TGC_oref&& x) noexcept :
+            object_p_(x.object_p_),
+            object_key_(x.object_key_)
+        {
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+            	x.reset_no_destroy_internal();
+			else if(object_p_)
+				increase_shared_object_counter_unsafe(object_p_);
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				NCPP_ASSERT_OREF_REQUIREMENTGC(&x);
+        }
+        NCPP_FORCE_INLINE TGC_oref& operator = (TGC_oref&& x) noexcept
+        {
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            object_key_ = x.object_key_;
+
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				x.reset_no_destroy_internal();
+			else if(object_p_)
+				increase_shared_object_counter_unsafe(object_p_);
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				NCPP_ASSERT_OREF_REQUIREMENTGC(&x);
+
+            return *this;
+        }
+
+		NCPP_FORCE_INLINE TGC_oref& operator = (F_null) noexcept
+		{
+			object_p_ = 0;
+			object_key_ = F_object_key();
+
+			NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+			return *this;
+		}
+
+        NCPP_FORCE_INLINE TGC_oref(TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
+            object_p_(x.object_p_),
+            object_key_(x.object_key_)
+        {
+            if(object_p_)
+                set_object_counter_to_one_unsafe(object_p_);
+
+            x.reset_no_destroy_internal();
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+            NCPP_ASSERT_OREF_REQUIREMENTGC(&x);
+        }
+        NCPP_FORCE_INLINE TGC_oref& operator = (TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
+        {
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            object_key_ = x.object_key_;
+
+            if(object_p_)
+                set_object_counter_to_one_unsafe(object_p_);
+
+            x.reset_no_destroy_internal();
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+            NCPP_ASSERT_OREF_REQUIREMENTGC(&x);
+
+            return *this;
+        }
+
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TGC_oref(const TGC_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>& x) noexcept :
+            object_p_((F_passed_object*)x.object_p_),
+            object_key_(x.object_key_)
+        {
+            if(object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TGC_oref& operator = (const TGC_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>& x) noexcept
+        {
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            object_key_ = x.object_key_;
+
+            if(object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+
+            return *this;
+        }
+
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TGC_oref(TGC_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
+            object_p_((F_passed_object*)x.object_p_),
+            object_key_(x.object_key_)
+        {
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				x.reset_no_destroy_internal();
+			else if(object_p_)
+					increase_shared_object_counter_unsafe(object_p_);
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				NCPP_ASSERT_OREF_REQUIREMENTGC(&x);
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TGC_oref& operator = (TGC_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
+        {
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            object_key_ = x.object_key_;
+
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				x.reset_no_destroy_internal();
+			else if(object_p_)
+				increase_shared_object_counter_unsafe(object_p_);
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				NCPP_ASSERT_OREF_REQUIREMENTGC(&x);
+
+            return *this;
+        }
+
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TGC_oref(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
+            object_p_((F_passed_object*)x.object_p_),
+            object_key_(x.object_key_)
+        {
+            if(object_p_)
+                set_object_counter_to_one_unsafe(object_p_);
+
+            x.reset_no_destroy_internal();
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+            NCPP_ASSERT_OREF_REQUIREMENTGC(&x);
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TGC_oref& operator = (TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
+        {
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+            object_key_ = x.object_key_;
+
+            if(object_p_)
+                set_object_counter_to_one_unsafe(object_p_);
+
+            x.reset_no_destroy_internal();
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+            NCPP_ASSERT_OREF_REQUIREMENTGC(&x);
+
+            return *this;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TGC_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>);
+
+	public:
+		template<typename F_other_p__>
+		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
+
+			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_);
+		}
+		template<typename F_other_p__>
+		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
+
+			F_other_p__* casted_object_p = T_try_cast_object<F_other_p__>(object_p_);
+
+			if(casted_object_p)
+			{
+				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key>::unsafe(casted_object_p, object_key_);
+				return true;
+			}
+
+			return false;
+		}
+		template<typename F_other_p__>
+		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() noexcept {
+
+			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
+					(F_other_p__*)object_p_,
+					object_key_
+				);
+			else
+				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
+					dynamic_cast<F_other_p__*>(object_p_),
+					object_key_
+				);
+		}
+		template<typename F_other_p__>\
+		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() const noexcept {
+
+			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
+					(F_other_p__*)object_p_,
+					object_key_
+				);
+			else
+				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
+					dynamic_cast<F_other_p__*>(object_p_),
+					object_key_
+				);
+		}
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+        NCPP_FORCE_INLINE b8 is_valid() const noexcept {
+
+            if constexpr (F_requirements::is_always_valid)
+                return true;
+
+            return (object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 is_null() const noexcept {
+
+            if constexpr (F_requirements::is_always_valid)
+                return false;
+
+            return (object_p_ == 0);
+        }
+
+        NCPP_FORCE_INLINE b8 NQ_is_valid() const noexcept {
+
+            return (object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 NQ_is_null() const noexcept {
+
+            return (object_p_ == 0);
+        }
+
+        NCPP_FORCE_INLINE b8 Q_is_valid() const noexcept {
+
+            if constexpr (F_requirements::is_always_valid)
+                return true;
+
+            return (object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 Q_is_null() const noexcept {
+
+            if constexpr (F_requirements::is_always_valid)
+                return false;
+
+            return (object_p_ == 0);
+        }
+
+
+
+    private:
+        NCPP_FORCE_INLINE void reset_no_destroy_internal() noexcept {
+
+            object_p_ = 0;
+            object_key_.reset();
+        }
+
+    public:
+        NCPP_FORCE_INLINE void reset() noexcept {
+
+            if(object_p_) {
+
+                if(decrease_shared_object_counter_unsafe(object_p_) != 1) {
+
+                    reset_no_destroy_internal();
+                }
+                else {
+
+                    destroy_object_internal();
+                    reset_no_destroy_internal();
+                }
+            }
+        }
+
+
+
+    private:
+        NCPP_FORCE_INLINE void pop_key_internal() noexcept {
+
+            object_key_ = default_object_manager().key_pool().pop();
+        }
+        NCPP_FORCE_INLINE void push_key_internal() noexcept {
+
+            if(object_key_.is_thread_safe)
+                F_options::template T_get_manager<true>().key_pool().push(object_key_);
+            else
+                F_options::template T_get_manager<false>().key_pool().push(object_key_);
+        }
+
+
+
+    private:
+        template<typename... F_args__>
+        inline void T_create_object(F_args__&&... args);
+
+    public:
+        template<typename... F_args__>
+        NCPP_FORCE_INLINE TGC_oref&& operator()(F_args__&&... args) && {
+
+            NCPP_ASSERT(!is_valid()) << "object reference is already valid";
+
+            T_create_object(std::forward<F_args__>(args)...);
+
+            return std::move(*this);
+        }
+
+        template<typename... F_args__>
+        static NCPP_FORCE_INLINE F_this T_make(F_args__&&... args) {
+
+            utilities::TF_mem_wrap<F_this> oref;
+
+            ((F_this&)oref).T_create_object(std::forward<F_args__>(args)...);
+
+            return { ((F_this&)oref).object_p_, ((F_this&)oref).object_key_ };
+        }
+
+    private:
+        NCPP_FORCE_INLINE void destroy_object_internal() noexcept;
+
+
+
+    public:
+        NCPP_FORCE_INLINE TW_oref<F_passed_object, F_requirements> weak() const noexcept {
+
+            return object_p_;
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_passed_object__, F_other_p__>
+        NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
+
+            return object_p_;
+        }
+        template<typename F_other_p__>
+        requires T_is_object_up_castable<F_passed_object__, F_other_p__>
+        explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+            return object_p_;
+        }
+
+
+
+    public:
+        NCPP_FORCE_INLINE TK_oref<F_passed_object, F_options, is_has_object_key, F_requirements> keyed() const noexcept {
+
+            return { object_p_, object_key_ };
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_passed_object__, F_other_p__>
+        NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> () const noexcept {
+
+            return { object_p_, object_key_ };
+        }
+        template<typename F_other_p__>
+        requires T_is_object_up_castable<F_passed_object__, F_other_p__>
+        explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> () const noexcept {
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+            return { object_p_, object_key_ };
+        }
+
+
+
+    public:
+        NCPP_FORCE_INLINE operator bool() const noexcept {
+
+            return is_valid();
+        }
+        NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
+
+            return (F_passed_object*)object_p_;
+        }
+        NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
+
+            return *((F_passed_object*)object_p_);
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+		NCPP_FORCE_INLINE auto no_requirements() noexcept {
+
+			return (TF_bind_requirements<F_no_requirements>&)*this;
+		}
+		NCPP_FORCE_INLINE const auto& no_requirements() const noexcept {
+
+			return (const TF_bind_requirements<F_no_requirements>&)*this;
+		}
+
+		template<typename F_requirements_in__ = F_no_requirements>
+		NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__> T_require() noexcept {
+
+			return (TF_bind_requirements<F_requirements_in__>&)*this;
+		}
+		template<typename F_requirements_in__ = F_no_requirements>
+		NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__> T_require() const noexcept {
+
+			return (const TF_bind_requirements<F_requirements_in__>&)*this;
+		}
+
+    };
+
+
+
+    template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_requirements__>
+    class TGC_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__> final {
+
+    private:
+        using F_this = TGC_oref<F_passed_object__, F_allocator__, F_options__, false, F_requirements__>;
+
+    public:
+        NCPP_OBJECT_FRIEND_CLASSES();
+
+        using F_passed_object = F_passed_object__;
+        using F_object = std::remove_const_t<F_passed_object__>;
+
+        using F_allocator = F_allocator__;
+        using F_options = F_options__;
+
+        using F_requirements = F_requirements__;
+
+        static constexpr b8 is_has_object_key = false;
+        static constexpr b8 is_const = std::is_const_v<F_passed_object>;
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+        template<typename F_new_requirements__>
+        using TF_bind_requirements = TGC_oref<F_passed_object__, F_allocator, F_options__, is_has_object_key, F_new_requirements__>;
+        template<typename F_passed_object_in__>
+    	using TF_bind_passed_object = TGC_oref<F_passed_object_in__, F_allocator, F_options__, is_has_object_key, F_requirements>;
+
+    private:
+    	friend ncpp::internal::F_this_oref_getter;
+    	NCPP_FORCE_INLINE const auto& this_oref_internal() const noexcept { return *this; }
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+        NCPP_RTTI_IMPLEMENT_FLAG(F_oref_flag);
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    protected:
+        F_passed_object* object_p_ = 0;
+
+    public:
+		NCPP_FORCE_INLINE F_passed_object* object_p() const noexcept {
+			NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
+			return (F_passed_object*)object_p_;
+		}
+		NCPP_FORCE_INLINE F_passed_object& object() const noexcept {
+			NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
+			return *(object_p());
+		}
+		NCPP_FORCE_INLINE F_passed_object* object_p_unsafe() const noexcept {
+			return (F_passed_object*)object_p_;
+		}
+		NCPP_FORCE_INLINE F_passed_object& object_unsafe() const noexcept {
+			return *(object_p());
+		}
+
+        NCPP_FORCE_INLINE u32 object_counter() const noexcept {
+
+            NCPP_ASSERT(object_p_) << "can't get object counter from null pointer";
+
+            return shared_object_counter_unsafe(object_p_);
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    private:
+        NCPP_FORCE_INLINE TGC_oref(F_passed_object* object_p) noexcept :
+            object_p_(object_p)
+        {
+        }
+
+    public:
+        static NCPP_FORCE_INLINE TGC_oref unsafe(F_passed_object* object_p) noexcept {
+
+            return object_p;
+        }
+
+    public:
+        NCPP_FORCE_INLINE TGC_oref() noexcept {
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+        }
+        NCPP_FORCE_INLINE TGC_oref(F_null) noexcept {
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+        }
+
+        NCPP_FORCE_INLINE ~TGC_oref() noexcept {
+
+            reset();
+        }
+
+        NCPP_FORCE_INLINE TGC_oref(const TGC_oref& x) noexcept :
+            object_p_(x.object_p_)
+        {
+            if(object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+        }
+        NCPP_FORCE_INLINE TGC_oref& operator = (const TGC_oref& x) noexcept
+        {
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+
+            if(object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+
+            return *this;
+        }
+
+        NCPP_FORCE_INLINE TGC_oref(TGC_oref&& x) noexcept :
+            object_p_(x.object_p_)
+        {
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+            	x.reset_no_destroy_internal();
+			else if(object_p_)
+				increase_shared_object_counter_unsafe(object_p_);
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				NCPP_ASSERT_OREF_REQUIREMENTGC(&x);
+        }
+        NCPP_FORCE_INLINE TGC_oref& operator = (TGC_oref&& x) noexcept
+        {
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				x.reset_no_destroy_internal();
+			else if(object_p_)
+				increase_shared_object_counter_unsafe(object_p_);
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				NCPP_ASSERT_OREF_REQUIREMENTGC(&x);
+
+            return *this;
+        }
+
+		NCPP_FORCE_INLINE TGC_oref& operator = (F_null) noexcept
+		{
+			object_p_ = 0;
+
+			NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+			return *this;
+		}
+
+        NCPP_FORCE_INLINE TGC_oref(TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
+            object_p_(x.object_p_)
+        {
+            if(object_p_)
+                set_object_counter_to_one_unsafe(object_p_);
+
+            x.reset_no_destroy_internal();
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+            NCPP_ASSERT_OREF_REQUIREMENTGC(&x);
+        }
+        NCPP_FORCE_INLINE TGC_oref& operator = (TU_oref<F_passed_object, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
+        {
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+
+            if(object_p_)
+                set_object_counter_to_one_unsafe(object_p_);
+
+            x.reset_no_destroy_internal();
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+            NCPP_ASSERT_OREF_REQUIREMENTGC(&x);
+
+            return *this;
+        }
+
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TGC_oref(const TGC_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>& x) noexcept :
+            object_p_((F_passed_object*)x.object_p_)
+        {
+            if(object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TGC_oref& operator = (const TGC_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>& x) noexcept
+        {
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+
+            if(object_p_)
+                increase_shared_object_counter_unsafe(object_p_);
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+
+            return *this;
+        }
+
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TGC_oref(TGC_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
+            object_p_((F_passed_object*)x.object_p_)
+        {
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				x.reset_no_destroy_internal();
+			else if(object_p_)
+				increase_shared_object_counter_unsafe(object_p_);
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				NCPP_ASSERT_OREF_REQUIREMENTGC(&x);
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TGC_oref& operator = (TGC_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
+        {
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				x.reset_no_destroy_internal();
+			else if(object_p_)
+				increase_shared_object_counter_unsafe(object_p_);
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+			if constexpr (!std::is_same_v<F_requirements, F_valid_requirements>)
+				NCPP_ASSERT_OREF_REQUIREMENTGC(&x);
+
+            return *this;
+        }
+
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TGC_oref(TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept :
+            object_p_((F_passed_object*)x.object_p_)
+        {
+            if(object_p_)
+                set_object_counter_to_one_unsafe(object_p_);
+
+            x.reset_no_destroy_internal();
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+            NCPP_ASSERT_OREF_REQUIREMENTGC(&x);
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_other_p__, F_passed_object>
+        NCPP_FORCE_INLINE TGC_oref& operator = (TU_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>&& x) noexcept
+        {
+            reset();
+
+            object_p_ = (F_passed_object*)x.object_p_;
+
+            if(object_p_)
+                set_object_counter_to_one_unsafe(object_p_);
+
+            x.reset_no_destroy_internal();
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+            NCPP_ASSERT_OREF_REQUIREMENTGC(&x);
+
+            return *this;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+        NCPP_OBJECT_REFERENCE_DEFINE_CAST_INTERNAL(TGC_oref<F_other_p__, F_allocator, F_options, is_has_object_key, F_requirements>);
+
+	public:
+		template<typename F_other_p__>
+		NCPP_FORCE_INLINE b8 T_check_polymorphism() const noexcept {
+
+			return ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_);
+		}
+		template<typename F_other_p__>
+		NCPP_FORCE_INLINE b8 T_try_interface(auto& out_ref) const noexcept {
+
+			F_other_p__* casted_object_p = T_try_cast_object<F_other_p__>(object_p_);
+
+			if(casted_object_p)
+			{
+				out_ref = TK_oref<F_other_p__, F_options, is_has_object_key>::unsafe(casted_object_p);
+				return true;
+			}
+
+			return false;
+		}
+		template<typename F_other_p__>
+		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() noexcept {
+
+			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
+					(F_other_p__*)object_p_
+				);
+			else
+				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
+					dynamic_cast<F_other_p__*>(object_p_)
+				);
+		}
+		template<typename F_other_p__>\
+		NCPP_FORCE_INLINE TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> T_interface() const noexcept {
+
+			NCPP_ASSERT(NQ_is_valid()) << "invalid object, can't get interface";
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+			if constexpr (std::is_same_v<std::remove_const_t<F_other_p__>, F_object>)
+				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
+					(F_other_p__*)object_p_
+				);
+			else
+				return TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements>::unsafe(
+					dynamic_cast<F_other_p__*>(object_p_)
+				);
+		}
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+        NCPP_FORCE_INLINE b8 is_valid() const noexcept {
+
+            if constexpr (F_requirements::is_always_valid)
+                return true;
+
+            return (object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 is_null() const noexcept {
+
+            if constexpr (F_requirements::is_always_valid)
+                return false;
+
+            return (object_p_ == 0);
+        }
+
+        NCPP_FORCE_INLINE b8 NQ_is_valid() const noexcept {
+
+            return (object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 NQ_is_null() const noexcept {
+
+            return (object_p_ == 0);
+        }
+
+        NCPP_FORCE_INLINE b8 Q_is_valid() const noexcept {
+
+            if constexpr (F_requirements::is_always_valid)
+                return true;
+
+            return (object_p_ != 0);
+        }
+        NCPP_FORCE_INLINE b8 Q_is_null() const noexcept {
+
+            if constexpr (F_requirements::is_always_valid)
+                return false;
+
+            return (object_p_ == 0);
+        }
+
+
+
+    private:
+        NCPP_FORCE_INLINE void reset_no_destroy_internal() noexcept {
+
+            object_p_ = 0;
+        }
+
+    public:
+        NCPP_FORCE_INLINE void reset() noexcept {
+
+            if(object_p_) {
+
+                if(decrease_shared_object_counter_unsafe(object_p_) != 1) {
+
+                    reset_no_destroy_internal();
+                }
+                else {
+                    destroy_object_internal();
+                    reset_no_destroy_internal();
+                }
+            }
+        }
+
+
+
+    private:
+        template<typename... F_args__>
+        inline void T_create_object(F_args__&&... args);
+
+    public:
+        template<typename... F_args__>
+        NCPP_FORCE_INLINE TGC_oref&& operator()(F_args__&&... args) && {
+
+            NCPP_ASSERT(!is_valid()) << "object reference is already valid";
+
+            T_create_object(std::forward<F_args__>(args)...);
+
+            return std::move(*this);
+        }
+
+        template<typename... F_args__>
+        static NCPP_FORCE_INLINE F_this T_make(F_args__&&... args) {
+
+            utilities::TF_mem_wrap<F_this> oref;
+
+            ((F_this&)oref).T_create_object(std::forward<F_args__>(args)...);
+
+            return { ((F_this&)oref).object_p_ };
+        }
+
+    private:
+        NCPP_FORCE_INLINE void destroy_object_internal() noexcept;
+
+
+
+    public:
+        NCPP_FORCE_INLINE TW_oref<F_passed_object, F_requirements> weak() const noexcept {
+
+            return object_p_;
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_passed_object__, F_other_p__>
+        NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
+
+            return object_p_;
+        }
+        template<typename F_other_p__>
+        requires T_is_object_up_castable<F_passed_object__, F_other_p__>
+        explicit NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+            return object_p_;
+        }
+
+
+
+    public:
+        NCPP_FORCE_INLINE TK_oref<F_passed_object, F_options, is_has_object_key, F_requirements> keyed() const noexcept {
+
+            return { object_p_ };
+        }
+        template<typename F_other_p__>
+        requires T_is_object_down_castable<F_passed_object__, F_other_p__>
+        NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> () const noexcept {
+
+            return { object_p_ };
+        }
+        template<typename F_other_p__>
+        requires T_is_object_up_castable<F_passed_object__, F_other_p__>
+        explicit NCPP_FORCE_INLINE operator TK_oref<F_other_p__, F_options, is_has_object_key, F_requirements> () const noexcept {
+
+			NCPP_ASSERT(
+				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
+			) << "invalid object polymorphism";
+
+            return { object_p_ };
+        }
+
+
+
+    public:
+        NCPP_FORCE_INLINE operator bool() const noexcept {
+
+            return is_valid();
+        }
+        NCPP_FORCE_INLINE F_passed_object* operator ->() const noexcept {
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
+
+            return (F_passed_object*)object_p_;
+        }
+        NCPP_FORCE_INLINE F_passed_object& operator *() const noexcept {
+
+            NCPP_ASSERT_OREF_REQUIREMENTGC(this);
+            NCPP_ASSERT(is_valid()) << "can't access invalid object";
+
+            return *((F_passed_object*)object_p_);
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+
+    public:
+		NCPP_FORCE_INLINE auto no_requirements() noexcept {
+
+			return (TF_bind_requirements<F_no_requirements>&)*this;
+		}
+		NCPP_FORCE_INLINE const auto& no_requirements() const noexcept {
+
+			return (const TF_bind_requirements<F_no_requirements>&)*this;
+		}
+
+		template<typename F_requirements_in__ = F_no_requirements>
+		NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__> T_require() noexcept {
+
+			return (TF_bind_requirements<F_requirements_in__>&)*this;
+		}
+		template<typename F_requirements_in__ = F_no_requirements>
+		NCPP_FORCE_INLINE TF_bind_requirements<F_requirements_in__> T_require() const noexcept {
+
+			return (const TF_bind_requirements<F_requirements_in__>&)*this;
+		}
+
+    };
+
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+    template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, b8 is_has_object_key__ = true, typename F_requirements__ = F_no_requirements>
     class TX_oref;
 
     template<typename F_passed_object__, typename F_allocator__ = mem::F_object_allocator, class F_options__ = F_default_object_options, typename F_requirements__ = F_no_requirements>
@@ -7525,6 +8939,20 @@ namespace ncpp {
 
 
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 	namespace internal {
 
 		struct F_fake_obj {};
@@ -7692,6 +9120,20 @@ namespace ncpp {
 
 		return internal::TF_unique_helper<F_allocator__, F_passed_object__, F_options__, is_has_object_key__, F_requirements__>::get(k);
 	}
+
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
