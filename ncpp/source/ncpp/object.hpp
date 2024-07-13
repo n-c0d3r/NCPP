@@ -2873,7 +2873,7 @@ namespace ncpp {
 
 
 
-    NCPP_FORCE_INLINE F_object_key object_key_unsafe(void* oref) noexcept {
+    NCPP_FORCE_INLINE F_object_key object_key_unsafe(const void* oref) noexcept {
 
         return *NCPP_OBJECT_P_TO_KEY_P(oref);
     }
