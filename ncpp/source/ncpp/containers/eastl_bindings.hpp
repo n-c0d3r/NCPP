@@ -95,6 +95,21 @@ NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
 
 
 ////////////////////////////////////////////////////////////////////////////////////
+//  fixed_vector
+////////////////////////////////////////////////////////////////////////////////////
+NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
+	NCPP_MA(ncpp::containers::TF_fixed_vector<F_item__, size__, enable_overflow__, F_allocator__>),
+	NCPP_MA(F_allocator__),
+	NCPP_MA(ncpp::containers::TF_fixed_vector<F_item__, size__, enable_overflow__, F_new_allocator__>),
+	typename F_item__,
+	ncpp::sz size__,
+	ncpp::b8 enable_overflow__,
+	typename F_allocator__
+);
+
+
+
+////////////////////////////////////////////////////////////////////////////////////
 //  set, map, unordered set, unordered map
 ////////////////////////////////////////////////////////////////////////////////////
 NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(

@@ -93,6 +93,14 @@ namespace ncpp {
 
         template<typename F_item__, unsigned subarray_size__ = DEQUE_DEFAULT_SUBARRAY_SIZE(F_item__)>
         using TV_deque = TF_view<TG_deque<F_item__, subarray_size__>>;
+
+
+
+		////////////////////////////////////////////////////////////////////////////////////
+		//  fixed_vector
+		////////////////////////////////////////////////////////////////////////////////////
+		template<typename F_item__, sz size__, b8 enable_overflow__ = true>
+		using TV_fixed_vector = TF_view<TG_fixed_vector<F_item__, size__, enable_overflow__>>;
     
 
 

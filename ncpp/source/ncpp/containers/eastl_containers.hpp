@@ -587,6 +587,18 @@ namespace ncpp {
 
 
 
+		////////////////////////////////////////////////////////////////////////////////////
+		//  fixed_vector
+		////////////////////////////////////////////////////////////////////////////////////
+		template<typename F_item__, sz size__, b8 enable_overflow__ = true, typename F_overflow_allocator__ = mem::F_default_allocator>
+		using TF_fixed_vector = eastl::fixed_vector<F_item__, size__, enable_overflow__, F_overflow_allocator__>;
+		template<typename F_item__, sz size__, b8 enable_overflow__ = true>
+		using TG_fixed_vector = eastl::fixed_vector<F_item__, size__, enable_overflow__, mem::F_general_allocator>;
+		template<typename F_item__, sz size__, b8 enable_overflow__ = true>
+		using TM_fixed_vector = eastl::fixed_vector<F_item__, size__, enable_overflow__, mem::F_ephemeral_allocator>;
+
+
+
         ////////////////////////////////////////////////////////////////////////////////////
         //  smart pointers
         ////////////////////////////////////////////////////////////////////////////////////
