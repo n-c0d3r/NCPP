@@ -1,7 +1,7 @@
 #pragma once
 
-/** @file ncpp/mem/crt_uniform_provider.hpp
-*	@brief Implements current runtime uniform provider.
+/** @file ncpp/mem/crt_memory_provider.hpp
+*	@brief Implements current runtime memory provider.
 */
 
 
@@ -31,7 +31,7 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include <ncpp/mem/uniform_provider.hpp>
+#include <ncpp/mem/memory_provider.hpp>
 
 #pragma endregion
 
@@ -55,86 +55,90 @@ namespace ncpp {
 
     namespace mem {
 
-        using F_crt_uniform_block = NCPP_COMBINE_TYPES(
+        using F_crt_memory_block = NCPP_COMBINE_TYPES(
 
-            F_default_uniform_block
-
-        );
-
-        using F_crt_uniform_provider_desc = NCPP_COMBINE_TYPES(
-
-            F_default_uniform_provider_desc
+            F_default_memory_block
 
         );
 
-        using F_crt_uniform_provider_management_params = NCPP_COMBINE_TYPES(
+        using F_crt_memory_provider_desc = NCPP_COMBINE_TYPES(
 
-            F_default_uniform_provider_management_params
+            F_default_memory_provider_desc
+
+        );
+
+        using F_crt_memory_provider_management_params = NCPP_COMBINE_TYPES(
+
+            F_default_memory_provider_management_params,
+
+            D_memory_block_size,
+            D_memory_block_alignment,
+            D_memory_block_alignment_offset
 
         );
 
 
 
         template<
-            typename F_uniform_block__ = F_crt_uniform_block,
-            typename F_child_uniform_block__ = F_default_uniform_block,
-            typename F_uniform_provider_desc__ = F_crt_uniform_provider_desc,
-            typename F_uniform_provider_management_params__ = F_crt_uniform_provider_management_params
+            typename F_memory_block__ = F_crt_memory_block,
+            typename F_child_memory_block__ = F_default_memory_block,
+            typename F_memory_provider_desc__ = F_crt_memory_provider_desc,
+            typename F_memory_provider_management_params__ = F_crt_memory_provider_management_params
         >
-        class TF_crt_uniform_provider :
-            public TA_uniform_provider<
-                F_invalid_uniform_provider,
-                F_uniform_block__,
-                F_child_uniform_block__,
-                F_uniform_provider_desc__,
-                F_uniform_provider_management_params__
+        class TF_crt_memory_provider :
+            public TF_memory_provider<
+                F_invalid_memory_provider,
+                F_memory_block__,
+                F_child_memory_block__,
+                F_memory_provider_desc__,
+                F_memory_provider_management_params__
             >
         {
 
         private:
-            using F_base = TA_uniform_provider<
-                F_invalid_uniform_provider,
-                F_uniform_block__,
-                F_child_uniform_block__,
-                F_uniform_provider_desc__,
-                F_uniform_provider_management_params__
+            using F_base = TF_memory_provider<
+                F_invalid_memory_provider,
+                F_memory_block__,
+                F_child_memory_block__,
+                F_memory_provider_desc__,
+                F_memory_provider_management_params__
             >;
 
         public:
-            using typename F_base::F_parent_uniform_provider;
-            using typename F_base::F_uniform_block;
-            using typename F_base::F_uniform_provider_desc;
-            using typename F_base::F_uniform_provider_management_params;
+            using typename F_base::F_parent_memory_provider;
+            using typename F_base::F_memory_block;
+            using typename F_base::F_memory_provider_desc;
+            using typename F_base::F_memory_provider_management_params;
 
-            using typename F_base::F_child_uniform_block;
-
-        public:
-            using typename F_base::F_parent_uniform_provider_management_params;
-
-
+            using typename F_base::F_child_memory_block;
 
         public:
-            NCPP_REQUIRE_BASE(F_uniform_block, F_default_uniform_block);
-            NCPP_REQUIRE_BASE(F_uniform_provider_desc, F_default_uniform_provider_desc);
-            NCPP_REQUIRE_BASE(F_uniform_provider_management_params, F_default_uniform_provider_management_params);
-
-            NCPP_REQUIRE_BASE(F_child_uniform_block, F_default_uniform_block);
+            using typename F_base::F_parent_memory_provider_management_params;
 
 
 
         public:
-            NCPP_FORCE_INLINE TF_crt_uniform_provider() noexcept = default;
-            NCPP_FORCE_INLINE TF_crt_uniform_provider(const F_uniform_provider_desc& provider_desc) :
+            NCPP_REQUIRE_BASE(F_memory_block, F_default_memory_block);
+            NCPP_REQUIRE_BASE(F_memory_provider_desc, F_default_memory_provider_desc);
+            NCPP_REQUIRE_BASE(F_memory_provider_management_params, F_default_memory_provider_management_params);
+
+            NCPP_REQUIRE_BASE(F_child_memory_block, F_default_memory_block);
+
+
+
+        public:
+            NCPP_FORCE_INLINE TF_crt_memory_provider() noexcept = default;
+            NCPP_FORCE_INLINE TF_crt_memory_provider(const F_memory_provider_desc& provider_desc) :
                 F_base(provider_desc)
             {
             }
 
-            NCPP_FORCE_INLINE TF_crt_uniform_provider(const TF_crt_uniform_provider& x) :
+            NCPP_FORCE_INLINE TF_crt_memory_provider(const TF_crt_memory_provider& x) :
                 F_base(NCPP_BASE_R_CONST(x).provider_desc())
             {
             }
 
-            NCPP_FORCE_INLINE TF_crt_uniform_provider& operator=(const TF_crt_uniform_provider& x) {
+            NCPP_FORCE_INLINE TF_crt_memory_provider& operator=(const TF_crt_memory_provider& x) {
 
                 NCPP_BASE_THIS()->set_provider_desc(
                     NCPP_BASE_R_CONST(x).provider_desc()
@@ -146,9 +150,55 @@ namespace ncpp {
 
 
         public:
-            NCPP_FORCE_INLINE b8 operator==(const TF_crt_uniform_provider& x) const noexcept {
+            NCPP_FORCE_INLINE b8 operator==(const TF_crt_memory_provider& x) const noexcept {
 
                 return (this == &x);
+            }
+
+
+
+        public:
+            NCPP_FORCE_INLINE F_memory_block* default_create_block(sz size, sz alignment, sz alignment_offset) {
+
+                F_memory_block* block_p = (F_memory_block*)(
+                    F_crt_allocator().allocate(
+                        size,
+                        alignment,
+                        alignment_offset,
+                        0
+                    )
+                );
+
+                new(block_p) F_memory_block{};
+
+                return block_p;
+            }
+            void default_destroy_block(F_memory_block* block_p) {
+
+                ((F_memory_block*)block_p)->~F_memory_block();
+
+                F_crt_allocator().deallocate(block_p);
+            }
+
+        public:
+            F_memory_block* create_block(
+                F_memory_provider_management_params* params_p = 0,
+                F_parent_memory_provider_management_params* parent_params_p = 0
+            ) {
+                F_memory_block* block_p = (F_memory_block*)default_create_block(
+                    params_p->memory_block_size,
+                    params_p->memory_block_alignment,
+                    params_p->memory_block_alignment_offset
+                );
+
+                return block_p;
+            }
+            void destroy_block(
+                F_memory_block* block_p,
+                F_memory_provider_management_params* params_p = 0,
+                F_parent_memory_provider_management_params* parent_params_p = 0
+            ) {
+                default_destroy_block(block_p);
             }
 
 
@@ -167,7 +217,7 @@ namespace ncpp {
 
 
 
-        using F_crt_uniform_provider = TF_crt_uniform_provider<>;
+        using F_crt_memory_provider = TF_crt_memory_provider<>;
 
     }
 

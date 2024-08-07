@@ -1,7 +1,7 @@
 #pragma once
 
-/** @file ncpp/mem/uniform_adaptor.hpp
-*	@brief Implements uniform adaptor base class template.
+/** @file ncpp/mem/memory_adapter.hpp
+*	@brief Implements memory adaptor base class template.
 */
 
 
@@ -33,7 +33,7 @@
 
 #include <ncpp/mem/allocator.hpp>
 #include <ncpp/mem/crt_allocator.hpp>
-#include <ncpp/mem/uniform_provider.hpp>
+#include <ncpp/mem/memory_provider.hpp>
 
 #pragma endregion
 
@@ -58,30 +58,30 @@ namespace ncpp {
     namespace mem {
 
         template<
-            class F_uniform_adaptor__,
-            class F_uniform_provider__,
+            class F_memory_adapter__,
+            class F_memory_provider__,
             class F_source_in__
         >
-        class TA_uniform_adaptor {
+        class TA_memory_adapter {
 
         private:
-            using F_this = TA_uniform_adaptor<
-                F_uniform_adaptor__,
-                F_uniform_provider__,
+            using F_this = TA_memory_adapter<
+                F_memory_adapter__,
+                F_memory_provider__,
                 F_source_in__
             >;
 
         public:
-            using F_uniform_adaptor = F_uniform_adaptor__;
-            using F_uniform_provider = F_uniform_provider__;
+            using F_memory_adapter = F_memory_adapter__;
+            using F_memory_provider = F_memory_provider__;
             using F_source_in = F_source_in__;
 
         public:
-            using F_uniform_block = typename TF_uniform_provider_safe_infos<F_uniform_provider>::F_uniform_block;
-            using F_uniform_provider_desc = typename TF_uniform_provider_safe_infos<F_uniform_provider>::F_uniform_provider_desc;
-            using F_uniform_provider_management_params = typename TF_uniform_provider_safe_infos<F_uniform_provider>::F_uniform_provider_management_params;
+            using F_memory_block = typename TF_memory_provider_safe_infos<F_memory_provider>::F_memory_block;
+            using F_memory_provider_desc = typename TF_memory_provider_safe_infos<F_memory_provider>::F_memory_provider_desc;
+            using F_memory_provider_management_params = typename TF_memory_provider_safe_infos<F_memory_provider>::F_memory_provider_management_params;
 
-            using F_child_uniform_block = typename TF_uniform_provider_safe_infos<F_uniform_provider>::F_child_uniform_block;
+            using F_child_memory_block = typename TF_memory_provider_safe_infos<F_memory_provider>::F_child_memory_block;
 
 
 
@@ -95,21 +95,21 @@ namespace ncpp {
 
 
         protected:
-            NCPP_FORCE_INLINE TA_uniform_adaptor(F_source_in* source_in_p) :
+            NCPP_FORCE_INLINE TA_memory_adapter(F_source_in* source_in_p) :
                 source_in_p_(source_in_p)
             {
             }
 
-            NCPP_FORCE_INLINE TA_uniform_adaptor(const TA_uniform_adaptor& x) = delete;
-            NCPP_FORCE_INLINE TA_uniform_adaptor(TA_uniform_adaptor&& x) = delete;
+            NCPP_FORCE_INLINE TA_memory_adapter(const TA_memory_adapter& x) = delete;
+            NCPP_FORCE_INLINE TA_memory_adapter(TA_memory_adapter&& x) = delete;
 
-            NCPP_FORCE_INLINE TA_uniform_adaptor& operator=(const TA_uniform_adaptor& x) = delete;
-            NCPP_FORCE_INLINE TA_uniform_adaptor& operator=(TA_uniform_adaptor&& x) = delete;
+            NCPP_FORCE_INLINE TA_memory_adapter& operator=(const TA_memory_adapter& x) = delete;
+            NCPP_FORCE_INLINE TA_memory_adapter& operator=(TA_memory_adapter&& x) = delete;
 
 
 
         public:
-            NCPP_FORCE_INLINE b8 operator==(const TA_uniform_adaptor& x) const noexcept {
+            NCPP_FORCE_INLINE b8 operator==(const TA_memory_adapter& x) const noexcept {
 
                 return (this == &x);
             }
@@ -117,8 +117,8 @@ namespace ncpp {
 
 
         public:
-            F_uniform_block* pop_block();
-            void push_block(F_uniform_block*);
+            F_memory_block* pop_block();
+            void push_block(F_memory_block*);
 
         };
 

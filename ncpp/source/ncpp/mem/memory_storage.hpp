@@ -1,7 +1,7 @@
 #pragma once
 
-/** @file ncpp/mem/uniform_storage.hpp
-*	@brief Implements uniform storage base class template.
+/** @file ncpp/mem/memory_storage.hpp
+*	@brief Implements memory storage base class template.
 */
 
 
@@ -33,7 +33,7 @@
 
 #include <ncpp/mem/allocator.hpp>
 #include <ncpp/mem/crt_allocator.hpp>
-#include <ncpp/mem/uniform_provider.hpp>
+#include <ncpp/mem/memory_provider.hpp>
 
 #pragma endregion
 
@@ -57,42 +57,42 @@ namespace ncpp {
 
     namespace mem {
 
-        template<class F_uniform_storage__, class F_uniform_provider__>
-        class TA_uniform_storage {
+        template<class F_memory_storage__, class F_memory_provider__>
+        class TA_memory_storage {
 
         private:
-            using F_this = TA_uniform_storage<F_uniform_storage__, F_uniform_provider__>;
+            using F_this = TA_memory_storage<F_memory_storage__, F_memory_provider__>;
 
         public:
-            using F_uniform_storage = F_uniform_storage__;
-            using F_uniform_provider = F_uniform_provider__;
+            using F_memory_storage = F_memory_storage__;
+            using F_memory_provider = F_memory_provider__;
 
         public:
-            using F_uniform_block = typename TF_uniform_provider_safe_infos<F_uniform_provider>::F_uniform_block;
-            using F_uniform_provider_desc = typename TF_uniform_provider_safe_infos<F_uniform_provider>::F_uniform_provider_desc;
-            using F_uniform_provider_management_params = typename TF_uniform_provider_safe_infos<F_uniform_provider>::F_uniform_provider_management_params;
+            using F_memory_block = typename TF_memory_provider_safe_infos<F_memory_provider>::F_memory_block;
+            using F_memory_provider_desc = typename TF_memory_provider_safe_infos<F_memory_provider>::F_memory_provider_desc;
+            using F_memory_provider_management_params = typename TF_memory_provider_safe_infos<F_memory_provider>::F_memory_provider_management_params;
 
-            using F_child_uniform_block = typename TF_uniform_provider_safe_infos<F_uniform_provider>::F_child_uniform_block;
+            using F_child_memory_block = typename TF_memory_provider_safe_infos<F_memory_provider>::F_child_memory_block;
 
 
 
         private:
-            utilities::TF_mem_wrap<F_uniform_provider> provider_mem_wrap_;
+            utilities::TF_mem_wrap<F_memory_provider> provider_mem_wrap_;
             NCPP_ENABLE_IF_DEBUG(b8 is_provider_initialized_ = false);
 
         public:
-            NCPP_FORCE_INLINE F_uniform_provider& provider() noexcept { return provider_mem_wrap_.get(); }
-            NCPP_FORCE_INLINE const F_uniform_provider& provider() const noexcept { return provider_mem_wrap_.get(); }
+            NCPP_FORCE_INLINE F_memory_provider& provider() noexcept { return provider_mem_wrap_.get(); }
+            NCPP_FORCE_INLINE const F_memory_provider& provider() const noexcept { return provider_mem_wrap_.get(); }
 
 
 
         protected:
-            NCPP_FORCE_INLINE TA_uniform_storage()
+            NCPP_FORCE_INLINE TA_memory_storage()
             {
             }
 
         public:
-            virtual ~TA_uniform_storage() {
+            virtual ~TA_memory_storage() {
 
                 NCPP_ENABLE_IF_DEBUG(
                     NCPP_ASSERT(is_provider_initialized_) << "provider is not initialized"
@@ -101,16 +101,16 @@ namespace ncpp {
                 provider_mem_wrap_.destruct();
             }
 
-            NCPP_FORCE_INLINE TA_uniform_storage(const TA_uniform_storage& x) = delete;
-            NCPP_FORCE_INLINE TA_uniform_storage(TA_uniform_storage&& x) = delete;
+            NCPP_FORCE_INLINE TA_memory_storage(const TA_memory_storage& x) = delete;
+            NCPP_FORCE_INLINE TA_memory_storage(TA_memory_storage&& x) = delete;
 
-            NCPP_FORCE_INLINE TA_uniform_storage& operator=(const TA_uniform_storage& x) = delete;
-            NCPP_FORCE_INLINE TA_uniform_storage& operator=(TA_uniform_storage&& x) = delete;
+            NCPP_FORCE_INLINE TA_memory_storage& operator=(const TA_memory_storage& x) = delete;
+            NCPP_FORCE_INLINE TA_memory_storage& operator=(TA_memory_storage&& x) = delete;
 
 
 
         public:
-            NCPP_FORCE_INLINE b8 operator==(const TA_uniform_storage& x) const noexcept {
+            NCPP_FORCE_INLINE b8 operator==(const TA_memory_storage& x) const noexcept {
 
                 return (this == &x);
             }
@@ -118,7 +118,7 @@ namespace ncpp {
 
 
         protected:
-            void init_provider(const F_uniform_provider_desc& provider_desc) {
+            void init_provider(const F_memory_provider_desc& provider_desc) {
 
                 provider_mem_wrap_.construct(provider_desc);
 
@@ -128,8 +128,8 @@ namespace ncpp {
 
 
         public:
-            F_uniform_block* pop_block();
-            void push_block(F_uniform_block*);
+            F_memory_block* pop_block();
+            void push_block(F_memory_block*);
 
         };
 

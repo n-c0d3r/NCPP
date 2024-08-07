@@ -5,7 +5,7 @@ NCoder's Game Engine Learning Aimed C++ Library.
 
 ## Features
 + Memory management:
-  + **Uniform provider**/**storage**/**adaptor**
+  + **Memory provider**/**storage**/**adaptor**
   + Reference allocator
   + **Powerful allocator base class**
 + Containers:

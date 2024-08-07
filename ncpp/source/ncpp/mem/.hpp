@@ -49,12 +49,12 @@
 #include <ncpp/mem/dummy_allocator.hpp>
 
 #ifndef NCPP_LITE
-#include <ncpp/mem/uniform_provider.hpp>
-#include <ncpp/mem/uniform_storage.hpp>
-#include <ncpp/mem/uniform_adaptor.hpp>
-#include <ncpp/mem/crt_uniform_provider.hpp>
-#include <ncpp/mem/linked_uniform_provider.hpp>
-#include <ncpp/mem/pool_uniform_provider.hpp>
+#include <ncpp/mem/memory_provider.hpp>
+#include <ncpp/mem/memory_storage.hpp>
+#include <ncpp/mem/memory_adapter.hpp>
+#include <ncpp/mem/crt_memory_provider.hpp>
+#include <ncpp/mem/linked_memory_provider.hpp>
+#include <ncpp/mem/pool_memory_provider.hpp>
 #endif
 
 #ifndef NCPP_LITE
