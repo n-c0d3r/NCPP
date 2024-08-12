@@ -312,13 +312,13 @@ namespace ncpp {
 
 
         public:
-            F_memory_block* create_block(
+            F_memory_block* create_block_through_parent(
                 F_memory_provider_management_params* params_p = 0,
                 F_parent_memory_provider_management_params* parent_params_p = 0
             ) {
                 NCPP_ASSERT(params_p->main_memory_block_linked_list_p) << "invalid target list";
 
-                F_memory_block* block_p = (F_memory_block*)F_base::create_block(params_p, parent_params_p);
+                F_memory_block* block_p = (F_memory_block*)F_base::create_block_through_parent(params_p, parent_params_p);
 
                 F_linked_memory_block_node* main_memory_block_linked_node_p = &(block_p->main_memory_block_linked_node);
                 main_memory_block_linked_node_p->block_p = block_p;
@@ -327,7 +327,7 @@ namespace ncpp {
 
                 return block_p;
             }
-            void destroy_block(
+            void destroy_block_through_parent(
                 F_memory_block* block_p,
                 F_memory_provider_management_params* params_p = 0,
                 F_parent_memory_provider_management_params* parent_params_p = 0
@@ -338,7 +338,7 @@ namespace ncpp {
 
                 params_p->main_memory_block_linked_list_p->erase(main_memory_block_linked_node_p);
 
-                F_base::destroy_block(block_p, params_p, parent_params_p);
+                F_base::destroy_block_through_parent(block_p, params_p, parent_params_p);
             }
 
         public:

@@ -105,39 +105,27 @@ namespace ncpp {
 
 		public:
             NCPP_FORCE_INLINE TF_reference_allocator(const char* name = 0) :
-                    TA_allocator<TF_reference_allocator<F_target_allocator__>>(name),
-                    target_allocator_p_(default_p())
+                TA_allocator<TF_reference_allocator<F_target_allocator__>>(name),
+                target_allocator_p_(default_p())
 			{
-
-
-
 			}
             NCPP_FORCE_INLINE TF_reference_allocator(F_target_allocator& target_allocator, const char* name = 0) :
-                    TA_allocator<TF_reference_allocator<F_target_allocator__>>(name),
-                    target_allocator_p_(&target_allocator)
+                TA_allocator<TF_reference_allocator<F_target_allocator__>>(name),
+                target_allocator_p_(&target_allocator)
 			{
-
-
-
 			}
             NCPP_FORCE_INLINE TF_reference_allocator& operator = (F_target_allocator& target_allocator) noexcept
             {
-
                 target_allocator_p_ = &target_allocator;
-
                 return *this;
             }
 
             NCPP_FORCE_INLINE TF_reference_allocator(const TF_reference_allocator& x) :
 				TF_reference_allocator((F_target_allocator&)x.target_allocator(), x.name())
 			{
-
-
-
 			}
             NCPP_FORCE_INLINE TF_reference_allocator& operator = (const TF_reference_allocator& x) noexcept
             {
-
                 target_allocator_p_ = (F_target_allocator*)x.target_allocator_p_;
 
 #ifdef NCPP_ENABLE_ALLOCATOR_NAME

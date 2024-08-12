@@ -48,19 +48,15 @@
 #include <ncpp/mem/object_allocator.hpp>
 #include <ncpp/mem/dummy_allocator.hpp>
 
-#ifndef NCPP_LITE
 #include <ncpp/mem/memory_provider.hpp>
 #include <ncpp/mem/memory_storage.hpp>
 #include <ncpp/mem/memory_adapter.hpp>
 #include <ncpp/mem/crt_memory_provider.hpp>
 #include <ncpp/mem/linked_memory_provider.hpp>
 #include <ncpp/mem/pool_memory_provider.hpp>
-#endif
+#include <ncpp/mem/frame_allocator.hpp>
 
-#ifndef NCPP_LITE
-#include <ncpp/mem/gob_allocator.hpp>
 #include <ncpp/mem/garbage_collection.hpp>
-#endif
 
 #include <ncpp/mem/reference_allocator.hpp>
 #include <ncpp/mem/flstack_allocator.hpp>

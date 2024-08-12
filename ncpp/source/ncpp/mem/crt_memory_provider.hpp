@@ -155,33 +155,8 @@ namespace ncpp {
                 return (this == &x);
             }
 
-
-
         public:
-            NCPP_FORCE_INLINE F_memory_block* default_create_block(sz size, sz alignment, sz alignment_offset) {
-
-                F_memory_block* block_p = (F_memory_block*)(
-                    F_crt_allocator().allocate(
-                        size,
-                        alignment,
-                        alignment_offset,
-                        0
-                    )
-                );
-
-                new(block_p) F_memory_block{};
-
-                return block_p;
-            }
-            void default_destroy_block(F_memory_block* block_p) {
-
-                ((F_memory_block*)block_p)->~F_memory_block();
-
-                F_crt_allocator().deallocate(block_p);
-            }
-
-        public:
-            F_memory_block* create_block(
+            F_memory_block* create_block_through_parent(
                 F_memory_provider_management_params* params_p = 0,
                 F_parent_memory_provider_management_params* parent_params_p = 0
             ) {
@@ -193,7 +168,7 @@ namespace ncpp {
 
                 return block_p;
             }
-            void destroy_block(
+            void destroy_block_through_parent(
                 F_memory_block* block_p,
                 F_memory_provider_management_params* params_p = 0,
                 F_parent_memory_provider_management_params* parent_params_p = 0

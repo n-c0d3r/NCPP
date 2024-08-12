@@ -83,8 +83,6 @@ namespace ncpp {
         );
         using F_child_pool_memory_block = NCPP_COMBINE_TYPES(
 
-            F_linked_memory_block,
-
             D_available_memory_block_linked_node,
             D_parent_memory_block_p
 
@@ -122,8 +120,6 @@ namespace ncpp {
 
         using F_pool_memory_provider_management_params = NCPP_COMBINE_TYPES(
 
-            F_linked_memory_provider_management_params,
-
             D_pool_memory_block_p
 
         );
@@ -138,7 +134,7 @@ namespace ncpp {
             typename F_memory_provider_management_params__ = F_pool_memory_provider_management_params
         >
         class TF_pool_memory_provider :
-            public TF_linked_memory_provider<
+            public TF_memory_provider<
                 F_parent_memory_provider__,
                 F_memory_block__,
                 F_child_memory_block__,
@@ -148,7 +144,7 @@ namespace ncpp {
         {
 
         private:
-            using F_base = TF_linked_memory_provider<
+            using F_base = TF_memory_provider<
                 F_parent_memory_provider__,
                 F_memory_block__,
                 F_child_memory_block__,
@@ -363,7 +359,7 @@ namespace ncpp {
 
 
         using F_pool_memory_provider = TF_pool_memory_provider<>;
-        using F_child_pool_memory_provider = TF_linked_memory_provider<
+        using F_child_pool_memory_provider = TF_memory_provider<
             F_pool_memory_provider,
             F_child_pool_memory_block
         >;

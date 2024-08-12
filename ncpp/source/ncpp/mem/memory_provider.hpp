@@ -63,6 +63,22 @@ namespace ncpp {
 
         };
 
+        struct D_child_memory_block_count_u8 {
+
+            u8 child_memory_block_count_u8 = 0;
+
+        };
+        struct D_child_memory_block_count_u16 {
+
+            u16 child_memory_block_count_u16 = 0;
+
+        };
+        struct D_child_memory_block_count_u32 {
+
+            u32 child_memory_block_count_u32 = 0;
+
+        };
+
         using F_default_memory_block = NCPP_COMBINE_TYPES(
         );
 
@@ -110,11 +126,11 @@ namespace ncpp {
         class F_invalid_memory_provider final {
 
         public:
-            void* create_block(
+            void* create_block_through_parent(
                 void* params_p = 0,
                 void* parent_params_p = 0
             ) { return 0; }
-            void destroy_block(
+            void destroy_block_through_parent(
                 void* block_p,
                 void* params_p = 0,
                 void* parent_params_p = 0
@@ -257,8 +273,33 @@ namespace ncpp {
                 return (this == &x);
             }
 
+
+
         public:
-            F_memory_block* create_block(
+            NCPP_FORCE_INLINE F_memory_block* default_create_block(sz size, sz alignment = EASTL_ALLOCATOR_MIN_ALIGNMENT, sz alignment_offset = 0) {
+
+                F_memory_block* block_p = (F_memory_block*)(
+                    F_crt_allocator().allocate(
+                        size,
+                        alignment,
+                        alignment_offset,
+                        0
+                    )
+                );
+
+                new(block_p) F_memory_block{};
+
+                return block_p;
+            }
+            void default_destroy_block(F_memory_block* block_p) {
+
+                ((F_memory_block*)block_p)->~F_memory_block();
+
+                F_crt_allocator().deallocate(block_p);
+            }
+
+        public:
+            F_memory_block* create_block_through_parent(
                 F_memory_provider_management_params* params_p = 0,
                 F_parent_memory_provider_management_params* parent_params_p = 0
             ) {
@@ -268,7 +309,7 @@ namespace ncpp {
                     )
                 );
             }
-            void destroy_block(
+            void destroy_block_through_parent(
                 F_memory_block* block_p,
                 F_memory_provider_management_params* params_p = 0,
                 F_parent_memory_provider_management_params* parent_params_p = 0
