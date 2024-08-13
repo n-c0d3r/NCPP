@@ -89,6 +89,14 @@ namespace ncpp {
 			~TF_crt_allocator()
 			{}
 
+
+
+		public:
+			constexpr b8 operator == (const TF_crt_allocator& x) const noexcept {
+
+				return true;
+			}
+
 		};
 
 		/**

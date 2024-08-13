@@ -7,7 +7,8 @@ using namespace ncpp;
 
 enum class E_frame_param
 {
-	GAMEPLAY,
+	MAIN,
+
 	GRAPHICS,
 	PHYSICS,
 	ANIMATION,
@@ -23,11 +24,11 @@ public:
 	F_demo_frame_heap()
 	{
 		create_adapter();
-		set_uniform_param_count((u32)E_frame_param::COUNT);
+		set_param_count((u32)E_frame_param::COUNT);
 	}
 };
 using F_demo_frame_memory_adapter = F_demo_frame_heap::F_adapter;
-using F_demo_frame_allocator = F_demo_frame_heap::TF_allocator<(u32)E_frame_param::GRAPHICS>;
+using F_demo_frame_allocator = F_demo_frame_heap::F_allocator;
 
 
 
@@ -36,7 +37,7 @@ int main()
 	{
 		F_demo_frame_heap heap;
 		F_demo_frame_memory_adapter* adapter_p = heap.adapter_p_vector()[0];
-		F_demo_frame_allocator allocator(adapter_p);
+		F_demo_frame_allocator allocator(adapter_p, (u32)E_frame_param::GRAPHICS);
 
 		{
 			NCPP_SCOPED_PROFILER_SAMPLE("TF_frame_allocator::allocate");
@@ -47,7 +48,7 @@ int main()
 
 		log_memory_stats();
 
-		heap.reset_uniform_param((u32)E_frame_param::GRAPHICS);
+		heap.reset_param((u32)E_frame_param::GRAPHICS);
 
 		log_memory_stats();
 	}

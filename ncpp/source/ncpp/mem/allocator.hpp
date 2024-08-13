@@ -248,7 +248,7 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 
 
         public:
-            NCPP_FORCE_INLINE b8 operator==(const TA_allocator& x) const noexcept {
+            NCPP_FORCE_INLINE b8 operator == (const TA_allocator& x) const noexcept {
 
                 return (this == &x);
             }

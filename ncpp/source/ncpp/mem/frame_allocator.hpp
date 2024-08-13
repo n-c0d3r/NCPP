@@ -11,7 +11,7 @@ namespace ncpp::mem {
     class TA_frame_heap;
     template<class F_heap__>
     class TF_frame_memory_adapter;
-    template<class F_heap__, u32 free_at_param__>
+    template<class F_heap__>
     class TF_frame_allocator;
 
 
@@ -86,8 +86,7 @@ namespace ncpp::mem {
     public:
         using F_adapter = TF_frame_memory_adapter<F_heap>;
 
-        template<u32 free_at_param__ = 0>
-        using TF_allocator = TF_frame_allocator<F_heap__, free_at_param__>;
+        using F_allocator = TF_frame_allocator<F_heap__>;
 
         static constexpr sz block_size = block_size__;
         static constexpr sz block_payload_size = block_size - sizeof(F_frame_memory_block);
@@ -209,17 +208,17 @@ namespace ncpp::mem {
         }
 
     protected:
-        void set_uniform_param_count(u32 uniform_param_count)
+        void set_param_count(u32 param_count)
         {
             for(auto adapter_p : adapter_p_vector_)
-                adapter_p->set_param_count(uniform_param_count);
+                adapter_p->set_param_count(param_count);
         }
 
     public:
-        void reset_uniform_param(u32 uniform_param_index)
+        void reset_param(u32 param_index)
         {
             for(auto adapter_p : adapter_p_vector_)
-                adapter_p->reset_param(uniform_param_index);
+                adapter_p->reset_param(param_index);
         }
 
     public:
@@ -257,8 +256,7 @@ namespace ncpp::mem {
         friend class ncpp::mem::TA_frame_heap;
 
     public:
-        template<u32 free_at_param__ = 0>
-        using TF_allocator = TF_frame_allocator<F_heap__, free_at_param__>;
+        using TF_allocator = TF_frame_allocator<F_heap__>;
 
 
 
@@ -363,7 +361,7 @@ namespace ncpp::mem {
 
 
 
-    public:
+    private:
         void reset_param(u32 index)
         {
             auto& block_list = block_lists_[index];
@@ -386,32 +384,31 @@ namespace ncpp::mem {
 
 
 
-    template<class F_heap__, u32 free_at_param__ = 0>
+    template<class F_heap__>
     class TF_frame_allocator :
         public TA_allocator<
-            TF_frame_allocator<F_heap__, free_at_param__>,
+            TF_frame_allocator<F_heap__>,
             true
         >
     {
 
     private:
-        using F_this = TF_frame_allocator<F_heap__, free_at_param__>;
+        using F_this = TF_frame_allocator<F_heap__>;
         using F_base = TA_allocator<F_this, true>;
 
     public:
         using F_heap = F_heap__;
         using F_adapter = typename F_heap::F_adapter;
 
-    public:
-        static constexpr u32 free_at_param = free_at_param__;
-
 
 
     private:
         F_adapter* adapter_p_ = 0;
+        u32 param_ = 0;
 
     public:
         NCPP_FORCE_INLINE F_adapter* adapter_p() const noexcept { return adapter_p_; }
+        NCPP_FORCE_INLINE u32 param() const noexcept { return param_; }
 
 
 
@@ -420,18 +417,20 @@ namespace ncpp::mem {
             TA_allocator<F_this, true>(name)
         {
         }
-        NCPP_FORCE_INLINE TF_frame_allocator(F_adapter* adapter_p, const char* name = 0) noexcept :
+        NCPP_FORCE_INLINE TF_frame_allocator(F_adapter* adapter_p, u32 param = 0, const char* name = 0) noexcept :
             TA_allocator<F_this, true>(name),
-            adapter_p_(adapter_p)
+            adapter_p_(adapter_p),
+            param_(param)
         {
         }
         NCPP_FORCE_INLINE TF_frame_allocator(const TF_frame_allocator& x) noexcept :
-            TF_frame_allocator(x.adapter_p_, x.name())
+            TF_frame_allocator(x.adapter_p_, x.param_, x.name())
         {
         }
         NCPP_FORCE_INLINE TF_frame_allocator& operator = (const TF_frame_allocator& x) noexcept
         {
             adapter_p_ = x.adapter_p_;
+            param_ = x.param_;
 
 #ifdef NCPP_ENABLE_ALLOCATOR_INFO
             reinterpret_cast<F_base*>(this)->set_name(x.name());
@@ -446,7 +445,7 @@ namespace ncpp::mem {
     public:
         NCPP_FORCE_INLINE b8 operator==(const TF_frame_allocator& x) const noexcept {
 
-            return (adapter_p_ == x.adapter_p_);
+            return (param_ == x.param_);
         }
 
 
@@ -457,7 +456,7 @@ namespace ncpp::mem {
             NCPP_ASSERT(adapter_p_) << "invalid adapter";
 
             return adapter_p_->new_mem(
-                free_at_param,
+                param_,
                 size,
                 alignment,
                 alignment_offset
