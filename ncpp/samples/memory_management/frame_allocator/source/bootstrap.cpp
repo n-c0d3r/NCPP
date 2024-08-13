@@ -38,8 +38,12 @@ int main()
 		F_demo_frame_memory_adapter* adapter_p = heap.adapter_p_vector()[0];
 		F_demo_frame_allocator allocator(adapter_p);
 
-		void* ptr1 = allocator.allocate(128);
-		void* ptr2 = allocator.allocate(128);
+		{
+			NCPP_SCOPED_PROFILER_SAMPLE("TF_frame_allocator::allocate");
+
+			for(u32 i = 0; i < 100000; ++i)
+				allocator.allocate(128);
+		}
 
 		log_memory_stats();
 
