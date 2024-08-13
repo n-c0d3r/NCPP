@@ -105,6 +105,14 @@ namespace ncpp {
 
             F_linked_memory_provider_desc,
 
+            D_memory_block_payload_size,
+            D_memory_block_payload_alignment,
+            D_memory_block_payload_alignment_offset,
+
+            D_memory_block_size,
+            D_memory_block_alignment,
+            D_memory_block_alignment_offset,
+
             D_child_pool_memory_block_size,
             D_max_child_pool_memory_block_count_per_pool_memory_block
 
@@ -234,18 +242,18 @@ namespace ncpp {
                 NCPP_ASSERT(
                     (
                         provider_desc.memory_block_alignment
-                        % provider_desc.memory_payload_alignment
+                        % provider_desc.memory_block_payload_alignment
                     )
                     == 0
                 ) << "block alignment must be multiples of memory_payload alignment";
 
                 header_size_ = align_size(
-                    sizeof(F_memory_block) + provider_desc.memory_payload_alignment_offset,
-                    provider_desc.memory_payload_alignment
-                ) - provider_desc.memory_payload_alignment_offset;
+                    sizeof(F_memory_block) + provider_desc.memory_block_payload_alignment_offset,
+                    provider_desc.memory_block_payload_alignment
+                ) - provider_desc.memory_block_payload_alignment_offset;
 
                 actual_block_size_ = align_size(
-                    header_size_ + provider_desc.payload_size,
+                    header_size_ + provider_desc.memory_block_payload_size,
                     provider_desc.memory_block_alignment
                 );
             }
@@ -280,7 +288,7 @@ namespace ncpp {
 
                 F_memory_provider_desc result = desc;
 
-                result.payload_size = desc.child_pool_memory_block_size * desc.max_child_pool_memory_block_count_per_pool_memory_block;
+                result.memory_block_payload_size = desc.child_pool_memory_block_size * desc.max_child_pool_memory_block_count_per_pool_memory_block;
 
                 return result;
             }
@@ -315,7 +323,7 @@ namespace ncpp {
                     ) << "pool block is full";
 
                     block_p = (F_child_memory_block*)(
-                        (u8*)(NCPP_BASE_THIS()->block_p_to_root_data_p(pool_memory_block_p))
+                        (u8*)block_p_to_root_data_p(pool_memory_block_p)
                         + pdesc.child_pool_memory_block_size * pool_memory_block_p->child_pool_memory_block_initialized_count
                     );
                     new(block_p) F_child_memory_block{};

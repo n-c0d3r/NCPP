@@ -86,22 +86,22 @@ namespace ncpp {
 
         struct D_memory_block_payload_size {
 
-            sz memory_payload_size = 0;
+            sz memory_block_payload_size = 0;
 
         };
         struct D_memory_block_payload_alignment {
 
-            sz memory_payload_alignment = EASTL_ALLOCATOR_MIN_ALIGNMENT;
+            sz memory_block_payload_alignment = EASTL_ALLOCATOR_MIN_ALIGNMENT;
 
         };
         struct D_memory_block_payload_alignment_offset {
 
-            sz memory_payload_alignment_offset = 0;
+            sz memory_block_payload_alignment_offset = 0;
 
         };
         struct D_memory_block_size {
 
-            sz memory_block_alignment = EASTL_ALLOCATOR_MIN_ALIGNMENT;
+            sz memory_block_size = 0;
 
         };
         struct D_memory_block_alignment {
@@ -111,7 +111,7 @@ namespace ncpp {
         };
         struct D_memory_block_alignment_offset {
 
-            sz memory_block_alignment = EASTL_ALLOCATOR_MIN_ALIGNMENT;
+            sz memory_block_alignment_offset = 0;
 
         };
 

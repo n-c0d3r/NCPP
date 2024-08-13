@@ -7,11 +7,11 @@
 
 namespace ncpp::mem {
 
-    template<class F_adapter__, class F_heap__, sz block_size__, sz blocks_per_chunk__>
+    template<class F_heap__, sz block_size__, sz blocks_per_chunk__>
     class TA_frame_heap;
-    template<class F_adapter__, class F_heap__>
-    class TA_frame_memory_adapter;
-    template<class F_adapter__, class F_heap__, u32 free_at_param__>
+    template<class F_heap__>
+    class TF_frame_memory_adapter;
+    template<class F_heap__, u32 free_at_param__>
     class TF_frame_allocator;
 
 
@@ -58,21 +58,20 @@ namespace ncpp::mem {
 
 
 
-    template<class F_adapter__, class F_heap__, sz block_size__ = NCPP_DEFAULT_FRAME_BLOCK_SIZE, sz blocks_per_chunk__ = NCPP_DEFAULT_FRAME_BLOCKS_PER_CHUNK>
+    template<class F_heap__, sz block_size__ = NCPP_DEFAULT_FRAME_BLOCK_SIZE, sz blocks_per_chunk__ = NCPP_DEFAULT_FRAME_BLOCKS_PER_CHUNK>
     class TA_frame_heap {
 
     private:
-        using F_this = TA_frame_heap<F_adapter__, F_heap__, block_size__, blocks_per_chunk__>;
+        using F_this = TA_frame_heap<F_heap__, block_size__, blocks_per_chunk__>;
 
     private:
         using F_heap = F_heap__;
 
     public:
-        using F_adapter = F_adapter__;
+        using F_adapter = TF_frame_memory_adapter<F_heap>;
 
-    public:
         template<u32 free_at_param__ = 0>
-        using TF_allocator = TF_frame_allocator<F_adapter, F_heap__, free_at_param__>;
+        using TF_allocator = TF_frame_allocator<F_heap__, free_at_param__>;
 
         static constexpr sz block_size = block_size__;
         static constexpr sz block_payload_size = block_size - sizeof(F_frame_memory_block);
@@ -102,19 +101,12 @@ namespace ncpp::mem {
 
 
 
-    public:
-        // implement these functions in your own frame heap class to let it works
-        static NCPP_FORCE_INLINE F_this* instance_p() noexcept;
-        static NCPP_FORCE_INLINE F_adapter* query_adapter() noexcept;
-
-
-
     private:
         F_chunk_memory_provider chunk_memory_provider_;
         F_block_memory_provider block_memory_provider_;
         eastl::vector<F_frame_chunk_memory_block*> chunk_p_vector_;
 
-    protected:
+    private:
         eastl::vector<F_adapter*> adapter_p_vector_;
 
     public:
@@ -137,7 +129,18 @@ namespace ncpp::mem {
         }
         ~TA_frame_heap()
         {
-            release_chunks();
+            release_adapters();
+        }
+
+
+
+    public:
+        F_adapter* create_adapter()
+        {
+            adapter_p_vector_.push_back(
+                new F_adapter((F_heap*)this)
+            );
+            return adapter_p_vector_.back();
         }
 
 
@@ -153,7 +156,9 @@ namespace ncpp::mem {
             }
 
             // create new chunk
-            return chunk_memory_provider_.default_create_block(chunk_size);
+            F_frame_chunk_memory_block* chunk_p = chunk_memory_provider_.default_create_block(chunk_size);
+            chunk_p_vector_.push_back(chunk_p);
+            return chunk_p;
         }
         F_frame_memory_block* create_block_on_chunk(F_frame_chunk_memory_block* chunk_p)
         {
@@ -176,6 +181,15 @@ namespace ncpp::mem {
                 chunk_memory_provider_.default_destroy_block(chunk_p);
             }
             chunk_p_vector_.clear();
+        }
+        void release_adapters()
+        {
+            release_chunks();
+
+            for(auto adapter_p : adapter_p_vector_)
+                delete adapter_p;
+
+            adapter_p_vector_.clear();
         }
 
     protected:
@@ -215,22 +229,20 @@ namespace ncpp::mem {
 
 
 
-    template<class F_adapter__, class F_heap__>
-    class TA_frame_memory_adapter {
+    template<class F_heap__>
+    class TF_frame_memory_adapter {
 
     private:
-        using F_this = TA_frame_memory_adapter<F_adapter__, F_heap__>;
-
-    private:
-        using F_adapter = F_adapter__;
+        using F_this = TF_frame_memory_adapter<F_heap__>;
 
     public:
         using F_heap = F_heap__;
-        friend F_heap;
+        template<class F_heap_fr__, sz block_size_fr__, sz blocks_per_chunk_fr__>
+        friend class ncpp::mem::TA_frame_heap;
 
     public:
         template<u32 free_at_param__ = 0>
-        using TF_allocator = TF_frame_allocator<F_adapter__, F_heap__, free_at_param__>;
+        using TF_allocator = TF_frame_allocator<F_heap__, free_at_param__>;
 
 
 
@@ -240,16 +252,26 @@ namespace ncpp::mem {
 
 
     private:
+        F_heap* heap_p_ = 0;
         eastl::vector<F_block_list> block_lists_;
 
     public:
+        NCPP_FORCE_INLINE F_heap* heap_p() const noexcept { return heap_p_; }
         NCPP_FORCE_INLINE u32 param_count() const noexcept { return block_lists_.size(); }
 
 
 
+    protected:
+        TF_frame_memory_adapter(F_heap* heap_p) :
+            heap_p_(heap_p)
+        {
+        }
+
     public:
-        TA_frame_memory_adapter() = default;
-        ~TA_frame_memory_adapter() = default;
+        ~TF_frame_memory_adapter()
+        {
+            destroy_params();
+        }
 
 
 
@@ -271,13 +293,19 @@ namespace ncpp::mem {
                 if(free_size >= required_free_size)
                 {
                     block_p->frame_memory_block_usage += required_free_size;
+                    NCPP_INCREASE_USABLE_ALLOCATED_MEMORY(required_free_size);
+
                     return ((u8*)(block_p + 1)) + memory_offset;
                 }
             }
 
             // create new block from heap
-            F_frame_memory_block* block_p = F_heap::instance_p()->create_block();
+            F_frame_memory_block* block_p = heap_p_->create_block();
             block_list.push_back(block_p);
+
+            block_p->frame_memory_block_usage = required_free_size;
+            NCPP_INCREASE_USABLE_ALLOCATED_MEMORY(required_free_size);
+
             return block_p + 1;
         }
 
@@ -322,7 +350,10 @@ namespace ncpp::mem {
 
             for(auto block_p : block_list)
             {
+                NCPP_DECREASE_USABLE_ALLOCATED_MEMORY(block_p->frame_memory_block_usage);
                 block_p->frame_memory_block_usage = 0;
+
+                heap_p_->destroy_block(block_p);
             }
 
             block_list.clear();
@@ -332,38 +363,53 @@ namespace ncpp::mem {
 
 
 
-    template<class F_adapter__, class F_heap__, u32 free_at_param__ = 0>
+    template<class F_heap__, u32 free_at_param__ = 0>
     class TF_frame_allocator :
         public TA_allocator<
-            TF_frame_allocator<F_adapter__, F_heap__, free_at_param__>,
+            TF_frame_allocator<F_heap__, free_at_param__>,
             true
         >
     {
 
     private:
-        using F_this = TF_frame_allocator<F_adapter__, F_heap__, free_at_param__>;
-        using F_base = TA_allocator<F_this>;
+        using F_this = TF_frame_allocator<F_heap__, free_at_param__>;
+        using F_base = TA_allocator<F_this, true>;
 
     public:
-        using F_adapter = F_adapter__;
         using F_heap = F_heap__;
+        using F_adapter = typename F_heap::F_adapter;
 
     public:
         static constexpr u32 free_at_param = free_at_param__;
 
 
 
+    private:
+        F_adapter* adapter_p_ = 0;
+
+    public:
+        NCPP_FORCE_INLINE F_adapter* adapter_p() const noexcept { return adapter_p_; }
+
+
+
     public:
         NCPP_FORCE_INLINE TF_frame_allocator(const char* name = 0) noexcept :
-            TA_allocator<F_this>(name)
+            TA_allocator<F_this, true>(name)
+        {
+        }
+        NCPP_FORCE_INLINE TF_frame_allocator(F_adapter* adapter_p, const char* name = 0) noexcept :
+            TA_allocator<F_this, true>(name),
+            adapter_p_(adapter_p)
         {
         }
         NCPP_FORCE_INLINE TF_frame_allocator(const TF_frame_allocator& x) noexcept :
-            TF_frame_allocator(x.name())
+            TF_frame_allocator(x.adapter_p_, x.name())
         {
         }
         NCPP_FORCE_INLINE TF_frame_allocator& operator = (const TF_frame_allocator& x) noexcept
         {
+            adapter_p_ = x.adapter_p_;
+
 #ifdef NCPP_ENABLE_ALLOCATOR_NAME
             reinterpret_cast<F_base*>(this)->set_name(x.name());
 #endif
@@ -375,9 +421,19 @@ namespace ncpp::mem {
 
 
     public:
+        NCPP_FORCE_INLINE b8 operator==(const TF_frame_allocator& x) const noexcept {
+
+            return (adapter_p_ == x.adapter_p_);
+        }
+
+
+
+    public:
         NCPP_FORCE_INLINE void* new_mem(sz size, sz alignment = EASTL_ALLOCATOR_MIN_ALIGNMENT, sz alignment_offset = 0) {
 
-            return F_heap::query_adapter()->new_mem(
+            NCPP_ASSERT(adapter_p_) << "invalid adapter";
+
+            return adapter_p_->new_mem(
                 free_at_param,
                 size,
                 alignment,
