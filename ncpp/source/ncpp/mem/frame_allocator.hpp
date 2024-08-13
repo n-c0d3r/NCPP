@@ -16,6 +16,11 @@ namespace ncpp::mem {
 
 
 
+    using F_frame_param = u32;
+    using F_frame_param_generation = u32;
+
+
+
     struct D_frame_memory_block_usage
     {
         u32 frame_memory_block_usage = 0;
@@ -124,11 +129,13 @@ namespace ncpp::mem {
         eastl::vector<F_frame_chunk_memory_block*> chunk_p_vector_;
 
     private:
-        u32 param_count_ = 0;
+        F_frame_param param_count_ = 0;
+        eastl::vector<F_frame_param_generation> param_generations_;
         eastl::vector<F_adapter*> adapter_p_vector_;
 
     public:
-        NCPP_FORCE_INLINE u32 param_count() const noexcept { return param_count_; }
+        NCPP_FORCE_INLINE F_frame_param param_count() const noexcept { return param_count_; }
+        NCPP_FORCE_INLINE const auto& param_generations() const noexcept { return param_generations_; }
         NCPP_FORCE_INLINE const auto& adapter_p_vector() const noexcept { return adapter_p_vector_; }
 
 
@@ -136,6 +143,7 @@ namespace ncpp::mem {
     public:
         TA_frame_heap(u32 param_count = 1, u32 adapter_count = 1) :
             param_count_(param_count),
+            param_generations_(param_count),
             adapter_p_vector_(adapter_count)
         {
             F_frame_chunk_memory_provider_desc chunk_memory_provider_desc;
@@ -147,6 +155,10 @@ namespace ncpp::mem {
             new(&block_memory_provider_) F_block_memory_provider(block_memory_provider_desc);
 
             block_memory_provider_.parent_memory_provider_p = &chunk_memory_provider_;
+
+            // create adapters
+            for(auto& generation : param_generations_)
+                generation = 0;
 
             // create adapters
             for(F_adapter*& adapter_p : adapter_p_vector_)
@@ -224,10 +236,12 @@ namespace ncpp::mem {
         }
 
     public:
-        void reset_param(u32 param_index)
+        void reset_param(F_frame_param param)
         {
             for(auto adapter_p : adapter_p_vector_)
-                adapter_p->reset_param(param_index);
+                adapter_p->reset_param(param);
+
+            ++(param_generations_[param]);
         }
         void reset_params()
         {
@@ -302,6 +316,7 @@ namespace ncpp::mem {
                 if(free_size >= required_free_size)
                 {
                     block_p->frame_memory_block_usage += required_free_size;
+
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
                     block_p->frame_memory_block_usable_usage += increase_usable_allocated_memory_by_actual_size(required_free_size);
 #endif
@@ -315,6 +330,7 @@ namespace ncpp::mem {
             block_list.push_back(block_p);
 
             block_p->frame_memory_block_usage = required_free_size;
+
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
             block_p->frame_memory_block_usable_usage += increase_usable_allocated_memory_by_actual_size(required_free_size);
 #endif
@@ -323,13 +339,14 @@ namespace ncpp::mem {
         }
 
     private:
-        void reset_param(u32 index)
+        void reset_param(F_frame_param param)
         {
-            auto& block_list = block_lists_[index];
+            auto& block_list = block_lists_[param];
 
             for(auto block_p : block_list)
             {
                 block_p->frame_memory_block_usage = 0;
+
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
                 decrease_usable_allocated_memory(block_p->frame_memory_block_usable_usage);
                 block_p->frame_memory_block_usable_usage = 0;
@@ -387,11 +404,11 @@ namespace ncpp::mem {
 
     private:
         F_adapter* adapter_p_ = 0;
-        u32 param_ = 0;
+        F_frame_param param_ = 0;
 
     public:
         NCPP_FORCE_INLINE F_adapter* adapter_p() const noexcept { return adapter_p_; }
-        NCPP_FORCE_INLINE u32 param() const noexcept { return param_; }
+        NCPP_FORCE_INLINE F_frame_param param() const noexcept { return param_; }
 
 
 
@@ -400,7 +417,7 @@ namespace ncpp::mem {
             TA_allocator<F_this, true>(name)
         {
         }
-        NCPP_FORCE_INLINE TF_frame_allocator(F_adapter* adapter_p, u32 param = 0, const char* name = 0) noexcept :
+        NCPP_FORCE_INLINE TF_frame_allocator(F_adapter* adapter_p, F_frame_param param = 0, const char* name = 0) noexcept :
             TA_allocator<F_this, true>(name),
             adapter_p_(adapter_p),
             param_(param)
