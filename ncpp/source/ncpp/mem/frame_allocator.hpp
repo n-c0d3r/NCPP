@@ -156,7 +156,7 @@ namespace ncpp::mem {
 
             block_memory_provider_.parent_memory_provider_p = &chunk_memory_provider_;
 
-            // create adapters
+            // setup initial param generations
             for(auto& generation : param_generations_)
                 generation = 0;
 
