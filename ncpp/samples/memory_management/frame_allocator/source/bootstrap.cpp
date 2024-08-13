@@ -5,17 +5,29 @@ using namespace ncpp;
 
 
 
+enum class E_frame_param
+{
+	GAMEPLAY,
+	GRAPHICS,
+	PHYSICS,
+	ANIMATION,
+
+	COUNT
+};
+
+
+
 class F_demo_frame_heap : public TA_frame_heap<F_demo_frame_heap>
 {
 public:
 	F_demo_frame_heap()
 	{
 		create_adapter();
-		set_uniform_param_count(1);
+		set_uniform_param_count((u32)E_frame_param::COUNT);
 	}
 };
 using F_demo_frame_memory_adapter = F_demo_frame_heap::F_adapter;
-using F_demo_frame_allocator = F_demo_frame_heap::TF_allocator<>;
+using F_demo_frame_allocator = F_demo_frame_heap::TF_allocator<(u32)E_frame_param::GRAPHICS>;
 
 
 
@@ -31,7 +43,7 @@ int main()
 
 		log_memory_stats();
 
-		heap.reset_uniform_param(0);
+		heap.reset_uniform_param((u32)E_frame_param::GRAPHICS);
 
 		log_memory_stats();
 	}
