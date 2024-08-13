@@ -20,6 +20,12 @@ namespace ncpp::mem {
     {
         u32 frame_memory_block_usage = 0;
     };
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+    struct D_frame_memory_block_usable_usage
+    {
+        u32 frame_memory_block_usable_usage = 0;
+    };
+#endif
 
 
 
@@ -29,12 +35,22 @@ namespace ncpp::mem {
         D_child_memory_block_count_u8
 
     );
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+    using F_frame_memory_block = NCPP_COMBINE_TYPES(
+
+        F_child_pool_memory_block,
+        D_frame_memory_block_usage,
+        D_frame_memory_block_usable_usage
+
+    );
+#else
     using F_frame_memory_block = NCPP_COMBINE_TYPES(
 
         F_child_pool_memory_block,
         D_frame_memory_block_usage
 
     );
+#endif
 
 
 
@@ -293,7 +309,9 @@ namespace ncpp::mem {
                 if(free_size >= required_free_size)
                 {
                     block_p->frame_memory_block_usage += required_free_size;
-                    NCPP_INCREASE_USABLE_ALLOCATED_MEMORY(required_free_size);
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+                    block_p->frame_memory_block_usable_usage += increase_usable_allocated_memory_by_actual_size(required_free_size);
+#endif
 
                     return ((u8*)(block_p + 1)) + memory_offset;
                 }
@@ -304,7 +322,9 @@ namespace ncpp::mem {
             block_list.push_back(block_p);
 
             block_p->frame_memory_block_usage = required_free_size;
-            NCPP_INCREASE_USABLE_ALLOCATED_MEMORY(required_free_size);
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+            block_p->frame_memory_block_usable_usage += increase_usable_allocated_memory_by_actual_size(required_free_size);
+#endif
 
             return block_p + 1;
         }
@@ -350,8 +370,11 @@ namespace ncpp::mem {
 
             for(auto block_p : block_list)
             {
-                NCPP_DECREASE_USABLE_ALLOCATED_MEMORY(block_p->frame_memory_block_usage);
                 block_p->frame_memory_block_usage = 0;
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+                decrease_usable_allocated_memory(block_p->frame_memory_block_usable_usage);
+                block_p->frame_memory_block_usable_usage = 0;
+#endif
 
                 heap_p_->destroy_block(block_p);
             }
@@ -410,7 +433,7 @@ namespace ncpp::mem {
         {
             adapter_p_ = x.adapter_p_;
 
-#ifdef NCPP_ENABLE_ALLOCATOR_NAME
+#ifdef NCPP_ENABLE_ALLOCATOR_INFO
             reinterpret_cast<F_base*>(this)->set_name(x.name());
 #endif
 

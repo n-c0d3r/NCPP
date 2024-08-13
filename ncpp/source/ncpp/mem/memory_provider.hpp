@@ -279,7 +279,7 @@ namespace ncpp {
             NCPP_FORCE_INLINE F_memory_block* default_create_block(sz size, sz alignment = EASTL_ALLOCATOR_MIN_ALIGNMENT, sz alignment_offset = 0) {
 
                 F_memory_block* block_p = (F_memory_block*)(
-                    F_crt_allocator().allocate(
+                    F_heap_crt_allocator().allocate(
                         size,
                         alignment,
                         alignment_offset,
@@ -295,7 +295,7 @@ namespace ncpp {
 
                 ((F_memory_block*)block_p)->~F_memory_block();
 
-                F_crt_allocator().deallocate(block_p);
+                F_heap_crt_allocator().deallocate(block_p);
             }
 
         public:

@@ -87,19 +87,20 @@ namespace ncpp {
 #ifdef NCPP_HAS_ALLOC_DEBUG_INFO
 		struct NCPP_ALIGN(EASTL_ALLOCATOR_MIN_ALIGNMENT) F_alloc_debug_info {
 
+#ifdef NCPP_ENABLE_ALLOCATOR_INFO
             void* allocator_address = 0;
-
-#ifdef NCPP_ENABLE_ALLOCATOR_NAME
             const char* allocator_name = 0;
-#endif
-
             const char* allocator_type_name = 0;
             u64 allocator_type_hash_code = 0;
+#endif
+
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
             sz actual_size = 0;
             sz payload_size = 0;
             u16 alignment = 0;
             u16 alignment_offset = 0;
             bool is_default_alloc = 0;
+#endif
 
 
 
@@ -109,6 +110,35 @@ namespace ncpp {
             }
 
         };
+#endif
+
+
+
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+		inline sz increase_usable_allocated_memory_by_actual_size(sz actual_size)
+		{
+			sz usable_size = actual_size - sizeof(void*) - sizeof(F_alloc_debug_info);
+
+			NCPP_INCREASE_USABLE_ALLOCATED_MEMORY(usable_size);
+
+			return usable_size;
+		}
+		inline sz decrease_usable_allocated_memory_by_actual_size(sz actual_size)
+		{
+			sz usable_size = actual_size - sizeof(void*) - sizeof(F_alloc_debug_info);
+
+			NCPP_DECREASE_USABLE_ALLOCATED_MEMORY(usable_size);
+
+			return usable_size;
+		}
+		inline void increase_usable_allocated_memory(sz usable_size)
+		{
+			NCPP_INCREASE_USABLE_ALLOCATED_MEMORY(usable_size);
+		}
+		inline void decrease_usable_allocated_memory(sz usable_size)
+		{
+			NCPP_DECREASE_USABLE_ALLOCATED_MEMORY(usable_size);
+		}
 #endif
 
 
@@ -184,7 +214,7 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 			inline TA_allocator(const char* name = 0)
 			{
 
-#ifdef NCPP_ENABLE_ALLOCATOR_NAME
+#ifdef NCPP_ENABLE_ALLOCATOR_INFO
 				name_ = name;
 #endif
 
@@ -192,7 +222,7 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 			inline TA_allocator(const TA_allocator& x)
 			{
 
-#ifdef NCPP_ENABLE_ALLOCATOR_NAME
+#ifdef NCPP_ENABLE_ALLOCATOR_INFO
 				name_ = x.name_;
 #endif
 
@@ -200,7 +230,7 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 			inline TA_allocator(const TA_allocator& x, const char* name)
 			{
 
-#if NCPP_ENABLE_ALLOCATOR_NAME
+#if NCPP_ENABLE_ALLOCATOR_INFO
 				name_ = name;
 #endif
 
@@ -208,7 +238,7 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 
 			inline TA_allocator& operator=(const TA_allocator& x) {
 
-#if NCPP_ENABLE_ALLOCATOR_NAME
+#if NCPP_ENABLE_ALLOCATOR_INFO
 				name_ = x.name_;
 #endif
 
@@ -249,19 +279,20 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 
 					F_alloc_debug_info debug_info = {
 
+#ifdef NCPP_ENABLE_ALLOCATOR_INFO
                         this,
-
-#ifdef NCPP_ENABLE_ALLOCATOR_NAME
 						name,
-#endif
-
                         utilities::T_type_fullname<F_allocator__>(),
                         utilities::T_type_hash_code<F_allocator__>,
+#endif
+
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
 						actual_size,
 						n,
                         (u16)alignment,
                         (u16)alignment_offset,
 						is_default_alloc__
+#endif
 
 					};
 #endif
@@ -300,19 +331,20 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 
                     F_alloc_debug_info debug_info = {
 
+#ifdef NCPP_ENABLE_ALLOCATOR_INFO
                         this,
-
-#ifdef NCPP_ENABLE_ALLOCATOR_NAME
                         name,
-#endif
-
                         utilities::T_type_fullname<F_allocator__>(),
                         utilities::T_type_hash_code<F_allocator__>,
+#endif
+
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
 						actual_size,
 						n,
                         (u16)alignment,
                         (u16)alignment_offset,
 						is_default_alloc__
+#endif
 
 					};
 
@@ -320,7 +352,10 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 					if constexpr (is_default_alloc__ || auto_count_non_default_allocations__) {
 
 						NCPP_INCREASE_TOTAL_ALLOCATED_MEMORY(actual_size);
+					}
+					if constexpr (auto_count_non_default_allocations__) {
 
+						increase_usable_allocated_memory_by_actual_size(actual_size);
 					}
 #endif
 #endif
@@ -369,19 +404,20 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 
                     F_alloc_debug_info debug_info = {
 
+#ifdef NCPP_ENABLE_ALLOCATOR_INFO
                         this,
-
-#ifdef NCPP_ENABLE_ALLOCATOR_NAME
                         name,
-#endif
-
                         utilities::T_type_fullname<F_allocator__>(),
                         utilities::T_type_hash_code<F_allocator__>,
+#endif
+
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
 						actual_size,
 						n,
                         0,
                         0,
 						is_default_alloc__
+#endif
 
 					};
 #endif
@@ -420,19 +456,20 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 
                     F_alloc_debug_info debug_info = {
 
+#ifdef NCPP_ENABLE_ALLOCATOR_INFO
                         this,
-
-#ifdef NCPP_ENABLE_ALLOCATOR_NAME
                         name,
-#endif
-
                         utilities::T_type_fullname<F_allocator__>(),
                         utilities::T_type_hash_code<F_allocator__>,
+#endif
+
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
 						actual_size,
 						n,
                         0,
                         0,
 						is_default_alloc__
+#endif
 
 					};
 
@@ -440,7 +477,10 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 					if constexpr (is_default_alloc__ || auto_count_non_default_allocations__) {
 
 						NCPP_INCREASE_TOTAL_ALLOCATED_MEMORY(actual_size);
+					}
+					if constexpr (auto_count_non_default_allocations__) {
 
+						increase_usable_allocated_memory_by_actual_size(actual_size);
 					}
 #endif
 #endif
@@ -474,15 +514,17 @@ NCPP_DISABLE_ALL_WARNINGS_POP
                 if (debug_info.is_default_alloc || auto_count_non_default_allocations__) {
 
                     NCPP_DECREASE_TOTAL_ALLOCATED_MEMORY(debug_info.actual_size);
-
                 }
+				if constexpr (auto_count_non_default_allocations__) {
+
+					decrease_usable_allocated_memory_by_actual_size(debug_info.actual_size);
+				}
 #endif
 #endif
 
 				if constexpr (enable_manual_alignment && !is_default_alloc__) {
 
 					reinterpret_cast<F_overloaded_allocator__*>(this)->delete_mem(p);
-
 				}
 				else {
 
@@ -491,7 +533,6 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 #else
 					reinterpret_cast<F_overloaded_allocator__*>(this)->delete_mem(reinterpret_cast<void**>(p)[-1]);
 #endif
-
 				}
 
 			}

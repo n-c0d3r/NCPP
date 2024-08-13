@@ -59,19 +59,47 @@ namespace ncpp {
 		/**
 		 *	An allocator using malloc and free.
 		 */
-		class F_crt_allocator : public TA_allocator<F_crt_allocator, false, true> {
+		template<b8 auto_count_non_default_allocations__ = true>
+		class TF_crt_allocator : public TA_allocator<
+				TF_crt_allocator<auto_count_non_default_allocations__>,
+				false,
+				auto_count_non_default_allocations__
+			>
+		{
+		private:
+			using F_this = TF_crt_allocator<auto_count_non_default_allocations__>;
+
+
 
 		public:
-			NCPP_FORCE_INLINE F_crt_allocator(const char* name = 0) :
-                    TA_allocator(name)
+			NCPP_FORCE_INLINE TF_crt_allocator(const char* name = 0) :
+                TA_allocator<
+                	F_this,
+					false,
+					auto_count_non_default_allocations__
+				>(name)
 			{}
-			NCPP_FORCE_INLINE F_crt_allocator(const F_crt_allocator& x) :
-                    TA_allocator()
+			NCPP_FORCE_INLINE TF_crt_allocator(const TF_crt_allocator& x) :
+				TA_allocator<
+					F_this,
+					false,
+					auto_count_non_default_allocations__
+				>()
 			{}
-			~F_crt_allocator()
+			~TF_crt_allocator()
 			{}
 
 		};
+
+		/**
+		 *	Default crt allocator.
+		 */
+		using F_crt_allocator = TF_crt_allocator<>;
+
+		/**
+		 *	Crt allocator that does not automatically count non-default allocations.
+		 */
+		using F_heap_crt_allocator = TF_crt_allocator<false>;
 
 	}
 

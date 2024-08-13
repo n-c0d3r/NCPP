@@ -128,7 +128,7 @@ namespace ncpp {
             {
                 target_allocator_p_ = (F_target_allocator*)x.target_allocator_p_;
 
-#ifdef NCPP_ENABLE_ALLOCATOR_NAME
+#ifdef NCPP_ENABLE_ALLOCATOR_INFO
                 reinterpret_cast<F_base*>(this)->set_name(x.name());
 #endif
 

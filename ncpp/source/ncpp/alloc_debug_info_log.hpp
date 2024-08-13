@@ -75,6 +75,7 @@ inline ncpp::F_ostream& operator << (ncpp::F_ostream& os, const ncpp::TF_ostream
 
     os << ncpp::T_cout_lowlight("{");
 
+#ifdef NCPP_ENABLE_ALLOCATOR_INFO
     {
 
         os << std::endl;
@@ -91,9 +92,7 @@ inline ncpp::F_ostream& operator << (ncpp::F_ostream& os, const ncpp::TF_ostream
 
     }
 
-#ifdef NCPP_ENABLE_ALLOCATOR_NAME
     {
-
         os << std::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
@@ -105,12 +104,9 @@ inline ncpp::F_ostream& operator << (ncpp::F_ostream& os, const ncpp::TF_ostream
         os << ncpp::T_cout_lowlight(" -> ");
         os << ncpp::T_cout_value(input.first.allocator_name);
         os << ncpp::T_cout_lowlight(", ");
-
     }
-#endif
 
     {
-
         os << std::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
@@ -122,11 +118,9 @@ inline ncpp::F_ostream& operator << (ncpp::F_ostream& os, const ncpp::TF_ostream
         os << ncpp::T_cout_lowlight(" -> ");
         os << ncpp::T_cout_value(input.first.allocator_type_name);
         os << ncpp::T_cout_lowlight(", ");
-
     }
 
     {
-
         os << std::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
@@ -138,9 +132,10 @@ inline ncpp::F_ostream& operator << (ncpp::F_ostream& os, const ncpp::TF_ostream
         os << ncpp::T_cout_lowlight(" -> ");
         os << ncpp::T_cout_value(input.first.allocator_type_hash_code);
         os << ncpp::T_cout_lowlight(", ");
-
     }
+#endif
 
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
     {
 
         os << std::endl;
@@ -219,6 +214,7 @@ inline ncpp::F_ostream& operator << (ncpp::F_ostream& os, const ncpp::TF_ostream
         os << ncpp::T_cout_value(input.first.is_default_alloc);
 
     }
+#endif
 
     os << std::endl;
 
@@ -254,6 +250,7 @@ inline ncpp::F_wostream& operator << (ncpp::F_wostream& os, const ncpp::TF_ostre
 
     os << ncpp::T_cout_lowlight("{");
 
+#ifdef NCPP_ENABLE_ALLOCATOR_INFO
     {
 
         os << std::endl;
@@ -270,7 +267,6 @@ inline ncpp::F_wostream& operator << (ncpp::F_wostream& os, const ncpp::TF_ostre
 
     }
 
-#ifdef NCPP_ENABLE_ALLOCATOR_NAME
     {
 
         os << std::endl;
@@ -286,10 +282,8 @@ inline ncpp::F_wostream& operator << (ncpp::F_wostream& os, const ncpp::TF_ostre
         os << ncpp::T_cout_lowlight(", ");
 
     }
-#endif
 
     {
-
         os << std::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
@@ -301,11 +295,9 @@ inline ncpp::F_wostream& operator << (ncpp::F_wostream& os, const ncpp::TF_ostre
         os << ncpp::T_cout_lowlight(" -> ");
         os << ncpp::T_cout_value(input.first.allocator_type_name);
         os << ncpp::T_cout_lowlight(", ");
-
     }
 
     {
-
         os << std::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
@@ -317,11 +309,11 @@ inline ncpp::F_wostream& operator << (ncpp::F_wostream& os, const ncpp::TF_ostre
         os << ncpp::T_cout_lowlight(" -> ");
         os << ncpp::T_cout_value(input.first.allocator_type_hash_code);
         os << ncpp::T_cout_lowlight(", ");
-
     }
+#endif
 
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
     {
-
         os << std::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
@@ -333,11 +325,9 @@ inline ncpp::F_wostream& operator << (ncpp::F_wostream& os, const ncpp::TF_ostre
         os << ncpp::T_cout_lowlight(" -> ");
         os << ncpp::T_cout_value(input.first.actual_size);
         os << ncpp::T_cout_lowlight(", ");
-
     }
 
     {
-
         os << std::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
@@ -349,11 +339,9 @@ inline ncpp::F_wostream& operator << (ncpp::F_wostream& os, const ncpp::TF_ostre
         os << ncpp::T_cout_lowlight(" -> ");
         os << ncpp::T_cout_value(input.first.payload_size);
         os << ncpp::T_cout_lowlight(", ");
-
     }
 
     {
-
         os << std::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
@@ -365,11 +353,9 @@ inline ncpp::F_wostream& operator << (ncpp::F_wostream& os, const ncpp::TF_ostre
         os << ncpp::T_cout_lowlight(" -> ");
         os << ncpp::T_cout_value(input.first.alignment);
         os << ncpp::T_cout_lowlight(", ");
-
     }
 
     {
-
         os << std::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
@@ -381,11 +367,9 @@ inline ncpp::F_wostream& operator << (ncpp::F_wostream& os, const ncpp::TF_ostre
         os << ncpp::T_cout_lowlight(" -> ");
         os << ncpp::T_cout_value(input.first.alignment_offset);
         os << ncpp::T_cout_lowlight(", ");
-
     }
 
     {
-
         os << std::endl;
 
         for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
@@ -396,8 +380,8 @@ inline ncpp::F_wostream& operator << (ncpp::F_wostream& os, const ncpp::TF_ostre
         os << ncpp::T_cout_field_name("is_default_alloc");
         os << ncpp::T_cout_lowlight(" -> ");
         os << ncpp::T_cout_value(input.first.is_default_alloc);
-
     }
+#endif
 
     os << std::endl;
 
