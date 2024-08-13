@@ -21,10 +21,12 @@ enum class E_frame_param
 class F_demo_frame_heap : public TA_frame_heap<F_demo_frame_heap>
 {
 public:
-	F_demo_frame_heap()
+	F_demo_frame_heap() :
+		TA_frame_heap<F_demo_frame_heap>(
+			(u32)E_frame_param::COUNT,
+			1
+		)
 	{
-		create_adapter();
-		set_param_count((u32)E_frame_param::COUNT);
 	}
 };
 using F_demo_frame_memory_adapter = F_demo_frame_heap::F_adapter;

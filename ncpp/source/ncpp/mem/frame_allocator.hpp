@@ -85,6 +85,8 @@ namespace ncpp::mem {
 
     public:
         using F_adapter = TF_frame_memory_adapter<F_heap>;
+        template<class F_heap_fr__>
+        friend class ncpp::mem::TF_frame_memory_adapter;
 
         using F_allocator = TF_frame_allocator<F_heap__>;
 
@@ -122,15 +124,19 @@ namespace ncpp::mem {
         eastl::vector<F_frame_chunk_memory_block*> chunk_p_vector_;
 
     private:
+        u32 param_count_ = 0;
         eastl::vector<F_adapter*> adapter_p_vector_;
 
     public:
+        NCPP_FORCE_INLINE u32 param_count() const noexcept { return param_count_; }
         NCPP_FORCE_INLINE const auto& adapter_p_vector() const noexcept { return adapter_p_vector_; }
 
 
 
     public:
-        TA_frame_heap()
+        TA_frame_heap(u32 param_count = 1, u32 adapter_count = 1) :
+            param_count_(param_count),
+            adapter_p_vector_(adapter_count)
         {
             F_frame_chunk_memory_provider_desc chunk_memory_provider_desc;
             chunk_memory_provider_desc.child_pool_memory_block_size = block_size;
@@ -141,21 +147,19 @@ namespace ncpp::mem {
             new(&block_memory_provider_) F_block_memory_provider(block_memory_provider_desc);
 
             block_memory_provider_.parent_memory_provider_p = &chunk_memory_provider_;
+
+            // create adapters
+            for(F_adapter*& adapter_p : adapter_p_vector_)
+                adapter_p = new F_adapter((F_heap*)this);
         }
         ~TA_frame_heap()
         {
-            release_adapters();
-        }
+            release_chunks();
 
-
-
-    public:
-        F_adapter* create_adapter()
-        {
-            adapter_p_vector_.push_back(
-                new F_adapter((F_heap*)this)
-            );
-            return adapter_p_vector_.back();
+            // destroy adapters
+            for(auto adapter_p : adapter_p_vector_)
+                delete adapter_p;
+            adapter_p_vector_.clear();
         }
 
 
@@ -185,43 +189,7 @@ namespace ncpp::mem {
             return block_memory_provider_.create_block_through_parent(0, &management_params);
         }
 
-    public:
-        void release_chunks()
-        {
-            for(auto adapter_p : adapter_p_vector_)
-                adapter_p->destroy_params();
-
-            for(auto chunk_p : chunk_p_vector_)
-            {
-                chunk_memory_provider_.default_destroy_block(chunk_p);
-            }
-            chunk_p_vector_.clear();
-        }
-        void release_adapters()
-        {
-            release_chunks();
-
-            for(auto adapter_p : adapter_p_vector_)
-                delete adapter_p;
-
-            adapter_p_vector_.clear();
-        }
-
-    protected:
-        void set_param_count(u32 param_count)
-        {
-            for(auto adapter_p : adapter_p_vector_)
-                adapter_p->set_param_count(param_count);
-        }
-
-    public:
-        void reset_param(u32 param_index)
-        {
-            for(auto adapter_p : adapter_p_vector_)
-                adapter_p->reset_param(param_index);
-        }
-
-    public:
+    private:
         F_frame_memory_block* create_block()
         {
             F_frame_chunk_memory_block* chunk_p = optain_chunk();
@@ -238,6 +206,33 @@ namespace ncpp::mem {
             chunk_p->child_memory_block_count_u8--;
 
             chunk_memory_provider_.deallocate_child_block(block_p, &management_params);
+        }
+
+
+
+    public:
+        void release_chunks()
+        {
+            for(auto adapter_p : adapter_p_vector_)
+                adapter_p->reset_params();
+
+            for(auto chunk_p : chunk_p_vector_)
+            {
+                chunk_memory_provider_.default_destroy_block(chunk_p);
+            }
+            chunk_p_vector_.clear();
+        }
+
+    public:
+        void reset_param(u32 param_index)
+        {
+            for(auto adapter_p : adapter_p_vector_)
+                adapter_p->reset_param(param_index);
+        }
+        void reset_params()
+        {
+            for(u32 i = 0; i < param_count_; ++i)
+                reset_param(i);
         }
 
     };
@@ -271,20 +266,20 @@ namespace ncpp::mem {
 
     public:
         NCPP_FORCE_INLINE F_heap* heap_p() const noexcept { return heap_p_; }
-        NCPP_FORCE_INLINE u32 param_count() const noexcept { return block_lists_.size(); }
 
 
 
     protected:
         TF_frame_memory_adapter(F_heap* heap_p) :
-            heap_p_(heap_p)
+            heap_p_(heap_p),
+            block_lists_(heap_p->param_count())
         {
         }
 
     public:
         ~TF_frame_memory_adapter()
         {
-            destroy_params();
+            reset_params();
         }
 
 
@@ -328,18 +323,27 @@ namespace ncpp::mem {
         }
 
     private:
-        // can be used by user defined heap class when defining param count
-        void set_param_count(u32 param_count)
+        void reset_param(u32 index)
+        {
+            auto& block_list = block_lists_[index];
+
+            for(auto block_p : block_list)
+            {
+                block_p->frame_memory_block_usage = 0;
+#ifdef NCPP_ENABLE_MEMORY_COUNTING
+                decrease_usable_allocated_memory(block_p->frame_memory_block_usable_usage);
+                block_p->frame_memory_block_usable_usage = 0;
+#endif
+
+                heap_p_->destroy_block(block_p);
+            }
+
+            block_list.clear();
+        }
+        void reset_params()
         {
             for(u32 i = 0; i < block_lists_.size(); ++i)
                 reset_param(i);
-
-            block_lists_.resize(param_count);
-        }
-        // can be used by user defined heap class when destroying param count
-        void destroy_params()
-        {
-            set_param_count(0);
         }
 
 
@@ -357,27 +361,6 @@ namespace ncpp::mem {
                     alignment
                 ) - alignment_offset
             );
-        }
-
-
-
-    private:
-        void reset_param(u32 index)
-        {
-            auto& block_list = block_lists_[index];
-
-            for(auto block_p : block_list)
-            {
-                block_p->frame_memory_block_usage = 0;
-#ifdef NCPP_ENABLE_MEMORY_COUNTING
-                decrease_usable_allocated_memory(block_p->frame_memory_block_usable_usage);
-                block_p->frame_memory_block_usable_usage = 0;
-#endif
-
-                heap_p_->destroy_block(block_p);
-            }
-
-            block_list.clear();
         }
 
     };
