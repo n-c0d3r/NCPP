@@ -2,12 +2,13 @@
 
 #include <ncpp/prerequisites.hpp>
 #include <ncpp/mem/pool_memory_provider.hpp>
+#include <ncpp/mem/reference_allocator.hpp>
 
 
 
 namespace ncpp::mem {
 
-    template<class F_heap__, sz block_size__, sz blocks_per_chunk__>
+    template<class F_heap__>
     class TA_frame_heap;
     template<class F_heap__>
     class TF_frame_memory_adapter;
@@ -79,11 +80,11 @@ namespace ncpp::mem {
 
 
 
-    template<class F_heap__, sz block_size__ = NCPP_DEFAULT_FRAME_BLOCK_SIZE, sz blocks_per_chunk__ = NCPP_DEFAULT_FRAME_BLOCKS_PER_CHUNK>
+    template<class F_heap__>
     class TA_frame_heap {
 
     private:
-        using F_this = TA_frame_heap<F_heap__, block_size__, blocks_per_chunk__>;
+        using F_this = TA_frame_heap<F_heap__>;
 
     private:
         using F_heap = F_heap__;
@@ -94,14 +95,6 @@ namespace ncpp::mem {
         friend class ncpp::mem::TF_frame_memory_adapter;
 
         using F_allocator = TF_frame_allocator<F_heap__>;
-
-        static constexpr sz block_size = block_size__;
-        static constexpr sz block_payload_size = block_size - sizeof(F_frame_memory_block);
-        static constexpr sz blocks_per_chunk = blocks_per_chunk__;
-        static constexpr sz chunk_payload_size = block_size * blocks_per_chunk;
-        static constexpr sz chunk_size = sizeof(F_frame_chunk_memory_block) + chunk_payload_size;
-
-        NCPP_STATIC_ASSERT(blocks_per_chunk__ <= 0xFF);
 
 
 
@@ -127,27 +120,43 @@ namespace ncpp::mem {
         F_chunk_memory_provider chunk_memory_provider_;
         F_block_memory_provider block_memory_provider_;
         eastl::vector<F_frame_chunk_memory_block*> chunk_p_vector_;
-
-    private:
         F_frame_param param_count_ = 0;
         eastl::vector<F_frame_param_generation> param_generations_;
         eastl::vector<F_adapter*> adapter_p_vector_;
+        sz block_size_ = 0;
+        sz block_payload_size_ = 0;
+        sz blocks_per_chunk_ = 0;
+        sz chunk_size_ = 0;
+        sz chunk_payload_size_ = 0;
 
     public:
         NCPP_FORCE_INLINE F_frame_param param_count() const noexcept { return param_count_; }
         NCPP_FORCE_INLINE const auto& param_generations() const noexcept { return param_generations_; }
         NCPP_FORCE_INLINE const auto& adapter_p_vector() const noexcept { return adapter_p_vector_; }
+        NCPP_FORCE_INLINE sz block_size() const noexcept { return block_size_; }
+        NCPP_FORCE_INLINE sz block_payload_size() const noexcept { return block_payload_size_; }
+        NCPP_FORCE_INLINE sz blocks_per_chunk() const noexcept { return blocks_per_chunk_; }
+        NCPP_FORCE_INLINE sz chunk_size() const noexcept { return chunk_size_; }
+        NCPP_FORCE_INLINE sz chunk_payload_size() const noexcept { return chunk_payload_size_; }
 
 
 
     public:
-        TA_frame_heap(u32 param_count = 1, u32 adapter_count = 1) :
+        TA_frame_heap(u32 param_count = 1, u32 adapter_count = 1, sz block_payload_size = NCPP_DEFAULT_FRAME_BLOCK_PAYLOAD_SIZE, sz blocks_per_chunk = NCPP_DEFAULT_FRAME_BLOCKS_PER_CHUNK) :
             param_count_(param_count),
             param_generations_(param_count),
-            adapter_p_vector_(adapter_count)
+            adapter_p_vector_(adapter_count),
+            block_payload_size_(block_payload_size),
+            blocks_per_chunk_(blocks_per_chunk)
         {
+            NCPP_ASSERT(blocks_per_chunk <= 0xFF);
+            block_size_ = block_payload_size + sizeof(F_frame_memory_block);
+            chunk_payload_size_ = blocks_per_chunk * block_size_;
+            chunk_size_ = chunk_payload_size_ + sizeof(F_frame_chunk_memory_block);
+
+            // setup memory providers
             F_frame_chunk_memory_provider_desc chunk_memory_provider_desc;
-            chunk_memory_provider_desc.child_pool_memory_block_size = block_size;
+            chunk_memory_provider_desc.child_pool_memory_block_size = block_size_;
             chunk_memory_provider_desc.max_child_pool_memory_block_count_per_pool_memory_block = blocks_per_chunk;
             new(&chunk_memory_provider_) F_chunk_memory_provider(chunk_memory_provider_desc);
 
@@ -182,12 +191,12 @@ namespace ncpp::mem {
             // try optain pre-created chunks
             for(auto it = chunk_p_vector_.rbegin(); it != chunk_p_vector_.rend(); ++it)
             {
-                if((*it)->child_memory_block_count_u8 < blocks_per_chunk)
+                if((*it)->child_memory_block_count_u8 < blocks_per_chunk_)
                     return *it;
             }
 
             // create new chunk
-            F_frame_chunk_memory_block* chunk_p = chunk_memory_provider_.default_create_block(chunk_size);
+            F_frame_chunk_memory_block* chunk_p = chunk_memory_provider_.default_create_block(chunk_size_);
             chunk_p_vector_.push_back(chunk_p);
             return chunk_p;
         }
@@ -261,7 +270,7 @@ namespace ncpp::mem {
 
     public:
         using F_heap = F_heap__;
-        template<class F_heap_fr__, sz block_size_fr__, sz blocks_per_chunk_fr__>
+        template<class F_heap_fr__>
         friend class ncpp::mem::TA_frame_heap;
 
     public:
@@ -311,7 +320,7 @@ namespace ncpp::mem {
                 F_frame_memory_block* block_p = block_list.back();
 
                 u32 memory_offset = block_p->frame_memory_block_usage;
-                u32 free_size = F_heap::block_payload_size - memory_offset;
+                u32 free_size = heap_p_->block_payload_size() - memory_offset;
 
                 if(free_size >= required_free_size)
                 {
@@ -369,6 +378,9 @@ namespace ncpp::mem {
         NCPP_FORCE_INLINE void* new_mem(u32 block_list_index, sz size, sz alignment = EASTL_ALLOCATOR_MIN_ALIGNMENT, sz alignment_offset = 0) {
 
             sz actual_size = size + alignment;
+
+            NCPP_ASSERT(actual_size < heap_p_->block_payload_size())
+                << "the allocation size is too big, the limit is " << T_cout_value(heap_p_->block_payload_size()) << "(bytes)";
 
             void* raw_memory_p = optain_memory(block_list_index, actual_size);
 
@@ -466,5 +478,27 @@ namespace ncpp::mem {
         }
 
     };
+
+
+
+    template<class F_heap__, typename F_target_allocator__ = TF_frame_allocator<F_heap__>>
+    class TF_reference_frame_allocator_config : TF_reference_allocator_config<F_target_allocator__> {
+
+    public:
+        static NCPP_FORCE_INLINE b8 is_equal(F_target_allocator__* a, F_target_allocator__* b) {
+
+            NCPP_ASSERT(a) << "invalid target allocator";
+            NCPP_ASSERT(b) << "invalid target allocator";
+
+            return (*a == *b);
+        }
+
+    };
+
+    template<class F_heap__, typename F_target_allocator__ = TF_frame_allocator<F_heap__>>
+    using TF_reference_frame_allocator = TF_reference_allocator<
+        F_target_allocator__,
+        TF_reference_frame_allocator_config<F_heap__, F_target_allocator__>
+    >;
 
 }

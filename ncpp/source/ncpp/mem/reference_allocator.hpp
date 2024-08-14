@@ -74,6 +74,10 @@ namespace ncpp {
 
         		return x != 0;
         	}
+        	static NCPP_FORCE_INLINE b8 is_equal(F_target_allocator__* a, F_target_allocator__* b) {
+
+				return (a == b);
+        	}
 
         };
 
@@ -158,7 +162,10 @@ namespace ncpp {
 				if constexpr (F_config::is_always_equal)
 					return true;
 
-				return (target_allocator_p_ == x.target_allocator_p());
+				return F_config::is_equal(
+					target_allocator_p_,
+					x.target_allocator_p()
+				);
 			}
 
 
