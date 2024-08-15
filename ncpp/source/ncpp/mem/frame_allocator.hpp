@@ -482,7 +482,7 @@ namespace ncpp::mem {
 
 
     template<class F_heap__, typename F_target_allocator__ = TF_frame_allocator<F_heap__>>
-    class TF_reference_frame_allocator_config : TF_reference_allocator_config<F_target_allocator__> {
+    class TF_reference_frame_allocator_config : public TF_reference_allocator_config<F_target_allocator__> {
 
     public:
         static NCPP_FORCE_INLINE b8 is_equal(F_target_allocator__* a, F_target_allocator__* b) {
@@ -495,10 +495,10 @@ namespace ncpp::mem {
 
     };
 
-    template<class F_heap__, typename F_target_allocator__ = TF_frame_allocator<F_heap__>>
+    template<class F_heap__, typename F_target_allocator__ = TF_frame_allocator<F_heap__>, class F_config__ = TF_reference_frame_allocator_config<F_target_allocator__>>
     using TF_reference_frame_allocator = TF_reference_allocator<
         F_target_allocator__,
-        TF_reference_frame_allocator_config<F_heap__, F_target_allocator__>
+        F_config__
     >;
 
 }
