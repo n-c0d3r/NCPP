@@ -485,7 +485,7 @@ namespace ncpp::mem {
     class TF_reference_frame_allocator_config : public TF_reference_allocator_config<F_target_allocator__> {
 
     public:
-        static NCPP_FORCE_INLINE b8 is_equal(F_target_allocator__* a, F_target_allocator__* b) {
+        static NCPP_FORCE_INLINE b8 is_equal(const F_target_allocator__* a, const F_target_allocator__* b) {
 
             NCPP_ASSERT(a) << "invalid target allocator";
             NCPP_ASSERT(b) << "invalid target allocator";

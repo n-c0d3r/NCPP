@@ -67,14 +67,14 @@ namespace ncpp {
             }
             static constexpr b8 can_be_invalid = std::is_same_v<F_target_allocator__, F_default_allocator>;
         	static constexpr b8 is_always_equal = std::is_same_v<F_target_allocator__, F_default_allocator>;
-        	static constexpr NCPP_FORCE_INLINE b8 can_be_used(F_target_allocator__* x) {
+        	static constexpr NCPP_FORCE_INLINE b8 can_be_used(const F_target_allocator__* x) {
 
         		if constexpr (can_be_invalid)
         			return true;
 
         		return x != 0;
         	}
-        	static NCPP_FORCE_INLINE b8 is_equal(F_target_allocator__* a, F_target_allocator__* b) {
+        	static NCPP_FORCE_INLINE b8 is_equal(const F_target_allocator__* a, const F_target_allocator__* b) {
 
 				return (a == b);
         	}
