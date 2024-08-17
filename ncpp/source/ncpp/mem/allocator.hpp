@@ -197,6 +197,7 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 
                 return name_;
             }
+            NCPP_FORCE_INLINE const char* get_name() const { return name(); }
 			NCPP_FORCE_INLINE void set_name(const char* new_name) { name_ = new_name; }
 #else
             NCPP_FORCE_INLINE const char* name() const {
@@ -205,6 +206,7 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 
                 return default_name;
             }
+            NCPP_FORCE_INLINE const char* get_name() const { return name(); }
             NCPP_FORCE_INLINE void set_name(const char* new_name) {  }
 #endif
 
