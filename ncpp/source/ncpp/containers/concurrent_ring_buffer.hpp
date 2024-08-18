@@ -110,9 +110,9 @@ namespace ncpp {
 			NCPP_FORCE_INLINE TF_concurrent_ring_buffer() = default;
 			TF_concurrent_ring_buffer(sz capacity) :
 				capacity_(capacity),
-				item_vector_(capacity),
 				is_poppable_vector_(capacity, false)
 			{
+				item_vector_.reserve(capacity);
 			}
 
 			TF_concurrent_ring_buffer(const TF_concurrent_ring_buffer& x) :
@@ -168,7 +168,9 @@ namespace ncpp {
 				location %= capacity_;
 
 				// store item and mark this location as poppable
-				item_vector_[location] = std::forward<F_passed_item__>(item);
+				new(item_vector_.data() + location) F_item(
+					std::forward<F_passed_item__>(item)
+				);
 				is_poppable_vector_[location] = true;
 
 				eastl::atomic_thread_fence(eastl::memory_order_acquire);
@@ -201,7 +203,7 @@ namespace ncpp {
 
 					// wait for the location to be poppable and then pop it
 					while (!is_poppable_vector_[location]);
-					item = std::move(item_vector_[location]);
+					item = std::move(*(item_vector_.data() + location));
 
 					// mark this location as non-poppable
 					// to be poppable again, it need to be re-pushed
@@ -274,7 +276,11 @@ namespace ncpp {
 					os << " ";
 
 				}
-        		os << ncpp::T_cout_field_name("item_vector") << ncpp::T_cout_lowlight(" -> ");
+				os << ncpp::T_cout_field_name("item_vector") << ncpp::T_cout_lowlight(" -> ");
+				auto item_vector_for_logging = F_item_vector(
+					input.first.item_vector_.data(),
+					input.first.item_vector_.data() + input.first.capacity_
+				);
 				ncpp::T_safe_ostream_with_tab<
 					ncpp::F_ostream,
 					ncpp::TF_ostream_input<
@@ -285,7 +291,7 @@ namespace ncpp {
 					ncpp::TF_ostream_input<
 						ncpp::TF_cout_value<F_item_vector>
 					> {
-						ncpp::T_cout_value(input.first.item_vector_),
+						ncpp::T_cout_value(item_vector_for_logging),
 						input.second + 1
 					}
 				);
@@ -355,7 +361,11 @@ namespace ncpp {
 					os << L" ";
 
 				}
-        		os << ncpp::T_cout_field_name("item_vector") << ncpp::T_cout_lowlight(" -> ");
+				os << ncpp::T_cout_field_name("item_vector") << ncpp::T_cout_lowlight(" -> ");
+				auto item_vector_for_logging = F_item_vector(
+					input.first.item_vector_.data(),
+					input.first.item_vector_.data() + input.first.capacity_
+				);
 				ncpp::T_safe_ostream_with_tab<
 					ncpp::F_wostream,
 					ncpp::TF_ostream_input<
@@ -366,7 +376,7 @@ namespace ncpp {
 					ncpp::TF_ostream_input<
 						ncpp::TF_cout_value<F_item_vector>
 					> {
-						ncpp::T_cout_value(input.first.item_vector_),
+						ncpp::T_cout_value(item_vector_for_logging),
 						input.second + 1
 					}
 				);
