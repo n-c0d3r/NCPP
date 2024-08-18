@@ -70,27 +70,28 @@ namespace ncpp {
 
 	namespace containers {
 
-		template<typename F_item__, class F_allocator__ = mem::F_default_allocator, class F_lock__ = pac::F_srsw_spin_lock>
+		template<typename F_item__, class F_allocator__ = mem::F_default_allocator, class F_pop_lock__ = pac::F_srsw_spin_lock>
 		class TF_concurrent_ring_buffer {
 
 		public:
 			using F_item = F_item__;
 			using F_allocator = F_allocator__;
-			using F_lock = F_lock__;
+			using F_pop_lock = F_pop_lock__;
 
 			using F_item_vector = TF_vector<F_item, F_allocator>;
+			using F_is_poppable_vector = TF_vector<b8, F_allocator>;
 
 
 
 		protected:
 			F_item_vector item_vector_;
+			F_is_poppable_vector is_poppable_vector_;
 			ai64 begin_index_ = 0;
 			ai64 end_index_ = 0;
-			
+			F_pop_lock pop_lock_;
+
 		private:
 			i64 capacity_ = 0;
-			F_lock reader_lock_;
-			F_lock writer_lock_;
 
 
 		public:
@@ -101,37 +102,31 @@ namespace ncpp {
             NCPP_FORCE_INLINE i64 begin_index() const { return begin_index_.load(eastl::memory_order_acquire); }
             NCPP_FORCE_INLINE i64 end_index() const { return end_index_.load(eastl::memory_order_acquire); }
             NCPP_FORCE_INLINE const F_item_vector& item_vector() const { return item_vector_; }
+            NCPP_FORCE_INLINE const F_is_poppable_vector& is_poppable_vector() const { return is_poppable_vector_; }
 
 
 
 		public:
-			inline TF_concurrent_ring_buffer() {
-
-
-
-			}
-			inline TF_concurrent_ring_buffer(sz capacity) :
+			NCPP_FORCE_INLINE TF_concurrent_ring_buffer() = default;
+			TF_concurrent_ring_buffer(sz capacity) :
 				capacity_(capacity),
-				item_vector_(capacity)
+				item_vector_(capacity),
+				is_poppable_vector_(capacity, false)
 			{
-
-				
-
 			}
 
-			inline TF_concurrent_ring_buffer(const TF_concurrent_ring_buffer& x) :
+			TF_concurrent_ring_buffer(const TF_concurrent_ring_buffer& x) :
 				item_vector_(x.item_vector_),
+				is_poppable_vector_(x.is_poppable_vector_),
 				capacity_(x.capacity_),
 				begin_index_(x.begin_index_.load(eastl::memory_order_acquire)),
 				end_index_(x.end_index_.load(eastl::memory_order_acquire))
 			{
-
-
-
 			}
-			inline TF_concurrent_ring_buffer& operator = (const TF_concurrent_ring_buffer& x) {
+			TF_concurrent_ring_buffer& operator = (const TF_concurrent_ring_buffer& x) {
 
 				item_vector_ = x.item_vector_;
+				is_poppable_vector_ = x.is_poppable_vector_;
 				capacity_ = x.capacity_;
 				begin_index_.store(x.begin_index_.load(eastl::memory_order_acquire), eastl::memory_order_release);
 				end_index_.store(x.end_index_.load(eastl::memory_order_acquire), eastl::memory_order_release);
@@ -139,19 +134,18 @@ namespace ncpp {
                 return *this;
 			}
 
-			inline TF_concurrent_ring_buffer(TF_concurrent_ring_buffer&& x) :
+			TF_concurrent_ring_buffer(TF_concurrent_ring_buffer&& x) :
 				item_vector_(std::move(x.item_vector_)),
+				is_poppable_vector_(std::move(x.is_poppable_vector_)),
 				capacity_(x.capacity_),
 				begin_index_(x.begin_index_.load(eastl::memory_order_acquire)),
 				end_index_(x.end_index_.load(eastl::memory_order_acquire))
 			{
-
-
-
 			}
-			inline TF_concurrent_ring_buffer& operator = (TF_concurrent_ring_buffer&& x) {
+			TF_concurrent_ring_buffer& operator = (TF_concurrent_ring_buffer&& x) {
 
 				item_vector_ = std::move(x.item_vector_);
+				is_poppable_vector_ = std::move(x.is_poppable_vector_);
 				capacity_ = x.capacity_;
                 begin_index_.store(x.begin_index_.load(eastl::memory_order_acquire), eastl::memory_order_release);
                 end_index_.store(x.end_index_.load(eastl::memory_order_acquire), eastl::memory_order_release);
@@ -163,16 +157,21 @@ namespace ncpp {
 
 		private:
 			template<typename F_passed_item__>
-			void T_push(F_passed_item__&& item) {
-
-				writer_lock_.lock();
-
+			void T_push(F_passed_item__&& item)
+			{
 				NCPP_ASSERT(size() < capacity()) << "out of capacity";
 
-				item_vector_[(end_index_.fetch_add(1, eastl::memory_order_release)) % capacity_] = std::forward<F_passed_item__>(item);
+				eastl::atomic_thread_fence(eastl::memory_order_release);
 
-				writer_lock_.unlock();
+				// obtain a location
+				i64 location = end_index_.fetch_add(1, eastl::memory_order_relaxed);
+				location %= capacity_;
 
+				// store item and mark this location as poppable
+				item_vector_[location] = std::forward<F_passed_item__>(item);
+				is_poppable_vector_[location] = true;
+
+				eastl::atomic_thread_fence(eastl::memory_order_acquire);
 			}
 
 
@@ -189,24 +188,37 @@ namespace ncpp {
 
 			inline b8 try_pop(F_item& item) {
 
-				reader_lock_.lock();
+				pop_lock_.lock();
 
-				i64 end = end_index_.load(eastl::memory_order_acquire);
-				i64 begin = begin_index_.load(eastl::memory_order_acquire);
+				eastl::atomic_thread_fence(eastl::memory_order_release);
 
-				if ((end - begin)> 0) {
-				
-					begin_index_.fetch_add(1, eastl::memory_order_acq_rel);
+				i64 end = end_index_.load(eastl::memory_order_relaxed);
+				i64 begin = begin_index_.load(eastl::memory_order_relaxed);
 
-					item = std::move(item_vector_[begin % capacity_]);
+				if (end > begin) {
 
-					reader_lock_.unlock();
+					i64 location = begin % capacity_;
 
+					// wait for the location to be poppable and then pop it
+					while (!is_poppable_vector_[location]);
+					item = std::move(item_vector_[location]);
+
+					// mark this location as non-poppable
+					// to be poppable again, it need to be re-pushed
+					is_poppable_vector_[location] = false;
+
+					//
+					begin_index_.fetch_add(1, eastl::memory_order_relaxed);
+
+					eastl::atomic_thread_fence(eastl::memory_order_acquire);
+
+					pop_lock_.unlock();
 					return true;
 				}
 
-				reader_lock_.unlock();
-				
+				eastl::atomic_thread_fence(eastl::memory_order_acquire);
+
+				pop_lock_.unlock();
 				return false;
 			}
 
@@ -394,10 +406,11 @@ namespace ncpp {
 }
 
 NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
-    NCPP_MA(ncpp::containers::TF_concurrent_ring_buffer<F_item__, F_allocator__>),
+    NCPP_MA(ncpp::containers::TF_concurrent_ring_buffer<F_item__, F_allocator__, F_pop_lock__>),
     NCPP_MA(F_allocator__),
-    NCPP_MA(ncpp::containers::TF_concurrent_ring_buffer<F_item__, F_new_allocator__>),
+    NCPP_MA(ncpp::containers::TF_concurrent_ring_buffer<F_item__, F_new_allocator__, F_pop_lock__>),
     typename F_item__,
-    typename F_allocator__
+    typename F_allocator__,
+    typename F_pop_lock__
 );
 
