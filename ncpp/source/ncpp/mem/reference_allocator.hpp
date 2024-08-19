@@ -65,16 +65,19 @@ namespace ncpp {
 
                 return 0;
             }
-            static constexpr b8 can_be_invalid = std::is_same_v<F_target_allocator__, F_default_allocator>;
+            static constexpr b8 is_always_default = std::is_same_v<F_target_allocator__, F_default_allocator>;
         	static constexpr b8 is_always_equal = std::is_same_v<F_target_allocator__, F_default_allocator>;
         	static constexpr NCPP_FORCE_INLINE b8 can_be_used(const F_target_allocator__* x) {
 
-        		if constexpr (can_be_invalid)
+        		if constexpr (is_always_default)
         			return true;
 
         		return x != 0;
         	}
         	static NCPP_FORCE_INLINE b8 is_equal(const F_target_allocator__* a, const F_target_allocator__* b) {
+
+        		if constexpr (is_always_default)
+        			return true;
 
 				return (a == b);
         	}
@@ -162,6 +165,9 @@ namespace ncpp {
 				if constexpr (F_config::is_always_equal)
 					return true;
 
+				if constexpr (F_config::is_always_default)
+					return true;
+
 				return F_config::is_equal(
 					target_allocator_p_,
 					x.target_allocator_p()
@@ -176,6 +182,9 @@ namespace ncpp {
 				NCPP_ASSERT(F_config::can_be_used(target_allocator_p_))
 					<< "target allocator can't be used";
 
+				if constexpr (F_config::is_always_default)
+					return default_p()->allocate(n, flags);
+
 				return target_allocator_p_->allocate(n, flags);
 			}
 			NCPP_FORCE_INLINE void* allocate(sz n, sz alignment, sz alignment_offset, int flags = 0) {
@@ -183,12 +192,21 @@ namespace ncpp {
 				NCPP_ASSERT(F_config::can_be_used(target_allocator_p_))
 					<< "target allocator can't be used";
 
+				if constexpr (F_config::is_always_default)
+					return default_p()->allocate(n, alignment, alignment_offset, flags);
+
 				return target_allocator_p_->allocate(n, alignment, alignment_offset, flags);
 			}
 			NCPP_FORCE_INLINE void  deallocate(void* p, sz n = 1) {
 
 				NCPP_ASSERT(F_config::can_be_used(target_allocator_p_))
 					<< "target allocator can't be used";
+
+				if constexpr (F_config::is_always_default)
+				{
+					default_p()->deallocate(p, n);
+					return;
+				}
 
 				target_allocator_p_->deallocate(p, n);
 			}
@@ -198,16 +216,20 @@ namespace ncpp {
 				if(!F_config::can_be_used(target_allocator_p_))
 					return;
 
-				target_allocator_p_->reset();
+				if constexpr (F_config::is_always_default)
+					return;
 
+				target_allocator_p_->reset();
 			}
 			NCPP_FORCE_INLINE void clear() {
 
                 if(!F_config::can_be_used(target_allocator_p_))
-                    return;
+                	return;
+
+				if constexpr (F_config::is_always_default)
+					return;
 
 				target_allocator_p_->clear();
-
 			}
 
             NCPP_FORCE_INLINE void unreference() {
