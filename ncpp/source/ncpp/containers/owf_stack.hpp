@@ -79,14 +79,14 @@ namespace ncpp {
 
 		private:
 			sz capacity_ = 0;
-			ptrd end_index_ = 0;
+			sz end_index_ = 0;
 
 		public:
 			NCPP_FORCE_INLINE sz size() const { return end_index_; }
 			NCPP_FORCE_INLINE sz capacity() const { return capacity_; }
 			NCPP_FORCE_INLINE bool is_empty() const { return !size(); }
 			NCPP_FORCE_INLINE bool is_null() const { return !capacity_; }
-            NCPP_FORCE_INLINE ptrd end_index() const { return end_index_; }
+            NCPP_FORCE_INLINE sz end_index() const { return end_index_; }
             NCPP_FORCE_INLINE const F_item_vector& item_vector() const noexcept { return item_vector_; }
 			NCPP_FORCE_INLINE F_item_vector& item_vector() noexcept { return item_vector_; }
 			NCPP_FORCE_INLINE TG_span<const F_item> item_span() const noexcept
