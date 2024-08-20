@@ -1,4 +1,6 @@
 
 add_subdirectory(concurrent_ring_buffer)
 add_subdirectory(ring_buffer)
+add_subdirectory(concurrent_owf_stack)
+add_subdirectory(owf_stack)
 add_subdirectory(hash_table)

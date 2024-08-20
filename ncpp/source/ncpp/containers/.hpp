@@ -67,6 +67,8 @@ namespace ncpp {
 #include <ncpp/containers/string_utilities.hpp>
 #include <ncpp/containers/ring_buffer.hpp>
 #include <ncpp/containers/concurrent_ring_buffer.hpp>
+#include <ncpp/containers/owf_stack.hpp>
+#include <ncpp/containers/concurrent_owf_stack.hpp>
 #include <ncpp/containers/hash_table.hpp>
 #include <ncpp/containers/pack.hpp>
 

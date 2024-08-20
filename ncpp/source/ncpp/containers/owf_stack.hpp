@@ -1,6 +1,6 @@
 #pragma once
 
-/** @file ncpp/containers/ring_buffer.hpp
+/** @file ncpp/containers/owf_stack.hpp
 *	@brief Implements ring buffer.
 */
 
@@ -64,7 +64,7 @@ namespace ncpp {
 	namespace containers {
 
 		template<typename F_item__, class F_allocator__ = mem::F_default_allocator>
-		class TF_ring_buffer {
+		class TF_owf_stack {
 
 		public:
 			using F_item = F_item__;
@@ -76,61 +76,63 @@ namespace ncpp {
 
 		protected:
 			F_item_vector item_vector_;
-			
+
 		private:
 			sz capacity_ = 0;
-			ptrd begin_index_ = 0;
 			ptrd end_index_ = 0;
 
 		public:
-			NCPP_FORCE_INLINE sz size() const { return end_index_ - begin_index_; }
+			NCPP_FORCE_INLINE sz size() const { return end_index_; }
 			NCPP_FORCE_INLINE sz capacity() const { return capacity_; }
 			NCPP_FORCE_INLINE bool is_empty() const { return !size(); }
 			NCPP_FORCE_INLINE bool is_null() const { return !capacity_; }
-            NCPP_FORCE_INLINE ptrd begin_index() const { return begin_index_; }
             NCPP_FORCE_INLINE ptrd end_index() const { return end_index_; }
             NCPP_FORCE_INLINE const F_item_vector& item_vector() const noexcept { return item_vector_; }
 			NCPP_FORCE_INLINE F_item_vector& item_vector() noexcept { return item_vector_; }
+			NCPP_FORCE_INLINE TG_span<const F_item_vector> item_span() const noexcept
+			{
+				return { item_vector_.data(), end_index_ };
+			}
+			NCPP_FORCE_INLINE TG_span<F_item_vector> item_span() noexcept
+			{
+				return { item_vector_.data(), end_index_ };
+			}
 
 
 
 		public:
-			NCPP_FORCE_INLINE TF_ring_buffer() noexcept = default;
-			TF_ring_buffer(sz capacity) :
+			NCPP_FORCE_INLINE TF_owf_stack() noexcept = default;
+			TF_owf_stack(sz capacity) :
 				capacity_(capacity)
 			{
 				item_vector_.reserve(capacity);
 			}
 
-			TF_ring_buffer(const TF_ring_buffer& x) :
+			TF_owf_stack(const TF_owf_stack& x) :
 				item_vector_(x.item_vector_),
 				capacity_(x.capacity_),
-				begin_index_(x.begin_index_),
 				end_index_(x.end_index_)
 			{
 			}
-			TF_ring_buffer& operator = (const TF_ring_buffer& x) {
+			TF_owf_stack& operator = (const TF_owf_stack& x) {
 
 				item_vector_ = x.item_vector_;
 				capacity_ = x.capacity_;
-				begin_index_ = x.begin_index_;
 				end_index_ = x.end_index_;
 
                 return *this;
 			}
 
-			TF_ring_buffer(TF_ring_buffer&& x) :
+			TF_owf_stack(TF_owf_stack&& x) :
 				item_vector_(std::move(x.item_vector_)),
 				capacity_(x.capacity_),
-				begin_index_(x.begin_index_),
 				end_index_(x.end_index_)
 			{
 			}
-			TF_ring_buffer& operator = (TF_ring_buffer&& x) {
+			TF_owf_stack& operator = (TF_owf_stack&& x) {
 
 				item_vector_ = std::move(x.item_vector_);
 				capacity_ = x.capacity_;
-				begin_index_ = x.begin_index_;
 				end_index_ = x.end_index_;
 
                 return *this;
@@ -142,13 +144,12 @@ namespace ncpp {
 			template<typename F_passed_item__>
 			void T_push(F_passed_item__&& item) {
 
-				sz location = end_index_ % capacity_;
+				sz location = end_index_;
 
 				++end_index_;
+				item_vector_.resize(end_index_);
 
-				new(item_vector_.data() + location) F_item(
-					std::forward<F_passed_item__>(item)
-				);
+				item_vector_[location] = std::forward<F_passed_item__>(item);
 			}
 
 
@@ -163,39 +164,10 @@ namespace ncpp {
 				T_push(std::forward<F_item>(item));
 			}
 
-			NCPP_FORCE_INLINE F_item pop() {
-
-				NCPP_ASSERT(size() > 0) << "ring buffer is empty";
-
-				sz location = begin_index_ % capacity_;
-				++begin_index_;
-
-				return std::move(
-					*(item_vector_.data() + location)
-				);
-			}
-
-			inline b8 try_pop(F_item& item) {
-
-				if (size() > 0) {
-
-					sz location = begin_index_ % capacity_;
-					++begin_index_;
-
-					item = std::move(
-						*(item_vector_.data() + location)
-					);
-
-					return true;
-				}
-				
-				return false;
-			}
-
 			NCPP_FORCE_INLINE void reset() {
 
-				begin_index_ = 0;
 				end_index_ = 0;
+				item_vector_.resize(end_index_);
 			}
 
 
@@ -204,11 +176,10 @@ namespace ncpp {
 			friend std::ostream& operator << (
 				std::ostream& os,
 				const ncpp::TF_ostream_input<
-                    TF_ring_buffer
+                    TF_owf_stack
 				>& input
 			)
 			{
-
 				if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
 
 					os << ncpp::T_cout_lowlight(L"...");
@@ -216,7 +187,7 @@ namespace ncpp {
 					return os;
 				}
 
-				os << NCPP_FOREGROUND_YELLOW << "ring_buffer"
+				os << NCPP_FOREGROUND_YELLOW << "owf_stack"
 					<< ncpp::T_cout_lowlight("(")
 					<< ncpp::T_cout_lowlight("size: ")
 					<< ncpp::T_cout_value(input.first.size())
@@ -230,13 +201,6 @@ namespace ncpp {
 					os << " ";
 
 				}
-        		os << ncpp::T_cout_field_name("begin_index") << ncpp::T_cout_lowlight(" -> ") << ncpp::T_cout_value(input.first.begin_index()) << ncpp::T_cout_lowlight(",") << std::endl;
-
-				for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
-
-					os << " ";
-
-				}
         		os << ncpp::T_cout_field_name("end_index") << ncpp::T_cout_lowlight(" -> ") << ncpp::T_cout_value(input.first.end_index()) << ncpp::T_cout_lowlight(",") << std::endl;
 
 				for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
@@ -244,11 +208,7 @@ namespace ncpp {
 					os << " ";
 
 				}
-				os << ncpp::T_cout_field_name("item_vector") << ncpp::T_cout_lowlight(" -> ");
-				auto item_vector_for_logging = F_item_vector(
-					input.first.item_vector_.data(),
-					input.first.item_vector_.data() + input.first.capacity_
-				);
+        		os << ncpp::T_cout_field_name("item_vector") << ncpp::T_cout_lowlight(" -> ");
 				ncpp::T_safe_ostream_with_tab<
 					ncpp::F_ostream,
 					ncpp::TF_ostream_input<
@@ -259,7 +219,7 @@ namespace ncpp {
 					ncpp::TF_ostream_input<
 						ncpp::TF_cout_value<F_item_vector>
 					> {
-						ncpp::T_cout_value(item_vector_for_logging),
+						ncpp::T_cout_value(input.first.item_vector_),
 						input.second + 1
 					}
 				);
@@ -276,10 +236,10 @@ namespace ncpp {
 				return os;
 			}
 
-           	friend std::ostream& operator << (std::ostream& os, const TF_ring_buffer& v)
+           	friend std::ostream& operator << (std::ostream& os, const TF_owf_stack& v)
 			{
 
-				os << ncpp::TF_ostream_input<TF_ring_buffer> { v, 0 };
+				os << ncpp::TF_ostream_input<TF_owf_stack> { v, 0 };
 
 				return os;
 			}
@@ -289,11 +249,10 @@ namespace ncpp {
            	friend std::wostream& operator << (
 				std::wostream& os,
 				const ncpp::TF_ostream_input<
-                    TF_ring_buffer
+                    TF_owf_stack
 				>& input
 			)
 			{
-
 				if (input.second > (ncpp::u32)NCPP_MAX_TAB_COUNT) {
 
 					os << ncpp::T_cout_lowlight(L"...");
@@ -301,7 +260,7 @@ namespace ncpp {
 					return os;
 				}
 
-				os << NCPP_FOREGROUND_YELLOW_TEXT << L"ring_buffer"
+				os << NCPP_FOREGROUND_YELLOW_TEXT << L"owf_stack"
 					<< ncpp::T_cout_lowlight("(")
 					<< ncpp::T_cout_lowlight("size: ")
 					<< ncpp::T_cout_value(input.first.size())
@@ -315,13 +274,6 @@ namespace ncpp {
 					os << L" ";
 
 				}
-        		os << ncpp::T_cout_field_name("begin_index") << ncpp::T_cout_lowlight(" -> ") << ncpp::T_cout_value(input.first.begin_index()) << ncpp::T_cout_lowlight(",") << std::endl;
-
-				for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
-
-					os << L" ";
-
-				}
         		os << ncpp::T_cout_field_name("end_index") << ncpp::T_cout_lowlight(" -> ") << ncpp::T_cout_value(input.first.end_index()) << ncpp::T_cout_lowlight(",") << std::endl;
 
 				for (ncpp::u32 j = 0; j < (input.second + 1) * NCPP_TAB_SIZE; ++j) {
@@ -329,11 +281,7 @@ namespace ncpp {
 					os << L" ";
 
 				}
-				os << ncpp::T_cout_field_name("item_vector") << ncpp::T_cout_lowlight(" -> ");
-				auto item_vector_for_logging = F_item_vector(
-					input.first.item_vector_.data(),
-					input.first.item_vector_.data() + input.first.capacity_
-				);
+        		os << ncpp::T_cout_field_name("item_vector") << ncpp::T_cout_lowlight(" -> ");
 				ncpp::T_safe_ostream_with_tab<
 					ncpp::F_wostream,
 					ncpp::TF_ostream_input<
@@ -344,7 +292,7 @@ namespace ncpp {
 					ncpp::TF_ostream_input<
 						ncpp::TF_cout_value<F_item_vector>
 					> {
-						ncpp::T_cout_value(item_vector_for_logging),
+						ncpp::T_cout_value(input.first.item_vector_),
 						input.second + 1
 					}
 				);
@@ -361,10 +309,10 @@ namespace ncpp {
 				return os;
 			}
 
-           	friend std::wostream& operator << (std::wostream& os, const TF_ring_buffer& v)
+           	friend std::wostream& operator << (std::wostream& os, const TF_owf_stack& v)
 			{
 
-				os << ncpp::TF_ostream_input<TF_ring_buffer> { v, 0 };
+				os << ncpp::TF_ostream_input<TF_owf_stack> { v, 0 };
 
 				return os;
 			}
@@ -372,21 +320,21 @@ namespace ncpp {
 		};
 
         template<typename F_item__>
-        using TG_ring_buffer = TF_ring_buffer<F_item__, mem::F_general_allocator>;
+        using TG_owf_stack = TF_owf_stack<F_item__, mem::F_general_allocator>;
         template<typename F_item__>
-        using TM_ring_buffer = TF_ring_buffer<F_item__, mem::F_ephemeral_allocator>;
+        using TM_owf_stack = TF_owf_stack<F_item__, mem::F_ephemeral_allocator>;
 
         template<typename F_item__>
-        using TV_ring_buffer = TF_view<TG_ring_buffer<F_item__>>;
+        using TV_owf_stack = TF_view<TG_owf_stack<F_item__>>;
 
 	}
 
 }
 
 NCPP_CONTAINERS_DEFINE_ALLOCATOR_BINDING(
-    NCPP_MA(ncpp::containers::TF_ring_buffer<F_item__, F_allocator__>),
+    NCPP_MA(ncpp::containers::TF_owf_stack<F_item__, F_allocator__>),
     NCPP_MA(F_allocator__),
-    NCPP_MA(ncpp::containers::TF_ring_buffer<F_item__, F_new_allocator__>),
+    NCPP_MA(ncpp::containers::TF_owf_stack<F_item__, F_new_allocator__>),
     typename F_item__,
     typename F_allocator__
 );
