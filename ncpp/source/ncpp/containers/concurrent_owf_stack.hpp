@@ -91,11 +91,11 @@ namespace ncpp {
 			NCPP_FORCE_INLINE F_item_vector& item_vector() noexcept { return item_vector_; }
 			NCPP_FORCE_INLINE TG_span<const F_item> item_span() const noexcept
 			{
-				return { item_vector_.data(), end_index_ };
+				return { item_vector_.data(), end_index() };
 			}
 			NCPP_FORCE_INLINE TG_span<F_item> item_span() noexcept
 			{
-				return { item_vector_.data(), end_index_ };
+				return { item_vector_.data(), end_index() };
 			}
 
 
