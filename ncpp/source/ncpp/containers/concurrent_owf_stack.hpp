@@ -150,6 +150,17 @@ namespace ncpp {
 					std::forward<F_passed_item__>(item)
 				);
 			}
+			template<typename F_passed_item__>
+			sz T_push_and_return_index(F_passed_item__&& item) {
+
+				sz location = end_index_.fetch_add(1, eastl::memory_order_acq_rel);
+
+				new(item_vector_.data() + location) F_item(
+					std::forward<F_passed_item__>(item)
+				);
+
+				return location;
+			}
 
 
 
@@ -161,6 +172,14 @@ namespace ncpp {
 			NCPP_FORCE_INLINE void push(F_item&& item) {
 
 				T_push(std::forward<F_item>(item));
+			}
+			NCPP_FORCE_INLINE sz push_and_return_index(F_item const& item) {
+
+				return T_push_and_return_index(std::forward<F_item const&>(item));
+			}
+			NCPP_FORCE_INLINE sz push_and_return_index(F_item&& item) {
+
+				return T_push_and_return_index(std::forward<F_item>(item));
 			}
 
 			NCPP_FORCE_INLINE void reset() {

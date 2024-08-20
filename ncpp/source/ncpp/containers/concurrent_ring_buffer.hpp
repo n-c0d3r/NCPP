@@ -175,6 +175,27 @@ namespace ncpp {
 
 				eastl::atomic_thread_fence(eastl::memory_order_acquire);
 			}
+			template<typename F_passed_item__>
+			sz T_push_and_return_index(F_passed_item__&& item)
+			{
+				NCPP_ASSERT(size() < capacity()) << "out of capacity";
+
+				eastl::atomic_thread_fence(eastl::memory_order_release);
+
+				// obtain a location
+				i64 location = end_index_.fetch_add(1, eastl::memory_order_relaxed);
+				location %= capacity_;
+
+				// store item and mark this location as poppable
+				new(item_vector_.data() + location) F_item(
+					std::forward<F_passed_item__>(item)
+				);
+				is_poppable_vector_[location] = true;
+
+				eastl::atomic_thread_fence(eastl::memory_order_acquire);
+
+				return location;
+			}
 
 
 
@@ -186,6 +207,14 @@ namespace ncpp {
 			NCPP_FORCE_INLINE void push(F_item&& item) {
 
 				T_push(std::forward<F_item>(item));
+			}
+			NCPP_FORCE_INLINE sz push_and_return_index(F_item const& item) {
+
+				return T_push_and_return_index(std::forward<F_item const&>(item));
+			}
+			NCPP_FORCE_INLINE sz push_and_return_index(F_item&& item) {
+
+				return T_push_and_return_index(std::forward<F_item>(item));
 			}
 
 			inline b8 try_pop(F_item& item) {
