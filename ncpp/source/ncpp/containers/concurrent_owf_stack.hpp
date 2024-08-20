@@ -89,11 +89,11 @@ namespace ncpp {
             NCPP_FORCE_INLINE ptrd end_index() const { return end_index_.load(eastl::memory_order_acquire); }
             NCPP_FORCE_INLINE const F_item_vector& item_vector() const noexcept { return item_vector_; }
 			NCPP_FORCE_INLINE F_item_vector& item_vector() noexcept { return item_vector_; }
-			NCPP_FORCE_INLINE TG_span<const F_item_vector> item_span() const noexcept
+			NCPP_FORCE_INLINE TG_span<const F_item> item_span() const noexcept
 			{
 				return { item_vector_.data(), end_index_ };
 			}
-			NCPP_FORCE_INLINE TG_span<F_item_vector> item_span() noexcept
+			NCPP_FORCE_INLINE TG_span<F_item> item_span() noexcept
 			{
 				return { item_vector_.data(), end_index_ };
 			}
