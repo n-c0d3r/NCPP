@@ -215,6 +215,15 @@ namespace ncpp {
 
 			NCPP_FORCE_INLINE void reset() {
 
+				sz begin = begin_index();
+				sz end = end_index();
+
+				for(sz i = begin; i < end; ++i)
+				{
+					sz location = i % capacity_;
+					(item_vector_.data() + location)->~F_item();
+				}
+
 				begin_index_ = 0;
 				end_index_ = 0;
 			}
