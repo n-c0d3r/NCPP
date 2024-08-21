@@ -608,28 +608,21 @@ NCPP_DISABLE_ALL_WARNINGS_POP
 				if constexpr (enable_manual_alignment) {
 
 					return reinterpret_cast<F_allocator__*>(this)->new_mem(n, alignment, alignment_offset);
-
 				}
 				else
 #endif
 				{
-
                     if (alignment <= EASTL_ALLOCATOR_MIN_ALIGNMENT)
                     {
-
                         if(alignment_offset)
-                            return T_aligned_allocate_internal<TA_allocator, true>(n, EASTL_ALLOCATOR_MIN_ALIGNMENT, alignment_offset, flags);
+                            return T_aligned_allocate_internal<TA_allocator, false>(n, EASTL_ALLOCATOR_MIN_ALIGNMENT, alignment_offset, flags);
                         else
-                            return T_allocate_internal<TA_allocator, true>(n, flags);
-
+                            return T_allocate_internal<TA_allocator, false>(n, flags);
 					}
 					else {
-
 						return T_aligned_allocate_internal<F_allocator__, false>(n, alignment, alignment_offset, flags);
 					}
-
 				}
-				
 			}
 			/**
 			 *	Deallocates memory with default delete_mem(void*) function
