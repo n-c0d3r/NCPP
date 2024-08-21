@@ -666,7 +666,15 @@ NCPP_DISABLE_ALL_WARNINGS_POP
             template<typename F__, typename... F_args__>
             NCPP_FORCE_INLINE F__* T_new(F_args__&&... args) {
                 
-                return new(allocate(sizeof(F__), NCPP_ALIGNOF(F__), 0)) F__{ std::forward<F_args__>(args)... };
+                return new(
+                	((F_allocator__*)this)->allocate(
+                		sizeof(F__),
+                		NCPP_ALIGNOF(F__),
+                		0
+                	)
+                ) F__{
+                	std::forward<F_args__>(args)...
+                };
             }
             
             template<typename F__>
@@ -674,7 +682,7 @@ NCPP_DISABLE_ALL_WARNINGS_POP
                 
                 p->~F__();
                 
-                deallocate(p);
+                ((F_allocator__*)this)->deallocate(p);
             }
 
 		};
