@@ -110,7 +110,7 @@ namespace ncpp {
             using F_uint = TF_flag_to_uint<std::remove_const_t<decltype(a1)>>;
 
             return (
-                0 != (
+                F_uint(a2) == (
                     F_uint(a1)
                     & F_uint(a2)
                 )
