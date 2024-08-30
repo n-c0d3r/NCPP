@@ -161,8 +161,6 @@ namespace ncpp {
 			{
 				NCPP_ASSERT(size() < capacity()) << "out of capacity";
 
-				eastl::atomic_thread_fence(eastl::memory_order_release);
-
 				// obtain a location
 				i64 location = end_index_.fetch_add(1, eastl::memory_order_relaxed);
 				location %= capacity_;
@@ -171,17 +169,16 @@ namespace ncpp {
 				new(item_vector_.data() + location) F_item(
 					std::forward<F_passed_item__>(item)
 				);
-				is_poppable_vector_[location] = true;
 
-				eastl::atomic_thread_fence(eastl::memory_order_acquire);
+				eastl::atomic_thread_fence(eastl::memory_order_release);
+
+				is_poppable_vector_[location] = true;
 			}
 			template<typename F_passed_item__>
 			sz T_push_and_return_index(F_passed_item__&& item)
 			{
 				NCPP_ASSERT(size() < capacity()) << "out of capacity";
 
-				eastl::atomic_thread_fence(eastl::memory_order_release);
-
 				// obtain a location
 				i64 location = end_index_.fetch_add(1, eastl::memory_order_relaxed);
 				location %= capacity_;
@@ -190,9 +187,10 @@ namespace ncpp {
 				new(item_vector_.data() + location) F_item(
 					std::forward<F_passed_item__>(item)
 				);
-				is_poppable_vector_[location] = true;
 
-				eastl::atomic_thread_fence(eastl::memory_order_acquire);
+				eastl::atomic_thread_fence(eastl::memory_order_release);
+
+				is_poppable_vector_[location] = true;
 
 				return location;
 			}
@@ -221,9 +219,8 @@ namespace ncpp {
 
 				pop_lock_.lock();
 
-				eastl::atomic_thread_fence(eastl::memory_order_release);
-
 				i64 end = end_index_.load(eastl::memory_order_relaxed);
+				eastl::atomic_thread_fence(eastl::memory_order_acquire);
 				i64 begin = begin_index_.load(eastl::memory_order_relaxed);
 
 				if (end > begin) {
@@ -231,23 +228,24 @@ namespace ncpp {
 					i64 location = begin % capacity_;
 
 					// wait for the location to be poppable and then pop it
-					while (!is_poppable_vector_[location]);
+					while (!((ab8&)is_poppable_vector_[location]).load(eastl::memory_order_acquire));
+
+					eastl::atomic_thread_fence(eastl::memory_order_acquire);
+
 					item = std::move(*(item_vector_.data() + location));
+
+					eastl::atomic_thread_fence(eastl::memory_order_release);
 
 					// mark this location as non-poppable
 					// to be poppable again, it need to be re-pushed
 					is_poppable_vector_[location] = false;
 
 					//
-					begin_index_.fetch_add(1, eastl::memory_order_relaxed);
-
-					eastl::atomic_thread_fence(eastl::memory_order_acquire);
+					begin_index_.fetch_add(1, eastl::memory_order_release);
 
 					pop_lock_.unlock();
 					return true;
 				}
-
-				eastl::atomic_thread_fence(eastl::memory_order_acquire);
 
 				pop_lock_.unlock();
 				return false;
