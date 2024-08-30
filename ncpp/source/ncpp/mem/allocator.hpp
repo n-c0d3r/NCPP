@@ -410,11 +410,11 @@ NCPP_DISABLE_ALL_WARNINGS_POP
                         this,
                         name,
                         utilities::T_type_fullname<F_allocator__>(),
-                        utilities::T_type_hash_code<F_allocator__>,
+                        utilities::T_type_hash_code<F_allocator__>
 #endif
 
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
-						actual_size,
+						, actual_size,
 						n,
                         0,
                         0,
@@ -462,11 +462,11 @@ NCPP_DISABLE_ALL_WARNINGS_POP
                         this,
                         name,
                         utilities::T_type_fullname<F_allocator__>(),
-                        utilities::T_type_hash_code<F_allocator__>,
+                        utilities::T_type_hash_code<F_allocator__>
 #endif
 
 #ifdef NCPP_ENABLE_MEMORY_COUNTING
-						actual_size,
+						, actual_size,
 						n,
                         0,
                         0,
