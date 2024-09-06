@@ -123,7 +123,24 @@ namespace ncpp {
                 && flag_is_has(a1, a3, rest...)
             );
         }
+        NCPP_FORCE_INLINE constexpr b8 flag_is_has_any(auto a1, auto a2) noexcept {
 
+            using F_uint = TF_flag_to_uint<std::remove_const_t<decltype(a1)>>;
+
+            return (
+                0 != (
+                    F_uint(a1)
+                    & F_uint(a2)
+                )
+            );
+        }
+        NCPP_FORCE_INLINE constexpr b8 flag_is_has_any(auto a1, auto a2, auto a3, auto... rest) noexcept {
+
+            return (
+                flag_is_has(a1, a2)
+                && flag_is_has(a1, a3, rest...)
+            );
+        }
     }
 
 }
