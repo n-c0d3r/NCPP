@@ -106,17 +106,18 @@ namespace ncpp {
 				NCPP_ASSERT(hash_size_ > 0) << "hash size must be greater than zero";
 				NCPP_ASSERT(utilities::is_power_of_two(static_cast<f32>(hash_size_))) << "hash size must be power of two";
                 
-                if(index_size > 0) {
-                    
+                if(index_size > 0)
+                {
                     hash_vector_.resize(hash_size_, 0xFFFFFFFF);
                     index_vector_.resize(index_size_, 0xFFFFFFFF);
-                    
                 }
             }
             TF_hash_table(const TF_hash_table& x) :
                 hash_size_(x.hash_size_),
                 index_size_(x.index_size_),
-            
+
+                hash_mask_(x.hash_mask_),
+
                 hash_vector_(x.hash_size_),
                 index_vector_(x.index_size_)
             {
@@ -125,7 +126,9 @@ namespace ncpp {
             {
                 hash_size_ = x.hash_size_;
                 index_size_ = x.index_size_;
-                
+
+                hash_mask_ = x.hash_mask_;
+
                 hash_vector_ = x.hash_vector_;
                 index_vector_ = x.index_vector_;
                 return *this;
@@ -133,16 +136,20 @@ namespace ncpp {
             TF_hash_table(TF_hash_table&& x) :
                 hash_size_(x.hash_size_),
                 index_size_(x.index_size_),
-            
+
+                hash_mask_(x.hash_mask_),
+
                 hash_vector_(std::move(x.hash_size_)),
                 index_vector_(std::move(x.index_size_))
             {
             }
-            inline TF_hash_table& operator = (TF_hash_table&& x)
+            TF_hash_table& operator = (TF_hash_table&& x)
             {
                 hash_size_ = x.hash_size_;
                 index_size_ = x.index_size_;
-                
+
+                hash_mask_ = x.hash_mask_;
+
                 hash_vector_ = std::move(x.hash_vector_);
                 index_vector_ = std::move(x.index_vector_);
                 return *this;
