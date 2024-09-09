@@ -109,7 +109,7 @@ namespace ncpp {
                 
                 if(index_size > 0) {
                     
-                    hash_vector_.resize(hash_size_, 0);
+                    hash_vector_.resize(hash_size_, 0xFFFFFFFF);
                     index_vector_.resize(index_size_, 0xFFFFFFFF);
                     
                 }
@@ -204,7 +204,7 @@ namespace ncpp {
                 {
                     hash_mask_ = hash_size_ - 1;
                     
-                    hash_vector_.resize(hash_size_, 0);
+                    hash_vector_.resize(hash_size_, 0xFFFFFFFF);
                     index_vector_.resize(index_size_, 0xFFFFFFFF);
                     
                 }
