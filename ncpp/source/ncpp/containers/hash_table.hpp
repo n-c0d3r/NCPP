@@ -94,7 +94,7 @@ namespace ncpp {
             
             
         public:
-            inline TF_hash_table(F_int hash_size = 2, F_int index_size = 0, const F_allocator& allocator = F_allocator()) :
+            TF_hash_table(F_int hash_size = 2, F_int index_size = 0, const F_allocator& allocator = F_allocator()) :
                 hash_size_(hash_size),
                 index_size_(index_size),
 
@@ -103,7 +103,6 @@ namespace ncpp {
                 hash_vector_(allocator),
                 index_vector_(allocator)
             {
-                
 				NCPP_ASSERT(hash_size_ > 0) << "hash size must be greater than zero";
 				NCPP_ASSERT(utilities::is_power_of_two(static_cast<f32>(hash_size_))) << "hash size must be power of two";
                 
@@ -113,85 +112,69 @@ namespace ncpp {
                     index_vector_.resize(index_size_, 0xFFFFFFFF);
                     
                 }
-                
             }
-            inline TF_hash_table(const TF_hash_table& x) :
+            TF_hash_table(const TF_hash_table& x) :
                 hash_size_(x.hash_size_),
                 index_size_(x.index_size_),
             
                 hash_vector_(x.hash_size_),
                 index_vector_(x.index_size_)
             {
-                
-                
-                
             }
-            inline TF_hash_table& operator = (const TF_hash_table& x)
+            TF_hash_table& operator = (const TF_hash_table& x)
             {
-                
                 hash_size_ = x.hash_size_;
                 index_size_ = x.index_size_;
                 
                 hash_vector_ = x.hash_vector_;
                 index_vector_ = x.index_vector_;
-                
                 return *this;
             }
-            inline TF_hash_table(TF_hash_table&& x) :
+            TF_hash_table(TF_hash_table&& x) :
                 hash_size_(x.hash_size_),
                 index_size_(x.index_size_),
             
                 hash_vector_(std::move(x.hash_size_)),
                 index_vector_(std::move(x.index_size_))
             {
-                
-                
-                
             }
             inline TF_hash_table& operator = (TF_hash_table&& x)
             {
-                
                 hash_size_ = x.hash_size_;
                 index_size_ = x.index_size_;
                 
                 hash_vector_ = std::move(x.hash_vector_);
                 index_vector_ = std::move(x.index_vector_);
-                
                 return *this;
             }
-            ~TF_hash_table(){
-                
+            ~TF_hash_table()
+            {
                 reset();
-                
             }
             
             
             
         public:
-            inline void reset(){
-                
-                if(index_size_) {
-                    
+            void reset()
+            {
+                if(index_size_)
+                {
                     hash_vector_.clear();
                     index_vector_.clear();
                     
                     hash_size_ = 2;
                     index_size_ = 2;
-                    
                 }
-                
             }
-            inline void clear(){
-                
-                if(index_size_) {
-                    
+            void clear()
+            {
+                if(index_size_)
+                {
                     hash_vector_.resize(hash_size_, 0xFFFFFFFF);
-                    
                 }
-                
             }
-            inline void clear(F_int hash_size, F_int index_size){
-                
+            void clear(F_int hash_size, F_int index_size)
+            {
                 reset();
                 
                 hash_size_ = hash_size;
@@ -206,12 +189,10 @@ namespace ncpp {
                     
                     hash_vector_.resize(hash_size_, 0xFFFFFFFF);
                     index_vector_.resize(index_size_, 0xFFFFFFFF);
-                    
                 }
-                
             }
-            inline void resize(F_int index_size) {
-                
+            void resize(F_int index_size)
+            {
                 if( index_size_ == index_size )
                 {
                     return;
@@ -232,24 +213,23 @@ namespace ncpp {
                 index_vector_.resize(index_size);
 
                 index_size_ = index_size;
-                
             }
-            NCPP_FORCE_INLINE F_int first(F_int key) const {
-                
+            NCPP_FORCE_INLINE F_int first(F_int key) const
+        	{
                 return hash_vector_[key & hash_mask_];
             }
-            NCPP_FORCE_INLINE F_int next(F_int index) const {
-                
+            NCPP_FORCE_INLINE F_int next(F_int index) const
+        	{
                 NCPP_ASSERT(index < index_size_);
                 NCPP_ASSERT(index_vector_[index] != index);
                 return index_vector_[index];
             }
-            NCPP_FORCE_INLINE b8 is_valid(F_int index) const {
-                
+            NCPP_FORCE_INLINE b8 is_valid(F_int index) const
+        	{
                 return index != ~0u;
             }
-            inline void add(F_int key, F_int index){
-
+            void add(F_int key, F_int index)
+        	{
                 NCPP_DISABLE_ALL_WARNINGS_PUSH
                 if( index >= index_size_ )
                 {
@@ -260,18 +240,16 @@ namespace ncpp {
                 key &= hash_mask_;
                 index_vector_[index] = hash_vector_[key];
                 hash_vector_[key] = index;
-
             }
-            inline void add_concurrent(F_int key, F_int index){
+            void add_concurrent(F_int key, F_int index)
+        	{
                 NCPP_ASSERT(index < index_size_);
 
                 key &= hash_mask_;
-                eastl::atomic_thread_fence(eastl::memory_order_release);
                 index_vector_[index] = EA::Thread::AtomicFetchSwap((i32*)(hash_vector_.data() + key), index);
-                eastl::atomic_thread_fence(eastl::memory_order_acquire);
             }
-            inline void remove(F_int key, F_int index){
-                
+            void remove(F_int key, F_int index)
+        	{
                 if(index >= index_size_)
                 {
                     return;
@@ -296,7 +274,6 @@ namespace ncpp {
                         }
                     }
                 }
-                
             }
 
 
