@@ -266,7 +266,9 @@ namespace ncpp {
                 NCPP_ASSERT(index < index_size_);
 
                 key &= hash_mask_;
+                eastl::atomic_thread_fence(eastl::memory_order_release);
                 index_vector_[index] = EA::Thread::AtomicFetchSwap((i32*)(hash_vector_.data() + key), index);
+                eastl::atomic_thread_fence(eastl::memory_order_acquire);
             }
             inline void remove(F_int key, F_int index){
                 
