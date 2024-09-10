@@ -118,8 +118,8 @@ namespace ncpp {
 
                 hash_mask_(x.hash_mask_),
 
-                hash_vector_(x.hash_size_),
-                index_vector_(x.index_size_)
+                hash_vector_(x.hash_vector_),
+                index_vector_(x.index_vector_)
             {
             }
             TF_hash_table& operator = (const TF_hash_table& x)
@@ -139,8 +139,8 @@ namespace ncpp {
 
                 hash_mask_(x.hash_mask_),
 
-                hash_vector_(std::move(x.hash_size_)),
-                index_vector_(std::move(x.index_size_))
+                hash_vector_(std::move(x.hash_vector_)),
+                index_vector_(std::move(x.index_vector_))
             {
             }
             TF_hash_table& operator = (TF_hash_table&& x)
