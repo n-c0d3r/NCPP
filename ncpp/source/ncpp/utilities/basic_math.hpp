@@ -71,6 +71,18 @@ namespace ncpp {
 
             return ((value & (value - 1)) == 0);
         }
+        static NCPP_FORCE_INLINE b8 is_power_of_two(u32 value){
+
+            return ((value & (value - 1)) == 0);
+        }
+        static NCPP_FORCE_INLINE b8 is_power_of_two(u16 value){
+
+            return ((value & (value - 1)) == 0);
+        }
+        static NCPP_FORCE_INLINE b8 is_power_of_two(u8 value){
+
+            return ((value & (value - 1)) == 0);
+        }
         static NCPP_FORCE_INLINE b8 is_power_of_two(f32 value){
             
             f32 exponental = std::log(value) / std::log(2.0f);

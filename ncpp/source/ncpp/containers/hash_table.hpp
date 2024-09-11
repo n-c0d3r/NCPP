@@ -104,7 +104,7 @@ namespace ncpp {
                 index_vector_(allocator)
             {
 				NCPP_ASSERT(hash_size_ > 0) << "hash size must be greater than zero";
-				NCPP_ASSERT(utilities::is_power_of_two(hash_size_)) << "hash size must be power of two";
+				NCPP_ASSERT(utilities::is_power_of_two((u32)hash_size_)) << "hash size must be power of two";
                 
                 if(index_size > 0)
                 {
@@ -188,7 +188,7 @@ namespace ncpp {
                 index_size_ = index_size;
                 
                 NCPP_ASSERT(hash_size_ > 0) << "hash size must be greater than zero";
-                NCPP_ASSERT(utilities::is_power_of_two(hash_size_)) << "hash size must be power of two";
+                NCPP_ASSERT(utilities::is_power_of_two((u32)hash_size_)) << "hash size must be power of two";
                 
                 if( index_size_ )
                 {
