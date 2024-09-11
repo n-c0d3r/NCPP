@@ -67,11 +67,15 @@ namespace ncpp {
 
 
 
+        static NCPP_FORCE_INLINE b8 is_power_of_two(u64 value){
+
+            return ((value & (value - 1)) == 0);
+        }
         static NCPP_FORCE_INLINE b8 is_power_of_two(f32 value){
             
             f32 exponental = std::log(value) / std::log(2.0f);
             
-            return exponental == i32(exponental);
+            return abs(exponental - f32(i32(exponental))) <= 0.0001f;
         }
         static NCPP_FORCE_INLINE f32 round_down_to_power_of_two(f32 value){
             
