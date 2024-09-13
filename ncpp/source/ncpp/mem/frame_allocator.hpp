@@ -3,7 +3,7 @@
 #include <ncpp/prerequisites.hpp>
 #include <ncpp/mem/pool_memory_provider.hpp>
 #include <ncpp/mem/reference_allocator.hpp>
-
+#include <ncpp/pac/spin_lock.hpp>
 
 
 namespace ncpp::mem {
@@ -129,6 +129,8 @@ namespace ncpp::mem {
         sz chunk_size_ = 0;
         sz chunk_payload_size_ = 0;
 
+        ncpp::pac::F_spin_lock main_lock_;
+
     public:
         NCPP_FORCE_INLINE F_frame_param param_count() const noexcept { return param_count_; }
         NCPP_FORCE_INLINE const auto& param_generations() const noexcept { return param_generations_; }
@@ -186,7 +188,10 @@ namespace ncpp::mem {
 
 
     private:
-        F_frame_chunk_memory_block* optain_chunk()
+        /**
+         *  Non-thread-safe
+         */
+        F_frame_chunk_memory_block* optain_chunk_internal()
         {
             // try optain pre-created chunks
             for(auto it = chunk_p_vector_.rbegin(); it != chunk_p_vector_.rend(); ++it)
@@ -200,7 +205,10 @@ namespace ncpp::mem {
             chunk_p_vector_.push_back(chunk_p);
             return chunk_p;
         }
-        F_frame_memory_block* create_block_on_chunk(F_frame_chunk_memory_block* chunk_p)
+        /**
+         *  Non-thread-safe
+         */
+        F_frame_memory_block* create_block_on_chunk_internal(F_frame_chunk_memory_block* chunk_p)
         {
             F_frame_chunk_memory_provider_management_params management_params;
             management_params.pool_memory_block_p = chunk_p;
@@ -210,15 +218,25 @@ namespace ncpp::mem {
             return block_memory_provider_.create_block_through_parent(0, &management_params);
         }
 
-    private:
+    protected:
+        /**
+         *  Thread-safe
+         */
         F_frame_memory_block* create_block()
         {
-            F_frame_chunk_memory_block* chunk_p = optain_chunk();
+            NCPP_SCOPED_LOCK(main_lock_);
 
-            return create_block_on_chunk(chunk_p);
+            F_frame_chunk_memory_block* chunk_p = optain_chunk_internal();
+
+            return create_block_on_chunk_internal(chunk_p);
         }
+        /**
+         *  Thread-safe
+         */
         void destroy_block(F_frame_memory_block* block_p)
         {
+            NCPP_SCOPED_LOCK(main_lock_);
+
             F_frame_chunk_memory_block* chunk_p = (F_frame_chunk_memory_block*)(block_p->parent_memory_block_p);
 
             F_frame_chunk_memory_provider_management_params management_params;
@@ -232,26 +250,38 @@ namespace ncpp::mem {
 
 
     public:
+        /**
+         *  Thread-safe
+         */
         void release_chunks()
         {
             for(auto adapter_p : adapter_p_vector_)
                 adapter_p->reset_params();
 
-            for(auto chunk_p : chunk_p_vector_)
             {
-                chunk_memory_provider_.default_destroy_block(chunk_p);
+                NCPP_SCOPED_LOCK(main_lock_);
+                for(auto chunk_p : chunk_p_vector_)
+                {
+                    chunk_memory_provider_.default_destroy_block(chunk_p);
+                }
+                chunk_p_vector_.clear();
             }
-            chunk_p_vector_.clear();
         }
 
     public:
+        /**
+         *  Thread-safe
+         */
         void reset_param(F_frame_param param)
-        {
+        {\
             for(auto adapter_p : adapter_p_vector_)
                 adapter_p->reset_param(param);
 
             ++(param_generations_[param]);
         }
+        /**
+         *  Thread-safe
+         */
         void reset_params()
         {
             for(u32 i = 0; i < param_count_; ++i)
