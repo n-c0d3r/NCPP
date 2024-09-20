@@ -43,6 +43,13 @@ function(NCPP_ApplyDependencies)
     endif()
 
     get_target_property(TargetType ${PARGS_TARGET} TYPE)
+    if(TargetType STREQUAL "SHARED_LIBRARY")
+        add_custom_command(TARGET ${PARGS_TARGET} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+                "$<TARGET_FILE:${PARGS_TARGET}>"
+                "${TargetTempDependenciesDir}/"
+        )
+    endif()
     if(TargetType STREQUAL "EXECUTABLE")
         add_custom_command(TARGET ${PARGS_TARGET} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_directory
