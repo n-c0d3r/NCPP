@@ -3,7 +3,7 @@ include(NCPP/Utilities/TempDependenciesDir)
 
 
 
-function(NCPP_AddTargetFileAsDependency TARGET FILE)
+function(NCPP_AddFileAsDependency TARGET FILE)
     NCPP_TempDependenciesDir(${TARGET} TargetTempDependenciesDir)
     add_custom_command(TARGET ${TARGET} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E make_directory
