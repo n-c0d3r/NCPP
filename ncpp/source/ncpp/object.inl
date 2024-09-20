@@ -111,7 +111,7 @@ namespace ncpp {
             NCPP_OBJECT_MEMORY_HEADER_SIZE,
             0
         );
-        counter_p->store(0x7FFFFFFF + F_options__::initial_shared_reference_count, eastl::memory_order_release);
+        counter_p->store(F_options__::initial_shared_reference_count, eastl::memory_order_release);
 
 		*NCPP_RAW_P_TO_KEY_P(counter_p) = object_key_;
 		*NCPP_RAW_P_TO_DESTRUCTOR_CALLER_P(counter_p) = [](void* p){
@@ -121,8 +121,6 @@ namespace ncpp {
         object_p_ = (F_passed_object__*)NCPP_RAW_P_TO_OBJECT_P(counter_p);
 
         new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
-
-        counter_p->fetch_sub(0x7FFFFFFF, eastl::memory_order_acq_rel);
     }
 
     template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_child_oref__>
@@ -149,7 +147,7 @@ namespace ncpp {
             NCPP_OBJECT_MEMORY_HEADER_SIZE,
             0
         );
-        counter_p->store(0x7FFFFFFF + F_options__::initial_shared_reference_count, eastl::memory_order_release);
+        counter_p->store(F_options__::initial_shared_reference_count, eastl::memory_order_release);
 
 		*NCPP_RAW_P_TO_DESTRUCTOR_CALLER_P(counter_p) = [](void* p){
 		  	((F_object*)p)->~F_object();
@@ -158,8 +156,6 @@ namespace ncpp {
         object_p_ = (F_passed_object__*)NCPP_RAW_P_TO_OBJECT_P(counter_p);
 
         new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
-
-        counter_p->fetch_sub(0x7FFFFFFF, eastl::memory_order_acq_rel);
     }
 
 
@@ -192,7 +188,7 @@ namespace ncpp {
             NCPP_OBJECT_MEMORY_HEADER_SIZE,
             0
         );
-        counter_p->store(0x7FFFFFFF + F_options__::initial_shared_reference_count, eastl::memory_order_release);
+        counter_p->store(F_options__::initial_shared_reference_count, eastl::memory_order_release);
 
 		*NCPP_RAW_P_TO_KEY_P(counter_p) = object_key_;
 		*NCPP_RAW_P_TO_DESTRUCTOR_CALLER_P(counter_p) = [](void* p){
@@ -204,8 +200,6 @@ namespace ncpp {
         new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
 
         is_shared_ = true;
-
-        counter_p->fetch_sub(0x7FFFFFFF, eastl::memory_order_acq_rel);
     }
 
     template<typename F_passed_object__, typename F_allocator__, class F_options__, typename F_child_oref__>
@@ -232,7 +226,7 @@ namespace ncpp {
             NCPP_OBJECT_MEMORY_HEADER_SIZE,
             0
         );
-        counter_p->store(0x7FFFFFFF + F_options__::initial_shared_reference_count, eastl::memory_order_release);
+        counter_p->store(F_options__::initial_shared_reference_count, eastl::memory_order_release);
 
 		*NCPP_RAW_P_TO_DESTRUCTOR_CALLER_P(counter_p) = [](void* p){
 		  	((F_object*)p)->~F_object();
@@ -243,8 +237,6 @@ namespace ncpp {
         new ((F_object*)object_p_) F_object(std::forward<F_args__>(args)...);
 
         is_shared_ = true;
-
-        counter_p->fetch_sub(0x7FFFFFFF, eastl::memory_order_acq_rel);
     }
 
 }
