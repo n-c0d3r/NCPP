@@ -4865,6 +4865,12 @@ namespace ncpp {
 
             return { object_p, ncpp::object_key_unsafe(object_p) };
         }
+		static NCPP_FORCE_INLINE TS_oref unsafe_protect_counter(F_passed_object* object_p) noexcept {
+
+        	increase_shared_object_counter_unsafe(object_p_);
+
+        	return { object_p, ncpp::object_key_unsafe(object_p) };
+        }
 
     public:
         NCPP_FORCE_INLINE TS_oref() noexcept {
@@ -5470,6 +5476,12 @@ namespace ncpp {
         static NCPP_FORCE_INLINE TS_oref unsafe(F_passed_object* object_p) noexcept {
 
             return object_p;
+        }
+    	static NCPP_FORCE_INLINE TS_oref unsafe_protect_counter(F_passed_object* object_p) noexcept {
+
+        	increase_shared_object_counter_unsafe(object_p_);
+
+        	return object_p;
         }
 
     public:
@@ -7247,8 +7259,13 @@ namespace ncpp {
             object_p_(object_p),
             object_key_(object_key)
         {
-
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
+        }
+    	NCPP_FORCE_INLINE TX_oref(F_passed_object* object_p, F_object_key object_key, b8 is_shared) noexcept :
+    		object_p_(object_p),
+			object_key_(object_key),
+			is_shared_(is_shared)
+        {
         }
 
     public:
@@ -7259,6 +7276,12 @@ namespace ncpp {
         static NCPP_FORCE_INLINE TX_oref unsafe(F_passed_object* object_p) noexcept {
 
             return { object_p, ncpp::object_key_unsafe(object_p) };
+        }
+    	static NCPP_FORCE_INLINE TX_oref unsafe_protect_counter(F_passed_object* object_p) noexcept {
+
+        	increase_shared_object_counter_unsafe(object_p_);
+
+        	return { object_p, ncpp::object_key_unsafe(object_p), true };
         }
 
     public:
@@ -8247,13 +8270,25 @@ namespace ncpp {
         NCPP_FORCE_INLINE TX_oref(F_passed_object* object_p) noexcept :
             object_p_(object_p)
         {
-
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
+        }
+    	NCPP_FORCE_INLINE TX_oref(F_passed_object* object_p, b8 is_shared) noexcept :
+			object_p_(object_p),
+			is_shared_(is_shared)
+        {
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
         }
 
     public:
         static NCPP_FORCE_INLINE TX_oref unsafe(F_passed_object* object_p) noexcept {
 
             return object_p;
+        }
+    	static NCPP_FORCE_INLINE TX_oref unsafe_protect_counter(F_passed_object* object_p) noexcept {
+
+        	increase_shared_object_counter_unsafe(object_p_);
+
+        	return { object_p, true };
         }
 
     public:
@@ -9548,48 +9583,48 @@ NCPP_BIND_CUSTOM_CPASS(
 #define NCPP_WTHIS() (ncpp::TW_valid<std::remove_pointer_t<decltype(this)>>::unsafe(this))
 
 #define NCPP_KTHIS(...) (ncpp::TK_valid<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
-#define NCPP_STHIS(...) (ncpp::TS_valid<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
-#define NCPP_XTHIS(...) (ncpp::TX_valid<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
+#define NCPP_STHIS(...) (ncpp::TS_valid<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe_protect_counter(this))
+#define NCPP_XTHIS(...) (ncpp::TX_valid<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe_protect_counter(this))
 
 #define NCPP_KTHIS2(...) (ncpp::TK2_valid<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
-#define NCPP_STHIS2(...) (ncpp::TS2_valid<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
-#define NCPP_XTHIS2(...) (ncpp::TX2_valid<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
+#define NCPP_STHIS2(...) (ncpp::TS2_valid<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe_protect_counter(this))
+#define NCPP_XTHIS2(...) (ncpp::TX2_valid<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe_protect_counter(this))
 
 
 
 #define NCPP_WTHIS_UNSAFE() (ncpp::TW<std::remove_pointer_t<decltype(this)>>::unsafe(this))
 
 #define NCPP_KTHIS_UNSAFE(...) (ncpp::TK<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
-#define NCPP_STHIS_UNSAFE(...) (ncpp::TS<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
-#define NCPP_XTHIS_UNSAFE(...) (ncpp::TX<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
+#define NCPP_STHIS_UNSAFE(...) (ncpp::TS<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe_protect_counter(this))
+#define NCPP_XTHIS_UNSAFE(...) (ncpp::TX<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe_protect_counter(this))
 
 #define NCPP_KTHIS2_UNSAFE(...) (ncpp::TK2<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
-#define NCPP_STHIS2_UNSAFE(...) (ncpp::TS2<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
-#define NCPP_XTHIS2_UNSAFE(...) (ncpp::TX2<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe(this))
+#define NCPP_STHIS2_UNSAFE(...) (ncpp::TS2<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe_protect_counter(this))
+#define NCPP_XTHIS2_UNSAFE(...) (ncpp::TX2<std::remove_pointer_t<decltype(this)> __VA_OPT__(,) __VA_ARGS__>::unsafe_protect_counter(this))
 
 
 
 #define NCPP_WTHIS_MUTABLE() (ncpp::TW_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>>>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
 
 #define NCPP_KTHIS_MUTABLE(...) (ncpp::TK_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
-#define NCPP_STHIS_MUTABLE(...) (ncpp::TS_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
-#define NCPP_XTHIS_MUTABLE(...) (ncpp::TX_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
+#define NCPP_STHIS_MUTABLE(...) (ncpp::TS_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe_protect_counter((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
+#define NCPP_XTHIS_MUTABLE(...) (ncpp::TX_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe_protect_counter((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
 
 #define NCPP_KTHIS2_MUTABLE(...) (ncpp::TK2_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
-#define NCPP_STHIS2_MUTABLE(...) (ncpp::TS2_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
-#define NCPP_XTHIS2_MUTABLE(...) (ncpp::TX2_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
+#define NCPP_STHIS2_MUTABLE(...) (ncpp::TS2_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe_protect_counter((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
+#define NCPP_XTHIS2_MUTABLE(...) (ncpp::TX2_valid<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe_protect_counter((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
 
 
 
 #define NCPP_WTHIS_UNSAFE_MUTABLE() (ncpp::TW<std::remove_const_t<std::remove_pointer_t<decltype(this)>>>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
 
 #define NCPP_KTHIS_UNSAFE_MUTABLE(...) (ncpp::TK<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
-#define NCPP_STHIS_UNSAFE_MUTABLE(...) (ncpp::TS<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
-#define NCPP_XTHIS_UNSAFE_MUTABLE(...) (ncpp::TX<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
+#define NCPP_STHIS_UNSAFE_MUTABLE(...) (ncpp::TS<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe_protect_counter((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
+#define NCPP_XTHIS_UNSAFE_MUTABLE(...) (ncpp::TX<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe_protect_counter((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
 
 #define NCPP_KTHIS2_UNSAFE_MUTABLE(...) (ncpp::TK2<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
-#define NCPP_STHIS2_UNSAFE_MUTABLE(...) (ncpp::TS2<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
-#define NCPP_XTHIS2_UNSAFE_MUTABLE(...) (ncpp::TX2<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
+#define NCPP_STHIS2_UNSAFE_MUTABLE(...) (ncpp::TS2<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe_protect_counter((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
+#define NCPP_XTHIS2_UNSAFE_MUTABLE(...) (ncpp::TX2<std::remove_const_t<std::remove_pointer_t<decltype(this)>> __VA_OPT__(,) __VA_ARGS__>::unsafe_protect_counter((std::remove_const_t<std::remove_pointer_t<decltype(this)>>*)this))
 
 
 
