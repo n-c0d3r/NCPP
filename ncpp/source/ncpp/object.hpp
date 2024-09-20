@@ -4852,7 +4852,6 @@ namespace ncpp {
             object_p_(object_p),
             object_key_(object_key)
         {
-
             NCPP_ASSERT_OREF_REQUIREMENTS(this);
         }
 
@@ -4867,7 +4866,7 @@ namespace ncpp {
         }
 		static NCPP_FORCE_INLINE TS_oref unsafe_protect_counter(F_passed_object* object_p) noexcept {
 
-        	increase_shared_object_counter_unsafe(object_p_);
+        	increase_shared_object_counter_unsafe(object_p);
 
         	return { object_p, ncpp::object_key_unsafe(object_p) };
         }
@@ -5469,7 +5468,7 @@ namespace ncpp {
         NCPP_FORCE_INLINE TS_oref(F_passed_object* object_p) noexcept :
             object_p_(object_p)
         {
-
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
         }
 
     public:
@@ -5479,7 +5478,7 @@ namespace ncpp {
         }
     	static NCPP_FORCE_INLINE TS_oref unsafe_protect_counter(F_passed_object* object_p) noexcept {
 
-        	increase_shared_object_counter_unsafe(object_p_);
+        	increase_shared_object_counter_unsafe(object_p);
 
         	return object_p;
         }
@@ -7266,6 +7265,7 @@ namespace ncpp {
 			object_key_(object_key),
 			is_shared_(is_shared)
         {
+            NCPP_ASSERT_OREF_REQUIREMENTS(this);
         }
 
     public:
@@ -7279,7 +7279,7 @@ namespace ncpp {
         }
     	static NCPP_FORCE_INLINE TX_oref unsafe_protect_counter(F_passed_object* object_p) noexcept {
 
-        	increase_shared_object_counter_unsafe(object_p_);
+        	increase_shared_object_counter_unsafe(object_p);
 
         	return { object_p, ncpp::object_key_unsafe(object_p), true };
         }
@@ -8286,7 +8286,7 @@ namespace ncpp {
         }
     	static NCPP_FORCE_INLINE TX_oref unsafe_protect_counter(F_passed_object* object_p) noexcept {
 
-        	increase_shared_object_counter_unsafe(object_p_);
+        	increase_shared_object_counter_unsafe(object_p);
 
         	return { object_p, true };
         }
