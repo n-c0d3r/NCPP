@@ -55,8 +55,6 @@ function(NCPP_ApplyDependencies)
             COMMAND ${CMAKE_COMMAND} -E copy_directory
                 "${TargetTempDependenciesDir}"
                 "$<TARGET_FILE_DIR:${PARGS_TARGET}>"
-            COMMAND ${CMAKE_COMMAND} -E remove_directory
-                "${TargetTempDependenciesDir}"
         )
     endif()
 endfunction()
