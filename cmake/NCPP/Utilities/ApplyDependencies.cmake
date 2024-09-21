@@ -1,5 +1,6 @@
 
 include(NCPP/Utilities/TempDependenciesDir)
+include(NCPP/Utilities/AddTargetFileAsDependency)
 
 
 
@@ -31,6 +32,12 @@ function(NCPP_ApplyDependencies)
             add_custom_command(TARGET ${PARGS_TARGET} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E make_directory
                     "${DependentTargetTempDependenciesDir}"
+            )
+            get_target_property(DependentTargetType ${DEPENDENT_TARGET} TYPE)
+            if(DependentTargetType STREQUAL "SHARED_LIBRARY")
+                NCPP_AddTargetFileAsDependency(${PARGS_TARGET} ${DEPENDENT_TARGET})
+            endif()
+            add_custom_command(TARGET ${PARGS_TARGET} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_directory
                     "${DependentTargetTempDependenciesDir}"
                     "${TargetTempDependenciesDir}"
@@ -43,13 +50,6 @@ function(NCPP_ApplyDependencies)
     endif()
 
     get_target_property(TargetType ${PARGS_TARGET} TYPE)
-    if(TargetType STREQUAL "SHARED_LIBRARY")
-        add_custom_command(TARGET ${PARGS_TARGET} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy
-                "$<TARGET_FILE:${PARGS_TARGET}>"
-                "${TargetTempDependenciesDir}/"
-        )
-    endif()
     if(TargetType STREQUAL "EXECUTABLE")
         add_custom_command(TARGET ${PARGS_TARGET} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_directory
