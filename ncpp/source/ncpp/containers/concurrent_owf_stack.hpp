@@ -149,6 +149,8 @@ namespace ncpp {
 				new(item_vector_.data() + location) F_item(
 					std::forward<F_passed_item__>(item)
 				);
+
+				NCPP_ASSERT(location < capacity_) << "capacity exceeded";
 			}
 			template<typename F_passed_item__>
 			sz T_push_and_return_index(F_passed_item__&& item) {
@@ -158,6 +160,10 @@ namespace ncpp {
 				new(item_vector_.data() + location) F_item(
 					std::forward<F_passed_item__>(item)
 				);
+
+				NCPP_ASSERT(location < capacity_);
+
+				NCPP_ASSERT(location < capacity_) << "capacity exceeded";
 
 				return location;
 			}
