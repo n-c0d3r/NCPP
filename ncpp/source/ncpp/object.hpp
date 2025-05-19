@@ -2668,7 +2668,7 @@ namespace ncpp {
 				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
-            return TW_oref<F_other_p__, F_requirements>::unsafe((F_other_p__*)object_p_));
+            return TW_oref<F_other_p__, F_requirements>::unsafe((F_other_p__*)object_p_);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////
