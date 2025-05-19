@@ -4736,25 +4736,25 @@ namespace ncpp {
 
 
 
-    NCPP_FORCE_INLINE u32 shared_object_counter_unsafe(void* object_p) noexcept {
+    NCPP_FORCE_INLINE u32 shared_object_counter_unsafe(const void* object_p) noexcept {
 
         au32* counter_p = ((au32*)object_p) - (NCPP_OBJECT_COUNTER_MEMORY_OFFSET_REVERSE / sizeof(u32));
 
         return counter_p->load(eastl::memory_order_acquire);
     }
-    NCPP_FORCE_INLINE u32 increase_shared_object_counter_unsafe(void* object_p) noexcept {
+    NCPP_FORCE_INLINE u32 increase_shared_object_counter_unsafe(const void* object_p) noexcept {
 
         au32* counter_p = ((au32*)object_p) - (NCPP_OBJECT_COUNTER_MEMORY_OFFSET_REVERSE / sizeof(u32));
 
         return counter_p->fetch_add(1, eastl::memory_order_acq_rel);
     }
-    NCPP_FORCE_INLINE u32 decrease_shared_object_counter_unsafe(void* object_p) noexcept {
+    NCPP_FORCE_INLINE u32 decrease_shared_object_counter_unsafe(const void* object_p) noexcept {
 
         au32* counter_p = ((au32*)object_p) - (NCPP_OBJECT_COUNTER_MEMORY_OFFSET_REVERSE / sizeof(u32));
 
         return counter_p->fetch_sub(1, eastl::memory_order_acq_rel);
     }
-    NCPP_FORCE_INLINE void set_object_counter_to_one_unsafe(void* object_p) noexcept {
+    NCPP_FORCE_INLINE void set_object_counter_to_one_unsafe(const void* object_p) noexcept {
 
         au32* counter_p = ((au32*)object_p) - (NCPP_OBJECT_COUNTER_MEMORY_OFFSET_REVERSE / sizeof(u32));
 
