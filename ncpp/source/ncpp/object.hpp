@@ -2668,7 +2668,7 @@ namespace ncpp {
 				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
-            return (F_other_p__*)object_p_;
+            return TW_oref<F_other_p__, F_requirements>::unsafe((F_other_p__*)object_p_));
         }
 
         ////////////////////////////////////////////////////////////////////////////////////
@@ -3290,7 +3290,7 @@ namespace ncpp {
         requires T_is_object_down_castable<F_passed_object, F_other_p__>
         NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
-            return object_p_;
+            return TW_oref<F_other_p__, F_requirements>::unsafe(object_p_);
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object, F_other_p__>
@@ -3300,7 +3300,7 @@ namespace ncpp {
 				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
-            return object_p_;
+            return TW_oref<F_other_p__, F_requirements>::unsafe(object_p_);
         }
 
 
@@ -3722,7 +3722,7 @@ namespace ncpp {
         requires T_is_object_down_castable<F_passed_object, F_other_p__>
         NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
-            return object_p_;
+            return TW_oref<F_other_p__, F_requirements>::unsafe(object_p_);
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object, F_other_p__>
@@ -3732,7 +3732,7 @@ namespace ncpp {
 				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
-            return object_p_;
+            return TW_oref<F_other_p__, F_requirements>::unsafe(object_p_);
         }
 
 
@@ -4202,7 +4202,7 @@ namespace ncpp {
         requires T_is_object_down_castable<F_passed_object__, F_other_p__>
         NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
-            return object_p_;
+            return TW_oref<F_other_p__, F_requirements>::unsafe(object_p_);
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object__, F_other_p__>
@@ -4212,7 +4212,7 @@ namespace ncpp {
 				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
-            return object_p_;
+            return TW_oref<F_other_p__, F_requirements>::unsafe(object_p_);
         }
 
 
@@ -4626,7 +4626,7 @@ namespace ncpp {
         requires T_is_object_down_castable<F_passed_object__, F_other_p__>
         NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
-            return object_p_;
+            return TW_oref<F_other_p__, F_requirements>::unsafe(object_p_);
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object__, F_other_p__>
@@ -4636,7 +4636,7 @@ namespace ncpp {
 				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
-            return object_p_;
+            return TW_oref<F_other_p__, F_requirements>::unsafe(object_p_);
         }
 
 
@@ -5299,7 +5299,7 @@ namespace ncpp {
         requires T_is_object_down_castable<F_passed_object__, F_other_p__>
         NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
-            return object_p_;
+            return TW_oref<F_other_p__, F_requirements>::unsafe(object_p_);
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object__, F_other_p__>
@@ -5309,7 +5309,7 @@ namespace ncpp {
 				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
-            return object_p_;
+            return TW_oref<F_other_p__, F_requirements>::unsafe(object_p_);
         }
 
 
@@ -5883,7 +5883,7 @@ namespace ncpp {
         requires T_is_object_down_castable<F_passed_object__, F_other_p__>
         NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
-            return object_p_;
+            return TW_oref<F_other_p__, F_requirements>::unsafe(object_p_);
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object__, F_other_p__>
@@ -5893,7 +5893,7 @@ namespace ncpp {
 				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
-            return object_p_;
+            return TW_oref<F_other_p__, F_requirements>::unsafe(object_p_);
         }
 
 
@@ -6504,7 +6504,7 @@ namespace ncpp {
         requires T_is_object_down_castable<F_passed_object__, F_other_p__>
         NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
-            return object_p_;
+            return TW_oref<F_other_p__, F_requirements>::unsafe(object_p_);
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object__, F_other_p__>
@@ -6514,7 +6514,7 @@ namespace ncpp {
 				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
-            return object_p_;
+            return TW_oref<F_other_p__, F_requirements>::unsafe(object_p_);
         }
 
 
@@ -7056,7 +7056,7 @@ namespace ncpp {
         requires T_is_object_down_castable<F_passed_object__, F_other_p__>
         NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
-            return object_p_;
+            return TW_oref<F_other_p__, F_requirements>::unsafe(object_p_);
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object__, F_other_p__>
@@ -7066,7 +7066,7 @@ namespace ncpp {
 				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
-            return object_p_;
+            return TW_oref<F_other_p__, F_requirements>::unsafe(object_p_);
         }
 
 
@@ -8070,7 +8070,7 @@ namespace ncpp {
         requires T_is_object_down_castable<F_passed_object__, F_other_p__>
         NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
-            return object_p_;
+            return TW_oref<F_other_p__, F_requirements>::unsafe(object_p_);
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object__, F_other_p__>
@@ -8080,7 +8080,7 @@ namespace ncpp {
 				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
-            return object_p_;
+            return TW_oref<F_other_p__, F_requirements>::unsafe(object_p_);
         }
 
 
@@ -8987,7 +8987,7 @@ namespace ncpp {
         requires T_is_object_down_castable<F_passed_object__, F_other_p__>
         NCPP_FORCE_INLINE operator TW_oref<F_other_p__, F_requirements> () const noexcept {
 
-            return object_p_;
+            return TW_oref<F_other_p__, F_requirements>::unsafe(object_p_);
         }
         template<typename F_other_p__>
         requires T_is_object_up_castable<F_passed_object__, F_other_p__>
@@ -8997,7 +8997,7 @@ namespace ncpp {
 				ncpp::T_check_object_polymorphism_for_direct_casting<F_other_p__>(object_p_)
 			) << "invalid object polymorphism";
 
-            return object_p_;
+            return TW_oref<F_other_p__, F_requirements>::unsafe(object_p_);
         }
 
 
