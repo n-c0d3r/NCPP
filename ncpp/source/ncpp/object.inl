@@ -36,7 +36,7 @@ namespace ncpp {
         );
 
         *NCPP_RAW_P_TO_KEY_P(counter_p) = object_key_;
-		*NCPP_RAW_P_TO_DESTRUCTOR_CALLER_P(counter_p) = [](void* p){
+		*NCPP_RAW_P_TO_DESTRUCTOR_CALLER_P(counter_p) = [](const void* p){
 		  	((F_object*)p)->~F_object();
 		};
 
@@ -71,7 +71,7 @@ namespace ncpp {
             0
         );
 
-		*NCPP_RAW_P_TO_DESTRUCTOR_CALLER_P(counter_p) = [](void* p){
+		*NCPP_RAW_P_TO_DESTRUCTOR_CALLER_P(counter_p) = [](const void* p){
 		  ((F_object*)p)->~F_object();
 		};
 
@@ -114,7 +114,7 @@ namespace ncpp {
         counter_p->store(F_options__::initial_shared_reference_count, eastl::memory_order_release);
 
 		*NCPP_RAW_P_TO_KEY_P(counter_p) = object_key_;
-		*NCPP_RAW_P_TO_DESTRUCTOR_CALLER_P(counter_p) = [](void* p){
+		*NCPP_RAW_P_TO_DESTRUCTOR_CALLER_P(counter_p) = [](const void* p){
 		  	((F_object*)p)->~F_object();
 		};
 
@@ -149,7 +149,7 @@ namespace ncpp {
         );
         counter_p->store(F_options__::initial_shared_reference_count, eastl::memory_order_release);
 
-		*NCPP_RAW_P_TO_DESTRUCTOR_CALLER_P(counter_p) = [](void* p){
+		*NCPP_RAW_P_TO_DESTRUCTOR_CALLER_P(counter_p) = [](const void* p){
 		  	((F_object*)p)->~F_object();
 		};
 
@@ -191,7 +191,7 @@ namespace ncpp {
         counter_p->store(F_options__::initial_shared_reference_count, eastl::memory_order_release);
 
 		*NCPP_RAW_P_TO_KEY_P(counter_p) = object_key_;
-		*NCPP_RAW_P_TO_DESTRUCTOR_CALLER_P(counter_p) = [](void* p){
+		*NCPP_RAW_P_TO_DESTRUCTOR_CALLER_P(counter_p) = [](const void* p){
 		  	((F_object*)p)->~F_object();
 		};
 
@@ -228,7 +228,7 @@ namespace ncpp {
         );
         counter_p->store(F_options__::initial_shared_reference_count, eastl::memory_order_release);
 
-		*NCPP_RAW_P_TO_DESTRUCTOR_CALLER_P(counter_p) = [](void* p){
+		*NCPP_RAW_P_TO_DESTRUCTOR_CALLER_P(counter_p) = [](const void* p){
 		  	((F_object*)p)->~F_object();
 		};
 

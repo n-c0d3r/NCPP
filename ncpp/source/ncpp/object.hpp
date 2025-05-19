@@ -93,7 +93,7 @@ namespace ncpp {
             template<typename F_object_fr__, typename F_allocator_fr__, class F_options_fr__, ncpp::b8 is_has_object_key_fr__, typename F_requirements_fr__>\
             friend class ncpp::TX_oref;
 
-	using F_object_destructor_caller = void(*)(void*);
+	using F_object_destructor_caller = void(*)(const void*);
 
     struct F_gc_object_state {
 
